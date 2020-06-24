@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <Version Value="11"/>
+    <BuildModes Active="Default"/>
+    <Units Count="14">
+      <Unit0>
+        <Filename Value="jupiterTools.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="45" Y="23"/>
+        <UsageCount Value="105"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="umain.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FMain"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uMain"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="74"/>
+        <CursorPos X="3" Y="82"/>
+        <UsageCount Value="105"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="forms/jupiterform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FJupiterForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="JupiterForm"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="80"/>
+        <CursorPos X="32" Y="82"/>
+        <UsageCount Value="105"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="classes/jupiterparams.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterParams"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="4"/>
+        <CursorPos X="17" Y="4"/>
+        <UsageCount Value="105"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="classes/jupiterrunnableitem.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterRunnableItem"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="56"/>
+        <CursorPos X="31" Y="80"/>
+        <UsageCount Value="105"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="classes/jupiterconsts.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="7"/>
+        <CursorPos X="49" Y="18"/>
+        <UsageCount Value="59"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="classes/jupiterrunnableitemlistdirectory.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterRunnableItemListDirectory"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="32"/>
+        <CursorPos X="32" Y="52"/>
+        <UsageCount Value="58"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="classes/jupiterrunnableitemlistfromfile.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterRunnableItemListFromFile"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="23"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="/usr/share/fpcsrc/3.0.4/rtl/objpas/classes/classesh.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1591"/>
+        <CursorPos X="21" Y="1613"/>
+        <UsageCount Value="10"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="/usr/share/fpcsrc/3.0.4/rtl/objpas/classes/classes.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="216"/>
+        <CursorPos X="25" Y="227"/>
+        <UsageCount Value="7"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="/usr/share/fpcsrc/3.0.4/rtl/unix/dos.pp"/>
+        <UnitName Value="Dos"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="25"/>
+        <CursorPos X="3" Y="23"/>
+        <UsageCount Value="7"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="/usr/share/fpcsrc/3.0.4/rtl/unix/cthreads.pp"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="24"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="/usr/share/fpcsrc/3.0.4/rtl/objpas/sysutils/filutilh.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="74"/>
+        <CursorPos X="3" Y="89"/>
+        <UsageCount Value="11"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="../_jupiterTools/classes/configreader.pas"/>
+        <UnitName Value="ConfigReader"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="196"/>
+        <CursorPos X="51" Y="130"/>
+        <UsageCount Value="10"/>
+      </Unit13>
+    </Units>
+    <JumpHistory Count="3" HistoryIndex="2">
+      <Position1>
+        <Filename Value="umain.pas"/>
+        <Caret Line="79" Column="36" TopLine="69"/>
+      </Position1>
+      <Position2>
+        <Filename Value="umain.pas"/>
+        <Caret Line="78" Column="38" TopLine="74"/>
+      </Position2>
+      <Position3>
+        <Filename Value="umain.pas"/>
+        <Caret Line="90" Column="45" TopLine="68"/>
+      </Position3>
+    </JumpHistory>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes Count="0" ActiveMode=""/>
+    </RunParams>
+  </ProjectSession>
+</CONFIG>

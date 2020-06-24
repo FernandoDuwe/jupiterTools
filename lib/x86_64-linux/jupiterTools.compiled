@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Compiler Value="/usr/bin/fpc" Date="1540814642"/>
+  <Params Value=" -MObjFPC -Scghi -Cg -O1 -g -gl -l -vewnhibq -Fi/home/duwe/Projetos/jupiterTools/lib/x86_64-linux -Fu/home/duwe/Projetos/jupiterTools/forms -Fu/home/duwe/Projetos/jupiterTools/classes -Fu/usr/share/lazarus/2.0.6/lcl/units/x86_64-linux/gtk2 -Fu/usr/share/lazarus/2.0.6/lcl/units/x86_64-linux -Fu/usr/share/lazarus/2.0.6/components/lazutils/lib/x86_64-linux -Fu/usr/share/lazarus/2.0.6/packager/units/x86_64-linux -Fu/home/duwe/Projetos/jupiterTools/ -FU/home/duwe/Projetos/jupiterTools/lib/x86_64-linux/ -FE/home/duwe/Projetos/jupiterTools/ -o/home/duwe/Projetos/jupiterTools/jupiterTools -dLCL -dLCLgtk2 -dUseCThreads jupiterTools.lpr"/>
+</CONFIG>
