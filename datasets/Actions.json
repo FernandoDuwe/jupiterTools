@@ -1,0 +1,12 @@
+{
+   "itens":[{
+				"title": "List Projects",
+	   			"category": "List",
+				"params": "/home/duwe/Projetos/",
+				"runnableAction": "ListDirectory",
+				"filter": "*",
+				"flags": "-HIDDENFILES -DIRECTORIES",
+	   			"icon": 0
+   		}
+   ]
+}

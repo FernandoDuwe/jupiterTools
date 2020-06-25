@@ -31,25 +31,25 @@ begin
 
   vrAttribute := readonly;
 
-  if Pos('DIRECTORIES', Self.Param.Tags) > 0 then
+  if Pos('DIRECTORIES', Self.Param.Flags) > 0 then
      vrAttribute := vrAttribute or directory;
 
-  if Pos('FILES', Self.Param.Tags) > 0 then
+  if Pos('FILES', Self.Param.Flags) > 0 then
      vrAttribute := vrAttribute or archive;
 
-  if Pos('HIDDENFILES', Self.Param.Tags) > 0 then
+  if Pos('HIDDENFILES', Self.Param.Flags) > 0 then
      vrAttribute := vrAttribute or hidden;
 
-  FindFirst(Self.Param.OptionPath + Self.Param.Param, vrAttribute, vrSearchResult);
+  FindFirst(Self.Param.Params + Self.Param.Filter, vrAttribute, vrSearchResult);
 
   while (DosError = 0) do
   begin
     if ((vrSearchResult.Name <> '.') and (vrSearchResult.Name <> '..')) then
     begin
       if DirectoryExists(Self.Param.OptionPath + vrSearchResult.Name) then
-          Self.Internal_AddItem(TJupiterListItem.Create(vrSearchResult.Name, Self.Param.OptionPath + vrSearchResult.Name, EmptyStr, JUPITER_ICON_DIRECTORY))
+          Self.Internal_AddItem(TJupiterListItem.Create(vrSearchResult.Name, Self.Param.Params + vrSearchResult.Name, EmptyStr, JUPITER_ICON_DIRECTORY))
       else
-          Self.Internal_AddItem(TJupiterListItem.Create(vrSearchResult.Name, Self.Param.OptionPath + vrSearchResult.Name, EmptyStr, JUPITER_ICON_FILE));
+          Self.Internal_AddItem(TJupiterListItem.Create(vrSearchResult.Name, Self.Param.Params + vrSearchResult.Name, EmptyStr, JUPITER_ICON_FILE));
     end;
 
     FindNext(vrSearchResult);
@@ -60,7 +60,7 @@ end;
 
 class function TJupiterRunnableItemListDirectory.ListAction: String;
 begin
-  Result := '';
+  Result := 'ListDirectory';
 end;
 
 end.

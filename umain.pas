@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, Menus,
-  ExtCtrls, StdCtrls, JupiterForm, JupiterParams, jupiterconsts;
+  ExtCtrls, StdCtrls, Buttons, JupiterForm, JupiterParams, jupiterconsts;
 
 type
 
@@ -15,21 +15,23 @@ type
   TFMain = class(TJupiterForm)
     ilIcons: TImageList;
     lvItens: TListView;
-    mmMsg: TMemo;
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
     MenuItem3: TMenuItem;
     MenuItem4: TMenuItem;
     mmOptions: TMainMenu;
     pcBody: TPageControl;
-    pnBody: TPanel;
-    pnActions: TPanel;
+    pcLeft: TPageControl;
+    pnTop: TPanel;
     sbStatus: TStatusBar;
-    spMessage: TSplitter;
-    spSeparator: TSplitter;
+    spDivisor: TSplitter;
+    SpeedButton1: TSpeedButton;
     TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
     tvActions: TTreeView;
     procedure tvActionsClick(Sender: TObject);
+  private
+    procedure Internal_AddParam(prSender : TObject; prParam : TJupiterAction);
   protected
     procedure Internal_Prepare; override;
     procedure Internal_UpdateComponents; override;
@@ -56,60 +58,64 @@ begin
 
   lvItens.Items.Clear;
 
-  Self.ActionFactory(TJupiterParamsNode(tvActions.Selected.Data));
+  Self.ActionFactory(TJupiterAction(tvActions.Selected.Data));
+end;
+
+procedure TFMain.Internal_AddParam(prSender: TObject; prParam: TJupiterAction);
+var
+  vrTree  : TTreeNode;
+  vrOwner : TTreeNode;
+begin
+  if prParam.Category <> EmptyStr then
+  begin
+    vrOwner := tvActions.Items.FindNodeWithText(prParam.Category);
+
+    if not Assigned(vrOwner) then
+    begin
+      vrOwner               := tvActions.Items.Add(nil, prParam.Category);
+      vrOwner.ImageIndex    := prParam.Icon;
+      vrOwner.SelectedIndex := prParam.Icon;
+    end;
+  end;
+
+  if prParam.Category <> EmptyStr then
+    vrTree := tvActions.Items.AddChild(vrOwner, prParam.Title)
+  else
+    vrTree := tvActions.Items.Add(nil, prParam.Title);
+
+  vrTree.ImageIndex    := prParam.Icon;
+  vrTree.SelectedIndex := prParam.Icon;
+  vrTree.StateIndex    := JUPITER_ICON_NONE;
+  vrTree.Data          := prParam;
+
+  if prParam.Category <> EmptyStr then
+     vrOwner.Expand(True);
 end;
 
 procedure TFMain.Internal_Prepare;
 var
   vrParams : TJupiterParams;
   vrItem   : TTreeNode;
-  vrNode   : TJupiterParamsNode;
+  vrNode   : TJupiterAction;
 begin
   inherited Internal_Prepare;
 
   if not DirectoryExists('./datasets/') then
      CreateDir('./datasets/');
 
-  vrParams := TJupiterParams.Create;
-  try
-    vrParams.CheckFile;
-  finally
-    FreeAndNil(vrParams);
-  end;
-
   tvActions.Items.Clear;
   lvItens.Items.Clear;
 
-  vrNode            := TJupiterParamsNode.Create;
-  vrNode.ListAction := 'ListDirectory';
-  vrNode.OptionPath := '/home/duwe/Projetos/';
-  vrNode.Param      := '*';
-  vrNode.Tags       := '-HIDDENFILES -DIRECTORIES';
+  vrParams := TJupiterParams.Create;
+  try
+    vrParams.OnAddParam := @Self.Internal_AddParam;
 
-  vrItem      := tvActions.Items.Add(nil, 'Listar projetos');
-  vrItem.Data := vrNode;
-  vrItem.ImageIndex := 0;
-  vrItem.SelectedIndex := 0;
+    vrParams.CheckFile;
 
-  vrNode            := TJupiterParamsNode.Create;
-    vrNode.ListAction := 'ListDirectory';
-    vrNode.OptionPath := '/home/duwe/';
-    vrNode.Param      := '*';
-    vrNode.Tags       := '-HIDDENFILES -DIRECTORIES';
-
-    vrItem      := tvActions.Items.Add(nil, 'Listar pasta pessoa');
-    vrItem.Data := vrNode;
-    vrItem.ImageIndex := 0;
-    vrItem.SelectedIndex := 0;
-
-  vrNode            := TJupiterParamsNode.Create;
-  vrNode.ListAction := 'ListFromFile';
-  vrNode.OptionPath := 'Report.json';
-
-  vrItem      := tvActions.Items.Add(nil, 'Listar relatório');
-  vrItem.Data := vrNode;
-  vrItem.ImageIndex := 1;
-  vrItem.SelectedIndex := 1;
+    vrParams.List;
+  finally
+    FreeAndNil(vrParams);
+  end;
 end;
 
 procedure TFMain.Internal_UpdateComponents;
@@ -138,6 +144,7 @@ begin
   vrItem.SubItems.Add(prItem.Description);
 
   vrItem.ImageIndex := prItem.Icon;
+  vrItem.StateIndex := JUPITER_ICON_NONE;
 
   vrItem.Data := prItem;
 end;

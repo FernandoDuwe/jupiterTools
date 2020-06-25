@@ -28,7 +28,7 @@ type
   public
      procedure UpdateForm;
 
-     function ActionFactory(prParam : TJupiterParamsNode) : TJupiterRunnableItem;
+     function ActionFactory(prParam : TJupiterAction) : TJupiterRunnableItem;
   end;
 
 var
@@ -90,14 +90,14 @@ begin
   end;
 end;
 
-function TJupiterForm.ActionFactory(prParam: TJupiterParamsNode): TJupiterRunnableItem;
+function TJupiterForm.ActionFactory(prParam: TJupiterAction): TJupiterRunnableItem;
 begin
   Result := nil;
 
-  if AnsiUpperCase(prParam.ListAction) = AnsiUpperCase(TJupiterRunnableItemListDirectory.ListAction) then
+  if AnsiUpperCase(prParam.RunnableAction) = AnsiUpperCase(TJupiterRunnableItemListDirectory.ListAction) then
     Result := TJupiterRunnableItemListDirectory.Create(True);
 
-  if AnsiUpperCase(prParam.ListAction) = AnsiUpperCase'ListFromFile' then
+  if AnsiUpperCase(prParam.ListAction) = AnsiUpperCase(TJupiterRunnableItemListFromFile.ListAction) then
     Result := TJupiterRunnableItemListFromFile.Create(True);
 
   Result.Param          := prParam;

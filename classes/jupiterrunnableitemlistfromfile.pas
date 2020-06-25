@@ -30,7 +30,7 @@ procedure TJupiterRunnableItemListFromFile.Internal_CheckFile;
 var
   vrStr : TStrings;
 begin
-  if FileExists('./datasets/' + Self.Param.OptionPath) then
+  if FileExists('./datasets/' + Self.Param.Params) then
     Exit;
 
   {
@@ -53,7 +53,7 @@ begin
     vrStr.Add('   ]');
     vrStr.Add('}');
 
-    vrStr.SaveToFile('./datasets/' + Self.Param.OptionPath);
+    vrStr.SaveToFile('./datasets/' + Self.Param.Params);
   finally
     vrStr.Clear;
     FreeAndNil(vrStr);
@@ -71,7 +71,7 @@ begin
 
   inherited Internal_Execute;
 
-  vrData := GetJSON(Self.Internal_GetFileContent('./datasets/' + Self.Param.OptionPath));
+  vrData := GetJSON(Self.Internal_GetFileContent('./datasets/' + Self.Param.Params));
 
   vrArray := TJSONArray(vrData.FindPath('itens'));
 

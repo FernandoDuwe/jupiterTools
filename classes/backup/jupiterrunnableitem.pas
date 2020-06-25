@@ -12,7 +12,7 @@ type
 
   TJupiterRunnableItem = class(TThread)
   private
-    FParam     : TJupiterParamsNode;
+    FParam     : TJupiterAction;
     FStatus    : TJupiterRunnableItemStatus;
     FOnChange  : TJupiterRunnableItemChangeStatus;
     FOnAddItem : TJupiterRunnableItemAddItem;
@@ -76,6 +76,8 @@ begin
   inherited Create(CreateSuspended, StackSize);
 
   Self.FStatus := jrsNotStarted;
+
+  Self.FreeOnTerminate := True;
 end;
 
 class function TJupiterRunnableItem.ListAction: String;

@@ -12,7 +12,7 @@ type
 
   TJupiterRunnableItem = class(TThread)
   private
-    FParam     : TJupiterParamsNode;
+    FParam     : TJupiterAction;
     FStatus    : TJupiterRunnableItemStatus;
     FOnChange  : TJupiterRunnableItemChangeStatus;
     FOnAddItem : TJupiterRunnableItemAddItem;
@@ -24,7 +24,7 @@ type
 
     procedure Internal_AddItem(prItem : TJupiterListItem);
   published
-    property Param  : TJupiterParamsNode read FParam write FParam;
+    property Param  : TJupiterAction read FParam write FParam;
     property Status : TJupiterRunnableItemStatus read FStatus;
 
     property OnAddItem      : TJupiterRunnableItemAddItem      read FOnAddItem write FOnAddItem;
