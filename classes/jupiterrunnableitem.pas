@@ -23,6 +23,8 @@ type
     procedure Internal_Execute; virtual;
 
     procedure Internal_AddItem(prItem : TJupiterListItem);
+    function  Internal_HasFlag(prFlag : String) : Boolean;
+    function  Internal_GetFlagParam(prFlag : String) : String;
   published
     property Param  : TJupiterAction read FParam write FParam;
     property Status : TJupiterRunnableItemStatus read FStatus;
@@ -69,6 +71,35 @@ procedure TJupiterRunnableItem.Internal_AddItem(prItem: TJupiterListItem);
 begin
   if Assigned(Self.FOnAddItem) then
     Self.FOnAddItem(Self, prItem);
+end;
+
+function TJupiterRunnableItem.Internal_HasFlag(prFlag: String): Boolean;
+begin
+  Result := Pos(prFlag, Self.Param.Flags) > 0;
+end;
+
+function TJupiterRunnableItem.Internal_GetFlagParam(prFlag: String): String;
+var
+  vrStr : TStrings;
+  vrVez : Integer;
+begin
+  Result := EmptyStr;
+
+  if not Self.Internal_HasFlag(prFlag) then
+    Exit;
+
+  vrStr := TStringList.Create;
+  try
+    vrStr.Delimiter     := '|';
+    vrStr.DelimitedText := StringReplace(prFlag, ' ', '|', [rfReplaceAll, rfIgnoreCase]);
+
+    for vrVez := 0 to vrStr.Count - 1 do
+      if Pos(prFlag, vrStr[vrVez]) > 0 then
+        Result := StringReplace(prFlag, prFlag + ':', EmptyStr, [rfReplaceAll, rfIgnoreCase]);
+  finally
+    vrStr.Clear;
+    FreeAndNil(vrStr);
+  end;
 end;
 
 constructor TJupiterRunnableItem.Create(CreateSuspended: Boolean; const StackSize: SizeUInt);

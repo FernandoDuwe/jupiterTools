@@ -1,7 +1,7 @@
 object FMain: TFMain
-  Left = 220
+  Left = 245
   Height = 596
-  Top = 101
+  Top = 97
   Width = 1091
   Caption = 'Jupiter Tools'
   ClientHeight = 571
@@ -21,11 +21,11 @@ object FMain: TFMain
     ClientWidth = 1091
     TabOrder = 0
     object SpeedButton1: TSpeedButton
-      Left = 8
-      Height = 22
+      Left = 6
+      Height = 24
       Hint = 'Add a new action'
-      Top = 6
-      Width = 23
+      Top = 4
+      Width = 25
       Images = ilIcons
       ImageIndex = 7
       ShowHint = True
@@ -107,6 +107,7 @@ object FMain: TFMain
             Width = 525
           end>
         LargeImages = ilIcons
+        ReadOnly = True
         SmallImages = ilIcons
         SortType = stBoth
         StateImages = ilIcons
@@ -123,9 +124,10 @@ object FMain: TFMain
     end
     object MenuItem2: TMenuItem
       Caption = 'Edit'
-    end
-    object MenuItem3: TMenuItem
-      Caption = 'View'
+      object MenuItem5: TMenuItem
+        Caption = 'Refresh'
+        OnClick = MenuItem5Click
+      end
     end
     object MenuItem4: TMenuItem
       Caption = 'Help'

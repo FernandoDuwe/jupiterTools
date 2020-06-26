@@ -85,21 +85,33 @@ begin
     vrItem := vrArray.Objects[vrVez];
 
     vrObj                := TJupiterAction.Create;
-    vrObj.Title          := vrItem['title'].AsString;
-    vrObj.Icon           := vrItem['icon'].AsInteger;
-    vrObj.RunnableAction := vrItem['runnableAction'].AsString;
-    vrObj.Filter         := vrItem['filter'].AsString;
-    vrObj.Params         := vrItem['params'].AsString;
-    vrObj.Flags          := vrItem['flags'].AsString;
-    vrObj.Category       := vrItem['flags'].AsString;
 
-    {
-    vrObj.Action     := vrItem['action'].AsString;
-    vrObj.ListAction := vrItem['listAction'].AsString;
-    vrObj.OptionPath := vrItem['optionPath'].AsString;
-    vrObj.Param      := vrItem['param'].AsString;
-    vrObj.Tags       := vrItem['tags'].AsString;
-    }
+    if Assigned(vrItem.FindPath('title')) then
+      vrObj.Title := vrItem['title'].AsString
+    else
+      vrObj.Title := EmptyStr;
+
+    if Assigned(vrItem.FindPath('icon')) then
+      vrObj.Icon := vrItem['icon'].AsInteger
+    else
+      vrObj.Icon := JUPITER_ICON_NONE;
+
+    if Assigned(vrItem.FindPath('runnableAction')) then
+      vrObj.RunnableAction := vrItem['runnableAction'].AsString;
+
+    if Assigned(vrItem.FindPath('filter')) then
+      vrObj.Filter := vrItem['filter'].AsString;
+
+    if Assigned(vrItem.FindPath('params')) then
+      vrObj.Params := vrItem['params'].AsString;
+
+    if Assigned(vrItem.FindPath('flags')) then
+      vrObj.Flags := vrItem['flags'].AsString;
+
+    if Assigned(vrItem.FindPath('category')) then
+      vrObj.Category := vrItem['category'].AsString
+    else
+      vrObj.Category := '<No category>';
 
     Self.FOnAddParam(Self, vrObj);
   end;

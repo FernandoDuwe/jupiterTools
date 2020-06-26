@@ -17,8 +17,8 @@ type
     lvItens: TListView;
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
-    MenuItem3: TMenuItem;
     MenuItem4: TMenuItem;
+    MenuItem5: TMenuItem;
     mmOptions: TMainMenu;
     pcBody: TPageControl;
     pcLeft: TPageControl;
@@ -29,6 +29,7 @@ type
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
     tvActions: TTreeView;
+    procedure MenuItem5Click(Sender: TObject);
     procedure tvActionsClick(Sender: TObject);
   private
     procedure Internal_AddParam(prSender : TObject; prParam : TJupiterAction);
@@ -61,11 +62,20 @@ begin
   Self.ActionFactory(TJupiterAction(tvActions.Selected.Data));
 end;
 
+procedure TFMain.MenuItem5Click(Sender: TObject);
+begin
+  Self.Internal_Prepare;
+
+  Self.UpdateForm;
+end;
+
 procedure TFMain.Internal_AddParam(prSender: TObject; prParam: TJupiterAction);
 var
   vrTree  : TTreeNode;
   vrOwner : TTreeNode;
 begin
+  tvActions.SortType := stText;
+
   if prParam.Category <> EmptyStr then
   begin
     vrOwner := tvActions.Items.FindNodeWithText(prParam.Category);
@@ -90,6 +100,8 @@ begin
 
   if prParam.Category <> EmptyStr then
      vrOwner.Expand(True);
+
+  tvActions.SortType := stBoth;
 end;
 
 procedure TFMain.Internal_Prepare;
@@ -139,6 +151,8 @@ var
 begin
   inherited Internal_ItemAddItem(prSender, prItem);
 
+  lvItens.SortType := stText;
+
   vrItem         := lvItens.Items.Add;
   vrItem.Caption := prItem.Title;
   vrItem.SubItems.Add(prItem.Description);
@@ -147,6 +161,8 @@ begin
   vrItem.StateIndex := JUPITER_ICON_NONE;
 
   vrItem.Data := prItem;
+
+  lvItens.SortType := stBoth;
 end;
 
 end.

@@ -4,11 +4,11 @@ program jupiterTools;
 
 uses
   {$IFDEF UNIX}{$IFDEF UseCThreads}
-  cthreads,
+  cthreads, cMem
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, uMain, JupiterForm, JupiterParams, JupiterRunnableItem, jupiterconsts,
-  JupiterRunnableItemListDirectory
+  JupiterRunnableItemListDirectory, JupiterRunnableItemListFromFile
   { you can add units after this }
   ;
 
