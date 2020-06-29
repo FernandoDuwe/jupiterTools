@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, Menus,
-  ExtCtrls, StdCtrls, Buttons, JupiterForm, JupiterParams, jupiterconsts;
+  ExtCtrls, StdCtrls, Buttons, JupiterForm, uNewAction, JupiterParams,
+  jupiterconsts;
 
 type
 
@@ -15,6 +16,7 @@ type
   TFMain = class(TJupiterForm)
     ilIcons: TImageList;
     lvItens: TListView;
+    mmOutput: TMemo;
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
     MenuItem4: TMenuItem;
@@ -28,8 +30,11 @@ type
     SpeedButton1: TSpeedButton;
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
+    TabSheet3: TTabSheet;
     tvActions: TTreeView;
+    procedure lvItensDblClick(Sender: TObject);
     procedure MenuItem5Click(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
     procedure tvActionsClick(Sender: TObject);
   private
     procedure Internal_AddParam(prSender : TObject; prParam : TJupiterAction);
@@ -59,7 +64,7 @@ begin
 
   lvItens.Items.Clear;
 
-  Self.ActionFactory(TJupiterAction(tvActions.Selected.Data));
+  Self.ActionFactory(TJupiterAction(tvActions.Selected.Data), nil);
 end;
 
 procedure TFMain.MenuItem5Click(Sender: TObject);
@@ -67,6 +72,27 @@ begin
   Self.Internal_Prepare;
 
   Self.UpdateForm;
+end;
+
+procedure TFMain.lvItensDblClick(Sender: TObject);
+begin
+  if not Assigned(lvItens.Selected) then
+    Exit;
+
+  if not Assigned(lvItens.Selected.Data) then
+    Exit;
+
+  Self.ActionFactory(nil, TJupiterListItem(lvItens.Selected.Data));
+end;
+
+procedure TFMain.SpeedButton1Click(Sender: TObject);
+begin
+  Application.CreateForm(TFNewAction, FNewAction);
+  try
+     FNewAction.ShowModal;
+  finally
+    FNewAction.Release;
+  end;
 end;
 
 procedure TFMain.Internal_AddParam(prSender: TObject; prParam: TJupiterAction);
@@ -133,11 +159,15 @@ end;
 procedure TFMain.Internal_UpdateComponents;
 begin
   inherited Internal_UpdateComponents;
+
+  lvItens.Enabled := tvActions.Items.Count <> 0;
 end;
 
 procedure TFMain.Internal_ItemChangeStatus(prSender: TObject; prStatus: TJupiterRunnableItemStatus);
 begin
   inherited Internal_ItemChangeStatus(prSender, prStatus);
+
+  lvItens.Enabled := prStatus = jrsDone;
 
   sbStatus.Panels[0].Text := 'Ready';
 

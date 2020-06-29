@@ -12,6 +12,7 @@ type
 
   TJupiterRunnableItem = class(TThread)
   private
+    FItem      : TJupiterListItem;
     FParam     : TJupiterAction;
     FStatus    : TJupiterRunnableItemStatus;
     FOnChange  : TJupiterRunnableItemChangeStatus;
@@ -26,7 +27,8 @@ type
     function  Internal_HasFlag(prFlag : String) : Boolean;
     function  Internal_GetFlagParam(prFlag : String) : String;
   published
-    property Param  : TJupiterAction read FParam write FParam;
+    property Param  : TJupiterAction   read FParam write FParam;
+    property Item   : TJupiterListItem read FItem  write FItem;
     property Status : TJupiterRunnableItemStatus read FStatus;
 
     property OnAddItem      : TJupiterRunnableItemAddItem      read FOnAddItem write FOnAddItem;
@@ -36,6 +38,8 @@ type
 
     class function ListAction : String; virtual; static;
   end;
+
+  ClassRunnableItem = Class OF TJupiterRunnableItem;
 
 implementation
 
@@ -91,11 +95,11 @@ begin
   vrStr := TStringList.Create;
   try
     vrStr.Delimiter     := '|';
-    vrStr.DelimitedText := StringReplace(prFlag, ' ', '|', [rfReplaceAll, rfIgnoreCase]);
+    vrStr.DelimitedText := StringReplace(Self.Param.Flags, ' ', '|', [rfReplaceAll, rfIgnoreCase]);
 
     for vrVez := 0 to vrStr.Count - 1 do
       if Pos(prFlag, vrStr[vrVez]) > 0 then
-        Result := StringReplace(prFlag, prFlag + ':', EmptyStr, [rfReplaceAll, rfIgnoreCase]);
+        Result := StringReplace(vrStr[vrVez], prFlag + ':', EmptyStr, [rfReplaceAll, rfIgnoreCase]);
   finally
     vrStr.Clear;
     FreeAndNil(vrStr);

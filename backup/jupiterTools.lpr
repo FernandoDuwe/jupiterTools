@@ -4,19 +4,21 @@ program jupiterTools;
 
 uses
   {$IFDEF UNIX}{$IFDEF UseCThreads}
-  cthreads, cMem
+  cthreads, cMem,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, uMain, JupiterForm, JupiterParams, JupiterRunnableItem, jupiterconsts,
-  JupiterRunnableItemListDirectory, JupiterRunnableItemListFromFile
+  JupiterRunnableItemListDirectory, JupiterRunnableItemListFromFile, jupiter,
+  uNewAction, jupiterrunnableitemopen
   { you can add units after this }
-  ;
+;
 
 {$R *.res}
 
 begin
   RequireDerivedFormResource := True;
-  Application.Scaled := True;
+  Application.Scaled         := True;
+
   Application.Initialize;
   Application.CreateForm(TFMain, FMain);
   Application.Run;

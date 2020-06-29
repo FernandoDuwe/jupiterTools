@@ -5,7 +5,7 @@
 				"params": "/home/duwe/Projetos/",
 				"runnableAction": "ListDirectory",
 				"filter": "*",
-				"flags": "-HIDDEN -DIRECTORIES -RECURSIVE -HASFILEINDIR:ELITE.GDB",
+				"flags": "-HIDDEN -DIRECTORIES",
 	   			"icon": 0
    		}
    ]

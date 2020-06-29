@@ -30,7 +30,7 @@
         <PackageName Value="LCL"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="8">
+    <Units Count="11">
       <Unit0>
         <Filename Value="jupiterTools.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -75,6 +75,22 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterRunnableItemListFromFile"/>
       </Unit7>
+      <Unit8>
+        <Filename Value="classes/jupiter.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="forms/unewaction.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FNewAction"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uNewAction"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="classes/jupiterrunnableitemopen.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit10>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

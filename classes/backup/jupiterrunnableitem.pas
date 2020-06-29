@@ -12,6 +12,7 @@ type
 
   TJupiterRunnableItem = class(TThread)
   private
+    FItem      : TJupiterListItem;
     FParam     : TJupiterAction;
     FStatus    : TJupiterRunnableItemStatus;
     FOnChange  : TJupiterRunnableItemChangeStatus;
@@ -36,6 +37,8 @@ type
 
     class function ListAction : String; virtual; static;
   end;
+
+  ClassRunnableItem = Class OF TJupiterRunnableItem;
 
 implementation
 
@@ -91,11 +94,11 @@ begin
   vrStr := TStringList.Create;
   try
     vrStr.Delimiter     := '|';
-    vrStr.DelimitedText := StringReplace(prFlag, ' ', '|', [rfReplaceAll, rfIgnoreCase]);
+    vrStr.DelimitedText := StringReplace(Self.Param.Flags, ' ', '|', [rfReplaceAll, rfIgnoreCase]);
 
     for vrVez := 0 to vrStr.Count - 1 do
       if Pos(prFlag, vrStr[vrVez]) > 0 then
-        Result := StringReplace(prFlag, prFlag + ':', '', [rfReplaceAll, rfIgnoreCase]);
+        Result := StringReplace(vrStr[vrVez], prFlag + ':', EmptyStr, [rfReplaceAll, rfIgnoreCase]);
   finally
     vrStr.Clear;
     FreeAndNil(vrStr);

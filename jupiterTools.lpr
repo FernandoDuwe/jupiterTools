@@ -8,7 +8,8 @@ uses
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, uMain, JupiterForm, JupiterParams, JupiterRunnableItem, jupiterconsts,
-  JupiterRunnableItemListDirectory, JupiterRunnableItemListFromFile
+  JupiterRunnableItemListDirectory, JupiterRunnableItemListFromFile, jupiter,
+  uNewAction, jupiterrunnableitemopen
   { you can add units after this }
   ;
 
@@ -16,7 +17,8 @@ uses
 
 begin
   RequireDerivedFormResource := True;
-  Application.Scaled := True;
+  Application.Scaled         := True;
+
   Application.Initialize;
   Application.CreateForm(TFMain, FMain);
   Application.Run;

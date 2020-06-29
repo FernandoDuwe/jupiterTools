@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, jupiterconsts,
   JupiterRunnableItemListDirectory, JupiterParams, JupiterRunnableItem,
-  JupiterRunnableItemListFromFile;
+  JupiterRunnableItemListFromFile, jupiter;
 
 type
 
@@ -28,7 +28,7 @@ type
   public
      procedure UpdateForm;
 
-     function ActionFactory(prParam : TJupiterAction) : TJupiterRunnableItem;
+     function ActionFactory(prParam : TJupiterAction; prItem : TJupiterListItem) : TJupiterRunnableItem;
   end;
 
 var
@@ -90,21 +90,32 @@ begin
   end;
 end;
 
-function TJupiterForm.ActionFactory(prParam: TJupiterAction): TJupiterRunnableItem;
+function TJupiterForm.ActionFactory(prParam: TJupiterAction; prItem : TJupiterListItem): TJupiterRunnableItem;
+var
+  vrObj : TJupiter;
 begin
   Result := nil;
 
-  if AnsiUpperCase(prParam.RunnableAction) = AnsiUpperCase(TJupiterRunnableItemListDirectory.ListAction) then
-    Result := TJupiterRunnableItemListDirectory.Create(True);
+  vrObj := TJupiter.Create;
+  try
+    if not Assigned(prParam) then
+        Result := vrObj.CreateRunnable('open')
+    else
+        Result := vrObj.CreateRunnable(prParam.RunnableAction);
 
-  if AnsiUpperCase(prParam.ListAction) = AnsiUpperCase(TJupiterRunnableItemListFromFile.ListAction) then
-    Result := TJupiterRunnableItemListFromFile.Create(True);
+    if Assigned(prParam) then
+        Result.Param := prParam;
 
-  Result.Param          := prParam;
-  Result.OnAddItem      := @Self.Internal_ItemAddItem;
-  Result.OnChangeStatus := @Self.Internal_ItemChangeStatus;
+    if Assigned(prItem) then
+        Result.Item := prItem;
 
-  Result.Start;
+    Result.OnAddItem      := @Self.Internal_ItemAddItem;
+    Result.OnChangeStatus := @Self.Internal_ItemChangeStatus;
+
+    Result.Start;
+  finally
+    FreeAndNil(vrObj);
+  end;
 end;
 
 end.

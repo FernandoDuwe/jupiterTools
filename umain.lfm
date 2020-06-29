@@ -9,6 +9,7 @@ object FMain: TFMain
   Menu = mmOptions
   OnCreate = FormCreate
   OnShow = FormShow
+  Position = poScreenCenter
   LCLVersion = '2.0.6.0'
   object pnTop: TPanel
     Left = 0
@@ -28,6 +29,7 @@ object FMain: TFMain
       Width = 25
       Images = ilIcons
       ImageIndex = 7
+      OnClick = SpeedButton1Click
       ShowHint = True
       ParentShowHint = False
     end
@@ -113,6 +115,22 @@ object FMain: TFMain
         StateImages = ilIcons
         TabOrder = 0
         ViewStyle = vsReport
+        OnDblClick = lvItensDblClick
+      end
+    end
+    object TabSheet3: TTabSheet
+      Caption = 'Output'
+      ClientHeight = 488
+      ClientWidth = 740
+      object mmOutput: TMemo
+        Left = 0
+        Height = 488
+        Top = 0
+        Width = 740
+        Align = alClient
+        ReadOnly = True
+        ScrollBars = ssAutoBoth
+        TabOrder = 0
       end
     end
   end
