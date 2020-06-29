@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, JupiterRunnableItem, JupiterRunnableItemListDirectory,
-  JupiterRunnableItemListFromFile;
+  JupiterRunnableItemListFromFile, jupiterrunnableitemopen;
 
 type
 
@@ -39,6 +39,7 @@ procedure TJupiter.Prepare;
 begin
   Self.RegisterRunnable(TJupiterRunnableItemListDirectory);
   Self.RegisterRunnable(TJupiterRunnableItemListFromFile);
+  Self.RegisterRunnable(TJupiterRunnableItemOpen);
 end;
 
 function TJupiter.CreateRunnable(prRunnableName: String): TJupiterRunnableItem;

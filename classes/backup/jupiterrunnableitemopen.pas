@@ -29,7 +29,7 @@ begin
 
   vrProcess := TProcess.Create(nil);
   try
-    vrProcess.Executable := Self.Item.Title;
+    vrProcess.Executable := Self.Item.Description;
 
     vrProcess.Parameters.AddStrings(Self.Item.Param);
 
@@ -43,7 +43,7 @@ end;
 
 class function TJupiterRunnableItemOpen.ListAction: String;
 begin
-  Result := 'ListDirectory';
+  Result := 'Open';
 end;
 
 end.

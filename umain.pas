@@ -5,9 +5,9 @@ unit uMain;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, Menus,
+  Classes, SysUtils, Controls, Graphics, Dialogs, ComCtrls, Menus,
   ExtCtrls, StdCtrls, Buttons, JupiterForm, uNewAction, JupiterParams,
-  jupiterconsts;
+  jupiterconsts, Forms;
 
 type
 
@@ -37,6 +37,8 @@ type
     procedure SpeedButton1Click(Sender: TObject);
     procedure tvActionsClick(Sender: TObject);
   private
+    FAction : TJupiterAction;
+
     procedure Internal_AddParam(prSender : TObject; prParam : TJupiterAction);
   protected
     procedure Internal_Prepare; override;
@@ -63,6 +65,8 @@ begin
     Exit;
 
   lvItens.Items.Clear;
+
+  Self.FAction := TJupiterAction(tvActions.Selected.Data);
 
   Self.ActionFactory(TJupiterAction(tvActions.Selected.Data), nil);
 end;
@@ -179,6 +183,10 @@ procedure TFMain.Internal_ItemAddItem(prSender: TObject; prItem: TJupiterListIte
 var
   vrItem : TListItem;
 begin
+  prItem.Param := Self.FAction.RunnableParam;
+  prItem.Param := StringReplace(prItem.Param, '{item}', prItem.Title, [rfIgnoreCase, rfReplaceAll]);
+  prItem.Param := StringReplace(prItem.Param, '{description}', prItem.Description, [rfIgnoreCase, rfReplaceAll]);
+
   inherited Internal_ItemAddItem(prSender, prItem);
 
   lvItens.SortType := stText;

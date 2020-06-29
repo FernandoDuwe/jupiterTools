@@ -84,7 +84,9 @@ begin
   begin
     vrItem := vrArray.Objects[vrVez];
 
-    vrObj                := TJupiterAction.Create;
+    vrObj := TJupiterAction.Create;
+
+    vrObj.RunnableParam := '{description}';
 
     if Assigned(vrItem.FindPath('title')) then
       vrObj.Title := vrItem['title'].AsString
@@ -98,6 +100,9 @@ begin
 
     if Assigned(vrItem.FindPath('runnableAction')) then
       vrObj.RunnableAction := vrItem['runnableAction'].AsString;
+
+    if Assigned(vrItem.FindPath('runnableParam')) then
+      vrObj.RunnableParam := vrItem['runnableAction'].AsString;
 
     if Assigned(vrItem.FindPath('filter')) then
       vrObj.Filter := vrItem['filter'].AsString;

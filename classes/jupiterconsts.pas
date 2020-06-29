@@ -48,6 +48,7 @@ type
     Params         : String;
     Filter         : String;
     RunnableAction : String;
+    RunnableParam  : String;
   end;
 
   // Use to add a item to a form list

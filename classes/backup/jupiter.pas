@@ -16,7 +16,7 @@ type
   private
     FList : TList;
   published
-    property
+    property List : TList read FList write FList;
   public
     procedure RegisterRunnable(prRunnable : ClassRunnableItem);
     procedure Prepare;
@@ -38,6 +38,7 @@ end;
 procedure TJupiter.Prepare;
 begin
   Self.RegisterRunnable(TJupiterRunnableItemListDirectory);
+  Self.RegisterRunnable(TJupiterRunnableItemListFromFile);
   Self.RegisterRunnable(TJupiterRunnableItemListFromFile);
 end;
 

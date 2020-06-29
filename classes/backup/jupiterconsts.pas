@@ -14,7 +14,9 @@ const
   JUPITER_ICON_BATCH     : Integer = 2;
   JUPITER_ICON_DOCKER    : Integer = 3;
   JUPITER_ICON_DB        : Integer = 4;
-  JUPITER_ICON_DB        : Integer = 3;
+  JUPITER_ICON_SCRIPT    : Integer = 5;
+  JUPITER_ICON_TOOL      : Integer = 6;
+  JUPITER_ICON_ADD       : Integer = 7;
 
 type
   // Controls a thread status
@@ -46,6 +48,7 @@ type
     Params         : String;
     Filter         : String;
     RunnableAction : String;
+    Runnable
   end;
 
   // Use to add a item to a form list
