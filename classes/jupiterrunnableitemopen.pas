@@ -31,6 +31,8 @@ begin
   try
     vrProcess.Executable := Self.Item.Param;
 
+    Self.OnMessage(Self, Self.Item.Param);
+
     vrProcess.Options := vrProcess.Options + [poNewConsole, poUsePipes];
 
     vrProcess.Execute;

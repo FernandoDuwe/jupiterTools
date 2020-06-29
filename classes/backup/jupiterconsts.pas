@@ -25,6 +25,8 @@ type
   // Use to monitor the change of status on a thread
   TJupiterRunnableItemChangeStatus = procedure(prSender : TObject; prStatus : TJupiterRunnableItemStatus) of object;
 
+  TJupiterRunnableItemMessage = procedure(prSender : TObject; prStatus : TJupiterRunnableItemStatus) of object;
+
   { TJupiterListItem }
 
   TJupiterListItem = class(TObject)
@@ -48,7 +50,7 @@ type
     Params         : String;
     Filter         : String;
     RunnableAction : String;
-    Runnable
+    RunnableParam  : String;
   end;
 
   // Use to add a item to a form list

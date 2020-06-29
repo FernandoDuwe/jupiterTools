@@ -2,7 +2,7 @@
 <CONFIG>
   <ProjectSession>
     <Version Value="11"/>
-    <BuildModes Active="Release"/>
+    <BuildModes Active="Default"/>
     <Units Count="21">
       <Unit0>
         <Filename Value="jupiterTools.lpr"/>
@@ -10,7 +10,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="2"/>
         <CursorPos X="51" Y="16"/>
-        <UsageCount Value="122"/>
+        <UsageCount Value="126"/>
       </Unit0>
       <Unit1>
         <Filename Value="umain.pas"/>
@@ -20,9 +20,9 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uMain"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="171"/>
-        <CursorPos X="42" Y="191"/>
-        <UsageCount Value="122"/>
+        <TopLine Value="207"/>
+        <CursorPos X="19" Y="222"/>
+        <UsageCount Value="126"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit1>
@@ -33,36 +33,39 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="JupiterForm"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="93"/>
-        <CursorPos X="22" Y="98"/>
-        <UsageCount Value="122"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="16"/>
+        <CursorPos X="85" Y="18"/>
+        <UsageCount Value="126"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit2>
       <Unit3>
         <Filename Value="classes/jupiterparams.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterParams"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="77"/>
-        <CursorPos X="19" Y="101"/>
-        <UsageCount Value="122"/>
+        <TopLine Value="79"/>
+        <CursorPos X="34" Y="86"/>
+        <UsageCount Value="126"/>
       </Unit3>
       <Unit4>
         <Filename Value="classes/jupiterrunnableitem.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterRunnableItem"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="18"/>
-        <CursorPos X="57" Y="20"/>
-        <UsageCount Value="122"/>
+        <TopLine Value="19"/>
+        <CursorPos X="40" Y="23"/>
+        <UsageCount Value="126"/>
       </Unit4>
       <Unit5>
         <Filename Value="classes/jupiterconsts.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="17"/>
-        <CursorPos X="27" Y="36"/>
-        <UsageCount Value="76"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="16"/>
+        <CursorPos X="92" Y="28"/>
+        <UsageCount Value="80"/>
+        <Loaded Value="True"/>
       </Unit5>
       <Unit6>
         <Filename Value="classes/jupiterrunnableitemlistdirectory.pas"/>
@@ -71,7 +74,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="64"/>
         <CursorPos Y="82"/>
-        <UsageCount Value="75"/>
+        <UsageCount Value="79"/>
       </Unit6>
       <Unit7>
         <Filename Value="classes/jupiterrunnableitemlistfromfile.pas"/>
@@ -79,7 +82,7 @@
         <UnitName Value="JupiterRunnableItemListFromFile"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="26" Y="3"/>
-        <UsageCount Value="40"/>
+        <UsageCount Value="44"/>
       </Unit7>
       <Unit8>
         <Filename Value="classes/jupiter.pas"/>
@@ -87,7 +90,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="34"/>
         <CursorPos X="49" Y="42"/>
-        <UsageCount Value="28"/>
+        <UsageCount Value="32"/>
       </Unit8>
       <Unit9>
         <Filename Value="forms/unewaction.pas"/>
@@ -99,7 +102,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="35"/>
         <CursorPos X="17" Y="38"/>
-        <UsageCount Value="23"/>
+        <UsageCount Value="27"/>
       </Unit9>
       <Unit10>
         <Filename Value="classes/jupiterrunnableitemopen.pas"/>
@@ -107,7 +110,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="16"/>
         <CursorPos X="19" Y="22"/>
-        <UsageCount Value="22"/>
+        <UsageCount Value="26"/>
       </Unit10>
       <Unit11>
         <Filename Value="/usr/share/fpcsrc/3.0.4/rtl/objpas/classes/classesh.inc"/>
@@ -181,7 +184,7 @@
         <UsageCount Value="10"/>
       </Unit20>
     </Units>
-    <JumpHistory Count="5" HistoryIndex="4">
+    <JumpHistory Count="19" HistoryIndex="18">
       <Position1>
         <Filename Value="umain.pas"/>
         <Caret Line="4" Column="19"/>
@@ -202,6 +205,62 @@
         <Filename Value="umain.pas"/>
         <Caret Line="47" Column="32" TopLine="26"/>
       </Position5>
+      <Position6>
+        <Filename Value="umain.pas"/>
+        <Caret Line="170" Column="63" TopLine="159"/>
+      </Position6>
+      <Position7>
+        <Filename Value="umain.pas"/>
+        <Caret Line="47" Column="30" TopLine="38"/>
+      </Position7>
+      <Position8>
+        <Filename Value="umain.pas"/>
+        <Caret Line="190" Column="30" TopLine="184"/>
+      </Position8>
+      <Position9>
+        <Filename Value="umain.pas"/>
+        <Caret Line="46" Column="15" TopLine="36"/>
+      </Position9>
+      <Position10>
+        <Filename Value="umain.pas"/>
+        <Caret Line="172" Column="50" TopLine="166"/>
+      </Position10>
+      <Position11>
+        <Filename Value="umain.pas"/>
+        <Caret Line="173" Column="50" TopLine="167"/>
+      </Position11>
+      <Position12>
+        <Filename Value="classes/jupiterconsts.pas"/>
+        <Caret Line="36" Column="27" TopLine="17"/>
+      </Position12>
+      <Position13>
+        <Filename Value="umain.pas"/>
+        <Caret Line="198" Column="19" TopLine="180"/>
+      </Position13>
+      <Position14>
+        <Filename Value="umain.pas"/>
+        <Caret Line="40" Column="27" TopLine="32"/>
+      </Position14>
+      <Position15>
+        <Filename Value="umain.pas"/>
+        <Caret Line="73" Column="68" TopLine="60"/>
+      </Position15>
+      <Position16>
+        <Filename Value="forms/jupiterform.pas"/>
+        <Caret Line="28" Column="31" TopLine="13"/>
+      </Position16>
+      <Position17>
+        <Filename Value="forms/jupiterform.pas"/>
+        <Caret Line="87" Column="8" TopLine="75"/>
+      </Position17>
+      <Position18>
+        <Filename Value="umain.pas"/>
+        <Caret Line="66" Column="4" TopLine="60"/>
+      </Position18>
+      <Position19>
+        <Filename Value="umain.pas"/>
+        <Caret Line="51" Column="80" TopLine="29"/>
+      </Position19>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>

@@ -118,6 +118,21 @@ object FMain: TFMain
         OnDblClick = lvItensDblClick
       end
     end
+    object TabSheet4: TTabSheet
+      Caption = 'Messages'
+      ClientHeight = 488
+      ClientWidth = 740
+      object mmMessages: TMemo
+        Left = 0
+        Height = 488
+        Top = 0
+        Width = 740
+        Align = alClient
+        ReadOnly = True
+        ScrollBars = ssAutoBoth
+        TabOrder = 0
+      end
+    end
     object TabSheet3: TTabSheet
       Caption = 'Output'
       ClientHeight = 488

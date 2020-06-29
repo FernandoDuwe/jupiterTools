@@ -25,6 +25,8 @@ type
      // Events
      procedure Internal_ItemChangeStatus(prSender : TObject; prStatus : TJupiterRunnableItemStatus); virtual;
      procedure Internal_ItemAddItem(prSender : TObject; prItem : TJupiterListItem); virtual;
+     procedure Internal_Message(prSender : TObject; prMessage : String); virtual;
+     procedure Internal_Output(prSender : TObject; prMessage : String); virtual;
   public
      procedure UpdateForm;
 
@@ -78,6 +80,16 @@ end;
 procedure TJupiterForm.Internal_ItemAddItem(prSender: TObject; prItem: TJupiterListItem);
 begin
   //
+end;
+
+procedure TJupiterForm.Internal_Message(prSender: TObject; prMessage: String);
+begin
+     //
+end;
+
+procedure TJupiterForm.Internal_Output(prSender: TObject; prMessage: String);
+begin
+     //
 end;
 
 procedure TJupiterForm.UpdateForm;

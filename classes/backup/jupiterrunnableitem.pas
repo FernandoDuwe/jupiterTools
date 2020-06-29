@@ -17,6 +17,8 @@ type
     FStatus    : TJupiterRunnableItemStatus;
     FOnChange  : TJupiterRunnableItemChangeStatus;
     FOnAddItem : TJupiterRunnableItemAddItem;
+    FOnMessage : TJupiterRunnableItemMessage;
+    FOnOutput  : TJupiterRunnableItemMessage;
 
     procedure Internal_ChangeStatus(prNewStatus : TJupiterRunnableItemStatus);
   protected
@@ -27,11 +29,14 @@ type
     function  Internal_HasFlag(prFlag : String) : Boolean;
     function  Internal_GetFlagParam(prFlag : String) : String;
   published
-    property Param  : TJupiterAction read FParam write FParam;
+    property Param  : TJupiterAction   read FParam write FParam;
+    property Item   : TJupiterListItem read FItem  write FItem;
     property Status : TJupiterRunnableItemStatus read FStatus;
 
     property OnAddItem      : TJupiterRunnableItemAddItem      read FOnAddItem write FOnAddItem;
     property OnChangeStatus : TJupiterRunnableItemChangeStatus read FOnChange  write FOnChange;
+    property OnMessage      : TJupiterRunnableItemChangeStatus read FOnMessage write FOnMessage;
+    property OnOutput       : TJupiterRunnableItemChangeStatus read FOnOutput  write FOnOutput;
   public
     constructor Create(CreateSuspended: Boolean; const StackSize: SizeUInt = DefaultStackSize);
 

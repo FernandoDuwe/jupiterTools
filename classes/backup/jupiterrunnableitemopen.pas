@@ -29,9 +29,9 @@ begin
 
   vrProcess := TProcess.Create(nil);
   try
-    vrProcess.Executable := Self.Item.Description;
+    vrProcess.Executable := Self.Item.Param;
 
-    vrProcess.Parameters.AddStrings(Self.Item.Param);
+    Self.f;
 
     vrProcess.Options := vrProcess.Options + [poNewConsole, poUsePipes];
 

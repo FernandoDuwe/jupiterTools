@@ -17,6 +17,8 @@ type
     FStatus    : TJupiterRunnableItemStatus;
     FOnChange  : TJupiterRunnableItemChangeStatus;
     FOnAddItem : TJupiterRunnableItemAddItem;
+    FOnMessage : TJupiterRunnableItemMessage;
+    FOnOutput  : TJupiterRunnableItemMessage;
 
     procedure Internal_ChangeStatus(prNewStatus : TJupiterRunnableItemStatus);
   protected
@@ -33,6 +35,8 @@ type
 
     property OnAddItem      : TJupiterRunnableItemAddItem      read FOnAddItem write FOnAddItem;
     property OnChangeStatus : TJupiterRunnableItemChangeStatus read FOnChange  write FOnChange;
+    property OnMessage      : TJupiterRunnableItemMessage      read FOnMessage write FOnMessage;
+    property OnOutput       : TJupiterRunnableItemMessage      read FOnOutput  write FOnOutput;
   public
     constructor Create(CreateSuspended: Boolean; const StackSize: SizeUInt = DefaultStackSize);
 

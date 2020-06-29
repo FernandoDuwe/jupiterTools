@@ -16,6 +16,7 @@ type
   TFMain = class(TJupiterForm)
     ilIcons: TImageList;
     lvItens: TListView;
+    mmMessages: TMemo;
     mmOutput: TMemo;
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
@@ -31,6 +32,7 @@ type
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
     TabSheet3: TTabSheet;
+    TabSheet4: TTabSheet;
     tvActions: TTreeView;
     procedure lvItensDblClick(Sender: TObject);
     procedure MenuItem5Click(Sender: TObject);
@@ -45,6 +47,8 @@ type
     procedure Internal_UpdateComponents; override;
     procedure Internal_ItemChangeStatus(prSender: TObject; prStatus: TJupiterRunnableItemStatus); override;
     procedure Internal_ItemAddItem(prSender : TObject; prItem : TJupiterListItem); override;
+    procedure Internal_Message(prSender : TObject; prMessage : String); override;
+    procedure Internal_Output(prSender : TObject; prMessage : String); override;
   end;
 
 var
@@ -165,6 +169,10 @@ begin
   inherited Internal_UpdateComponents;
 
   lvItens.Enabled := tvActions.Items.Count <> 0;
+
+  TabSheet1.Caption := Format('Itens (%0:d)', [lvItens.Items.Count]);
+  TabSheet3.Caption := Format('Output (%0:d)', [mmOutput.Lines.Count]);
+  TabSheet4.Caption := Format('Messages (%0:d)', [mmMessages.Lines.Count]);
 end;
 
 procedure TFMain.Internal_ItemChangeStatus(prSender: TObject; prStatus: TJupiterRunnableItemStatus);
@@ -177,6 +185,8 @@ begin
 
   if prStatus = jrsRunning then
     sbStatus.Panels[0].Text := 'Working...';
+
+  Self.UpdateForm;
 end;
 
 procedure TFMain.Internal_ItemAddItem(prSender: TObject; prItem: TJupiterListItem);
@@ -185,7 +195,7 @@ var
 begin
   prItem.Param := Self.FAction.RunnableParam;
   prItem.Param := StringReplace(prItem.Param, '{item}', prItem.Title, [rfIgnoreCase, rfReplaceAll]);
-  prItem.Param := StringReplace(prItem.Param, '{item}', prItem.Title, [rfIgnoreCase, rfReplaceAll]);
+  prItem.Param := StringReplace(prItem.Param, '{description}', prItem.Description, [rfIgnoreCase, rfReplaceAll]);
 
   inherited Internal_ItemAddItem(prSender, prItem);
 
@@ -201,6 +211,21 @@ begin
   vrItem.Data := prItem;
 
   lvItens.SortType := stBoth;
+end;
+
+procedure TFMain.Internal_Message(prSender: TObject; prMessage: String);
+begin
+  inherited Internal_Message(prSender, prMessage);
+
+  mmMessages.Lines.Add(prMessage);
+end;
+
+procedure TFMain.Internal_Output(prSender: TObject; prMessage: String);
+begin
+  inherited Internal_Output(prSender, prMessage);
+
+  mmOutput.Lines.Clear;
+  mmOutput.Lines.Add(prMessage);
 end;
 
 end.

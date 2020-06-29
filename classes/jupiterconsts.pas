@@ -25,6 +25,8 @@ type
   // Use to monitor the change of status on a thread
   TJupiterRunnableItemChangeStatus = procedure(prSender : TObject; prStatus : TJupiterRunnableItemStatus) of object;
 
+  TJupiterRunnableItemMessage = procedure(prSender : TObject; prMessage : String) of object;
+
   { TJupiterListItem }
 
   TJupiterListItem = class(TObject)
