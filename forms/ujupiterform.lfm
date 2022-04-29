@@ -1,0 +1,9 @@
+object JupiterForm: TJupiterForm
+  Left = 784
+  Height = 240
+  Top = 145
+  Width = 320
+  Caption = 'JupiterForm'
+  OnActivate = FormActivate
+  LCLVersion = '2.2.0.4'
+end

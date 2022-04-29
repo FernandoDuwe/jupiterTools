@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectOptions>
-    <Version Value="11"/>
+    <Version Value="12"/>
+    <PathDelim Value="\"/>
     <General>
       <SessionStorage Value="InProjectDir"/>
-      <MainUnit Value="0"/>
       <Title Value="jupiterTools"/>
       <Scaled Value="True"/>
       <ResourceType Value="res"/>
@@ -14,86 +14,8 @@
       </XPManifest>
       <Icon Value="0"/>
     </General>
-    <BuildModes Count="3">
-      <Item1 Name="Default" Default="True"/>
-      <Item2 Name="Debug">
-        <CompilerOptions>
-          <Version Value="11"/>
-          <Target>
-            <Filename Value="jupiterTools"/>
-          </Target>
-          <SearchPaths>
-            <IncludeFiles Value="$(ProjOutDir)"/>
-            <OtherUnitFiles Value="forms;classes"/>
-            <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
-          </SearchPaths>
-          <Parsing>
-            <SyntaxOptions>
-              <IncludeAssertionCode Value="True"/>
-            </SyntaxOptions>
-          </Parsing>
-          <CodeGeneration>
-            <Checks>
-              <IOChecks Value="True"/>
-              <RangeChecks Value="True"/>
-              <OverflowChecks Value="True"/>
-              <StackChecks Value="True"/>
-            </Checks>
-            <VerifyObjMethodCallValidity Value="True"/>
-          </CodeGeneration>
-          <Linking>
-            <Debugging>
-              <DebugInfoType Value="dsDwarf2Set"/>
-              <UseHeaptrc Value="True"/>
-              <TrashVariables Value="True"/>
-              <UseExternalDbgSyms Value="True"/>
-            </Debugging>
-            <Options>
-              <Win32>
-                <GraphicApplication Value="True"/>
-              </Win32>
-            </Options>
-          </Linking>
-          <Other>
-            <CustomOptions Value="-dUseCThreads"/>
-          </Other>
-        </CompilerOptions>
-      </Item2>
-      <Item3 Name="Release">
-        <CompilerOptions>
-          <Version Value="11"/>
-          <Target>
-            <Filename Value="jupiterTools"/>
-          </Target>
-          <SearchPaths>
-            <IncludeFiles Value="$(ProjOutDir)"/>
-            <OtherUnitFiles Value="forms;classes"/>
-            <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
-          </SearchPaths>
-          <CodeGeneration>
-            <SmartLinkUnit Value="True"/>
-            <TargetCPU Value="x86_64"/>
-            <TargetOS Value="win64"/>
-            <Optimizations>
-              <OptimizationLevel Value="3"/>
-            </Optimizations>
-          </CodeGeneration>
-          <Linking>
-            <Debugging>
-              <GenerateDebugInfo Value="False"/>
-            </Debugging>
-            <LinkSmart Value="True"/>
-            <Options>
-              <Win32>
-                <GraphicApplication Value="True"/>
-              </Win32>
-            </Options>
-          </Linking>
-          <Other>
-            <CustomOptions Value="-dUseCThreads"/>
-          </Other>
-        </CompilerOptions>
-      </Item3>
+    <BuildModes>
+      <Item Name="Default" Default="True"/>
     </BuildModes>
     <PublishOptions>
       <Version Value="2"/>
@@ -101,108 +23,109 @@
     </PublishOptions>
     <RunParams>
       <FormatVersion Value="2"/>
-      <Modes Count="0"/>
     </RunParams>
-    <RequiredPackages Count="1">
-      <Item1>
+    <RequiredPackages>
+      <Item>
         <PackageName Value="LCL"/>
-      </Item1>
+      </Item>
     </RequiredPackages>
-    <Units Count="11">
-      <Unit0>
+    <Units>
+      <Unit>
         <Filename Value="jupiterTools.lpr"/>
         <IsPartOfProject Value="True"/>
-      </Unit0>
-      <Unit1>
+      </Unit>
+      <Unit>
         <Filename Value="umain.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FMain"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uMain"/>
-      </Unit1>
-      <Unit2>
-        <Filename Value="forms/jupiterform.pas"/>
+      </Unit>
+      <Unit>
+        <Filename Value="classes\jupiterapp.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="FJupiterForm"/>
+        <UnitName Value="JupiterApp"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms\ujupiterform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="JupiterForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="JupiterForm"/>
-      </Unit2>
-      <Unit3>
-        <Filename Value="classes/jupiterparams.pas"/>
+        <UnitName Value="uJupiterForm"/>
+      </Unit>
+      <Unit>
+        <Filename Value="classes\jupitermodule.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="JupiterParams"/>
-      </Unit3>
-      <Unit4>
-        <Filename Value="classes/jupiterrunnableitem.pas"/>
+        <UnitName Value="JupiterModule"/>
+      </Unit>
+      <Unit>
+        <Filename Value="classes\jupiterconfig.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="JupiterRunnableItem"/>
-      </Unit4>
-      <Unit5>
-        <Filename Value="classes/jupiterconsts.pas"/>
+        <UnitName Value="JupiterConfig"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms\uconfig.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit5>
-      <Unit6>
-        <Filename Value="classes/jupiterrunnableitemlistdirectory.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="JupiterRunnableItemListDirectory"/>
-      </Unit6>
-      <Unit7>
-        <Filename Value="classes/jupiterrunnableitemlistfromfile.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="JupiterRunnableItemListFromFile"/>
-      </Unit7>
-      <Unit8>
-        <Filename Value="classes/jupiter.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit8>
-      <Unit9>
-        <Filename Value="forms/unewaction.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="FNewAction"/>
+        <ComponentName Value="FConfig"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="uNewAction"/>
-      </Unit9>
-      <Unit10>
-        <Filename Value="classes/jupiterrunnableitemopen.pas"/>
+        <UnitName Value="uConfig"/>
+      </Unit>
+      <Unit>
+        <Filename Value="modules\jupitertasks.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit10>
+        <UnitName Value="JupiterTasks"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms\uexplorer.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FExplorer"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uExplorer"/>
+      </Unit>
+      <Unit>
+        <Filename Value="utils\jupiterconsts.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterConsts"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
     <Version Value="11"/>
+    <PathDelim Value="\"/>
     <Target>
-      <Filename Value="jupiterTools"/>
+      <Filename Value="./out/jupiterTools"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="forms;classes"/>
-      <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
+      <OtherUnitFiles Value="classes;forms;modules;utils"/>
+      <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Linking>
+      <Debugging>
+        <DebugInfoType Value="dsDwarf2Set"/>
+      </Debugging>
       <Options>
         <Win32>
           <GraphicApplication Value="True"/>
         </Win32>
       </Options>
     </Linking>
-    <Other>
-      <CustomOptions Value="-dUseCThreads"/>
-    </Other>
   </CompilerOptions>
   <Debugging>
-    <Exceptions Count="3">
-      <Item1>
+    <Exceptions>
+      <Item>
         <Name Value="EAbort"/>
-      </Item1>
-      <Item2>
+      </Item>
+      <Item>
         <Name Value="ECodetoolError"/>
-      </Item2>
-      <Item3>
+      </Item>
+      <Item>
         <Name Value="EFOpenError"/>
-      </Item3>
+      </Item>
     </Exceptions>
   </Debugging>
 </CONFIG>

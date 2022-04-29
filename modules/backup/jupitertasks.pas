@@ -1,0 +1,56 @@
+unit JupiterTasks;
+
+{$mode ObjFPC}{$H+}
+
+interface
+
+uses
+  Classes, SysUtils, JupiterModule, JupiterApp, JupiterConsts, ComCtrls;
+
+type
+
+  { TJupiterTasks }
+
+  TJupiterTasks = class(TJupiterModule)
+  protected
+    procedure Internal_Initialize; override;
+    function  Internal_GetIdentifier: String; override;
+  public
+    procedure GetTasks(var prTreeMenu : TTreeView); override;
+  end;
+
+implementation
+
+{ TJupiterTasks }
+
+procedure TJupiterTasks.Internal_Initialize;
+begin
+  inherited Internal_Initialize;
+
+  if not Self.JupiterApp.Config.Exists(Self.ID + '.Path') then
+     Self.JupiterApp.Config.AddConfig(Self.ID + '.Path', 'C:\Tarefas\', 'Diretório de tarefas');
+
+  if not DirectoryExists(Self.JupiterApp.Config.GetByID(Self.ID + '.Path').Value) then
+     CreateDir(Self.JupiterApp.Config.GetByID(Self.ID + '.Path').Value);
+end;
+
+function TJupiterTasks.Internal_GetIdentifier: String;
+begin
+  Result := 'JupiterTools.Modules.Tasks';
+end;
+
+procedure TJupiterTasks.GetTasks(var prTreeMenu: TTreeView);
+var
+  vrNode : TTreeNode;
+begin
+  inherited GetTasks(prTreeMenu);
+
+  vrNode               := prTreeMenu.Items.Add(nil, 'Tarefas');
+  vrNode.ImageIndex    := ICON_FOLDER;
+  vrNode.SelectedIndex := ICON_FOLDER;
+
+  vrNode.Data := TJupiterListem.Create(Self.ID, '/', );
+end;
+
+end.
+

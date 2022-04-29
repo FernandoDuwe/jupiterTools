@@ -1,0 +1,41 @@
+inherited FConfig: TFConfig
+  Left = 473
+  Height = 595
+  Top = 157
+  Width = 965
+  Caption = 'Configurações'
+  ClientHeight = 595
+  ClientWidth = 965
+  Position = poScreenCenter
+  object sbStatus: TStatusBar[0]
+    Left = 0
+    Height = 23
+    Top = 572
+    Width = 965
+    Panels = <>
+  end
+  object lvParams: TListView[1]
+    Left = 0
+    Height = 572
+    Top = 0
+    Width = 965
+    Align = alClient
+    Columns = <    
+      item
+        Caption = 'Identificador'
+        Width = 200
+      end    
+      item
+        Caption = 'Descrição'
+        Width = 200
+      end    
+      item
+        Caption = 'Valor'
+        Width = 600
+      end>
+    ReadOnly = True
+    SortType = stText
+    TabOrder = 1
+    ViewStyle = vsReport
+  end
+end

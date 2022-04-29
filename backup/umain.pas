@@ -5,50 +5,45 @@ unit uMain;
 interface
 
 uses
-  Classes, SysUtils, Controls, Graphics, Dialogs, ComCtrls, Menus,
-  ExtCtrls, StdCtrls, Buttons, JupiterForm, uNewAction, JupiterParams,
-  jupiterconsts, Forms;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, ExtCtrls,
+  Menus, JupiterApp, JupiterConfig, JupiterModule, uJupiterForm, uConfig,
+  uExplorer, JupiterConsts;
 
 type
 
   { TFMain }
 
   TFMain = class(TJupiterForm)
-    ilIcons: TImageList;
-    lvItens: TListView;
-    mmMessages: TMemo;
-    mmOutput: TMemo;
+    ilMainIcons: TImageList;
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
+    MenuItem3: TMenuItem;
     MenuItem4: TMenuItem;
     MenuItem5: TMenuItem;
-    mmOptions: TMainMenu;
-    pcBody: TPageControl;
-    pcLeft: TPageControl;
-    pnTop: TPanel;
+    MenuItem6: TMenuItem;
+    MenuItem7: TMenuItem;
+    miModules: TMenuItem;
+    miMessages: TMenuItem;
+    Separator1: TMenuItem;
+    miConfig: TMenuItem;
+    mMenu: TMainMenu;
+    pnBody: TPanel;
+    pnLeft: TPanel;
     sbStatus: TStatusBar;
-    spDivisor: TSplitter;
-    SpeedButton1: TSpeedButton;
-    TabSheet1: TTabSheet;
-    TabSheet2: TTabSheet;
-    TabSheet3: TTabSheet;
-    TabSheet4: TTabSheet;
-    tvActions: TTreeView;
-    procedure lvItensDblClick(Sender: TObject);
-    procedure MenuItem5Click(Sender: TObject);
-    procedure SpeedButton1Click(Sender: TObject);
-    procedure tvActionsClick(Sender: TObject);
+    Splitter1: TSplitter;
+    tvItens: TTreeView;
+    procedure FormResize(Sender: TObject);
+    procedure MenuItem7Click(Sender: TObject);
+    procedure miModulesClick(Sender: TObject);
+    procedure miConfigClick(Sender: TObject);
+    procedure tvItensClick(Sender: TObject);
   private
-    FAction : TJupiterAction;
+    FCurrentForm : TJupiterForm;
 
-    procedure Internal_AddParam(prSender : TObject; prParam : TJupiterAction);
-  protected
-    procedure Internal_Prepare; override;
     procedure Internal_UpdateComponents; override;
-    procedure Internal_ItemChangeStatus(prSender: TObject; prStatus: TJupiterRunnableItemStatus); override;
-    procedure Internal_ItemAddItem(prSender : TObject; prItem : TJupiterListItem); override;
-    procedure Internal_Message(prSender : TObject; prMessage : String); override;
-    procedure Internal_Output(prSender : TObject; prMessage : String); override;
+    procedure Internal_ShowForm(prItem : TJupiterListem);
+  public
+
   end;
 
 var
@@ -60,172 +55,81 @@ implementation
 
 { TFMain }
 
-procedure TFMain.tvActionsClick(Sender: TObject);
+procedure TFMain.miConfigClick(Sender: TObject);
 begin
-  if not Assigned(tvActions.Selected) then
-    Exit;
-
-  if not Assigned(tvActions.Selected.Data) then
-    Exit;
-
-  lvItens.Items.Clear;
-
-  Self.FAction := TJupiterAction(tvActions.Selected.Data);
-
-  Self.ActionFactory(TJupiterAction(tvActions.Selected.Data), nil);
-end;
-
-procedure TFMain.MenuItem5Click(Sender: TObject);
-begin
-  Self.Internal_Prepare;
-
-  Self.UpdateForm;
-end;
-
-procedure TFMain.lvItensDblClick(Sender: TObject);
-begin
-  if not Assigned(lvItens.Selected) then
-    Exit;
-
-  if not Assigned(lvItens.Selected.Data) then
-    Exit;
-
-  Self.ActionFactory(nil, TJupiterListItem(lvItens.Selected.Data));
-end;
-
-procedure TFMain.SpeedButton1Click(Sender: TObject);
-begin
-  Application.CreateForm(TFNewAction, FNewAction);
+  Application.CreateForm(TFConfig, FConfig);
   try
-     FNewAction.ShowModal;
+    FConfig.ShowModal;
   finally
-    FNewAction.Release;
+    FConfig.Release;
+    FreeAndNil(FConfig);
   end;
 end;
 
-procedure TFMain.Internal_AddParam(prSender: TObject; prParam: TJupiterAction);
-var
-  vrTree  : TTreeNode;
-  vrOwner : TTreeNode;
+procedure TFMain.tvItensClick(Sender: TObject);
 begin
-  tvActions.SortType := stText;
+  if not Assigned(tvItens.Selected) then
+    Exit;
 
-  if prParam.Category <> EmptyStr then
-  begin
-    vrOwner := tvActions.Items.FindNodeWithText(prParam.Category);
+  if not Assigned(tvItens.Selected.Data) then
+    Exit;
 
-    if not Assigned(vrOwner) then
-    begin
-      vrOwner               := tvActions.Items.Add(nil, prParam.Category);
-      vrOwner.ImageIndex    := prParam.Icon;
-      vrOwner.SelectedIndex := prParam.Icon;
-    end;
-  end;
-
-  if prParam.Category <> EmptyStr then
-    vrTree := tvActions.Items.AddChild(vrOwner, prParam.Title)
-  else
-    vrTree := tvActions.Items.Add(nil, prParam.Title);
-
-  vrTree.ImageIndex    := prParam.Icon;
-  vrTree.SelectedIndex := prParam.Icon;
-  vrTree.StateIndex    := JUPITER_ICON_NONE;
-  vrTree.Data          := prParam;
-
-  if prParam.Category <> EmptyStr then
-     vrOwner.Expand(True);
-
-  tvActions.SortType := stBoth;
-end;
-
-procedure TFMain.Internal_Prepare;
-var
-  vrParams : TJupiterParams;
-  vrItem   : TTreeNode;
-  vrNode   : TJupiterAction;
-begin
-  inherited Internal_Prepare;
-
-  if not DirectoryExists('./datasets/') then
-     CreateDir('./datasets/');
-
-  tvActions.Items.Clear;
-  lvItens.Items.Clear;
-
-  vrParams := TJupiterParams.Create;
-  try
-    vrParams.OnAddParam := @Self.Internal_AddParam;
-
-    vrParams.CheckFile;
-
-    vrParams.List;
-  finally
-    FreeAndNil(vrParams);
-  end;
+  Self.Internal_ShowForm(TJupiterListem(tvItens.Selected.Data));
 end;
 
 procedure TFMain.Internal_UpdateComponents;
+var
+  vrCount : Integer;
 begin
   inherited Internal_UpdateComponents;
 
-  lvItens.Enabled := tvActions.Items.Count <> 0;
+  if tvItens.Items.Count = 0 then
+  begin
+    tvItens.Items.Clear;
 
-  TabSheet1.Caption := Format('Itens (%0:d)', [lvItens.Items.Count]);
-  TabSheet3.Caption := Format('Output (%0:d)', [mmOutput.Lines.Count]);
-  TabSheet4.Caption := Format('Messages (%0:d)', [mmMessages.Lines.Count]);
+    for vrCount := 0 to vrJupiterApp.ModuleCount - 1 do
+        TJupiterModule(vrJupiterApp.GetModuleByIndex(vrCount)).GetTasks(tvItens);
+  end;
+
+  if Assigned(Self.FCurrentForm) then
+     Self.FCurrentForm.UpdateForm;
 end;
 
-procedure TFMain.Internal_ItemChangeStatus(prSender: TObject; prStatus: TJupiterRunnableItemStatus);
+procedure TFMain.Internal_ShowForm(prItem: TJupiterListem);
 begin
-  inherited Internal_ItemChangeStatus(prSender, prStatus);
+  if Assigned(Self.FCurrentForm) then
+  begin
+    Self.FCurrentForm.Release;
+    FreeAndNil(Self.FCurrentForm);
+  end;
 
-  lvItens.Enabled := prStatus = jrsDone;
+  case prItem.Tag of
+    0 : begin
+          Self.FCurrentForm := TFExplorer.Create(pnBody);
+          TFExplorer(FCurrentForm).Params := ;
+        end;
+  end;
 
-  sbStatus.Panels[0].Text := 'Ready';
-
-  if prStatus = jrsRunning then
-    sbStatus.Panels[0].Text := 'Working...';
-
-  Self.UpdateForm;
+  Self.FCurrentForm.Parent      := pnBody;
+  Self.FCurrentForm.WindowState := wsMaximized;
+  Self.FCurrentForm.BorderStyle := bsNone;
+  Self.FCurrentForm.Align       := alClient;
+  Self.FCurrentForm.Show;
 end;
 
-procedure TFMain.Internal_ItemAddItem(prSender: TObject; prItem: TJupiterListItem);
-var
-  vrItem : TListItem;
+procedure TFMain.MenuItem7Click(Sender: TObject);
 begin
-  prItem.Param := Self.FAction.RunnableParam;
-  prItem.Param := StringReplace(prItem.Param, '{item}', prItem.Title, [rfIgnoreCase, rfReplaceAll]);
-  prItem.Param := StringReplace(prItem.Param, '{description}', prItem.Description, [rfIgnoreCase, rfReplaceAll]);
-
-  inherited Internal_ItemAddItem(prSender, prItem);
-
-  lvItens.SortType := stText;
-
-  vrItem         := lvItens.Items.Add;
-  vrItem.Caption := prItem.Title;
-  vrItem.SubItems.Add(prItem.Description);
-
-  vrItem.ImageIndex := prItem.Icon;
-  vrItem.StateIndex := JUPITER_ICON_NONE;
-
-  vrItem.Data := prItem;
-
-  lvItens.SortType := stBoth;
+  Application.Terminate;
 end;
 
-procedure TFMain.Internal_Message(prSender: TObject; prMessage: String);
+procedure TFMain.FormResize(Sender: TObject);
 begin
-  inherited Internal_Message(prSender, prMessage);
 
-  mmMessages.Lines.Add(prMessage);
 end;
 
-procedure TFMain.Internal_Output(prSender: TObject; prMessage: String);
+procedure TFMain.miModulesClick(Sender: TObject);
 begin
-  inherited Internal_Output(prSender, prMessage);
 
-  mmOutput.Lines.Clear;
-  mmOutput.Lines.Add(prMessage);
 end;
 
 end.
