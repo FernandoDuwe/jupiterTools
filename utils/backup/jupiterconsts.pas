@@ -8,7 +8,11 @@ uses
   Classes, SysUtils;
 
 const
-  ICON_FOLDER : Smallint = 0;
+  ICON_FOLDER      : Smallint = 0;
+  ICON_SCRIPTS      : Smallint = 4;
+  ICON_FAVORITE    : Smallint = 6;
+  ICON_CHECKED     : Smallint = 8;
+  ICON_CURRENTTASK : Smallint = 10;
 
   FORM_EXPLORER : Smallint = 0;
 
@@ -26,15 +30,38 @@ type
     constructor Create(prModule, prTask : String; prParams : String = ''; prTag : Integer = 0);
   end;
 
+  { TJupiterListableItem }
+
   TJupiterListableItem = class(TObject)
   public
     Item        : String;
     Descricao   : String;
-
+    Param       : String;
     Selecionado : Boolean;
+    Tag         : Integer;
+    SubItens    : TStrings;
+
+    constructor Create;
+    destructor Destroy; override;
   end;
 
 implementation
+
+{ TJupiterListableItem }
+
+constructor TJupiterListableItem.Create;
+begin
+  Self.SubItens := TStringList.Create;
+  Self.SubItens.Clear;
+end;
+
+destructor TJupiterListableItem.Destroy;
+begin
+  Self.SubItens.Clear;
+  FreeAndNil(Self.SubItens);
+
+  inherited Destroy;
+end;
 
 { TJupiterListem }
 

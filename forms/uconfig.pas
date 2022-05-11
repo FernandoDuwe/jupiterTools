@@ -6,17 +6,34 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, ExtCtrls,
-  uJupiterForm, JupiterApp, JupiterConfig;
+  StdCtrls, Buttons, uJupiterForm, JupiterApp, JupiterConfig;
 
 type
 
   { TFConfig }
 
   TFConfig = class(TJupiterForm)
+    btCancel: TButton;
+    btSave: TButton;
+    btEdit: TButton;
+    btNew: TButton;
+    edValue: TEdit;
+    edID: TEdit;
+    edDescr: TEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
     lvParams: TListView;
-    sbStatus: TStatusBar;
+    pnForm: TPanel;
+    sbViewList: TSpeedButton;
+    Splitter1: TSplitter;
+    procedure FormCreate(Sender: TObject);
+    procedure lvParamsClick(Sender: TObject);
   private
+    FCurrentItem : TJupiterConfigItem;
+
     procedure Internal_UpdateDatasets; override;
+    procedure Internal_UpdateComponents; override;
   public
 
   end;
@@ -30,6 +47,26 @@ implementation
 
 { TFConfig }
 
+procedure TFConfig.lvParamsClick(Sender: TObject);
+begin
+  if not Assigned(lvParams.Selected) then
+    Exit;
+
+  if not Assigned(lvParams.Selected.Data) then
+    Exit;
+
+  try
+    Self.FCurrentItem := TJupiterConfigItem(lvParams.Selected.Data);
+  finally
+    Self.UpdateForm;
+  end;
+end;
+
+procedure TFConfig.FormCreate(Sender: TObject);
+begin
+  Self.FCurrentItem := nil;
+end;
+
 procedure TFConfig.Internal_UpdateDatasets;
 var
   vrVez : Integer;
@@ -37,6 +74,13 @@ var
   vrItem : TJupiterConfigItem;
 begin
   inherited Internal_UpdateDatasets;
+
+  if Assigned(Self.FCurrentItem) then
+  begin
+    edID.Text    := Self.FCurrentItem.ID;
+    edDescr.Text := Self.FCurrentItem.Description;
+    edValue.Text := Self.FCurrentItem.Value;
+  end;
 
   lvParams.Items.Clear;
 
@@ -50,7 +94,27 @@ begin
     vrNode.SubItems.Add(vrItem.Description);
     vrNode.SubItems.Add(vrItem.Value);
     vrNode.Data := vrItem;
+
+    if Assigned(Self.FCurrentItem) then
+      if vrItem.ID = Self.FCurrentItem.ID then
+        lvParams.Selected := vrNode;
   end;
+end;
+
+procedure TFConfig.Internal_UpdateComponents;
+begin
+  inherited Internal_UpdateComponents;
+
+   btNew.Enabled      := False;
+   btEdit.Enabled     := False;
+   btSave.Enabled     := False;
+   btCancel.Enabled   := False;
+   sbViewList.Enabled := False;
+
+  if not Assigned(Self.FCurrentItem) then
+    Exit;
+
+
 end;
 
 end.

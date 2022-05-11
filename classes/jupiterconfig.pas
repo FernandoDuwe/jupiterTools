@@ -41,6 +41,7 @@ type
     function Count : Integer;
     function GetByIndex(prIndex : Integer) : TJupiterConfigItem;
     function GetByID(prID : String) : TJupiterConfigItem;
+    function ResolveString(prStr : String) : String;
 
     constructor Create;
     destructor Destroy; override;
@@ -66,22 +67,22 @@ var
   vrVez    : Integer;
   vrStrAux : TStrings;
 begin
-  if not FileExists(ExtractFileDir(Application.ExeName) + '\datasets\config.csv') then
+  if not FileExists(ExtractFileDir(Application.ExeName) + '/datasets/config.csv') then
      Exit;
 
   vrStr := TStringList.Create();
   try
-    vrStr.LoadFromFile(ExtractFileDir(Application.ExeName) + '\datasets\config.csv');
+    vrStr.LoadFromFile(ExtractFileDir(Application.ExeName) + '/datasets/config.csv');
 
     for vrVez := 1 to vrStr.Count - 1 do
     begin
       vrStrAux := TStringList.Create;
       vrStrAux.Delimiter     := ';';
-      vrStrAux.DelimitedText := StringReplace(vrStr[vrVez], ' ', '|', [rfIgnoreCase, rfReplaceAll]);
+      vrStrAux.DelimitedText := StringReplace(vrStr[vrVez], ' ', '/JUPITERTOOLS\|/JUPITERTOOLS\', [rfIgnoreCase, rfReplaceAll]);
 
-      Self.FList.Add(TJupiterConfigItem.Create(StringReplace(vrStrAux[0], '|', ' ', [rfIgnoreCase, rfReplaceAll]),
-                                               StringReplace(vrStrAux[1], '|', ' ', [rfIgnoreCase, rfReplaceAll]),
-                                               StringReplace(vrStrAux[2], '|', ' ', [rfIgnoreCase, rfReplaceAll])));
+      Self.FList.Add(TJupiterConfigItem.Create(StringReplace(vrStrAux[0], '/JUPITERTOOLS\|/JUPITERTOOLS\', ' ', [rfIgnoreCase, rfReplaceAll]),
+                                               StringReplace(vrStrAux[1], '/JUPITERTOOLS\|/JUPITERTOOLS\', ' ', [rfIgnoreCase, rfReplaceAll]),
+                                               StringReplace(vrStrAux[2], '/JUPITERTOOLS\|/JUPITERTOOLS\', ' ', [rfIgnoreCase, rfReplaceAll])));
     end;
   finally
     vrStr.Clear;
@@ -105,7 +106,7 @@ begin
                                               TJupiterConfigItem(Self.FList[vrVez]).Description,
                                               TJupiterConfigItem(Self.FList[vrVez]).Value]));
 
-    vrStr.SaveToFile(ExtractFileDir(Application.ExeName) + '\datasets\config.csv');
+    vrStr.SaveToFile(ExtractFileDir(Application.ExeName) + '/datasets/config.csv');
   finally
     vrStr.Clear;
     FreeAndNil(vrStr);
@@ -129,7 +130,10 @@ end;
 procedure TJupiterConfig.AddConfig(prID, prValue: String; prDescription: String);
 begin
   try
-    Self.FList.Add(TJupiterConfigItem.Create(prID, prDescription, prValue));
+    if Self.Exists(prID) then
+      Self.GetByID(prID).Value := prValue
+    else
+      Self.FList.Add(TJupiterConfigItem.Create(prID, prDescription, prValue));
   finally
     Self.Internal_WriteListFile;
   end;
@@ -164,12 +168,22 @@ begin
       end;
 end;
 
+function TJupiterConfig.ResolveString(prStr: String): String;
+var
+  vrVez : Integer;
+begin
+  Result := prStr;
+
+  for vrVez := 0 to Self.Count - 1 do
+    Result := StringReplace(Result, '{' + Self.GetByIndex(vrVez).ID + '}', Self.GetByIndex(vrVez).Value, [rfIgnoreCase, rfReplaceAll]);
+end;
+
 constructor TJupiterConfig.Create;
 begin
   Self.FList := TList.Create;
 
-  if not DirectoryExists(ExtractFileDir(Application.ExeName) + '\datasets\') then
-     CreateDir(ExtractFileDir(Application.ExeName) + '\datasets\');
+  if not DirectoryExists(ExtractFileDir(Application.ExeName) + '/datasets/') then
+     CreateDir(ExtractFileDir(Application.ExeName) + '/datasets/');
 
   Self.Internal_ReadList;
 end;

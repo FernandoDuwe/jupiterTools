@@ -1,2 +1,6 @@
 ID;DESCRIPTION;VALUE;
-JupiterTools.Modules.Tasks.Path;Diretório de tarefas;C:\Tarefas\;
+JupiterTools.Modules.Tasks.Path;Diretório de tarefas;/home/duwe/Tarefas/;
+JupiterTools.Modules.Tasks.Current;Tarefa atual;/home/duwe/Tarefas/Santander/2010816/;
+JupiterTools.Modules.Tasks.CurrentNumber;Número Tarefa atual;2010816;
+JupiterTools.Modules.Tasks.OpenInEditorPrefExtensions;Extensões de arquivos abertas em editor preferencial;.txt|.sql|.md;
+JupiterTools.Modules.Tasks.EditorPref;Editor preferencial (caminho ou comando);code;

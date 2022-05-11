@@ -19,6 +19,7 @@ type
         procedure Internal_UpdateCalcs; virtual;
   public
         procedure UpdateForm;
+        procedure Search(prSearch : String);
   end;
 
 var
@@ -54,7 +55,7 @@ procedure TJupiterForm.UpdateForm;
 begin
   Self.Internal_UpdateDatasets;
   Self.Internal_UpdateComponents;
-  Self.Internal_UpdateCalcs;;
+  Self.Internal_UpdateCalcs;
 end;
 
 end.

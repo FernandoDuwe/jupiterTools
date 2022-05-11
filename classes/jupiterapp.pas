@@ -5,7 +5,7 @@ unit JupiterApp;
 interface
 
 uses
-  Classes, Forms, JupiterConfig, SysUtils;
+  Classes, Forms, JupiterConfig, SysUtils, JupiterConsts;
 
 type
 
@@ -27,6 +27,10 @@ type
 
     constructor Create();
     destructor Destroy; override;
+
+    procedure ListItems(prParams : TJupiterListem; var prList : TList);
+
+    procedure RunListable(prParamsItem : TJupiterListem; prParamsListableItem : TJupiterListableItem);
   end;
 
 var
@@ -34,7 +38,7 @@ var
 
 implementation
 
-uses JupiterTasks, JupiterModule;
+uses JupiterTasks, jupiterRunner, JupiterModule;
 
 { TJupiterApp }
 
@@ -46,7 +50,12 @@ end;
 
 procedure TJupiterApp.Internal_SetModules;
 begin
+  if not DirectoryExists(ExtractFileDir(Application.ExeName) + '/modules/') then
+     CreateDir(ExtractFileDir(Application.ExeName) + '/modules/');
+
   Self.FModules.Add(TJupiterTasks.Create(Self));
+
+  Self.FModules.Add(TJupiterRunner.Create(Self));
 end;
 
 function TJupiterApp.ModuleCount: Integer;
@@ -73,7 +82,7 @@ begin
       end;
 end;
 
-constructor TJupiterApp.Create;
+constructor TJupiterApp.Create();
 begin
   Self.FConfig := TJupiterConfig.Create;
 
@@ -96,6 +105,24 @@ begin
   FreeAndNil(Self.FConfig);
 
   inherited Destroy;
+end;
+
+procedure TJupiterApp.ListItems(prParams: TJupiterListem; var prList: TList);
+var
+  vrModule : TJupiterModule;
+begin
+  vrModule := TJupiterModule(Self.GetModuleByID(prParams.Module));
+
+  vrModule.ListItems(prParams, prList);
+end;
+
+procedure TJupiterApp.RunListable(prParamsItem: TJupiterListem; prParamsListableItem: TJupiterListableItem);
+var
+  vrModule : TJupiterModule;
+begin
+  vrModule := TJupiterModule(Self.GetModuleByID(prParamsItem.Module));
+
+  vrModule.RunListable(prParamsListableItem);
 end;
 
 end.

@@ -5,7 +5,7 @@ unit JupiterModule;
 interface
 
 uses
-  Classes, SysUtils, JupiterApp, ComCtrls;
+  Classes, SysUtils, JupiterApp, ComCtrls, JupiterConsts;
 
 type
 
@@ -27,7 +27,8 @@ type
 
       procedure GetTasks(var prTreeMenu : TTreeView); virtual;
 
-      procedure ListItems(var prList : TList);
+      procedure ListItems(prParams : TJupiterListem; var prList : TList); virtual;
+      procedure RunListable(prParams : TJupiterListableItem); virtual;
     end;
 
 implementation
@@ -35,7 +36,7 @@ implementation
 { TJupiterModule }
 
 procedure TJupiterModule.Internal_Initialize;
-begin                                       v
+begin
   //
 end;
 
@@ -56,7 +57,7 @@ begin
   //
 end;
 
-procedure TJupiterModule.ListItems(var prList: TList);
+procedure TJupiterModule.ListItems(prParams : TJupiterListem; var prList: TList);
 begin
   //
 end;

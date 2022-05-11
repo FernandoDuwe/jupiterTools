@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Compiler Value="/usr/bin/fpc" Date="1574718682"/>
+  <Params Value=" -MObjFPC -Scghi -Cg -O1 -gw2 -godwarfsets -gl -l -vewnhibq -Fi/home/duwe/Projetos/jupiterTools/lib/x86_64-linux -Fu/home/duwe/Projetos/jupiterTools/classes -Fu/home/duwe/Projetos/jupiterTools/forms -Fu/home/duwe/Projetos/jupiterTools/modules -Fu/home/duwe/Projetos/jupiterTools/utils -Fu/home/duwe/Projetos/jupiterTools/ -FU/home/duwe/Projetos/jupiterTools/lib/x86_64-linux/ -FE/home/duwe/Projetos/jupiterTools/out/ -o/home/duwe/Projetos/jupiterTools/out/jupiterTools umain.pas"/>
+  <Complete Value="False"/>
+</CONFIG>
