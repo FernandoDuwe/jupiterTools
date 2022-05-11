@@ -106,6 +106,11 @@ begin
 
   if Assigned(Self.FCurrentForm) then
      Self.FCurrentForm.UpdateForm;
+
+  sbRefresh.Height := edSearch.Height;
+  sbRefresh.Width  := edSearch.Height;
+
+  pnTaskBar.Height := (edSearch.Top * 2) + edSearch.Height;
 end;
 
 procedure TFMain.Internal_ShowForm(prItem: TJupiterListem);

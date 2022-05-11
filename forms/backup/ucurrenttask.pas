@@ -25,7 +25,6 @@ type
     pnFiles: TPanel;
     pnBody: TPanel;
     pnHeader: TPanel;
-    sbNewFile: TSpeedButton;
     sbStartTime: TSpeedButton;
     sbEndTime: TSpeedButton;
     Splitter1: TSplitter;

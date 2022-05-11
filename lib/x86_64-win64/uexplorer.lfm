@@ -19,10 +19,11 @@ inherited FExplorer: TFExplorer
       end    
       item
         Caption = 'Descrição'
-        Width = 400
+        Width = 720
       end>
     SortType = stText
     TabOrder = 0
     ViewStyle = vsReport
+    OnDblClick = lvReportDblClick
   end
 end

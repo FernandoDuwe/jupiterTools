@@ -98,18 +98,6 @@ inherited FCurrentTask: TFCurrentTask
         ViewStyle = vsReport
         OnDblClick = lvFilesDblClick
       end
-      object sbNewFile: TSpeedButton
-        Left = 1272
-        Height = 33
-        Hint = 'Novo Arquivo'
-        Top = 48
-        Width = 33
-        Anchors = [akTop, akRight]
-        Images = FMain.ilMainIcons
-        ImageIndex = 2
-        ShowHint = True
-        ParentShowHint = False
-      end
     end
     object Splitter1: TSplitter
       Cursor = crVSplit

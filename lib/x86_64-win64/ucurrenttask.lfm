@@ -1,0 +1,175 @@
+inherited FCurrentTask: TFCurrentTask
+  Left = 337
+  Height = 751
+  Top = 129
+  Width = 1313
+  Caption = 'Tarefa Atual'
+  ClientHeight = 751
+  ClientWidth = 1313
+  OnCreate = FormCreate
+  object pnHeader: TPanel[0]
+    Left = 0
+    Height = 88
+    Top = 0
+    Width = 1313
+    Align = alTop
+    BevelOuter = bvNone
+    ClientHeight = 88
+    ClientWidth = 1313
+    TabOrder = 0
+    object Label1: TLabel
+      Left = 16
+      Height = 15
+      Top = 16
+      Width = 65
+      Caption = 'Tarefa atual'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
+    object lbCurrentTask: TLabel
+      Left = 16
+      Height = 15
+      Top = 48
+      Width = 72
+      Caption = 'lbCurrentTask'
+    end
+    object btFolder: TButton
+      Left = 1176
+      Height = 40
+      Top = 16
+      Width = 123
+      Anchors = [akTop, akRight]
+      Caption = 'Abrir Diretório'
+      OnClick = btFolderClick
+      TabOrder = 0
+    end
+  end
+  object pnBody: TPanel[1]
+    Left = 0
+    Height = 663
+    Top = 88
+    Width = 1313
+    Align = alClient
+    BevelOuter = bvNone
+    ClientHeight = 663
+    ClientWidth = 1313
+    TabOrder = 1
+    object pnFiles: TPanel
+      Left = 0
+      Height = 356
+      Top = 0
+      Width = 1313
+      Align = alClient
+      BevelOuter = bvNone
+      ClientHeight = 356
+      ClientWidth = 1313
+      TabOrder = 0
+      object Label2: TLabel
+        Left = 16
+        Height = 15
+        Top = 16
+        Width = 49
+        Caption = 'Arquivos'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object lvFiles: TListView
+        Left = 16
+        Height = 296
+        Top = 48
+        Width = 1248
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        Columns = <        
+          item
+            Caption = 'Arquivo'
+            Width = 500
+          end        
+          item
+            Caption = 'Pasta'
+            Width = 736
+          end>
+        ReadOnly = True
+        SortColumn = 0
+        SortType = stText
+        TabOrder = 0
+        ViewStyle = vsReport
+        OnDblClick = lvFilesDblClick
+      end
+    end
+    object Splitter1: TSplitter
+      Cursor = crVSplit
+      Left = 0
+      Height = 5
+      Top = 356
+      Width = 1313
+      Align = alBottom
+      ResizeAnchor = akBottom
+    end
+    object pnTimes: TPanel
+      Left = 0
+      Height = 302
+      Top = 361
+      Width = 1313
+      Align = alBottom
+      BevelOuter = bvNone
+      ClientHeight = 302
+      ClientWidth = 1313
+      TabOrder = 2
+      object Label3: TLabel
+        Left = 16
+        Height = 15
+        Top = 16
+        Width = 43
+        Caption = 'Tempos'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object lvTimes: TListView
+        Left = 16
+        Height = 241
+        Top = 48
+        Width = 1248
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        Columns = <        
+          item
+            Caption = 'Início'
+            Width = 500
+          end        
+          item
+            Caption = 'Fim'
+            Width = 736
+          end>
+        ReadOnly = True
+        SortType = stText
+        TabOrder = 0
+        ViewStyle = vsReport
+      end
+      object sbStartTime: TSpeedButton
+        Left = 1272
+        Height = 33
+        Hint = 'Registrar tempo inicial'
+        Top = 48
+        Width = 33
+        Anchors = [akTop, akRight]
+        Images = FMain.ilMainIcons
+        ImageIndex = 5
+        OnClick = sbStartTimeClick
+        ShowHint = True
+        ParentShowHint = False
+      end
+      object sbEndTime: TSpeedButton
+        Left = 1272
+        Height = 33
+        Hint = 'Registrar tempo final'
+        Top = 88
+        Width = 33
+        Anchors = [akTop, akRight]
+        Images = FMain.ilMainIcons
+        ImageIndex = 5
+        OnClick = sbEndTimeClick
+        ShowHint = True
+        ParentShowHint = False
+      end
+    end
+  end
+end

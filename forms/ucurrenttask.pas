@@ -189,7 +189,7 @@ begin
       vrNode         := lvFiles.Items.Add;
       vrNode.Caption := ExtractFileName(vrStr[vrVez]);
 
-      vrDir := StringReplace(ExtractFileDir(vrStr[vrVez]) + '/', Self.CurrentTask.Path, EmptyStr, [rfIgnoreCase, rfReplaceAll]);
+      vrDir := StringReplace(ExtractFileDir(vrStr[vrVez]) + GetDirectorySeparator, Self.CurrentTask.Path, EmptyStr, [rfIgnoreCase, rfReplaceAll]);
 
       if vrDir = EmptyStr then
         vrDir := '.';

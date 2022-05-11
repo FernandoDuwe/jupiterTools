@@ -95,14 +95,22 @@ begin
 
   if tvItens.Items.Count = 0 then
   begin
+    tvItens.SortType := stNone;
     tvItens.Items.Clear;
 
     for vrCount := 0 to vrJupiterApp.ModuleCount - 1 do
         TJupiterModule(vrJupiterApp.GetModuleByIndex(vrCount)).GetTasks(tvItens);
+
+    tvItens.SortType := stText;
   end;
 
   if Assigned(Self.FCurrentForm) then
      Self.FCurrentForm.UpdateForm;
+
+  sbRefresh.Height := edSearch.Height;
+  sbRefresh.Width  := edSearch.Height;
+
+  pnTaskBar.Height := (edSearch.Top * 2) + edSearch.Height;
 end;
 
 procedure TFMain.Internal_ShowForm(prItem: TJupiterListem);

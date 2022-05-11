@@ -81,6 +81,10 @@ begin
       vrNode.SubItems.Add(vrItem.Descricao);
 
       vrNode.ImageIndex := -1;
+
+      if vrItem.Selecionado then
+        vrNode.ImageIndex := ICON_CHECKED;
+
       vrNode.Data := vrItem;
     end;
   finally

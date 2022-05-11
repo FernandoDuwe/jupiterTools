@@ -1,7 +1,7 @@
 inherited FConfig: TFConfig
-  Left = 473
+  Left = 156
   Height = 640
-  Top = 157
+  Top = 79
   Width = 1191
   Caption = 'Configurações'
   ClientHeight = 640
@@ -47,14 +47,13 @@ inherited FConfig: TFConfig
       Left = 16
       Height = 15
       Top = 16
-      Width = 87
+      Width = 67
       Caption = 'Identificador'
-      ParentColor = False
       ParentFont = False
     end
     object edID: TEdit
       Left = 16
-      Height = 33
+      Height = 23
       Top = 40
       Width = 1154
       Anchors = [akTop, akLeft, akRight]
@@ -63,7 +62,7 @@ inherited FConfig: TFConfig
     end
     object edDescr: TEdit
       Left = 16
-      Height = 33
+      Height = 23
       Top = 120
       Width = 1154
       Anchors = [akTop, akLeft, akRight]
@@ -74,23 +73,21 @@ inherited FConfig: TFConfig
       Left = 16
       Height = 15
       Top = 96
-      Width = 66
+      Width = 51
       Caption = 'Descrição'
-      ParentColor = False
       ParentFont = False
     end
     object Label3: TLabel
-      Left = 23
+      Left = 16
       Height = 15
       Top = 176
-      Width = 36
+      Width = 26
       Caption = 'Valor'
-      ParentColor = False
       ParentFont = False
     end
     object edValue: TEdit
       Left = 16
-      Height = 33
+      Height = 23
       Top = 200
       Width = 1120
       Anchors = [akTop, akLeft, akRight]
@@ -105,6 +102,7 @@ inherited FConfig: TFConfig
       Anchors = [akTop, akRight]
       Caption = 'Cancelar'
       Enabled = False
+      OnClick = btCancelClick
       TabOrder = 3
     end
     object btSave: TButton
@@ -115,6 +113,7 @@ inherited FConfig: TFConfig
       Anchors = [akTop, akRight]
       Caption = 'Salvar'
       Enabled = False
+      OnClick = btSaveClick
       TabOrder = 4
     end
     object btEdit: TButton
@@ -125,6 +124,7 @@ inherited FConfig: TFConfig
       Anchors = [akTop, akRight]
       Caption = 'Editar'
       Enabled = False
+      OnClick = btEditClick
       TabOrder = 5
     end
     object btNew: TButton
@@ -135,6 +135,7 @@ inherited FConfig: TFConfig
       Anchors = [akTop, akRight]
       Caption = 'Novo'
       Enabled = False
+      OnClick = btNewClick
       TabOrder = 6
     end
     object sbViewList: TSpeedButton

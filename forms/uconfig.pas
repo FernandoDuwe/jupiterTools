@@ -27,10 +27,15 @@ type
     pnForm: TPanel;
     sbViewList: TSpeedButton;
     Splitter1: TSplitter;
+    procedure btCancelClick(Sender: TObject);
+    procedure btEditClick(Sender: TObject);
+    procedure btNewClick(Sender: TObject);
+    procedure btSaveClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure lvParamsClick(Sender: TObject);
   private
     FCurrentItem : TJupiterConfigItem;
+    FEditMode : Boolean;
 
     procedure Internal_UpdateDatasets; override;
     procedure Internal_UpdateComponents; override;
@@ -65,6 +70,59 @@ end;
 procedure TFConfig.FormCreate(Sender: TObject);
 begin
   Self.FCurrentItem := nil;
+  Self.FEditMode    := False;
+end;
+
+procedure TFConfig.btNewClick(Sender: TObject);
+begin
+  try
+    Self.FCurrentItem := TJupiterConfigItem.Create(EmptyStr, EmptyStr, EmptyStr);
+
+    Self.FEditMode := True;
+  finally
+    Self.UpdateForm;
+  end;
+end;
+
+procedure TFConfig.btSaveClick(Sender: TObject);
+begin
+  if Trim(edID.Text) = EmptyStr then
+    raise Exception.Create('Identificador é obrigatório');
+
+  if Trim(edDescr.Text) = EmptyStr then
+    raise Exception.Create('Descrição é obrigatória');
+
+  try
+    Self.FCurrentItem := nil;
+    Self.FEditMode    := False;
+
+    vrJupiterApp.Config.AddConfig(edID.Text, edValue.Text, edDescr.Text);
+
+    lvParams.Items.Clear;
+  finally
+    Self.UpdateForm;
+  end;
+end;
+
+procedure TFConfig.btEditClick(Sender: TObject);
+begin
+  try
+    Self.FEditMode := True;
+  finally
+    Self.UpdateForm;
+  end;
+end;
+
+procedure TFConfig.btCancelClick(Sender: TObject);
+begin
+  try
+    Self.FCurrentItem := nil;
+    Self.FEditMode    := False;
+
+    lvParams.Items.Clear;
+  finally
+    Self.UpdateForm;
+  end;
 end;
 
 procedure TFConfig.Internal_UpdateDatasets;
@@ -82,22 +140,25 @@ begin
     edValue.Text := Self.FCurrentItem.Value;
   end;
 
-  lvParams.Items.Clear;
-
-  for vrVez := 0 to vrJupiterApp.Config.Count - 1 do
+  if lvParams.Items.Count = 0 then
   begin
-    vrNode := lvParams.Items.Add;
+    lvParams.Items.Clear;
 
-    vrItem := vrJupiterApp.Config.GetByIndex(vrVez);
+    for vrVez := 0 to vrJupiterApp.Config.Count - 1 do
+    begin
+      vrNode := lvParams.Items.Add;
 
-    vrNode.Caption := vrItem.ID;
-    vrNode.SubItems.Add(vrItem.Description);
-    vrNode.SubItems.Add(vrItem.Value);
-    vrNode.Data := vrItem;
+      vrItem := vrJupiterApp.Config.GetByIndex(vrVez);
 
-    if Assigned(Self.FCurrentItem) then
-      if vrItem.ID = Self.FCurrentItem.ID then
-        lvParams.Selected := vrNode;
+      vrNode.Caption := vrItem.ID;
+      vrNode.SubItems.Add(vrItem.Description);
+      vrNode.SubItems.Add(vrItem.Value);
+      vrNode.Data := vrItem;
+
+      if Assigned(Self.FCurrentItem) then
+        if vrItem.ID = Self.FCurrentItem.ID then
+          lvParams.Selected := vrNode;
+    end;
   end;
 end;
 
@@ -105,16 +166,28 @@ procedure TFConfig.Internal_UpdateComponents;
 begin
   inherited Internal_UpdateComponents;
 
-   btNew.Enabled      := False;
-   btEdit.Enabled     := False;
-   btSave.Enabled     := False;
-   btCancel.Enabled   := False;
-   sbViewList.Enabled := False;
+  sbViewList.Height := edValue.Height;
+  sbViewList.Width  := edValue.Height;
+
+  btNew.Enabled      := False;
+  btEdit.Enabled     := False;
+  btSave.Enabled     := False;
+  btCancel.Enabled   := False;
+  sbViewList.Enabled := False;
+
+  btNew.Enabled  := not Self.FEditMode;
 
   if not Assigned(Self.FCurrentItem) then
     Exit;
 
+  btEdit.Enabled   := ((not Self.FEditMode) and (Assigned(Self.FCurrentItem))) and (Self.FCurrentItem.CanSave);
+  btSave.Enabled   := Self.FEditMode;
+  btCancel.Enabled := Self.FEditMode;
 
+  edID.Enabled       := (Self.FEditMode) and (Assigned(Self.FCurrentItem)) and (Self.FCurrentItem.ID = EmptyStr);
+  edDescr.Enabled    := (Self.FEditMode) and (Assigned(Self.FCurrentItem));
+  edValue.Enabled    := (Self.FEditMode) and (Assigned(Self.FCurrentItem));
+  sbViewList.Enabled := (Self.FEditMode) and (Assigned(Self.FCurrentItem));
 end;
 
 end.

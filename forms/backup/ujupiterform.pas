@@ -58,5 +58,10 @@ begin
   Self.Internal_UpdateCalcs;
 end;
 
+procedure TJupiterForm.Search(prSearch: String);
+begin
+  //
+end;
+
 end.
 
