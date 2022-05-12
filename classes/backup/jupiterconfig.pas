@@ -78,11 +78,11 @@ begin
     begin
       vrStrAux := TStringList.Create;
       vrStrAux.Delimiter     := ';';
-      vrStrAux.DelimitedText := StringReplace(vrStr[vrVez], ' ', '/JUPITERTOOLS\|/JUPITERTOOLS\', [rfIgnoreCase, rfReplaceAll]);
+      vrStrAux.DelimitedText := StringReplace(vrStr[vrVez], ' ', EMPTY_SPACE_SEPARATOR, [rfIgnoreCase, rfReplaceAll]);
 
-      Self.FList.Add(TJupiterConfigItem.Create(StringReplace(vrStrAux[0], '|', ' ', [rfIgnoreCase, rfReplaceAll]),
-                                               StringReplace(vrStrAux[1], '|', ' ', [rfIgnoreCase, rfReplaceAll]),
-                                               StringReplace(vrStrAux[2], '|', ' ', [rfIgnoreCase, rfReplaceAll])));
+      Self.FList.Add(TJupiterConfigItem.Create(StringReplace(vrStrAux[0], EMPTY_SPACE_SEPARATOR, ' ', [rfIgnoreCase, rfReplaceAll]),
+                                               StringReplace(vrStrAux[1], EMPTY_SPACE_SEPARATOR, ' ', [rfIgnoreCase, rfReplaceAll]),
+                                               StringReplace(vrStrAux[2], EMPTY_SPACE_SEPARATOR, ' ', [rfIgnoreCase, rfReplaceAll])));
     end;
   finally
     vrStr.Clear;

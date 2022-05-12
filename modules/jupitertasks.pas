@@ -75,7 +75,7 @@ begin
     if FileExists(Self.FPath + 'Tempos.txt') then
       vrStr.LoadFromFile(Self.FPath + 'Tempos.txt');
 
-    if not FileExists(Self.FPath + 'Tempos.txt') then
+    if FileExists(Self.FPath + 'Tempos.txt') then
       vrStr.Add(EmptyStr);
 
     vrStr.Add(Format('I;%0:s;%1:s;', [FormatDateTime('dd/mm/yyyy', Now), FormatDateTime('hh:nn', Now)]));

@@ -9,7 +9,8 @@ uses
 
 const
   ICON_FOLDER      : Smallint = 0;
-  ICON_SCRIPTS      : Smallint = 4;
+  ICON_PACKAGE     : Smallint = 1;
+  ICON_SCRIPTS     : Smallint = 4;
   ICON_FAVORITE    : Smallint = 6;
   ICON_CHECKED     : Smallint = 8;
   ICON_CURRENTTASK : Smallint = 10;

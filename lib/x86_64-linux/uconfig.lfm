@@ -1,7 +1,7 @@
 inherited FConfig: TFConfig
-  Left = 473
+  Left = 156
   Height = 640
-  Top = 157
+  Top = 79
   Width = 1191
   Caption = 'Configurações'
   ClientHeight = 640
@@ -80,7 +80,7 @@ inherited FConfig: TFConfig
       ParentFont = False
     end
     object Label3: TLabel
-      Left = 23
+      Left = 16
       Height = 15
       Top = 176
       Width = 36
@@ -105,6 +105,7 @@ inherited FConfig: TFConfig
       Anchors = [akTop, akRight]
       Caption = 'Cancelar'
       Enabled = False
+      OnClick = btCancelClick
       TabOrder = 3
     end
     object btSave: TButton
@@ -115,6 +116,7 @@ inherited FConfig: TFConfig
       Anchors = [akTop, akRight]
       Caption = 'Salvar'
       Enabled = False
+      OnClick = btSaveClick
       TabOrder = 4
     end
     object btEdit: TButton
@@ -125,6 +127,7 @@ inherited FConfig: TFConfig
       Anchors = [akTop, akRight]
       Caption = 'Editar'
       Enabled = False
+      OnClick = btEditClick
       TabOrder = 5
     end
     object btNew: TButton
@@ -135,15 +138,20 @@ inherited FConfig: TFConfig
       Anchors = [akTop, akRight]
       Caption = 'Novo'
       Enabled = False
+      OnClick = btNewClick
       TabOrder = 6
     end
     object sbViewList: TSpeedButton
       Left = 1137
       Height = 33
+      Hint = 'Editar listagem'
       Top = 200
       Width = 33
       Anchors = [akTop, akRight]
       Caption = '...'
+      OnClick = sbViewListClick
+      ShowHint = True
+      ParentShowHint = False
     end
   end
   object Splitter1: TSplitter[2]

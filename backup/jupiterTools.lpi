@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectOptions>
-    <Version Value="12"/>
+    <Version Value="11"/>
     <General>
-      <Flags>
-        <CompatibilityMode Value="True"/>
-      </Flags>
       <SessionStorage Value="InProjectDir"/>
+      <MainUnit Value="0"/>
       <Title Value="jupiterTools"/>
       <Scaled Value="True"/>
       <ResourceType Value="res"/>
@@ -16,6 +14,13 @@
       </XPManifest>
       <Icon Value="0"/>
     </General>
+    <VersionInfo>
+      <UseVersionInfo Value="True"/>
+      <AutoIncrementBuild Value="True"/>
+      <MajorVersionNr Value="1"/>
+      <BuildNr Value="7"/>
+      <StringTable CompanyName="Jupiter Studios" FileDescription="Jupiter Tools"/>
+    </VersionInfo>
     <BuildModes Count="1">
       <Item1 Name="Default" Default="True"/>
     </BuildModes>
@@ -25,13 +30,14 @@
     </PublishOptions>
     <RunParams>
       <FormatVersion Value="2"/>
+      <Modes Count="0"/>
     </RunParams>
     <RequiredPackages Count="1">
       <Item1>
         <PackageName Value="LCL"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="14">
+    <Units Count="15">
       <Unit0>
         <Filename Value="jupiterTools.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -119,6 +125,14 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="jupiterRunner"/>
       </Unit13>
+      <Unit14>
+        <Filename Value="forms/ueditlist.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FEditList"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uEditList"/>
+      </Unit14>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

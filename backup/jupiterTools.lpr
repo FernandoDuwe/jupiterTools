@@ -11,7 +11,8 @@ uses
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, uMain, JupiterApp, uJupiterForm, JupiterModule, JupiterConfig, uConfig,
-  JupiterTasks, uExplorer, JupiterConsts, fileUtils, uCurrentTask, uNewTask
+  JupiterTasks, uExplorer, JupiterConsts, fileUtils, uCurrentTask, uNewTask,
+  jupiterRunner, uEditList
   { you can add units after this };
 
 {$R *.res}
@@ -24,6 +25,7 @@ begin
 
   Application.Initialize;
   Application.CreateForm(TFMain, FMain);
+  Application.CreateForm(TFEditList, FEditList);
   Application.Run;
 end.
 

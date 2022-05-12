@@ -12,7 +12,7 @@ uses
   Interfaces, // this includes the LCL widgetset
   Forms, uMain, JupiterApp, uJupiterForm, JupiterModule, JupiterConfig, uConfig,
   JupiterTasks, uExplorer, JupiterConsts, fileUtils, uCurrentTask, uNewTask,
-  jupiterRunner
+  jupiterRunner, uEditList
   { you can add units after this };
 
 {$R *.res}

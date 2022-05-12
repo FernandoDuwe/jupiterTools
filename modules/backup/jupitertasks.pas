@@ -212,7 +212,7 @@ begin
   vrExtensions := vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.OpenInEditorPrefExtensions').Value;
 
   if Pos(AnsiUpperCase(ExtractFileExt(prFilePath)), AnsiUpperCase(vrExtensions)) <> -1 then
-    RunCommand(vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.EditorPref').Value, [], vrOutput)
+    RunCommand(vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.EditorPref').Value, [prFilePath], vrOutput)
   else
     OpenDocument(prFilePath);
 end;

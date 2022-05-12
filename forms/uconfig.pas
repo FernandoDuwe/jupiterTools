@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, ExtCtrls,
-  StdCtrls, Buttons, uJupiterForm, JupiterApp, JupiterConfig;
+  StdCtrls, Buttons, uJupiterForm, uEditList, JupiterApp, JupiterConfig;
 
 type
 
@@ -33,6 +33,7 @@ type
     procedure btSaveClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure lvParamsClick(Sender: TObject);
+    procedure sbViewListClick(Sender: TObject);
   private
     FCurrentItem : TJupiterConfigItem;
     FEditMode : Boolean;
@@ -64,6 +65,21 @@ begin
     Self.FCurrentItem := TJupiterConfigItem(lvParams.Selected.Data);
   finally
     Self.UpdateForm;
+  end;
+end;
+
+procedure TFConfig.sbViewListClick(Sender: TObject);
+begin
+  Application.CreateForm(TFEditList, FEditList);
+  try
+    FEditList.List := edValue.Text;
+
+    FEditList.ShowModal;
+
+    edValue.Text := FEditList.List;
+  finally
+    FEditList.Release;
+    FreeAndNil(FEditList)
   end;
 end;
 
