@@ -13,9 +13,11 @@ const
   ICON_SCRIPTS     : Smallint = 4;
   ICON_FAVORITE    : Smallint = 6;
   ICON_CHECKED     : Smallint = 8;
-  ICON_CURRENTTASK : Smallint = 10;
+  ICON_CURRENTTASK : Smallint = 13;
 
   FORM_EXPLORER : Smallint = 0;
+
+  EMPTY_SPACE_SEPARATOR : String = '/JUPITERTOOLS\|/JUPITERTOOLS\';
 
 type
 

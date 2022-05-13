@@ -25,7 +25,6 @@ begin
 
   Application.Initialize;
   Application.CreateForm(TFMain, FMain);
-  Application.CreateForm(TFEditList, FEditList);
   Application.Run;
 end.
 

@@ -237,11 +237,11 @@ procedure TJupiterTasks.Internal_Initialize;
 begin
   inherited Internal_Initialize;
 
-  if not DirectoryExists(ExtractFileDir(Application.ExeName) + '/modules/tasks/') then
-     CreateDir(ExtractFileDir(Application.ExeName) + '/modules/tasks/');
+  if not DirectoryExists(TratarCaminho(ExtractFileDir(Application.ExeName) + '/modules/tasks/')) then
+     CreateDir(TratarCaminho(ExtractFileDir(Application.ExeName) + '/modules/tasks/'));
 
-  if not DirectoryExists(ExtractFileDir(Application.ExeName) + '/modules/tasks/templates/') then
-     CreateDir(ExtractFileDir(Application.ExeName) + '/modules/tasks/templates');
+  if not DirectoryExists(TratarCaminho(ExtractFileDir(Application.ExeName) + '/modules/tasks/templates/')) then
+     CreateDir(TratarCaminho(ExtractFileDir(Application.ExeName) + '/modules/tasks/templates'));
 
   if not Self.JupiterApp.Config.Exists(Self.ID + '.Path') then
 
@@ -274,8 +274,8 @@ begin
   inherited GetTasks(prTreeMenu);
 
   vrNode               := prTreeMenu.Items.Add(nil, 'Tarefas');
-  vrNode.ImageIndex    := ICON_FOLDER;
-  vrNode.SelectedIndex := ICON_FOLDER;
+  vrNode.ImageIndex    := ICON_CURRENTTASK;
+  vrNode.SelectedIndex := ICON_CURRENTTASK;
 
   vrNode.Data := TJupiterListem.Create(Self.ID, '/');
 

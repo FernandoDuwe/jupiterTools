@@ -21,12 +21,13 @@ type
     lbCurrentTask: TLabel;
     lvFiles: TListView;
     lvTimes: TListView;
+    pnTaskBar: TPanel;
     pnTimes: TPanel;
     pnFiles: TPanel;
     pnBody: TPanel;
     pnHeader: TPanel;
-    sbStartTime: TSpeedButton;
     sbEndTime: TSpeedButton;
+    sbStartTime: TSpeedButton;
     Splitter1: TSplitter;
     procedure btFolderClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -189,7 +190,7 @@ begin
       vrNode         := lvFiles.Items.Add;
       vrNode.Caption := ExtractFileName(vrStr[vrVez]);
 
-      vrDir := StringReplace(ExtractFileDir(vrStr[vrVez]) + '/', Self.CurrentTask.Path, EmptyStr, [rfIgnoreCase, rfReplaceAll]);
+      vrDir := StringReplace(ExtractFileDir(vrStr[vrVez]) + GetDirectorySeparator, Self.CurrentTask.Path, EmptyStr, [rfIgnoreCase, rfReplaceAll]);
 
       if vrDir = EmptyStr then
         vrDir := '.';

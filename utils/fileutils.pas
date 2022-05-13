@@ -12,6 +12,7 @@ uses
   function GetDirectorySeparator : String;
 
   procedure OpenFolder(prFolderPath : String);
+  function  TratarCaminho(prCaminho : String) : String;
 
 implementation
 
@@ -70,6 +71,13 @@ end;
 procedure OpenFolder(prFolderPath: String);
 begin
   OpenDocument(prFolderPath);
+end;
+
+function TratarCaminho(prCaminho: String): String;
+begin
+  Result := prCaminho;
+  Result := StringReplace(Result, '\', GetDirectorySeparator, [rfIgnoreCase, rfReplaceAll]);
+  Result := StringReplace(Result, '/', GetDirectorySeparator, [rfIgnoreCase, rfReplaceAll]);
 end;
 
 end.

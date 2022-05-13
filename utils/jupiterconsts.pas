@@ -13,7 +13,8 @@ const
   ICON_SCRIPTS     : Smallint = 4;
   ICON_FAVORITE    : Smallint = 6;
   ICON_CHECKED     : Smallint = 8;
-  ICON_CURRENTTASK : Smallint = 10;
+  ICON_CURRENTTASK : Smallint = 13;
+  ICON_SQL         : Smallint = 15;
 
   FORM_EXPLORER : Smallint = 0;
 

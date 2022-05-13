@@ -12,6 +12,7 @@ uses
   function GetDirectorySeparator : String;
 
   procedure OpenFolder(prFolderPath : String);
+  function  TratarCaminho(prCaminho : String) : String;
 
 implementation
 
@@ -49,6 +50,9 @@ begin
       if not FileExists(prRoot + vrInfo.Name) then
         Continue;
 
+      if DirectoryExists(prRoot + vrInfo.Name) then
+        Continue;
+
       prOut.Add(Format('%0:s%1:s', [prRoot, vrInfo.Name, GetDirectorySeparator]));
     until FindNext(vrInfo) <> 0;
 
@@ -67,6 +71,13 @@ end;
 procedure OpenFolder(prFolderPath: String);
 begin
   OpenDocument(prFolderPath);
+end;
+
+function TratarCaminho(prCaminho: String): String;
+begin
+  Result := prCaminho;
+  Result := StringReplace(Result, '\', GetDirectorySeparator, [rfIgnoreCase, rfReplaceAll]);
+  Result := StringReplace(Result, '\', GetDirectorySeparator, [rfIgnoreCase, rfReplaceAll]);
 end;
 
 end.
