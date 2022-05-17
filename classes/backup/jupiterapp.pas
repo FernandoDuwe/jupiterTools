@@ -38,7 +38,7 @@ var
 
 implementation
 
-uses JupiterTasks, JupiterModule;
+uses fileUtils, JupiterTasks, jupiterRunner, JupiterModule;
 
 { TJupiterApp }
 
@@ -46,10 +46,23 @@ procedure TJupiterApp.Internal_SetAppVariables;
 begin
   Self.Config.AddVariable('JupiterTools.Variables.ExeFile', Application.ExeName, 'Executável do JupiterTools');
   Self.Config.AddVariable('JupiterTools.Variables.Path', ExtractFileDir(Application.ExeName), 'Diretório do JupiterTools');
+
+  Self.Config.AddVariable('JupiterTools.Variables.Display.FontSize', '0', 'Tamanho da fonte dos formulários');
+
+  Self.Config.AddVariable('JupiterTools.Variables.OS.DirectotySeparator', GetDirectorySeparator, 'Caracter separador de diretório');
+
+  {$IFDEF WINDOWS}
+    Self.Config.AddVariable('JupiterTools.Variables.OS.DirectotySeparator', GetDirectorySeparator, 'Caracter separador de diretório');
+  {$ELSE}
+    Self.Config.AddVariable('JupiterTools.Variables.OS', 'Linux', 'Sistema Operacional');
+  {$ENDIF}
 end;
 
 procedure TJupiterApp.Internal_SetModules;
 begin
+  if not DirectoryExists(ExtractFileDir(Application.ExeName) + '/temp/') then
+     CreateDir(ExtractFileDir(Application.ExeName) + '/temp/');
+
   if not DirectoryExists(ExtractFileDir(Application.ExeName) + '/modules/') then
      CreateDir(ExtractFileDir(Application.ExeName) + '/modules/');
 

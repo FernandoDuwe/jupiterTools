@@ -18,7 +18,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="36"/>
+      <BuildNr Value="41"/>
       <StringTable CompanyName="Jupiter Studios" FileDescription="Jupiter Tools"/>
     </VersionInfo>
     <BuildModes Count="1">

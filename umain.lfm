@@ -77,6 +77,7 @@ inherited FMain: TFMain
       Top = 8
       Width = 1192
       Anchors = [akTop, akLeft, akRight]
+      Enabled = False
       OnChange = edSearchChange
       ParentShowHint = False
       ShowHint = True
@@ -120,15 +121,18 @@ inherited FMain: TFMain
     end
     object MenuItem2: TMenuItem
       Caption = 'Editar'
+      OnClick = MenuItem2Click
       object MenuItem8: TMenuItem
         Caption = 'Atualizar'
         OnClick = MenuItem8Click
       end
       object MenuItem9: TMenuItem
         Caption = 'Aumentar fonte'
+        Enabled = False
       end
       object MenuItem10: TMenuItem
         Caption = 'Diminuir fonte'
+        Enabled = False
       end
       object N1: TMenuItem
         Caption = '-'

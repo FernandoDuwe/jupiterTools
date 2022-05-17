@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls,
   Buttons, SynEdit, SynHighlighterSQL, SynHighlighterBat, SynCompletion,
-  uJupiterForm, JupiterApp;
+  uJupiterForm, JupiterApp, fileUtils;
 
 type
 
@@ -29,6 +29,7 @@ type
     procedure btOpenEditorClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure sbCopyClick(Sender: TObject);
+    procedure sbRefreshClick(Sender: TObject);
   private
      FFileName : String;
      FEditMode : Boolean;
@@ -66,6 +67,17 @@ end;
 procedure TFScriptEditor.sbCopyClick(Sender: TObject);
 begin
   seEditor.CopyToClipboard;
+end;
+
+procedure TFScriptEditor.sbRefreshClick(Sender: TObject);
+var
+  vrOutput : String;
+begin
+  try
+    seEditor.Lines.SaveToFile(TratarCaminho(ExtractFileDir(Application.ExeName) + '/temp/temp.bat'));
+  finally
+    RunCommand(TratarCaminho(ExtractFileDir(Application.ExeName) + '/temp/temp.bat'), [], vrOutput);
+  end;
 end;
 
 procedure TFScriptEditor.btEditClick(Sender: TObject);

@@ -47,6 +47,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure MenuItem11Click(Sender: TObject);
+    procedure MenuItem2Click(Sender: TObject);
     procedure MenuItem6Click(Sender: TObject);
     procedure MenuItem7Click(Sender: TObject);
     procedure MenuItem8Click(Sender: TObject);
@@ -101,7 +102,7 @@ var
 begin
   inherited Internal_UpdateComponents;
 
-  if tvItens.Items.Count = 0 then
+  if ((tvItens.Items.Count = 0) or (tvItens.Focused)) then
   begin
     tvItens.SortType := stNone;
     tvItens.Items.Clear;
@@ -190,6 +191,11 @@ begin
     FConfig.Release;
     FreeAndNil(FConfig);
   end;
+end;
+
+procedure TFMain.MenuItem2Click(Sender: TObject);
+begin
+
 end;
 
 procedure TFMain.MenuItem6Click(Sender: TObject);

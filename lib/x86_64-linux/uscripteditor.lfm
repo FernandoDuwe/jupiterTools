@@ -26,6 +26,7 @@ inherited FScriptEditor: TFScriptEditor
       Flat = True
       Images = FMain.ilMainIcons
       ImageIndex = 9
+      OnClick = sbRefreshClick
       ShowHint = True
       ParentShowHint = False
     end

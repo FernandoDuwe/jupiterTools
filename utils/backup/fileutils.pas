@@ -77,7 +77,7 @@ function TratarCaminho(prCaminho: String): String;
 begin
   Result := prCaminho;
   Result := StringReplace(Result, '\', GetDirectorySeparator, [rfIgnoreCase, rfReplaceAll]);
-  Result := StringReplace(Result, '\', GetDirectorySeparator, [rfIgnoreCase, rfReplaceAll]);
+  Result := StringReplace(Result, '/', GetDirectorySeparator, [rfIgnoreCase, rfReplaceAll]);
 end;
 
 end.
