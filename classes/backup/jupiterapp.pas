@@ -47,15 +47,17 @@ begin
   Self.Config.AddVariable('JupiterTools.Variables.ExeFile', Application.ExeName, 'Executável do JupiterTools');
   Self.Config.AddVariable('JupiterTools.Variables.Path', ExtractFileDir(Application.ExeName), 'Diretório do JupiterTools');
 
-  Self.Config.AddVariable('JupiterTools.Variables.Display.FontSize', '0', 'Tamanho da fonte dos formulários');
+  Self.Config.AddConfig('JupiterTools.UI.Display.FontSize', '9', 'Tamanho da fonte dos formulários');
 
   Self.Config.AddVariable('JupiterTools.Variables.OS.DirectotySeparator', GetDirectorySeparator, 'Caracter separador de diretório');
 
   {$IFDEF WINDOWS}
-    Self.Config.AddVariable('JupiterTools.Variables.OS.DirectotySeparator', GetDirectorySeparator, 'Caracter separador de diretório');
+    Self.Config.AddVariable('JupiterTools.Variables.OS', 'Windows', 'Sistema Operacional');
   {$ELSE}
     Self.Config.AddVariable('JupiterTools.Variables.OS', 'Linux', 'Sistema Operacional');
   {$ENDIF}
+
+  Self.Config.AddVariable('JupiterTools.Variables.ComputerName', GetEnvironmentVariable('COMPUTERNAME'), 'Nome do computador');
 end;
 
 procedure TJupiterApp.Internal_SetModules;

@@ -5,7 +5,7 @@ unit JupiterConfig;
 interface
 
 uses
-  Classes, Forms, SysUtils;
+  Classes, Forms, JupiterConsts, SysUtils;
 
 type
 
@@ -141,6 +141,11 @@ end;
 
 procedure TJupiterConfig.AddVariable(prID, prValue: String; prDescription: String);
 begin
+  if Self.Exists(prID) then
+    Self.GetByID(prID).Value := prValue
+  else
+    Self.FList.Add(TJupiterConfigItem.Create(prID, prDescription, prValue));
+
   Self.FList.Add( TJupiterConfigItem.Create(prID, prDescription, prValue, False));
 end;
 

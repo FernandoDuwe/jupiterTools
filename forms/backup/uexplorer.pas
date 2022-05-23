@@ -18,6 +18,7 @@ type
   private
     FParams : TJupiterListem;
 
+    procedure Internal_UpdateComponents; override;
     procedure Internal_UpdateDatasets; override;
   published
     property Params : TJupiterListem read FParams write FParams;
@@ -50,6 +51,13 @@ begin
   end;
 end;
 
+procedure TFExplorer.Internal_UpdateComponents;
+begin
+  inherited Internal_UpdateComponents;
+
+  lvReport.Font.Size := StrToInt(vrJupiterApp.Config.GetByID('JupiterTools.Variables.Display.FontSize').Value);
+end;
+
 procedure TFExplorer.Internal_UpdateDatasets;
 var
   vrList : TList;
@@ -58,7 +66,7 @@ var
   vrItem : TJupiterListableItem;
 begin
   lvReport.SmallImages := FMain.ilMainIcons;
-  lvReport.StateImages := FMain.ilMainIcons;
+//  lvReport.StateImages := FMain.ilMainIcons;
   lvReport.LargeImages := FMain.ilMainIcons;
 
   inherited Internal_UpdateDatasets;

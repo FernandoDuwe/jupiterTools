@@ -60,7 +60,7 @@ type
 
 implementation
 
-uses Process, LCLIntf;
+uses LCLIntf;
 
 { TJupiterTaskDetailsTimeNote }
 
@@ -205,16 +205,8 @@ begin
 end;
 
 procedure TJupiterTaskDetails.ExecuteFile(prFilePath: String);
-var
-  vrExtensions : String;
-  vrOutput : AnsiString;
 begin
-  vrExtensions := vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.OpenInEditorPrefExtensions').Value;
-
-  if Pos(AnsiUpperCase(ExtractFileExt(prFilePath)), AnsiUpperCase(vrExtensions)) <> -1 then
-    RunCommand(vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.EditorPref').Value, [prFilePath], vrOutput)
-  else
-    OpenDocument(prFilePath);
+  OpenFile(prFilePath);
 end;
 
 constructor TJupiterTaskDetails.Create(prPath: String);
@@ -259,6 +251,9 @@ begin
 
   if not Self.JupiterApp.Config.Exists(Self.ID + '.EditorPref') then
      Self.JupiterApp.Config.AddConfig(Self.ID + '.EditorPref', 'notepad', 'Editor preferencial (caminho ou comando)');
+
+  if not Self.JupiterApp.Config.Exists(Self.ID + '.DoNotChangeContentExtensions') then
+     Self.JupiterApp.Config.AddConfig(Self.ID + '.DoNotChangeContentExtensions', '.doc|.docx|.pdf', 'Extensões de arquivos que não terão seu conteúdo alterado');
 end;
 
 function TJupiterTasks.Internal_GetIdentifier: String;

@@ -141,7 +141,10 @@ end;
 
 procedure TJupiterConfig.AddVariable(prID, prValue: String; prDescription: String);
 begin
-  Self.FList.Add( TJupiterConfigItem.Create(prID, prDescription, prValue, False));
+  if Self.Exists(prID) then
+    Self.GetByID(prID).Value := prValue
+  else
+    Self.FList.Add( TJupiterConfigItem.Create(prID, prDescription, prValue, False));
 end;
 
 function TJupiterConfig.Count: Integer;

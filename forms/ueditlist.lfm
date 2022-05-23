@@ -9,14 +9,14 @@ inherited FEditList: TFEditList
   Position = poScreenCenter
   object StatusBar1: TStatusBar[0]
     Left = 0
-    Height = 18
-    Top = 365
+    Height = 23
+    Top = 360
     Width = 488
     Panels = <>
   end
   object mmList: TMemo[1]
     Left = 0
-    Height = 365
+    Height = 360
     Top = 0
     Width = 488
     Align = alClient

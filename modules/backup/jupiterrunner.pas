@@ -41,6 +41,9 @@ begin
   if not DirectoryExists(TratarCaminho(ExtractFileDir(Application.ExeName) + '/modules/runner/')) then
      CreateDir(TratarCaminho(ExtractFileDir(Application.ExeName) + '/modules/runner/'));
 
+  if not Self.JupiterApp.Config.Exists(Self.ID + '.ExecMethod') then
+     Self.JupiterApp.Config.AddConfig(Self.ID + '.ExecMethod', 'notepad', 'Método de execução');
+
   vrStr := TStringList.Create;
   try
     if not FileExists(TratarCaminho(ExtractFileDir(Application.ExeName) + '/modules/runner/folders.csv')) then
@@ -88,9 +91,16 @@ begin
 
       vrNode := prTreeMenu.Items.AddChild(prOwner, ExtractFileName(vrStr[vrVez]));
 
-
-      vrNode.ImageIndex    := ICON_SCRIPTS;
-      vrNode.SelectedIndex := ICON_SCRIPTS;
+      if AnsiUpperCase(ExtractFileExt(vrStr[vrVez])) = '.SQL' then
+      begin
+        vrNode.ImageIndex    := ICON_SQL;
+        vrNode.SelectedIndex := ICON_SQL;
+      end
+      else
+      begin
+        vrNode.ImageIndex    := ICON_SCRIPTS;
+        vrNode.SelectedIndex := ICON_SCRIPTS;
+      end;
 
       vrNode.Data := TJupiterListem.Create(Self.ID, EmptyStr, vrStr[vrVez], 50);
     end;
@@ -189,6 +199,8 @@ begin
 
   Self.Internal_ListScripts(prTreeMenu, vrNode);
 
+  vrNode.Expanded := True;
+
   vrNode               := prTreeMenu.Items.Add(nil, 'Favoritos');
   vrNode.ImageIndex    := ICON_FAVORITE;
   vrNode.SelectedIndex := ICON_FAVORITE;
@@ -211,21 +223,13 @@ begin
 end;
 
 procedure TJupiterRunner.RunListable(prParams: TJupiterListableItem);
-var
-  vrExtensions : String;
-  vrOutput : AnsiString;
 begin
   inherited RunListable(prParams);
 
-  vrExtensions := vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.OpenInEditorPrefExtensions').Value;
-
   if DirectoryExists(prParams.Param) then
-    OpenDocument(prParams.Param)
+    OpenFolder(prParams.Param)
   else
-    if ((Trim(ExtractFileExt(prParams.Param)) <> EmptyStr) and (Pos(AnsiUpperCase(ExtractFileExt(prParams.Param)), AnsiUpperCase(vrExtensions)) <> -1)) then
-      RunCommand(vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.EditorPref').Value, [prParams.Param], vrOutput)
-    else
-      RunCommand(prParams.Param, [], vrOutput);
+    OpenFile(prParams.Param);
 end;
 
 end.

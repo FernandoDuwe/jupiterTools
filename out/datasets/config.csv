@@ -1,6 +1,9 @@
 ID;DESCRIPTION;VALUE;
-JupiterTools.Modules.Tasks.Path;Diretório de tarefas;/home/duwe/Tarefas/;
+JupiterTools.Modules.Tasks.Path;Diretório de tarefas;C:\Tarefas\;
 JupiterTools.Modules.Tasks.OpenInEditorPrefExtensions;Extensões de arquivos abertas em editor preferencial;.txt|.sql|.md;
-JupiterTools.Modules.Tasks.EditorPref;Editor preferencial (caminho ou comando);code;
-JupiterTools.Modules.Tasks.Current;Tarefa atual;/home/duwe/Tarefas/Santander/2010816/;
-JupiterTools.Modules.Tasks.CurrentNumber;Número Tarefa atual;2010816;
+JupiterTools.Modules.Tasks.EditorPref;Editor preferencial (caminho ou comando);C:\Program Files\Notepad++\notepad++.exe;
+JupiterTools.Modules.Tasks.Current;Tarefa atual;C:\Tarefas\Benner\12412412412412\;
+JupiterTools.Modules.Tasks.CurrentNumber;Número Tarefa atual;12412412412412;
+JupiterTools.Modules.Tasks.DoNotChangeContentExtensions;Extensões de arquivos que não terão seu conteúdo alterado;.doc|.docx|.pdf;
+JupiterTools.Modules.Runner.ExecMethod;Método de execução;RunCommand;
+JupiterTools.UI.Display.FontSize;Tamanho da fonte dos formulários;10;

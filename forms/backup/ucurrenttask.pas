@@ -165,6 +165,9 @@ begin
 
   sbStartTime.Enabled := not Self.FStarted;
   sbEndTime.Enabled   := Self.FStarted;
+
+  lvFiles.Font.Size := StrToInt(vrJupiterApp.Config.GetByID('JupiterTools.Variables.Display.FontSize').Value);
+  lvTimes.Font.Size := StrToInt(vrJupiterApp.Config.GetByID('JupiterTools.Variables.Display.FontSize').Value);
 end;
 
 procedure TFCurrentTask.Internal_UpdateDatasets;

@@ -1,7 +1,7 @@
 inherited FScriptEditor: TFScriptEditor
-  Left = 498
+  Left = 90
   Height = 611
-  Top = 216
+  Top = 135
   Width = 1143
   Caption = 'Editor de Script'
   ClientHeight = 611
@@ -76,7 +76,7 @@ inherited FScriptEditor: TFScriptEditor
     TabOrder = 1
     inline seEditor: TSynEdit
       Left = 0
-      Height = 561
+      Height = 252
       Top = 0
       Width = 1143
       Align = alClient
@@ -87,7 +87,7 @@ inherited FScriptEditor: TFScriptEditor
       ParentColor = False
       ParentFont = False
       TabOrder = 0
-      Gutter.Width = 57
+      Gutter.Width = 53
       Gutter.MouseActions = <>
       RightGutter.Width = 0
       RightGutter.MouseActions = <>
@@ -544,7 +544,7 @@ inherited FScriptEditor: TFScriptEditor
           MouseActions = <>
         end
         object SynGutterLineNumber1: TSynGutterLineNumber
-          Width = 17
+          Width = 13
           MouseActions = <>
           MarkupInfo.Background = clBtnFace
           MarkupInfo.Foreground = clNone
@@ -574,27 +574,61 @@ inherited FScriptEditor: TFScriptEditor
         end
       end
     end
+    object gbOutput: TGroupBox
+      Left = 0
+      Height = 304
+      Top = 257
+      Width = 1143
+      Align = alBottom
+      Caption = 'Saída'
+      ClientHeight = 284
+      ClientWidth = 1139
+      TabOrder = 1
+      object mmOutput: TMemo
+        Left = 0
+        Height = 284
+        Top = 0
+        Width = 1139
+        Align = alClient
+        Color = clBtnFace
+        Lines.Strings = (
+          'mmOutput'
+        )
+        ReadOnly = True
+        ScrollBars = ssBoth
+        TabOrder = 0
+      end
+    end
+    object Splitter1: TSplitter
+      Cursor = crVSplit
+      Left = 0
+      Height = 5
+      Top = 252
+      Width = 1143
+      Align = alBottom
+      ResizeAnchor = akBottom
+    end
   end
   object syHighSQL: TSynSQLSyn[2]
     DefaultFilter = 'SQL Files (*.sql)|*.sql'
     Enabled = False
     SQLDialect = sqlOracle
-    left = 549
-    top = 148
+    Left = 549
+    Top = 148
   end
   object syHighBAT: TSynBatSyn[3]
     DefaultFilter = 'MS-DOS Batch Files (*.bat;*.cmd)|*.bat;*.cmd'
     Enabled = False
-    left = 549
-    top = 224
+    Left = 549
+    Top = 224
   end
   object syAutocomplete: TSynAutoComplete[4]
     EndOfTokenChr = '()[].'
     ShortCut = 8224
     ExecCommandID = ecSynAutoCompletionExecute
     Editor = seEditor
-    left = 549
-    top = 296
+    Left = 549
+    Top = 296
   end
   object SynCompletion1: TSynCompletion[5]
     Position = 0
@@ -608,7 +642,7 @@ inherited FScriptEditor: TFScriptEditor
     ExecCommandID = ecSynCompletionExecute
     Editor = seEditor
     ToggleReplaceWhole = False
-    left = 324
-    top = 193
+    Left = 324
+    Top = 193
   end
 end

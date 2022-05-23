@@ -124,6 +124,7 @@ var
 begin
   inherited Internal_UpdateDatasets;
 
+  cbClient.Text := EmptyStr;
   cbClient.Items.Clear;
 
   vrStrClients := TStringList.Create;
@@ -194,10 +195,20 @@ var
   vrVez  : Integer;
   vrStr  : TStrings;
   vrFile : String;
+
+  vrExtensions : String;
+  vrContent : Integer;
 begin
   vrFile := Self.TaskPath + vrJupiterApp.Config.ResolveString(prFile);
 
   CopyFile(Self.Internal_GetTemplatePath + prFile, vrFile);
+
+  vrExtensions := vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.DoNotChangeContentExtensions').Value;
+
+  vrContent := Pos(AnsiUpperCase(ExtractFileExt(prFile)), AnsiUpperCase(vrExtensions));
+
+  if vrContent <> 0 then
+    Exit;
 
   vrStr := TStringList.Create;
   try

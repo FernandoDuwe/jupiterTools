@@ -1,7 +1,7 @@
 inherited FExplorer: TFExplorer
-  Left = 469
+  Left = 87
   Height = 524
-  Top = 233
+  Top = 172
   Width = 1035
   Caption = 'Dados'
   ClientHeight = 524

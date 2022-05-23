@@ -97,6 +97,11 @@ begin
     Self.FEditMode := True;
   finally
     Self.UpdateForm;
+
+    edID.Text := 'User.';
+
+    if edID.CanFocus then
+      edID.SetFocus;
   end;
 end;
 

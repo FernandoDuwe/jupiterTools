@@ -97,6 +97,11 @@ begin
     Self.FEditMode := True;
   finally
     Self.UpdateForm;
+
+    edID.Text := 'User.';
+
+    if edID.CanFocus then
+      edID.SetFocus;
   end;
 end;
 
@@ -192,6 +197,8 @@ begin
   sbViewList.Enabled := False;
 
   btNew.Enabled  := not Self.FEditMode;
+
+  lvParams.Font.Size := StrToInt(vrJupiterApp.Config.GetByID('JupiterTools.UI.Display.FontSize').Value);
 
   if not Assigned(Self.FCurrentItem) then
     Exit;

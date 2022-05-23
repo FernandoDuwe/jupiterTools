@@ -46,15 +46,19 @@ type
     procedure edSearchChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormResize(Sender: TObject);
+    procedure MenuItem10Click(Sender: TObject);
     procedure MenuItem11Click(Sender: TObject);
     procedure MenuItem2Click(Sender: TObject);
+    procedure MenuItem4Click(Sender: TObject);
     procedure MenuItem6Click(Sender: TObject);
     procedure MenuItem7Click(Sender: TObject);
     procedure MenuItem8Click(Sender: TObject);
+    procedure MenuItem9Click(Sender: TObject);
     procedure miAutoUpdateClick(Sender: TObject);
     procedure miCleanSearchChangeItemClick(Sender: TObject);
     procedure miModulesClick(Sender: TObject);
     procedure miConfigClick(Sender: TObject);
+    procedure pnBodyClick(Sender: TObject);
     procedure sbRefreshClick(Sender: TObject);
     procedure tvItensClick(Sender: TObject);
   private
@@ -71,11 +75,18 @@ var
 
 implementation
 
+uses LCLType;
+
 {$R *.lfm}
 
 { TFMain }
 
 procedure TFMain.miConfigClick(Sender: TObject);
+begin
+
+end;
+
+procedure TFMain.pnBodyClick(Sender: TObject);
 begin
 
 end;
@@ -102,7 +113,7 @@ var
 begin
   inherited Internal_UpdateComponents;
 
-  if ((tvItens.Items.Count = 0) or ()) then
+  if ((tvItens.Items.Count = 0) or (tvItens.Focused)) then
   begin
     tvItens.SortType := stNone;
     tvItens.Items.Clear;
@@ -120,6 +131,8 @@ begin
   sbRefresh.Width  := edSearch.Height;
 
   pnTaskBar.Height := (edSearch.Top * 2) + edSearch.Height;
+
+  tvItens.Font.Size := StrToInt(vrJupiterApp.Config.GetByID('JupiterTools.Variables.Display.FontSize').Value);
 end;
 
 procedure TFMain.Internal_ShowForm(prItem: TJupiterListem);
@@ -167,6 +180,19 @@ begin
   Self.UpdateForm;
 end;
 
+procedure TFMain.MenuItem9Click(Sender: TObject);
+var
+  vrValue : Integer;
+begin
+  try
+    vrValue := StrToInt(vrJupiterApp.Config.GetByID('JupiterTools.UI.Display.FontSize').Value);
+
+    vrJupiterApp.Config.AddConfig('JupiterTools.UI.Display.FontSize', IntToStr(vrValue + 1), 'Tamanho da fonte dos formulários');
+  finally
+    Self.UpdateForm;
+  end;
+end;
+
 procedure TFMain.miAutoUpdateClick(Sender: TObject);
 begin
   miAutoUpdate.Checked := not miAutoUpdate.Checked;
@@ -180,6 +206,19 @@ end;
 procedure TFMain.FormResize(Sender: TObject);
 begin
 
+end;
+
+procedure TFMain.MenuItem10Click(Sender: TObject);
+var
+  vrValue : Integer;
+begin
+  try
+    vrValue := StrToInt(vrJupiterApp.Config.GetByID('JupiterTools.UI.Display.FontSize').Value);
+
+    vrJupiterApp.Config.AddConfig('JupiterTools.UI.Display.FontSize', IntToStr(vrValue - 1), 'Tamanho da fonte dos formulários');
+  finally
+    Self.UpdateForm;
+  end;
 end;
 
 procedure TFMain.MenuItem11Click(Sender: TObject);
@@ -196,6 +235,11 @@ end;
 procedure TFMain.MenuItem2Click(Sender: TObject);
 begin
 
+end;
+
+procedure TFMain.MenuItem4Click(Sender: TObject);
+begin
+  Application.MessageBox('JupiterTools - 1.0', PAnsiChar(Self.Caption), MB_ICONINFORMATION + MB_OK);
 end;
 
 procedure TFMain.MenuItem6Click(Sender: TObject);

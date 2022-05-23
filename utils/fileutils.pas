@@ -5,16 +5,19 @@ unit fileUtils;
 interface
 
 uses
-  Classes, LCLIntf, SysUtils;
+  Classes, LCLIntf, JupiterApp, SysUtils;
 
   procedure ListDirectories(prRoot : String; var prOut : TStrings);
   procedure ListFiles(prRoot : String; var prOut : TStrings);
   function GetDirectorySeparator : String;
 
   procedure OpenFolder(prFolderPath : String);
+  procedure OpenFile(prFileName : String);
   function  TratarCaminho(prCaminho : String) : String;
 
 implementation
+
+uses Process, ShellApi;
 
 procedure ListDirectories(prRoot: String; var prOut: TStrings);
 var
@@ -71,6 +74,27 @@ end;
 procedure OpenFolder(prFolderPath: String);
 begin
   OpenDocument(prFolderPath);
+end;
+
+procedure OpenFile(prFileName: String);
+var
+  vrExtensions : String;
+  vrOutput : String;
+  vrContent : Integer;
+begin
+  vrExtensions := vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.OpenInEditorPrefExtensions').Value;
+
+  vrContent := Pos(AnsiUpperCase(ExtractFileExt(prFileName)), AnsiUpperCase(vrExtensions));
+
+  if vrContent <> 0 then
+  begin
+    if vrJupiterApp.Config.GetByID('JupiterTools.Modules.Runner.ExecMethod').Value = 'RunCommand' then
+      RunCommand(vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.EditorPref').Value, [prFileName], vrOutput, [poRunIdle])
+    else
+      ShellExecute(0, nil, PAnsiChar(vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.EditorPref').Value), PAnsiChar(prFileName), nil, 0);
+  end
+  else
+    OpenDocument(prFileName);
 end;
 
 function TratarCaminho(prCaminho: String): String;

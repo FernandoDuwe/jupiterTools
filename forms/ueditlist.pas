@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls,
-  uJupiterForm;
+  uJupiterForm, JupiterApp;
 
 type
 
@@ -18,6 +18,8 @@ type
   private
     function  Internal_ReadList: String;
     procedure Internal_WriteList(prStr : String);
+
+    procedure Internal_UpdateComponents; override;
   published
     property List : String read Internal_ReadList write Internal_WriteList;
   end;
@@ -63,6 +65,13 @@ begin
     vrStr.Clear;
     FreeAndNil(vrStr);
   end;
+end;
+
+procedure TFEditList.Internal_UpdateComponents;
+begin
+  inherited Internal_UpdateComponents;
+
+  mmList.Font.Size := StrToInt(vrJupiterApp.Config.GetByID('JupiterTools.UI.Display.FontSize').Value);
 end;
 
 end.

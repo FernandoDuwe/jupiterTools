@@ -16,11 +16,14 @@ type
   TFScriptEditor = class(TJupiterForm)
     btOpenEditor: TButton;
     btEdit: TButton;
+    gbOutput: TGroupBox;
+    mmOutput: TMemo;
     pnBody: TPanel;
     pnTaskBar: TPanel;
     sbRefresh: TSpeedButton;
     sbCopy: TSpeedButton;
     seEditor: TSynEdit;
+    Splitter1: TSplitter;
     syAutocomplete: TSynAutoComplete;
     syHighBAT: TSynBatSyn;
     syHighSQL: TSynSQLSyn;
@@ -59,6 +62,7 @@ uses process, StrUtils, uMain;
 procedure TFScriptEditor.FormCreate(Sender: TObject);
 begin
   seEditor.Lines.Clear;
+  mmOutput.Lines.Clear;
 
   Self.FEditMode := False;
   Self.FFileName := EmptyStr;
@@ -70,11 +74,16 @@ begin
 end;
 
 procedure TFScriptEditor.sbRefreshClick(Sender: TObject);
+var
+  vrOutput : String;
 begin
   try
     seEditor.Lines.SaveToFile(TratarCaminho(ExtractFileDir(Application.ExeName) + '/temp/temp.bat'));
   finally
-    RunCommand(TratarCaminho(ExtractFileDir(Application.ExeName) + '/temp/temp.bat'), [], vrOutput);
+    RunCommand(TratarCaminho(ExtractFileDir(Application.ExeName) + '/temp/temp.bat'), [], vrOutput, [poNoConsole]);
+
+    mmOutput.Lines.Clear;
+    mmOutput.Lines.Add(vrOutput);
   end;
 end;
 
@@ -93,10 +102,8 @@ begin
 end;
 
 procedure TFScriptEditor.btOpenEditorClick(Sender: TObject);
-var
-  vrOutput : String;
 begin
-  RunCommand(vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.EditorPref').Value, [Self.FileName], vrOutput)
+  OpenFile(Self.FileName);
 end;
 
 procedure TFScriptEditor.Internal_SetEditMode(prEditMode: Boolean);
@@ -155,6 +162,11 @@ begin
   btEdit.Caption := IfThen(Self.EditMode, 'Salvar', 'Editar');
 
   sbRefresh.Enabled := AnsiUpperCase(ExtractFileExt(Self.FileName)) = '.BAT';
+  gbOutput.Visible := AnsiUpperCase(ExtractFileExt(Self.FileName)) = '.BAT';
+  Splitter1.Visible := AnsiUpperCase(ExtractFileExt(Self.FileName)) = '.BAT';
+
+  seEditor.Font.Size := StrToInt(vrJupiterApp.Config.GetByID('JupiterTools.Variables.Display.FontSize').Value);
+  mmOutput.Font.Size := StrToInt(vrJupiterApp.Config.GetByID('JupiterTools.Variables.Display.FontSize').Value);
 end;
 
 end.
