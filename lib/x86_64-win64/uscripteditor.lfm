@@ -63,6 +63,16 @@ inherited FScriptEditor: TFScriptEditor
       ShowHint = True
       ParentShowHint = False
     end
+    object btHideResults: TButton
+      Left = 680
+      Height = 33
+      Top = 8
+      Width = 144
+      Anchors = [akTop, akRight]
+      Caption = 'Exibir Resultados'
+      OnClick = btHideResultsClick
+      TabOrder = 2
+    end
   end
   object pnBody: TPanel[1]
     Left = 0
@@ -76,7 +86,7 @@ inherited FScriptEditor: TFScriptEditor
     TabOrder = 1
     inline seEditor: TSynEdit
       Left = 0
-      Height = 252
+      Height = 193
       Top = 0
       Width = 1143
       Align = alClient
@@ -576,17 +586,18 @@ inherited FScriptEditor: TFScriptEditor
     end
     object gbOutput: TGroupBox
       Left = 0
-      Height = 304
-      Top = 257
+      Height = 363
+      Top = 198
       Width = 1143
       Align = alBottom
       Caption = 'Saída'
-      ClientHeight = 284
+      ClientHeight = 343
       ClientWidth = 1139
       TabOrder = 1
+      Visible = False
       object mmOutput: TMemo
         Left = 0
-        Height = 284
+        Height = 343
         Top = 0
         Width = 1139
         Align = alClient
@@ -603,7 +614,7 @@ inherited FScriptEditor: TFScriptEditor
       Cursor = crVSplit
       Left = 0
       Height = 5
-      Top = 252
+      Top = 193
       Width = 1143
       Align = alBottom
       ResizeAnchor = akBottom

@@ -14,12 +14,14 @@ type
   TJupiterForm = class(TForm)
     procedure FormActivate(Sender: TObject);
   protected
-        procedure Internal_UpdateComponents; virtual;
-        procedure Internal_UpdateDatasets; virtual;
-        procedure Internal_UpdateCalcs; virtual;
+    FSearchParam : String;
+
+    procedure Internal_UpdateComponents; virtual;
+    procedure Internal_UpdateDatasets; virtual;
+    procedure Internal_UpdateCalcs; virtual;
   public
-        procedure UpdateForm;
-        procedure Search(prSearch : String);
+    procedure UpdateForm;
+    procedure Search(prSearch : String);
   end;
 
 var

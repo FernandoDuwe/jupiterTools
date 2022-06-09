@@ -14,6 +14,7 @@ const
   ICON_FAVORITE    : Smallint = 6;
   ICON_CHECKED     : Smallint = 8;
   ICON_CURRENTTASK : Smallint = 13;
+  ICON_SQL         : Smallint = 15;
 
   FORM_EXPLORER : Smallint = 0;
 
@@ -29,8 +30,9 @@ type
     Task   : String;
     Params : String;
     Tag    : Integer;
+    Hint   : String;
 
-    constructor Create(prModule, prTask : String; prParams : String = ''; prTag : Integer = 0);
+    constructor Create(prModule, prTask : String; prParams : String = ''; prTag : Integer = 0; prHint : String = '');
   end;
 
   { TJupiterListableItem }
@@ -68,12 +70,13 @@ end;
 
 { TJupiterListem }
 
-constructor TJupiterListem.Create(prModule, prTask: String; prParams: String; prTag: Integer);
+constructor TJupiterListem.Create(prModule, prTask: String; prParams: String; prTag: Integer; prHint : String = '');
 begin
   Self.Module := prModule;
   Self.Task   := prTask;
   Self.Params := prParams;
   Self.Tag    := prTag;
+  Self.Hint   := prHint;
 end;
 
 end.

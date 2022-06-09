@@ -14,6 +14,8 @@ type
   TJupiterForm = class(TForm)
     procedure FormActivate(Sender: TObject);
   protected
+    FSearchParam : String;
+
     procedure Internal_UpdateComponents; virtual;
     procedure Internal_UpdateDatasets; virtual;
     procedure Internal_UpdateCalcs; virtual;
@@ -60,7 +62,7 @@ end;
 
 procedure TJupiterForm.Search(prSearch: String);
 begin
-  //
+  Self.FSearchParam := prSearch;
 end;
 
 end.

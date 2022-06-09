@@ -46,6 +46,7 @@ type
     procedure edSearchChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormResize(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure MenuItem10Click(Sender: TObject);
     procedure MenuItem11Click(Sender: TObject);
     procedure MenuItem2Click(Sender: TObject);
@@ -59,6 +60,7 @@ type
     procedure miModulesClick(Sender: TObject);
     procedure miConfigClick(Sender: TObject);
     procedure pnBodyClick(Sender: TObject);
+    procedure pnTaskBarClick(Sender: TObject);
     procedure sbRefreshClick(Sender: TObject);
     procedure tvItensClick(Sender: TObject);
   private
@@ -87,6 +89,11 @@ begin
 end;
 
 procedure TFMain.pnBodyClick(Sender: TObject);
+begin
+
+end;
+
+procedure TFMain.pnTaskBarClick(Sender: TObject);
 begin
 
 end;
@@ -208,6 +215,12 @@ begin
 
 end;
 
+procedure TFMain.FormShow(Sender: TObject);
+begin
+  if vrJupiterApp.Config.GetByID('JupiterTools.UI.Display.WindowsState').Value = 'Maximized' then
+    Self.WindowState := wsMaximized;
+end;
+
 procedure TFMain.MenuItem10Click(Sender: TObject);
 var
   vrValue : Integer;
@@ -263,7 +276,14 @@ end;
 
 procedure TFMain.edSearchChange(Sender: TObject);
 begin
-  Self.Search(edSearch.Text);
+  try
+    Self.Search(edSearch.Text);
+
+    if Assigned(Self.FCurrentForm) then
+       TJupiterForm(Self.FCurrentForm).Search(edSearch.Text);
+  finally
+    Self.UpdateForm;
+  end;
 end;
 
 procedure TFMain.ApplicationProperties1Restore(Sender: TObject);

@@ -14,6 +14,7 @@ uses
   procedure OpenFolder(prFolderPath : String);
   procedure OpenFile(prFileName : String);
   function  TratarCaminho(prCaminho : String) : String;
+  procedure CreateProcess(prFileName : String; prParams : String);
 
 implementation
 
@@ -91,7 +92,12 @@ begin
     if vrJupiterApp.Config.GetByID('JupiterTools.Modules.Runner.ExecMethod').Value = 'RunCommand' then
       RunCommand(vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.EditorPref').Value, [prFileName], vrOutput, [poRunIdle])
     else
-      ShellExecute(0, nil, PAnsiChar(vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.EditorPref').Value), PAnsiChar(prFileName), nil, 0);
+    begin
+      if vrJupiterApp.Config.GetByID('JupiterTools.Modules.Runner.ExecMethod').Value = 'ShellExecute' then
+        ShellExecute(0, nil, PAnsiChar(vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.EditorPref').Value), PAnsiChar(prFileName), nil, 0)
+      else
+        CreateProcess(PAnsiChar(vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.EditorPref').Value), PAnsiChar(prFileName));
+    end;
   end
   else
     OpenDocument(prFileName);
@@ -102,6 +108,20 @@ begin
   Result := prCaminho;
   Result := StringReplace(Result, '\', GetDirectorySeparator, [rfIgnoreCase, rfReplaceAll]);
   Result := StringReplace(Result, '/', GetDirectorySeparator, [rfIgnoreCase, rfReplaceAll]);
+end;
+
+procedure CreateProcess(prFileName: String; prParams: String);
+var
+  vrProcess : TProcess;
+begin
+  vrProcess := TProcess.Create(nil);
+  vrProcess.Executable := prFileName;
+
+  if prParams <> EmptyStr then
+    vrProcess.Parameters.Add(prParams);
+
+  vrProcess.Execute;
+  vrProcess.Free;
 end;
 
 end.

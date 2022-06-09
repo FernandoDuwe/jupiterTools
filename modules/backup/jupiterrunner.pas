@@ -42,7 +42,7 @@ begin
      CreateDir(TratarCaminho(ExtractFileDir(Application.ExeName) + '/modules/runner/'));
 
   if not Self.JupiterApp.Config.Exists(Self.ID + '.ExecMethod') then
-     Self.JupiterApp.Config.AddConfig(Self.ID + '.ExecMethod', 'notepad', 'Método de execução');
+     Self.JupiterApp.Config.AddConfig(Self.ID + '.ExecMethod', 'RunCommand', 'Método de execução (RunCommand / ShellExecute / ExecuteProcess)');
 
   vrStr := TStringList.Create;
   try
@@ -195,7 +195,7 @@ begin
   vrNode.ImageIndex    := ICON_SCRIPTS;
   vrNode.SelectedIndex := ICON_SCRIPTS;
 
-  vrNode.Data := TJupiterListem.Create(Self.ID, '/scripts');
+  vrNode.Data := TJupiterListem.Create(Self.ID, '/scripts', EmptyStr, 0, 'Listando agora o diretório de scripts. Dê um duplo clique para abrir.');
 
   Self.Internal_ListScripts(prTreeMenu, vrNode);
 
@@ -205,19 +205,19 @@ begin
   vrNode.ImageIndex    := ICON_FAVORITE;
   vrNode.SelectedIndex := ICON_FAVORITE;
 
-  vrNode.Data := TJupiterListem.Create(Self.ID, '/fav');
+  vrNode.Data := TJupiterListem.Create(Self.ID, '/fav', EmptyStr, 0, 'Arquivos de configuração favoritos. Dê um duplo clique para abrir.');
 
   vrSubNode := prTreeMenu.Items.AddChild(vrNode, 'Pastas');
   vrSubNode.ImageIndex    := ICON_FOLDER;
   vrSubNode.SelectedIndex := ICON_FOLDER;
 
-  vrSubNode.Data := TJupiterListem.Create(Self.ID, '/folders', EmptyStr);
+  vrSubNode.Data := TJupiterListem.Create(Self.ID, '/folders', EmptyStr, 0, 'Pastas favoritas. Dê um duplo clique para abrir.');
 
   vrSubNode := prTreeMenu.Items.AddChild(vrNode, 'Executáveis');
   vrSubNode.ImageIndex    := ICON_PACKAGE;
   vrSubNode.SelectedIndex := ICON_PACKAGE;
 
-  vrSubNode.Data := TJupiterListem.Create(Self.ID, '/applications', EmptyStr);
+  vrSubNode.Data := TJupiterListem.Create(Self.ID, '/applications', EmptyStr, 0, 'Aplicativos e comandos favoritos. Dê um duplo clique para abrir.');
 
   vrNode.Expanded := True;
 end;

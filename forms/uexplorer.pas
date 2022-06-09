@@ -5,15 +5,18 @@ unit uExplorer;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, uJupiterForm,
-  JupiterConsts, JupiterApp;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, ExtCtrls,
+  StdCtrls, uJupiterForm, JupiterConsts, JupiterApp;
 
 type
 
   { TFExplorer }
 
   TFExplorer = class(TJupiterForm)
+    imgInfo: TImage;
+    lbInfo: TLabel;
     lvReport: TListView;
+    pnHint: TPanel;
     procedure lvReportDblClick(Sender: TObject);
   private
     FParams : TJupiterListem;
@@ -56,6 +59,9 @@ begin
   inherited Internal_UpdateComponents;
 
   lvReport.Font.Size := StrToInt(vrJupiterApp.Config.GetByID('JupiterTools.UI.Display.FontSize').Value);
+
+  pnHint.Visible := Self.FParams.Hint <> EmptyStr;
+  lbInfo.Caption := Self.FParams.Hint;
 end;
 
 procedure TFExplorer.Internal_UpdateDatasets;
@@ -83,6 +89,10 @@ begin
     for vrVez := 0 to vrList.Count - 1 do
     begin
       vrItem := TJupiterListableItem(vrList[vrVez]);
+
+      if Self.FSearchParam <> EmptyStr then
+         if ((Pos(AnsiUpperCase(Self.FSearchParam), AnsiUpperCase(vrItem.Item)) = 0) and (Pos(AnsiUpperCase(Self.FSearchParam), AnsiUpperCase(vrItem.Descricao)) = 0)) then
+           Continue;
 
       vrNode := lvReport.Items.Add;
       vrNode.Caption := vrItem.Item;

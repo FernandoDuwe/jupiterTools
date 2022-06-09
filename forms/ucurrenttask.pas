@@ -31,6 +31,7 @@ type
     Splitter1: TSplitter;
     procedure btFolderClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure lvFilesDblClick(Sender: TObject);
     procedure sbEndTimeClick(Sender: TObject);
     procedure sbStartTimeClick(Sender: TObject);
@@ -66,6 +67,11 @@ end;
 procedure TFCurrentTask.FormCreate(Sender: TObject);
 begin
   Self.FStarted := False;
+end;
+
+procedure TFCurrentTask.FormShow(Sender: TObject);
+begin
+
 end;
 
 procedure TFCurrentTask.lvFilesDblClick(Sender: TObject);

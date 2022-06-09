@@ -46,6 +46,7 @@ type
     procedure edSearchChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormResize(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure MenuItem10Click(Sender: TObject);
     procedure MenuItem11Click(Sender: TObject);
     procedure MenuItem2Click(Sender: TObject);
@@ -132,7 +133,7 @@ begin
 
   pnTaskBar.Height := (edSearch.Top * 2) + edSearch.Height;
 
-  tvItens.Font.Size := StrToInt(vrJupiterApp.Config.GetByID('JupiterTools.Variables.Display.FontSize').Value);
+  tvItens.Font.Size := StrToInt(vrJupiterApp.Config.GetByID('JupiterTools.UI.Display.FontSize').Value);
 end;
 
 procedure TFMain.Internal_ShowForm(prItem: TJupiterListem);
@@ -208,6 +209,12 @@ begin
 
 end;
 
+procedure TFMain.FormShow(Sender: TObject);
+begin
+  if vrJupiterApp.Config.GetByID('JupiterTools.UI.Display.WindowsState').Value = 'Maximized' then
+    Self.WindowState := wsMaximized;
+end;
+
 procedure TFMain.MenuItem10Click(Sender: TObject);
 var
   vrValue : Integer;
@@ -263,7 +270,14 @@ end;
 
 procedure TFMain.edSearchChange(Sender: TObject);
 begin
-  Self.Search(edSearch.Text);
+  try
+    Self.Search(edSearch.Text);
+
+    if Assigned(Self.FCurrentForm) then
+       TJupiterForm(Self.FCurrentForm).Search(edSearch.Text);
+  finally
+    Self.UpdateForm;
+  end;
 end;
 
 procedure TFMain.ApplicationProperties1Restore(Sender: TObject);

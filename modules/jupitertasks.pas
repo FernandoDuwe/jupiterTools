@@ -272,7 +272,7 @@ begin
   vrNode.ImageIndex    := ICON_CURRENTTASK;
   vrNode.SelectedIndex := ICON_CURRENTTASK;
 
-  vrNode.Data := TJupiterListem.Create(Self.ID, '/');
+  vrNode.Data := TJupiterListem.Create(Self.ID, '/', EmptyStr, 0, 'Tarefas já cadastradas. Dê um duplo clique para selecionar a tarefa atual.');
 
   vrSubNode := prTreeMenu.Items.AddChild(vrNode, 'Atual');
   vrSubNode.ImageIndex    := ICON_CURRENTTASK;
@@ -324,7 +324,7 @@ begin
 
         vrObj             := TJupiterListableItem.Create();
         vrObj.Item        := vrTask;
-        vrObj.Descricao   := Format('Cliente %0:s, tarefa %1:s', [vrClient, vrTask]);
+        vrObj.Descricao   := Format('Cliente/Projeto: %0:s, Tarefa: %1:s', [vrClient, vrTask]);
         vrObj.Param       := vrTasks[vrVez2];
         vrObj.Selecionado := False;
 

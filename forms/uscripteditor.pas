@@ -16,6 +16,7 @@ type
   TFScriptEditor = class(TJupiterForm)
     btOpenEditor: TButton;
     btEdit: TButton;
+    btHideResults: TButton;
     gbOutput: TGroupBox;
     mmOutput: TMemo;
     pnBody: TPanel;
@@ -29,6 +30,7 @@ type
     syHighSQL: TSynSQLSyn;
     SynCompletion1: TSynCompletion;
     procedure btEditClick(Sender: TObject);
+    procedure btHideResultsClick(Sender: TObject);
     procedure btOpenEditorClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure sbCopyClick(Sender: TObject);
@@ -70,6 +72,7 @@ end;
 
 procedure TFScriptEditor.sbCopyClick(Sender: TObject);
 begin
+  seEditor.SelectAll;
   seEditor.CopyToClipboard;
 end;
 
@@ -78,12 +81,23 @@ var
   vrOutput : String;
 begin
   try
+    gbOutput.Visible := True;
+
     seEditor.Lines.SaveToFile(TratarCaminho(ExtractFileDir(Application.ExeName) + '/temp/temp.bat'));
   finally
+    mmOutput.Lines.Clear;
+    mmOutput.Lines.Add('Início: ' + FormatDateTime('hh:nn:ss', Now));
+    mmOutput.Lines.Add('-----------------------------------------------------------');
+    mmOutput.Lines.Add(EmptyStr);
+
     RunCommand(TratarCaminho(ExtractFileDir(Application.ExeName) + '/temp/temp.bat'), [], vrOutput, [poNoConsole]);
 
-    mmOutput.Lines.Clear;
     mmOutput.Lines.Add(vrOutput);
+    mmOutput.Lines.Add(EmptyStr);
+    mmOutput.Lines.Add('-----------------------------------------------------------');
+    mmOutput.Lines.Add('Fim: ' + FormatDateTime('hh:nn:ss', Now));
+
+    Self.UpdateForm;
   end;
 end;
 
@@ -99,6 +113,15 @@ begin
     seEditor.Lines.LoadFromFile(Self.FileName);
 
   Self.EditMode := not Self.EditMode;
+end;
+
+procedure TFScriptEditor.btHideResultsClick(Sender: TObject);
+begin
+  try
+    gbOutput.Visible := not gbOutput.Visible;
+  finally
+    Self.UpdateForm;
+  end;
 end;
 
 procedure TFScriptEditor.btOpenEditorClick(Sender: TObject);
@@ -161,9 +184,10 @@ begin
 
   btEdit.Caption := IfThen(Self.EditMode, 'Salvar', 'Editar');
 
-  sbRefresh.Enabled := AnsiUpperCase(ExtractFileExt(Self.FileName)) = '.BAT';
-  gbOutput.Visible := AnsiUpperCase(ExtractFileExt(Self.FileName)) = '.BAT';
-  Splitter1.Visible := AnsiUpperCase(ExtractFileExt(Self.FileName)) = '.BAT';
+  sbRefresh.Enabled     := AnsiUpperCase(ExtractFileExt(Self.FileName)) = '.BAT';
+  btHideResults.Visible := AnsiUpperCase(ExtractFileExt(Self.FileName)) = '.BAT';
+  Splitter1.Visible     := AnsiUpperCase(ExtractFileExt(Self.FileName)) = '.BAT';
+  btHideResults.Caption := IfThen(gbOutput.Visible, 'Esconder Saída', 'Exibir Saída');
 
   seEditor.Font.Size := StrToInt(vrJupiterApp.Config.GetByID('JupiterTools.UI.Display.FontSize').Value);
   mmOutput.Font.Size := StrToInt(vrJupiterApp.Config.GetByID('JupiterTools.UI.Display.FontSize').Value);

@@ -32,6 +32,7 @@ type
     procedure btNewClick(Sender: TObject);
     procedure btSaveClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure lvParamsClick(Sender: TObject);
     procedure sbViewListClick(Sender: TObject);
   private
@@ -87,6 +88,12 @@ procedure TFConfig.FormCreate(Sender: TObject);
 begin
   Self.FCurrentItem := nil;
   Self.FEditMode    := False;
+end;
+
+procedure TFConfig.FormShow(Sender: TObject);
+begin
+  if vrJupiterApp.Config.GetByID('JupiterTools.UI.Display.WindowsState') = 'Maximized'
+    Self.WindowState := wsMaximized;
 end;
 
 procedure TFConfig.btNewClick(Sender: TObject);
@@ -163,6 +170,8 @@ begin
 
   if lvParams.Items.Count = 0 then
   begin
+    lvParams.SortType := stNone;
+
     lvParams.Items.Clear;
 
     for vrVez := 0 to vrJupiterApp.Config.Count - 1 do
@@ -180,6 +189,8 @@ begin
         if vrItem.ID = Self.FCurrentItem.ID then
           lvParams.Selected := vrNode;
     end;
+
+    lvParams.SortType := stText;
   end;
 end;
 
@@ -197,6 +208,8 @@ begin
   sbViewList.Enabled := False;
 
   btNew.Enabled  := not Self.FEditMode;
+
+  lvParams.Font.Size := StrToInt(vrJupiterApp.Config.GetByID('JupiterTools.UI.Display.FontSize').Value);
 
   if not Assigned(Self.FCurrentItem) then
     Exit;

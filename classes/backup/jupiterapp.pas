@@ -47,7 +47,11 @@ begin
   Self.Config.AddVariable('JupiterTools.Variables.ExeFile', Application.ExeName, 'Executável do JupiterTools');
   Self.Config.AddVariable('JupiterTools.Variables.Path', ExtractFileDir(Application.ExeName), 'Diretório do JupiterTools');
 
-  Self.Config.AddConfig('JupiterTools.UI.Display.FontSize', '9', 'Tamanho da fonte dos formulários');
+  if not Self.Config.Exists('JupiterTools.UI.Display.FontSize') then
+    Self.Config.AddConfig('JupiterTools.UI.Display.FontSize', '9', 'Tamanho da fonte dos formulários');
+
+  if not Self.Config.Exists('JupiterTools.UI.Display.WindowsState') then
+    Self.Config.AddConfig('JupiterTools.UI.Display.WindowsState', 'Normal', 'Estado da Janela (Normal / Maximized)');
 
   Self.Config.AddVariable('JupiterTools.Variables.OS.DirectotySeparator', GetDirectorySeparator, 'Caracter separador de diretório');
 
@@ -71,6 +75,8 @@ begin
   Self.FModules.Add(TJupiterTasks.Create(Self));
 
   Self.FModules.Add(TJupiterRunner.Create(Self));
+
+  Self.FModules.Add(TJupiterChecklist.Create(Self));
 end;
 
 function TJupiterApp.ModuleCount: Integer;

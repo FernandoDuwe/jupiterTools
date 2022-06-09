@@ -31,6 +31,7 @@ type
     Splitter1: TSplitter;
     procedure btFolderClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure lvFilesDblClick(Sender: TObject);
     procedure sbEndTimeClick(Sender: TObject);
     procedure sbStartTimeClick(Sender: TObject);
@@ -66,6 +67,11 @@ end;
 procedure TFCurrentTask.FormCreate(Sender: TObject);
 begin
   Self.FStarted := False;
+end;
+
+procedure TFCurrentTask.FormShow(Sender: TObject);
+begin
+  if vrJupiterApp.Config.GetByID('JupiterTools.UI.Display.WindowsState') = 'Maximized'
 end;
 
 procedure TFCurrentTask.lvFilesDblClick(Sender: TObject);
@@ -166,8 +172,8 @@ begin
   sbStartTime.Enabled := not Self.FStarted;
   sbEndTime.Enabled   := Self.FStarted;
 
-  lvFiles.Font.Size := StrToInt(vrJupiterApp.Config.GetByID('JupiterTools.Variables.Display.FontSize').Value);
-  lvTimes.Font.Size := StrToInt(vrJupiterApp.Config.GetByID('JupiterTools.Variables.Display.FontSize').Value);
+  lvFiles.Font.Size := StrToInt(vrJupiterApp.Config.GetByID('JupiterTools.UI.Display.FontSize').Value);
+  lvTimes.Font.Size := StrToInt(vrJupiterApp.Config.GetByID('JupiterTools.UI.Display.FontSize').Value);
 end;
 
 procedure TFCurrentTask.Internal_UpdateDatasets;
