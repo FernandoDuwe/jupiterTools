@@ -24,13 +24,14 @@ type
     function ModuleCount : Integer;
     function GetModuleByIndex(prIndex : Integer) : TObject;
     function GetModuleByID(prID : String) : TObject;
+    function GetVersion : String;
 
     constructor Create();
     destructor Destroy; override;
 
     procedure ListItems(prParams : TJupiterListem; var prList : TList);
 
-    procedure RunListable(prParamsItem : TJupiterListem; prParamsListableItem : TJupiterListableItem);
+    procedure RunListable(prParamsItem : TJupiterListem; var prParamsListableItem : TJupiterListableItem);
   end;
 
 var
@@ -38,7 +39,7 @@ var
 
 implementation
 
-uses fileUtils, JupiterTasks, jupiterRunner, JupiterModule;
+uses FileInfo, fileUtils, JupiterTasks, jupiterRunner, JupiterModule, jupiterchecklist;
 
 { TJupiterApp }
 
@@ -103,6 +104,28 @@ begin
       end;
 end;
 
+function TJupiterApp.GetVersion: String;
+var
+  vrVersionInfo : TVersionInfo;
+begin
+  Result := EmptyStr;
+
+  vrVersionInfo:=TVersionInfo.Create;
+  try
+    vrVersionInfo.Load(HINSTANCE);
+
+    Result := Format('%0:d.%1:d.%2:d.%3:d', [vrVersionInfo.FixedInfo.FileVersion[0], vrVersionInfo.FixedInfo.FileVersion[1], vrVersionInfo.FixedInfo.FileVersion[2], vrVersionInfo.FixedInfo.FileVersion[3]]);
+
+     VersionInfo.Version:=aVersionInfo.FixedInfo.FileVersion[0];
+     VersionInfo.Major:=aVersionInfo.FixedInfo.FileVersion[1];
+     VersionInfo.Minor:=aVersionInfo.FixedInfo.FileVersion[2];
+     VersionInfo.Build:=aVersionInfo.FixedInfo.FileVersion[3];
+  finally
+    if Assigned(vrVersionInfo) then
+      vrVersionInfo.Free;
+  end;
+end;
+
 constructor TJupiterApp.Create();
 begin
   Self.FConfig := TJupiterConfig.Create;
@@ -137,7 +160,7 @@ begin
   vrModule.ListItems(prParams, prList);
 end;
 
-procedure TJupiterApp.RunListable(prParamsItem: TJupiterListem; prParamsListableItem: TJupiterListableItem);
+procedure TJupiterApp.RunListable(prParamsItem: TJupiterListem; var prParamsListableItem: TJupiterListableItem);
 var
   vrModule : TJupiterModule;
 begin

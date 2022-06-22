@@ -5,6 +5,6 @@ JupiterTools.Modules.Tasks.EditorPref;Editor preferencial (caminho ou comando);n
 JupiterTools.Modules.Tasks.Current;Tarefa atual;C:\Tarefas\sdajoas\123213\;
 JupiterTools.Modules.Tasks.CurrentNumber;Número Tarefa atual;123213;
 JupiterTools.Modules.Tasks.DoNotChangeContentExtensions;Extensões de arquivos que não terão seu conteúdo alterado;.doc|.docx|.pdf;
-JupiterTools.UI.Display.FontSize;Tamanho da fonte dos formulários;10;
+JupiterTools.UI.Display.FontSize;Tamanho da fonte dos formulários;9;
 JupiterTools.Modules.Runner.ExecMethod;Método de execução (RunCommand / ShellExecute / ExecuteProcess);CreateProcess;
 JupiterTools.UI.Display.WindowsState;Estado da Janela (Normal / Maximized);Normal;

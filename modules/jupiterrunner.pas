@@ -23,7 +23,7 @@ type
 
     procedure GetTasks(var prTreeMenu : TTreeView); override;
 
-    procedure RunListable(prParams : TJupiterListableItem); override;
+    procedure RunListable(var prParams : TJupiterListableItem); override;
   end;
 
 implementation
@@ -117,6 +117,7 @@ var
   vrVez    : Integer;
   vrObj    : TJupiterListableItem;
   vrIsDir  : Boolean;
+  vrIcon   : Integer;
 begin
   inherited ListItems(prParams, prList);
 
@@ -131,6 +132,8 @@ begin
 
     if prParams.Task = '/fav' then
     begin
+      vrIcon := ICON_CONFIG;
+
       vrStr.Add(EmptyStr);
       vrStr.Add(Format('%0:s;%1:s;', [TratarCaminho(ExtractFileDir(Application.ExeName) + GetDirectorySeparator + 'modules/runner/folders.csv'), 'Lista de Pastas favoritas']));
       vrStr.Add(Format('%0:s;%1:s;', [TratarCaminho(ExtractFileDir(Application.ExeName) + GetDirectorySeparator + 'modules/runner/applications.csv'), 'Lista de Aplicações favoritas']));
@@ -138,6 +141,8 @@ begin
 
     if prParams.Task = '/scripts' then
     begin
+      vrIcon := ICON_FOLDER;
+
       vrStr.Add(EmptyStr);
       vrStr.Add(Format('%0:s;%1:s;', [TratarCaminho(ExtractFileDir(Application.ExeName) + GetDirectorySeparator + 'modules/runner/'), 'Pasta de scripts']));
 
@@ -146,13 +151,19 @@ begin
 
     if prParams.Task = '/folders' then
     begin
+      vrIcon := ICON_FOLDER;
+
       vrStr.LoadFromFile(TratarCaminho(ExtractFileDir(Application.ExeName) + GetDirectorySeparator + 'modules/runner/folders.csv'));
 
       vrIsDir := True;
     end;
 
     if prParams.Task = '/applications' then
+    begin
       vrStr.LoadFromFile(TratarCaminho(ExtractFileDir(Application.ExeName) + GetDirectorySeparator + 'modules/runner/applications.csv'));
+
+      vrIcon := ICON_PACKAGE;
+    end;
 
     if vrStr.Count = 0 then
       Exit;
@@ -166,12 +177,14 @@ begin
       vrObj := TJupiterListableItem.Create();
 
       if vrIsDir then
-        vrObj.Item := StringReplace(vrStrAux[0], EMPTY_SPACE_SEPARATOR, ' ', [rfReplaceAll, rfIgnoreCase])
+        vrObj.Descricao := StringReplace(vrStrAux[0], EMPTY_SPACE_SEPARATOR, ' ', [rfReplaceAll, rfIgnoreCase])
       else
-        vrObj.Item := ExtractFileName(StringReplace(vrStrAux[0], EMPTY_SPACE_SEPARATOR, ' ', [rfReplaceAll, rfIgnoreCase]));
+        vrObj.Descricao := ExtractFileName(StringReplace(vrStrAux[0], EMPTY_SPACE_SEPARATOR, ' ', [rfReplaceAll, rfIgnoreCase]));
 
-      vrObj.Descricao := StringReplace(vrStrAux[1], EMPTY_SPACE_SEPARATOR, ' ', [rfReplaceAll, rfIgnoreCase]);
-      vrObj.Param     := StringReplace(vrStrAux[0], EMPTY_SPACE_SEPARATOR, ' ', [rfReplaceAll, rfIgnoreCase]);
+      vrObj.ImageIndex := vrIcon;
+
+      vrObj.Item  := StringReplace(vrStrAux[1], EMPTY_SPACE_SEPARATOR, ' ', [rfReplaceAll, rfIgnoreCase]);
+      vrObj.Param := StringReplace(vrStrAux[0], EMPTY_SPACE_SEPARATOR, ' ', [rfReplaceAll, rfIgnoreCase]);
 
       prList.Add(vrObj);
     end;
@@ -222,7 +235,7 @@ begin
   vrNode.Expanded := True;
 end;
 
-procedure TJupiterRunner.RunListable(prParams: TJupiterListableItem);
+procedure TJupiterRunner.RunListable(var prParams: TJupiterListableItem);
 begin
   inherited RunListable(prParams);
 

@@ -14,12 +14,14 @@ inherited FExplorer: TFExplorer
     Align = alClient
     Columns = <    
       item
+        AutoSize = True
         Caption = 'Item'
-        Width = 500
+        Width = 39
       end    
       item
+        AutoSize = True
         Caption = 'Descrição'
-        Width = 720
+        Width = 66
       end>
     SortType = stText
     TabOrder = 0

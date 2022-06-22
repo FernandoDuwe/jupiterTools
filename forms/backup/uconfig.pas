@@ -92,7 +92,7 @@ end;
 
 procedure TFConfig.FormShow(Sender: TObject);
 begin
-  if vrJupiterApp.Config.GetByID('JupiterTools.UI.Display.WindowsState') = 'Maximized'
+  if vrJupiterApp.Config.GetByID('JupiterTools.UI.Display.WindowsState').Value = 'Maximized' then
     Self.WindowState := wsMaximized;
 end;
 
@@ -191,6 +191,9 @@ begin
     end;
 
     lvParams.SortType := stText;
+    lvParams.SortColumn := 0;
+    lvParams.SortDirection:= sdAscending;
+    lvParams.Sort;
   end;
 end;
 

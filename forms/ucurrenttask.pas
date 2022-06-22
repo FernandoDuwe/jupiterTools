@@ -35,6 +35,7 @@ type
     procedure lvFilesDblClick(Sender: TObject);
     procedure sbEndTimeClick(Sender: TObject);
     procedure sbStartTimeClick(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
   private
     FStarted : Boolean;
 
@@ -101,6 +102,11 @@ begin
   finally
     Self.UpdateForm;
   end;
+end;
+
+procedure TFCurrentTask.SpeedButton1Click(Sender: TObject);
+begin
+
 end;
 
 procedure TFCurrentTask.Internal_ListTimes;

@@ -71,7 +71,7 @@ end;
 
 procedure TFCurrentTask.FormShow(Sender: TObject);
 begin
-  if vrJupiterApp.Config.GetByID('JupiterTools.UI.Display.WindowsState') = 'Maximized'
+
 end;
 
 procedure TFCurrentTask.lvFilesDblClick(Sender: TObject);

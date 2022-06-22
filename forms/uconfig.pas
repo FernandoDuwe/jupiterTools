@@ -191,6 +191,9 @@ begin
     end;
 
     lvParams.SortType := stText;
+    lvParams.SortColumn := 0;
+    lvParams.SortDirection:= sdAscending;
+    lvParams.Sort;
   end;
 end;
 

@@ -54,7 +54,7 @@ type
     procedure GetTasks(var prTreeMenu : TTreeView); override;
 
     procedure ListItems(prParams : TJupiterListem; var prList : TList); override;
-    procedure RunListable(prParams : TJupiterListableItem); override;
+    procedure RunListable(var prParams : TJupiterListableItem); override;
     function  CreateTaskDetail : TJupiterTaskDetails;
   end;
 
@@ -324,7 +324,7 @@ begin
 
         vrObj             := TJupiterListableItem.Create();
         vrObj.Item        := vrTask;
-        vrObj.Descricao   := Format('Cliente/Projeto %0:s, Tarefa %1:s', [vrClient, vrTask]);
+        vrObj.Descricao   := Format('Cliente/Projeto: %0:s, Tarefa: %1:s', [vrClient, vrTask]);
         vrObj.Param       := vrTasks[vrVez2];
         vrObj.Selecionado := False;
 

@@ -40,6 +40,8 @@ uses uMain;
 { TFExplorer }
 
 procedure TFExplorer.lvReportDblClick(Sender: TObject);
+var
+  vrItem : TJupiterListableItem;
 begin
   if not Assigned(lvReport.Selected) then
     Exit;
@@ -47,9 +49,13 @@ begin
   if not Assigned(lvReport.Selected.Data) then
     Exit;
 
+  vrItem := TJupiterListableItem(lvReport.Selected.Data);
+
   try
-    vrJupiterApp.RunListable(Self.Params, TJupiterListableItem(lvReport.Selected.Data));
+    vrJupiterApp.RunListable(Self.Params, vrItem);
   finally
+    lvReport.Selected.Data := vrItem;
+
     Self.UpdateForm;
   end;
 end;
@@ -70,7 +76,10 @@ var
   vrVez  : Integer;
   vrNode : TListItem;
   vrItem : TJupiterListableItem;
+  vrShowDetails : Boolean;
 begin
+  vrShowDetails := False;
+
   lvReport.SmallImages := FMain.ilMainIcons;
 //  lvReport.StateImages := FMain.ilMainIcons;
   lvReport.LargeImages := FMain.ilMainIcons;
@@ -86,6 +95,8 @@ begin
 
     vrJupiterApp.ListItems(Self.Params, vrList);
 
+    vrShowDetails := vrList.Count = 0;
+
     for vrVez := 0 to vrList.Count - 1 do
     begin
       vrItem := TJupiterListableItem(vrList[vrVez]);
@@ -98,7 +109,10 @@ begin
       vrNode.Caption := vrItem.Item;
       vrNode.SubItems.Add(vrItem.Descricao);
 
-      vrNode.ImageIndex := -1;
+      if Trim(vrItem.Descricao) <> EmptyStr then
+        vrShowDetails := True;
+
+      vrNode.ImageIndex := vrItem.ImageIndex;
 
       if vrItem.Selecionado then
         vrNode.ImageIndex := ICON_CHECKED;
@@ -109,6 +123,11 @@ begin
     FreeAndNil(vrList);
 
     lvReport.SortType := stText;
+    lvReport.SortColumn := 0;
+    lvReport.SortDirection:= sdAscending;
+    lvReport.Sort;
+
+    lvReport.Column[1].Visible := vrShowDetails;
   end;
 end;
 

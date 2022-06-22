@@ -75,12 +75,14 @@ inherited FCurrentTask: TFCurrentTask
         Anchors = [akTop, akLeft, akRight, akBottom]
         Columns = <        
           item
+            AutoSize = True
             Caption = 'Arquivo'
-            Width = 500
+            Width = 57
           end        
           item
+            AutoSize = True
             Caption = 'Pasta'
-            Width = 765
+            Width = 43
           end>
         ReadOnly = True
         SortColumn = 0
@@ -127,12 +129,14 @@ inherited FCurrentTask: TFCurrentTask
         Anchors = [akTop, akLeft, akRight, akBottom]
         Columns = <        
           item
+            AutoSize = True
             Caption = 'Início'
-            Width = 500
+            Width = 44
           end        
           item
+            AutoSize = True
             Caption = 'Fim'
-            Width = 765
+            Width = 35
           end>
         ReadOnly = True
         SortType = stText

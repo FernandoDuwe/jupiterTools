@@ -17,16 +17,19 @@ inherited FConfig: TFConfig
     Align = alClient
     Columns = <    
       item
+        AutoSize = True
         Caption = 'Identificador'
-        Width = 300
+        Width = 82
       end    
       item
+        AutoSize = True
         Caption = 'Descrição'
-        Width = 300
+        Width = 66
       end    
       item
+        AutoSize = True
         Caption = 'Valor'
-        Width = 800
+        Width = 42
       end>
     ReadOnly = True
     SortType = stText

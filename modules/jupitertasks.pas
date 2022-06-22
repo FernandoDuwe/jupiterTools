@@ -54,7 +54,7 @@ type
     procedure GetTasks(var prTreeMenu : TTreeView); override;
 
     procedure ListItems(prParams : TJupiterListem; var prList : TList); override;
-    procedure RunListable(prParams : TJupiterListableItem); override;
+    procedure RunListable(var prParams : TJupiterListableItem); override;
     function  CreateTaskDetail : TJupiterTaskDetails;
   end;
 
@@ -343,7 +343,7 @@ begin
   end;
 end;
 
-procedure TJupiterTasks.RunListable(prParams: TJupiterListableItem);
+procedure TJupiterTasks.RunListable(var prParams: TJupiterListableItem);
 begin
   inherited RunListable(prParams);
 
