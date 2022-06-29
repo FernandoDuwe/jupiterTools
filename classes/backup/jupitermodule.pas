@@ -28,6 +28,7 @@ type
       procedure GetTasks(var prTreeMenu : TTreeView); virtual;
 
       procedure ListItems(prParams : TJupiterListem; var prList : TList); virtual;
+      procedure ListActions(prParams : TJupiterListem; var prList : TList); virtual;
       procedure RunListable(var prParams : TJupiterListableItem); virtual;
     end;
 
@@ -62,7 +63,19 @@ begin
   //
 end;
 
-procedure TJupiterModule.RunListable(prParams: TJupiterListableItem);
+procedure TJupiterModule.ListActions(prParams: TJupiterListem; var prList: TList);
+var
+  vrUpdateAction : TJupiterAction;
+begin
+  vrUpdateAction            := TJupiterAction.Create;
+  vrUpdateAction.Title      := 'Atualizar';
+  vrUpdateAction.ImageIndex := ICON_UPDATE;
+  vrUpdateAction.Hint       := 'Clique aqui para atualizar o formulário';
+
+  prList.Add(vrJupiterApp);
+end;
+
+procedure TJupiterModule.RunListable(var prParams: TJupiterListableItem);
 begin
   //
 end;

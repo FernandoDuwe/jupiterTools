@@ -92,6 +92,8 @@ begin
   finally
     vrStrClients.Clear;
     FreeAndNil(vrStrClients);
+
+    vrJupiterApp.Log.AddLog(Now, Self.Caption, 'Criada tarefa: ' + cbClient.Text + '/' + IntToStr());
   end;
 
   Self.Close;
@@ -208,7 +210,7 @@ begin
   vrContent := Pos(AnsiUpperCase(ExtractFileExt(prFile)), AnsiUpperCase(vrExtensions));
 
   if vrContent <> 0 then
-    Exit/
+    Exit;
 
   vrStr := TStringList.Create;
   try

@@ -95,9 +95,11 @@ begin
     mmOutput.Lines.Add(vrOutput);
     mmOutput.Lines.Add(EmptyStr);
     mmOutput.Lines.Add('-----------------------------------------------------------');
-    mmOutput.Lines.Add('Início: ' + FormatDateTime('hh:nn:ss', Now));
+    mmOutput.Lines.Add('Fim: ' + FormatDateTime('hh:nn:ss', Now));
 
     Self.UpdateForm;
+
+    vrJupiterApp.Log.AddLog(Now, Self.Caption, 'Executado arquivo: ' + ExtractFileName(Self.FileName));
   end;
 end;
 

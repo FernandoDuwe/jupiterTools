@@ -22,8 +22,8 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <RevisionNr Value="1"/>
-      <BuildNr Value="1"/>
+      <RevisionNr Value="2"/>
+      <BuildNr Value="21"/>
       <Language Value="0416"/>
       <StringTable CompanyName="Jupiter Studios" FileDescription="Jupiter Tools"/>
     </VersionInfo>
@@ -45,7 +45,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="18">
+    <Units Count="21">
       <Unit0>
         <Filename Value="jupiterTools.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -158,6 +158,27 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="jupiterUtils"/>
       </Unit17>
+      <Unit18>
+        <Filename Value="classes/jupiterlog.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterLog"/>
+      </Unit18>
+      <Unit19>
+        <Filename Value="forms/umessage.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FMessage"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uMessage"/>
+      </Unit19>
+      <Unit20>
+        <Filename Value="forms/unewfavoriteitem.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FNewFavoriteItem"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uNewFavoriteItem"/>
+      </Unit20>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

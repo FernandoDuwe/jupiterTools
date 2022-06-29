@@ -12,8 +12,8 @@ uses
   Interfaces, // this includes the LCL widgetset
   Forms, uMain, JupiterApp, uJupiterForm, JupiterModule, JupiterConfig, uConfig,
   JupiterTasks, uExplorer, JupiterConsts, fileUtils, uCurrentTask, uNewTask,
-  jupiterRunner, uEditList, uScriptEditor, jupiterchecklist, jupiterUtils
-  { you can add units after this };
+  jupiterRunner, uEditList, uScriptEditor, jupiterchecklist, jupiterUtils,
+jupiterLog, uMessage, uNewFavoriteItem;
 
 {$R *.res}
 
@@ -21,10 +21,13 @@ begin
   RequireDerivedFormResource := True;
   Application.Scaled:=True;
 
-  vrJupiterApp := TJupiterApp.Create();
+  vrJupiterApp := TJupiterApp.Create('JupiterTools');
 
-  Application.Initialize;
-  Application.CreateForm(TFMain, FMain);
-  Application.Run;
+  if not vrJupiterApp.ConsoleMode then
+  begin
+    Application.Initialize;
+    Application.CreateForm(TFMain, FMain);
+    Application.Run;
+  end;
 end.
 

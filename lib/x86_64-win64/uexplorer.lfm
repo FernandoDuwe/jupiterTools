@@ -6,23 +6,23 @@ inherited FExplorer: TFExplorer
   Caption = 'Dados'
   ClientHeight = 524
   ClientWidth = 1035
+  OnShow = FormShow
   object lvReport: TListView[0]
     Left = 0
-    Height = 458
-    Top = 0
+    Height = 408
+    Top = 50
     Width = 1035
     Align = alClient
     Columns = <    
       item
-        AutoSize = True
         Caption = 'Item'
-        Width = 39
+        Width = 500
       end    
       item
-        AutoSize = True
         Caption = 'Descrição'
-        Width = 66
+        Width = 500
       end>
+    PopupMenu = ppOpcoes
     SortType = stText
     TabOrder = 0
     ViewStyle = vsReport
@@ -113,6 +113,47 @@ inherited FExplorer: TFExplorer
       Caption = 'lbInfo'
       ParentColor = False
       WordWrap = True
+    end
+  end
+  object pnTaskBar: TPanel[2]
+    Left = 0
+    Height = 50
+    Top = 0
+    Width = 1035
+    Align = alTop
+    BevelOuter = bvNone
+    TabOrder = 2
+  end
+  object ppOpcoes: TPopupMenu[3]
+    Images = FMain.ilMainIcons
+    Left = 509
+    Top = 147
+    object MenuItem1: TMenuItem
+      Caption = 'Ajustar tamanho da coluna'
+      OnClick = MenuItem1Click
+    end
+    object Separator1: TMenuItem
+      Caption = '-'
+    end
+    object miRelatorio: TMenuItem
+      Caption = 'Relatório'
+      OnClick = miRelatorioClick
+    end
+    object miIcon: TMenuItem
+      Caption = 'Ícones'
+      OnClick = miIconClick
+    end
+    object miList: TMenuItem
+      Caption = 'Lista'
+      OnClick = miListClick
+    end
+    object miSmallIcon: TMenuItem
+      Caption = 'Ícones pequenos'
+      OnClick = miSmallIconClick
+    end
+    object spOtherActions: TMenuItem
+      Caption = '-'
+      Visible = False
     end
   end
 end

@@ -1,7 +1,6 @@
 inherited FConfig: TFConfig
-  Left = 156
+  Left = 351
   Height = 640
-  Top = 79
   Width = 1191
   Caption = 'Configurações'
   ClientHeight = 640
@@ -11,7 +10,7 @@ inherited FConfig: TFConfig
   Position = poScreenCenter
   object lvParams: TListView[0]
     Left = 0
-    Height = 333
+    Height = 310
     Top = 0
     Width = 1191
     Align = alClient
@@ -40,7 +39,7 @@ inherited FConfig: TFConfig
   object pnForm: TPanel[1]
     Left = 0
     Height = 302
-    Top = 338
+    Top = 315
     Width = 1191
     Align = alBottom
     BevelOuter = bvNone
@@ -162,9 +161,16 @@ inherited FConfig: TFConfig
     Cursor = crVSplit
     Left = 0
     Height = 5
-    Top = 333
+    Top = 310
     Width = 1191
     Align = alBottom
     ResizeAnchor = akBottom
+  end
+  object sbStatus: TStatusBar[3]
+    Left = 0
+    Height = 23
+    Top = 617
+    Width = 1191
+    Panels = <>
   end
 end

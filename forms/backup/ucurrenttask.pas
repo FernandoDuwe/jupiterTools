@@ -35,6 +35,7 @@ type
     procedure lvFilesDblClick(Sender: TObject);
     procedure sbEndTimeClick(Sender: TObject);
     procedure sbStartTimeClick(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
   private
     FStarted : Boolean;
 
@@ -61,6 +62,8 @@ uses uMain;
 
 procedure TFCurrentTask.btFolderClick(Sender: TObject);
 begin
+  vrJupiterApp.Log.AddLog(Now, Self.Caption, 'Abrindo tarefa atual: ' + vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.Current').Value);
+
   OpenFolder(vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.Current').Value);
 end;
 
@@ -82,6 +85,8 @@ begin
   if not Assigned(lvFiles.Selected.Data) then
     Exit;
 
+  vrJupiterApp.Log.AddLog(Now, Self.Caption, 'Abrindo tarefa atual: ' + vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.Current').Value);
+
   Self.CurrentTask.ExecuteFile(TJupiterListableItem(lvFiles.Selected.Data).Param);
 end;
 
@@ -101,6 +106,11 @@ begin
   finally
     Self.UpdateForm;
   end;
+end;
+
+procedure TFCurrentTask.SpeedButton1Click(Sender: TObject);
+begin
+
 end;
 
 procedure TFCurrentTask.Internal_ListTimes;

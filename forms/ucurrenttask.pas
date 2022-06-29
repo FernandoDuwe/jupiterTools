@@ -62,6 +62,8 @@ uses uMain;
 
 procedure TFCurrentTask.btFolderClick(Sender: TObject);
 begin
+  vrJupiterApp.Log.AddLog(Now, Self.Caption, 'Abrindo tarefa atual: ' + vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.Current').Value);
+
   OpenFolder(vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.Current').Value);
 end;
 
@@ -82,6 +84,8 @@ begin
 
   if not Assigned(lvFiles.Selected.Data) then
     Exit;
+
+  vrJupiterApp.Log.AddLog(Now, Self.Caption, 'Abrindo arquivo: ' + TJupiterListableItem(lvFiles.Selected.Data).Param);
 
   Self.CurrentTask.ExecuteFile(TJupiterListableItem(lvFiles.Selected.Data).Param);
 end;

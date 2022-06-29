@@ -1,7 +1,7 @@
 inherited FCurrentTask: TFCurrentTask
-  Left = 106
+  Left = 326
   Height = 751
-  Top = 41
+  Top = 49
   Width = 1276
   Caption = 'Tarefa Atual'
   ClientHeight = 751
@@ -129,14 +129,12 @@ inherited FCurrentTask: TFCurrentTask
         Anchors = [akTop, akLeft, akRight, akBottom]
         Columns = <        
           item
-            AutoSize = True
             Caption = 'Início'
-            Width = 44
+            Width = 140
           end        
           item
-            AutoSize = True
             Caption = 'Fim'
-            Width = 35
+            Width = 140
           end>
         ReadOnly = True
         SortType = stText

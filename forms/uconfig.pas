@@ -27,6 +27,7 @@ type
     pnForm: TPanel;
     sbViewList: TSpeedButton;
     Splitter1: TSplitter;
+    sbStatus: TStatusBar;
     procedure btCancelClick(Sender: TObject);
     procedure btEditClick(Sender: TObject);
     procedure btNewClick(Sender: TObject);
@@ -172,6 +173,7 @@ begin
   begin
     lvParams.SortType := stNone;
 
+    lvParams.DisableAutoSizing;
     lvParams.Items.Clear;
 
     for vrVez := 0 to vrJupiterApp.Config.Count - 1 do
@@ -194,6 +196,9 @@ begin
     lvParams.SortColumn := 0;
     lvParams.SortDirection:= sdAscending;
     lvParams.Sort;
+
+    if lvParams.Column[0].AutoSize then
+      lvParams.EnableAutoSizing;
   end;
 end;
 

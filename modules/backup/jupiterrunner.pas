@@ -6,11 +6,29 @@ interface
 
 uses
   Classes, ComCtrls, Forms, JupiterModule, JupiterApp, JupiterConsts, fileUtils,
-  SysUtils, process;
+  uNewFavoriteItem, SysUtils, process, UITypes;
 
 type
 
   { TJupiterRunner }
+
+  { TJupiterRunnerNewItemApp }
+
+  TJupiterRunnerNewItemApp = class(TJupiterAction)
+  public
+    constructor Create;
+
+    procedure Run(prParams : TJupiterListem); override;
+  end;
+
+  { TJupiterRunnerNewItemPath }
+
+  TJupiterRunnerNewItemPath = class(TJupiterAction)
+  public
+    constructor Create;
+
+    procedure Run(prParams : TJupiterListem); override;
+  end;
 
   TJupiterRunner = class(TJupiterModule)
   protected
@@ -20,6 +38,7 @@ type
     procedure Internal_ListScripts(var prTreeMenu : TTreeView; prOwner : TTreeNode);
   public
     procedure ListItems(prParams : TJupiterListem; var prList : TList); override;
+    procedure ListActions(prParams : TJupiterListem; var prList : TList); override;
 
     procedure GetTasks(var prTreeMenu : TTreeView); override;
 
@@ -29,6 +48,82 @@ type
 implementation
 
 uses LCLIntf;
+
+{ TJupiterRunnerNewItemPath }
+
+constructor TJupiterRunnerNewItemPath.Create;
+begin
+  Self.Title      := 'Nova pasta';
+  Self.Hint       := 'Clique aqui para adicionar uma nova pasta favorita';
+  Self.ImageIndex := ICON_FAVORITE;
+end;
+
+procedure TJupiterRunnerNewItemPath.Run(prParams: TJupiterListem);
+var
+  vrStr : TStrings;
+begin
+  Application.CreateForm(TFNewFavoriteItem, FNewFavoriteItem);
+  try
+    FNewFavoriteItem.IsApplication := False;
+
+    if FNewFavoriteItem.ShowModal = mrOK then
+    begin
+      vrStr := TStringList.Create;
+      try
+        vrStr.LoadFromFile(TratarCaminho(ExtractFileDir(Application.ExeName) + GetDirectorySeparator + 'modules/runner/folders.csv'));
+        vrStr.Add(FNewFavoriteItem.edPath.Text + ';' + FNewFavoriteItem.edTitulo.Text + ';');
+
+        vrStr.SaveToFile(TratarCaminho(ExtractFileDir(Application.ExeName) + GetDirectorySeparator + 'modules/runner/folders.csv'));
+      finally
+        vrStr.Clear;
+        FreeAndNil(vrStr);
+      end;
+    end;
+  finally
+    FNewFavoriteItem.Release;
+    FreeAndNil(FNewFavoriteItem);
+  end;
+
+  inherited Run(prParams);
+end;
+
+{ TJupiterRunnerNewItemApp }
+
+constructor TJupiterRunnerNewItemApp.Create;
+begin
+  Self.Title      := 'Novo favorito';
+  Self.Hint       := 'Clique aqui para adicionar um novo aplicativo favorito';
+  Self.ImageIndex := ICON_FAVORITE;
+end;
+
+procedure TJupiterRunnerNewItemApp.Run(prParams: TJupiterListem);
+var
+  vrStr : TStrings
+begin
+  Application.CreateForm(TFNewFavoriteItem, FNewFavoriteItem);
+  try
+    FNewFavoriteItem.IsApplication := True;
+
+    if FNewFavoriteItem.ShowModal = mrOK then
+    begin
+      vrStr := TStringList.Create;
+      try
+        vrStr.LoadFromFile(TratarCaminho(ExtractFileDir(Application.ExeName) + GetDirectorySeparator + 'modules/runner/applications.csv'));
+        vrStr.Add(FNewFavoriteItem.edPath.Text + ';' + FNewFavoriteItem.edTitulo.Text + ';');
+
+        vrStr.SaveToFile(TratarCaminho(ExtractFileDir(Application.ExeName) + GetDirectorySeparator + 'modules/runner/applications.csv'));
+      finally
+        vrStr.Clear;
+        FreeAndNil(vrStr);
+      end;
+    end;
+  finally
+    FNewFavoriteItem.Release;
+    FreeAndNil(FNewFavoriteItem);
+  end;
+
+  inherited Run(prParams);
+end;
 
 { TJupiterRunner }
 
@@ -177,14 +272,18 @@ begin
       vrObj := TJupiterListableItem.Create();
 
       if vrIsDir then
-        vrObj.Item := StringReplace(vrStrAux[0], EMPTY_SPACE_SEPARATOR, ' ', [rfReplaceAll, rfIgnoreCase])
+        vrObj.Descricao := StringReplace(vrStrAux[0], EMPTY_SPACE_SEPARATOR, ' ', [rfReplaceAll, rfIgnoreCase])
       else
-        vrObj.Item := ExtractFileName(StringReplace(vrStrAux[0], EMPTY_SPACE_SEPARATOR, ' ', [rfReplaceAll, rfIgnoreCase]));
+        vrObj.Descricao := ExtractFileName(StringReplace(vrStrAux[0], EMPTY_SPACE_SEPARATOR, ' ', [rfReplaceAll, rfIgnoreCase]));
 
       vrObj.ImageIndex := vrIcon;
 
-      vrObj.Descricao := StringReplace(vrStrAux[1], EMPTY_SPACE_SEPARATOR, ' ', [rfReplaceAll, rfIgnoreCase]);
-      vrObj.Param     := StringReplace(vrStrAux[0], EMPTY_SPACE_SEPARATOR, ' ', [rfReplaceAll, rfIgnoreCase]);
+      vrObj.Item  := StringReplace(vrStrAux[1], EMPTY_SPACE_SEPARATOR, ' ', [rfReplaceAll, rfIgnoreCase]);
+      vrObj.Param := StringReplace(vrStrAux[0], EMPTY_SPACE_SEPARATOR, ' ', [rfReplaceAll, rfIgnoreCase]);
+
+      vrObj.Descricao := vrJupiterApp.Config.ResolveString(vrObj.Descricao);
+      vrObj.Item      := vrJupiterApp.Config.ResolveString(vrObj.Item);
+      vrObj.Param     := vrJupiterApp.Config.ResolveString(vrObj.Param);
 
       prList.Add(vrObj);
     end;
@@ -195,6 +294,17 @@ begin
     vrStrAux.Clear;
     FreeAndNil(vrStrAux);
   end;
+end;
+
+procedure TJupiterRunner.ListActions(prParams: TJupiterListem; var prList: TList);
+begin
+  if prParams.Task = '/folders' then
+    prList.Add(TJupiterRunnerNewItemPath.Create);
+
+  if prParams.Task = '/applications' then
+  prList.Add(TJupiterRunnerNewItemApp.Create);
+
+  inherited ListActions(prParams, prList);
 end;
 
 procedure TJupiterRunner.GetTasks(var prTreeMenu: TTreeView);
@@ -240,9 +350,17 @@ begin
   inherited RunListable(prParams);
 
   if DirectoryExists(prParams.Param) then
-    OpenFolder(prParams.Param)
+  begin
+    Self.JupiterApp.Log.AddLog(Now, 'Runner', 'Abrindo pasta: ' + prParams.Param);
+
+    OpenFolder(prParams.Param);
+  end
   else
+  begin
+    Self.JupiterApp.Log.AddLog(Now, 'Runner', 'Abrindo executável: ' + prParams.Param);
+
     OpenFile(prParams.Param);
+  end;
 end;
 
 end.

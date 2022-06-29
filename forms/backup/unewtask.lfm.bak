@@ -41,7 +41,7 @@ inherited FNewTask: TFNewTask
       Left = 16
       Height = 15
       Top = 96
-      Width = 33
+      Width = 31
       Caption = 'Tarefa'
       ParentColor = False
       ParentFont = False

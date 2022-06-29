@@ -92,6 +92,8 @@ begin
   finally
     vrStrClients.Clear;
     FreeAndNil(vrStrClients);
+
+    vrJupiterApp.Log.AddLog(Now, Self.Caption, 'Criada tarefa: ' + cbClient.Text + '/' + edTaskName.Text);
   end;
 
   Self.Close;

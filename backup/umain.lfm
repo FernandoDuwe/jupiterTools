@@ -1,11 +1,11 @@
 inherited FMain: TFMain
-  Left = 149
+  Left = 382
   Height = 732
-  Top = 86
-  Width = 1262
+  Top = 21
+  Width = 1266
   Caption = 'Jupiter Tools'
   ClientHeight = 712
-  ClientWidth = 1262
+  ClientWidth = 1266
   Menu = mMenu
   OnCreate = FormCreate
   OnResize = FormResize
@@ -15,7 +15,7 @@ inherited FMain: TFMain
     Left = 0
     Height = 23
     Top = 689
-    Width = 1262
+    Width = 1266
     Panels = <    
       item
         Text = 'Pronto'
@@ -26,6 +26,11 @@ inherited FMain: TFMain
         Width = 200
       end    
       item
+        Width = 400
+      end    
+      item
+        Bevel = pbNone
+        Text = 'Mensagens: 0'
         Width = 50
       end>
     SimplePanel = False
@@ -52,6 +57,7 @@ inherited FMain: TFMain
       StateImages = ilMainIcons
       TabOrder = 0
       OnClick = tvItensClick
+      OnCollapsed = tvItensCollapsed
       Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
     end
   end
@@ -65,28 +71,29 @@ inherited FMain: TFMain
     Left = 371
     Height = 639
     Top = 50
-    Width = 891
+    Width = 895
     Align = alClient
     BevelOuter = bvNone
-    Caption = 'Selecione uma opção na árvore de opções para começar.'
     ClientHeight = 639
-    ClientWidth = 891
+    ClientWidth = 895
     Font.Height = -19
     ParentFont = False
     TabOrder = 3
     OnClick = pnBodyClick
     object lbVersion: TLabel
-      Left = 120
-      Height = 25
-      Top = 96
-      Width = 61
+      Left = 104
+      Height = 17
+      Top = 71
+      Width = 43
       Caption = 'Versão:'
+      Font.Height = -13
       ParentColor = False
+      ParentFont = False
     end
     object imgLogo: TImage
-      Left = 32
+      Left = 24
       Height = 48
-      Top = 40
+      Top = 32
       Width = 48
       AutoSize = True
       Picture.Data = {
@@ -396,9 +403,9 @@ inherited FMain: TFMain
       }
     end
     object Label2: TLabel
-      Left = 120
+      Left = 104
       Height = 40
-      Top = 48
+      Top = 23
       Width = 167
       Caption = 'JupiterTools'
       Font.Height = -29
@@ -406,25 +413,66 @@ inherited FMain: TFMain
       ParentColor = False
       ParentFont = False
     end
+    object lvRecents: TListView
+      Left = 24
+      Height = 307
+      Top = 320
+      Width = 843
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      Columns = <      
+        item
+          Caption = 'Recentes'
+          Width = 500
+        end>
+      Font.Height = -16
+      LargeImages = ilMainIcons
+      ParentFont = False
+      SmallImages = ilMainIcons
+      TabOrder = 0
+      ViewStyle = vsReport
+      OnClick = lvRecentsClick
+    end
+    object mmInstructions: TMemo
+      Left = 24
+      Height = 160
+      Top = 128
+      Width = 843
+      Anchors = [akTop, akLeft, akRight]
+      BorderStyle = bsNone
+      Color = clBtnFace
+      Font.Height = -13
+      Lines.Strings = (
+        'Bem vindo ao JupiterTools. Aqui você encontrará várias ferramentas para ajuda-lo em seu dia a dia.'
+        ''
+        'Nossa aplicação é orientada a configurações, o que significa que você poderá facilmente acessar todas as configurações disponibilizadas no cadastro de configurações (Arquivo / Configurações), além de criar seus próprios parâmetros.'
+        ''
+        'Para que o JupiterTools altere o nome de uma configuração para o seu respectivo valor, basta informar o ID da configuração entre chaves {}.'
+        'Ex:'
+        '            {ParamName}! = ParamValue!'
+      )
+      ParentFont = False
+      ReadOnly = True
+      TabOrder = 1
+    end
   end
   object pnTaskBar: TPanel[4]
     Left = 0
     Height = 50
     Top = 0
-    Width = 1262
+    Width = 1266
     Align = alTop
     BevelOuter = bvSpace
     BorderStyle = bsSingle
     ClientHeight = 46
-    ClientWidth = 1258
+    ClientWidth = 1262
     TabOrder = 4
     OnClick = pnTaskBarClick
     object edSearch: TEdit
-      Left = 56
+      Left = 64
       Height = 23
       Hint = 'Pesquisar'
       Top = 8
-      Width = 1188
+      Width = 1128
       Anchors = [akTop, akLeft, akRight]
       OnChange = edSearchChange
       ParentShowHint = False
@@ -433,11 +481,12 @@ inherited FMain: TFMain
       TextHint = 'Pesquisar'
     end
     object sbRefresh: TSpeedButton
-      Left = 8
+      Left = 1212
       Height = 33
       Hint = 'Atualizar'
       Top = 8
       Width = 33
+      Anchors = [akTop, akRight]
       Flat = True
       Images = ilMainIcons
       ImageIndex = 11
@@ -445,14 +494,29 @@ inherited FMain: TFMain
       ShowHint = True
       ParentShowHint = False
     end
+    object sbHome: TSpeedButton
+      Left = 8
+      Height = 33
+      Hint = 'Ir para a página inicial'
+      Top = 8
+      Width = 33
+      Flat = True
+      Images = ilMainIcons
+      ImageIndex = 16
+      OnClick = sbHomeClick
+      ShowHint = True
+      ParentShowHint = False
+    end
   end
   object mMenu: TMainMenu[5]
+    Images = ilMainIcons
     Left = 56
     Top = 96
     object MenuItem1: TMenuItem
       Caption = 'Arquivo'
       object MenuItem5: TMenuItem
         Caption = 'Novo'
+        ImageIndex = 2
         object MenuItem6: TMenuItem
           Caption = 'Tarefa'
           OnClick = MenuItem6Click
@@ -475,21 +539,30 @@ inherited FMain: TFMain
       end
       object MenuItem21: TMenuItem
         Caption = 'Abrir tarefa atual'
+        ImageIndex = 13
         OnClick = MenuItem21Click
       end
       object MenuItem22: TMenuItem
         Caption = 'Marcar tempo inicial'
+        ImageIndex = 5
         OnClick = MenuItem22Click
       end
       object MenuItem23: TMenuItem
         Caption = 'Marcar tempo final'
+        ImageIndex = 5
         OnClick = MenuItem23Click
       end
       object Separator4: TMenuItem
         Caption = '-'
       end
+      object MenuItem24: TMenuItem
+        Caption = 'Mensagens'
+        ImageIndex = 10
+        OnClick = MenuItem24Click
+      end
       object MenuItem11: TMenuItem
         Caption = 'Configurações'
+        ImageIndex = 12
         OnClick = MenuItem11Click
       end
       object Separator2: TMenuItem
@@ -505,6 +578,7 @@ inherited FMain: TFMain
       OnClick = MenuItem2Click
       object MenuItem8: TMenuItem
         Caption = 'Atualizar'
+        ImageIndex = 11
         OnClick = MenuItem8Click
       end
       object MenuItem9: TMenuItem
@@ -533,6 +607,7 @@ inherited FMain: TFMain
       Caption = 'Pastas'
       object MenuItem12: TMenuItem
         Caption = 'JupiterTools'
+        ImageIndex = 0
         OnClick = MenuItem12Click
       end
       object Separator1: TMenuItem
@@ -540,22 +615,27 @@ inherited FMain: TFMain
       end
       object MenuItem13: TMenuItem
         Caption = 'Datasets'
+        ImageIndex = 0
         OnClick = MenuItem13Click
       end
       object MenuItem15: TMenuItem
         Caption = 'Checklists'
+        ImageIndex = 0
         OnClick = MenuItem15Click
       end
       object MenuItem14: TMenuItem
         Caption = 'Runner'
+        ImageIndex = 0
         OnClick = MenuItem14Click
       end
       object MenuItem16: TMenuItem
         Caption = 'Tasks'
+        ImageIndex = 0
         OnClick = MenuItem16Click
       end
       object MenuItem17: TMenuItem
         Caption = 'Temp'
+        ImageIndex = 0
         OnClick = MenuItem17Click
       end
     end

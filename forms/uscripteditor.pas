@@ -98,6 +98,8 @@ begin
     mmOutput.Lines.Add('Fim: ' + FormatDateTime('hh:nn:ss', Now));
 
     Self.UpdateForm;
+
+    vrJupiterApp.Log.AddLog(Now, Self.Caption, 'Executado arquivo: ' + ExtractFileName(Self.FileName));
   end;
 end;
 

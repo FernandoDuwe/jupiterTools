@@ -5,7 +5,7 @@ unit JupiterApp;
 interface
 
 uses
-  Classes, Forms, JupiterConfig, SysUtils, JupiterConsts;
+  Classes, Forms, JupiterConfig, SysUtils, JupiterConsts, jupiterLog;
 
 type
 
@@ -13,25 +13,36 @@ type
 
   TJupiterApp = class(TObject)
   protected
-    FConfig  : TJupiterConfig;
-    FModules : TList;
+    FConfig      : TJupiterConfig;
+    FLog         : TJupiterLog;
+    FModules     : TList;
+    FAppName     : String;
 
     procedure Internal_SetAppVariables;
     procedure Internal_SetModules;
   published
-    property Config : TJupiterConfig read FConfig write FConfig;
+    property AppName : String         read FAppName;
+    property Config  : TJupiterConfig read FConfig  write FConfig;
+    property Log     : TJupiterLog    read FLog     write FLog;
   public
+    function ConsoleMode : Boolean;
+
     function ModuleCount : Integer;
     function GetModuleByIndex(prIndex : Integer) : TObject;
     function GetModuleByID(prID : String) : TObject;
     function GetVersion : String;
 
-    constructor Create();
+    constructor Create(prAppName : String);
     destructor Destroy; override;
 
     procedure ListItems(prParams : TJupiterListem; var prList : TList);
+    procedure ListActions(prParams : TJupiterListem; var prList : TList);
 
     procedure RunListable(prParamsItem : TJupiterListem; var prParamsListableItem : TJupiterListableItem);
+
+    procedure RegisterRecentTask(prTask : TJupiterListem);
+
+    function GetAboutInfo : String;
   end;
 
 var
@@ -45,24 +56,24 @@ uses FileInfo, fileUtils, JupiterTasks, jupiterRunner, JupiterModule, jupiterche
 
 procedure TJupiterApp.Internal_SetAppVariables;
 begin
-  Self.Config.AddVariable('JupiterTools.Variables.ExeFile', Application.ExeName, 'Executável do JupiterTools');
-  Self.Config.AddVariable('JupiterTools.Variables.Path', ExtractFileDir(Application.ExeName), 'Diretório do JupiterTools');
+  Self.Config.AddVariable(Self.FAppName + '.Variables.ExeFile', Application.ExeName, 'Executável do JupiterTools');
+  Self.Config.AddVariable(Self.FAppName + '.Variables.Path', ExtractFileDir(Application.ExeName), 'Diretório do JupiterTools');
 
-  if not Self.Config.Exists('JupiterTools.UI.Display.FontSize') then
-    Self.Config.AddConfig('JupiterTools.UI.Display.FontSize', '9', 'Tamanho da fonte dos formulários');
+  if not Self.Config.Exists(Self.FAppName + '.UI.Display.FontSize') then
+    Self.Config.AddConfig(Self.FAppName + '.UI.Display.FontSize', '9', 'Tamanho da fonte dos formulários');
 
-  if not Self.Config.Exists('JupiterTools.UI.Display.WindowsState') then
-    Self.Config.AddConfig('JupiterTools.UI.Display.WindowsState', 'Normal', 'Estado da Janela (Normal / Maximized)');
+  if not Self.Config.Exists(Self.FAppName + '.UI.Display.WindowsState') then
+    Self.Config.AddConfig(Self.FAppName + '.UI.Display.WindowsState', 'Normal', 'Estado da Janela (Normal / Maximized)');
 
-  Self.Config.AddVariable('JupiterTools.Variables.OS.DirectotySeparator', GetDirectorySeparator, 'Caracter separador de diretório');
+  Self.Config.AddVariable(Self.FAppName + '.Variables.OS.DirectotySeparator', GetDirectorySeparator, 'Caracter separador de diretório');
 
   {$IFDEF WINDOWS}
-    Self.Config.AddVariable('JupiterTools.Variables.OS', 'Windows', 'Sistema Operacional');
+    Self.Config.AddVariable(Self.FAppName + '.Variables.OS', 'Windows', 'Sistema Operacional');
   {$ELSE}
-    Self.Config.AddVariable('JupiterTools.Variables.OS', 'Linux', 'Sistema Operacional');
+    Self.Config.AddVariable(Self.FAppName + '.Variables.OS', 'Linux', 'Sistema Operacional');
   {$ENDIF}
 
-  Self.Config.AddVariable('JupiterTools.Variables.ComputerName', GetEnvironmentVariable('COMPUTERNAME'), 'Nome do computador');
+  Self.Config.AddVariable(Self.FAppName + '.Variables.ComputerName', GetEnvironmentVariable('COMPUTERNAME'), 'Nome do computador');
 end;
 
 procedure TJupiterApp.Internal_SetModules;
@@ -78,6 +89,11 @@ begin
   Self.FModules.Add(TJupiterRunner.Create(Self));
 
   Self.FModules.Add(TJupiterChecklist.Create(Self));
+end;
+
+function TJupiterApp.ConsoleMode: Boolean;
+begin
+  Result := False;
 end;
 
 function TJupiterApp.ModuleCount: Integer;
@@ -121,14 +137,23 @@ begin
   end;
 end;
 
-constructor TJupiterApp.Create();
+constructor TJupiterApp.Create(prAppName : String);
 begin
-  Self.FConfig := TJupiterConfig.Create;
+  try
+    Self.FAppName := prAppName;
 
-  Self.FModules := TList.Create;
+    Self.FConfig := TJupiterConfig.Create;
 
-  Self.Internal_SetAppVariables;
-  Self.Internal_SetModules;
+    Self.FLog := TJupiterLog.Create;
+
+    Self.FModules := TList.Create;
+
+    Self.Internal_SetAppVariables;
+    Self.Internal_SetModules;
+
+  finally
+    Self.Log.AddLog(Now, Self.FAppName, 'Iniciando');
+  end;
 end;
 
 destructor TJupiterApp.Destroy;
@@ -140,6 +165,8 @@ begin
   end;
 
   FreeAndNil(Self.FModules);
+
+  FreeAndNil(Self.FLog);
 
   FreeAndNil(Self.FConfig);
 
@@ -155,6 +182,15 @@ begin
   vrModule.ListItems(prParams, prList);
 end;
 
+procedure TJupiterApp.ListActions(prParams: TJupiterListem; var prList: TList);
+var
+  vrModule : TJupiterModule;
+begin
+  vrModule := TJupiterModule(Self.GetModuleByID(prParams.Module));
+
+  vrModule.ListActions(prParams, prList);
+end;
+
 procedure TJupiterApp.RunListable(prParamsItem: TJupiterListem; var prParamsListableItem: TJupiterListableItem);
 var
   vrModule : TJupiterModule;
@@ -162,6 +198,59 @@ begin
   vrModule := TJupiterModule(Self.GetModuleByID(prParamsItem.Module));
 
   vrModule.RunListable(prParamsListableItem);
+end;
+
+procedure TJupiterApp.RegisterRecentTask(prTask: TJupiterListem);
+var
+  vrStr : TStrings;
+begin
+  vrStr := TStringList.Create;
+  try
+    vrStr.Clear;
+
+    if FileExists(TratarCaminho(Self.Config.GetByID(Self.FAppName + '.Variables.Path').Value + '\datasets\recents.csv')) then
+      vrStr.LoadFromFile(TratarCaminho(Self.Config.GetByID(Self.FAppName + '.Variables.Path').Value + '\datasets\recents.csv'))
+    else
+    begin
+      vrStr.Add('OBJECTSTR');
+      vrStr.Add(EmptyStr);
+    end;
+
+    if vrStr.IndexOf(prTask.ObjectToStr) <> - 1 then
+      vrStr.Delete(vrStr.IndexOf(prTask.ObjectToStr));
+
+    vrStr.Insert(1, prTask.ObjectToStr);
+
+    while vrStr.Count > 11 do
+      vrStr.Delete(vrStr.Count - 1);
+
+    vrStr.SaveToFile(TratarCaminho(Self.Config.GetByID(Self.FAppName + '.Variables.Path').Value + '\datasets\recents.csv'));
+  finally
+    vrStr.Clear;
+    FreeAndNil(vrStr);
+  end;
+end;
+
+function TJupiterApp.GetAboutInfo: String;
+var
+  vrPlataform : String;
+  vrVez       : Integer;
+begin
+  vrPlataform := EmptyStr;
+
+  {$IFDEF WINDOWS}
+    vrPlataform := 'Windows';
+  {$ELSE}
+    vrPlataform := 'Linux';
+  {$ENDIF}
+
+  Result := Self.FAppName + #13#10 + #13#10 + 'Versão: ' + Self.GetVersion + #13#10 + 'Plataforma atual: ' + vrPlataform+ #13#10 + 'Plataformas suportadas: Windows, Linux';
+
+  Result := Result + #13#10 + #13#10 + 'Módulos instalados: ';
+
+  for vrVez := 0 to Self.ModuleCount - 1 do
+     Result := Result + #13#10 + '  - ' + TJupiterModule(Self.GetModuleByIndex(vrVez)).ID + ';';
+;
 end;
 
 end.

@@ -1,0 +1,74 @@
+inherited FNewFavoriteItem: TFNewFavoriteItem
+  Left = 592
+  Height = 187
+  Top = 251
+  Width = 412
+  BorderStyle = bsDialog
+  Caption = 'Novo Item Favorito'
+  ClientHeight = 187
+  ClientWidth = 412
+  Position = poScreenCenter
+  object pnBottom: TPanel[0]
+    Left = 0
+    Height = 50
+    Top = 137
+    Width = 412
+    Align = alBottom
+    ClientHeight = 50
+    ClientWidth = 412
+    TabOrder = 0
+    object btCancel: TButton
+      Left = 317
+      Height = 25
+      Top = 8
+      Width = 75
+      Caption = 'Cancelar'
+      ModalResult = 2
+      TabOrder = 0
+    end
+    object btSave: TButton
+      Left = 232
+      Height = 25
+      Top = 8
+      Width = 75
+      Caption = 'Salvar'
+      ModalResult = 1
+      OnClick = btSaveClick
+      TabOrder = 1
+    end
+  end
+  object pnBody: TPanel[1]
+    Left = 0
+    Height = 137
+    Top = 0
+    Width = 412
+    Align = alClient
+    ClientHeight = 137
+    ClientWidth = 412
+    TabOrder = 1
+    object edTitulo: TLabeledEdit
+      Left = 16
+      Height = 23
+      Top = 32
+      Width = 376
+      EditLabel.Height = 15
+      EditLabel.Width = 376
+      EditLabel.Caption = 'Descrição'
+      EditLabel.ParentColor = False
+      TabOrder = 0
+      OnChange = edTituloChange
+    end
+    object edPath: TLabeledEdit
+      Left = 16
+      Height = 23
+      Top = 96
+      Width = 376
+      EditLabel.Height = 15
+      EditLabel.Width = 376
+      EditLabel.Caption = 'Caminho'
+      EditLabel.ParentColor = False
+      TabOrder = 1
+      OnChange = edTituloChange
+    end
+  end
+end
