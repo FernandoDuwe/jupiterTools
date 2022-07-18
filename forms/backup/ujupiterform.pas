@@ -20,7 +20,7 @@ type
     procedure Internal_UpdateDatasets; virtual;
     procedure Internal_UpdateCalcs; virtual;
   public
-    procedure UpdateForm;
+    procedure UpdateForm; virtual;
     procedure Search(prSearch : String);
   end;
 
@@ -55,14 +55,17 @@ end;
 
 procedure TJupiterForm.UpdateForm;
 begin
-  Self.Internal_UpdateDatasets;
-  Self.Internal_UpdateComponents;
-  Self.Internal_UpdateCalcs;
+  try
+    Self.Internal_UpdateDatasets;
+    Self.Internal_UpdateComponents;
+    Self.Internal_UpdateCalcs;
+  finally
+  end;
 end;
 
 procedure TJupiterForm.Search(prSearch: String);
 begin
-  //
+  Self.FSearchParam := prSearch;
 end;
 
 end.

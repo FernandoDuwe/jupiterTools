@@ -1,7 +1,7 @@
 inherited FScriptEditor: TFScriptEditor
-  Left = 90
+  Left = 277
   Height = 611
-  Top = 135
+  Top = 143
   Width = 1143
   Caption = 'Editor de Script'
   ClientHeight = 611
@@ -51,7 +51,7 @@ inherited FScriptEditor: TFScriptEditor
       TabOrder = 1
     end
     object sbCopy: TSpeedButton
-      Left = 48
+      Left = 104
       Height = 33
       Hint = 'Copiar para a área de transferência'
       Top = 8
@@ -72,6 +72,19 @@ inherited FScriptEditor: TFScriptEditor
       Caption = 'Exibir Resultados'
       OnClick = btHideResultsClick
       TabOrder = 2
+    end
+    object sbPlayExternal: TSpeedButton
+      Left = 56
+      Height = 33
+      Hint = 'Executar externamente'
+      Top = 8
+      Width = 33
+      Flat = True
+      Images = FMain.ilMainIcons
+      ImageIndex = 4
+      OnClick = sbPlayExternalClick
+      ShowHint = True
+      ParentShowHint = False
     end
   end
   object pnBody: TPanel[1]

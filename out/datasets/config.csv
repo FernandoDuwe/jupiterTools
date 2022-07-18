@@ -1,10 +1,9 @@
 ID;DESCRIPTION;VALUE;
+JupiterTools.UI.Display.FontSize;Tamanho da fonte dos formulários;9;
+JupiterTools.UI.Display.WindowsState;Estado da Janela (Normal / Maximized);Normal;
 JupiterTools.Modules.Tasks.Path;Diretório de tarefas;C:\Tarefas\;
 JupiterTools.Modules.Tasks.OpenInEditorPrefExtensions;Extensões de arquivos abertas em editor preferencial;.txt|.sql|.md;
 JupiterTools.Modules.Tasks.EditorPref;Editor preferencial (caminho ou comando);notepad;
-JupiterTools.Modules.Tasks.Current;Tarefa atual;C:\Tarefas\sdajoas\123213\;
-JupiterTools.Modules.Tasks.CurrentNumber;Número Tarefa atual;123213;
 JupiterTools.Modules.Tasks.DoNotChangeContentExtensions;Extensões de arquivos que não terão seu conteúdo alterado;.doc|.docx|.pdf;
-JupiterTools.UI.Display.FontSize;Tamanho da fonte dos formulários;9;
-JupiterTools.Modules.Runner.ExecMethod;Método de execução (RunCommand / ShellExecute / ExecuteProcess);CreateProcess;
-JupiterTools.UI.Display.WindowsState;Estado da Janela (Normal / Maximized);Normal;
+JupiterTools.Modules.Runner.ExecMethod;Método de execução (RunCommand / ShellExecute / CreateProcess);RunCommand;
+JupiterTools.Modules.Runner.ExecutorBATScript;Aplicação que será chamada ao abrir um script bat na opção: Executar externamente;cmd.exe;

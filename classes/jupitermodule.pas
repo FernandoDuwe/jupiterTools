@@ -27,9 +27,9 @@ type
 
       procedure GetTasks(var prTreeMenu : TTreeView); virtual;
 
-      procedure ListItems(prParams : TJupiterListem; var prList : TList); virtual;
+      procedure ListItems(var prParams : TJupiterListem; var prList : TList); virtual;
       procedure ListActions(prParams : TJupiterListem; var prList : TList); virtual;
-      procedure RunListable(var prParams : TJupiterListableItem); virtual;
+      procedure RunListable(var prParamsItem: TJupiterListem; var prParams : TJupiterListableItem); virtual;
     end;
 
 implementation
@@ -58,7 +58,7 @@ begin
   //
 end;
 
-procedure TJupiterModule.ListItems(prParams : TJupiterListem; var prList: TList);
+procedure TJupiterModule.ListItems(var prParams : TJupiterListem; var prList: TList);
 begin
   //
 end;
@@ -75,7 +75,7 @@ begin
   prList.Add(vrUpdateAction);
 end;
 
-procedure TJupiterModule.RunListable(var prParams: TJupiterListableItem);
+procedure TJupiterModule.RunListable(var prParamsItem: TJupiterListem; var prParams: TJupiterListableItem);
 begin
   //
 end;

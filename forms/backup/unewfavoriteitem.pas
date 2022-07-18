@@ -17,6 +17,7 @@ type
     btSave: TButton;
     edTitulo: TLabeledEdit;
     edPath: TLabeledEdit;
+    Image1: TImage;
     pnBottom: TPanel;
     pnBody: TPanel;
     procedure btSaveClick(Sender: TObject);
@@ -28,6 +29,7 @@ type
   published
     property IsApplication : Boolean read FIsApplication write FIsApplication;
   public
+
   end;
 
 var

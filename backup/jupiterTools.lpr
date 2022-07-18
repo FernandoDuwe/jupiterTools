@@ -13,7 +13,9 @@ uses
   Forms, uMain, JupiterApp, uJupiterForm, JupiterModule, JupiterConfig, uConfig,
   JupiterTasks, uExplorer, JupiterConsts, fileUtils, uCurrentTask, uNewTask,
   jupiterRunner, uEditList, uScriptEditor, jupiterchecklist, jupiterUtils,
-jupiterLog, uMessage, uNewFavoriteItem;
+  jupiterLog, uMessage, uNewFavoriteItem, jupiterGenerator, JupiterCustomAction,
+  uGeneratorActionEditor, ugeneratoractioneditorfield, uCustomForm, 
+ugeneratoractioneditoraction;
 
 {$R *.res}
 

@@ -8,7 +8,8 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, ExtCtrls,
   Menus, StdCtrls, Buttons, JupiterApp, JupiterConfig, JupiterModule,
   uJupiterForm, uConfig, uExplorer, uCurrentTask, uNewTask, uScriptEditor,
-  uMessage, JupiterConsts, fileUtils, jupiterUtils, JupiterTasks;
+  uMessage, uCustomForm, JupiterConsts, fileUtils, jupiterUtils, JupiterTasks,
+  jupiterchecklist, jupiterRunner;
 
 type
 
@@ -22,6 +23,7 @@ type
     Label2: TLabel;
     lbVersion: TLabel;
     lvRecents: TListView;
+    MenuItem25: TMenuItem;
     mmInstructions: TMemo;
     MenuItem1: TMenuItem;
     MenuItem10: TMenuItem;
@@ -87,6 +89,7 @@ type
     procedure MenuItem22Click(Sender: TObject);
     procedure MenuItem23Click(Sender: TObject);
     procedure MenuItem24Click(Sender: TObject);
+    procedure MenuItem25Click(Sender: TObject);
     procedure MenuItem2Click(Sender: TObject);
     procedure MenuItem4Click(Sender: TObject);
     procedure MenuItem6Click(Sender: TObject);
@@ -114,7 +117,7 @@ type
     procedure Internal_ListRecents;
     function Internal_GetTreeViewByHash(prStrObject : String) : TTreeNode;
   public
-
+    procedure UpdateForm; override;
   end;
 
 var
@@ -199,8 +202,18 @@ begin
 
   lbVersion.Caption := 'Versão: ' + vrJupiterApp.GetVersion;
 
-  MenuItem22.Enabled := not Self.Internal_CurrentTask.TimeNote.Started;
-  MenuItem23.Enabled := Self.Internal_CurrentTask.TimeNote.Started;
+  if vrJupiterApp.Config.Exists('JupiterTools.Modules.Tasks.CurrentNumber') then
+  begin
+    MenuItem21.Enabled := True;
+    MenuItem22.Enabled := not Self.Internal_CurrentTask.TimeNote.Started;
+    MenuItem23.Enabled := Self.Internal_CurrentTask.TimeNote.Started;
+  end
+  else
+  begin
+    MenuItem21.Enabled := False;
+    MenuItem22.Enabled := False;
+    MenuItem23.Enabled := False;
+  end;
 
   if ((tvItens.Items.Count = 0) or (tvItens.Focused)) then
   begin
@@ -230,7 +243,9 @@ begin
   tvItens.Font.Size := StrToInt(vrJupiterApp.Config.GetByID('JupiterTools.UI.Display.FontSize').Value);
 
   if vrJupiterApp.Config.Exists('JupiterTools.Modules.Tasks.CurrentNumber') then
-    sbStatus.Panels[1].Text := Format('Tarefa atual: %0:s', [vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.CurrentNumber').Value]);
+    sbStatus.Panels[1].Text := Format('Tarefa atual: %0:s', [vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.CurrentNumber').Value])
+  else
+    sbStatus.Panels[1].Text := 'Nenhuma tarefa selecionada';
 
   sbStatus.Panels[3].Text := Format('Mensagens: %0:d', [vrJupiterApp.Log.Count]);
 end;
@@ -253,8 +268,14 @@ begin
   case prItem.Tag of
     0 : begin
           Self.FCurrentForm := TFExplorer.Create(pnBody);
-          TFExplorer(FCurrentForm).Params := prItem;
+          TFExplorer(FCurrentForm).Params.CopyFrom(prItem);
         end;
+    30 : begin
+           Self.FCurrentForm := TFCustomForm.Create(pnBody);
+
+           TFCustomForm(FCurrentForm).CustomAction.FileName := prItem.Params;
+           TFCustomForm(FCurrentForm).CustomAction.LoadFromFile;
+         end;
     50 : begin
            Self.FCurrentForm := TFScriptEditor.Create(pnBody);
 
@@ -354,6 +375,21 @@ begin
   end;
 end;
 
+procedure TFMain.UpdateForm;
+var
+  vrTime : TDateTime;
+begin
+  vrTime := Now;
+
+  try
+    inherited UpdateForm;
+  finally
+    vrTime := Now - vrTime;
+
+    vrJupiterApp.Log.AddLog(Now, Self.Caption, 'Atualização de tela efetuada. Tempo: ' + FormatDateTime('hh:nn:ss:zzz', vrTime));
+  end;
+end;
+
 procedure TFMain.MenuItem7Click(Sender: TObject);
 begin
   Application.Terminate;
@@ -389,7 +425,7 @@ end;
 
 procedure TFMain.FormResize(Sender: TObject);
 begin
-
+  Self.UpdateForm;
 end;
 
 procedure TFMain.FormShow(Sender: TObject);
@@ -492,54 +528,51 @@ end;
 
 procedure TFMain.MenuItem18Click(Sender: TObject);
 var
-  vrFile : String;
+  vrObj : TJupiterActionChecklistNewFileCheckList;
 begin
-  InputQuery('Nova Checklist', 'Informe o nome da nova checklist (sem extensão)', vrFile);
-
-  if Trim(vrFile) = EmptyStr then
-    Exit;
-
+  vrObj := TJupiterActionChecklistNewFileCheckList.Create;
   try
-    NovaChecklist(vrFile);
-
-    vrJupiterApp.Log.AddLog(Now, Self.Caption, 'Criada checklist: ' + vrFile);
+    vrObj.Run(TJupiterListem.Create(EmptyStr, EmptyStr));
   finally
+    FreeAndNil(vrObj);
+
+    if tvItens.CanFocus then
+      tvItens.SetFocus;
+
     Self.UpdateForm;
   end;
 end;
 
 procedure TFMain.MenuItem19Click(Sender: TObject);
 var
-  vrFile : String;
+  vrObj : TJupiterRunnerNewScriptBAT;
 begin
-  InputQuery('Novo arquivo de script .BAT', 'Informe o nome do novo script BAT (sem extensão)', vrFile);
-
-  if Trim(vrFile) = EmptyStr then
-    Exit;
-
+  vrObj := TJupiterRunnerNewScriptBAT.Create;
   try
-    NovoScriptBAT(vrFile);
-
-    vrJupiterApp.Log.AddLog(Now, Self.Caption, 'Criado script BAT: ' + vrFile);
+    vrObj.Run(TJupiterListem.Create(EmptyStr, EmptyStr));
   finally
+    FreeAndNil(vrObj);
+
+    if tvItens.CanFocus then
+      tvItens.SetFocus;
+
     Self.UpdateForm;
   end;
 end;
 
 procedure TFMain.MenuItem20Click(Sender: TObject);
 var
-  vrFile : String;
+  vrObj : TJupiterRunnerNewScriptSQL;
 begin
-  InputQuery('Novo arquivo de script .SQL', 'Informe o nome do novo script sql (sem extensão)', vrFile);
-
-  if Trim(vrFile) = EmptyStr then
-    Exit;
-
+  vrObj := TJupiterRunnerNewScriptSQL.Create;
   try
-    NovoScriptSQL(vrFile);
-
-    vrJupiterApp.Log.AddLog(Now, Self.Caption, 'Criado script SQL: ' + vrFile);
+    vrObj.Run(TJupiterListem.Create(EmptyStr, EmptyStr));
   finally
+    FreeAndNil(vrObj);
+
+    if tvItens.CanFocus then
+      tvItens.SetFocus;
+
     Self.UpdateForm;
   end;
 end;
@@ -580,6 +613,13 @@ begin
   end;
 end;
 
+procedure TFMain.MenuItem25Click(Sender: TObject);
+begin
+  vrJupiterApp.Log.AddLog(Now, vrJupiterApp.AppName, 'Abrindo pasta: ' + TratarCaminho(ExtractFileDir(Application.ExeName) + '\modules\generator\'));
+
+  OpenFolder(TratarCaminho(ExtractFileDir(Application.ExeName) + '\modules\generator\'));
+end;
+
 procedure TFMain.MenuItem2Click(Sender: TObject);
 begin
 
@@ -591,14 +631,17 @@ begin
 end;
 
 procedure TFMain.MenuItem6Click(Sender: TObject);
+var
+  vrObj : TJupiterActionTasksNewTask;
 begin
-  Application.CreateForm(TFNewTask, FNewTask);
+  vrObj := TJupiterActionTasksNewTask.Create;
   try
-    FNewTask.ShowModal;
+    vrObj.Run(TJupiterListem.Create(EmptyStr, EmptyStr));
   finally
-    FNewTask.Release;
+    FreeAndNil(vrObj);
 
-    FreeAndNil(FNewTask);
+    if tvItens.CanFocus then
+      tvItens.SetFocus;
 
     Self.UpdateForm;
   end;

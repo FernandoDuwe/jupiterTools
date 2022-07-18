@@ -26,6 +26,7 @@ type
     Separator1: TMenuItem;
     pnHint: TPanel;
     ppOpcoes: TPopupMenu;
+    procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure lvReportDblClick(Sender: TObject);
     procedure MenuItem1Click(Sender: TObject);
@@ -70,7 +71,7 @@ begin
   vrItem := TJupiterListableItem(lvReport.Selected.Data);
 
   try
-    vrJupiterApp.RunListable(Self.Params, vrItem);
+    vrJupiterApp.RunListable(Self.FParams, vrItem);
   finally
     lvReport.Selected.Data := vrItem;
 
@@ -81,6 +82,11 @@ end;
 procedure TFExplorer.FormShow(Sender: TObject);
 begin
   Self.Internal_CreateActions;
+end;
+
+procedure TFExplorer.FormCreate(Sender: TObject);
+begin
+  Self.FParams := TJupiterListem.Create(EmptyStr, EmptyStr);
 end;
 
 procedure TFExplorer.MenuItem1Click(Sender: TObject);
@@ -133,6 +139,17 @@ begin
   pnHint.Visible := Self.FParams.Hint <> EmptyStr;
   lbInfo.Caption := Self.FParams.Hint;
 
+  lbInfo.Font.Color := clDefault;
+
+  case Self.FParams.HintType of
+    htNone    : pnHint.Color := clDefault;
+    htSuccess : begin
+                  pnHint.Color      := clMoneyGreen;
+                  lbInfo.Font.Color := clWhite;
+                end;
+    htError   : pnHint.Color := clInfoBk;
+  end;
+
   miRelatorio.Checked := lvReport.ViewStyle = vsReport;
   miIcon.Checked      := lvReport.ViewStyle = vsIcon;
   miList.Checked      := lvReport.ViewStyle = vsList;
@@ -163,7 +180,7 @@ begin
   try
     vrList.Clear;
 
-    vrJupiterApp.ListItems(Self.Params, vrList);
+    vrJupiterApp.ListItems(Self.FParams, vrList);
 
     vrShowDetails := vrList.Count = 0;
 
@@ -221,7 +238,10 @@ begin
     vrList.Clear;
     FreeAndNil(vrList);
 
-    FMain.UpdateForm;
+    if fsModal in Self.FormState then
+      Self.UpdateForm
+    else
+      FMain.UpdateForm;
   end;
 end;
 
@@ -253,8 +273,9 @@ begin
       vrBtn.ImageIndex := TJupiterAction(vrList[vrVez]).ImageIndex;
       vrBtn.Images     := FMain.ilMainIcons;
       vrBtn.Hint       := TJupiterAction(vrList[vrVez]).Hint;
+      vrBtn.ShowHint   := True;
       vrBtn.Tag        := vrVez;
-      vrBtn.AutoSize   := True;
+      vrBtn.AutoSize   := False;
       vrBtn.OnClick    := @Internal_BtnClick;
 
       vrMenuItem            := TMenuItem.Create(ppOpcoes);

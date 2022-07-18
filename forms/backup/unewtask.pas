@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls,
-  CheckLst, uJupiterForm, FileUtil, fileUtils, JupiterApp, JupiterTasks;
+  CheckLst, uJupiterForm, FileUtil, fileUtils, JupiterApp;
 
 type
 
@@ -93,7 +93,7 @@ begin
     vrStrClients.Clear;
     FreeAndNil(vrStrClients);
 
-    vrJupiterApp.Log.AddLog(Now, Self.Caption, 'Criada tarefa: ' + cbClient.Text + '/' + IntToStr());
+    vrJupiterApp.Log.AddLog(Now, Self.Caption, 'Criada tarefa: ' + cbClient.Text + '/' + edTaskName.Text);
   end;
 
   Self.Close;

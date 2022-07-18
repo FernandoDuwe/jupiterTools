@@ -17,6 +17,7 @@ type
     btSave: TButton;
     edTitulo: TLabeledEdit;
     edPath: TLabeledEdit;
+    Image1: TImage;
     pnBottom: TPanel;
     pnBody: TPanel;
     procedure btSaveClick(Sender: TObject);
@@ -71,10 +72,12 @@ begin
   if not btSave.Enabled then
     Exit;
 
+  {
   if Self.IsApplication then
     btSave.Enabled := FileExists(edPath.Text)
   else
     btSave.Enabled := DirectoryExists(edPath.Text);
+  }
 end;
 
 end.

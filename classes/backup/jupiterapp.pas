@@ -35,10 +35,10 @@ type
     constructor Create(prAppName : String);
     destructor Destroy; override;
 
-    procedure ListItems(prParams : TJupiterListem; var prList : TList);
+    procedure ListItems(var prParams : TJupiterListem; var prList : TList);
     procedure ListActions(prParams : TJupiterListem; var prList : TList);
 
-    procedure RunListable(prParamsItem : TJupiterListem; var prParamsListableItem : TJupiterListableItem);
+    procedure RunListable(var prParamsItem : TJupiterListem; var prParamsListableItem : TJupiterListableItem);
 
     procedure RegisterRecentTask(prTask : TJupiterListem);
 
@@ -50,7 +50,7 @@ var
 
 implementation
 
-uses FileInfo, fileUtils, JupiterTasks, jupiterRunner, JupiterModule, jupiterchecklist;
+uses FileInfo, fileUtils, JupiterTasks, jupiterRunner, JupiterModule, jupiterchecklist, jupiterGenerator;
 
 { TJupiterApp }
 
@@ -74,6 +74,9 @@ begin
   {$ENDIF}
 
   Self.Config.AddVariable(Self.FAppName + '.Variables.ComputerName', GetEnvironmentVariable('COMPUTERNAME'), 'Nome do computador');
+
+  Self.Config.AddVariable(Self.FAppName + '.Variables.CurrentPath', EmptyStr, 'Diretório atual');
+  Self.Config.AddVariable(Self.FAppName + '.Variables.CurrentPath', EmptyStr, 'Diretório atual');
 end;
 
 procedure TJupiterApp.Internal_SetModules;
@@ -89,6 +92,13 @@ begin
   Self.FModules.Add(TJupiterRunner.Create(Self));
 
   Self.FModules.Add(TJupiterChecklist.Create(Self));
+
+  Self.FModules.Add(TJupiterGenerator.Create(Self));
+end;
+
+function TJupiterApp.ConsoleMode: Boolean;
+begin
+  Result := False;
 end;
 
 function TJupiterApp.ModuleCount: Integer;
@@ -168,7 +178,7 @@ begin
   inherited Destroy;
 end;
 
-procedure TJupiterApp.ListItems(prParams: TJupiterListem; var prList: TList);
+procedure TJupiterApp.ListItems(var prParams: TJupiterListem; var prList: TList);
 var
   vrModule : TJupiterModule;
 begin
@@ -186,13 +196,13 @@ begin
   vrModule.ListActions(prParams, prList);
 end;
 
-procedure TJupiterApp.RunListable(prParamsItem: TJupiterListem; var prParamsListableItem: TJupiterListableItem);
+procedure TJupiterApp.RunListable(var prParamsItem: TJupiterListem; var prParamsListableItem: TJupiterListableItem);
 var
   vrModule : TJupiterModule;
 begin
   vrModule := TJupiterModule(Self.GetModuleByID(prParamsItem.Module));
 
-  vrModule.RunListable(prParamsListableItem);
+  vrModule.RunListable(prParamsItem, prParamsListableItem);
 end;
 
 procedure TJupiterApp.RegisterRecentTask(prTask: TJupiterListem);

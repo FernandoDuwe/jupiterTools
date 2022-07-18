@@ -6,9 +6,45 @@ interface
 
 uses
   Classes, SysUtils, JupiterModule, JupiterApp, JupiterConsts, fileUtils,
-  ComCtrls, Forms;
+  uNewTask, ComCtrls, Forms, Dialogs;
 
 type
+
+  { TJupiterActionTasksNewTask }
+
+  { TJupiterActionTasksNewTaskCheckList }
+
+  { TJupiterActionTasksNewTaskScriptSQL }
+
+  TJupiterActionTasksNewTaskScriptSQL = class(TJupiterAction)
+  public
+    constructor Create;
+
+    procedure Run(prParams : TJupiterListem); override;
+  end;
+
+  { TJupiterActionTasksNewTaskScriptBAT }
+
+  TJupiterActionTasksNewTaskScriptBAT = class(TJupiterAction)
+  public
+    constructor Create;
+
+    procedure Run(prParams : TJupiterListem); override;
+  end;
+
+  TJupiterActionTasksNewTaskCheckList = class(TJupiterAction)
+  public
+    constructor Create;
+
+    procedure Run(prParams : TJupiterListem); override;
+  end;
+
+  TJupiterActionTasksNewTask = class(TJupiterAction)
+  public
+    constructor Create;
+
+    procedure Run(prParams : TJupiterListem); override;
+  end;
 
   { TJupiterTaskDetails }
 
@@ -53,14 +89,114 @@ type
   public
     procedure GetTasks(var prTreeMenu : TTreeView); override;
 
-    procedure ListItems(prParams : TJupiterListem; var prList : TList); override;
-    procedure RunListable(var prParams : TJupiterListableItem); override;
+    procedure ListItems(var prParams : TJupiterListem; var prList : TList); override;
+    procedure ListActions(prParams : TJupiterListem; var prList : TList); override;
+
+    procedure RunListable(var prParamsItem: TJupiterListem; var prParams : TJupiterListableItem); override;
     function  CreateTaskDetail : TJupiterTaskDetails;
   end;
 
 implementation
 
-uses LCLIntf;
+uses jupiterUtils, LCLIntf, uExplorer;
+
+{ TJupiterActionTasksNewTaskScriptSQL }
+
+constructor TJupiterActionTasksNewTaskScriptSQL.Create;
+begin
+  Self.Title      := 'Novo script SQL';
+  Self.Hint       := 'Clique aqui para criar um novo arquivo de script SQL para a tarefa atual';
+  Self.ImageIndex := ICON_SQL;
+end;
+
+procedure TJupiterActionTasksNewTaskScriptSQL.Run(prParams: TJupiterListem);
+var
+  vrFile : String;
+begin
+  InputQuery('Novo arquivo de script .SQL de Tarefa', 'Informe o nome do novo script SQL (sem extensão)', vrFile);
+
+  if Trim(vrFile) = EmptyStr then
+    Exit;
+
+  NovoScriptSQLInTask(vrFile, vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.Current').Value);
+
+  vrJupiterApp.Log.AddLog(Now, Self.ClassName, 'Criado script SQL: ' + vrFile);
+
+  inherited Run(prParams);
+end;
+
+{ TJupiterActionTasksNewTaskScriptBAT }
+
+constructor TJupiterActionTasksNewTaskScriptBAT.Create;
+begin
+  Self.Title      := 'Novo script BAT';
+  Self.Hint       := 'Clique aqui para criar um novo arquivo de script BAT para a tarefa atual';
+  Self.ImageIndex := ICON_SCRIPTS;
+end;
+
+procedure TJupiterActionTasksNewTaskScriptBAT.Run(prParams: TJupiterListem);
+var
+  vrFile : String;
+begin
+  InputQuery('Novo arquivo de script .BAT de Tarefa', 'Informe o nome do novo script BAT (sem extensão)', vrFile);
+
+  if Trim(vrFile) = EmptyStr then
+    Exit;
+
+  NovoScriptBATInTask(vrFile, vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.Current').Value);
+
+  vrJupiterApp.Log.AddLog(Now, Self.ClassName, 'Criado script BAT: ' + vrFile);
+
+  inherited Run(prParams);
+end;
+
+{ TJupiterActionTasksNewTaskCheckList }
+
+constructor TJupiterActionTasksNewTaskCheckList.Create;
+begin
+  Self.Title      := 'Nova Checklist';
+  Self.Hint       := 'Clique aqui para criar um novo arquivo de checklist para a Tarefa atual';
+  Self.ImageIndex := ICON_CHECKLIST;
+end;
+
+procedure TJupiterActionTasksNewTaskCheckList.Run(prParams: TJupiterListem);
+var
+  vrFile : String;
+begin
+  InputQuery('Nova Checklist de Tarefa', 'Informe o nome da nova checklist (sem extensão)', vrFile);
+
+  if Trim(vrFile) = EmptyStr then
+    Exit;
+
+  NovaChecklistInTask(vrFile, vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.Current').Value);
+
+  vrJupiterApp.Log.AddLog(Now, Self.ClassName, 'Criada checklist: ' + vrFile);
+
+  inherited Run(prParams);
+end;
+
+{ TJupiterActionTasksNewTask }
+
+constructor TJupiterActionTasksNewTask.Create;
+begin
+  Self.Title      := 'Nova Tarefa';
+  Self.Hint       := 'Clique aqui para criar uma nova tarefa';
+  Self.ImageIndex := ICON_CURRENTTASK;
+end;
+
+procedure TJupiterActionTasksNewTask.Run(prParams: TJupiterListem);
+begin
+  Application.CreateForm(TFNewTask, FNewTask);
+  try
+    FNewTask.ShowModal;
+  finally
+    FNewTask.Release;
+
+    FreeAndNil(FNewTask);
+  end;
+
+  inherited Run(prParams);
+end;
 
 { TJupiterTaskDetailsTimeNote }
 
@@ -114,6 +250,9 @@ var
   vrObj : TJupiterListableItem;
 begin
   prList.Clear;
+
+  if Trim(Self.FPath) = EmptyStr then
+    Exit;
 
   if not FileExists(Self.FPath + 'Tempos.txt') then
     Exit;
@@ -265,6 +404,7 @@ procedure TJupiterTasks.GetTasks(var prTreeMenu: TTreeView);
 var
   vrNode : TTreeNode;
   vrSubNode : TTreeNode;
+  vrSubCurrent : TTreeNode;
 begin
   inherited GetTasks(prTreeMenu);
 
@@ -274,16 +414,33 @@ begin
 
   vrNode.Data := TJupiterListem.Create(Self.ID, '/', EmptyStr, 0, 'Tarefas já cadastradas. Dê um duplo clique para selecionar a tarefa atual.');
 
-  vrSubNode := prTreeMenu.Items.AddChild(vrNode, 'Atual');
-  vrSubNode.ImageIndex    := ICON_CURRENTTASK;
-  vrSubNode.SelectedIndex := ICON_CURRENTTASK;
+  if Self.JupiterApp.Config.Exists(Self.ID + '.CurrentNumber') then
+  begin
+    vrSubNode := prTreeMenu.Items.AddChild(vrNode, 'Atual: ' + Self.JupiterApp.Config.GetByID(Self.ID + '.CurrentNumber').Value);
 
-  vrSubNode.Data := TJupiterListem.Create(Self.ID, '/current', EmptyStr, 90);
+    vrSubNode.ImageIndex    := ICON_CURRENTTASK;
+    vrSubNode.SelectedIndex := ICON_CURRENTTASK;
 
-  vrNode.Expanded := True;
+    vrSubNode.Data := TJupiterListem.Create(Self.ID, '/current', EmptyStr, 90);
+
+    if Self.JupiterApp.Config.Exists(Self.ID + '.Current') then
+    begin
+      vrSubCurrent := prTreeMenu.Items.AddChild(vrSubNode, 'Checklists');
+      vrSubCurrent.ImageIndex    := ICON_CHECKLIST;
+      vrSubCurrent.SelectedIndex := ICON_CHECKLIST;
+      vrSubCurrent.Data := TJupiterListem.Create(Self.ID, '/current/checklists', EmptyStr, 0, 'Checklists da tarefa atual.');
+
+      vrSubCurrent := prTreeMenu.Items.AddChild(vrSubNode, 'Scripts');
+      vrSubCurrent.ImageIndex    := ICON_SCRIPTS;
+      vrSubCurrent.SelectedIndex := ICON_SCRIPTS;
+      vrSubCurrent.Data := TJupiterListem.Create(Self.ID, '/current/scripts', EmptyStr, 0, 'Scripts da tarefa atual.');
+    end;
+  end;
+
+  vrNode.Expand(True);
 end;
 
-procedure TJupiterTasks.ListItems(prParams: TJupiterListem; var prList: TList);
+procedure TJupiterTasks.ListItems(var prParams: TJupiterListem; var prList: TList);
 var
   vrClientList : TStrings;
   vrTasks      : TStrings;
@@ -306,30 +463,88 @@ begin
     vrClientList.Clear;
     vrTasks.Clear;
 
-    ListDirectories(Self.JupiterApp.Config.GetByID(Self.ID + '.Path').Value, vrClientList);
-
-    for vrVez := 0 to vrClientList.Count - 1 do
+    if prParams.Task = '/' then
     begin
-      vrTasks.Clear;
+      Self.JupiterApp.Config.AddVariable(Self.JupiterApp.AppName + '.Variables.CurrentPath', Self.JupiterApp.Config.GetByID(Self.ID + '.Path').Value, 'Diretório atual');
+      Self.JupiterApp.Config.AddVariable(Self.JupiterApp.AppName + '.Variables.CurrentFile', EmptyStr, 'Arquivo atual');
 
-      vrClient := StringReplace(vrClientList[vrVez], Self.JupiterApp.Config.GetByID(Self.ID + '.Path').Value, EmptyStr, [rfIgnoreCase, rfReplaceAll]);
-      vrClient := StringReplace(vrClient, GetDirectorySeparator, EmptyStr, [rfIgnoreCase, rfReplaceAll]);
+      ListDirectories(Self.JupiterApp.Config.GetByID(Self.ID + '.Path').Value, vrClientList);
 
-      ListDirectories(vrClientList[vrVez], vrTasks);
-
-      for vrVez2 := 0 to vrTasks.Count - 1 do
+      for vrVez := 0 to vrClientList.Count - 1 do
       begin
-        vrTask := StringReplace(vrTasks[vrVez2], vrClientList[vrVez], EmptyStr, [rfIgnoreCase, rfReplaceAll]);
-        vrTask := StringReplace(vrTask, GetDirectorySeparator, EmptyStr, [rfIgnoreCase, rfReplaceAll]);
+        vrTasks.Clear;
+
+        vrClient := StringReplace(vrClientList[vrVez], Self.JupiterApp.Config.GetByID(Self.ID + '.Path').Value, EmptyStr, [rfIgnoreCase, rfReplaceAll]);
+        vrClient := StringReplace(vrClient, GetDirectorySeparator, EmptyStr, [rfIgnoreCase, rfReplaceAll]);
+
+        ListDirectories(vrClientList[vrVez], vrTasks);
+
+        for vrVez2 := 0 to vrTasks.Count - 1 do
+        begin
+          vrTask := StringReplace(vrTasks[vrVez2], vrClientList[vrVez], EmptyStr, [rfIgnoreCase, rfReplaceAll]);
+          vrTask := StringReplace(vrTask, GetDirectorySeparator, EmptyStr, [rfIgnoreCase, rfReplaceAll]);
+
+          vrObj             := TJupiterListableItem.Create();
+          vrObj.Item        := vrTask;
+          vrObj.Descricao   := Format('Cliente/Projeto: %0:s, Tarefa: %1:s', [vrClient, vrTask]);
+          vrObj.Param       := vrTasks[vrVez2];
+          vrObj.Selecionado := False;
+          vrObj.Tag         := 0;
+
+          if Self.JupiterApp.Config.Exists(Self.ID + '.Current') then
+            vrObj.Selecionado := Self.JupiterApp.Config.GetByID(Self.ID + '.Current').Value = vrTasks[vrVez2];
+
+          prList.Add(vrObj);
+        end;
+      end;
+    end;
+
+    if prParams.Task = '/current/checklists' then
+    begin
+      Self.JupiterApp.Config.AddVariable(Self.JupiterApp.AppName + '.Variables.CurrentPath', TratarCaminho(Self.JupiterApp.Config.GetByID(Self.ID + '.Current').Value + '\Arquivos\'), 'Diretório atual');
+      Self.JupiterApp.Config.AddVariable(Self.JupiterApp.AppName + '.Variables.CurrentFile', EmptyStr, 'Arquivo atual');
+
+      ListFiles(TratarCaminho(Self.JupiterApp.Config.GetByID(Self.ID + '.Current').Value + '\Arquivos\'), vrClientList);
+
+      for vrVez := 0 to vrClientList.Count - 1 do
+      begin
+        if AnsiUpperCase(ExtractFileExt(vrClientList[vrVez])) <> '.CKL' then
+          Continue;
 
         vrObj             := TJupiterListableItem.Create();
-        vrObj.Item        := vrTask;
-        vrObj.Descricao   := Format('Cliente/Projeto: %0:s, Tarefa: %1:s', [vrClient, vrTask]);
-        vrObj.Param       := vrTasks[vrVez2];
-        vrObj.Selecionado := False;
+        vrObj.Item        := ExtractFileName(vrClientList[vrVez]);
+        vrObj.Descricao   := vrClientList[vrVez];
+        vrObj.Param       := vrClientList[vrVez];
+        vrObj.ImageIndex  := ICON_CHECKLIST;
+        vrObj.Tag         := 1;
 
-        if Self.JupiterApp.Config.Exists(Self.ID + '.Current') then
-          vrObj.Selecionado := Self.JupiterApp.Config.GetByID(Self.ID + '.Current').Value = vrTasks[vrVez2];
+        prList.Add(vrObj);
+      end;
+    end;
+
+    if prParams.Task = '/current/scripts' then
+    begin
+      Self.JupiterApp.Config.AddVariable(Self.FAppName + '.Variables.CurrentPath', TratarCaminho(Self.JupiterApp.Config.GetByID(Self.ID + '.Current').Value + '\Arquivos\'), 'Diretório atual');
+      Self.JupiterApp.Config.AddVariable(Self.FAppName + '.Variables.CurrentFile', EmptyStr, 'Arquivo atual');
+
+      ListFiles(TratarCaminho(Self.JupiterApp.Config.GetByID(Self.ID + '.Current').Value + '\Arquivos\'), vrClientList);
+
+      for vrVez := 0 to vrClientList.Count - 1 do
+      begin
+        if ((AnsiUpperCase(ExtractFileExt(vrClientList[vrVez])) <> '.SQL') and (AnsiUpperCase(ExtractFileExt(vrClientList[vrVez])) <> '.BAT')) then
+          Continue;
+
+        vrObj             := TJupiterListableItem.Create();
+        vrObj.Item        := ExtractFileName(vrClientList[vrVez]);
+        vrObj.Descricao   := vrClientList[vrVez];
+        vrObj.Param       := vrClientList[vrVez];
+
+        if AnsiUpperCase(ExtractFileExt(vrClientList[vrVez])) = '.SQL' then
+          vrObj.ImageIndex  := ICON_SQL
+        else
+          vrObj.ImageIndex  := ICON_SCRIPTS;
+
+        vrObj.Tag         := 2;
 
         prList.Add(vrObj);
       end;
@@ -343,17 +558,67 @@ begin
   end;
 end;
 
-procedure TJupiterTasks.RunListable(prParams: TJupiterListableItem);
+procedure TJupiterTasks.ListActions(prParams: TJupiterListem; var prList: TList);
 begin
-  inherited RunListable(prParams);
+  if prParams.Task = '/' then
+    prList.Add(TJupiterActionTasksNewTask.Create);
 
-  Self.JupiterApp.Config.AddConfig(Self.ID + '.Current', prParams.Param, 'Tarefa atual');
-  Self.JupiterApp.Config.AddConfig(Self.ID + '.CurrentNumber', prParams.Item, 'Número Tarefa atual');
+  if prParams.Task = '/current/checklists' then
+    prList.Add(TJupiterActionTasksNewTaskCheckList.Create);
+
+  if prParams.Task = '/current/scripts' then
+  begin
+    prList.Add(TJupiterActionTasksNewTaskScriptBAT.Create);
+
+    prList.Add(TJupiterActionTasksNewTaskScriptSQL.Create);
+  end;
+
+  inherited ListActions(prParams, prList);
+end;
+
+procedure TJupiterTasks.RunListable(var prParamsItem: TJupiterListem; var prParams: TJupiterListableItem);
+var
+  vrExplorer : TFExplorer;
+begin
+  inherited RunListable(prParamsItem, prParams);
+
+  if prParams.Tag = 0 then
+  begin
+    Self.JupiterApp.Config.AddConfig(Self.ID + '.Current', prParams.Param, 'Tarefa atual');
+    Self.JupiterApp.Config.AddConfig(Self.ID + '.CurrentNumber', prParams.Item, 'Número Tarefa atual');
+  end;
+
+  if prParams.Tag = 1 then
+  begin
+    Application.CreateForm(TFExplorer, vrExplorer);
+    try
+      vrExplorer.Params := TJupiterListem.Create('JupiterTools.Modules.Checklist', '/checklistFile', prParams.Param, 0, 'Dê um duplo clique para marcar/desmarcar a opção selecionada.');
+
+      if Self.JupiterApp.Config.GetByID('JupiterTools.UI.Display.WindowsState').Value = 'Maximized' then
+        vrExplorer.WindowState := wsMaximized;
+
+      vrExplorer.Caption := ExtractFileName(prParams.Param) + ' - Checklist de Tarefa';
+      vrExplorer.ShowModal;
+    finally
+      vrExplorer.Release;
+      FreeAndNil(vrExplorer);
+    end;
+  end;
+
+  if prParams.Tag = 2 then
+  begin
+    vrJupiterApp.Log.AddLog(Now, Self.ClassName, 'Abrindo arquivo: ' + prParams.Param);
+
+    Self.CreateTaskDetail.ExecuteFile(prParams.Param);
+  end;
 end;
 
 function TJupiterTasks.CreateTaskDetail: TJupiterTaskDetails;
 begin
-  Result := TJupiterTaskDetails.Create(Self.JupiterApp.Config.GetByID(Self.ID + '.Current').Value);
+  if Self.JupiterApp.Config.Exists(Self.ID + '.Current') then
+    Result := TJupiterTaskDetails.Create(Self.JupiterApp.Config.GetByID(Self.ID + '.Current').Value)
+  else
+    Result := TJupiterTaskDetails.Create(EmptyStr);
 end;
 
 end.

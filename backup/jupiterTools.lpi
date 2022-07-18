@@ -22,8 +22,8 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="1"/>
-      <RevisionNr Value="2"/>
-      <BuildNr Value="21"/>
+      <RevisionNr Value="6"/>
+      <BuildNr Value="4"/>
       <Language Value="0416"/>
       <StringTable CompanyName="Jupiter Studios" FileDescription="Jupiter Tools"/>
     </VersionInfo>
@@ -45,7 +45,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="21">
+    <Units Count="28">
       <Unit0>
         <Filename Value="jupiterTools.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -179,6 +179,51 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uNewFavoriteItem"/>
       </Unit20>
+      <Unit21>
+        <Filename Value="modules/jupitergenerator.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterGenerator"/>
+      </Unit21>
+      <Unit22>
+        <Filename Value="classes/jupitercustomaction.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterCustomAction"/>
+      </Unit22>
+      <Unit23>
+        <Filename Value="forms/ugeneratoractioneditor.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FGeneratorActionEditor"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uGeneratorActionEditor"/>
+      </Unit23>
+      <Unit24>
+        <Filename Value="forms/ugeneratoractioneditorfield.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FGeneratorActionEditorField"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit24>
+      <Unit25>
+        <Filename Value="forms/ucustomform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FCustomForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uCustomForm"/>
+      </Unit25>
+      <Unit26>
+        <Filename Value="forms/ugeneratoractioneditoraction.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FGeneratorActionEditorAction"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit26>
+      <Unit27>
+        <Filename Value="utils/jupiterscript.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterScript"/>
+      </Unit27>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

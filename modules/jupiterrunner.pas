@@ -6,9 +6,27 @@ interface
 
 uses
   Classes, ComCtrls, Forms, JupiterModule, JupiterApp, JupiterConsts, fileUtils,
-  uNewFavoriteItem, SysUtils, process, UITypes;
+  jupiterUtils, uNewFavoriteItem, SysUtils, process, UITypes, Dialogs;
 
 type
+
+  { TJupiterRunnerNewScriptBAT }
+
+  TJupiterRunnerNewScriptBAT = class(TJupiterAction)
+  public
+    constructor Create;
+
+    procedure Run(prParams : TJupiterListem); override;
+  end;
+
+  { TJupiterRunnerNewScriptSQL }
+
+  TJupiterRunnerNewScriptSQL = class(TJupiterAction)
+  public
+    constructor Create;
+
+    procedure Run(prParams : TJupiterListem); override;
+  end;
 
   { TJupiterRunner }
 
@@ -37,17 +55,67 @@ type
 
     procedure Internal_ListScripts(var prTreeMenu : TTreeView; prOwner : TTreeNode);
   public
-    procedure ListItems(prParams : TJupiterListem; var prList : TList); override;
+    procedure ListItems(var prParams : TJupiterListem; var prList : TList); override;
     procedure ListActions(prParams : TJupiterListem; var prList : TList); override;
 
     procedure GetTasks(var prTreeMenu : TTreeView); override;
 
-    procedure RunListable(var prParams : TJupiterListableItem); override;
+    procedure RunListable(var prParamsItem: TJupiterListem; var prParams : TJupiterListableItem); override;
   end;
 
 implementation
 
 uses LCLIntf;
+
+{ TJupiterRunnerNewScriptBAT }
+
+constructor TJupiterRunnerNewScriptBAT.Create;
+begin
+  Self.Title      := 'Novo BAT';
+  Self.Hint       := 'Clique aqui para adicionar um novo arquivo de script BAT';
+  Self.ImageIndex := ICON_SCRIPTS;
+end;
+
+procedure TJupiterRunnerNewScriptBAT.Run(prParams: TJupiterListem);
+var
+  vrFile : String;
+begin
+  InputQuery('Novo arquivo de script .BAT', 'Informe o nome do novo script BAT (sem extensão)', vrFile);
+
+  if Trim(vrFile) = EmptyStr then
+    Exit;
+
+  NovoScriptBAT(vrFile);
+
+  vrJupiterApp.Log.AddLog(Now, Self.ClassName, 'Criado script BAT: ' + vrFile);
+
+  inherited Run(prParams);
+end;
+
+{ TJupiterRunnerNewScriptSQL }
+
+constructor TJupiterRunnerNewScriptSQL.Create;
+begin
+  Self.Title      := 'Novo SQL';
+  Self.Hint       := 'Clique aqui para adicionar um novo arquivo de script SQL';
+  Self.ImageIndex := ICON_SQL;
+end;
+
+procedure TJupiterRunnerNewScriptSQL.Run(prParams: TJupiterListem);
+var
+  vrFile : String;
+begin
+  InputQuery('Novo arquivo de script .SQL', 'Informe o nome do novo script sql (sem extensão)', vrFile);
+
+  if Trim(vrFile) = EmptyStr then
+    Exit;
+
+  NovoScriptSQL(vrFile);
+
+  vrJupiterApp.Log.AddLog(Now, Self.ClassName, 'Criado script SQL: ' + vrFile);
+
+  inherited Run(prParams);
+end;
 
 { TJupiterRunnerNewItemPath }
 
@@ -139,6 +207,9 @@ begin
   if not Self.JupiterApp.Config.Exists(Self.ID + '.ExecMethod') then
      Self.JupiterApp.Config.AddConfig(Self.ID + '.ExecMethod', 'RunCommand', 'Método de execução (RunCommand / ShellExecute / CreateProcess)');
 
+  if not Self.JupiterApp.Config.Exists(Self.ID + '.ExecutorBATScript') then
+     Self.JupiterApp.Config.AddConfig(Self.ID + '.ExecutorBATScript', 'cmd.exe', 'Aplicação que será chamada ao abrir um script bat na opção: Executar externamente');
+
   vrStr := TStringList.Create;
   try
     if not FileExists(TratarCaminho(ExtractFileDir(Application.ExeName) + '/modules/runner/folders.csv')) then
@@ -146,7 +217,7 @@ begin
       vrStr.Clear;
       vrStr.Add('PATH;DESCRIPTION;');
 
-      vrStr.SaveToFile(ExtractFileDir(TratarCaminho(Application.ExeName) + '/modules/runner/folders.csv'));
+      vrStr.SaveToFile(TratarCaminho(ExtractFileDir(Application.ExeName) + '/modules/runner/folders.csv'));
     end;
 
     if not FileExists(TratarCaminho(ExtractFileDir(Application.ExeName) + '/modules/runner/applications.csv')) then
@@ -205,7 +276,7 @@ begin
   end;
 end;
 
-procedure TJupiterRunner.ListItems(prParams: TJupiterListem; var prList: TList);
+procedure TJupiterRunner.ListItems(var prParams: TJupiterListem; var prList: TList);
 var
   vrStr    : TStrings;
   vrStrAux : TStrings;
@@ -227,6 +298,9 @@ begin
 
     if prParams.Task = '/fav' then
     begin
+      Self.JupiterApp.Config.AddVariable(Self.JupiterApp.AppName + '.Variables.CurrentPath', TratarCaminho(ExtractFileDir(Application.ExeName) + GetDirectorySeparator + 'modules/runner/'), 'Diretório atual');
+      Self.JupiterApp.Config.AddVariable(Self.JupiterApp.AppName + '.Variables.CurrentFile', prParams.Params, 'Arquivo atual');
+
       vrIcon := ICON_CONFIG;
 
       vrStr.Add(EmptyStr);
@@ -236,6 +310,9 @@ begin
 
     if prParams.Task = '/scripts' then
     begin
+      Self.JupiterApp.Config.AddVariable(Self.JupiterApp.AppName + '.Variables.CurrentPath', TratarCaminho(ExtractFileDir(Application.ExeName) + GetDirectorySeparator + 'modules/runner/'), 'Diretório atual');
+      Self.JupiterApp.Config.AddVariable(Self.JupiterApp.AppName + '.Variables.CurrentFile', prParams.Params, 'Arquivo atual');
+
       vrIcon := ICON_FOLDER;
 
       vrStr.Add(EmptyStr);
@@ -246,6 +323,9 @@ begin
 
     if prParams.Task = '/folders' then
     begin
+      Self.JupiterApp.Config.AddVariable(Self.JupiterApp.AppName + '.Variables.CurrentPath', TratarCaminho(ExtractFileDir(Application.ExeName) + GetDirectorySeparator + 'modules/runner/'), 'Diretório atual');
+      Self.JupiterApp.Config.AddVariable(Self.JupiterApp.AppName + '.Variables.CurrentFile', prParams.Params, 'Arquivo atual');
+
       vrIcon := ICON_FOLDER;
 
       vrStr.LoadFromFile(TratarCaminho(ExtractFileDir(Application.ExeName) + GetDirectorySeparator + 'modules/runner/folders.csv'));
@@ -255,6 +335,9 @@ begin
 
     if prParams.Task = '/applications' then
     begin
+      Self.JupiterApp.Config.AddVariable(Self.JupiterApp.AppName + '.Variables.CurrentPath', TratarCaminho(ExtractFileDir(Application.ExeName) + GetDirectorySeparator + 'modules/runner/'), 'Diretório atual');
+      Self.JupiterApp.Config.AddVariable(Self.JupiterApp.AppName + '.Variables.CurrentFile', prParams.Params, 'Arquivo atual');
+
       vrStr.LoadFromFile(TratarCaminho(ExtractFileDir(Application.ExeName) + GetDirectorySeparator + 'modules/runner/applications.csv'));
 
       vrIcon := ICON_PACKAGE;
@@ -298,6 +381,13 @@ end;
 
 procedure TJupiterRunner.ListActions(prParams: TJupiterListem; var prList: TList);
 begin
+  if prParams.Task = '/scripts' then
+  begin
+    prList.Add(TJupiterRunnerNewScriptSQL.Create);
+
+    prList.Add(TJupiterRunnerNewScriptBAT.Create);
+  end;
+
   if prParams.Task = '/folders' then
     prList.Add(TJupiterRunnerNewItemPath.Create);
 
@@ -345,9 +435,9 @@ begin
   vrNode.Expanded := True;
 end;
 
-procedure TJupiterRunner.RunListable(var prParams: TJupiterListableItem);
+procedure TJupiterRunner.RunListable(var prParamsItem: TJupiterListem; var prParams: TJupiterListableItem);
 begin
-  inherited RunListable(prParams);
+  inherited RunListable(prParamsItem, prParams);
 
   if DirectoryExists(prParams.Param) then
   begin

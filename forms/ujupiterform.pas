@@ -20,7 +20,7 @@ type
     procedure Internal_UpdateDatasets; virtual;
     procedure Internal_UpdateCalcs; virtual;
   public
-    procedure UpdateForm;
+    procedure UpdateForm; virtual;
     procedure Search(prSearch : String);
   end;
 

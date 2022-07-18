@@ -198,6 +198,9 @@ begin
 
   lvFiles.Items.Clear;
 
+  vrJupiterApp.Config.AddVariable(vrJupiterApp.AppName + '.Variables.CurrentPath', vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.Current').Value, 'Diretório atual');
+  vrJupiterApp.Config.AddVariable(vrJupiterApp.AppName + '.Variables.CurrentFile', EmptyStr, 'Arquivo atual');
+
   vrStr :=  TStringList.Create;
   try
     vrStr.Clear;

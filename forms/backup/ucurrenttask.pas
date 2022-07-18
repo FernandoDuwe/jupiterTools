@@ -85,7 +85,7 @@ begin
   if not Assigned(lvFiles.Selected.Data) then
     Exit;
 
-  vrJupiterApp.Log.AddLog(Now, Self.Caption, 'Abrindo tarefa atual: ' + vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.Current').Value);
+  vrJupiterApp.Log.AddLog(Now, Self.Caption, 'Abrindo arquivo: ' + TJupiterListableItem(lvFiles.Selected.Data).Param);
 
   Self.CurrentTask.ExecuteFile(TJupiterListableItem(lvFiles.Selected.Data).Param);
 end;
@@ -197,6 +197,9 @@ begin
   inherited Internal_UpdateDatasets;
 
   lvFiles.Items.Clear;
+
+  vrJupiterApp.Config.AddVariable(vrJupiterApp.AppName + '.Variables.CurrentPath', vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.Current').Value, 'Diretório atual');
+  vrJupiterApp.Config.AddVariable(vrJupiterApp.AppName + '.Variables.CurrentFile', , 'Arquivo atual');
 
   vrStr :=  TStringList.Create;
   try

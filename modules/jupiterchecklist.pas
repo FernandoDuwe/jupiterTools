@@ -6,9 +6,18 @@ interface
 
 uses
   Classes, ComCtrls, Forms, JupiterModule, JupiterApp, JupiterConsts, fileUtils,
-  SysUtils, process, Dialogs;
+  jupiterUtils, SysUtils, process, Dialogs;
 
 type
+
+  { TJupiterActionChecklistNewFileCheckList }
+
+  TJupiterActionChecklistNewFileCheckList = class(TJupiterAction)
+  public
+    constructor Create;
+
+    procedure Run(prParams : TJupiterListem); override;
+  end;
 
   { TJupiterActionChecklistNewItem }
 
@@ -45,19 +54,45 @@ type
     function  Internal_GetIdentifier: String; override;
 
     procedure Internal_ListChecklists(var prTreeMenu : TTreeView; prOwner : TTreeNode);
+    function  Internal_ChecklistCompleted(prFileName : String) : Boolean;
   public
-    procedure ListItems(prParams : TJupiterListem; var prList : TList); override;
+    procedure ListItems(var prParams : TJupiterListem; var prList : TList); override;
     procedure ListActions(prParams : TJupiterListem; var prList : TList); override;
 
     procedure GetTasks(var prTreeMenu : TTreeView); override;
 
-    procedure RunListable(var prParams : TJupiterListableItem); override;
+    procedure RunListable(var prParamsItem: TJupiterListem; var prParams : TJupiterListableItem); override;
   end;
 
 
 implementation
 
 uses LCLIntf;
+
+{ TJupiterActionChecklistNewFileCheckList }
+
+constructor TJupiterActionChecklistNewFileCheckList.Create;
+begin
+  Self.Title      := 'Nova Checklist';
+  Self.Hint       := 'Clique aqui para criar um novo arquivo de checklist';
+  Self.ImageIndex := ICON_CHECKLIST;
+end;
+
+procedure TJupiterActionChecklistNewFileCheckList.Run(prParams: TJupiterListem);
+var
+  vrFile : String;
+begin
+  InputQuery('Nova Checklist', 'Informe o nome da nova checklist (sem extensão)', vrFile);
+
+  if Trim(vrFile) = EmptyStr then
+    Exit;
+
+  NovaChecklist(vrFile);
+
+  vrJupiterApp.Log.AddLog(Now, Self.ClassName, 'Criada checklist: ' + vrFile);
+
+  inherited Run(prParams);
+end;
 
 { TJupiterActionChecklistMarkAll }
 
@@ -216,7 +251,30 @@ begin
 
 end;
 
-procedure TJupiterChecklist.ListItems(prParams: TJupiterListem;
+function TJupiterChecklist.Internal_ChecklistCompleted(prFileName: String): Boolean;
+var
+  vrVez : Integer;
+  vrStr : TStrings;
+begin
+  Result := True;
+
+  vrStr := TStringList.Create;
+  try
+    vrStr.LoadFromFile(prFileName);
+
+    for vrVez := 1 to vrStr.Count - 1 do
+      if StrToIntDef(GetCSVColumn(vrStr[vrVez] , 1), 0) = 0 then
+      begin
+        Result := False;
+        Exit;
+      end;
+  finally
+    vrStr.Clear;
+    FreeAndNil(vrStr);
+  end;
+end;
+
+procedure TJupiterChecklist.ListItems(var prParams: TJupiterListem;
   var prList: TList);
 var
   vrObj    : TJupiterListableItem;
@@ -228,6 +286,9 @@ begin
 
   if prParams.Task = '/' then
   begin
+    Self.JupiterApp.Config.AddVariable(Self.JupiterApp.AppName + '.Variables.CurrentPath', TratarCaminho(ExtractFileDir(Application.ExeName) + GetDirectorySeparator + 'modules/checklist/'), 'Diretório atual');
+    Self.JupiterApp.Config.AddVariable(Self.JupiterApp.AppName + '.Variables.CurrentFile', EmptyStr, 'Arquivo atual');
+
     vrObj := TJupiterListableItem.Create();
     vrObj.Descricao  := TratarCaminho(ExtractFileDir(Application.ExeName) + GetDirectorySeparator + 'modules/checklist/');
     vrObj.Item       := 'Pasta de checklists';
@@ -236,37 +297,13 @@ begin
     vrObj.Tag        := 0;
 
     prList.Add(vrObj);
-
-    {
-    vrStr := TStringList.Create;
-    try
-      vrStr.Clear;
-
-      ListFiles(TratarCaminho(ExtractFileDir(Application.ExeName) + GetDirectorySeparator + 'modules/checklist/'), vrStr);
-
-      for vrVez := 0 to vrStr.Count - 1 do
-      begin
-        if (AnsiUpperCase(ExtractFileExt(vrStr[vrVez])) <> '.CKL') then
-          Continue;
-
-        vrObj := TJupiterListableItem.Create();
-        vrObj.Item       := 'Limpar checklist: ' + ExtractFileName(vrStr[vrVez]);
-        vrObj.Descricao  := 'Dê um duplo clique para limpar o arquivo de checklist';
-        vrObj.Param      := vrStr[vrVez];
-        vrObj.ImageIndex := ICON_DOCS;
-        vrObj.Tag        := 2;
-
-        prList.Add(vrObj);
-      end;
-    finally
-      vrStr.Clear;
-      FreeAndNil(vrStr);
-    end;
-    }
   end;
 
   if prParams.Task = '/checklistFile' then
   begin
+    Self.JupiterApp.Config.AddVariable(Self.JupiterApp.AppName + '.Variables.CurrentPath', TratarCaminho(ExtractFileDir(Application.ExeName) + GetDirectorySeparator + 'modules/checklist/'), 'Diretório atual');
+    Self.JupiterApp.Config.AddVariable(Self.JupiterApp.AppName + '.Variables.CurrentFile', prParams.Params, 'Arquivo atual');
+
     vrStr := TStringList.Create;
     vrSubStr := TStringList.Create;
     try
@@ -288,6 +325,17 @@ begin
 
         prList.Add(vrObj);
       end;
+
+      if Self.Internal_ChecklistCompleted(prParams.Params) then
+      begin
+        prParams.HintType := htSuccess;
+        prParams.Hint     := 'Checklist Completa!';
+      end
+      else
+      begin
+        prParams.HintType := htNone;
+        prParams.Hint     := 'Dê um duplo clique para marcar/desmarcar a opção selecionada.';
+      end;
     finally
       vrSubStr.Clear;
       FreeAndNil(vrSubStr);
@@ -300,6 +348,9 @@ end;
 
 procedure TJupiterChecklist.ListActions(prParams: TJupiterListem; var prList: TList);
 begin
+  if prParams.Task = '/' then
+    prList.Add(TJupiterActionChecklistNewFileCheckList.Create);
+
   if prParams.Task = '/checklistFile' then
   begin
     prList.Add(TJupiterActionChecklistNewItem.Create);
@@ -330,13 +381,13 @@ begin
   vrNode.Expanded := True;
 end;
 
-procedure TJupiterChecklist.RunListable(var prParams: TJupiterListableItem);
+procedure TJupiterChecklist.RunListable(var prParamsItem: TJupiterListem; var prParams: TJupiterListableItem);
 var
   vrStr    : TStrings;
   vrVez    : Integer;
   vrSubStr : TStrings;
 begin
-  inherited RunListable(prParams);
+  inherited RunListable(prParamsItem, prParams);
 
   if prParams.Tag = 0 then
   begin

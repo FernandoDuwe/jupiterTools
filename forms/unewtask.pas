@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls,
-  CheckLst, uJupiterForm, FileUtil, fileUtils, JupiterApp, JupiterTasks;
+  CheckLst, uJupiterForm, FileUtil, fileUtils, JupiterApp;
 
 type
 
@@ -46,6 +46,8 @@ var
 implementation
 
 {$R *.lfm}
+
+uses JupiterTasks;
 
 { TFNewTask }
 

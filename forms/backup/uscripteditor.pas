@@ -23,6 +23,7 @@ type
     pnTaskBar: TPanel;
     sbRefresh: TSpeedButton;
     sbCopy: TSpeedButton;
+    sbPlayExternal: TSpeedButton;
     seEditor: TSynEdit;
     Splitter1: TSplitter;
     syAutocomplete: TSynAutoComplete;
@@ -34,6 +35,7 @@ type
     procedure btOpenEditorClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure sbCopyClick(Sender: TObject);
+    procedure sbPlayExternalClick(Sender: TObject);
     procedure sbRefreshClick(Sender: TObject);
   private
      FFileName : String;
@@ -76,13 +78,34 @@ begin
   seEditor.CopyToClipboard;
 end;
 
+procedure TFScriptEditor.sbPlayExternalClick(Sender: TObject);
+var
+  vrStr    : TStrings;
+  vrOutput : String;
+begin
+
+  vrStr := TStringList.Create;
+  try
+    vrStr.Clear;
+
+    vrStr.AddStrings(seEditor.Lines);
+    vrStr.Add('pause');
+
+    vrStr.SaveToFile(TratarCaminho(ExtractFileDir(Application.ExeName) + '/temp/temp.bat'));
+  finally
+    RunCommand(vrJupiterApp.Config.GetByID('JupiterTools.Modules.Runner.ExecutorBATScript').Value, [TratarCaminho(ExtractFileDir(Application.ExeName) + '/temp/temp.bat')], vrOutput, [poRunIdle]);
+
+    Self.UpdateForm;
+
+    vrJupiterApp.Log.AddLog(Now, Self.Caption, 'Executado externamente: ' + ExtractFileName(Self.FileName));
+  end;
+end;
+
 procedure TFScriptEditor.sbRefreshClick(Sender: TObject);
 var
   vrOutput : String;
 begin
   try
-    gbOutput.Visible := True;
-
     seEditor.Lines.SaveToFile(TratarCaminho(ExtractFileDir(Application.ExeName) + '/temp/temp.bat'));
   finally
     mmOutput.Lines.Clear;
@@ -97,6 +120,7 @@ begin
     mmOutput.Lines.Add('-----------------------------------------------------------');
     mmOutput.Lines.Add('Fim: ' + FormatDateTime('hh:nn:ss', Now));
 
+    gbOutput.Visible := True;
     Self.UpdateForm;
 
     vrJupiterApp.Log.AddLog(Now, Self.Caption, 'Executado arquivo: ' + ExtractFileName(Self.FileName));
@@ -153,6 +177,9 @@ begin
 
   seEditor.Lines.LoadFromFile(prFileName);
 
+  vrJupiterApp.Config.AddVariable(vrJupiterApp.AppName + '.Variables.CurrentPath', TratarCaminho(ExtractFileDir(Application.ExeName) + GetDirectorySeparator + 'modules/generator/'), 'Diretório atual');
+  vrJupiterApp.Config.AddVariable(vrJupiterApp.AppName + '.Variables.CurrentFile', prParams.Params, 'Arquivo atual');
+
   for vrVez := 0 to seEditor.Lines.Count -1 do
     seEditor.Lines[vrVez] := vrJupiterApp.Config.ResolveString(seEditor.Lines[vrVez]);
 end;
@@ -180,16 +207,18 @@ procedure TFScriptEditor.Internal_UpdateComponents;
 begin
   inherited Internal_UpdateComponents;
 
-  seEditor.ReadOnly    := not Self.EditMode;
-  sbRefresh.Enabled    := not Self.EditMode;
-  btOpenEditor.Enabled := not Self.EditMode;
+  seEditor.ReadOnly      := not Self.EditMode;
+  sbRefresh.Enabled      := not Self.EditMode;
+  sbPlayExternal.Enabled := not Self.EditMode;
+  btOpenEditor.Enabled   := not Self.EditMode;
 
   btEdit.Caption := IfThen(Self.EditMode, 'Salvar', 'Editar');
 
-  sbRefresh.Enabled     := AnsiUpperCase(ExtractFileExt(Self.FileName)) = '.BAT';
-  btHideResults.Visible := AnsiUpperCase(ExtractFileExt(Self.FileName)) = '.BAT';
-  Splitter1.Visible     := AnsiUpperCase(ExtractFileExt(Self.FileName)) = '.BAT';
-  btHideResults.Caption := IfThen(gbOutput.Visible, 'Esconder Saída', 'Exibir Saída');
+  sbRefresh.Enabled      := AnsiUpperCase(ExtractFileExt(Self.FileName)) = '.BAT';
+  sbPlayExternal.Enabled := AnsiUpperCase(ExtractFileExt(Self.FileName)) = '.BAT';
+  btHideResults.Visible  := AnsiUpperCase(ExtractFileExt(Self.FileName)) = '.BAT';
+  Splitter1.Visible      := AnsiUpperCase(ExtractFileExt(Self.FileName)) = '.BAT';
+  btHideResults.Caption  := IfThen(gbOutput.Visible, 'Esconder Saída', 'Exibir Saída');
 
   seEditor.Font.Size := StrToInt(vrJupiterApp.Config.GetByID('JupiterTools.UI.Display.FontSize').Value);
   mmOutput.Font.Size := StrToInt(vrJupiterApp.Config.GetByID('JupiterTools.UI.Display.FontSize').Value);
