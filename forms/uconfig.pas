@@ -6,42 +6,28 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, ExtCtrls,
-  StdCtrls, Buttons, uJupiterForm, uEditList, JupiterApp, JupiterConfig;
+  uCustomJupiterForm, JupiterVariable, JupiterApp, JupiterModule,
+  JupiterFormGenerator, JupiterAction, JupiterConsts, JupiterVariableForm,
+  JupiterDialogForm;
 
 type
 
   { TFConfig }
 
-  TFConfig = class(TJupiterForm)
-    btCancel: TButton;
-    btSave: TButton;
-    btEdit: TButton;
-    btNew: TButton;
-    edValue: TEdit;
-    edID: TEdit;
-    edDescr: TEdit;
-    Label1: TLabel;
-    Label2: TLabel;
-    Label3: TLabel;
-    lvParams: TListView;
-    pnForm: TPanel;
-    sbViewList: TSpeedButton;
+  TFConfig = class(TFCustomJupiterForm)
     Splitter1: TSplitter;
-    sbStatus: TStatusBar;
-    procedure btCancelClick(Sender: TObject);
-    procedure btEditClick(Sender: TObject);
-    procedure btNewClick(Sender: TObject);
-    procedure btSaveClick(Sender: TObject);
+    tvNavigation: TTreeView;
     procedure FormCreate(Sender: TObject);
-    procedure FormShow(Sender: TObject);
-    procedure lvParamsClick(Sender: TObject);
-    procedure sbViewListClick(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure tvNavigationSelectionChanged(Sender: TObject);
   private
-    FCurrentItem : TJupiterConfigItem;
-    FEditMode : Boolean;
-
-    procedure Internal_UpdateDatasets; override;
-    procedure Internal_UpdateComponents; override;
+    FConfigGenerator : TJupiterFormGenerator;
+    FOldVariant : TJupiterVariableList;
+  protected
+    procedure Internal_ListModules(prOwner : TTreeNode);
+    procedure Internal_PrepareForm; override;
+    procedure Internal_NewConfigClick(Sender : TObject);
+    procedure Internal_SaveConfigClick(Sender : TObject);
   public
 
   end;
@@ -55,181 +41,170 @@ implementation
 
 { TFConfig }
 
-procedure TFConfig.lvParamsClick(Sender: TObject);
-begin
-  if not Assigned(lvParams.Selected) then
-    Exit;
-
-  if not Assigned(lvParams.Selected.Data) then
-    Exit;
-
-  try
-    Self.FCurrentItem := TJupiterConfigItem(lvParams.Selected.Data);
-  finally
-    Self.UpdateForm;
-  end;
-end;
-
-procedure TFConfig.sbViewListClick(Sender: TObject);
-begin
-  Application.CreateForm(TFEditList, FEditList);
-  try
-    FEditList.List := edValue.Text;
-
-    FEditList.ShowModal;
-
-    edValue.Text := FEditList.List;
-  finally
-    FEditList.Release;
-    FreeAndNil(FEditList)
-  end;
-end;
-
 procedure TFConfig.FormCreate(Sender: TObject);
 begin
-  Self.FCurrentItem := nil;
-  Self.FEditMode    := False;
+  inherited;
+
+  Self.FOldVariant := nil;
+
+  Self.FConfigGenerator := TJupiterFormGenerator.Create;
+  Self.FConfigGenerator.ClearContainerOnSet := True;
+  Self.FConfigGenerator.Container := sbBody;
 end;
 
-procedure TFConfig.FormShow(Sender: TObject);
+procedure TFConfig.FormDestroy(Sender: TObject);
 begin
-  if vrJupiterApp.Config.GetByID('JupiterTools.UI.Display.WindowsState').Value = 'Maximized' then
-    Self.WindowState := wsMaximized;
+  FreeAndNil(Self.FConfigGenerator);
+
+  inherited;
 end;
 
-procedure TFConfig.btNewClick(Sender: TObject);
+procedure TFConfig.tvNavigationSelectionChanged(Sender: TObject);
 begin
-  try
-    Self.FCurrentItem := TJupiterConfigItem.Create(EmptyStr, EmptyStr, EmptyStr);
-
-    Self.FEditMode := True;
-  finally
-    Self.UpdateForm;
-
-    edID.Text := 'User.';
-
-    if edID.CanFocus then
-      edID.SetFocus;
-  end;
-end;
-
-procedure TFConfig.btSaveClick(Sender: TObject);
-begin
-  if Trim(edID.Text) = EmptyStr then
-    raise Exception.Create('Identificador é obrigatório');
-
-  if Trim(edDescr.Text) = EmptyStr then
-    raise Exception.Create('Descrição é obrigatória');
-
-  try
-    Self.FCurrentItem := nil;
-    Self.FEditMode    := False;
-
-    vrJupiterApp.Config.AddConfig(edID.Text, edValue.Text, edDescr.Text);
-
-    lvParams.Items.Clear;
-  finally
-    Self.UpdateForm;
-  end;
-end;
-
-procedure TFConfig.btEditClick(Sender: TObject);
-begin
-  try
-    Self.FEditMode := True;
-  finally
-    Self.UpdateForm;
-  end;
-end;
-
-procedure TFConfig.btCancelClick(Sender: TObject);
-begin
-  try
-    Self.FCurrentItem := nil;
-    Self.FEditMode    := False;
-
-    lvParams.Items.Clear;
-  finally
-    Self.UpdateForm;
-  end;
-end;
-
-procedure TFConfig.Internal_UpdateDatasets;
-var
-  vrVez : Integer;
-  vrNode : TListItem;
-  vrItem : TJupiterConfigItem;
-begin
-  inherited Internal_UpdateDatasets;
-
-  if Assigned(Self.FCurrentItem) then
-  begin
-    edID.Text    := Self.FCurrentItem.ID;
-    edDescr.Text := Self.FCurrentItem.Description;
-    edValue.Text := Self.FCurrentItem.Value;
-  end;
-
-  if lvParams.Items.Count = 0 then
-  begin
-    lvParams.SortType := stNone;
-
-    lvParams.DisableAutoSizing;
-    lvParams.Items.Clear;
-
-    for vrVez := 0 to vrJupiterApp.Config.Count - 1 do
-    begin
-      vrNode := lvParams.Items.Add;
-
-      vrItem := vrJupiterApp.Config.GetByIndex(vrVez);
-
-      vrNode.Caption := vrItem.ID;
-      vrNode.SubItems.Add(vrItem.Description);
-      vrNode.SubItems.Add(vrItem.Value);
-      vrNode.Data := vrItem;
-
-      if Assigned(Self.FCurrentItem) then
-        if vrItem.ID = Self.FCurrentItem.ID then
-          lvParams.Selected := vrNode;
-    end;
-
-    lvParams.SortType := stText;
-    lvParams.SortColumn := 0;
-    lvParams.SortDirection:= sdAscending;
-    lvParams.Sort;
-
-    if lvParams.Column[0].AutoSize then
-      lvParams.EnableAutoSizing;
-  end;
-end;
-
-procedure TFConfig.Internal_UpdateComponents;
-begin
-  inherited Internal_UpdateComponents;
-
-  sbViewList.Height := edValue.Height;
-  sbViewList.Width  := edValue.Height;
-
-  btNew.Enabled      := False;
-  btEdit.Enabled     := False;
-  btSave.Enabled     := False;
-  btCancel.Enabled   := False;
-  sbViewList.Enabled := False;
-
-  btNew.Enabled  := not Self.FEditMode;
-
-  lvParams.Font.Size := StrToInt(vrJupiterApp.Config.GetByID('JupiterTools.UI.Display.FontSize').Value);
-
-  if not Assigned(Self.FCurrentItem) then
+  if not Assigned(tvNavigation.Selected) then
     Exit;
 
-  btEdit.Enabled   := ((not Self.FEditMode) and (Assigned(Self.FCurrentItem))) and (Self.FCurrentItem.CanSave);
-  btSave.Enabled   := Self.FEditMode;
-  btCancel.Enabled := Self.FEditMode;
+  if not Assigned(tvNavigation.Selected.Data) then
+    Exit;
 
-  edID.Enabled       := (Self.FEditMode) and (Assigned(Self.FCurrentItem)) and (Self.FCurrentItem.ID = EmptyStr);
-  edDescr.Enabled    := (Self.FEditMode) and (Assigned(Self.FCurrentItem));
-  edValue.Enabled    := (Self.FEditMode) and (Assigned(Self.FCurrentItem));
-  sbViewList.Enabled := (Self.FEditMode) and (Assigned(Self.FCurrentItem));
+  sbBody.Visible := False;
+  try
+    if Assigned(Self.FOldVariant) then
+      Self.FOldVariant.CopyValues(Self.FConfigGenerator.Variables);
+
+    Self.FConfigGenerator.Variables := TJupiterVariableFormList.CreateFromVariableList(TJupiterVariableList(tvNavigation.Selected.Data));
+    Self.FOldVariant := TJupiterVariableList(tvNavigation.Selected.Data);
+  finally
+    sbBody.Visible := True;
+  end;
+end;
+
+procedure TFConfig.Internal_ListModules(prOwner: TTreeNode);
+var
+  vrVez       : Integer;
+  vrChild     : TTreeNode;
+  vrVariables : TJupiterVariableList;
+begin
+  for vrVez := 0 to vrJupiterApp.ModulesList.Size - 1 do
+    with TJupiterModule(vrJupiterApp.ModulesList.GetAtIndex(vrVez)) do
+    begin
+      vrChild := tvNavigation.Items.AddChild(prOwner, ModuleTitle);
+
+      vrVariables := TJupiterVariableList.Create;
+      vrVariables.CopyValues(Params);
+      vrVariables.Tag := vrVez;
+
+      vrChild.Data := vrVariables;
+    end;
+end;
+
+procedure TFConfig.Internal_PrepareForm;
+var
+  vrNode : TTreeNode;
+begin
+  inherited Internal_PrepareForm;
+
+  Self.Hint := 'Nesta tela você pode controlar todas as configurações utilizadas pelo Jupiter';
+
+  Self.Actions.Add(TJupiterAction.Create('Salvar', @Internal_SaveConfigClick));
+
+  with TJupiterAction(Self.Actions.GetLastObject) do
+  begin
+    Hint := 'Clique aqui para salvar as suas configurações';
+    Icon := ICON_SAVE;
+  end;
+
+  Self.Actions.Add(TJupiterAction.Create('Adicionar', @Internal_NewConfigClick));
+
+  with TJupiterAction(Self.Actions.GetLastObject) do
+  begin
+    Hint := 'Clique aqui para inserir uma nova configuração';
+    Icon := ICON_ADD;
+  end;
+
+  tvNavigation.Items.Clear;
+
+  vrNode := tvNavigation.Items.Add(nil, 'Geral');
+  vrNode.Data := TJupiterVariableList.Create;
+
+  TJupiterVariableList(vrNode.Data).CopyValues(vrJupiterApp.Params);
+  TJupiterVariableList(vrNode.Data).Tag := -1;
+
+  tvNavigation.Selected := vrNode;
+
+  vrNode := tvNavigation.Items.Add(nil, 'Módulos');
+
+  Self.Internal_ListModules(vrNode);
+
+  vrNode := tvNavigation.Items.Add(nil, 'Usuário');
+  vrNode.Data := TJupiterVariableList.Create;
+
+  TJupiterVariableList(vrNode.Data).CopyValues(vrJupiterApp.UserParams);
+  TJupiterVariableList(vrNode.Data).Tag := -2;
+
+  tvNavigation.FullExpand;
+end;
+
+procedure TFConfig.Internal_NewConfigClick(Sender: TObject);
+var
+  vrDialog : TJupiterDialogForm;
+begin
+  vrDialog := TJupiterDialogForm.Create;
+  try
+    vrDialog.Title := 'Nova Configuração';
+    vrDialog.Hint  := 'Crie uma nova configuração.';
+
+    vrDialog.Fields.AddField('ID', 'Identificador', 'User.');
+    vrDialog.Fields.AddField('DESC', 'Descrição', '');
+    vrDialog.Fields.AddField('VALUE', 'Valor', '');
+
+    if vrDialog.Show then
+    begin
+      Self.FConfigGenerator.Variables.AddConfig(vrDialog.Fields.VariableFormById('ID').Value,
+                                                vrDialog.Fields.VariableFormById('VALUE').Value,
+                                                vrDialog.Fields.VariableFormById('DESC').Value);
+
+      Self.FConfigGenerator.Variables := TJupiterVariableFormList.CreateFromVariableList(Self.FConfigGenerator.Variables);
+    end;
+  finally
+    FreeAndNil(vrDialog);
+  end;
+end;
+
+procedure TFConfig.Internal_SaveConfigClick(Sender: TObject);
+var
+  vrVez : Integer;
+begin
+  if Assigned(Self.FOldVariant) then
+    Self.FOldVariant.CopyValues(Self.FConfigGenerator.Variables);
+
+  for vrVez := 0 to tvNavigation.Items.Count - 1 do
+  begin
+    if not Assigned(tvNavigation.Items[vrVez].Data) then
+      Continue;
+
+    with TJupiterVariableList(tvNavigation.Items[vrVez].Data) do
+    begin
+      if Tag = -1 then // Variáveis gerais
+      begin
+        vrJupiterApp.Params.CopyValues(TJupiterVariableList(tvNavigation.Items[vrVez].Data));
+        vrJupiterApp.Params.SaveToFile;
+        Continue;
+      end;
+
+      if Tag = -2 then // Variáveis gerais
+      begin
+        vrJupiterApp.UserParams.CopyValues(TJupiterVariableList(tvNavigation.Items[vrVez].Data));
+        vrJupiterApp.UserParams.SaveToFile;
+        Continue;
+      end;
+
+      vrJupiterApp.ModulesList.GetModuleByIndex(Tag).Params.CopyValues(TJupiterVariableList(tvNavigation.Items[vrVez].Data));
+      vrJupiterApp.ModulesList.GetModuleByIndex(Tag).Params.SaveToFile;
+    end;
+  end;
+
+  Self.Close;
 end;
 
 end.

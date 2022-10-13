@@ -1,50 +1,38 @@
 unit uCurrentTask;
 
-{$mode objfpc}{$H+}
+{$mode ObjFPC}{$H+}
 
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ComCtrls,
-  ExtCtrls, Buttons, uJupiterForm, JupiterApp, JupiterModule, fileUtils,
-  JupiterConsts, JupiterTasks;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls,
+  ComCtrls, uCustomJupiterForm, JupiterAction, JupiterConsts, JupiterApp,
+  JupiterRunnable, JupiterFileDataProvider, JupiterTaskTimesDataProvider,
+  JupiterToolsModule;
 
 type
 
   { TFCurrentTask }
 
-  TFCurrentTask = class(TJupiterForm)
-    btFolder: TButton;
+  TFCurrentTask = class(TFCustomJupiterForm)
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
+    Label4: TLabel;
+    lbCurrentProject: TLabel;
     lbCurrentTask: TLabel;
     lvFiles: TListView;
     lvTimes: TListView;
-    pnTaskBar: TPanel;
-    pnTimes: TPanel;
-    pnFiles: TPanel;
-    pnBody: TPanel;
-    pnHeader: TPanel;
-    sbEndTime: TSpeedButton;
-    sbStartTime: TSpeedButton;
-    Splitter1: TSplitter;
-    procedure btFolderClick(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
-    procedure FormShow(Sender: TObject);
+    pnCurrentTask: TPanel;
     procedure lvFilesDblClick(Sender: TObject);
-    procedure sbEndTimeClick(Sender: TObject);
-    procedure sbStartTimeClick(Sender: TObject);
-    procedure SpeedButton1Click(Sender: TObject);
   private
-    FStarted : Boolean;
-
-    procedure Internal_ListTimes;
-
+    procedure Internal_MarcarTempoInicial(Sender : TObject);
+    procedure Internal_MarcarTempoFinal(Sender : TObject);
+    procedure Internal_LimparTempos(Sender : TObject);
+  protected
+    procedure Internal_PrepareForm; override;
     procedure Internal_UpdateComponents; override;
     procedure Internal_UpdateDatasets; override;
-
-    function CurrentTask : TJupiterTaskDetails;
   public
 
   end;
@@ -54,28 +42,9 @@ var
 
 implementation
 
-uses uMain;
-
 {$R *.lfm}
 
 { TFCurrentTask }
-
-procedure TFCurrentTask.btFolderClick(Sender: TObject);
-begin
-  vrJupiterApp.Log.AddLog(Now, Self.Caption, 'Abrindo tarefa atual: ' + vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.Current').Value);
-
-  OpenFolder(vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.Current').Value);
-end;
-
-procedure TFCurrentTask.FormCreate(Sender: TObject);
-begin
-  Self.FStarted := False;
-end;
-
-procedure TFCurrentTask.FormShow(Sender: TObject);
-begin
-
-end;
 
 procedure TFCurrentTask.lvFilesDblClick(Sender: TObject);
 begin
@@ -85,89 +54,71 @@ begin
   if not Assigned(lvFiles.Selected.Data) then
     Exit;
 
-  vrJupiterApp.Log.AddLog(Now, Self.Caption, 'Abrindo arquivo: ' + TJupiterListableItem(lvFiles.Selected.Data).Param);
-
-  Self.CurrentTask.ExecuteFile(TJupiterListableItem(lvFiles.Selected.Data).Param);
+  TJupiterRunnable(lvFiles.Selected.Data).Execute;
 end;
 
-procedure TFCurrentTask.sbEndTimeClick(Sender: TObject);
+procedure TFCurrentTask.Internal_MarcarTempoInicial(Sender: TObject);
 begin
   try
-    Self.CurrentTask.TimeNote.Finish;
+    TJupiterToolsModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Tools')).SetStartTime;
   finally
     Self.UpdateForm;
   end;
 end;
 
-procedure TFCurrentTask.sbStartTimeClick(Sender: TObject);
+procedure TFCurrentTask.Internal_MarcarTempoFinal(Sender: TObject);
 begin
   try
-    Self.CurrentTask.TimeNote.Start;
+    TJupiterToolsModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Tools')).SetEndTime;
   finally
     Self.UpdateForm;
   end;
 end;
 
-procedure TFCurrentTask.SpeedButton1Click(Sender: TObject);
+procedure TFCurrentTask.Internal_LimparTempos(Sender: TObject);
 begin
-
+  //
 end;
 
-procedure TFCurrentTask.Internal_ListTimes;
-var
-  vrVez  : Integer;
-  vrList : TList;
-  vrStr  : TStrings;
-  vrItem : TListItem;
+procedure TFCurrentTask.Internal_PrepareForm;
 begin
-  lvTimes.Items.Clear;
+  inherited Internal_PrepareForm;
 
-  vrList := TList.Create;
-  vrStr  := TStringList.Create;
-  try
-    vrStr.Clear;
-    vrList.Clear;
+  Self.Params.AddVariable('Generator.FormId', 'CurrentTaskForm', 'Título do formulário');
 
-    Self.CurrentTask.TimeNote.GetTimes(vrList);
+  with TJupiterToolsModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Tools')) do
+    Self.Actions.Add(TJupiterAction.Create('Abrir tarefa', TJupiterRunnable.Create(Params.VariableById('Jupiter.Tools.Tasks.Current.Path').Value)));
 
-    Self.FStarted := False;
+  with TJupiterAction(Self.Actions.GetLastObject) do
+  begin
+    Hint := 'Clique aqui para abrir o diretório da tarefa atual';
+    Icon := ICON_PLAY;
+  end;
 
-    for vrVez := 0 to vrList.Count - 1 do
-    begin
-       vrStr.Clear;
-       vrStr.Delimiter     := ';';
-       vrStr.DelimitedText := TJupiterListableItem(vrList[vrVez]).SubItens[0];
+  Self.Actions.Add(TJupiterAction.Create('Marcar tempo inicial', @Internal_MarcarTempoInicial));
 
-       vrItem := lvTimes.Items.Add;
+  with TJupiterAction(Self.Actions.GetLastObject) do
+  begin
+    Hint := 'Clique aqui para marcar o tempo inicial da sua tarefa';
+    Icon := ICON_STARTTIME;
+  end;
 
-       vrItem.Caption := Format('%0:s %1:s', [vrStr[1], vrStr[2]]);
+  Self.Actions.Add(TJupiterAction.Create('Marcar tempo final', @Internal_MarcarTempoFinal));
 
-       Self.FStarted := True;
+  with TJupiterAction(Self.Actions.GetLastObject) do
+  begin
+    Hint := 'Clique aqui para marcar o tempo final da sua tarefa';
+    Icon := ICON_ENDTIME;
+  end;
 
-       if TJupiterListableItem(vrList[vrVez]).SubItens.Count > 1 then
-       begin
-         vrStr.Clear;
-         vrStr.Delimiter     := ';';
-         vrStr.DelimitedText := TJupiterListableItem(vrList[vrVez]).SubItens[1];
+  Self.Actions.Add(TJupiterAction.Create('Limpar Tempos Registrados', @Internal_LimparTempos));
 
-         vrItem.SubItems.Add(Format('%0:s %1:s', [vrStr[1], vrStr[2]]));
+  with TJupiterAction(Self.Actions.GetLastObject) do
+  begin
+    Hint := 'Clique aqui limpar todos os tempos registrados';
+    Icon := ICON_DELETE;
 
-         Self.FStarted := False;
-       end;
-    end;
-  finally
-    while vrList.Count > 0 do
-    begin
-      TJupiterListableItem(vrList[0]).Free;
-
-      vrList.Delete(0);
-    end;
-
-    vrStr.Clear;
-    FreeAndNil(vrStr);
-
-    vrList.Clear;
-    FreeAndNil(vrList);
+    ConfirmBeforeExecute := True;
   end;
 end;
 
@@ -175,66 +126,68 @@ procedure TFCurrentTask.Internal_UpdateComponents;
 begin
   inherited Internal_UpdateComponents;
 
-  lbCurrentTask.Caption := vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.CurrentNumber').Value;
-  btFolder.Enabled := ((vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.Current') <> nil) and
-                       (DirectoryExists(vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.Current').Value)));
+  with TJupiterToolsModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Tools')) do
+  begin
+    lbCurrentProject.Caption := Params.VariableById('Jupiter.Tools.Tasks.Current.Client').Value;
+    lbCurrentTask.Caption    := Params.VariableById('Jupiter.Tools.Tasks.Current.Number').Value;
 
-  sbStartTime.Enabled := not Self.FStarted;
-  sbEndTime.Enabled   := Self.FStarted;
-
-  lvFiles.Font.Size := StrToInt(vrJupiterApp.Config.GetByID('JupiterTools.UI.Display.FontSize').Value);
-  lvTimes.Font.Size := StrToInt(vrJupiterApp.Config.GetByID('JupiterTools.UI.Display.FontSize').Value);
+    Self.Actions.GetActionButton(1, sbActions).Enabled := not StartedTime;
+    Self.Actions.GetActionButton(2, sbActions).Enabled := StartedTime;
+  end;
 end;
 
 procedure TFCurrentTask.Internal_UpdateDatasets;
 var
-  vrNode     : TListItem;
-  vrStr      : TStrings;
+  vrProvider : TJupiterFileDataProvider;
+  vrTempos   : TJupiterTaskTimesDataProvider;
   vrVez      : Integer;
-  vrListable : TJupiterListableItem;
-  vrDir      : String;
+  vrNode     : TListItem;
 begin
   inherited Internal_UpdateDatasets;
 
-  lvFiles.Items.Clear;
-
-  vrJupiterApp.Config.AddVariable(vrJupiterApp.AppName + '.Variables.CurrentPath', vrJupiterApp.Config.GetByID('JupiterTools.Modules.Tasks.Current').Value, 'Diretório atual');
-  vrJupiterApp.Config.AddVariable(vrJupiterApp.AppName + '.Variables.CurrentFile', , 'Arquivo atual');
-
-  vrStr :=  TStringList.Create;
+  vrProvider := TJupiterFileDataProvider.Create;
   try
-    vrStr.Clear;
+    vrProvider.SubFolders := True;
 
-    Self.CurrentTask.ListTaskFiles(vrStr);
+    with TJupiterToolsModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Tools')) do
+      vrProvider.Path := Params.VariableById('Jupiter.Tools.Tasks.Current.Path').Value;
 
-    for vrVez := 0 to vrStr.Count - 1 do
-    begin
-      vrNode         := lvFiles.Items.Add;
-      vrNode.Caption := ExtractFileName(vrStr[vrVez]);
+    vrProvider.ProvideData;
 
-      vrDir := StringReplace(ExtractFileDir(vrStr[vrVez]) + GetDirectorySeparator, Self.CurrentTask.Path, EmptyStr, [rfIgnoreCase, rfReplaceAll]);
+    lvFiles.Items.Clear;
 
-      if vrDir = EmptyStr then
-        vrDir := '.';
-
-      vrNode.SubItems.Add(vrDir);
-
-      vrListable       := TJupiterListableItem.Create;
-      vrListable.Param := vrStr[vrVez];
-
-      vrNode.Data := vrListable;
-    end;
-
-    Self.Internal_ListTimes;
+    for vrVez := 0 to vrProvider.Size - 1 do
+      with vrProvider.GetRowByIndex(vrVez) do
+      begin
+        vrNode := lvFiles.Items.Add;
+        vrNode.Caption := Fields.VariableById('FieldName').Value + COLUMN_SPACE_SEPARATOR;
+        vrNode.SubItems.Add(Fields.VariableById('File').Value + COLUMN_SPACE_SEPARATOR);
+        vrNode.Data := TJupiterRunnable.Create(Fields.VariableById('File').Value);
+      end;
   finally
-    vrStr.Clear;
-    FreeAndNil(vrStr);
+    FreeAndNil(vrProvider);
   end;
-end;
 
-function TFCurrentTask.CurrentTask: TJupiterTaskDetails;
-begin
-  Result := TJupiterTasks(vrJupiterApp.GetModuleByID('JupiterTools.Modules.Tasks')).CreateTaskDetail;
+  vrTempos := TJupiterTaskTimesDataProvider.Create;
+  try
+    with TJupiterToolsModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Tools')) do
+      vrTempos.FileName := Params.VariableById('Jupiter.Tools.Tasks.Current.Path').Value + 'Tempos.txt';
+
+    if FileExists(vrTempos.FileName) then
+      vrTempos.ProvideData;
+
+    lvTimes.Items.Clear;
+
+    for vrVez := 0 to vrTempos.Size - 1 do
+      with vrTempos.GetRowByIndex(vrVez) do
+      begin
+        vrNode := lvTimes.Items.Add;
+        vrNode.Caption := Fields.VariableById('startTime').Value + COLUMN_SPACE_SEPARATOR;
+        vrNode.SubItems.Add(Fields.VariableById('endTime').Value + COLUMN_SPACE_SEPARATOR);
+      end;
+  finally
+    FreeAndNil(vrTempos);
+  end;
 end;
 
 end.

@@ -5,45 +5,34 @@ unit uExplorer;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, ExtCtrls,
-  StdCtrls, Menus, Buttons, uJupiterForm, JupiterConsts, JupiterApp;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, Buttons,
+  Grids, JupiterForm, JupiterAction, JupiterRunnable, JupiterDataProvider,
+  JupiterConsts, JupiterApp, JupiterVariable;
 
 type
 
   { TFExplorer }
 
-  TFExplorer = class(TJupiterForm)
-    imgInfo: TImage;
-    lbInfo: TLabel;
-    lvReport: TListView;
-    MenuItem1: TMenuItem;
-    pnTaskBar: TPanel;
-    spOtherActions: TMenuItem;
-    miRelatorio: TMenuItem;
-    miIcon: TMenuItem;
-    miList: TMenuItem;
-    miSmallIcon: TMenuItem;
-    Separator1: TMenuItem;
-    pnHint: TPanel;
-    ppOpcoes: TPopupMenu;
-    procedure FormCreate(Sender: TObject);
-    procedure FormShow(Sender: TObject);
-    procedure lvReportDblClick(Sender: TObject);
-    procedure MenuItem1Click(Sender: TObject);
-    procedure MenuItem2Click(Sender: TObject);
-    procedure miRelatorioClick(Sender: TObject);
-    procedure miIconClick(Sender: TObject);
-    procedure miListClick(Sender: TObject);
-    procedure miSmallIconClick(Sender: TObject);
+  TFExplorer = class(TFJupiterForm)
+    lvItems: TListView;
+    procedure lvItemsDblClick(Sender: TObject);
   private
-    FParams : TJupiterListem;
+    FProvider  : TJupiterDataProvider;
 
-    procedure Internal_UpdateComponents; override;
-    procedure Internal_UpdateDatasets; override;
-    procedure Internal_BtnClick(Sender: TObject);
-    procedure Internal_CreateActions;
+    function Internal_IfChecked(prValue1, prValue2 : String) : Boolean;
+    function InternalGetCheckMode : Boolean;
+
+    procedure Internal_OnClick(prParams : TJupiterVariableList);
   published
-    property Params : TJupiterListem read FParams write FParams;
+    property CheckMode : Boolean read InternalGetCheckMode;
+
+    property Provider : TJupiterDataProvider read FProvider write FProvider;
+  protected
+    procedure Internal_PrepareForm; override;
+
+    procedure Internal_UpdateDatasets; override;
+  public
+
   end;
 
 var
@@ -51,252 +40,138 @@ var
 
 implementation
 
-uses uMain;
-
 {$R *.lfm}
-
 
 { TFExplorer }
 
-procedure TFExplorer.lvReportDblClick(Sender: TObject);
-var
-  vrItem : TJupiterListableItem;
+procedure TFExplorer.lvItemsDblClick(Sender: TObject);
 begin
-  if not Assigned(lvReport.Selected) then
+  if not Assigned(lvItems.Selected) then
     Exit;
 
-  if not Assigned(lvReport.Selected.Data) then
+  if not Assigned(lvItems.Selected.Data) then
     Exit;
-
-  vrItem := TJupiterListableItem(lvReport.Selected.Data);
 
   try
-    vrJupiterApp.RunListable(Self.FParams, vrItem);
+    Self.Internal_OnClick(TJupiterVariableList(lvItems.Selected.Data));
   finally
-    lvReport.Selected.Data := vrItem;
-
     Self.UpdateForm;
   end;
 end;
 
-procedure TFExplorer.FormShow(Sender: TObject);
+function TFExplorer.Internal_IfChecked(prValue1, prValue2: String): Boolean;
 begin
-  Self.Internal_CreateActions;
+  Result := prValue1 = prValue2;
 end;
 
-procedure TFExplorer.FormCreate(Sender: TObject);
+function TFExplorer.InternalGetCheckMode: Boolean;
 begin
-  Self.FParams := TJupiterListem.Create(EmptyStr, EmptyStr);
+  Result := Self.Params.Exists('checkableField') and Self.Params.Exists('checkableVariable');
 end;
 
-procedure TFExplorer.MenuItem1Click(Sender: TObject);
-var
-  vrVez : Integer;
+procedure TFExplorer.Internal_OnClick(prParams: TJupiterVariableList);
 begin
-  for vrVez := 0 to lvReport.Columns.Count - 1 do
-      lvReport.Column[vrVez].AutoSize := True;
-end;
-
-procedure TFExplorer.MenuItem2Click(Sender: TObject);
-begin
-  Self.UpdateForm;
-end;
-
-procedure TFExplorer.miRelatorioClick(Sender: TObject);
-begin
-  lvReport.ViewStyle := vsReport;
-
-  Self.UpdateForm;
-end;
-
-procedure TFExplorer.miIconClick(Sender: TObject);
-begin
-  lvReport.ViewStyle := vsIcon;
-
-  Self.UpdateForm;
-end;
-
-procedure TFExplorer.miListClick(Sender: TObject);
-begin
-  lvReport.ViewStyle := vsList;
-
-  Self.UpdateForm;
-end;
-
-procedure TFExplorer.miSmallIconClick(Sender: TObject);
-begin
-  lvReport.ViewStyle := vsSmallIcon;
-
-  Self.UpdateForm;
-end;
-
-procedure TFExplorer.Internal_UpdateComponents;
-begin
-  inherited Internal_UpdateComponents;
-
-  lvReport.Font.Size := StrToInt(vrJupiterApp.Config.GetByID('JupiterTools.UI.Display.FontSize').Value);
-
-  pnHint.Visible := Self.FParams.Hint <> EmptyStr;
-  lbInfo.Caption := Self.FParams.Hint;
-
-  lbInfo.Font.Color := clDefault;
-
-  case Self.FParams.HintType of
-    htNone    : pnHint.Color := clDefault;
-    htSuccess : begin
-                  pnHint.Color      := clMoneyGreen;
-                  lbInfo.Font.Color := clWhite;
-                end;
-    htError   : pnHint.Color := clInfoBk;
+  if Self.CheckMode then
+  begin
+    with vrJupiterApp.Params.VariableById(Self.Params.VariableById('checkableVariable').Value) do
+    begin
+      Value := prParams.VariableById(Self.Params.VariableById('checkableField').Value).Value;
+      SaveConfig;
+    end;
   end;
+end;
 
-  miRelatorio.Checked := lvReport.ViewStyle = vsReport;
-  miIcon.Checked      := lvReport.ViewStyle = vsIcon;
-  miList.Checked      := lvReport.ViewStyle = vsList;
-  miSmallIcon.Checked := lvReport.ViewStyle = vsSmallIcon;
+procedure TFExplorer.Internal_PrepareForm;
+var
+  vrProvider : String;
+  vrParam    : String;
+  vrAction   : TJupiterAction;
+begin
+  inherited Internal_PrepareForm;
+
+  vrProvider := EmptyStr;
+  vrParam := EmptyStr;
+
+  if Self.Params.Exists('type') then
+     vrProvider := Self.Params.VariableById('type').Value;
+
+  if Self.Params.Exists('path') then
+     vrParam := Self.Params.VariableById('path').Value;
+
+  Self.FProvider := FactoryDataProvider(vrProvider, vrParam);
+
+  {
+  vrAction      := TJupiterAction.Create('Novo', TJupiterRunnable.Create(''), nil);
+  vrAction.Hint := 'Clique aqui para inserir um novo registro';
+  vrAction.Icon := ICON_NEW;
+
+  Self.Actions.Add(vrAction);
+
+  vrAction      := TJupiterAction.Create('Editar', TJupiterRunnable.Create(''), nil);
+  vrAction.Hint := 'Clique aqui para editar o registro atual';
+  vrAction.Icon := ICON_EDIT;
+
+  Self.Actions.Add(vrAction);
+
+  vrAction      := TJupiterAction.Create('Excluir', TJupiterRunnable.Create(''), nil);
+  vrAction.Hint := 'Clique aqui para excluir o registro atual';
+  vrAction.Icon := ICON_DELETE;
+
+  Self.Actions.Add(vrAction);
+  }
+
+  vrAction      := TJupiterAction.Create('Atualizar', TJupiterRunnable.Create(''), nil);
+  vrAction.Hint := 'Clique aqui para atualizar a página';
+  vrAction.Icon := ICON_REFRESH;
+
+  Self.Actions.Add(vrAction);
 end;
 
 procedure TFExplorer.Internal_UpdateDatasets;
 var
-  vrList : TList;
-  vrVez  : Integer;
-  vrNode : TListItem;
-  vrItem : TJupiterListableItem;
-  vrShowDetails : Boolean;
+  vrItem          : TListItem;
+  vrVez           : Integer;
+  vrVez2          : Integer;
+  vrCreateColumns : Boolean;
+  vrColumn        : TListColumn;
 begin
-  vrShowDetails := False;
-
-  lvReport.SmallImages := FMain.ilMainIcons;
-//  lvReport.StateImages := FMain.ilMainIcons;
-  lvReport.LargeImages := FMain.ilMainIcons;
-
   inherited Internal_UpdateDatasets;
 
-  lvReport.Items.Clear;
-  lvReport.DisableAutoSizing;
-  lvReport.SortType := stNone;
+  lvItems.Items.Clear;
 
-  vrList := TList.Create;
-  try
-    vrList.Clear;
+  vrCreateColumns := lvItems.ColumnCount = 0;
 
-    vrJupiterApp.ListItems(Self.FParams, vrList);
-
-    vrShowDetails := vrList.Count = 0;
-
-    for vrVez := 0 to vrList.Count - 1 do
+  for vrVez := 0 to Self.Provider.Size - 1 do
+    with Self.Provider.GetRowByIndex(vrVez) do
     begin
-      vrItem := TJupiterListableItem(vrList[vrVez]);
+      vrItem := lvItems.Items.Add;
 
-      if Self.FSearchParam <> EmptyStr then
-         if ((Pos(AnsiUpperCase(Self.FSearchParam), AnsiUpperCase(vrItem.Item)) = 0) and (Pos(AnsiUpperCase(Self.FSearchParam), AnsiUpperCase(vrItem.Descricao)) = 0)) then
-           Continue;
+      for vrVez2 := 0 to Fields.Size - 1 do
+      begin
+        if ((vrCreateColumns) and (vrVez = 0)) then
+        begin
+          vrColumn            := lvItems.Columns.Add;
+          vrColumn.Caption    := Fields.VariableByIndex(vrVez2).Title + COLUMN_SPACE_SEPARATOR;
+          vrColumn.AutoSize   := True;
+        end;
 
-      vrNode := lvReport.Items.Add;
-      vrNode.Caption := vrItem.Item;
-      vrNode.SubItems.Add(vrItem.Descricao);
+        if vrVez2 = 0 then
+          vrItem.Caption := Fields.VariableByIndex(vrVez2).Value + COLUMN_SPACE_SEPARATOR
+        else
+          vrItem.SubItems.Add(Fields.VariableByIndex(vrVez2).Value + COLUMN_SPACE_SEPARATOR);
 
-      if Trim(vrItem.Descricao) <> EmptyStr then
-        vrShowDetails := True;
+        vrItem.ImageIndex := NULL_KEY;
+        vrItem.Data := TJupiterVariableList.Create;
 
-      vrNode.ImageIndex := vrItem.ImageIndex;
+        TJupiterVariableList(vrItem.Data).CopyValues(Fields);
 
-      if vrItem.Selecionado then
-        vrNode.ImageIndex := ICON_CHECKED;
-
-      vrNode.Data := vrItem;
+        if ((Self.CheckMode) and
+            (Self.Internal_IfChecked(Fields.VariableById(Self.Params.VariableById('checkableField').Value).Value,
+                                     vrJupiterApp.Params.VariableById(Self.Params.VariableById('checkableVariable').Value).Value)
+                                     )) then
+          vrItem.ImageIndex := ICON_CHECK;
+      end;
     end;
-  finally
-    FreeAndNil(vrList);
-
-    lvReport.SortType := stText;
-    lvReport.SortColumn := 0;
-    lvReport.SortDirection:= sdAscending;
-    lvReport.Sort;
-
-    lvReport.Column[1].Visible := vrShowDetails;
-
-    if lvReport.Column[0].AutoSize then
-      lvReport.EnableAutoSizing;
-  end;
-end;
-
-procedure TFExplorer.Internal_BtnClick(Sender: TObject);
-var
-  vrList : TList;
-begin
-  vrList := TList.Create;
-  try
-    vrJupiterApp.ListActions(Self.FParams, vrList);
-
-    if Sender is TSpeedButton then
-      TJupiterAction(vrList[TSpeedButton(Sender).Tag]).Run(Self.FParams);
-
-    if Sender is TMenuItem then
-      TJupiterAction(vrList[TMenuItem(Sender).Tag]).Run(Self.FParams);
-  finally
-    vrList.Clear;
-    FreeAndNil(vrList);
-
-    if fsModal in Self.FormState then
-      Self.UpdateForm
-    else
-      FMain.UpdateForm;
-  end;
-end;
-
-procedure TFExplorer.Internal_CreateActions;
-var
-  vrBtn      : TSpeedButton;
-  vrList     : TList;
-  vrVez      : Integer;
-  vrLeft     : Integer;
-  vrMenuItem : TMenuItem;
-begin
-  vrList := TList.Create;
-  try
-    vrList.Clear;
-
-    vrJupiterApp.ListActions(Self.FParams, vrList);
-
-    vrLeft := 8;
-
-    for vrVez := 0 to vrList.Count -1 do
-    begin
-      vrBtn            := TSpeedButton.Create(pnTaskBar);
-      vrBtn.Parent     := pnTaskBar;
-      vrBtn.Top        := 8;
-      vrBtn.Left       := vrLeft;
-      vrBtn.Height     := 33;
-      vrBtn.Width      := 144;
-      vrBtn.Caption    := TJupiterAction(vrList[vrVez]).Title;
-      vrBtn.ImageIndex := TJupiterAction(vrList[vrVez]).ImageIndex;
-      vrBtn.Images     := FMain.ilMainIcons;
-      vrBtn.Hint       := TJupiterAction(vrList[vrVez]).Hint;
-      vrBtn.ShowHint   := True;
-      vrBtn.Tag        := vrVez;
-      vrBtn.AutoSize   := False;
-      vrBtn.OnClick    := @Internal_BtnClick;
-
-      vrMenuItem            := TMenuItem.Create(ppOpcoes);
-      vrMenuItem.Caption    := TJupiterAction(vrList[vrVez]).Title;
-      vrMenuItem.ImageIndex := TJupiterAction(vrList[vrVez]).ImageIndex;
-      vrMenuItem.Hint       := TJupiterAction(vrList[vrVez]).Hint;
-      vrMenuItem.Tag        := vrVez;
-      vrMenuItem.OnClick    := @Internal_BtnClick;
-
-      ppOpcoes.Items.Add(vrMenuItem);
-
-      spOtherActions.Visible := True;
-
-      vrLeft := vrLeft + (vrBtn.Width) + 8;
-    end;
-
-    Application.ProcessMessages;
-  finally
-    vrList.Clear;
-    FreeAndNil(vrList);
-  end;
 end;
 
 end.

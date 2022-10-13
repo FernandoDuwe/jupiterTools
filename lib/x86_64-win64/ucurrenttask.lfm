@@ -1,78 +1,83 @@
 inherited FCurrentTask: TFCurrentTask
-  Left = 326
-  Height = 751
-  Top = 49
-  Width = 1276
-  Caption = 'Tarefa Atual'
-  ClientHeight = 751
-  ClientWidth = 1276
-  OnCreate = FormCreate
-  OnShow = FormShow
-  object pnHeader: TPanel[0]
-    Left = 0
-    Height = 46
-    Top = 50
-    Width = 1276
-    Align = alTop
-    BevelOuter = bvNone
-    ClientHeight = 46
-    ClientWidth = 1276
-    TabOrder = 0
-    object Label1: TLabel
-      Left = 16
-      Height = 15
-      Top = 16
-      Width = 65
-      Caption = 'Tarefa atual'
-      Font.Style = [fsBold]
-      ParentColor = False
-      ParentFont = False
-    end
-    object lbCurrentTask: TLabel
-      Left = 144
-      Height = 15
-      Top = 16
-      Width = 72
-      Caption = 'lbCurrentTask'
-      ParentColor = False
-    end
+  Left = 449
+  Height = 678
+  Top = 66
+  Width = 968
+  Caption = 'Tarefa atual'
+  ClientHeight = 678
+  ClientWidth = 968
+  inherited sbActions: TScrollBox
+    Width = 968
   end
-  object pnBody: TPanel[1]
-    Left = 0
-    Height = 655
-    Top = 96
-    Width = 1276
-    Align = alClient
-    BevelOuter = bvNone
-    ClientHeight = 655
-    ClientWidth = 1276
-    TabOrder = 1
-    object pnFiles: TPanel
+  inherited sbStatus: TStatusBar
+    Top = 655
+    Width = 968
+  end
+  inherited pnHint: TPanel
+    Top = 605
+    Width = 968
+    ClientWidth = 968
+  end
+  inherited sbBody: TScrollBox
+    Height = 555
+    Top = 50
+    Width = 968
+    HorzScrollBar.Page = 254
+    VertScrollBar.Page = 512
+    ClientHeight = 551
+    ClientWidth = 964
+    object pnCurrentTask: TPanel[0]
       Left = 0
-      Height = 405
+      Height = 512
       Top = 0
-      Width = 1276
-      Align = alClient
+      Width = 964
+      Align = alTop
       BevelOuter = bvNone
-      ClientHeight = 405
-      ClientWidth = 1276
+      ClientHeight = 512
+      ClientWidth = 964
       TabOrder = 0
-      object Label2: TLabel
-        Left = 16
+      object Label1: TLabel
+        Left = 8
         Height = 15
-        Top = 16
-        Width = 49
-        Caption = 'Arquivos'
+        Top = 8
+        Width = 80
+        Caption = 'Cliente/Projeto'
+        ParentColor = False
+      end
+      object lbCurrentProject: TLabel
+        Left = 8
+        Height = 15
+        Top = 32
+        Width = 93
+        Caption = 'lbCurrentProject'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label2: TLabel
+        Left = 160
+        Height = 15
+        Top = 8
+        Width = 94
+        Caption = 'Número da Tarefa'
+        ParentColor = False
+      end
+      object lbCurrentTask: TLabel
+        Left = 160
+        Height = 15
+        Top = 32
+        Width = 77
+        Caption = 'lbCurrentTask'
         Font.Style = [fsBold]
         ParentColor = False
         ParentFont = False
       end
       object lvFiles: TListView
-        Left = 16
-        Height = 345
-        Top = 48
-        Width = 1243
-        Anchors = [akTop, akLeft, akRight, akBottom]
+        Left = 8
+        Height = 200
+        Top = 96
+        Width = 940
+        Anchors = [akTop, akLeft, akRight]
         Columns = <        
           item
             AutoSize = True
@@ -84,6 +89,7 @@ inherited FCurrentTask: TFCurrentTask
             Caption = 'Pasta'
             Width = 43
           end>
+        GridLines = True
         ReadOnly = True
         SortColumn = 0
         SortType = stText
@@ -91,42 +97,22 @@ inherited FCurrentTask: TFCurrentTask
         ViewStyle = vsReport
         OnDblClick = lvFilesDblClick
       end
-    end
-    object Splitter1: TSplitter
-      Cursor = crVSplit
-      Left = 0
-      Height = 5
-      Top = 405
-      Width = 1276
-      Align = alBottom
-      ResizeAnchor = akBottom
-    end
-    object pnTimes: TPanel
-      Left = 0
-      Height = 245
-      Top = 410
-      Width = 1276
-      Align = alBottom
-      BevelOuter = bvNone
-      ClientHeight = 245
-      ClientWidth = 1276
-      TabOrder = 2
       object Label3: TLabel
-        Left = 16
+        Left = 8
         Height = 15
-        Top = 16
-        Width = 43
-        Caption = 'Tempos'
+        Top = 72
+        Width = 49
+        Caption = 'Arquivos'
         Font.Style = [fsBold]
         ParentColor = False
         ParentFont = False
       end
       object lvTimes: TListView
-        Left = 16
-        Height = 184
-        Top = 48
-        Width = 1243
-        Anchors = [akTop, akLeft, akRight, akBottom]
+        Left = 8
+        Height = 152
+        Top = 344
+        Width = 940
+        Anchors = [akTop, akLeft, akRight]
         Columns = <        
           item
             Caption = 'Início'
@@ -136,56 +122,22 @@ inherited FCurrentTask: TFCurrentTask
             Caption = 'Fim'
             Width = 140
           end>
+        GridLines = True
         ReadOnly = True
         SortType = stText
-        TabOrder = 0
+        TabOrder = 1
         ViewStyle = vsReport
       end
-    end
-  end
-  object pnTaskBar: TPanel[2]
-    Left = 0
-    Height = 50
-    Top = 0
-    Width = 1276
-    Align = alTop
-    BevelOuter = bvNone
-    ClientHeight = 50
-    ClientWidth = 1276
-    TabOrder = 2
-    object btFolder: TButton
-      Left = 1115
-      Height = 35
-      Top = 8
-      Width = 145
-      Anchors = [akTop, akRight]
-      Caption = 'Abrir Diretório'
-      OnClick = btFolderClick
-      TabOrder = 0
-    end
-    object sbStartTime: TSpeedButton
-      Left = 8
-      Height = 33
-      Hint = 'Registrar tempo inicial'
-      Top = 8
-      Width = 33
-      Images = FMain.ilMainIcons
-      ImageIndex = 5
-      OnClick = sbStartTimeClick
-      ShowHint = True
-      ParentShowHint = False
-    end
-    object sbEndTime: TSpeedButton
-      Left = 48
-      Height = 33
-      Hint = 'Registrar tempo final'
-      Top = 8
-      Width = 33
-      Images = FMain.ilMainIcons
-      ImageIndex = 5
-      OnClick = sbEndTimeClick
-      ShowHint = True
-      ParentShowHint = False
+      object Label4: TLabel
+        Left = 8
+        Height = 15
+        Top = 320
+        Width = 43
+        Caption = 'Tempos'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+      end
     end
   end
 end
