@@ -1,8 +1,8 @@
 ID;DESCRIPTION;VALUE;
-Enviroment.Run.ShellScript;Aplicação que executará arquivo de bat ou shell;cmd.exe;
+Enviroment.Run.ShellScript;Aplicação que executará arquivo de bat ou shell;C:\Program Files\ConEmu\ConEmu64.exe;
 Enviroment.DoNotChangeContentExtensions;Extensões de arquivos que não terão seu conteúdo alterado;.doc|.docx|.pdf;
 Enviroment.Run.EditorPref;Editor preferencial (caminho ou comando);C:\Program Files\Notepad++\notepad++.exe;
 Enviroment.Run.Method;Método de execução (RunCommand / ShellExecute / CreateProcess);CreateProcess;
 Enviroment.Run.OpenInEditorPrefExtensions;Extensões de arquivos abertas em editor preferencial;.txt|.sql|.md;
-Interface.Font.Size;Tamanho da fonte;8;
 Enviroment.Run.ScriptExtensions;Extensões de arquivos de script;.bat;
+Interface.Font.Size;Tamanho da fonte;8;

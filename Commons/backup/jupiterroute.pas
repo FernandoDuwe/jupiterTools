@@ -20,6 +20,8 @@ type
 
     property Params : TJupiterVariableList read FParams write FParams;
   public
+    function DestinyPath : String;
+
     function SameRoute(prRoutePath : String) : Boolean;
 
     constructor Create(prPath : String);
@@ -72,7 +74,8 @@ begin
   Result := TJupiterRouteList.Create;
 
   for vrVez := 0 to Self.Size - 1 do
-
+    if TJupiterRoute(Self.GetAtIndex(vrVez)).Path = prDir then
+      Result.Add(TJupiterRoute(Self.GetAtIndex(vrVez)));
 end;
 
 { TJupiterFormRouteGroup }
@@ -110,6 +113,20 @@ begin
 end;
 
 { TJupiterRoute }
+
+function TJupiterRoute.DestinyPath: String;
+begin
+  Result := Self.Path;
+
+  if Self.Params.Exists('destinyPath') then
+    Result := Self.Params.VariableById('destinyPath').Value;
+end;
+
+procedure TJupiterRoute.SetDestinyPath(AValue: Internal_ReadDestinyPath);
+begin
+  if FDestinyPath=AValue then Exit;
+  FDestinyPath:=AValue;
+end;
 
 function TJupiterRoute.SameRoute(prRoutePath: String): Boolean;
 begin

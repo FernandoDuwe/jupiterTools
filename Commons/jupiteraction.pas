@@ -42,7 +42,7 @@ type
     procedure Execute;
 
     constructor Create(prTitle : String; prRunnable : TJupiterRunnable; prLocation : TJupiterRoute = nil);
-    constructor Create(prTitle : String; prRoute : TJupiterRoute; prLocation : TJupiterRoute = nil);
+    constructor Create(prTitle : String; prRoute   : TJupiterRoute; prLocation : TJupiterRoute = nil);
     constructor Create(prTitle : String; prOnClick : TNotifyEvent; prLocation : TJupiterRoute = nil);
 
     destructor Destroy; override;

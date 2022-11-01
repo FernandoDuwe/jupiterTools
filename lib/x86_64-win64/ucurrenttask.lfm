@@ -6,6 +6,7 @@ inherited FCurrentTask: TFCurrentTask
   Caption = 'Tarefa atual'
   ClientHeight = 678
   ClientWidth = 968
+  OnShow = FormShow
   inherited sbActions: TScrollBox
     Width = 968
   end
@@ -20,7 +21,6 @@ inherited FCurrentTask: TFCurrentTask
   end
   inherited sbBody: TScrollBox
     Height = 555
-    Top = 50
     Width = 968
     HorzScrollBar.Page = 254
     VertScrollBar.Page = 512
@@ -72,31 +72,6 @@ inherited FCurrentTask: TFCurrentTask
         ParentColor = False
         ParentFont = False
       end
-      object lvFiles: TListView
-        Left = 8
-        Height = 200
-        Top = 96
-        Width = 940
-        Anchors = [akTop, akLeft, akRight]
-        Columns = <        
-          item
-            AutoSize = True
-            Caption = 'Arquivo'
-            Width = 57
-          end        
-          item
-            AutoSize = True
-            Caption = 'Pasta'
-            Width = 43
-          end>
-        GridLines = True
-        ReadOnly = True
-        SortColumn = 0
-        SortType = stText
-        TabOrder = 0
-        ViewStyle = vsReport
-        OnDblClick = lvFilesDblClick
-      end
       object Label3: TLabel
         Left = 8
         Height = 15
@@ -112,7 +87,7 @@ inherited FCurrentTask: TFCurrentTask
         Height = 152
         Top = 344
         Width = 940
-        Anchors = [akTop, akLeft, akRight]
+        Anchors = [akLeft, akRight, akBottom]
         Columns = <        
           item
             Caption = 'Início'
@@ -125,7 +100,7 @@ inherited FCurrentTask: TFCurrentTask
         GridLines = True
         ReadOnly = True
         SortType = stText
-        TabOrder = 1
+        TabOrder = 0
         ViewStyle = vsReport
       end
       object Label4: TLabel
@@ -133,11 +108,28 @@ inherited FCurrentTask: TFCurrentTask
         Height = 15
         Top = 320
         Width = 43
+        Anchors = [akLeft, akBottom]
         Caption = 'Tempos'
         Font.Style = [fsBold]
         ParentColor = False
         ParentFont = False
       end
+      object tvExplorer: TTreeView
+        Left = 8
+        Height = 193
+        Top = 96
+        Width = 940
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        Images = FMain.ilIconFamily
+        ReadOnly = True
+        TabOrder = 1
+        OnDblClick = lvFilesDblClick
+        Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
+      end
     end
+  end
+  inherited ppMenu: TPopupMenu
+    Left = 352
+    Top = 88
   end
 end

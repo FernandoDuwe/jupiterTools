@@ -1,32 +1,28 @@
 inherited FExplorer: TFExplorer
-  Height = 240
-  Width = 320
+  Height = 377
+  Width = 451
   Caption = 'Explorer'
-  ClientHeight = 240
-  ClientWidth = 320
+  ClientHeight = 377
+  ClientWidth = 451
   inherited sbActions: TScrollBox
-    Width = 320
+    Width = 451
   end
   inherited sbStatus: TStatusBar
-    Top = 187
-    Width = 320
+    Top = 354
+    Width = 451
   end
   inherited pnHint: TPanel
     Height = 30
-    Top = 210
-    Width = 320
+    Top = 324
+    Width = 451
     ClientHeight = 30
-    ClientWidth = 320
-    inherited lbHelp: TLabel
-      Left = 64
-      Top = 24
-    end
+    ClientWidth = 451
   end
   object lvItems: TListView[3]
     Left = 0
-    Height = 137
+    Height = 274
     Top = 50
-    Width = 320
+    Width = 451
     Align = alClient
     Columns = <>
     GridLines = True

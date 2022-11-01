@@ -1,0 +1,126 @@
+inherited FMessage: TFMessage
+  Left = 388
+  Height = 551
+  Top = 117
+  Width = 982
+  Caption = 'Mensagens do Sistema'
+  ClientHeight = 551
+  ClientWidth = 982
+  inherited sbActions: TScrollBox
+    Width = 982
+  end
+  inherited sbStatus: TStatusBar
+    Top = 528
+    Width = 982
+  end
+  inherited pnHint: TPanel
+    Top = 478
+    Width = 982
+    ClientWidth = 982
+  end
+  inherited sbBody: TScrollBox
+    Left = 265
+    Height = 428
+    Top = 50
+    Width = 717
+    HorzScrollBar.Page = 466
+    VertScrollBar.Page = 87
+    ClientHeight = 424
+    ClientWidth = 713
+    object lbTitleTile: TLabel[0]
+      Left = 8
+      Height = 15
+      Top = 8
+      Width = 30
+      Caption = 'Título'
+      ParentColor = False
+    end
+    object lbTitleDesc: TLabel[1]
+      Left = 8
+      Height = 15
+      Top = 32
+      Width = 32
+      Caption = 'Título'
+      Font.Style = [fsBold]
+      ParentColor = False
+      ParentFont = False
+    end
+    object lbOriginTitle: TLabel[2]
+      Left = 208
+      Height = 15
+      Top = 8
+      Width = 40
+      Caption = 'Origem'
+      ParentColor = False
+    end
+    object lbOriginDesc: TLabel[3]
+      Left = 208
+      Height = 15
+      Top = 32
+      Width = 42
+      Caption = 'Origem'
+      Font.Style = [fsBold]
+      ParentColor = False
+      ParentFont = False
+    end
+    object lbTimeTitle: TLabel[4]
+      Left = 408
+      Height = 15
+      Top = 8
+      Width = 55
+      Caption = 'Data/Hora'
+      ParentColor = False
+    end
+    object lbTimeDesc: TLabel[5]
+      Left = 408
+      Height = 15
+      Top = 32
+      Width = 58
+      Caption = 'Data/Hora'
+      Font.Style = [fsBold]
+      ParentColor = False
+      ParentFont = False
+    end
+    object lbDetailsTitle: TLabel[6]
+      Left = 8
+      Height = 15
+      Top = 72
+      Width = 45
+      Caption = 'Detalhes'
+      ParentColor = False
+    end
+    object mmDetails: TMemo[7]
+      Left = 8
+      Height = 312
+      Top = 96
+      Width = 694
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      Lines.Strings = (
+        'mmDetails'
+      )
+      ReadOnly = True
+      ScrollBars = ssBoth
+      TabOrder = 0
+    end
+  end
+  object lbResume: TListBox[4]
+    Left = 0
+    Height = 428
+    Top = 50
+    Width = 260
+    Align = alLeft
+    ItemHeight = 0
+    OnClick = lbResumeClick
+    TabOrder = 4
+  end
+  object Splitter1: TSplitter[5]
+    Left = 260
+    Height = 428
+    Top = 50
+    Width = 5
+  end
+  inherited ppMenu: TPopupMenu[6]
+    Left = 640
+    Top = 240
+  end
+end

@@ -20,6 +20,8 @@ type
 
     property Params : TJupiterVariableList read FParams write FParams;
   public
+    function DestinyPath : String;
+
     function SameRoute(prRoutePath : String) : Boolean;
 
     constructor Create(prPath : String);
@@ -111,6 +113,14 @@ begin
 end;
 
 { TJupiterRoute }
+
+function TJupiterRoute.DestinyPath: String;
+begin
+  Result := Self.Path;
+
+  if Self.Params.Exists('destinyPath') then
+    Result := Self.Params.VariableById('destinyPath').Value;
+end;
 
 function TJupiterRoute.SameRoute(prRoutePath: String): Boolean;
 begin

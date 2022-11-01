@@ -8,13 +8,16 @@ uses
   Classes, SysUtils;
 
 const
-   ROOT_PATH          : String = '/';
-   CONFIG_PATH        : String = '/config/';
-   ROOT_FORM_PATH     : String = '/forms/';
-   EXPLORER_FORM_PATH : String = '/forms/explorer/';
-   CUSTOM_FORM_PATH   : String = '/forms/custom/';
-   NEWTASK_FORM_PATH  : String = '/forms/custom/newTask/';
-   TASK_FORM_PATH     : String = '/forms/custom/currentTask/';
+   ROOT_PATH           : String = '/';
+   ROOT_FORM_PATH      : String = '/forms/';
+   CONFIG_PATH         : String = '/forms/config/';
+   EXPLORER_FORM_PATH  : String = '/forms/explorer/';
+   EDITOR_FORM_PATH    : String = '/forms/editor/';
+   GENERATOR_FORM_PATH : String = '/forms/generator/';
+   MESSAGES_PATH       : String = '/forms/messages/';
+   CUSTOM_FORM_PATH    : String = '/forms/custom/';
+   NEWTASK_FORM_PATH   : String = '/forms/custom/newTask/';
+   TASK_FORM_PATH      : String = '/forms/custom/currentTask/';
 
    ICON_ADD       : SmallInt = 0;
    ICON_NEW       : SmallInt = 1;
@@ -44,11 +47,21 @@ const
    ICON_FAVORITE    : SmallInt = 25;
    ICON_APPLICATION : SmallInt = 26;
    ICON_LIBRARY     : SmallInt = 27;
+   ICON_GRAPHICFILE : SmallInt = 28;
+   ICON_DOCFILE     : SmallInt = 29;
+   ICON_TECHFILE    : SmallInt = 30;
+   ICON_TXTFILE     : SmallInt = 31;
+   ICON_SHEETFILE   : SmallInt = 32;
+   ICON_TIMEFILE    : SmallInt = 33;
+   ICON_PICTUREFILE : SmallInt = 34;
+   ICON_COPY        : SmallInt = 35;
+   ICON_EXIT        : SmallInt = 36;
 
    NULL_KEY : SmallInt = -1;
 
    EMPTY_SPACE_SEPARATOR  : String = '/JUPITERTOOLS\|/JUPITERTOOLS\';
    COLUMN_SPACE_SEPARATOR : String = '      ';
+   FIELD_ID_GENERADOR     : String = 'Generator.FormId';
 
    DATAPROVIDER_TYPE_LIST_FILES : String = 'TJupiterFileDataProvider';
    DATAPROVIDER_TYPE_LIST_PATHS : String = 'TJupiterDirectoryDataProvider';

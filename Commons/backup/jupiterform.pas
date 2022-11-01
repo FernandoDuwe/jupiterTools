@@ -135,7 +135,8 @@ begin
   if pnHint.Visible then
   begin
     pnHint.Height := 66;
-    lb
+    lbHelp.Top    := 24;
+    lbHelp.Left   := 64;
   end;
 
   Self.UpdateForm;

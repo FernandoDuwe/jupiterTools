@@ -1,22 +1,33 @@
 inherited FHome: TFHome
-  Height = 502
+  Height = 593
+  Width = 887
   Caption = 'Página Inicial'
-  ClientHeight = 502
+  ClientHeight = 593
+  ClientWidth = 887
   OnResize = FormResize
   OnShow = FormShow
-  inherited sbStatus: TStatusBar
-    Top = 479
+  inherited sbActions: TScrollBox
+    Width = 887
   end
-  object sbBody: TScrollBox[2]
+  inherited sbStatus: TStatusBar
+    Top = 570
+    Width = 887
+  end
+  inherited pnHint: TPanel
+    Top = 504
+    Width = 887
+    ClientWidth = 887
+  end
+  object sbBody: TScrollBox[3]
     Left = 0
-    Height = 433
-    Top = 46
-    Width = 668
+    Height = 454
+    Top = 50
+    Width = 887
     HorzScrollBar.Page = 648
     VertScrollBar.Page = 376
     Align = alClient
-    ClientHeight = 429
-    ClientWidth = 664
+    ClientHeight = 450
+    ClientWidth = 883
     Color = clWhite
     ParentColor = False
     TabOrder = 1
@@ -31,6 +42,7 @@ inherited FHome: TFHome
       Color = clWhite
       ParentColor = False
       TabOrder = 0
+      OnClick = pnTitleClick
       object lbTitle: TLabel
         Left = 88
         Height = 25
@@ -213,7 +225,7 @@ inherited FHome: TFHome
           5099B0C482C70C0000000049454E44AE426082
         }
       end
-      object Label1: TLabel
+      object lbVersion: TLabel
         Left = 88
         Height = 15
         Top = 48
@@ -232,7 +244,7 @@ inherited FHome: TFHome
         ParentColor = False
       end
       object Label3: TLabel
-        Left = 224
+        Left = 192
         Height = 15
         Top = 128
         Width = 80
@@ -241,9 +253,9 @@ inherited FHome: TFHome
       end
       object lbConfigLink: TLabel
         Cursor = crHandPoint
-        Left = 224
+        Left = 192
         Height = 15
-        Top = 152
+        Top = 176
         Width = 77
         Caption = 'Configurações'
         Font.Color = clHighlight
@@ -271,6 +283,81 @@ inherited FHome: TFHome
         Caption = 'Pastas:'
         ParentColor = False
       end
+      object Label5: TLabel
+        Cursor = crHandPoint
+        Left = 416
+        Height = 15
+        Top = 152
+        Width = 35
+        Caption = 'Jupiter'
+        Font.Color = clHighlight
+        ParentColor = False
+        ParentFont = False
+        OnClick = Label5Click
+      end
+      object Label6: TLabel
+        Cursor = crHandPoint
+        Left = 416
+        Height = 15
+        Top = 176
+        Width = 44
+        Caption = 'Datasets'
+        Font.Color = clHighlight
+        ParentColor = False
+        ParentFont = False
+        OnClick = Label6Click
+      end
+      object Label7: TLabel
+        Cursor = crHandPoint
+        Left = 416
+        Height = 15
+        Top = 200
+        Width = 46
+        Caption = 'Modules'
+        Font.Color = clHighlight
+        ParentColor = False
+        ParentFont = False
+        OnClick = Label7Click
+      end
+      object Label8: TLabel
+        Cursor = crHandPoint
+        Left = 416
+        Height = 15
+        Top = 224
+        Width = 29
+        Caption = 'Temp'
+        Font.Color = clHighlight
+        ParentColor = False
+        ParentFont = False
+        OnClick = Label7Click
+        OnDblClick = Label8DblClick
+      end
+      object lbConfigLink1: TLabel
+        Cursor = crHandPoint
+        Left = 192
+        Height = 15
+        Top = 152
+        Width = 119
+        Caption = 'Mensagens de sistema'
+        Font.Color = clHighlight
+        ParentColor = False
+        ParentFont = False
+        OnClick = lbConfigLink1Click
+      end
+      object lbNewTaskLink1: TLabel
+        Cursor = crHandPoint
+        Left = 16
+        Height = 15
+        Top = 176
+        Width = 60
+        Caption = 'Tarefa atual'
+        Font.Color = clHighlight
+        ParentColor = False
+        ParentFont = False
+        OnClick = lbNewTaskLink1Click
+      end
     end
+  end
+  inherited ppMenu: TPopupMenu[4]
   end
 end

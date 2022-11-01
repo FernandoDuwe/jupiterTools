@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, ExtCtrls, JupiterModule, JupiterObject, JupiterRoute, JupiterForm,
-  JupiterVariable, JupiterEnviroment, SysUtils, Controls;
+  JupiterVariable, JupiterEnviroment, JupiterSystemMessage, SysUtils, Controls;
 
 type
 
@@ -17,6 +17,7 @@ type
     FAppID       : String;
     FAppName     : String;
     FModules     : TJupiterModuleList;
+    FMessages    : TJupiterObjectList;
     FFormRoutes  : TJupiterObjectList;
     FBodyPanel   : TPanel;
     FCurrentForm : TFJupiterForm;
@@ -36,11 +37,14 @@ type
 
     property FormRoutes  : TJupiterObjectList   read FFormRoutes write FFormRoutes;
     property ModulesList : TJupiterModuleList   read FModules    write FModules;
+    property Messages    : TJupiterObjectList   read FMessages   write FMessages;
     property Params      : TJupiterVariableList read FParams     write FParams;
     property UserParams  : TJupiterVariableList read FUserParams write FUserParams;
   public
     procedure AddModule(prModule : TJupiterModule);
+    function AddMessage(prTitle, prOrigin : String) : TJupiterSystemMessage;
 
+    function GetVersion : String;
     function ConsoleMode : Boolean;
 
     procedure NavigateTo(prRoute : TJupiterRoute; prAsModal : Boolean);
@@ -56,7 +60,7 @@ var
 
 implementation
 
-uses Forms;
+uses FileInfo, Forms;
 
 { TJupiterApp }
 
@@ -78,6 +82,9 @@ begin
 
     if not Self.Params.Exists(Self.AppID + '.Path') then
       Self.Params.AddVariable(Self.AppID + '.Path', ExtractFileDir(Application.ExeName), 'Diretório do Executável');
+
+    if not Self.Params.Exists(Self.AppID + '.Messages.Count') then
+      Self.Params.AddVariable(Self.AppID + '.Messages.Count', IntToStr(Self.Messages.Size), 'Contador de Mensagens');
 
     if not Self.Params.Exists('Enviroment.Run.ShellScript') then
        Self.Params.AddConfig('Enviroment.Run.ShellScript', 'cmd.exe', 'Aplicação que executará arquivo de bat ou shell');
@@ -111,6 +118,32 @@ begin
   Self.Params.AddChildList(prModule.Params);
 end;
 
+function TJupiterApp.AddMessage(prTitle, prOrigin: String): TJupiterSystemMessage;
+begin
+  Result := TJupiterSystemMessage.Create(prTitle, prOrigin, EmptyStr);
+
+  Self.Messages.Add(Result);
+
+  Self.Params.AddVariable(Self.AppID + '.Messages.Count', IntToStr(Self.Messages.Size), 'Contador de Mensagens');
+end;
+
+function TJupiterApp.GetVersion: String;
+var
+  vrVersionInfo : TVersionInfo;
+begin
+  Result := EmptyStr;
+
+  vrVersionInfo := TVersionInfo.Create;
+  try
+    vrVersionInfo.Load(HINSTANCE);
+
+    Result := Format('%0:d.%1:d.%2:d.%3:d', [vrVersionInfo.FixedInfo.FileVersion[0], vrVersionInfo.FixedInfo.FileVersion[1], vrVersionInfo.FixedInfo.FileVersion[2], vrVersionInfo.FixedInfo.FileVersion[3]]);
+  finally
+    if Assigned(vrVersionInfo) then
+      vrVersionInfo.Free;
+  end;
+end;
+
 function TJupiterApp.ConsoleMode: Boolean;
 begin
   Result := False;
@@ -126,7 +159,7 @@ begin
   begin
     vrFormRoute := TJupiterFormRoute(Self.FormRoutes.GetAtIndex(vrVez));
 
-    if vrFormRoute.Path = prRoute.Path then
+    if vrFormRoute.Path = prRoute.DestinyPath then
     begin
       if prAsModal then
       begin
@@ -182,6 +215,8 @@ begin
 
   Self.FFormRoutes := TJupiterObjectList.Create;
   Self.FModules    := TJupiterModuleList.Create;
+
+  Self.FMessages   := TJupiterObjectList.Create;
   Self.FParams     := TJupiterVariableList.Create;
   Self.FUserParams := TJupiterVariableList.Create;
 
@@ -191,6 +226,7 @@ end;
 destructor TJupiterApp.Destroy;
 begin
   FreeAndNil(Self.FFormRoutes);
+  FreeAndNil(Self.FMessages);
   FreeAndNil(Self.FModules);
   FreeAndNil(Self.FParams);
   FreeAndNil(Self.FUserParams);

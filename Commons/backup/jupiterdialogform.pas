@@ -60,13 +60,18 @@ begin
     FCurrentForm.BorderStyle         := bsDialog;
     FCurrentForm.Generator.Variables := Self.Fields;
     FCurrentForm.Hint                := Self.Hint;
+    FCurrentForm.Height              := Round(Screen.Height / 2);
+    FCurrentForm.Width               := Round(Screen.Height / 2);
 
-    FCurrentForm.Actions.Add(TJupiterAction.Create('Salvar', @Internal_BtnClick));
-
-    with TJupiterAction(FCurrentForm.Actions.GetLastObject) do
+    if not Self.OnlyShow then
     begin
-      Hint := 'Clique aqui para salvar';
-      Icon := ICON_SAVE;
+      FCurrentForm.Actions.Add(TJupiterAction.Create('Salvar', @Internal_BtnClick));
+
+      with TJupiterAction(FCurrentForm.Actions.GetLastObject) do
+      begin
+        Hint := 'Clique aqui para salvar';
+        Icon := ICON_SAVE;
+      end;
     end;
 
     FCurrentForm.PrepareForm;

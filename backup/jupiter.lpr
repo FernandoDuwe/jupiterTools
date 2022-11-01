@@ -15,8 +15,10 @@ uses
   pascalscript, JupiterToolsModule, uHome, uExplorer, JupiterGeneratorModule,
   JupiterStandardModule, uCustomJupiterForm, uNewTask, JupiterDataProvider,
   JupiterFileDataProvider, JupiterDirectoryDataProvider, JupiterCSVDataProvider,
-  uConfig, JupiterEnviroment, JupiterFormGenerator, JupiterFormField, 
-JupiterVariableForm, JupiterDialogForm, uCurrentTask
+  uConfig, JupiterEnviroment, JupiterFormGenerator, JupiterFormField,
+  JupiterVariableForm, JupiterDialogForm, uCurrentTask,
+  JupiterTasksDataProvider, JupiterTaskTimesDataProvider, uEditor, uGenerator,
+  uMessage, JupiterSystemMessage
   { you can add units after this };
 
 {$R *.res}
@@ -38,6 +40,10 @@ begin
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(EXPLORER_FORM_PATH, TFExplorer));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(CUSTOM_FORM_PATH, TFCustomJupiterForm));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(NEWTASK_FORM_PATH, TFNewTask));
+  vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(TASK_FORM_PATH, TFCurrentTask));
+  vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(EDITOR_FORM_PATH, TFEditor));
+  vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(GENERATOR_FORM_PATH, TFGenerator));
+  vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(MESSAGES_PATH, TFMessage));
 
   if not vrJupiterApp.ConsoleMode then
     Application.CreateForm(TFMain, FMain);

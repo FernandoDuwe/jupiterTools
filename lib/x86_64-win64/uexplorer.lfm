@@ -17,10 +17,6 @@ inherited FExplorer: TFExplorer
     Width = 451
     ClientHeight = 30
     ClientWidth = 451
-    inherited lbHelp: TLabel
-      Left = 64
-      Top = 24
-    end
   end
   object lvItems: TListView[3]
     Left = 0

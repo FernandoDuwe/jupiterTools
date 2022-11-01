@@ -146,7 +146,7 @@ procedure TFJupiterForm.Internal_UpdateComponents;
 begin
   sbActions.Visible := Self.Actions.Size > 0;
 
-  miEditGenerator.Enabled := Self.Params.Exists('Generator.FormId');
+  miEditGenerator.Enabled := Self.Params.Exists(FIELD_ID_GENERADOR);
   miViewParams.Enabled    := Self.Params.Size > 0;
 end;
 

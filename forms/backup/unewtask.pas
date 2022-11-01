@@ -25,6 +25,7 @@ type
     Label3: TLabel;
     Label4: TLabel;
     Panel1: TPanel;
+    procedure FormShow(Sender: TObject);
     procedure Panel1Resize(Sender: TObject);
   private
     procedure Internal_SaveConfigClick(Sender : TObject);
@@ -56,6 +57,13 @@ begin
   cbFiles.Width    := (Panel1.Width - (FORM_MARGIN_LEFT + FORM_MARGIN_RIGHT));
 end;
 
+procedure TFNewTask.FormShow(Sender: TObject);
+begin
+  inherited;
+
+  pnCurrentTask.Height := sbBody.Height - 5;
+end;
+
 procedure TFNewTask.Internal_SaveConfigClick(Sender: TObject);
 var
   vrPath : String;
@@ -75,15 +83,17 @@ begin
     begin
       vrPath := CreateTask(cbClient.Text, edTaskName.Text, cbCurrent.Checked);
 
+      CreatePathScruture(vrPath);
+
       for vrVez := 0 to cbFiles.Items.Count - 1 do
         if cbFiles.Checked[vrVez] then
-          CopyFile(vrPath, cbFiles.Items[vrVez]);
+          CopyFileFromTemplate(vrPath, cbFiles.Items[vrVez]);
 
       if cbStartTimer.Checked then
         SetStartTime;
     end;
 
-    vrJupiterApp.NavigateTo(TJupiterRoute.Create(TASK_FORM_PATH));
+    vrJupiterApp.NavigateTo(TJupiterRoute.Create(TASK_FORM_PATH), False);
   except
     Application.MessageBox(PAnsiChar(Exception(ExceptObject).Message), PAnsiChar(Self.Caption), MB_ICONERROR + MB_OK);
   end;
@@ -168,7 +178,7 @@ begin
     Icon := ICON_SAVE;
   end;
 
-  Self.Params.AddVariable('Generator.FormId', 'NewTaskForm', 'Título do formulário');
+  Self.Params.AddVariable(FIELD_ID_GENERADOR, 'NewTaskForm', 'ID do formulário');
 end;
 
 procedure TFNewTask.Internal_UpdateDatasets;

@@ -7,7 +7,8 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, Buttons,
   Grids, JupiterForm, JupiterAction, JupiterRunnable, JupiterDataProvider,
-  JupiterConsts, JupiterApp, JupiterVariable;
+  JupiterConsts, JupiterApp, JupiterVariable, JupiterEnviroment,
+  JupiterCSVDataProvider;
 
 type
 
@@ -19,17 +20,26 @@ type
   private
     FProvider  : TJupiterDataProvider;
 
-    function Internal_IfChecked(prValue1, prValue2 : String) : Boolean;
-    function InternalGetCheckMode : Boolean;
+    function  Internal_IfChecked(prValue1, prValue2 : String) : Boolean;
+    function  InternalGetCheckMode : Boolean;
+    function  InternalGetCheckListMode : Boolean;
+    function  Internal_RecordChecked(prParams : TJupiterVariableList) : Boolean;
+    procedure Internal_ChangeValue(var prParams : TJupiterVariableList);
+    function  InternalGetRunMode : Boolean;
 
     procedure Internal_OnClick(prParams : TJupiterVariableList);
+    procedure Internal_RefreshClick(Sender: TObject);
+    function  Internal_HideColumn(prColumnName : String) : Boolean;
   published
-    property CheckMode : Boolean read InternalGetCheckMode;
+    property CheckMode     : Boolean read InternalGetCheckMode;
+    property ChecklistMode : Boolean read InternalGetCheckListMode;
+    property RunMode       : Boolean read InternalGetRunMode;
 
     property Provider : TJupiterDataProvider read FProvider write FProvider;
   protected
     procedure Internal_PrepareForm; override;
 
+    procedure Internal_UpdateComponents; override;
     procedure Internal_UpdateDatasets; override;
   public
 
@@ -69,16 +79,70 @@ begin
   Result := Self.Params.Exists('checkableField') and Self.Params.Exists('checkableVariable');
 end;
 
+function TFExplorer.InternalGetCheckListMode: Boolean;
+begin
+  Result := Self.Params.Exists('checklistField');
+end;
+
+function TFExplorer.Internal_RecordChecked(prParams : TJupiterVariableList) : Boolean;
+begin
+  Result := False;
+
+  if not Self.ChecklistMode then
+    Exit;
+
+  if not prParams.Exists(Self.Params.VariableById('checklistField').Value) then
+    Exit;
+
+  Result := StrToIntDef(prParams.VariableById(Self.Params.VariableById('checklistField').Value).Value, 0) = 1;
+end;
+
+procedure TFExplorer.Internal_ChangeValue(var prParams: TJupiterVariableList);
+begin
+  if Self.Internal_RecordChecked(prParams) then
+    prParams.VariableById(Self.Params.VariableById('checklistField').Value).Value := '0'
+  else
+    prParams.VariableById(Self.Params.VariableById('checklistField').Value).Value := '1';
+end;
+
+function TFExplorer.InternalGetRunMode: Boolean;
+begin
+  Result := Self.Params.Exists('runnableField');
+end;
+
 procedure TFExplorer.Internal_OnClick(prParams: TJupiterVariableList);
 begin
   if Self.CheckMode then
-  begin
     with vrJupiterApp.Params.VariableById(Self.Params.VariableById('checkableVariable').Value) do
     begin
       Value := prParams.VariableById(Self.Params.VariableById('checkableField').Value).Value;
       SaveConfig;
     end;
+
+  if Self.RunMode then
+    TJupiterRunnable.Create(prParams.VariableById(Self.Params.VariableById('runnableField').Value).Value, True);
+
+  if Self.ChecklistMode then
+  begin
+    Self.Internal_ChangeValue(prParams);
+
+    TJupiterCSVDataProvider(Self.Provider).SaveToFile(prParams);
   end;
+end;
+
+procedure TFExplorer.Internal_RefreshClick(Sender: TObject);
+begin
+  Self.UpdateForm;
+end;
+
+function TFExplorer.Internal_HideColumn(prColumnName: String): Boolean;
+begin
+  Result := False;
+
+  if not Self.Params.Exists('hideColumns') then
+    Exit;
+
+  Result := Pos(AnsiUpperCase(prColumnName), AnsiUpperCase(Self.Params.VariableById('hideColumns').Value)) <> 0;
 end;
 
 procedure TFExplorer.Internal_PrepareForm;
@@ -100,31 +164,19 @@ begin
 
   Self.FProvider := FactoryDataProvider(vrProvider, vrParam);
 
-  {
-  vrAction      := TJupiterAction.Create('Novo', TJupiterRunnable.Create(''), nil);
-  vrAction.Hint := 'Clique aqui para inserir um novo registro';
-  vrAction.Icon := ICON_NEW;
-
-  Self.Actions.Add(vrAction);
-
-  vrAction      := TJupiterAction.Create('Editar', TJupiterRunnable.Create(''), nil);
-  vrAction.Hint := 'Clique aqui para editar o registro atual';
-  vrAction.Icon := ICON_EDIT;
-
-  Self.Actions.Add(vrAction);
-
-  vrAction      := TJupiterAction.Create('Excluir', TJupiterRunnable.Create(''), nil);
-  vrAction.Hint := 'Clique aqui para excluir o registro atual';
-  vrAction.Icon := ICON_DELETE;
-
-  Self.Actions.Add(vrAction);
-  }
-
   vrAction      := TJupiterAction.Create('Atualizar', TJupiterRunnable.Create(''), nil);
   vrAction.Hint := 'Clique aqui para atualizar a página';
   vrAction.Icon := ICON_REFRESH;
 
   Self.Actions.Add(vrAction);
+
+  if Self.Params.Exists('hint') then
+    Self.Hint := Self.Params.VariableById('hint').Value;
+end;
+
+procedure TFExplorer.Internal_UpdateComponents;
+begin
+  inherited Internal_UpdateComponents;
 end;
 
 procedure TFExplorer.Internal_UpdateDatasets;
@@ -134,44 +186,67 @@ var
   vrVez2          : Integer;
   vrCreateColumns : Boolean;
   vrColumn        : TListColumn;
+  vrEnviroment    : TJupiterEnviroment;
 begin
   inherited Internal_UpdateDatasets;
 
   lvItems.Items.Clear;
+  lvItems.DisableAutoSizing;
 
-  vrCreateColumns := lvItems.ColumnCount = 0;
+  vrEnviroment := TJupiterEnviroment.Create;
+  try
+    vrCreateColumns := lvItems.ColumnCount = 0;
 
-  for vrVez := 0 to Self.Provider.Size - 1 do
-    with Self.Provider.GetRowByIndex(vrVez) do
-    begin
-      vrItem := lvItems.Items.Add;
-
-      for vrVez2 := 0 to Fields.Size - 1 do
+    for vrVez := 0 to Self.Provider.Size - 1 do
+      with Self.Provider.GetRowByIndex(vrVez) do
       begin
-        if ((vrCreateColumns) and (vrVez = 0)) then
+        vrItem := lvItems.Items.Add;
+
+        for vrVez2 := 0 to Fields.Size - 1 do
         begin
-          vrColumn            := lvItems.Columns.Add;
-          vrColumn.Caption    := Fields.VariableByIndex(vrVez2).Title + COLUMN_SPACE_SEPARATOR;
-          vrColumn.AutoSize   := True;
+          if Self.Internal_HideColumn(Fields.VariableByIndex(vrVez2).ID) then
+            Continue;
+
+          if ((vrCreateColumns) and (vrVez = 0)) then
+          begin
+            vrColumn            := lvItems.Columns.Add;
+            vrColumn.Caption    := Fields.VariableByIndex(vrVez2).Title + COLUMN_SPACE_SEPARATOR;
+            vrColumn.AutoSize   := True;
+          end;
+
+          if vrVez2 = 0 then
+            vrItem.Caption := vrJupiterApp.Params.ResolveString(Fields.VariableByIndex(vrVez2).Value + COLUMN_SPACE_SEPARATOR)
+          else
+            vrItem.SubItems.Add(vrJupiterApp.Params.ResolveString(Fields.VariableByIndex(vrVez2).Value + COLUMN_SPACE_SEPARATOR));
+
+          if ((Self.CheckMode) or (Self.ChecklistMode)) then
+            vrItem.ImageIndex := NULL_KEY
+          else
+            vrItem.ImageIndex := vrEnviroment.IconOfFile(vrItem.Caption);
+
+          vrItem.Data := TJupiterVariableList.Create;
+
+          TJupiterVariableList(vrItem.Data).CopyValues(Fields);
+
+          if ((Self.CheckMode) and
+              (vrJupiterApp.Params.Exists(Self.Params.VariableById('checkableVariable').Value)) and
+              (Self.Internal_IfChecked(Fields.VariableById(Self.Params.VariableById('checkableField').Value).Value,
+                                       vrJupiterApp.Params.VariableById(Self.Params.VariableById('checkableVariable').Value).Value)
+                                       )) then
+            vrItem.ImageIndex := ICON_CHECK
+          else
+            if ((Self.ChecklistMode) and (Self.Internal_RecordChecked(Fields))) then
+              vrItem.ImageIndex := ICON_CHECK
+            else
+              if Self.Params.Exists('itemIcon') then
+                vrItem.ImageIndex := StrToInt(Self.Params.VariableById('itemIcon').Value);
         end;
-
-        if vrVez2 = 0 then
-          vrItem.Caption := Fields.VariableByIndex(vrVez2).Value + COLUMN_SPACE_SEPARATOR
-        else
-          vrItem.SubItems.Add(Fields.VariableByIndex(vrVez2).Value + COLUMN_SPACE_SEPARATOR);
-
-        vrItem.ImageIndex := NULL_KEY;
-        vrItem.Data := TJupiterVariableList.Create;
-
-        TJupiterVariableList(vrItem.Data).CopyValues(Fields);
-
-        if ((Self.CheckMode) and
-            (Self.Internal_IfChecked(Fields.VariableById(Self.Params.VariableById('checkableField').Value).Value,
-                                     vrJupiterApp.Params.VariableById(Self.Params.VariableById('checkableVariable').Value).Value)
-                                     )) then
-          vrItem.ImageIndex := ICON_CHECK;
       end;
-    end;
+  finally
+    Self.Params.AddVariable('Size', IntToStr(lvItems.Items.Count), 'Qtd. de registros');
+
+    lvItems.EnableAutoSizing;
+  end;
 end;
 
 end.

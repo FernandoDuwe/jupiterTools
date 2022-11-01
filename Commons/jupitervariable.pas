@@ -60,6 +60,7 @@ type
     function VariableById(prID : String) : TJupiterVariable;
     function VariableByIndex(prIndex : Integer) : TJupiterVariable;
     function ResolveString(prStr : String) : String;
+    procedure ResolveFile(prFile : String);
 
     procedure CopyValues(prList : TJupiterVariableList);
     procedure SaveToFile;
@@ -248,6 +249,26 @@ begin
 
   for vrVezModule := 0 to Self.ChildList.Size -1 do
     Result := TJupiterVariableList(Self.ChildList.GetAtIndex(vrVezModule)).ResolveString(Result);
+end;
+
+procedure TJupiterVariableList.ResolveFile(prFile: String);
+var
+  vrStr : TStrings;
+  vrVez : Integer;
+begin
+  vrStr := TStringList.Create;
+  try
+    vrStr.Clear;
+    vrStr.LoadFromFile(prFile);
+
+    for vrVez := 0 to vrStr.Count - 1 do
+      vrStr[vrVez] := Self.ResolveString(vrStr[vrVez]);
+
+    vrStr.SaveToFile(prFile);
+  finally
+    vrStr.Clear;
+    FreeAndNil(vrStr);
+  end;
 end;
 
 procedure TJupiterVariableList.CopyValues(prList: TJupiterVariableList);

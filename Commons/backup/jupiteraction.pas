@@ -138,7 +138,8 @@ end;
 procedure TJupiterAction.Execute;
 begin
   if Self.ConfirmBeforeExecute then
-    if Application.MessageBox(PAnsiChar('Deseja realmente ' + Self.Title + '?'), PAnsiChar(Self.Title), MB_);
+    if Application.MessageBox(PAnsiChar('Deseja realmente ' + Self.Title + '?'), PAnsiChar(Self.Title), MB_ICONQUESTION + MB_YESNO) = ID_NO then
+      Exit;
 
   if Assigned(Self.FOnClick) then
     Self.OnClick(Application.MainForm);

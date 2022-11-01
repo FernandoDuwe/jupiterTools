@@ -24,7 +24,7 @@ type
 
     procedure Internal_Change(prSender : TObject);
   published
-    property TabOrder : Integer read FTabOrder write FTabOrder;
+    property TabOrder : Integer read FTabOrder write FTabOrder default 1;
     property Variable : TJupiterVariableForm read FVariable write FVariable;
   public
     procedure Draw(prOwner : TScrollBox);
@@ -64,7 +64,7 @@ begin
   Result.Parent  := prContainer;
   Result.Top     := FORM_MARGIN_TOP;
   Result.Left    := FORM_MARGIN_LEFT;
-  Result.Caption := Self.Variable.Title;
+  Result.Caption := IfThen(Self.Variable.Title = EmptyStr, Self.Variable.ID, Self.Variable.Title);
 end;
 
 function TJupiterFormField.Internal_CreateEdit(prContainer: TPanel; prTop : Integer): TEdit;

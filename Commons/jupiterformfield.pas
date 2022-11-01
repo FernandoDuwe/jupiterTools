@@ -64,7 +64,7 @@ begin
   Result.Parent  := prContainer;
   Result.Top     := FORM_MARGIN_TOP;
   Result.Left    := FORM_MARGIN_LEFT;
-  Result.Caption := Self.Variable.Title;
+  Result.Caption := IfThen(Trim(Self.Variable.Title) = EmptyStr, Self.Variable.ID, Self.Variable.Title);
 end;
 
 function TJupiterFormField.Internal_CreateEdit(prContainer: TPanel; prTop : Integer): TEdit;

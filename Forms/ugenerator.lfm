@@ -1,0 +1,23 @@
+inherited FGenerator: TFGenerator
+  Height = 689
+  Width = 1292
+  ClientHeight = 689
+  ClientWidth = 1292
+  inherited sbActions: TScrollBox
+    Width = 1292
+  end
+  inherited sbStatus: TStatusBar
+    Top = 666
+    Width = 1292
+  end
+  inherited pnHint: TPanel
+    Top = 616
+    Width = 1292
+    ClientWidth = 1292
+  end
+  inherited sbBody: TScrollBox
+    Height = 566
+    Top = 50
+    Width = 1292
+  end
+end

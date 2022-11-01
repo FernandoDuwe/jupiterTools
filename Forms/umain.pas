@@ -7,8 +7,9 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, ExtCtrls,
   StdCtrls, Menus, PopupNotifier, Buttons, JupiterApp, JupiterRoute,
-  JupiterConsts, JupiterObject, JupiterForm, JupiterAction,
-  uPSComponent_Default, LMessages, PairSplitter;
+  JupiterConsts, JupiterObject, JupiterForm, JupiterAction, JupiterEnviroment,
+  JupiterRunnable, JupiterToolsModule, uPSComponent_Default, LMessages,
+  PairSplitter;
 
 type
 
@@ -18,6 +19,31 @@ type
     cbNavigationMenu: TCoolBar;
     edSearch: TEdit;
     ilIconFamily: TImageList;
+    miPastasJupiter: TMenuItem;
+    miPastasModules: TMenuItem;
+    miPastasDatasets: TMenuItem;
+    miPastasTemp: TMenuItem;
+    Separator5: TMenuItem;
+    miAutoUpdate: TMenuItem;
+    miClearSearch: TMenuItem;
+    miGenerator: TMenuItem;
+    Separator4: TMenuItem;
+    miDecFontSize: TMenuItem;
+    miIncFontSize: TMenuItem;
+    miUpdate: TMenuItem;
+    miNew: TMenuItem;
+    miCurrentTaskStartTime: TMenuItem;
+    miCurrentTaskEndTime: TMenuItem;
+    miMessage: TMenuItem;
+    miConfig: TMenuItem;
+    miExit: TMenuItem;
+    Separator3: TMenuItem;
+    Separator2: TMenuItem;
+    miNewTask: TMenuItem;
+    miOpen: TMenuItem;
+    miOpenCSV: TMenuItem;
+    miOpenCurrentTask: TMenuItem;
+    Separator1: TMenuItem;
     miFormParams: TMenuItem;
     MenuItem2: TMenuItem;
     MenuItem3: TMenuItem;
@@ -41,10 +67,23 @@ type
     procedure cbNavigationMenuChange(Sender: TObject);
     procedure FormShortCut(var Msg: TLMKey; var Handled: Boolean);
     procedure FormShow(Sender: TObject);
+    procedure miPastasJupiterClick(Sender: TObject);
     procedure MenuItem5Click(Sender: TObject);
+    procedure miPastasModulesClick(Sender: TObject);
+    procedure miPastasDatasetsClick(Sender: TObject);
+    procedure miPastasTempClick(Sender: TObject);
+    procedure miConfigClick(Sender: TObject);
+    procedure miCurrentTaskEndTimeClick(Sender: TObject);
+    procedure miCurrentTaskStartTimeClick(Sender: TObject);
+    procedure miExitClick(Sender: TObject);
+    procedure miGeneratorClick(Sender: TObject);
+    procedure miNewTaskClick(Sender: TObject);
+    procedure miOpenCSVClick(Sender: TObject);
+    procedure miOpenCurrentTaskClick(Sender: TObject);
     procedure pnBodyClick(Sender: TObject);
     procedure tbHomeClick(Sender: TObject);
     procedure tbMenuClick(Sender: TObject);
+    procedure tbMessageClick(Sender: TObject);
     procedure ToolButton1Click(Sender: TObject);
     procedure ToolButton2Click(Sender: TObject);
     procedure tvMenuClick(Sender: TObject);
@@ -52,6 +91,7 @@ type
     procedure Internal_ListMenuItens;
 
     procedure Internal_ShowRoute(prRoute : TJupiterRoute; prList : TJupiterObjectList; prNode : TTreeNode);
+    procedure Internal_MessagesCountSetValue(prID, prNewValue : String);
   protected
     procedure Internal_UpdateComponents; override;
     procedure Internal_PrepareForm; override;
@@ -82,6 +122,11 @@ begin
   end;
 end;
 
+procedure TFMain.tbMessageClick(Sender: TObject);
+begin
+  vrJupiterApp.NavigateTo(TJupiterRoute.Create(MESSAGES_PATH), True);
+end;
+
 procedure TFMain.ToolButton1Click(Sender: TObject);
 begin
   Self.UpdateForm;
@@ -110,9 +155,127 @@ begin
   vrJupiterApp.NavigateTo(TJupiterRoute.Create(ROOT_FORM_PATH), False);
 end;
 
+procedure TFMain.miPastasJupiterClick(Sender: TObject);
+var
+  vrEnviroment : TJupiterEnviroment;
+begin
+  vrEnviroment := TJupiterEnviroment.Create;
+  try
+    TJupiterRunnable.Create(vrEnviroment.BasePath, True);
+  finally
+    FreeAndNil(vrEnviroment);
+  end;
+end;
+
 procedure TFMain.MenuItem5Click(Sender: TObject);
 begin
 
+end;
+
+procedure TFMain.miPastasModulesClick(Sender: TObject);
+var
+  vrEnviroment : TJupiterEnviroment;
+begin
+  vrEnviroment := TJupiterEnviroment.Create;
+  try
+    TJupiterRunnable.Create(vrEnviroment.FullPath('modules/'), True);
+  finally
+    FreeAndNil(vrEnviroment);
+  end;
+end;
+
+procedure TFMain.miPastasDatasetsClick(Sender: TObject);
+var
+  vrEnviroment : TJupiterEnviroment;
+begin
+  vrEnviroment := TJupiterEnviroment.Create;
+  try
+    TJupiterRunnable.Create(vrEnviroment.FullPath('datasets/'), True);
+  finally
+    FreeAndNil(vrEnviroment);
+  end;
+end;
+
+procedure TFMain.miPastasTempClick(Sender: TObject);
+var
+  vrEnviroment : TJupiterEnviroment;
+begin
+  vrEnviroment := TJupiterEnviroment.Create;
+  try
+    TJupiterRunnable.Create(vrEnviroment.FullPath('temp/'), True);
+  finally
+    FreeAndNil(vrEnviroment);
+  end;
+end;
+
+procedure TFMain.miConfigClick(Sender: TObject);
+begin
+
+end;
+
+procedure TFMain.miCurrentTaskEndTimeClick(Sender: TObject);
+begin
+  try
+    TJupiterToolsModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Tools')).SetEndTime;
+  finally
+    Self.UpdateForm;
+  end;
+end;
+
+procedure TFMain.miCurrentTaskStartTimeClick(Sender: TObject);
+begin
+  try
+    TJupiterToolsModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Tools')).SetStartTime;
+  finally
+    Self.UpdateForm;
+  end;
+end;
+
+procedure TFMain.miExitClick(Sender: TObject);
+begin
+  Application.Terminate;
+end;
+
+procedure TFMain.miGeneratorClick(Sender: TObject);
+begin
+  vrJupiterApp.NavigateTo(TJupiterRoute.Create(GENERATOR_FORM_PATH), True);
+end;
+
+procedure TFMain.miNewTaskClick(Sender: TObject);
+begin
+  vrJupiterApp.NavigateTo(TJupiterRoute.Create(NEWTASK_FORM_PATH), True);
+end;
+
+procedure TFMain.miOpenCSVClick(Sender: TObject);
+var
+  vrEnviroment : TJupiterEnviroment;
+  vrFile       : String;
+  vrRoute      : TJupiterRoute;
+begin
+  vrEnviroment := TJupiterEnviroment.Create();
+  try
+    vrFile := vrEnviroment.OpenFile('*.csv');
+
+    if vrFile <> EmptyStr then
+    begin
+      vrRoute := TJupiterRoute.Create(EXPLORER_FORM_PATH);
+
+      vrRoute.Params.AddVariable('type', DATAPROVIDER_TYPE_LIST_CSV, 'Tipo');
+      vrRoute.Params.AddVariable('path', vrFile, 'Arquivo');
+      vrRoute.Params.AddVariable('hint', 'Arquivo: ' + vrFile, 'Dica');
+      vrRoute.Params.AddVariable('title', 'Arquivo: ' + vrFile, 'Dica');
+      vrRoute.Params.AddVariable('hideColumns', 'Line', 'Campos a esconder');
+
+      vrJupiterApp.NavigateTo(vrRoute, False);
+    end;
+  finally
+    FreeAndNil(vrEnviroment);
+  end;
+end;
+
+procedure TFMain.miOpenCurrentTaskClick(Sender: TObject);
+begin
+  vrJupiterApp.NavigateTo(TJupiterRoute.Create(TASK_FORM_PATH), False);
 end;
 
 procedure TFMain.pnBodyClick(Sender: TObject);
@@ -177,11 +340,22 @@ begin
   end;
 end;
 
+procedure TFMain.Internal_MessagesCountSetValue(prID, prNewValue : String);
+begin
+  sbStatus.Panels[0].Text := 'Mensagens: ' + prNewValue;
+
+  tbMessage.Hint := sbStatus.Panels[0].Text;
+  miMessage.Hint := sbStatus.Panels[0].Text;
+end;
+
 procedure TFMain.Internal_UpdateComponents;
 begin
   inherited Internal_UpdateComponents;
 
   Self.Caption := vrJupiterApp.AppName;
+
+  if Assigned(vrJupiterApp.CurrentForm) then
+    vrJupiterApp.CurrentForm.UpdateForm;
 
   if pnMenu.Visible then
   begin
@@ -195,13 +369,41 @@ begin
 
     tbMenu.Hint := 'Exibir menu';
   end;
+
+  with TJupiterToolsModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Tools')) do
+  begin
+    if ((Params.Exists(DefineParamName('Tasks.Current.Path'))) and
+        (Params.VariableById(DefineParamName('Tasks.Current.Path')).Value <> EmptyStr)) then
+    begin
+      miOpenCurrentTask.Enabled      := True;
+      miCurrentTaskStartTime.Enabled := not StartedTime;
+      miCurrentTaskEndTime.Enabled   := StartedTime;
+    end
+    else
+    begin
+      miOpenCurrentTask.Enabled      := False;
+      miCurrentTaskStartTime.Enabled := False;
+      miCurrentTaskEndTime.Enabled   := False;
+    end;
+  end;
 end;
 
 procedure TFMain.Internal_PrepareForm;
+var
+  vr : TDateTime;
 begin
   inherited Internal_PrepareForm;
 
   vrJupiterApp.BodyPanel := pnBody;
+
+  if vrJupiterApp.Params.Exists(vrJupiterApp.AppID + '.Messages.Count') then
+  begin
+    vrJupiterApp.Params.VariableById(vrJupiterApp.AppID + '.Messages.Count').OnChangeValue := @Internal_MessagesCountSetValue;
+
+    Internal_MessagesCountSetValue(EmptyStr, IntToStr(vrJupiterApp.Messages.Size));
+  end;
+
+
 
   Self.Internal_ListMenuItens;
 end;

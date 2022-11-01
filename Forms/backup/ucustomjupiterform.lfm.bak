@@ -16,8 +16,10 @@ inherited FCustomJupiterForm: TFCustomJupiterForm
     HorzScrollBar.Page = 1
     VertScrollBar.Page = 1
     Align = alClient
-    Color = clDefault
+    Color = clWhite
     ParentColor = False
     TabOrder = 1
+  end
+  inherited ppMenu: TPopupMenu[4]
   end
 end

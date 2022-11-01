@@ -46,21 +46,6 @@ begin
 
   with TJupiterAction(Result.GetLastObject) do
     Icon := ICON_TOOLS;
-
-  Result.Add(TJupiterAction.Create('Favoritos', TJupiterRoute.Create('/tools/favorites/'), TJupiterRoute.Create('/tools/')));
-
-  with TJupiterAction(Result.GetLastObject) do
-    Icon := ICON_FAVORITE;
-
-  Result.Add(TJupiterAction.Create('Arquivos', TJupiterRoute.Create('/tools/favorites/apps/'), TJupiterRoute.Create('/tools/favorites/')));
-
-  with TJupiterAction(Result.GetLastObject) do
-    Icon := ICON_APPLICATION;
-
-  Result.Add(TJupiterAction.Create('Diretórios', TJupiterRoute.Create('/tools/favorites/folders/'), TJupiterRoute.Create('/tools/favorites/')));
-
-  with TJupiterAction(Result.GetLastObject) do
-    Icon := ICON_OPEN;
 end;
 
 end.

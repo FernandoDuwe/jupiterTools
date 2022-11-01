@@ -6,8 +6,8 @@ inherited FNewTask: TFNewTask
   Caption = 'Criar uma nova tarefa'
   ClientHeight = 626
   ClientWidth = 622
+  OnShow = FormShow
   inherited sbActions: TScrollBox
-    Top = 50
     Width = 622
   end
   inherited sbStatus: TStatusBar
@@ -15,12 +15,12 @@ inherited FNewTask: TFNewTask
     Width = 622
   end
   inherited pnHint: TPanel
+    Top = 553
     Width = 622
     ClientWidth = 622
   end
   inherited sbBody: TScrollBox
     Height = 503
-    Top = 100
     Width = 622
     HorzScrollBar.Page = 603
     VertScrollBar.Page = 408

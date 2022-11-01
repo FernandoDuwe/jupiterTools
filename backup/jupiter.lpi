@@ -29,6 +29,9 @@
     </RunParams>
     <RequiredPackages>
       <Item>
+        <PackageName Value="SynEdit"/>
+      </Item>
+      <Item>
         <PackageName Value="pascalscript"/>
       </Item>
       <Item>
@@ -213,6 +216,35 @@
         <Filename Value="Commons\jupitertasktimesdataprovider.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterTaskTimesDataProvider"/>
+      </Unit>
+      <Unit>
+        <Filename Value="Forms\ueditor.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FEditor"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uEditor"/>
+      </Unit>
+      <Unit>
+        <Filename Value="Forms\ugenerator.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FGenerator"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uGenerator"/>
+      </Unit>
+      <Unit>
+        <Filename Value="Forms\umessage.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FMessage"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uMessage"/>
+      </Unit>
+      <Unit>
+        <Filename Value="Commons\jupitersystemmessage.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterSystemMessage"/>
       </Unit>
     </Units>
   </ProjectOptions>

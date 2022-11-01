@@ -104,6 +104,9 @@ var
 begin
   inherited Internal_PrepareForm;
 
+  Self.Height := Round(Screen.Height / 2);
+  Self.Width  := Round(Screen.Width / 2);
+
   Self.Hint := 'Nesta tela você pode controlar todas as configurações utilizadas pelo Jupiter';
 
   Self.Actions.Add(TJupiterAction.Create('Salvar', @Internal_SaveConfigClick));
