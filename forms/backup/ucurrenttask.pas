@@ -67,7 +67,7 @@ procedure TFCurrentTask.FormShow(Sender: TObject);
 begin
   inherited;
 
-  pnCurrentTask.Height := sbBody.Height - 1;
+  pnCurrentTask.Height := sbBody.Height - 5;
 end;
 
 procedure TFCurrentTask.Internal_MarcarTempoInicial(Sender: TObject);
@@ -213,6 +213,9 @@ end;
 procedure TFCurrentTask.Internal_UpdateComponents;
 begin
   inherited Internal_UpdateComponents;
+
+  tvExplorer.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
+  lvTimes.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
 
   with TJupiterToolsModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Tools')) do
   begin

@@ -1,5 +1,5 @@
 ID;DESCRIPTION;VALUE;
 Jupiter.Tools.Tasks.Path;Diretório de tarefas;C:\Tarefas\;
-Jupiter.Tools.Tasks.Current.Client;Cliente da tarefa atual;Duwe;
-Jupiter.Tools.Tasks.Current.Number;Número da tarefa atual;1990;
-Jupiter.Tools.Tasks.Current.Path;Diretório da tarefa atual;C:\Tarefas\Duwe\1990\;
+Jupiter.Tools.Tasks.Current.Client;Cliente da tarefa atual;Jequitaia;
+Jupiter.Tools.Tasks.Current.Number;Número da tarefa atual;1234;
+Jupiter.Tools.Tasks.Current.Path;Diretório da tarefa atual;C:\Tarefas\Jequitaia\1234\;

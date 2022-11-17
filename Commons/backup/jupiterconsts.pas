@@ -14,7 +14,7 @@ const
    EXPLORER_FORM_PATH  : String = '/forms/explorer/';
    EDITOR_FORM_PATH    : String = '/forms/editor/';
    GENERATOR_FORM_PATH : String = '/forms/generator/';
-   CONFIG_PATH         : String = '/forms/messages/';
+   MESSAGES_PATH       : String = '/forms/messages/';
    CUSTOM_FORM_PATH    : String = '/forms/custom/';
    NEWTASK_FORM_PATH   : String = '/forms/custom/newTask/';
    TASK_FORM_PATH      : String = '/forms/custom/currentTask/';
@@ -58,6 +58,9 @@ const
    ICON_EXIT        : SmallInt = 36;
 
    NULL_KEY : SmallInt = -1;
+
+   // Generator
+   GENERATOR_SYSLAYER : SmallInt = 1000;
 
    EMPTY_SPACE_SEPARATOR  : String = '/JUPITERTOOLS\|/JUPITERTOOLS\';
    COLUMN_SPACE_SEPARATOR : String = '      ';

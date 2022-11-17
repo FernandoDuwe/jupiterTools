@@ -17,6 +17,7 @@ type
     FContainer           : TScrollBox;
     FVariables           : TJupiterVariableFormList;
     FClearContainerOnSet : Boolean;
+    FLastTop             : Integer;
 
     procedure Internal_CreateComponent(prVariable : TJupiterVariableForm; prTabOrder : Integer);
     procedure Internal_ClearContainer;
@@ -41,6 +42,9 @@ begin
   vrField.Variable := prVariable;
   vrField.TabOrder := prTabOrder;
   vrField.Draw(Self.Container);
+  vrField.Panel.Top := Self.FLastTop;
+
+  Self.FLastTop := vrField.Panel.Top + vrField.Panel.Height + 1;
 end;
 
 procedure TJupiterFormGenerator.Internal_ClearContainer;
@@ -53,8 +57,12 @@ procedure TJupiterFormGenerator.Internal_DrawForm;
 var
   vrVez : Integer;
 begin
-  for vrVez := Self.Variables.Size - 1 downto 0 do
+  Self.FLastTop := 0;
+
+  for vrVez := 0 to Self.Variables.Size - 1 do
+  begin
     Self.Internal_CreateComponent(Self.Variables.VariableFormByIndex(vrVez), vrVez + 1);
+  end;
 end;
 
 procedure TJupiterFormGenerator.Internal_SetVariables(prVariables: TJupiterVariableFormList);

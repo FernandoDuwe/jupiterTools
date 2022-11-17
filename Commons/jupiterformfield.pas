@@ -16,6 +16,7 @@ type
   protected
     FVariable : TJupiterVariableForm;
     FTabOrder : Integer;
+    FPanel    : TPanel;
 
     function Internal_GenerateHint : String;
     function Internal_CreateContainer(prOwner : TScrollBox) : TPanel;
@@ -24,6 +25,7 @@ type
 
     procedure Internal_Change(prSender : TObject);
   published
+    property Panel    : TPanel read FPanel;
     property TabOrder : Integer read FTabOrder write FTabOrder default 1;
     property Variable : TJupiterVariableForm read FVariable write FVariable;
   public
@@ -56,6 +58,7 @@ begin
   Result.Caption    := EmptyStr;
   Result.BevelOuter := bvNone;
   Result.TabStop    := False;
+  Result.TabOrder   := GENERATOR_SYSLAYER + Self.TabOrder;
 end;
 
 function TJupiterFormField.Internal_CreatetTitle(prContainer: TPanel): TLabel;
@@ -80,8 +83,8 @@ begin
   Result.OnChange := @Self.Internal_Change;
   Result.Hint     := Self.Internal_GenerateHint;
   Result.ShowHint := True;
+  Result.TabOrder := 1;
   Result.TabStop  := True;
-  Result.TabOrder := Self.TabOrder;
 end;
 
 procedure TJupiterFormField.Internal_Change(prSender: TObject);
@@ -101,6 +104,8 @@ begin
     vrEdit      := Self.Internal_CreateEdit(vrContainer, ((vrLabel.Top + vrLabel.Height) + FORM_MARGIN_BOTTOM));
   finally
     vrContainer.Height := (vrEdit.Top + vrEdit.Height) + FORM_MARGIN_BOTTOM;
+
+    Self.FPanel := vrContainer;
   end;
 end;
 

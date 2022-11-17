@@ -214,6 +214,9 @@ procedure TFCurrentTask.Internal_UpdateComponents;
 begin
   inherited Internal_UpdateComponents;
 
+  tvExplorer.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
+  lvTimes.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
+
   with TJupiterToolsModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Tools')) do
   begin
     lbCurrentProject.Caption := Params.VariableById('Jupiter.Tools.Tasks.Current.Client').Value;

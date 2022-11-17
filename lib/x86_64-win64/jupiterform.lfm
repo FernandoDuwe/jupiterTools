@@ -11,7 +11,7 @@ object FJupiterForm: TFJupiterForm
   OnShow = FormShow
   PopupMenu = ppMenu
   Position = poScreenCenter
-  LCLVersion = '2.2.2.0'
+  LCLVersion = '2.2.4.0'
   object sbActions: TScrollBox
     Left = 0
     Height = 50

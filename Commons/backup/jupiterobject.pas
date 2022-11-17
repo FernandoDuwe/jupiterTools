@@ -78,7 +78,7 @@ begin
   Result := nil;
 
   if Self.Size > 0 then
-    Result := Self.GetAtIndex();
+    Result := Self.GetAtIndex(Self.Size -1);
 end;
 
 constructor TJupiterObjectList.Create;

@@ -31,19 +31,23 @@ type
     procedure miRefreshClick(Sender: TObject);
     procedure miViewParamsClick(Sender: TObject);
   private
-    FActions  : TJupiterActionList;
-    FParams   : TJupiterVariableList;
-    FRoute    : TJupiterRoute;
-    FHint     : String;
-    FPrepared : Boolean;
+    FActions    : TJupiterActionList;
+    FParams     : TJupiterVariableList;
+    FRoute      : TJupiterRoute;
+    FHint       : String;
+    FSearchText : String;
+    FPrepared   : Boolean;
+    FIsModal    : Boolean;
 
     procedure Internal_SetHint(prHint : String);
   published
-    property Actions  : TJupiterActionList   read FActions  write FActions;
-    property Hint     : String               read FHint     write Internal_SetHint;
-    property Prepared : Boolean              read FPrepared write FPrepared;
-    property Params   : TJupiterVariableList read FParams   write FParams;
-    property Route    : TJupiterRoute        read FRoute    write FRoute;
+    property Actions    : TJupiterActionList   read FActions  write FActions;
+    property Hint       : String               read FHint     write Internal_SetHint;
+    property IsModal    : Boolean              read FIsModal  write FIsModal;
+    property Prepared   : Boolean              read FPrepared write FPrepared;
+    property Params     : TJupiterVariableList read FParams   write FParams;
+    property Route      : TJupiterRoute        read FRoute    write FRoute;
+    property SearchText : String               read FSearchText;
 
   protected
     procedure Internal_UpdateComponents; virtual;
@@ -55,6 +59,7 @@ type
   public
     procedure PrepareForm; virtual;
     procedure UpdateForm; virtual;
+    procedure Search(prSearch : String); virtual;
   end;
 
 var
@@ -62,7 +67,7 @@ var
 
 implementation
 
-uses JupiterDialogForm;
+uses JupiterApp, JupiterDialogForm;
 
 {$R *.lfm}
 
@@ -80,6 +85,8 @@ begin
   Self.FActions := TJupiterActionList.Create;
   Self.FParams  := TJupiterVariableList.Create;
   Self.FRoute   := TJupiterRoute.Create(ROOT_PATH);
+
+  Self.IsModal  := False;
 end;
 
 procedure TFJupiterForm.FormDestroy(Sender: TObject);
@@ -146,7 +153,7 @@ procedure TFJupiterForm.Internal_UpdateComponents;
 begin
   sbActions.Visible := Self.Actions.Size > 0;
 
-  miEditGenerator.Enabled := Self.Params.Exists('Generator.FormId');
+  miEditGenerator.Enabled := Self.Params.Exists(FIELD_ID_GENERADOR);
   miViewParams.Enabled    := Self.Params.Size > 0;
 end;
 
@@ -157,7 +164,28 @@ end;
 
 procedure TFJupiterForm.Internal_UpdateCalcs;
 begin
-  //
+  if pnHint.Visible then
+  begin
+    if ((not Self.Params.Exists('Hint.Success')) and (Self.Params.Exists('Hint.Error'))) then
+    begin
+      pnHint.Color      := clDefault;
+      lbHelp.Font.Color := clDefault;
+    end;
+
+    if Self.Params.Exists('Hint.Success') then
+    begin
+      pnHint.Color      := clMoneyGreen;
+      lbHelp.Font.Color := clWhite;
+    end;
+
+    if Self.Params.Exists('Hint.Error') then
+      pnHint.Color      := clInfoBk;
+  end;
+
+  if not Self.IsModal then
+    if vrJupiterApp.Params.Exists('Interface.CurrentForm.Title') then
+      if ((Trim(Self.Caption) <> EmptyStr) and (Self.Caption <> vrJupiterApp.Params.VariableById('Interface.CurrentForm.Title').Value)) then
+        vrJupiterApp.Params.VariableById('Interface.CurrentForm.Title').Value := Self.Caption;
 end;
 
 procedure TFJupiterForm.Internal_PrepareForm;
@@ -186,6 +214,15 @@ begin
   Self.Internal_UpdateDatasets;
   Self.Internal_UpdateComponents;
   Self.Internal_UpdateCalcs;
+end;
+
+procedure TFJupiterForm.Search(prSearch: String);
+begin
+  try
+    Self.FSearchText := prSearch;
+  finally
+    Self.UpdateForm;
+  end;
 end;
 
 end.

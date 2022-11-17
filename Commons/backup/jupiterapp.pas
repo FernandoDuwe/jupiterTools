@@ -60,7 +60,7 @@ var
 
 implementation
 
-uses Forms;
+uses FileInfo, Forms;
 
 { TJupiterApp }
 
@@ -106,6 +106,9 @@ begin
 
     if not Self.Params.Exists('Interface.Font.Size') then
        Self.Params.AddConfig('Interface.Font.Size', '8', 'Tamanho da fonte');
+
+    if not Self.Params.Exists('Interface.CurrentForm.Title') then
+       Self.Params.AddVariable('Interface.CurrentForm.Title', EmptyStr, 'Título do formulário atual');
   finally
     FreeAndNil(vrEnviroment);
   end;
@@ -165,6 +168,7 @@ begin
       begin
         Application.CreateForm(vrFormRoute.FormClass, vrFormModal);
         try
+          vrFormModal.IsModal := prAsModal;
           vrFormModal.Params.CopyValues(prRoute.Params);
 
           vrFormModal.ShowModal;
@@ -187,6 +191,7 @@ begin
         Self.CurrentForm.WindowState := wsMaximized;
         Self.CurrentForm.BorderStyle := bsNone;
         Self.CurrentForm.Align       := alClient;
+        Self.CurrentForm.IsModal := prAsModal;
 
         Self.CurrentForm.Params.CopyValues(prRoute.Params);
 
@@ -219,6 +224,8 @@ begin
   Self.FMessages   := TJupiterObjectList.Create;
   Self.FParams     := TJupiterVariableList.Create;
   Self.FUserParams := TJupiterVariableList.Create;
+
+  Self.Params.AddChildList(Self.UserParams);
 
   Self.Internal_Prepare;
 end;

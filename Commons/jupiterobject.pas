@@ -24,7 +24,7 @@ type
   { TJupiterObjectList }
 
   TJupiterObjectList = class(TJupiterObject)
-  private
+  protected
     FList : TList;
 
     function Internal_GetSize : Integer;

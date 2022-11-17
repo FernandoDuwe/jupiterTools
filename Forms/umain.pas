@@ -57,6 +57,7 @@ type
     tbMenu: TToolButton;
     tbOptions: TToolBar;
     TbSystemBar: TToolButton;
+    tmSearch: TTimer;
     ToolBar1: TToolBar;
     tbSearch: TToolBar;
     tbSystemButtons: TToolBar;
@@ -65,8 +66,11 @@ type
     tbMessage: TToolButton;
     tvMenu: TTreeView;
     procedure cbNavigationMenuChange(Sender: TObject);
+    procedure edSearchChange(Sender: TObject);
     procedure FormShortCut(var Msg: TLMKey; var Handled: Boolean);
     procedure FormShow(Sender: TObject);
+    procedure miDecFontSizeClick(Sender: TObject);
+    procedure miIncFontSizeClick(Sender: TObject);
     procedure miPastasJupiterClick(Sender: TObject);
     procedure MenuItem5Click(Sender: TObject);
     procedure miPastasModulesClick(Sender: TObject);
@@ -80,10 +84,12 @@ type
     procedure miNewTaskClick(Sender: TObject);
     procedure miOpenCSVClick(Sender: TObject);
     procedure miOpenCurrentTaskClick(Sender: TObject);
+    procedure miUpdateClick(Sender: TObject);
     procedure pnBodyClick(Sender: TObject);
     procedure tbHomeClick(Sender: TObject);
     procedure tbMenuClick(Sender: TObject);
     procedure tbMessageClick(Sender: TObject);
+    procedure tmSearchTimer(Sender: TObject);
     procedure ToolButton1Click(Sender: TObject);
     procedure ToolButton2Click(Sender: TObject);
     procedure tvMenuClick(Sender: TObject);
@@ -92,6 +98,7 @@ type
 
     procedure Internal_ShowRoute(prRoute : TJupiterRoute; prList : TJupiterObjectList; prNode : TTreeNode);
     procedure Internal_MessagesCountSetValue(prID, prNewValue : String);
+    procedure Internal_CurrentFormTitleSetValue(prID, prNewValue : String);
   protected
     procedure Internal_UpdateComponents; override;
     procedure Internal_PrepareForm; override;
@@ -127,8 +134,18 @@ begin
   vrJupiterApp.NavigateTo(TJupiterRoute.Create(MESSAGES_PATH), True);
 end;
 
+procedure TFMain.tmSearchTimer(Sender: TObject);
+begin
+  if Assigned(vrJupiterApp.CurrentForm) then
+    vrJupiterApp.CurrentForm.Search(edSearch.Text);
+
+  tmSearch.Enabled := False;
+end;
+
 procedure TFMain.ToolButton1Click(Sender: TObject);
 begin
+  Self.IsModal := True;
+
   Self.UpdateForm;
 end;
 
@@ -147,12 +164,40 @@ begin
 
 end;
 
+procedure TFMain.edSearchChange(Sender: TObject);
+begin
+  tmSearch.Enabled := False;
+  tmSearch.Enabled := True;
+end;
+
 procedure TFMain.FormShow(Sender: TObject);
 begin
   inherited;
 
   vrJupiterApp.MainIcons := ilIconFamily;
   vrJupiterApp.NavigateTo(TJupiterRoute.Create(ROOT_FORM_PATH), False);
+end;
+
+procedure TFMain.miDecFontSizeClick(Sender: TObject);
+begin
+  try
+    vrJupiterApp.Params.AddConfig('Interface.Font.Size',
+                                  IntToStr(StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value) - 1),
+                                  'Tamanho da fonte');
+  finally
+    Self.UpdateForm;
+  end;
+end;
+
+procedure TFMain.miIncFontSizeClick(Sender: TObject);
+begin
+  try
+    vrJupiterApp.Params.AddConfig('Interface.Font.Size',
+                                  IntToStr(StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value) + 1),
+                                  'Tamanho da fonte');
+  finally
+    Self.UpdateForm;
+  end;
 end;
 
 procedure TFMain.miPastasJupiterClick(Sender: TObject);
@@ -278,6 +323,13 @@ begin
   vrJupiterApp.NavigateTo(TJupiterRoute.Create(TASK_FORM_PATH), False);
 end;
 
+procedure TFMain.miUpdateClick(Sender: TObject);
+begin
+  Self.IsModal := True;
+
+  Self.UpdateForm;
+end;
+
 procedure TFMain.pnBodyClick(Sender: TObject);
 begin
 
@@ -348,11 +400,14 @@ begin
   miMessage.Hint := sbStatus.Panels[0].Text;
 end;
 
+procedure TFMain.Internal_CurrentFormTitleSetValue(prID, prNewValue: String);
+begin
+  Self.Caption := Format('%0:s - %1:s', [prNewValue, vrJupiterApp.AppName]);
+end;
+
 procedure TFMain.Internal_UpdateComponents;
 begin
   inherited Internal_UpdateComponents;
-
-  Self.Caption := vrJupiterApp.AppName;
 
   if Assigned(vrJupiterApp.CurrentForm) then
     vrJupiterApp.CurrentForm.UpdateForm;
@@ -403,7 +458,8 @@ begin
     Internal_MessagesCountSetValue(EmptyStr, IntToStr(vrJupiterApp.Messages.Size));
   end;
 
-
+  if vrJupiterApp.Params.Exists('Interface.CurrentForm.Title') then
+    vrJupiterApp.Params.VariableById('Interface.CurrentForm.Title').OnChangeValue := @Internal_CurrentFormTitleSetValue;
 
   Self.Internal_ListMenuItens;
 end;

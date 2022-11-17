@@ -17,6 +17,8 @@ type
   published
     property Fields : TJupiterVariableList read FFields write FFields;
   public
+    function CanShowInSearch(prSearch : String) : Boolean;
+
     constructor Create;
     destructor Destroy; override;
   end;
@@ -68,10 +70,9 @@ begin
 
   if prDataProviderType = DATAPROVIDER_TYPE_TASKS then
   begin
-    Result := TJupiterCSVDataProvider.Create;
+    Result := TJupiterTasksDataProvider.Create;
 
-    TJupiterCSVDataProvider(Result).Filename := prParam;
-    TJupiterCSVDataProvider(Result).ProvideData;
+    TJupiterTasksDataProvider(Result).ProvideData;
     Exit;
   end;
 
@@ -102,6 +103,21 @@ begin
 end;
 
 { TJupiterDataProviderRow }
+
+function TJupiterDataProviderRow.CanShowInSearch(prSearch: String): Boolean;
+var
+  vrVez : Integer;
+begin
+  Result := False;
+
+  for vrVez := 0 to Self.Fields.Size - 1 do
+    with Self.Fields.VariableByIndex(vrVez) do
+      if Pos(AnsiUpperCase(prSearch), AnsiUpperCase(Self.Fields.VariableByIndex(vrVez).Value)) = 0 then
+      begin
+        Result := True;
+        Exit;
+      end;
+end;
 
 constructor TJupiterDataProviderRow.Create;
 begin

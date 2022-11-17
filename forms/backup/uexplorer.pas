@@ -126,7 +126,7 @@ begin
   begin
     Self.Internal_ChangeValue(prParams);
 
-    TJupiterCSVDataProvider(Self.Provider).SaveToFile(prParams);
+    TJupiterCSVDataProvider(Self.Provider).SaveLine(prParams);
   end;
 end;
 
@@ -177,6 +177,8 @@ end;
 procedure TFExplorer.Internal_UpdateComponents;
 begin
   inherited Internal_UpdateComponents;
+
+  lvItems.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
 end;
 
 procedure TFExplorer.Internal_UpdateDatasets;
@@ -187,19 +189,26 @@ var
   vrCreateColumns : Boolean;
   vrColumn        : TListColumn;
   vrEnviroment    : TJupiterEnviroment;
+  vrCountChecked  : Integer;
 begin
   inherited Internal_UpdateDatasets;
 
   lvItems.Items.Clear;
+  lvItems.Visible := False;
   lvItems.DisableAutoSizing;
 
   vrEnviroment := TJupiterEnviroment.Create;
   try
     vrCreateColumns := lvItems.ColumnCount = 0;
 
+    vrCountChecked := 0;
+
     for vrVez := 0 to Self.Provider.Size - 1 do
       with Self.Provider.GetRowByIndex(vrVez) do
       begin
+        if ((Trim(Self.SearchText) <> EmptyStr) and (not CanShowInSearch(Self.SearchText))) then
+          Continue;
+
         vrItem := lvItems.Items.Add;
 
         for vrVez2 := 0 to Fields.Size - 1 do
@@ -233,7 +242,11 @@ begin
               (Self.Internal_IfChecked(Fields.VariableById(Self.Params.VariableById('checkableField').Value).Value,
                                        vrJupiterApp.Params.VariableById(Self.Params.VariableById('checkableVariable').Value).Value)
                                        )) then
-            vrItem.ImageIndex := ICON_CHECK
+          begin
+            vrItem.ImageIndex := ICON_CHECK;
+
+            vrCountChecked := vrCountChecked + 1;
+          end
           else
             if ((Self.ChecklistMode) and (Self.Internal_RecordChecked(Fields))) then
               vrItem.ImageIndex := ICON_CHECK
@@ -242,10 +255,21 @@ begin
                 vrItem.ImageIndex := StrToInt(Self.Params.VariableById('itemIcon').Value);
         end;
       end;
+
+    if ((Self.Params.Exists('Hint.Success')) and (vrCountChecked <> Self.Provider.Size)) then
+      Self.Params.DeleteVariable('Hint.Success')
+    else
+      if ((vrCountChecked > 0) and (vrCountChecked = Self.Provider.Size)) then
+        Self.Params.AddVariable('Hint.Success', 'Hint.Success', 'Sucesso');
+
   finally
     Self.Params.AddVariable('Size', IntToStr(lvItems.Items.Count), 'Qtd. de registros');
 
+    lvItems.Visible := True;
     lvItems.EnableAutoSizing;
+
+    for vrVez := 0 to lvItems.Columns.Count - 1 do
+
   end;
 end;
 

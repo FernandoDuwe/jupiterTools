@@ -93,6 +93,8 @@ procedure TFEditor.Internal_UpdateComponents;
 begin
   inherited Internal_UpdateComponents;
 
+  seEditor.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
+
   seEditor.ReadOnly := Self.FReadMode;
 
   Self.Actions.GetActionButton(0, sbActions).Enabled := not Self.FReadMode;
@@ -116,7 +118,8 @@ end;
 
 procedure TFEditor.Internal_CopyFileClick(Sender: TObject);
 begin
-  //
+  seEditor.SelectAll;
+  seEditor.CopyToClipboard;
 end;
 
 procedure TFEditor.Internal_ResolveVariables;

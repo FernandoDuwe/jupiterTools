@@ -1,5 +1,5 @@
 inherited FCurrentTask: TFCurrentTask
-  Left = 449
+  Left = 455
   Height = 678
   Top = 66
   Width = 968

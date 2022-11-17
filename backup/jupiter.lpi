@@ -16,6 +16,8 @@
     </General>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
+      <MajorVersionNr Value="2"/>
+      <MinorVersionNr Value="1"/>
     </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>
@@ -44,7 +46,7 @@
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="Forms\umain.pas"/>
+        <Filename Value="forms\umain.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FMain"/>
         <HasResources Value="True"/>
@@ -105,7 +107,7 @@
         <UnitName Value="JupiterToolsModule"/>
       </Unit>
       <Unit>
-        <Filename Value="Forms\uhome.pas"/>
+        <Filename Value="forms\uhome.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FHome"/>
         <HasResources Value="True"/>
@@ -113,7 +115,7 @@
         <UnitName Value="uHome"/>
       </Unit>
       <Unit>
-        <Filename Value="Forms\uexplorer.pas"/>
+        <Filename Value="forms\uexplorer.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FExplorer"/>
         <HasResources Value="True"/>
@@ -131,7 +133,7 @@
         <UnitName Value="JupiterStandardModule"/>
       </Unit>
       <Unit>
-        <Filename Value="Forms\ucustomjupiterform.pas"/>
+        <Filename Value="forms\ucustomjupiterform.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FCustomJupiterForm"/>
         <HasResources Value="True"/>
@@ -139,7 +141,7 @@
         <UnitName Value="uCustomJupiterForm"/>
       </Unit>
       <Unit>
-        <Filename Value="Forms\unewtask.pas"/>
+        <Filename Value="forms\unewtask.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FNewTask"/>
         <HasResources Value="True"/>
@@ -167,7 +169,7 @@
         <UnitName Value="JupiterCSVDataProvider"/>
       </Unit>
       <Unit>
-        <Filename Value="Forms\uconfig.pas"/>
+        <Filename Value="forms\uconfig.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FConfig"/>
         <HasResources Value="True"/>
@@ -200,7 +202,7 @@
         <UnitName Value="JupiterDialogForm"/>
       </Unit>
       <Unit>
-        <Filename Value="Forms\ucurrenttask.pas"/>
+        <Filename Value="forms\ucurrenttask.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FCurrentTask"/>
         <HasResources Value="True"/>
@@ -218,7 +220,7 @@
         <UnitName Value="JupiterTaskTimesDataProvider"/>
       </Unit>
       <Unit>
-        <Filename Value="Forms\ueditor.pas"/>
+        <Filename Value="forms\ueditor.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FEditor"/>
         <HasResources Value="True"/>
@@ -226,7 +228,7 @@
         <UnitName Value="uEditor"/>
       </Unit>
       <Unit>
-        <Filename Value="Forms\ugenerator.pas"/>
+        <Filename Value="forms\ugenerator.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FGenerator"/>
         <HasResources Value="True"/>
@@ -234,7 +236,7 @@
         <UnitName Value="uGenerator"/>
       </Unit>
       <Unit>
-        <Filename Value="Forms\umessage.pas"/>
+        <Filename Value="forms\umessage.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FMessage"/>
         <HasResources Value="True"/>

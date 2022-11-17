@@ -1,4 +1,5 @@
 inherited FExplorer: TFExplorer
+  Left = 519
   Height = 377
   Width = 451
   Caption = 'Explorer'

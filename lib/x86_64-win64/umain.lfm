@@ -1,5 +1,5 @@
 inherited FMain: TFMain
-  Left = 365
+  Left = 371
   Height = 727
   Top = 58
   Width = 1297
@@ -178,6 +178,7 @@ inherited FMain: TFMain
       AutoSize = False
       BorderSpacing.Left = 127
       BorderSpacing.Top = 3
+      OnChange = edSearchChange
       TabOrder = 3
       TextHint = 'Pesquisar'
     end
@@ -893,14 +894,17 @@ inherited FMain: TFMain
       object miUpdate: TMenuItem
         Caption = 'Atualizar'
         ImageIndex = 15
+        OnClick = miUpdateClick
       end
       object miIncFontSize: TMenuItem
         Caption = 'Aumentar Fonte'
         ImageIndex = 10
+        OnClick = miIncFontSizeClick
       end
       object miDecFontSize: TMenuItem
         Caption = 'Diminuir Fonte'
         ImageIndex = 11
+        OnClick = miDecFontSizeClick
       end
       object Separator4: TMenuItem
         Caption = '-'
@@ -950,5 +954,12 @@ inherited FMain: TFMain
     object MenuItem5: TMenuItem
       Caption = 'Ajuda'
     end
+  end
+  object tmSearch: TTimer[10]
+    Enabled = False
+    Interval = 500
+    OnTimer = tmSearchTimer
+    Left = 608
+    Top = 134
   end
 end

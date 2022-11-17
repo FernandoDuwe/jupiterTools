@@ -75,6 +75,9 @@ const
    FORM_MARGIN_BOTTOM   : Integer = 8;
    FORM_ACTION_MINWIDTH : Integer = 100;
 
+   // Generator
+   GENERATOR_SYSLAYER : SmallInt = 1000;
+
    function GetCurrentOS : String;
    function GetDirectorySeparator : String;
 

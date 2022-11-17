@@ -183,6 +183,7 @@ begin
           Route.Params.AddVariable('path', Fields.VariableById('File').Value, 'Arquivo');
           Route.Params.AddVariable('checklistField', 'Checked', 'Campo de checklist');
           Route.Params.AddVariable('hideColumns', 'Checked, Line', 'Campos a esconder');
+          Route.Params.AddVariable('hint', 'Dica', 'Dê um duplo clique para cumprir cada item da checklist');
 
           Route.Params.AddVariable('filename', Fields.VariableById('File').Value, 'Nome do arquivo');
           Route.Params.AddVariable('destinyPath', EXPLORER_FORM_PATH, 'Destino');
@@ -290,7 +291,7 @@ begin
       Route.Params.AddVariable('runnableField', 'Caminho', 'Campo a ser executado');
       Route.Params.AddVariable('destinyPath', EXPLORER_FORM_PATH, 'Destino');
       Route.Params.AddVariable('hint', 'Meus aplicativos favoritos, para alterar, clique em Favoritos, no menu principal', 'Dica');
-      Route.Params.AddVariable('hideColumns', 'Checked, Line', 'Campos a esconder');
+      Route.Params.AddVariable('hideColumns', 'Line', 'Campos a esconder');
       Route.Params.AddVariable(FIELD_ID_GENERADOR, 'FavoriteAppsForm', 'ID do formulário');
     end;
 
@@ -307,7 +308,7 @@ begin
       Route.Params.AddVariable('runnableField', 'Caminho', 'Campo a ser executado');
       Route.Params.AddVariable('destinyPath', EXPLORER_FORM_PATH, 'Destino');
       Route.Params.AddVariable('hint', 'Minhas pastas favoritas, para alterar, clique em Favoritos, no menu principal', 'Dica');
-      Route.Params.AddVariable('hideColumns', 'Checked, Line', 'Campos a esconder');
+      Route.Params.AddVariable('hideColumns', 'Line', 'Campos a esconder');
       Route.Params.AddVariable(FIELD_ID_GENERADOR, 'FavoritePathsForm', 'ID do formulário');
     end;
   finally

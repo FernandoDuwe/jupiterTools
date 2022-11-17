@@ -5,7 +5,7 @@ unit JupiterVariable;
 interface
 
 uses
-  Classes, JupiterObject, JupiterEnviroment, SysUtils;
+  Classes, JupiterObject, JupiterEnviroment, JupiterConsts, SysUtils;
 
 type
 
@@ -58,9 +58,11 @@ type
 
     function Exists(prID : String) : Boolean;
     function VariableById(prID : String) : TJupiterVariable;
+    function VariableIndexById(prID : String) : Integer;
     function VariableByIndex(prIndex : Integer) : TJupiterVariable;
     function ResolveString(prStr : String) : String;
     procedure ResolveFile(prFile : String);
+    procedure DeleteVariable(prID : String);
 
     procedure CopyValues(prList : TJupiterVariableList);
     procedure SaveToFile;
@@ -232,6 +234,21 @@ begin
   end;
 end;
 
+function TJupiterVariableList.VariableIndexById(prID: String): Integer;
+var
+  vrVez : Integer;
+  vrVezModule : Integer;
+begin
+  Result := NULL_KEY;
+
+  for vrVez := 0 to Self.VariableCount - 1 do
+    if Self.VariableByIndex(vrVez).ID = prID then
+    begin
+      Result := vrVez;
+      Exit;
+    end;
+end;
+
 function TJupiterVariableList.VariableByIndex(prIndex: Integer): TJupiterVariable;
 begin
   Result := TJupiterVariable(Self.GetAtIndex(prIndex));
@@ -269,6 +286,19 @@ begin
     vrStr.Clear;
     FreeAndNil(vrStr);
   end;
+end;
+
+procedure TJupiterVariableList.DeleteVariable(prID: String);
+var
+  vrIndex : Integer;
+  vrObj   : TJupiterVariable;
+begin
+  vrIndex := Self.VariableIndexById(prID);
+  vrObj   := Self.VariableByIndex(vrIndex);
+
+  FreeAndNil(vrObj);
+
+  Self.FList.Delete(vrIndex);
 end;
 
 procedure TJupiterVariableList.CopyValues(prList: TJupiterVariableList);

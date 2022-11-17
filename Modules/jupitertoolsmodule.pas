@@ -183,6 +183,7 @@ begin
           Route.Params.AddVariable('path', Fields.VariableById('File').Value, 'Arquivo');
           Route.Params.AddVariable('checklistField', 'Checked', 'Campo de checklist');
           Route.Params.AddVariable('hideColumns', 'Checked, Line', 'Campos a esconder');
+          Route.Params.AddVariable('hint', 'Dê um duplo clique para cumprir cada item da checklist', 'Dica');
 
           Route.Params.AddVariable('filename', Fields.VariableById('File').Value, 'Nome do arquivo');
           Route.Params.AddVariable('destinyPath', EXPLORER_FORM_PATH, 'Destino');
