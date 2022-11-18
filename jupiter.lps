@@ -20,10 +20,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uMain"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="145"/>
-        <CursorPos X="30" Y="147"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="217"/>
+        <CursorPos X="81" Y="240"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="Commons\jupiterconsts.pas"/>
@@ -89,7 +92,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="JupiterForm"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="4"/>
         <TopLine Value="158"/>
         <CursorPos X="59" Y="169"/>
         <UsageCount Value="200"/>
@@ -142,9 +145,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uExplorer"/>
-        <IsVisibleTab Value="True"/>
         <TopLine Value="252"/>
-        <CursorPos Y="263"/>
+        <CursorPos X="57" Y="268"/>
         <UsageCount Value="222"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -376,10 +378,11 @@
       <Unit>
         <Filename Value="C:\lazarus\lcl\forms.pp"/>
         <UnitName Value="Forms"/>
-        <EditorIndex Value="-1"/>
+        <EditorIndex Value="2"/>
         <TopLine Value="1508"/>
         <CursorPos X="14" Y="1524"/>
-        <UsageCount Value="5"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\lcl\include\treeview.inc"/>
@@ -425,19 +428,17 @@
         <CursorPos Y="2804"/>
         <UsageCount Value="8"/>
       </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\lcl\lcltype.pp"/>
+        <UnitName Value="LCLType"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="761"/>
+        <CursorPos X="3" Y="775"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit>
     </Units>
-    <JumpHistory HistoryIndex="26">
-      <Position>
-        <Filename Value="forms\uexplorer.pas"/>
-      </Position>
-      <Position>
-        <Filename Value="forms\uexplorer.pas"/>
-        <Caret Line="80" Column="20" TopLine="61"/>
-      </Position>
-      <Position>
-        <Filename Value="forms\uexplorer.pas"/>
-        <Caret Line="75" Column="26" TopLine="61"/>
-      </Position>
+    <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="forms\uexplorer.pas"/>
         <Caret Line="42" Column="35" TopLine="30"/>
@@ -533,6 +534,30 @@
       <Position>
         <Filename Value="Commons\jupiterform.pas"/>
         <Caret Line="169" Column="59" TopLine="158"/>
+      </Position>
+      <Position>
+        <Filename Value="forms\umain.pas"/>
+        <Caret Line="147" Column="30" TopLine="145"/>
+      </Position>
+      <Position>
+        <Filename Value="forms\umain.pas"/>
+        <Caret Line="217" Column="38" TopLine="215"/>
+      </Position>
+      <Position>
+        <Filename Value="C:\lazarus\lcl\forms.pp"/>
+        <Caret Line="1524" Column="14" TopLine="1508"/>
+      </Position>
+      <Position>
+        <Filename Value="forms\umain.pas"/>
+        <Caret Line="230" Column="30" TopLine="215"/>
+      </Position>
+      <Position>
+        <Filename Value="forms\umain.pas"/>
+        <Caret Line="95" Column="25" TopLine="74"/>
+      </Position>
+      <Position>
+        <Filename Value="forms\umain.pas"/>
+        <Caret Line="221" Column="39" TopLine="216"/>
       </Position>
     </JumpHistory>
     <RunParams>

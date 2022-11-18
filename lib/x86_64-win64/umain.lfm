@@ -953,6 +953,7 @@ inherited FMain: TFMain
     end
     object MenuItem5: TMenuItem
       Caption = 'Ajuda'
+      OnClick = MenuItem5Click
     end
   end
   object tmSearch: TTimer[10]

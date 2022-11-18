@@ -113,6 +113,8 @@ implementation
 
 {$R *.lfm}
 
+uses LCLType;
+
 { TFMain }
 
 procedure TFMain.tbHomeClick(Sender: TObject);
@@ -144,6 +146,8 @@ end;
 
 procedure TFMain.ToolButton1Click(Sender: TObject);
 begin
+  Self.IsModal := True;
+
   Self.UpdateForm;
 end;
 
@@ -211,8 +215,32 @@ begin
 end;
 
 procedure TFMain.MenuItem5Click(Sender: TObject);
+var
+  vrStrMessage : String;
+  vrVez        : Integer;
 begin
+  vrStrMessage := vrJupiterApp.AppName;
+  vrStrMessage := vrStrMessage + #13#10;
+  vrStrMessage := vrStrMessage + 'Versão: ' + vrJupiterApp.GetVersion + #13#10;
+  vrStrMessage := vrStrMessage + 'SO: ' + GetCurrentOS + #13#10;
 
+
+  vrStrMessage := vrStrMessage + #13#10;
+  vrStrMessage := vrStrMessage + 'Módulos instalados:' + #13#10;
+
+  for vrVez := 0 to vrJupiterApp.ModulesList.Size - 1 do
+    vrStrMessage := vrStrMessage + '  * ' + vrJupiterApp.ModulesList.GetModuleByIndex(vrVez).ModuleTitle + ' (' + vrJupiterApp.ModulesList.GetModuleByIndex(vrVez).ModuleID + ');' + #13#10;
+
+  vrStrMessage := vrStrMessage + #13#10;
+  vrStrMessage := vrStrMessage + 'SOs suportados:' + #13#10;
+  vrStrMessage := vrStrMessage + '  * Windows;' + #13#10;
+  vrStrMessage := vrStrMessage + '  * Linux;' + #13#10;
+
+  vrStrMessage := vrStrMessage + #13#10;
+
+  https://github.com/FernandoDuwe/jupiterTools
+
+  Application.MessageBox(PAnsiChar(vrStrMessage), 'Sobre', MB_ICONINFORMATION + MB_OK);
 end;
 
 procedure TFMain.miPastasModulesClick(Sender: TObject);
