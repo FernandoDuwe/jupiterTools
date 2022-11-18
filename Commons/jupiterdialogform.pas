@@ -57,7 +57,6 @@ begin
   Application.CreateForm(TFCustomJupiterForm, FCurrentForm);
   try
     FCurrentForm.Caption             := Self.Title;
-    FCurrentForm.BorderStyle         := bsDialog;
     FCurrentForm.Generator.Variables := Self.Fields;
     FCurrentForm.Hint                := Self.Hint;
     FCurrentForm.Height              := Round(Screen.Height / 2);

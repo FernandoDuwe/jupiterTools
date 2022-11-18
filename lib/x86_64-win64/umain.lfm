@@ -1,7 +1,7 @@
 inherited FMain: TFMain
-  Left = 371
+  Left = 493
   Height = 727
-  Top = 58
+  Top = 66
   Width = 1297
   Caption = 'FMain'
   ClientHeight = 707

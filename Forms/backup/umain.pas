@@ -237,8 +237,7 @@ begin
   vrStrMessage := vrStrMessage + '  * Linux;' + #13#10;
 
   vrStrMessage := vrStrMessage + #13#10;
-
-  https://github.com/FernandoDuwe/jupiterTools
+  vrStrMessage := vrStrMessage + 'https://github.com/FernandoDuwe/jupiterTools';
 
   Application.MessageBox(PAnsiChar(vrStrMessage), 'Sobre', MB_ICONINFORMATION + MB_OK);
 end;

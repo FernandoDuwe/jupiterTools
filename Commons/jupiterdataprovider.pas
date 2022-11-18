@@ -32,20 +32,21 @@ type
     procedure ProvideData; virtual;
   end;
 
-  function FactoryDataProvider(prDataProviderType : String; prParam : String) : TJupiterDataProvider;
+  function FactoryDataProvider(prDataProviderType : String; prParam : String; prSubFolders : Boolean) : TJupiterDataProvider;
 
 implementation
 
 uses JupiterFileDataProvider, JupiterDirectoryDataProvider, JupiterCSVDataProvider,
      JupiterTasksDataProvider;
 
-function FactoryDataProvider(prDataProviderType: String; prParam : String): TJupiterDataProvider;
+function FactoryDataProvider(prDataProviderType: String; prParam : String; prSubFolders : Boolean): TJupiterDataProvider;
 begin
   if prDataProviderType = DATAPROVIDER_TYPE_LIST_FILES then
   begin
     Result := TJupiterFileDataProvider.Create;
 
     TJupiterFileDataProvider(Result).Path := prParam;
+    TJupiterFileDataProvider(Result).SubFolders := prSubFolders;
     TJupiterFileDataProvider(Result).ProvideData;
     Exit;
   end;
@@ -55,6 +56,7 @@ begin
     Result := TJupiterDirectoryDataProvider.Create;
 
     TJupiterDirectoryDataProvider(Result).Path := prParam;
+    TJupiterDirectoryDataProvider(Result).SubFolders := prSubFolders;
     TJupiterDirectoryDataProvider(Result).ProvideData;
     Exit;
   end;

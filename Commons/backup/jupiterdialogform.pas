@@ -61,7 +61,7 @@ begin
     FCurrentForm.Generator.Variables := Self.Fields;
     FCurrentForm.Hint                := Self.Hint;
     FCurrentForm.Height              := Round(Screen.Height / 2);
-    FCurrentForm.Width               := Round(Screen.Height / 2);
+    FCurrentForm.Width               := Round(Screen.Width / 2);
 
     if not Self.OnlyShow then
     begin

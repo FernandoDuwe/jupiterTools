@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, Buttons,
   Grids, JupiterForm, JupiterAction, JupiterRunnable, JupiterDataProvider,
   JupiterConsts, JupiterApp, JupiterVariable, JupiterEnviroment,
-  JupiterCSVDataProvider;
+  JupiterCSVDataProvider, JupiterDirectoryDataProvider, JupiterFileDataProvider;
 
 type
 
@@ -162,11 +162,12 @@ begin
   if Self.Params.Exists('path') then
      vrParam := Self.Params.VariableById('path').Value;
 
-  Self.FProvider := FactoryDataProvider(vrProvider, vrParam);
+  Self.FProvider := FactoryDataProvider(vrProvider, vrParam, Self.Params.Exists('subfolders'));
 
   vrAction      := TJupiterAction.Create('Atualizar', TJupiterRunnable.Create(''), nil);
   vrAction.Hint := 'Clique aqui para atualizar a página';
   vrAction.Icon := ICON_REFRESH;
+  vrAction.OnClick := @Internal_RefreshClick;
 
   Self.Actions.Add(vrAction);
 
@@ -231,7 +232,7 @@ begin
           if ((Self.CheckMode) or (Self.ChecklistMode)) then
             vrItem.ImageIndex := NULL_KEY
           else
-            vrItem.ImageIndex := vrEnviroment.IconOfFile(vrItem.Caption);
+            vrItem.ImageIndex := vrEnviroment.IconOfFile(TrimRight(vrItem.Caption));
 
           vrItem.Data := TJupiterVariableList.Create;
 

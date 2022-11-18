@@ -1,7 +1,7 @@
 ID;DESCRIPTION;VALUE;
 Enviroment.Run.ShellScript;Aplicação que executará arquivo de bat ou shell;;
 Enviroment.DoNotChangeContentExtensions;Extensões de arquivos que não terão seu conteúdo alterado;.doc|.docx|.pdf;
-Enviroment.Run.EditorPref;Editor preferencial (caminho ou comando);C:\Program Files\Notepad++\notepad++.exe;
+Enviroment.Run.EditorPref;Editor preferencial (caminho ou comando);notepad;
 Enviroment.Run.Method;Método de execução (RunCommand / ShellExecute / CreateProcess);CreateProcess;
 Enviroment.Run.OpenInEditorPrefExtensions;Extensões de arquivos abertas em editor preferencial;.txt|.sql|.md;
 Enviroment.Run.ScriptExtensions;Extensões de arquivos de script;.bat;

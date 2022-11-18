@@ -166,7 +166,7 @@ procedure TFJupiterForm.Internal_UpdateCalcs;
 begin
   if pnHint.Visible then
   begin
-    if ((not Self.Params.Exists('Hint.Success')) and (Self.Params.Exists('Hint.Error'))) then
+    if ((not Self.Params.Exists('Hint.Success')) and (not Self.Params.Exists('Hint.Error'))) then
     begin
       pnHint.Color      := clDefault;
       lbHelp.Font.Color := clDefault;

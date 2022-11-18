@@ -22,6 +22,8 @@ type
     procedure Internal_OnChangeCurrentTask(prID, prNewValue : String);
     procedure Internal_ListLibrary(prDir : String; var prList : TJupiterObjectList);
     procedure Internal_ListChecklists(var prList : TJupiterObjectList);
+    procedure Internal_ListChecklistsFromCurrentTask(var prList : TJupiterObjectList);
+    procedure Internal_ListTaskFiles(var prList : TJupiterObjectList);
   public
     function GetActions(prRoute : TJupiterRoute) : TJupiterObjectList; override;
 
@@ -183,7 +185,7 @@ begin
           Route.Params.AddVariable('path', Fields.VariableById('File').Value, 'Arquivo');
           Route.Params.AddVariable('checklistField', 'Checked', 'Campo de checklist');
           Route.Params.AddVariable('hideColumns', 'Checked, Line', 'Campos a esconder');
-          Route.Params.AddVariable('hint', 'Dica', 'Dê um duplo clique para cumprir cada item da checklist');
+          Route.Params.AddVariable('hint', 'Dê um duplo clique para cumprir cada item da checklist', 'Dica');
 
           Route.Params.AddVariable('filename', Fields.VariableById('File').Value, 'Nome do arquivo');
           Route.Params.AddVariable('destinyPath', EXPLORER_FORM_PATH, 'Destino');
@@ -193,6 +195,73 @@ begin
     FreeAndNil(vrFile);
     FreeAndNil(vrEnviroment);
   end;
+end;
+
+procedure TJupiterToolsModule.Internal_ListChecklistsFromCurrentTask(var prList: TJupiterObjectList);
+var
+  vrFile       : TJupiterFileDataProvider;
+  vrEnviroment : TJupiterEnviroment;
+  vrVez        : Integer;
+begin
+  vrFile       := TJupiterFileDataProvider.Create;
+  vrEnviroment := TJupiterEnviroment.Create;
+  try
+    vrFile.Path := Self.Params.VariableById(Self.DefineParamName('Tasks.Current.Path')).Value;
+    vrFile.SubFolders := True;
+    vrFile.ProvideData;
+
+    for vrVez := 0 to vrFile.Size - 1 do
+      with vrFile.GetRowByIndex(vrVez) do
+      begin
+        if not vrEnviroment.IsOfExtension(Fields.VariableById('File').Value, '.ckl') then
+          Continue;
+
+        prList.Add(TJupiterAction.Create(Fields.VariableById('FieldName').Value, TJupiterRoute.Create('/forms/custom/currentTask/checklists/' + Fields.VariableById('FieldName').Value + '/'), TJupiterRoute.Create('/forms/custom/currentTask/checklists/')));
+
+        with TJupiterAction(prList.GetLastObject) do
+        begin
+          Icon := vrEnviroment.IconOfFile(Fields.VariableById('File').Value);
+
+          Route.Params.AddVariable('title', 'Checklist: ' + Fields.VariableById('FieldName').Value, 'Título');
+          Route.Params.AddVariable('type', DATAPROVIDER_TYPE_LIST_CSV, 'Tipo');
+          Route.Params.AddVariable('path', Fields.VariableById('File').Value, 'Arquivo');
+          Route.Params.AddVariable('checklistField', 'Checked', 'Campo de checklist');
+          Route.Params.AddVariable('hideColumns', 'Checked, Line', 'Campos a esconder');
+          Route.Params.AddVariable('hint', 'Dê um duplo clique para cumprir cada item da checklist', 'Dica');
+
+          Route.Params.AddVariable('filename', Fields.VariableById('File').Value, 'Nome do arquivo');
+          Route.Params.AddVariable('destinyPath', EXPLORER_FORM_PATH, 'Destino');
+        end;
+      end;
+  finally
+    FreeAndNil(vrFile);
+    FreeAndNil(vrEnviroment);
+  end;
+end;
+
+procedure TJupiterToolsModule.Internal_ListTaskFiles(var prList: TJupiterObjectList);
+begin
+  prList.Add(TJupiterAction.Create('Arquivos', TJupiterRoute.Create('/forms/custom/currentTask/files/'), TJupiterRoute.Create(TASK_FORM_PATH)));
+
+  with TJupiterAction(prList.GetLastObject) do
+  begin
+    Icon := ICON_OPEN;
+
+    Route.Params.AddVariable('title', 'Arquivos da tarefa atual', 'Título');
+    Route.Params.AddVariable('type', DATAPROVIDER_TYPE_LIST_FILES, 'Tipo');
+    Route.Params.AddVariable('path', Self.Params.VariableById(Self.DefineParamName('Tasks.Current.Path')).Value, 'Diretório');
+    Route.Params.AddVariable('subfolders', '1', 'Pesquisar em subpastas?');
+
+    Route.Params.AddVariable('runnableField', 'File', 'Campo a ser executado');
+    Route.Params.AddVariable('destinyPath', EXPLORER_FORM_PATH, 'Destino');
+  end;
+
+  prList.Add(TJupiterAction.Create('Checklists', TJupiterRoute.Create('/forms/custom/currentTask/checklists/'), TJupiterRoute.Create(TASK_FORM_PATH)));
+
+  with TJupiterAction(prList.GetLastObject) do
+    Icon := ICON_CHECK;
+
+  Self.Internal_ListChecklistsFromCurrentTask(prList);
 end;
 
 function TJupiterToolsModule.GetActions(prRoute: TJupiterRoute): TJupiterObjectList;
@@ -223,6 +292,8 @@ begin
 
       with TJupiterAction(Result.GetLastObject) do
         Icon := ICON_CURTASK;
+
+      Self.Internal_ListTaskFiles(Result);
     end;
 
     Result.Add(TJupiterAction.Create('Nova Tarefa', TJupiterRoute.Create(NEWTASK_FORM_PATH), TJupiterRoute.Create('/records/')));
