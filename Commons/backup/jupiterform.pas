@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, Buttons,
   ComCtrls, StdCtrls, Menus, JupiterRoute, JupiterConsts, JupiterVariable,
-  JupiterAction;
+  JupiterAction, JupiterFormGenerator, JupiterGeneratorForm;
 
 type
 
@@ -34,6 +34,7 @@ type
     FActions    : TJupiterActionList;
     FParams     : TJupiterVariableList;
     FRoute      : TJupiterRoute;
+    FGenerator  : TJupiterGeneratorForm;
     FHint       : String;
     FSearchText : String;
     FPrepared   : Boolean;
@@ -41,13 +42,14 @@ type
 
     procedure Internal_SetHint(prHint : String);
   published
-    property Actions    : TJupiterActionList   read FActions  write FActions;
-    property Hint       : String               read FHint     write Internal_SetHint;
-    property IsModal    : Boolean              read FIsModal  write FIsModal;
-    property Prepared   : Boolean              read FPrepared write FPrepared;
-    property Params     : TJupiterVariableList read FParams   write FParams;
-    property Route      : TJupiterRoute        read FRoute    write FRoute;
-    property SearchText : String               read FSearchText;
+    property Actions    : TJupiterActionList    read FActions   write FActions;
+    property Hint       : String                read FHint      write Internal_SetHint;
+    property IsModal    : Boolean               read FIsModal   write FIsModal;
+    property Prepared   : Boolean               read FPrepared  write FPrepared;
+    property Params     : TJupiterVariableList  read FParams    write FParams;
+    property Route      : TJupiterRoute         read FRoute     write FRoute;
+    property Generator  : TJupiterGeneratorForm read FGenerator write FGenerator;
+    property SearchText : String                read FSearchText;
 
   protected
     procedure Internal_UpdateComponents; virtual;
@@ -55,7 +57,6 @@ type
     procedure Internal_UpdateCalcs; virtual;
 
     procedure Internal_PrepareForm; virtual;
-
   public
     procedure PrepareForm; virtual;
     procedure UpdateForm; virtual;
@@ -82,9 +83,10 @@ procedure TFJupiterForm.FormCreate(Sender: TObject);
 begin
   Self.FPrepared := False;
 
-  Self.FActions := TJupiterActionList.Create;
-  Self.FParams  := TJupiterVariableList.Create;
-  Self.FRoute   := TJupiterRoute.Create(ROOT_PATH);
+  Self.FActions   := TJupiterActionList.Create;
+  Self.FParams    := TJupiterVariableList.Create;
+  Self.FRoute     := TJupiterRoute.Create(ROOT_PATH);
+  Self.FGenerator := TJupiterGeneratorForm.Create;
 
   Self.IsModal  := False;
 end;
@@ -94,6 +96,7 @@ begin
   FreeAndNil(Self.FActions);
   FreeAndNil(Self.FParams);
   FreeAndNil(Self.FRoute);
+  FreeAndNil(Self.FGenerator);
 end;
 
 procedure TFJupiterForm.FormShow(Sender: TObject);
@@ -202,6 +205,9 @@ begin
     sbStatus.Visible := Self.BorderStyle <> bsNone;
 
     Self.Internal_PrepareForm;
+
+    if Self.Params.Exists(FIELD_ID_GENERADOR) then
+      Self.Generator.;
   finally
     Self.Actions.BuildActions(sbActions);
 

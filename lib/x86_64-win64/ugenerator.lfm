@@ -1,5 +1,7 @@
 inherited FGenerator: TFGenerator
+  Left = 495
   Height = 689
+  Top = 187
   Width = 1292
   ClientHeight = 689
   ClientWidth = 1292
@@ -17,7 +19,40 @@ inherited FGenerator: TFGenerator
   end
   inherited sbBody: TScrollBox
     Height = 566
-    Top = 50
     Width = 1292
+    HorzScrollBar.Page = 158
+    VertScrollBar.Page = 78
+    ClientHeight = 562
+    ClientWidth = 1288
+    object pcTabs: TPageControl[0]
+      Left = 0
+      Height = 562
+      Top = 0
+      Width = 1288
+      ActivePage = tsInicio
+      Align = alClient
+      TabIndex = 0
+      TabOrder = 0
+      object tsInicio: TTabSheet
+        Caption = 'Início'
+        ClientHeight = 534
+        ClientWidth = 1280
+        object mmLines: TMemo
+          Left = 0
+          Height = 534
+          Top = 0
+          Width = 1280
+          Align = alClient
+          Lines.Strings = (
+            'mmLines'
+          )
+          ScrollBars = ssBoth
+          TabOrder = 0
+        end
+      end
+      object tsForms: TTabSheet
+        Caption = 'Formulários'
+      end
+    end
   end
 end

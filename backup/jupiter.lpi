@@ -248,6 +248,11 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterSystemMessage"/>
       </Unit>
+      <Unit>
+        <Filename Value="Commons\jupitergeneratorform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterGeneratorForm"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

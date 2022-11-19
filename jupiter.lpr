@@ -18,7 +18,7 @@ uses
   uConfig, JupiterEnviroment, JupiterFormGenerator, JupiterFormField,
   JupiterVariableForm, JupiterDialogForm, uCurrentTask,
   JupiterTasksDataProvider, JupiterTaskTimesDataProvider, uEditor, uGenerator,
-  uMessage, JupiterSystemMessage
+  uMessage, JupiterSystemMessage, JupiterGeneratorForm, JupiterXMLDataProvider
   { you can add units after this };
 
 {$R *.res}

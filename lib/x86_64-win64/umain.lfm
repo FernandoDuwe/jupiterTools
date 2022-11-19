@@ -32,17 +32,17 @@ inherited FMain: TFMain
     Left = 0
     Height = 535
     Top = 83
-    Width = 284
+    Width = 326
     Align = alLeft
     BevelOuter = bvNone
     ClientHeight = 535
-    ClientWidth = 284
+    ClientWidth = 326
     TabOrder = 1
     object tvMenu: TTreeView
       Left = 0
       Height = 535
       Top = 0
-      Width = 284
+      Width = 326
       Align = alClient
       Images = ilIconFamily
       ReadOnly = True
@@ -54,16 +54,16 @@ inherited FMain: TFMain
     end
   end
   object spSplitter: TSplitter[4]
-    Left = 284
+    Left = 326
     Height = 535
     Top = 83
     Width = 5
   end
   object pnBody: TPanel[5]
-    Left = 289
+    Left = 331
     Height = 535
     Top = 83
-    Width = 1008
+    Width = 966
     Align = alClient
     BevelOuter = bvNone
     BorderStyle = bsSingle
