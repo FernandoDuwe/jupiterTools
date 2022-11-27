@@ -5,7 +5,8 @@ unit JupiterXMLDataProvider;
 interface
 
 uses
-  Classes, SysUtils, JupiterDataProvider, JupiterConsts, JupiterVariable;
+  Classes, SysUtils, JupiterDataProvider, JupiterConsts, JupiterVariable,
+  DOM, XMLRead, LazUTF8;
 
 type
 
@@ -13,9 +14,13 @@ type
 
   TJupiterXMLDataProvider = class(TJupiterDataProvider)
   private
-    FFilename : String;
+    FFilename   : String;
+    FSearchNode : String;
+  protected
+    procedure Internal_DoFill(prNode : TDOMNode; prSaveAsRow : Boolean = False);
   published
-    property Filename : String read FFilename write FFilename;
+    property Filename   : String read FFilename   write FFilename;
+    property SearchNode : String read FSearchNode write FSearchNode;
   public
     procedure ProvideData; override;
   end;
@@ -24,31 +29,44 @@ implementation
 
 { TJupiterXMLDataProvider }
 
-procedure TJupiterXMLDataProvider.ProvideData;
-inherited ProvideData;
-
-if ((Trim(Self.Filename) = EmptyStr) or (not FileExists(Self.Filename))) then
-   raise Exception.Create('Filename must be valid');
-
-vrFile := TStringList.Create;
-try
-  vrFile.Clear;
-  vrFile.LoadFromFile(Self.Filename);
-
-  if vrFile.Count > 0 then
-     Self.FColumnCount := Self.Internal_GetCSVColumnCount(vrFile[0]);
-
-  for vrVez := 1 to vrFile.Count - 1 do
+procedure TJupiterXMLDataProvider.Internal_DoFill(prNode : TDOMNode; prSaveAsRow : Boolean = False);
+var
+  vrVez       : Integer;
+  vrSaveAsRow : Boolean;
+begin
+  for vrVez := 0 to prNode.ChildNodes.Count - 1 do
   begin
-    if Trim(vrFile[vrVez]) = EmptyStr then
-      Continue;
+    vrSaveAsRow := False;
 
-    Self.Internal_ProcessLine(vrFile[vrVez], vrFile[0]);
+    if ((not prSaveAsRow) and (Trim(Self.SearchNode) <> EmptyStr)) then
+       vrSaveAsRow := AnsiUpperCase(prNode.ChildNodes[vrVez].NodeName) = AnsiUpperCase(Self.SearchNode);
+
+    if vrSaveAsRow then
+       Self.AddRow;
+
+    if prSaveAsRow then
+      with Self.GetLastRow do
+        Fields.AddVariable(prNode.ChildNodes[vrVez].NodeName,
+                           prNode.ChildNodes[vrVez].NodeValue,
+                           prNode.ChildNodes[vrVez].NodeName);
+
+    Self.Internal_DoFill(prNode.ChildNodes[vrVez], vrSaveAsRow);
   end;
-finally
-  vrFile.Clear;
-  FreeAndNil(vrFile);
 end;
+
+procedure TJupiterXMLDataProvider.ProvideData;
+var
+  vrDocumentXML : TXMLDocument;
+begin
+  if ((Trim(Self.Filename) = EmptyStr) or (not FileExists(Self.Filename))) then
+     raise Exception.Create('Filename must be valid');
+
+  ReadXMLFile(vrDocumentXML, UTF8ToSys(Self.Filename));
+  try
+    Self.Internal_DoFill(vrDocumentXML);
+  finally
+    FreeAndNil(vrDocumentXML);
+  end;
 end;
 
 end.

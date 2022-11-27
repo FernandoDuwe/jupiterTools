@@ -27,6 +27,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure miEditGeneratorClick(Sender: TObject);
     procedure miFormParamsClick(Sender: TObject);
     procedure miRefreshClick(Sender: TObject);
     procedure miViewParamsClick(Sender: TObject);
@@ -68,7 +69,7 @@ var
 
 implementation
 
-uses JupiterApp, JupiterDialogForm;
+uses JupiterApp, JupiterDialogForm, uGenerator;
 
 {$R *.lfm}
 
@@ -105,6 +106,20 @@ begin
     Self.PrepareForm;
   finally
     Self.UpdateForm;
+  end;
+end;
+
+procedure TFJupiterForm.miEditGeneratorClick(Sender: TObject);
+var
+  vrGenerator : TFGenerator;
+begin
+  Application.CreateForm(TFGenerator, vrGenerator);
+  try
+    vrGenerator.FormID := Self.Params.VariableById(FIELD_ID_GENERADOR).Value;
+    vrGenerator.ShowModal;
+  finally
+    vrGenerator.Release;
+    FreeAndNil(vrGenerator);
   end;
 end;
 

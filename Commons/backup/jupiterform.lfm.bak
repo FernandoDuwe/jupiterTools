@@ -127,6 +127,7 @@ object FJupiterForm: TFJupiterForm
     end
     object miEditGenerator: TMenuItem
       Caption = 'Editar com Generator'
+      OnClick = miEditGeneratorClick
     end
     object miViewParams: TMenuItem
       Caption = 'Parâmetros'

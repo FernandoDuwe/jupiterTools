@@ -1,10 +1,12 @@
 inherited FGenerator: TFGenerator
-  Left = 495
+  Left = 375
   Height = 689
-  Top = 187
+  Top = 152
   Width = 1292
   ClientHeight = 689
   ClientWidth = 1292
+  OnCreate = FormCreate
+  OnShow = FormShow
   inherited sbActions: TScrollBox
     Width = 1292
   end
@@ -20,8 +22,8 @@ inherited FGenerator: TFGenerator
   inherited sbBody: TScrollBox
     Height = 566
     Width = 1292
-    HorzScrollBar.Page = 158
-    VertScrollBar.Page = 78
+    HorzScrollBar.Page = 531
+    VertScrollBar.Page = 455
     ClientHeight = 562
     ClientWidth = 1288
     object pcTabs: TPageControl[0]
@@ -29,9 +31,9 @@ inherited FGenerator: TFGenerator
       Height = 562
       Top = 0
       Width = 1288
-      ActivePage = tsForms
+      ActivePage = tsInicio
       Align = alClient
-      TabIndex = 1
+      TabIndex = 0
       TabOrder = 0
       object tsInicio: TTabSheet
         Caption = 'Início'
@@ -44,7 +46,11 @@ inherited FGenerator: TFGenerator
           Width = 1280
           Align = alClient
           Lines.Strings = (
-            'mmLines'
+            'Bem vindo ao Generator!'
+            ''
+            'Nesse módulo, você está livre para dar asas a imaginação, criando suas próprias funcionalidades dentro do sistema.'
+            'Você poderá criar formulários, executar rotinas e criar menus.'
+            ''
           )
           ScrollBars = ssBoth
           TabOrder = 0
@@ -52,7 +58,199 @@ inherited FGenerator: TFGenerator
       end
       object tsForms: TTabSheet
         Caption = 'Formulários'
+        ClientHeight = 534
+        ClientWidth = 1280
+        object lbFormList: TListBox
+          Left = 0
+          Height = 534
+          Top = 0
+          Width = 268
+          Align = alLeft
+          ItemHeight = 0
+          OnClick = lbFormListClick
+          TabOrder = 0
+        end
+        object spForms: TSplitter
+          Left = 268
+          Height = 534
+          Top = 0
+          Width = 5
+        end
+        object pnForm: TPanel
+          Left = 273
+          Height = 534
+          Top = 0
+          Width = 1007
+          Align = alClient
+          BevelOuter = bvNone
+          ClientHeight = 534
+          ClientWidth = 1007
+          TabOrder = 2
+          object Panel1: TPanel
+            Left = 0
+            Height = 72
+            Top = 0
+            Width = 1007
+            Align = alTop
+            BevelOuter = bvNone
+            ClientHeight = 72
+            ClientWidth = 1007
+            TabOrder = 0
+            object Label1: TLabel
+              Left = 8
+              Height = 15
+              Top = 8
+              Width = 42
+              Caption = 'Arquivo'
+              ParentColor = False
+              ParentFont = False
+            end
+            object edFile: TEdit
+              Left = 8
+              Height = 23
+              Top = 32
+              Width = 976
+              Anchors = [akTop, akLeft, akRight]
+              ReadOnly = True
+              TabOrder = 0
+            end
+          end
+          object Panel2: TPanel
+            Left = 0
+            Height = 200
+            Top = 72
+            Width = 1007
+            Align = alTop
+            BevelOuter = bvNone
+            ClientHeight = 200
+            ClientWidth = 1007
+            TabOrder = 1
+            object Label2: TLabel
+              Left = 8
+              Height = 15
+              Top = 8
+              Width = 32
+              Caption = 'Ações'
+              ParentColor = False
+              ParentFont = False
+            end
+            object lvActions: TListView
+              Left = 8
+              Height = 142
+              Top = 40
+              Width = 976
+              Anchors = [akTop, akLeft, akRight, akBottom]
+              Columns = <              
+                item
+                  AutoSize = True
+                  Caption = 'Título'
+                  Width = 45
+                end              
+                item
+                  AutoSize = True
+                  Caption = 'Arquivo'
+                  Width = 57
+                end>
+              GridLines = True
+              TabOrder = 0
+              ViewStyle = vsReport
+              OnSelectItem = lvActionsSelectItem
+            end
+            object sbActionDelete: TSpeedButton
+              Left = 960
+              Height = 22
+              Top = 8
+              Width = 23
+              Anchors = [akTop, akRight]
+              Flat = True
+            end
+            object sbActionAdd: TSpeedButton
+              Left = 928
+              Height = 22
+              Top = 8
+              Width = 23
+              Anchors = [akTop, akRight]
+              Flat = True
+            end
+          end
+          object Splitter1: TSplitter
+            Cursor = crVSplit
+            Left = 0
+            Height = 5
+            Top = 272
+            Width = 1007
+            Align = alTop
+            ResizeAnchor = akTop
+          end
+          object Panel3: TPanel
+            Left = 0
+            Height = 257
+            Top = 277
+            Width = 1007
+            Align = alClient
+            BevelOuter = bvNone
+            ClientHeight = 257
+            ClientWidth = 1007
+            TabOrder = 3
+            object Label3: TLabel
+              Left = 8
+              Height = 15
+              Top = 8
+              Width = 44
+              Caption = 'Campos'
+              ParentColor = False
+              ParentFont = False
+            end
+            object lvFields: TListView
+              Left = 8
+              Height = 199
+              Top = 40
+              Width = 976
+              Anchors = [akTop, akLeft, akRight, akBottom]
+              Columns = <              
+                item
+                  AutoSize = True
+                  Caption = 'ID'
+                  Width = 26
+                end              
+                item
+                  AutoSize = True
+                  Caption = 'Valor'
+                  Width = 42
+                end              
+                item
+                  AutoSize = True
+                  Caption = 'Descrição'
+                  Width = 66
+                end>
+              GridLines = True
+              TabOrder = 0
+              ViewStyle = vsReport
+              OnSelectItem = lvFieldsSelectItem
+            end
+            object sbFieldDelete: TSpeedButton
+              Left = 960
+              Height = 22
+              Top = 8
+              Width = 23
+              Anchors = [akTop, akRight]
+              Flat = True
+            end
+            object sbFieldAdd: TSpeedButton
+              Left = 928
+              Height = 22
+              Top = 8
+              Width = 23
+              Anchors = [akTop, akRight]
+              Flat = True
+            end
+          end
+        end
       end
     end
+  end
+  inherited ppMenu: TPopupMenu
+    Left = 96
+    Top = 160
   end
 end
