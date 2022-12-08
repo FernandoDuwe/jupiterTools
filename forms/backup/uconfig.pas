@@ -132,6 +132,12 @@ begin
 
   tvNavigation.Selected := vrNode;
 
+  vrNode := tvNavigation.Items.Add(nil, 'Datasets');
+  vrNode.Data := TJupiterVariableList.Create;
+
+  TJupiterVariableList(vrNode.Data).CopyValues(vrJupiterApp.DataSetParams);
+  TJupiterVariableList(vrNode.Data).Tag := -3;
+
   vrNode := tvNavigation.Items.Add(nil, 'Módulos');
 
   Self.Internal_ListModules(vrNode);
@@ -165,7 +171,7 @@ begin
                                                 vrDialog.Fields.VariableFormById('VALUE').Value,
                                                 vrDialog.Fields.VariableFormById('DESC').Value);
 
-      Self.FConfigGenerator.Variables (TJupiterVariableFormList.CreateFromVariableList(Self.FConfigGenerator.Variables));
+      Self.FConfigGenerator.SetVariables(TJupiterVariableFormList.CreateFromVariableList(Self.FConfigGenerator.Variables));
     end;
   finally
     FreeAndNil(vrDialog);
@@ -193,10 +199,17 @@ begin
         Continue;
       end;
 
-      if Tag = -2 then // Variáveis gerais
+      if Tag = -2 then // Variáveis de usuário
       begin
         vrJupiterApp.UserParams.CopyValues(TJupiterVariableList(tvNavigation.Items[vrVez].Data));
         vrJupiterApp.UserParams.SaveToFile;
+        Continue;
+      end;
+
+      if Tag = -3 then // Datasets
+      begin
+        vrJupiterApp.DataSetParams.CopyValues(TJupiterVariableList(tvNavigation.Items[vrVez].Data));
+        vrJupiterApp.DataSetParams.SaveToFile;
         Continue;
       end;
 

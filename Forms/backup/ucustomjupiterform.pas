@@ -51,8 +51,6 @@ begin
 end;
 
 procedure TFCustomJupiterForm.Internal_PrepareForm;
-var
-  vrVez : Integer;
 begin
   inherited Internal_PrepareForm;
 end;
@@ -61,8 +59,7 @@ procedure TFCustomJupiterForm.PrepareForm;
 begin
   inherited PrepareForm;
 
-  for vrVez := 0 to Self.Generator.Fields.Size - 1 do
-    Self.FFormGenerator.Variables.Add(Self.Generator.Fields.GetAtIndex(vrVez));
+  Self.FFormGenerator.Variables.CreateFromVariableList(Self.Generator.Fields);
 
   if ((Assigned(Self.FFormGenerator.Variables)) and (Self.FFormGenerator.Variables.Size > 0)) then
     Self.FFormGenerator.DrawForm;

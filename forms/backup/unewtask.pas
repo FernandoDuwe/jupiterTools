@@ -77,7 +77,10 @@ begin
       raise Exception.Create('O campo Tarefa é obrigatório');
 
     if Assigned(Self.FormGenerator.Variables) then
-      Self.Generator.Variables.Validate;
+    begin
+      Self.FormGenerator.Variables.Validate;
+      Self.FormGenerator.Variables.Save;
+    end;
 
     with TJupiterToolsModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Tools')) do
     begin

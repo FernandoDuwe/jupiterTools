@@ -229,7 +229,7 @@ begin
 
       // Adiciona as ações no formulario
       for vrVez := 0 to Self.Generator.Actions.Size - 1 do
-         Self.Actions.Add(Self.Generator.Actions.GetAtIndex(vrVez));
+        Self.Actions.Add(Self.Generator.Actions.GetAtIndex(vrVez));
     end;
   finally
     Self.Actions.BuildActions(sbActions);

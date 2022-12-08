@@ -24,15 +24,16 @@ type
 
   published
     property CleanOnShow   : Boolean read FCleanOnShow   write FCleanOnShow default False;
-    property CopyButton    : Boolean read FCopyButton    write FCopyButton default False;
+    property CopyButton    : Boolean read FCopyButton    write FCopyButton  default False;
     property ComponentType : String  read FComponentType write FComponentType;
     property ListVariable  : String  read FListVariable  write FListVariable;
-    property Required      : Boolean read FRequired      write FRequired default False;
-    property ReadOnly      : Boolean read FReadOnly      write FReadOnly default False;
+    property Required      : Boolean read FRequired      write FRequired  default False;
+    property ReadOnly      : Boolean read FReadOnly      write FReadOnly  default False;
     property RunButton     : Boolean read FRunButton     write FRunButton default False;
-
   public
     function HasValue : Boolean;
+
+    constructor CreateFromVariable(prVariable : TJupiterVariable);
   end;
 
   { TJupiterVariableFormList }
@@ -45,16 +46,30 @@ type
     procedure AddField(prID, prTitle, prValue : String; prRequired : Boolean = True; prReadOnly : Boolean = False);
 
     constructor CreateFromVariableList(prList : TJupiterVariableList);
+    procedure CopyFromVariableList(prList : TJupiterVariableList);
     procedure Validate; virtual;
+    procedure Save; virtual;
   end;
 
 implementation
+
+uses JupiterApp;
 
 { TJupiterVariableForm }
 
 function TJupiterVariableForm.HasValue: Boolean;
 begin
   Result := Trim(Self.Value) <> EmptyStr;
+end;
+
+constructor TJupiterVariableForm.CreateFromVariable(prVariable: TJupiterVariable);
+begin
+  inherited Create;
+
+  Self.ID    := prVariable.ID;
+  Self.Value := prVariable.Value;
+  Self.Title := prVariable.Title;
+  Self.Save  := prVariable.Save;
 end;
 
 { TJupiterVariableFormList }
@@ -95,20 +110,38 @@ begin
 end;
 
 constructor TJupiterVariableFormList.CreateFromVariableList(prList: TJupiterVariableList);
-var
-  vrVez  : Integer;
-  vrForm : TJupiterVariableForm;
 begin
   inherited Create;
 
+  Self.CopyFromVariableList(prList);
+end;
+
+procedure TJupiterVariableFormList.CopyFromVariableList(prList: TJupiterVariableList);
+var
+  vrVez  : Integer;
+  vrForm : TJupiterVariableForm;
+  vrCurrentVariable : TJupiterVariableForm;
+begin
   for vrVez := 0 to prList.Size - 1 do
   begin
+    if prList.VariableByIndex(vrVez) is TJupiterVariable then
+      vrCurrentVariable := TJupiterVariableForm.CreateFromVariable(prList.VariableByIndex(vrVez))
+    else
+      vrCurrentVariable := TJupiterVariableForm(prList.VariableByIndex(vrVez));
+
     vrForm          := TJupiterVariableForm.Create;
-    vrForm.Title    := prList.VariableByIndex(vrVez).Title;
-    vrForm.ID       := prList.VariableByIndex(vrVez).ID;
-    vrForm.Value    := prList.VariableByIndex(vrVez).Value;
-    vrForm.Save     := prList.VariableByIndex(vrVez).Save;
-    vrForm.ReadOnly := not prList.VariableByIndex(vrVez).Save;
+    vrForm.Title    := vrCurrentVariable.Title;
+    vrForm.ID       := vrCurrentVariable.ID;
+    vrForm.Value    := vrCurrentVariable.Value;
+    vrForm.Save     := vrCurrentVariable.Save;
+    vrForm.ReadOnly := vrCurrentVariable.ReadOnly;
+    vrForm.Required := vrCurrentVariable.Required;
+
+    vrForm.ComponentType := vrCurrentVariable.ComponentType;
+    vrForm.CleanOnShow   := vrCurrentVariable.CleanOnShow;
+    vrForm.RunButton     := vrCurrentVariable.RunButton;
+    vrForm.CopyButton    := vrCurrentVariable.CopyButton;
+    vrForm.ListVariable  := vrCurrentVariable.ListVariable;
 
     Self.Add(vrForm);
   end;
@@ -122,6 +155,19 @@ begin
     with Self.VariableFormByIndex(vrVez) do
       if ((Required) and (not HasValue)) then
         raise Exception.Create(Format('O campo %0:s é obrigatório.', [Title]));
+end;
+
+procedure TJupiterVariableFormList.Save;
+var
+  vrVez : Integer;
+begin
+  for vrVez := 0 to Self.Size - 1 do
+  begin
+    if not vrJupiterApp.Params.Exists(Self.VariableByIndex(vrVez).ID) then
+      vrJupiterApp.Params.AddVariable(Self.VariableByIndex(vrVez).ID, Self.VariableByIndex(vrVez).Value, Self.VariableByIndex(vrVez).Title)
+    else
+      vrJupiterApp.Params.VariableById(Self.VariableByIndex(vrVez).ID).Value := Self.VariableByIndex(vrVez).Value;
+  end;
 end;
 
 end.

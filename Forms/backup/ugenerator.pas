@@ -188,7 +188,7 @@ begin
     Exit;
 
   if Application.MessageBox('Deseja realmente excluir', 'Excluir Campo', MB_ICONQUESTION + MB_YESNO) = ID_YES then
-    Application.ProcessMessages;
+    Self.Internal_DeleteField(TJupiterVariableForm(lvFields.Selected.Data).Tag);
 end;
 
 procedure TFGenerator.FormCreate(Sender: TObject);

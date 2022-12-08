@@ -56,6 +56,7 @@ const
    ICON_PICTUREFILE : SmallInt = 34;
    ICON_COPY        : SmallInt = 35;
    ICON_EXIT        : SmallInt = 36;
+   ICON_WIZARD      : SmallInt = 37;
 
    NULL_KEY : SmallInt = -1;
 
@@ -73,7 +74,7 @@ const
    FORM_MARGIN_LEFT     : Integer = 8;
    FORM_MARGIN_RIGHT    : Integer = 16;
    FORM_MARGIN_BOTTOM   : Integer = 8;
-   FORM_ACTION_MINWIDTH : Integer = 100;
+   FORM_ACTION_MINWIDTH : Integer = 120;
 
    // Generator
    GENERATOR_SYSLAYER : SmallInt = 1000;

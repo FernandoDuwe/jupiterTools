@@ -228,8 +228,7 @@ begin
       Self.Generator.FormID := Self.Params.VariableById(FIELD_ID_GENERADOR).Value;
 
       // Adiciona as ações no formulario
-      for vrVez := 0 to Self.Generator.Actions.Size - 1 do
-        Self.Actions.Add(Self.Generator.Actions.GetAtIndex(vrVez));
+      Self.Actions.CopyFromList(Self.Generator.Actions);
     end;
   finally
     Self.Actions.BuildActions(sbActions);

@@ -55,6 +55,8 @@ type
     procedure Internal_OnClick(Sender: TObject);
     function Internal_CreateButton(prAction : TJupiterAction; prIndex, prLeft : Integer; prOwner : TScrollBox) : TBitBtn;
   public
+    procedure CopyFromList(prCopyList : TJupiterActionList);
+
     procedure BuildActions(prOwner : TScrollBox);
 
     function GetActionButton(prActionIndex : Integer; prOwner : TScrollBox) : TBitBtn;
@@ -77,6 +79,8 @@ begin
 end;
 
 function TJupiterActionList.Internal_CreateButton(prAction: TJupiterAction; prIndex, prLeft: Integer; prOwner: TScrollBox): TBitBtn;
+var
+  vrWidth : Integer;
 begin
   Result            := TBitBtn.Create(prOwner);
   Result.Parent     := prOwner;
@@ -91,14 +95,52 @@ begin
     Result.Images := vrJupiterApp.MainIcons;
 
   Result.AutoSize := True;
+  Application.ProcessMessages;
+
+  vrWidth := Result.Width;
+
   Result.AutoSize := False;
 
-  if Result.Width < FORM_ACTION_MINWIDTH then
-    Result.Width := FORM_ACTION_MINWIDTH;
+  if vrWidth < FORM_ACTION_MINWIDTH then
+    Result.Width := FORM_ACTION_MINWIDTH
+  else
+    Result.Width := vrWidth;
 
   Result.Height  := prOwner.Height - (FORM_MARGIN_TOP + FORM_MARGIN_BOTTOM);
   Result.Tag     := prIndex;
   Result.OnClick := @Self.Internal_OnClick;
+end;
+
+procedure TJupiterActionList.CopyFromList(prCopyList: TJupiterActionList);
+var
+  vrVez           : Integer;
+  vrAction        : TJupiterAction;
+  vrCurrentAction : TJupiterAction;
+  vrLocation      : TJupiterRoute;
+begin
+  for vrVez := 0 to prCopyList.Size - 1 do
+  begin
+    vrCurrentAction := TJupiterAction(prCopyList.GetAtIndex(vrVez));
+    vrLocation      := nil;
+
+    if Assigned(vrCurrentAction.Location) then
+      vrLocation := TJupiterRoute.Create(vrCurrentAction.Location.Path);
+
+    if Assigned(vrCurrentAction.Route) then
+      vrAction := TJupiterAction.Create(vrCurrentAction.Title, TJupiterRoute.Create(vrCurrentAction.Route.Path), vrLocation);
+
+    if Assigned(vrCurrentAction.Runnable) then
+      vrAction := TJupiterAction.Create(vrCurrentAction.Title, TJupiterRunnable.Create(vrCurrentAction.Runnable.CommandLine), vrLocation);
+
+    if Assigned(vrCurrentAction.OnClick) then
+      vrAction := TJupiterAction.Create(vrCurrentAction.Title, vrCurrentAction.OnClick, vrLocation);
+
+    vrAction.Icon := vrCurrentAction.Icon;
+    vrAction.ConfirmBeforeExecute := vrCurrentAction.ConfirmBeforeExecute;
+    vrAction.Hint := vrCurrentAction.Hint;
+
+    Self.Add(vrAction);
+  end;
 end;
 
 procedure TJupiterActionList.BuildActions(prOwner: TScrollBox);

@@ -14,16 +14,17 @@ type
 
   TJupiterApp = class(TJupiterObject)
   private
-    FAppID       : String;
-    FAppName     : String;
-    FModules     : TJupiterModuleList;
-    FMessages    : TJupiterObjectList;
-    FFormRoutes  : TJupiterObjectList;
-    FBodyPanel   : TPanel;
-    FCurrentForm : TFJupiterForm;
-    FParams      : TJupiterVariableList;
-    FUserParams  : TJupiterVariableList;
-    FMainIcons   : TImageList;
+    FAppID          : String;
+    FAppName        : String;
+    FModules        : TJupiterModuleList;
+    FMessages       : TJupiterObjectList;
+    FFormRoutes     : TJupiterObjectList;
+    FBodyPanel      : TPanel;
+    FCurrentForm    : TFJupiterForm;
+    FParams         : TJupiterVariableList;
+    FUserParams     : TJupiterVariableList;
+    FDataSetParams  : TJupiterVariableList;
+    FMainIcons      : TImageList;
 
   protected
     procedure Internal_Prepare; virtual;
@@ -35,11 +36,12 @@ type
     property CurrentForm : TFJupiterForm read FCurrentForm write FCurrentForm;
     property MainIcons   : TImageList    read FMainIcons   write FMainIcons;
 
-    property FormRoutes  : TJupiterObjectList   read FFormRoutes write FFormRoutes;
-    property ModulesList : TJupiterModuleList   read FModules    write FModules;
-    property Messages    : TJupiterObjectList   read FMessages   write FMessages;
-    property Params      : TJupiterVariableList read FParams     write FParams;
-    property UserParams  : TJupiterVariableList read FUserParams write FUserParams;
+    property FormRoutes     : TJupiterObjectList   read FFormRoutes    write FFormRoutes;
+    property ModulesList    : TJupiterModuleList   read FModules       write FModules;
+    property Messages       : TJupiterObjectList   read FMessages      write FMessages;
+    property Params         : TJupiterVariableList read FParams        write FParams;
+    property DataSetParams  : TJupiterVariableList read FDataSetParams write FDataSetParams;
+    property UserParams     : TJupiterVariableList read FUserParams    write FUserParams;
   public
     procedure AddModule(prModule : TJupiterModule);
     function AddMessage(prTitle, prOrigin : String) : TJupiterSystemMessage;
@@ -191,7 +193,7 @@ begin
         Self.CurrentForm.WindowState := wsMaximized;
         Self.CurrentForm.BorderStyle := bsNone;
         Self.CurrentForm.Align       := alClient;
-        Self.CurrentForm.IsModal := prAsModal;
+        Self.CurrentForm.IsModal     := prAsModal;
 
         Self.CurrentForm.Params.CopyValues(prRoute.Params);
 
@@ -221,10 +223,12 @@ begin
   Self.FFormRoutes := TJupiterObjectList.Create;
   Self.FModules    := TJupiterModuleList.Create;
 
-  Self.FMessages   := TJupiterObjectList.Create;
-  Self.FParams     := TJupiterVariableList.Create;
-  Self.FUserParams := TJupiterVariableList.Create;
+  Self.FMessages      := TJupiterObjectList.Create;
+  Self.FParams        := TJupiterVariableList.Create;
+  Self.FDataSetParams := TJupiterVariableList.Create;
+  Self.FUserParams    := TJupiterVariableList.Create;
 
+  Self.Params.AddChildList(Self.DataSetParams);
   Self.Params.AddChildList(Self.UserParams);
 
   Self.Internal_Prepare;
@@ -236,6 +240,7 @@ begin
   FreeAndNil(Self.FMessages);
   FreeAndNil(Self.FModules);
   FreeAndNil(Self.FParams);
+  FreeAndNil(Self.FDataSetParams);
   FreeAndNil(Self.FUserParams);
 
   inherited Destroy;

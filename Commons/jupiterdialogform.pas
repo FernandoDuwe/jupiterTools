@@ -57,7 +57,10 @@ begin
   Application.CreateForm(TFCustomJupiterForm, FCurrentForm);
   try
     FCurrentForm.Caption                 := Self.Title;
-    FCurrentForm.FormGenerator.Variables := Self.Fields;
+
+    FCurrentForm.FormGenerator.Variables.CopyFromVariableList(Self.Fields);
+    FCurrentForm.FormGenerator.Variables.CopyList := Self.Fields;
+
     FCurrentForm.Hint                    := Self.Hint;
     FCurrentForm.Height                  := Round(Screen.Height / 2);
     FCurrentForm.Width                   := Round(Screen.Width / 2);

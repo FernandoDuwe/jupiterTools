@@ -3,22 +3,22 @@
   <actions>
     <action>
       <title>Abrir Minhas Tarefas</title>
-      <hint>Abrir diretório de Tarefas</hint>
-      <file>1</file>
+      <hint>Clique aqui para abrir Minhas Tarefas</hint>
+      <file>{Jupiter.Tools.Tasks.Path}</file>
       <icon>2</icon>
-      <confirmBeforeExecute>-1</confirmBeforeExecute>
+      <confirmBeforeExecute>0</confirmBeforeExecute>
     </action>
   </actions>
   <fields>
     <field>
       <id>User.CurrentTask.Title</id>
       <value></value>
-      <description>Título da Tarefa</description>
+      <description>Título da tarefa atual</description>
       <required>-1</required>
       <readOnly>0</readOnly>
       <cleanOnShow>-1</cleanOnShow>
       <componentType>Edit</componentType>
-      <copyButton>-1</copyButton>
+      <copyButton>0</copyButton>
       <listVariable></listVariable>
       <runButton>0</runButton>
     </field>
