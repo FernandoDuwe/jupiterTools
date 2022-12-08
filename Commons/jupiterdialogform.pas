@@ -56,11 +56,11 @@ begin
 
   Application.CreateForm(TFCustomJupiterForm, FCurrentForm);
   try
-    FCurrentForm.Caption             := Self.Title;
-    FCurrentForm.Generator.Variables := Self.Fields;
-    FCurrentForm.Hint                := Self.Hint;
-    FCurrentForm.Height              := Round(Screen.Height / 2);
-    FCurrentForm.Width               := Round(Screen.Width / 2);
+    FCurrentForm.Caption                 := Self.Title;
+    FCurrentForm.FormGenerator.Variables := Self.Fields;
+    FCurrentForm.Hint                    := Self.Hint;
+    FCurrentForm.Height                  := Round(Screen.Height / 2);
+    FCurrentForm.Width                   := Round(Screen.Width / 2);
 
     if not Self.OnlyShow then
     begin
@@ -72,8 +72,6 @@ begin
         Icon := ICON_SAVE;
       end;
     end;
-
-    FCurrentForm.PrepareForm;
 
     Result := FCurrentForm.ShowModal = mrOK;
   finally

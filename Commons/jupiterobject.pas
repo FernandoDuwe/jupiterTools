@@ -36,6 +36,7 @@ type
     procedure Add(prJupiterObject : TJupiterObject);
 
     procedure Merge(prOtherList : TJupiterObjectList);
+    procedure DeleteAtIndex(prIndex : Integer);
 
     function GetLastObject : TJupiterObject;
 
@@ -71,6 +72,17 @@ var
 begin
   for vrVez := 0 to prOtherList.Size - 1 do
     Self.Add(prOtherList.GetAtIndex(vrVez));
+end;
+
+procedure TJupiterObjectList.DeleteAtIndex(prIndex: Integer);
+var
+  vrObj : TJupiterObject;
+begin
+  vrObj := Self.GetAtIndex(prIndex);
+
+  FreeAndNil(vrObj);
+
+  Self.FList.Delete(prIndex);
 end;
 
 function TJupiterObjectList.GetLastObject: TJupiterObject;

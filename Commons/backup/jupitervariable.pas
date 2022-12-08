@@ -5,7 +5,7 @@ unit JupiterVariable;
 interface
 
 uses
-  Classes, JupiterObject, JupiterEnviroment, SysUtils;
+  Classes, JupiterObject, JupiterEnviroment, JupiterConsts, SysUtils;
 
 type
 

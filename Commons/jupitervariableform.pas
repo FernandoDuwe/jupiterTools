@@ -13,11 +13,23 @@ type
 
   TJupiterVariableForm = class(TJupiterVariable)
   private
-    FRequired : Boolean;
-    FReadOnly : Boolean;
+    FCleanOnShow   : Boolean;
+    FRequired      : Boolean;
+    FReadOnly      : Boolean;
+    FCopyButton    : Boolean;
+    FRunButton     : Boolean;
+
+    FComponentType : String;
+    FListVariable  : String;
+
   published
-    property Required : Boolean read FRequired write FRequired default False;
-    property ReadOnly : Boolean read FReadOnly write FReadOnly default False;
+    property CleanOnShow   : Boolean read FCleanOnShow   write FCleanOnShow default False;
+    property CopyButton    : Boolean read FCopyButton    write FCopyButton  default False;
+    property ComponentType : String  read FComponentType write FComponentType;
+    property ListVariable  : String  read FListVariable  write FListVariable;
+    property Required      : Boolean read FRequired      write FRequired  default False;
+    property ReadOnly      : Boolean read FReadOnly      write FReadOnly  default False;
+    property RunButton     : Boolean read FRunButton     write FRunButton default False;
 
   public
     function HasValue : Boolean;

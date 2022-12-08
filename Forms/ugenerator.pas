@@ -6,9 +6,10 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls,
-  ExtCtrls, Buttons, uCustomJupiterForm, JupiterFileDataProvider,
-  JupiterEnviroment, JupiterConsts, JupiterXMLDataProvider,
-  JupiterGeneratorForm, JupiterAction, JupiterRunnable;
+  ExtCtrls, Buttons, uCustomJupiterForm, uNewAction, uNewField,
+  JupiterFileDataProvider, JupiterEnviroment, JupiterConsts,
+  JupiterXMLDataProvider, JupiterGeneratorForm, JupiterAction, JupiterRunnable,
+  JupiterVariableForm, LCLType;
 
 type
 
@@ -39,14 +40,24 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure lbFormListClick(Sender: TObject);
+    procedure lvActionsDblClick(Sender: TObject);
     procedure lvActionsSelectItem(Sender: TObject; Item: TListItem;
       Selected: Boolean);
+    procedure lvFieldsDblClick(Sender: TObject);
     procedure lvFieldsSelectItem(Sender: TObject; Item: TListItem;
       Selected: Boolean);
+    procedure sbActionAddClick(Sender: TObject);
+    procedure sbActionDeleteClick(Sender: TObject);
+    procedure sbFieldAddClick(Sender: TObject);
+    procedure sbFieldDeleteClick(Sender: TObject);
   private
     FFormID : String;
 
     procedure Internal_ShowForm(prFile : String);
+    procedure Internal_EditAction(prActionIndex : Integer; prAction : TJupiterAction);
+    procedure Internal_DeleteAction(prActionIndex : Integer);
+    procedure Internal_EditField(prFieldIndex : Integer; prField : TJupiterVariableForm);
+    procedure Internal_DeleteField(prFieldIndex : Integer);
     procedure Internal_PrepareForm; override;
     procedure Internal_RefreshClick(Sender: TObject);
 
@@ -78,16 +89,106 @@ begin
   Self.Internal_ShowForm(lbFormList.Items[lbFormList.ItemIndex]);
 end;
 
+procedure TFGenerator.lvActionsDblClick(Sender: TObject);
+begin
+  if not Assigned(lvActions.Selected) then
+    Exit;
+
+  if not Assigned(lvActions.Selected.Data) then
+    Exit;
+
+  Application.CreateForm(TFNewAction, FNewAction);
+  try
+    FNewAction.ActionIndex := TJupiterAction(lvActions.Selected.Data).Tag;
+    FNewAction.Action := TJupiterAction(lvActions.Selected.Data);
+
+    if FNewAction.ShowModal = mrOK then
+      Self.Internal_EditAction(FNewAction.ActionIndex, FNewAction.Action);
+  finally
+    FreeAndNil(FNewAction);
+  end;
+end;
+
 procedure TFGenerator.lvActionsSelectItem(Sender: TObject; Item: TListItem;
   Selected: Boolean);
 begin
   Self.Internal_UpdateFormForm;
 end;
 
+procedure TFGenerator.lvFieldsDblClick(Sender: TObject);
+begin
+  if not Assigned(lvFields.Selected) then
+    Exit;
+
+  if not Assigned(lvFields.Selected.Data) then
+    Exit;
+
+  Application.CreateForm(TFNewField, FNewField);
+  try
+    FNewField.FieldIndex := TJupiterVariableForm(lvFields.Selected.Data).Tag;
+    FNewField.Field      := TJupiterVariableForm(lvFields.Selected.Data);
+
+    if FNewField.ShowModal = mrOK then
+      Self.Internal_EditField(FNewField.FieldIndex, FNewField.Field);
+  finally
+    FreeAndNil(FNewField);
+  end;
+end;
+
 procedure TFGenerator.lvFieldsSelectItem(Sender: TObject; Item: TListItem;
   Selected: Boolean);
 begin
   Self.Internal_UpdateFormForm;
+end;
+
+procedure TFGenerator.sbActionAddClick(Sender: TObject);
+begin
+  Application.CreateForm(TFNewAction, FNewAction);
+  try
+    FNewAction.ActionIndex := NULL_KEY;
+
+    if FNewAction.ShowModal = mrOK then
+      Self.Internal_EditAction(FNewAction.ActionIndex, FNewAction.Action);
+  finally
+    FreeAndNil(FNewAction);
+  end;
+end;
+
+procedure TFGenerator.sbActionDeleteClick(Sender: TObject);
+begin
+  if not Assigned(lvActions.Selected) then
+    Exit;
+
+  if not Assigned(lvActions.Selected.Data) then
+    Exit;
+
+  if Application.MessageBox('Deseja realmente excluir', 'Excluir Ação', MB_ICONQUESTION + MB_YESNO) = ID_YES then
+    Self.Internal_DeleteAction(TJupiterAction(lvActions.Selected.Data).Tag);
+end;
+
+procedure TFGenerator.sbFieldAddClick(Sender: TObject);
+begin
+  Application.CreateForm(TFNewField, FNewField);
+  try
+    FNewField.FieldIndex := NULL_KEY;
+
+    if FNewField.ShowModal = mrOK then
+      Self.Internal_EditField(FNewField.FieldIndex, FNewField.Field);
+  finally
+    FreeAndNil(FNewField);
+  end;
+end;
+
+procedure TFGenerator.sbFieldDeleteClick(Sender: TObject);
+begin
+  if not Assigned(lvFields.Selected) then
+    Exit;
+
+  if not Assigned(lvFields.Selected.Data) then
+    Exit;
+
+  if Application.MessageBox('Deseja realmente excluir', 'Excluir Campo', MB_ICONQUESTION + MB_YESNO) = ID_YES then
+    Self.Internal_DeleteField(TJupiterVariableForm(lvFields.Selected.Data).Tag);
 end;
 
 procedure TFGenerator.FormCreate(Sender: TObject);
@@ -134,6 +235,7 @@ begin
       vrRow := lvActions.Items.Add;
       vrRow.Caption := TJupiterAction(vrGenerator.Actions.GetAtIndex(vrVez)).Title;
       vrRow.SubItems.Add(TJupiterAction(vrGenerator.Actions.GetAtIndex(vrVez)).Runnable.CommandLine);
+      vrRow.Data := TJupiterAction(vrGenerator.Actions.GetAtIndex(vrVez));
     end;
 
     for vrVez := 0 to vrGenerator.Fields.Size - 1 do
@@ -142,11 +244,138 @@ begin
       vrRow.Caption := vrGenerator.Fields.VariableByIndex(vrVez).ID;
       vrRow.SubItems.Add(vrGenerator.Fields.VariableByIndex(vrVez).Value);
       vrRow.SubItems.Add(vrGenerator.Fields.VariableByIndex(vrVez).Title);
+      vrRow.Data := vrGenerator.Fields.VariableByIndex(vrVez);
     end;
 
     Self.Internal_UpdateFormForm;
   finally
     FreeAndNil(vrEnviroment);
+  end;
+end;
+
+procedure TFGenerator.Internal_EditAction(prActionIndex: Integer; prAction: TJupiterAction);
+var
+  vrGenerator : TJupiterGeneratorForm;
+begin
+  vrGenerator  := TJupiterGeneratorForm.Create;
+  try
+    vrGenerator.FormID := StringReplace(ExtractFileName(edFile.Text), '.xml', EmptyStr, [rfIgnoreCase, rfReplaceAll]);
+
+    if prActionIndex = NULL_KEY then
+    begin
+      vrGenerator.Actions.Add(TJupiterAction.Create(prAction.Title, TJupiterRunnable.Create(prAction.Runnable.CommandLine)));
+
+      with TJupiterAction(vrGenerator.Actions.GetLastObject) do
+      begin
+        Hint := prAction.Hint;
+        Icon := prAction.Icon;
+
+        ConfirmBeforeExecute := prAction.ConfirmBeforeExecute;
+      end;
+    end
+    else
+    begin
+      with TJupiterAction(vrGenerator.Actions.GetAtIndex(prActionIndex)) do
+      begin
+        Title := prAction.Title;
+        Hint  := prAction.Hint;
+        Icon  := prAction.Icon;
+        ConfirmBeforeExecute := prAction.ConfirmBeforeExecute;
+
+        Runnable.CommandLine := prAction.Runnable.CommandLine;
+      end;
+    end;
+
+    vrGenerator.SaveFile;
+
+    Self.Internal_ShowForm(StringReplace(ExtractFileName(edFile.Text), '.xml', EmptyStr, [rfIgnoreCase, rfReplaceAll]));
+  finally
+    FreeAndNil(vrGenerator);
+  end;
+end;
+
+procedure TFGenerator.Internal_DeleteAction(prActionIndex: Integer);
+var
+  vrGenerator : TJupiterGeneratorForm;
+begin
+  vrGenerator  := TJupiterGeneratorForm.Create;
+  try
+    vrGenerator.FormID := StringReplace(ExtractFileName(edFile.Text), '.xml', EmptyStr, [rfIgnoreCase, rfReplaceAll]);
+    vrGenerator.Actions.DeleteAtIndex(prActionIndex);
+    vrGenerator.SaveFile;
+
+    Self.Internal_ShowForm(StringReplace(ExtractFileName(edFile.Text), '.xml', EmptyStr, [rfIgnoreCase, rfReplaceAll]));
+  finally
+    FreeAndNil(vrGenerator);
+  end;
+end;
+
+procedure TFGenerator.Internal_EditField(prFieldIndex: Integer; prField: TJupiterVariableForm);
+var
+  vrGenerator : TJupiterGeneratorForm;
+begin
+  vrGenerator  := TJupiterGeneratorForm.Create;
+  try
+    vrGenerator.FormID := StringReplace(ExtractFileName(edFile.Text), '.xml', EmptyStr, [rfIgnoreCase, rfReplaceAll]);
+
+    if prFieldIndex = NULL_KEY then
+    begin
+      vrGenerator.Fields.Add(TJupiterVariableForm.Create);
+
+      with TJupiterVariableForm(vrGenerator.Fields.GetLastObject) do
+      begin
+        ID    := prField.ID;
+        Title := prField.Title;
+        Value := prField.Value;
+
+        CleanOnShow   := prField.CleanOnShow;
+        Required      := prField.Required;
+        ReadOnly      := prField.ReadOnly;
+        CopyButton    := prField.CopyButton;
+        RunButton     := prField.RunButton;
+        ComponentType := prField.ComponentType;
+        ListVariable  := prField.ListVariable;
+      end;
+    end
+    else
+    begin
+      with TJupiterVariableForm(vrGenerator.Fields.GetAtIndex(prFieldIndex)) do
+      begin
+        ID    := prField.ID;
+        Title := prField.Title;
+        Value := prField.Value;
+
+        CleanOnShow   := prField.CleanOnShow;
+        Required      := prField.Required;
+        ReadOnly      := prField.ReadOnly;
+        CopyButton    := prField.CopyButton;
+        RunButton     := prField.RunButton;
+        ComponentType := prField.ComponentType;
+        ListVariable  := prField.ListVariable;
+      end;
+    end;
+
+    vrGenerator.SaveFile;
+
+    Self.Internal_ShowForm(StringReplace(ExtractFileName(edFile.Text), '.xml', EmptyStr, [rfIgnoreCase, rfReplaceAll]));
+  finally
+    FreeAndNil(vrGenerator);
+  end;
+end;
+
+procedure TFGenerator.Internal_DeleteField(prFieldIndex: Integer);
+var
+  vrGenerator : TJupiterGeneratorForm;
+begin
+  vrGenerator  := TJupiterGeneratorForm.Create;
+  try
+    vrGenerator.FormID := StringReplace(ExtractFileName(edFile.Text), '.xml', EmptyStr, [rfIgnoreCase, rfReplaceAll]);
+    vrGenerator.Fields.DeleteAtIndex(prFieldIndex);
+    vrGenerator.SaveFile;
+
+    Self.Internal_ShowForm(StringReplace(ExtractFileName(edFile.Text), '.xml', EmptyStr, [rfIgnoreCase, rfReplaceAll]));
+  finally
+    FreeAndNil(vrGenerator);
   end;
 end;
 

@@ -78,6 +78,9 @@ const
    // Generator
    GENERATOR_SYSLAYER : SmallInt = 1000;
 
+   FIELD_TYPE_EDIT  : String = 'Edit';
+   FIELD_TYPE_COMBO : String = 'Combo';
+
    function GetCurrentOS : String;
    function GetDirectorySeparator : String;
 

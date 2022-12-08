@@ -1,7 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-      <content>
-                  <actions>
-                  </actions>
-                  <fields>
-                  </fields>
-      </content>
+<content>
+  <actions>
+    <action>
+      <title>Abrir Minhas Tarefas</title>
+      <hint>Abrir diretório de Tarefas</hint>
+      <file>1</file>
+      <icon>2</icon>
+      <confirmBeforeExecute>-1</confirmBeforeExecute>
+    </action>
+  </actions>
+  <fields>
+    <field>
+      <id>User.CurrentTask.Title</id>
+      <value></value>
+      <description>Título da Tarefa</description>
+      <required>-1</required>
+      <readOnly>0</readOnly>
+      <cleanOnShow>-1</cleanOnShow>
+      <componentType>Edit</componentType>
+      <copyButton>-1</copyButton>
+      <listVariable></listVariable>
+      <runButton>0</runButton>
+    </field>
+  </fields>
+</content>

@@ -76,8 +76,8 @@ begin
     if Trim(edTaskName.Text) = EmptyStr then
       raise Exception.Create('O campo Tarefa é obrigatório');
 
-    if Assigned(Self.Generator.Variables) then
-      Self.Generator.Variables.Validate;
+    if Assigned(Self.FormGenerator.Variables) then
+      Self.FormGenerator.Variables.Validate;
 
     with TJupiterToolsModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Tools')) do
     begin

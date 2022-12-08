@@ -18,7 +18,8 @@ uses
   uConfig, JupiterEnviroment, JupiterFormGenerator, JupiterFormField,
   JupiterVariableForm, JupiterDialogForm, uCurrentTask,
   JupiterTasksDataProvider, JupiterTaskTimesDataProvider, uEditor, uGenerator,
-  uMessage, JupiterSystemMessage
+  uMessage, JupiterSystemMessage, JupiterGeneratorForm, JupiterXMLDataProvider,
+  uNewAction, uNewField
   { you can add units after this };
 
 {$R *.res}
@@ -29,6 +30,7 @@ begin
   Application.Initialize;
 
   vrJupiterApp := TJupiterApp.Create('jupiter', 'Jupiter');
+  vrJupiterApp.AddMessage('Iniciando', Application.Title);
 
   vrJupiterApp.AddModule(TJupiterStandardModule.Create);
   vrJupiterApp.AddModule(TJupiterToolsModule.Create);

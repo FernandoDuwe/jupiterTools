@@ -219,7 +219,7 @@ begin
   Result := nil;
 
   for vrVez := 0 to Self.VariableCount - 1 do
-    if Self.VariableByIndex(vrVez).ID = prID then
+    if AnsiUpperCase(Self.VariableByIndex(vrVez).ID) = AnsiUpperCase(prID) then
     begin
       Result := Self.VariableByIndex(vrVez);
       Exit;

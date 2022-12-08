@@ -24,7 +24,6 @@ inherited FConfig: TFConfig
   inherited sbBody: TScrollBox
     Left = 289
     Height = 566
-    Top = 50
     Width = 1003
     PopupMenu = ppMenu
   end

@@ -17,7 +17,7 @@ type
 
     procedure Internal_CreateProcess(prFileName : String; prParams : String; var prOutput : String);
   published
-    property CommandLine : String read FCommandLine;
+    property CommandLine : String read FCommandLine write FCommandLine ;
   public
     procedure Execute;
     procedure OpenFolder(prFolder : String);

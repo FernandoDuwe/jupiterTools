@@ -18,16 +18,23 @@ type
     FVariables           : TJupiterVariableFormList;
     FClearContainerOnSet : Boolean;
     FLastTop             : Integer;
+    FAlreadyDrawed       : Boolean;
 
     procedure Internal_CreateComponent(prVariable : TJupiterVariableForm; prTabOrder : Integer);
     procedure Internal_ClearContainer;
     procedure Internal_DrawForm;
-    procedure Internal_SetVariables(prVariables : TJupiterVariableFormList);
   published
     property ClearContainerOnSet : Boolean read FClearContainerOnSet write FClearContainerOnSet default False;
 
     property Container : TScrollBox               read FContainer write FContainer;
-    property Variables : TJupiterVariableFormList read FVariables write Internal_SetVariables;
+    property Variables : TJupiterVariableFormList read FVariables write FVariables;
+  public
+    procedure DrawForm;
+
+    procedure SetVariables(prVariables : TJupiterVariableFormList);
+
+    constructor Create;
+    destructor Destroy; override;
   end;
 
 implementation
@@ -42,6 +49,7 @@ begin
   vrField.Variable := prVariable;
   vrField.TabOrder := prTabOrder;
   vrField.Draw(Self.Container);
+  vrField.Panel.Top := Self.FLastTop;
 
   Self.FLastTop := vrField.Panel.Top + vrField.Panel.Height + 1;
 end;
@@ -64,7 +72,7 @@ begin
   end;
 end;
 
-procedure TJupiterFormGenerator.Internal_SetVariables(prVariables: TJupiterVariableFormList);
+procedure TJupiterFormGenerator.SetVariables(prVariables: TJupiterVariableFormList);
 begin
   Self.FVariables := prVariables;
 
@@ -72,6 +80,28 @@ begin
     Self.Internal_ClearContainer;
 
   Self.Internal_DrawForm;
+end;
+
+procedure TJupiterFormGenerator.DrawForm;
+begin
+  if Self.FAlreadyDrawed then
+    Exit;
+
+  Self.Internal_DrawForm;
+end;
+
+constructor TJupiterFormGenerator.Create;
+begin
+  Self.FAlreadyDrawed := False;
+
+  Self.FVariables := TJupiterVariableFormList.Create;
+end;
+
+destructor TJupiterFormGenerator.Destroy;
+begin
+  FreeAndNil(Self.FVariables);
+
+  inherited Destroy;
 end;
 
 end.

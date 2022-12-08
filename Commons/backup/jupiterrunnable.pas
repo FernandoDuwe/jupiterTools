@@ -17,7 +17,7 @@ type
 
     procedure Internal_CreateProcess(prFileName : String; prParams : String; var prOutput : String);
   published
-    property CommandLine : String read FCommandLine;
+    property CommandLine : String write FCommandLine read FCommandLine;
   public
     procedure Execute;
     procedure OpenFolder(prFolder : String);
@@ -86,6 +86,7 @@ begin
     else
       Self.OpenFile(vrCommandLine);
   finally
+    Application.MainForm.Cursor := crDefault;
   end;
 end;
 

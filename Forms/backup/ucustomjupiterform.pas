@@ -17,13 +17,13 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
   private
-    FGenerator : TJupiterFormGenerator;
+    FFormGenerator : TJupiterFormGenerator;
   published
-    property Generator : TJupiterFormGenerator read FGenerator write FGenerator;
+    property FormGenerator : TJupiterFormGenerator read FFormGenerator write FFormGenerator;
   protected
     procedure Internal_PrepareForm; override;
   public
-
+    procedure PrepareForm; override;
   end;
 
 var
@@ -39,20 +39,33 @@ procedure TFCustomJupiterForm.FormCreate(Sender: TObject);
 begin
   inherited;
 
-  Self.FGenerator := TJupiterFormGenerator.Create;
-  Self.FGenerator.Container := sbBody;
+  Self.FFormGenerator := TJupiterFormGenerator.Create;
+  Self.FFormGenerator.Container := sbBody;
 end;
 
 procedure TFCustomJupiterForm.FormDestroy(Sender: TObject);
 begin
-  FreeAndNil(FGenerator);
+  FreeAndNil(FFormGenerator);
 
   inherited;
 end;
 
 procedure TFCustomJupiterForm.Internal_PrepareForm;
+var
+  vrVez : Integer;
 begin
   inherited Internal_PrepareForm;
+end;
+
+procedure TFCustomJupiterForm.PrepareForm;
+begin
+  inherited PrepareForm;
+
+  for vrVez := 0 to Self.Generator.Fields.Size - 1 do
+    Self.FFormGenerator.Variables.Add(Self.Generator.Fields.GetAtIndex(vrVez));
+
+  if ((Assigned(Self.FFormGenerator.Variables)) and (Self.FFormGenerator.Variables.Size > 0)) then
+    Self.FFormGenerator.DrawForm;
 end;
 
 end.

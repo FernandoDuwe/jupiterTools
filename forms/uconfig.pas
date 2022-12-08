@@ -72,7 +72,7 @@ begin
     if Assigned(Self.FOldVariant) then
       Self.FOldVariant.CopyValues(Self.FConfigGenerator.Variables);
 
-    Self.FConfigGenerator.Variables := TJupiterVariableFormList.CreateFromVariableList(TJupiterVariableList(tvNavigation.Selected.Data));
+    Self.FConfigGenerator.SetVariables(TJupiterVariableFormList.CreateFromVariableList(TJupiterVariableList(tvNavigation.Selected.Data)));
     Self.FOldVariant := TJupiterVariableList(tvNavigation.Selected.Data);
   finally
     sbBody.Visible := True;
@@ -148,6 +148,7 @@ end;
 procedure TFConfig.Internal_NewConfigClick(Sender: TObject);
 var
   vrDialog : TJupiterDialogForm;
+  vrVez    : Integer;
 begin
   vrDialog := TJupiterDialogForm.Create;
   try
@@ -164,7 +165,7 @@ begin
                                                 vrDialog.Fields.VariableFormById('VALUE').Value,
                                                 vrDialog.Fields.VariableFormById('DESC').Value);
 
-      Self.FConfigGenerator.Variables := TJupiterVariableFormList.CreateFromVariableList(Self.FConfigGenerator.Variables);
+      Self.FConfigGenerator.SetVariables(TJupiterVariableFormList.CreateFromVariableList(Self.FConfigGenerator.Variables));
     end;
   finally
     FreeAndNil(vrDialog);

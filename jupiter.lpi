@@ -258,6 +258,22 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterXMLDataProvider"/>
       </Unit>
+      <Unit>
+        <Filename Value="forms\unewaction.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FNewAction"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uNewAction"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms\unewfield.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FNewField"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uNewField"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

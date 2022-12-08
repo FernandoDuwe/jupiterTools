@@ -1,7 +1,7 @@
 inherited FGenerator: TFGenerator
-  Left = 375
+  Left = 326
   Height = 689
-  Top = 152
+  Top = 143
   Width = 1292
   ClientHeight = 689
   ClientWidth = 1292
@@ -31,9 +31,9 @@ inherited FGenerator: TFGenerator
       Height = 562
       Top = 0
       Width = 1288
-      ActivePage = tsInicio
+      ActivePage = tsForms
       Align = alClient
-      TabIndex = 0
+      TabIndex = 1
       TabOrder = 0
       object tsInicio: TTabSheet
         Caption = 'Início'
@@ -153,8 +153,10 @@ inherited FGenerator: TFGenerator
                   Width = 57
                 end>
               GridLines = True
+              ReadOnly = True
               TabOrder = 0
               ViewStyle = vsReport
+              OnDblClick = lvActionsDblClick
               OnSelectItem = lvActionsSelectItem
             end
             object sbActionDelete: TSpeedButton
@@ -164,6 +166,7 @@ inherited FGenerator: TFGenerator
               Width = 23
               Anchors = [akTop, akRight]
               Flat = True
+              OnClick = sbActionDeleteClick
             end
             object sbActionAdd: TSpeedButton
               Left = 928
@@ -172,6 +175,7 @@ inherited FGenerator: TFGenerator
               Width = 23
               Anchors = [akTop, akRight]
               Flat = True
+              OnClick = sbActionAddClick
             end
           end
           object Splitter1: TSplitter
@@ -225,8 +229,10 @@ inherited FGenerator: TFGenerator
                   Width = 66
                 end>
               GridLines = True
+              ReadOnly = True
               TabOrder = 0
               ViewStyle = vsReport
+              OnDblClick = lvFieldsDblClick
               OnSelectItem = lvFieldsSelectItem
             end
             object sbFieldDelete: TSpeedButton
@@ -236,6 +242,7 @@ inherited FGenerator: TFGenerator
               Width = 23
               Anchors = [akTop, akRight]
               Flat = True
+              OnClick = sbFieldDeleteClick
             end
             object sbFieldAdd: TSpeedButton
               Left = 928
@@ -244,6 +251,7 @@ inherited FGenerator: TFGenerator
               Width = 23
               Anchors = [akTop, akRight]
               Flat = True
+              OnClick = sbFieldAddClick
             end
           end
         end

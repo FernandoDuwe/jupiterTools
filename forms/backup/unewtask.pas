@@ -61,7 +61,7 @@ procedure TFNewTask.FormShow(Sender: TObject);
 begin
   inherited;
 
-  pnCurrentTask.Height := sbBody.Height - 5;
+  Panel1.Height := sbBody.Height - 5;
 end;
 
 procedure TFNewTask.Internal_SaveConfigClick(Sender: TObject);
@@ -76,7 +76,7 @@ begin
     if Trim(edTaskName.Text) = EmptyStr then
       raise Exception.Create('O campo Tarefa é obrigatório');
 
-    if Assigned(Self.Generator.Variables) then
+    if Assigned(Self.FormGenerator.Variables) then
       Self.Generator.Variables.Validate;
 
     with TJupiterToolsModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Tools')) do

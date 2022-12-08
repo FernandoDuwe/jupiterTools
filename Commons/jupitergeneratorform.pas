@@ -67,12 +67,22 @@ begin
 
     for vrVez := 0 to vrXML.Size - 1 do
     begin
-      Self.Fields.AddVariable(vrXML.GetRowByIndex(vrVez).Fields.VariableById('id').Value,
-                              vrXML.GetRowByIndex(vrVez).Fields.VariableById('value').Value,
-                              vrXML.GetRowByIndex(vrVez).Fields.VariableById('description').Value);
+      Self.Fields.Add(TJupiterVariableForm.Create);
 
-      Self.Fields.VariableFormById(vrXML.GetRowByIndex(vrVez).Fields.VariableById('id').Value).Required := StrToBool(vrXML.GetRowByIndex(vrVez).Fields.VariableById('required').Value);
-      Self.Fields.VariableFormById(vrXML.GetRowByIndex(vrVez).Fields.VariableById('id').Value).ReadOnly := StrToBool(vrXML.GetRowByIndex(vrVez).Fields.VariableById('readOnly').Value);
+      TJupiterVariableForm(Self.Fields.GetLastObject).ID    := vrXML.GetRowByIndex(vrVez).Fields.VariableById('id').Value;
+      TJupiterVariableForm(Self.Fields.GetLastObject).Value := vrXML.GetRowByIndex(vrVez).Fields.VariableById('value').Value;
+      TJupiterVariableForm(Self.Fields.GetLastObject).Title := vrXML.GetRowByIndex(vrVez).Fields.VariableById('description').Value;
+
+      TJupiterVariableForm(Self.Fields.GetLastObject).Required := StrToBool(vrXML.GetRowByIndex(vrVez).Fields.VariableById('required').Value);
+      TJupiterVariableForm(Self.Fields.GetLastObject).ReadOnly := StrToBool(vrXML.GetRowByIndex(vrVez).Fields.VariableById('readOnly').Value);
+
+      TJupiterVariableForm(Self.Fields.GetLastObject).CleanOnShow   := StrToBool(vrXML.GetRowByIndex(vrVez).Fields.VariableById('cleanOnShow').Value);
+      TJupiterVariableForm(Self.Fields.GetLastObject).ComponentType := vrXML.GetRowByIndex(vrVez).Fields.VariableById('componentType').Value;
+      TJupiterVariableForm(Self.Fields.GetLastObject).CopyButton    := StrToBool(vrXML.GetRowByIndex(vrVez).Fields.VariableById('copyButton').Value);
+      TJupiterVariableForm(Self.Fields.GetLastObject).ListVariable  := vrXML.GetRowByIndex(vrVez).Fields.VariableById('listVariable').Value;
+      TJupiterVariableForm(Self.Fields.GetLastObject).RunButton     := StrToBool(vrXML.GetRowByIndex(vrVez).Fields.VariableById('runButton').Value);
+
+      TJupiterVariableForm(Self.Fields.GetLastObject).Tag := vrVez;
     end;
   finally
     FreeAndNil(vrXML);
@@ -95,8 +105,10 @@ begin
       Self.Actions.Add(TJupiterAction.Create(vrXML.GetRowByIndex(vrVez).Fields.VariableById('title').Value,
                                              TJupiterRunnable.Create(vrXML.GetRowByIndex(vrVez).Fields.VariableById('file').Value)));
 
+      TJupiterAction(Self.Actions.GetLastObject).Hint                 := vrXML.GetRowByIndex(vrVez).Fields.VariableById('hint').Value;
       TJupiterAction(Self.Actions.GetLastObject).Icon                 := StrToIntDef(vrXML.GetRowByIndex(vrVez).Fields.VariableById('icon').Value, NULL_KEY);
       TJupiterAction(Self.Actions.GetLastObject).ConfirmBeforeExecute := StrToBool(vrXML.GetRowByIndex(vrVez).Fields.VariableById('confirmBeforeExecute').Value);
+      TJupiterAction(Self.Actions.GetLastObject).Tag := vrVez;
     end;
   finally
     FreeAndNil(vrXML);
@@ -151,6 +163,7 @@ begin
     begin
       vrStr.Add('    <action>');
       vrStr.Add('      <title>' + TJupiterAction(Self.Actions.GetAtIndex(vrVez)).Title + '</title>');
+      vrStr.Add('      <hint>' + TJupiterAction(Self.Actions.GetAtIndex(vrVez)).Hint + '</hint>');
       vrStr.Add('      <file>' + TJupiterAction(Self.Actions.GetAtIndex(vrVez)).Runnable.CommandLine + '</file>');
       vrStr.Add('      <icon>' + IntToStr(TJupiterAction(Self.Actions.GetAtIndex(vrVez)).Icon) + '</icon>');
       vrStr.Add('      <confirmBeforeExecute>' + BoolToStr(TJupiterAction(Self.Actions.GetAtIndex(vrVez)).ConfirmBeforeExecute) + '</confirmBeforeExecute>');
@@ -168,6 +181,13 @@ begin
       vrStr.Add('      <description>' + Self.Fields.VariableFormByIndex(vrVez).Title + '</description>');
       vrStr.Add('      <required>' + BoolToStr(Self.Fields.VariableFormByIndex(vrVez).Required) + '</required>');
       vrStr.Add('      <readOnly>' + BoolToStr(Self.Fields.VariableFormByIndex(vrVez).ReadOnly) + '</readOnly>');
+
+      vrStr.Add('      <cleanOnShow>' + BoolToStr(Self.Fields.VariableFormByIndex(vrVez).CleanOnShow) + '</cleanOnShow>');
+      vrStr.Add('      <componentType>' + Self.Fields.VariableFormByIndex(vrVez).ComponentType + '</componentType>');
+      vrStr.Add('      <copyButton>' + BoolToStr(Self.Fields.VariableFormByIndex(vrVez).CopyButton) + '</copyButton>');
+      vrStr.Add('      <listVariable>' + Self.Fields.VariableFormByIndex(vrVez).ListVariable + '</listVariable>');
+      vrStr.Add('      <runButton>' + BoolToStr(Self.Fields.VariableFormByIndex(vrVez).RunButton) + '</runButton>');
+
       vrStr.Add('    </field>');
     end;
 

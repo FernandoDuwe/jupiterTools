@@ -59,9 +59,6 @@ const
 
    NULL_KEY : SmallInt = -1;
 
-   // Generator
-   GENERATOR_SYSLAYER : SmallInt = 1000;
-
    EMPTY_SPACE_SEPARATOR  : String = '/JUPITERTOOLS\|/JUPITERTOOLS\';
    COLUMN_SPACE_SEPARATOR : String = '      ';
    FIELD_ID_GENERADOR     : String = 'Generator.FormId';
@@ -77,6 +74,12 @@ const
    FORM_MARGIN_RIGHT    : Integer = 16;
    FORM_MARGIN_BOTTOM   : Integer = 8;
    FORM_ACTION_MINWIDTH : Integer = 100;
+
+   // Generator
+   GENERATOR_SYSLAYER : SmallInt = 1000;
+
+   FIELD_TYPE_EDIT : String = 'Edit';
+   FIELD_TYPE_COMBO : String = 'Combo';
 
    function GetCurrentOS : String;
    function GetDirectorySeparator : String;

@@ -33,6 +33,7 @@ procedure TJupiterXMLDataProvider.Internal_DoFill(prNode : TDOMNode; prSaveAsRow
 var
   vrVez       : Integer;
   vrSaveAsRow : Boolean;
+  vrValor     : String;
 begin
   for vrVez := 0 to prNode.ChildNodes.Count - 1 do
   begin
@@ -44,13 +45,20 @@ begin
     if vrSaveAsRow then
        Self.AddRow;
 
-    if prSaveAsRow then
-      with Self.GetLastRow do
-        Fields.AddVariable(prNode.ChildNodes[vrVez].NodeName,
-                           prNode.ChildNodes[vrVez].ChildNodes[0].NodeValue,
-                           prNode.ChildNodes[vrVez].NodeName);
+      if prSaveAsRow then
+        with Self.GetLastRow do
+        begin
+          vrValor := EmptyStr;
 
-    Self.Internal_DoFill(prNode.ChildNodes[vrVez], vrSaveAsRow);
+          if prNode.ChildNodes[vrVez].ChildNodes.Count > 0 then
+            vrValor := prNode.ChildNodes[vrVez].ChildNodes[0].NodeValue;
+
+          Fields.AddVariable(prNode.ChildNodes[vrVez].NodeName,
+                             vrValor,
+                             prNode.ChildNodes[vrVez].NodeName);
+        end;
+
+      Self.Internal_DoFill(prNode.ChildNodes[vrVez], vrSaveAsRow);
   end;
 end;
 

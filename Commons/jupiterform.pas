@@ -212,6 +212,8 @@ begin
 end;
 
 procedure TFJupiterForm.PrepareForm;
+var
+  vrVez : Integer;
 begin
   if Self.Prepared then
     Exit;
@@ -222,7 +224,13 @@ begin
     Self.Internal_PrepareForm;
 
     if Self.Params.Exists(FIELD_ID_GENERADOR) then
+    begin
       Self.Generator.FormID := Self.Params.VariableById(FIELD_ID_GENERADOR).Value;
+
+      // Adiciona as ações no formulario
+      for vrVez := 0 to Self.Generator.Actions.Size - 1 do
+        Self.Actions.Add(Self.Generator.Actions.GetAtIndex(vrVez));
+    end;
   finally
     Self.Actions.BuildActions(sbActions);
 
