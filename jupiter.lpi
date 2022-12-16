@@ -274,6 +274,15 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uNewField"/>
       </Unit>
+      <Unit>
+        <Filename Value="Commons\jupitergeneratormenuitem.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterGeneratorMenuItem"/>
+      </Unit>
+      <Unit>
+        <Filename Value="Commons\jupiterformutils.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

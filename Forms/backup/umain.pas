@@ -8,8 +8,8 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, ExtCtrls,
   StdCtrls, Menus, PopupNotifier, Buttons, JupiterApp, JupiterRoute,
   JupiterConsts, JupiterObject, JupiterForm, JupiterAction, JupiterEnviroment,
-  JupiterRunnable, JupiterToolsModule, uPSComponent_Default, LMessages,
-  PairSplitter;
+  JupiterRunnable, jupiterformutils, JupiterToolsModule, uPSComponent_Default,
+  LMessages, PairSplitter;
 
 type
 
@@ -64,6 +64,7 @@ type
     ToolBar2: TToolBar;
     ToolButton1: TToolButton;
     tbMessage: TToolButton;
+    ToolButton2: TToolButton;
     tvMenu: TTreeView;
     procedure cbNavigationMenuChange(Sender: TObject);
     procedure edSearchChange(Sender: TObject);
@@ -382,7 +383,7 @@ var
 begin
   vrMenuList := vrJupiterApp.GetActions(TJupiterRoute.Create(ROOT_PATH));
 
-  Self.Internal_ShowRoute(TJupiterRoute.Create(ROOT_PATH), vrMenuList, nil);
+  ShowRouteOnTreeView(TJupiterRoute.Create(ROOT_PATH), vrMenuList, nil);
 
   tvMenu.FullExpand;
 end;

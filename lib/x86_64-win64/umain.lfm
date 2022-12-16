@@ -1,7 +1,7 @@
 inherited FMain: TFMain
-  Left = 493
+  Left = 327
   Height = 727
-  Top = 66
+  Top = 177
   Width = 1297
   Caption = 'FMain'
   ClientHeight = 707
@@ -204,7 +204,7 @@ inherited FMain: TFMain
       Left = 529
       Height = 22
       Top = 5
-      Width = 47
+      Width = 70
       Align = alNone
       AutoSize = True
       BorderSpacing.Left = 527
@@ -232,6 +232,16 @@ inherited FMain: TFMain
         Caption = 'tbMessage'
         ImageIndex = 24
         OnClick = tbMessageClick
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object ToolButton2: TToolButton
+        Left = 47
+        Hint = 'Abrir o módulo Generator'
+        Top = 0
+        Caption = 'ToolButton2'
+        ImageIndex = 37
+        OnClick = miGeneratorClick
         ParentShowHint = False
         ShowHint = True
       end

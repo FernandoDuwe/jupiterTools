@@ -114,11 +114,19 @@ begin
     Icon := ICON_SAVE;
   end;
 
-  Self.Actions.Add(TJupiterAction.Create('Adicionar', @Internal_NewConfigClick));
+  Self.Actions.Add(TJupiterAction.Create('Configuração', @Internal_NewConfigClick));
 
   with TJupiterAction(Self.Actions.GetLastObject) do
   begin
     Hint := 'Clique aqui para inserir uma nova configuração';
+    Icon := ICON_ADD;
+  end;
+
+  Self.Actions.Add(TJupiterAction.Create('Dataset', @Internal_NewConfigClick));
+
+  with TJupiterAction(Self.Actions.GetLastObject) do
+  begin
+    Hint := 'Clique aqui para inserir um novo Dataset';
     Icon := ICON_ADD;
   end;
 

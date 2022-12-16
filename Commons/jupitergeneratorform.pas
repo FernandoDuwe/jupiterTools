@@ -30,10 +30,10 @@ type
     property Fields  : TJupiterVariableFormList read FFields  write FFields;
     property FormID  : String                   read FFormID  write Internal_SetFormID;
   public
+    procedure SaveFile;
+
     constructor Create;
     destructor Destroy; override;
-
-    procedure SaveFile;
   end;
 
 implementation

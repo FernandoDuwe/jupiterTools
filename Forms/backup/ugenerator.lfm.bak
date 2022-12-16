@@ -1,8 +1,9 @@
 inherited FGenerator: TFGenerator
-  Left = 326
+  Left = 325
   Height = 689
-  Top = 143
+  Top = 146
   Width = 1292
+  Caption = 'Jupiter Generator'
   ClientHeight = 689
   ClientWidth = 1292
   OnCreate = FormCreate
@@ -22,8 +23,8 @@ inherited FGenerator: TFGenerator
   inherited sbBody: TScrollBox
     Height = 566
     Width = 1292
-    HorzScrollBar.Page = 531
-    VertScrollBar.Page = 455
+    HorzScrollBar.Page = 158
+    VertScrollBar.Page = 51
     ClientHeight = 562
     ClientWidth = 1288
     object pcTabs: TPageControl[0]
@@ -31,9 +32,9 @@ inherited FGenerator: TFGenerator
       Height = 562
       Top = 0
       Width = 1288
-      ActivePage = tsForms
+      ActivePage = tsInicio
       Align = alClient
-      TabIndex = 1
+      TabIndex = 0
       TabOrder = 0
       object tsInicio: TTabSheet
         Caption = 'Início'
@@ -207,7 +208,7 @@ inherited FGenerator: TFGenerator
               ParentFont = False
             end
             object lvFields: TListView
-              Left = 8
+              Left = 7
               Height = 199
               Top = 40
               Width = 976
@@ -253,6 +254,136 @@ inherited FGenerator: TFGenerator
               Flat = True
               OnClick = sbFieldAddClick
             end
+          end
+        end
+      end
+      object TabSheet1: TTabSheet
+        Caption = 'Menus'
+        ClientHeight = 534
+        ClientWidth = 1280
+        object lbMenuList: TListBox
+          Left = 0
+          Height = 534
+          Top = 0
+          Width = 268
+          Align = alLeft
+          ItemHeight = 0
+          OnClick = lbFormListClick
+          TabOrder = 0
+        end
+        object spForms1: TSplitter
+          Left = 268
+          Height = 534
+          Top = 0
+          Width = 5
+        end
+        object pnBodyMenuItem: TPanel
+          Left = 273
+          Height = 534
+          Top = 0
+          Width = 1007
+          Align = alClient
+          BevelOuter = bvNone
+          ClientHeight = 534
+          ClientWidth = 1007
+          TabOrder = 2
+          object Label4: TLabel
+            Left = 8
+            Height = 15
+            Top = 8
+            Width = 30
+            Caption = 'Título'
+            ParentColor = False
+            ParentFont = False
+          end
+          object edMenuItemTitle: TEdit
+            Left = 8
+            Height = 23
+            Top = 32
+            Width = 976
+            Anchors = [akTop, akLeft, akRight]
+            ReadOnly = True
+            TabOrder = 0
+          end
+          object edMenuItemRoute: TEdit
+            Left = 8
+            Height = 23
+            Top = 104
+            Width = 976
+            Anchors = [akTop, akLeft, akRight]
+            ReadOnly = True
+            TabOrder = 1
+          end
+          object Label5: TLabel
+            Left = 8
+            Height = 15
+            Top = 80
+            Width = 241
+            Caption = 'Rota de Destino (Para onde o menu apontará)'
+            ParentColor = False
+            ParentFont = False
+          end
+          object edMenuItemLocation: TEdit
+            Left = 8
+            Height = 23
+            Top = 176
+            Width = 976
+            Anchors = [akTop, akLeft, akRight]
+            ReadOnly = True
+            TabOrder = 2
+          end
+          object Label6: TLabel
+            Left = 8
+            Height = 15
+            Top = 152
+            Width = 257
+            Caption = 'Rota de Origem (Onde o menu estará localizado)'
+            ParentColor = False
+            ParentFont = False
+          end
+        end
+      end
+      object TabSheet2: TTabSheet
+        Caption = 'Menu Atual'
+        ClientHeight = 534
+        ClientWidth = 1280
+        object tvCurrentMenu: TTreeView
+          Left = 0
+          Height = 534
+          Top = 0
+          Width = 268
+          Align = alLeft
+          TabOrder = 0
+          OnClick = tvCurrentMenuClick
+        end
+        object Splitter2: TSplitter
+          Left = 268
+          Height = 534
+          Top = 0
+          Width = 5
+        end
+        object gbMenu: TGroupBox
+          Left = 273
+          Height = 534
+          Top = 0
+          Width = 1007
+          Align = alClient
+          Caption = 'Informações'
+          ClientHeight = 514
+          ClientWidth = 1003
+          TabOrder = 2
+          object mmCurrentMenuInfo: TMemo
+            Left = 0
+            Height = 514
+            Top = 0
+            Width = 1003
+            Align = alClient
+            Lines.Strings = (
+              'Selecione o item de menu para ver mais informações'
+            )
+            ReadOnly = True
+            ScrollBars = ssBoth
+            TabOrder = 0
           end
         end
       end

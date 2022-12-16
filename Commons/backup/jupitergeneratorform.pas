@@ -30,10 +30,10 @@ type
     property Fields  : TJupiterVariableFormList read FFields  write FFields;
     property FormID  : String                   read FFormID  write Internal_SetFormID;
   public
+    procedure SaveFile;
+
     constructor Create;
     destructor Destroy; override;
-
-    procedure SaveFile;
   end;
 
 implementation
@@ -69,13 +69,9 @@ begin
     begin
       Self.Fields.Add(TJupiterVariableForm.Create);
 
-      Self.Fields.AddVariable(vrXML.GetRowByIndex(vrVez).Fields.VariableById('id').Value,
-                              vrXML.GetRowByIndex(vrVez).Fields.VariableById('value').Value,
-                              vrXML.GetRowByIndex(vrVez).Fields.VariableById('description').Value);
-
       TJupiterVariableForm(Self.Fields.GetLastObject).ID    := vrXML.GetRowByIndex(vrVez).Fields.VariableById('id').Value;
       TJupiterVariableForm(Self.Fields.GetLastObject).Value := vrXML.GetRowByIndex(vrVez).Fields.VariableById('value').Value;
-      TJupiterVariableForm(Self.Fields.GetLastObject).Title := vrXML.GetRowByIndex(vrVez).Fields.VariableById('value').Value;
+      TJupiterVariableForm(Self.Fields.GetLastObject).Title := vrXML.GetRowByIndex(vrVez).Fields.VariableById('description').Value;
 
       TJupiterVariableForm(Self.Fields.GetLastObject).Required := StrToBool(vrXML.GetRowByIndex(vrVez).Fields.VariableById('required').Value);
       TJupiterVariableForm(Self.Fields.GetLastObject).ReadOnly := StrToBool(vrXML.GetRowByIndex(vrVez).Fields.VariableById('readOnly').Value);
@@ -135,6 +131,11 @@ begin
   finally
     FreeAndNil(vrEnviroment);
   end;
+end;
+
+function TJupiterGeneratorForm.GetActions(prRoute: TJupiterRoute): TJupiterObjectList;
+begin
+  //
 end;
 
 constructor TJupiterGeneratorForm.Create;

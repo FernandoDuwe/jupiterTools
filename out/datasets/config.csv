@@ -5,4 +5,4 @@ Enviroment.Run.EditorPref;Editor preferencial (caminho ou comando);notepad.exe;
 Enviroment.Run.Method;Método de execução (RunCommand / ShellExecute / CreateProcess);CreateProcess;
 Enviroment.Run.OpenInEditorPrefExtensions;Extensões de arquivos abertas em editor preferencial;.txt|.sql|.md;
 Enviroment.Run.ScriptExtensions;Extensões de arquivos de script;.bat;
-Interface.Font.Size;Tamanho da fonte;8;
+Interface.Font.Size;Tamanho da fonte;10;

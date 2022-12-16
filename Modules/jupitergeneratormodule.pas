@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, JupiterModule, JupiterRoute, JupiterObject, JupiterAction,
-  JupiterConsts, JupiterEnviroment, SysUtils;
+  JupiterConsts, JupiterEnviroment, JupiterFileDataProvider,
+  JupiterGeneratorMenuItem, SysUtils;
 
 type
   { TJupiterGeneratorModule }
@@ -33,6 +34,7 @@ begin
   vrEnviroment := TJupiterEnviroment.Create;
   try
     vrEnviroment.CreatePath('modules/generator');
+    vrEnviroment.CreatePath('modules/generator/menus');
   finally
     FreeAndNil(vrEnviroment);
   end;
@@ -49,8 +51,31 @@ begin
 end;
 
 function TJupiterGeneratorModule.GetActions(prRoute: TJupiterRoute): TJupiterObjectList;
+var
+  vrEnviroment : TJupiterEnviroment;
+  vrFile       : TJupiterFileDataProvider;
+  vrVez        : Integer;
+  vrMenu       : TJupiterGeneratorMenuItem;
 begin
   Result := inherited GetActions(prRoute);
+
+  vrEnviroment := TJupiterEnviroment.Create;
+  vrFile       := TJupiterFileDataProvider.Create;
+  try
+    vrFile.Path := vrEnviroment.FullPath('modules/generator/menus/');
+    vrFile.ProvideData;
+
+    for vrVez := 0 to vrFile.Size - 1 do
+    begin
+      vrMenu := TJupiterGeneratorMenuItem.Create;
+      vrMenu.FileName := vrFile.GetRowByIndex(vrVez).Fields.VariableById('File').Value;
+
+      Result.Add(vrMenu.CreateAction);
+    end;
+  finally
+    FreeAndNil(vrFile);
+    FreeAndNil(vrEnviroment);
+  end;
 end;
 
 end.

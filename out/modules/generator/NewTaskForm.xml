@@ -2,7 +2,7 @@
 <content>
   <actions>
     <action>
-      <title>Abrir Minhas Tarefas</title>
+      <title>Todas</title>
       <hint>Clique aqui para abrir Minhas Tarefas</hint>
       <file>{Jupiter.Tools.Tasks.Path}</file>
       <icon>2</icon>

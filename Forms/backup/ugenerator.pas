@@ -6,10 +6,11 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls,
-  ExtCtrls, Buttons, uCustomJupiterForm, uNewAction, uNewField,
+  ExtCtrls, Buttons, uCustomJupiterForm, uNewAction, uNewField, uMain,
   JupiterFileDataProvider, JupiterEnviroment, JupiterConsts,
   JupiterXMLDataProvider, JupiterGeneratorForm, JupiterAction, JupiterRunnable,
-  JupiterVariableForm, LCLType;
+  JupiterVariableForm, JupiterApp, JupiterRoute, jupiterformutils,
+  JupiterObject, LCLType;
 
 type
 
@@ -17,16 +18,26 @@ type
 
   TFGenerator = class(TFCustomJupiterForm)
     edFile: TEdit;
+    edMenuItemLocation: TEdit;
+    edMenuItemTitle: TEdit;
+    edMenuItemRoute: TEdit;
+    gbMenu: TGroupBox;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
     lbFormList: TListBox;
+    lbMenuList: TListBox;
     lvActions: TListView;
     lvFields: TListView;
+    mmCurrentMenuInfo: TMemo;
     mmLines: TMemo;
     Panel1: TPanel;
     Panel2: TPanel;
     Panel3: TPanel;
+    pnBodyMenuItem: TPanel;
     pnForm: TPanel;
     pcTabs: TPageControl;
     sbActionDelete: TSpeedButton;
@@ -34,24 +45,29 @@ type
     sbActionAdd: TSpeedButton;
     sbFieldAdd: TSpeedButton;
     spForms: TSplitter;
+    spForms1: TSplitter;
     Splitter1: TSplitter;
+    Splitter2: TSplitter;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    tvCurrentMenu: TTreeView;
     tsForms: TTabSheet;
     tsInicio: TTabSheet;
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure lbFormListClick(Sender: TObject);
     procedure lvActionsDblClick(Sender: TObject);
-    procedure lvActionsSelectItem(Sender: TObject; Item: TListItem;
-      Selected: Boolean);
+    procedure lvActionsSelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
     procedure lvFieldsDblClick(Sender: TObject);
-    procedure lvFieldsSelectItem(Sender: TObject; Item: TListItem;
-      Selected: Boolean);
+    procedure lvFieldsSelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
     procedure sbActionAddClick(Sender: TObject);
     procedure sbActionDeleteClick(Sender: TObject);
     procedure sbFieldAddClick(Sender: TObject);
     procedure sbFieldDeleteClick(Sender: TObject);
+    procedure tvCurrentMenuClick(Sender: TObject);
   private
     FFormID : String;
+    FMenuFile : String;
 
     procedure Internal_ShowForm(prFile : String);
     procedure Internal_EditAction(prActionIndex : Integer; prAction : TJupiterAction);
@@ -63,6 +79,7 @@ type
 
     procedure Internal_UpdateFormForm;
   protected
+    procedure Internal_UpdateComponents; override;
     procedure Internal_UpdateDatasets; override;
   published
     property FormID : String read FFormID write FFormID;
@@ -75,7 +92,6 @@ var
 
 implementation
 
-uses uMain;
 
 {$R *.lfm}
 
@@ -109,8 +125,7 @@ begin
   end;
 end;
 
-procedure TFGenerator.lvActionsSelectItem(Sender: TObject; Item: TListItem;
-  Selected: Boolean);
+procedure TFGenerator.lvActionsSelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
 begin
   Self.Internal_UpdateFormForm;
 end;
@@ -135,8 +150,7 @@ begin
   end;
 end;
 
-procedure TFGenerator.lvFieldsSelectItem(Sender: TObject; Item: TListItem;
-  Selected: Boolean);
+procedure TFGenerator.lvFieldsSelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
 begin
   Self.Internal_UpdateFormForm;
 end;
@@ -191,14 +205,56 @@ begin
     Self.Internal_DeleteField(TJupiterVariableForm(lvFields.Selected.Data).Tag);
 end;
 
+procedure TFGenerator.tvCurrentMenuClick(Sender: TObject);
+var
+  vrVez : Integer;
+begin
+  if not Assigned(tvCurrentMenu.Selected) then
+    Exit;
+
+  mmCurrentMenuInfo.Lines.Clear;
+  mmCurrentMenuInfo.Lines.Add(Format('Selecionado: %0:s', [tvCurrentMenu.Selected.Text]));
+
+  if not Assigned(tvCurrentMenu.Selected.Data) then
+    Exit;
+
+  with TJupiterAction(tvCurrentMenu.Selected.Data) do
+  begin
+    mmCurrentMenuInfo.Lines.Add(EmptyStr);
+    mmCurrentMenuInfo.Lines.Add('Título:');
+    mmCurrentMenuInfo.Lines.Add(Title);
+    mmCurrentMenuInfo.Lines.Add(EmptyStr);
+    mmCurrentMenuInfo.Lines.Add('Rota de Destino (Para onde o menu apontará):');
+    mmCurrentMenuInfo.Lines.Add(Route.Path);
+    mmCurrentMenuInfo.Lines.Add(EmptyStr);
+    mmCurrentMenuInfo.Lines.Add('Rota de Origem (Onde o menu estará localizado):');
+    mmCurrentMenuInfo.Lines.Add(Location.Path);
+    mmCurrentMenuInfo.Lines.Add(EmptyStr);
+    mmCurrentMenuInfo.Lines.Add('Parâmetros:');
+
+    for vrVez := 0 to Route.Params.Size - 1 do
+    begin
+      mmCurrentMenuInfo.Lines.Add(EmptyStr);
+      mmCurrentMenuInfo.Lines.Add('  - Parâmetro ' + IntToStr(vrVez + 1) + ':');
+      mmCurrentMenuInfo.Lines.Add('    ID: ' + Route.Params.VariableByIndex(vrVez).ID);
+      mmCurrentMenuInfo.Lines.Add('    Valor: ' + Route.Params.VariableByIndex(vrVez).Value);
+      mmCurrentMenuInfo.Lines.Add('    Derscrição: ' + Route.Params.VariableByIndex(vrVez).Title);
+    end;
+  end;
+end;
+
 procedure TFGenerator.FormCreate(Sender: TObject);
 begin
   inherited;
 
-  Self.FFormID := EmptyStr;
+  Self.FFormID   := EmptyStr;
+  Self.FMenuFile := EmptyStr;
 end;
 
 procedure TFGenerator.FormShow(Sender: TObject);
+var
+  vrVez : Integer;
+  vrMenuList : TJupiterObjectList;
 begin
   inherited;
 
@@ -211,6 +267,14 @@ begin
     if lbFormList.ItemIndex <> NULL_KEY then
       lbFormListClick(Sender);
   end;
+
+  tvCurrentMenu.Images := FMain.ilIconFamily;
+
+  vrMenuList := vrJupiterApp.GetActions(TJupiterRoute.Create(ROOT_PATH));
+
+  ShowRouteOnTreeView(tvCurrentMenu, TJupiterRoute.Create(ROOT_PATH), vrMenuList, nil);
+
+  tvCurrentMenu.FullExpand;
 end;
 
 procedure TFGenerator.Internal_ShowForm(prFile: String);
@@ -382,12 +446,27 @@ end;
 procedure TFGenerator.Internal_PrepareForm;
 var
   vrAction : TJupiterAction;
+  vrVez : Integer;
 begin
   inherited Internal_PrepareForm;
 
   vrAction      := TJupiterAction.Create('Atualizar', TJupiterRunnable.Create(''), nil);
   vrAction.Hint := 'Clique aqui para atualizar a página';
   vrAction.Icon := ICON_REFRESH;
+  vrAction.OnClick := @Internal_RefreshClick;
+
+  Self.Actions.Add(vrAction);
+
+  vrAction      := TJupiterAction.Create('Novo Menu', TJupiterRunnable.Create(''), nil);
+  vrAction.Hint := 'Clique aqui para criar um novo item de menu';
+  vrAction.Icon := ICON_NEW;
+  vrAction.OnClick := @Internal_RefreshClick;
+
+  Self.Actions.Add(vrAction);
+
+  vrAction      := TJupiterAction.Create('Salvar Menu', TJupiterRunnable.Create(''), nil);
+  vrAction.Hint := 'Clique aqui para salvar o item de menu';
+  vrAction.Icon := ICON_SAVE;
   vrAction.OnClick := @Internal_RefreshClick;
 
   Self.Actions.Add(vrAction);
@@ -416,6 +495,16 @@ begin
   lvActions.StateImages := FMain.ilIconFamily;
 
   Self.Hint := 'No módulo Generator você pode criar suas próprias funcionalidades no sistema';
+
+  if vrJupiterApp.FormRoutes.Size > 0 then
+  begin
+    mmLines.Lines.Add(EmptyStr);
+    mmLines.Lines.Add('Formulários registrados');
+
+    for vrVez := 0 to vrJupiterApp.FormRoutes.Size - 1 do
+      with TJupiterFormRoute(vrJupiterApp.FormRoutes.GetAtIndex(vrVez)) do
+        mmLines.Lines.Add(Format('  - %1:s - %0:s;', [Path, FormClass.ClassName]));
+  end;
 end;
 
 procedure TFGenerator.Internal_RefreshClick(Sender: TObject);
@@ -435,18 +524,32 @@ begin
   sbFieldDelete.Enabled  := Assigned(lvFields.Selected);
 end;
 
+procedure TFGenerator.Internal_UpdateComponents;
+begin
+  inherited Internal_UpdateComponents;
+
+  mmLines.Font.Size           := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
+  mmCurrentMenuInfo.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
+
+  Self.Actions.GetActionButton(1, sbActions).Enabled := Self.FMenuFile = EmptyStr;
+  Self.Actions.GetActionButton(2, sbActions).Enabled := Self.FMenuFile <> EmptyStr;
+end;
+
 procedure TFGenerator.Internal_UpdateDatasets;
 var
   vrFile       : TJupiterFileDataProvider;
+  vrFileMenu   : TJupiterFileDataProvider;
   vrVez        : Integer;
   vrEnviroment : TJupiterEnviroment;
 begin
   inherited Internal_UpdateDatasets;
 
   lbFormList.Items.Clear;
+  lbMenuList.Items.Clear;
 
-  vrFile       := TJupiterFileDataProvider.Create;
-  vrEnviroment := TJupiterEnviroment.Create;
+  vrFile           := TJupiterFileDataProvider.Create;
+  vrEnviroment     := TJupiterEnviroment.Create;
+  vrFileMenu       := TJupiterFileDataProvider.Create;
   try
     vrFile.Path := vrEnviroment.FullPath('modules/generator/');
     vrFile.ProvideData;
@@ -454,8 +557,16 @@ begin
     for vrVez := 0 to vrFile.Size - 1 do
       with vrFile.GetRowByIndex(vrVez) do
         lbFormList.Items.Add(Fields.VariableById('FieldName').Value);
+
+    vrFileMenu.Path := vrEnviroment.FullPath('modules/generator/menus/');
+    vrFileMenu.ProvideData;
+
+    for vrVez := 0 to vrFileMenu.Size - 1 do
+      with vrFileMenu.GetRowByIndex(vrVez) do
+        lbMenuList.Items.Add(Fields.VariableById('FieldName').Value);
   finally
     FreeAndNil(vrFile);
+    FreeAndNil(vrFileMenu);
     FreeAndNil(vrEnviroment);
   end;
 end;
