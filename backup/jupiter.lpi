@@ -283,6 +283,14 @@
         <Filename Value="Commons\jupiterformutils.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
+      <Unit>
+        <Filename Value="forms\unewparam.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FNewParam"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uNewParam"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

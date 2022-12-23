@@ -19,6 +19,7 @@ type
     cbNavigationMenu: TCoolBar;
     edSearch: TEdit;
     ilIconFamily: TImageList;
+    miMaximizedForms: TMenuItem;
     miPastasJupiter: TMenuItem;
     miPastasModules: TMenuItem;
     miPastasDatasets: TMenuItem;
@@ -72,6 +73,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure miDecFontSizeClick(Sender: TObject);
     procedure miIncFontSizeClick(Sender: TObject);
+    procedure miMaximizedFormsClick(Sender: TObject);
     procedure miPastasJupiterClick(Sender: TObject);
     procedure MenuItem5Click(Sender: TObject);
     procedure miPastasModulesClick(Sender: TObject);
@@ -201,6 +203,11 @@ begin
   finally
     Self.UpdateForm;
   end;
+end;
+
+procedure TFMain.miMaximizedFormsClick(Sender: TObject);
+begin
+  miMaximizedForms.Checked := not miMaximizedForms.Checked;
 end;
 
 procedure TFMain.miPastasJupiterClick(Sender: TObject);

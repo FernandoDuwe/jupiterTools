@@ -19,6 +19,7 @@ type
     cbNavigationMenu: TCoolBar;
     edSearch: TEdit;
     ilIconFamily: TImageList;
+    miMaximizedForms: TMenuItem;
     miPastasJupiter: TMenuItem;
     miPastasModules: TMenuItem;
     miPastasDatasets: TMenuItem;
@@ -383,7 +384,7 @@ var
 begin
   vrMenuList := vrJupiterApp.GetActions(TJupiterRoute.Create(ROOT_PATH));
 
-  ShowRouteOnTreeView(TJupiterRoute.Create(ROOT_PATH), vrMenuList, nil);
+  ShowRouteOnTreeView(tvMenu, TJupiterRoute.Create(ROOT_PATH), vrMenuList, nil);
 
   tvMenu.FullExpand;
 end;

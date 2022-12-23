@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <content>
-  <title>Teste</title>
-  <routePath>/myForms/</routePath>
+  <title>Teste 123</title>
+  <routePath>/forms/explorer/</routePath>
   <locationPath>/</locationPath>
   <params>
   </params>

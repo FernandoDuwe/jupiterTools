@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<content>
+  <title>MenuTestFormulario</title>
+  <routePath>/forms/custom/menuTestFormulario/</routePath>
+  <locationPath>/</locationPath>
+  <params>
+    <param>
+      <id>destinyPath</id>
+      <value>/forms/custom/</value>
+      <title>Destino</title>
+    </param>
+    <param>
+      <id>Generator.FormId</id>
+      <value>FormID</value>
+      <title>Menu Teste Formulário</title>
+    </param>
+  </params>
+</content>

@@ -7,10 +7,11 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls,
   ExtCtrls, Buttons, uCustomJupiterForm, uNewAction, uNewField, uMain,
-  JupiterFileDataProvider, JupiterEnviroment, JupiterConsts,
+  uNewParam, JupiterFileDataProvider, JupiterEnviroment, JupiterConsts,
   JupiterXMLDataProvider, JupiterGeneratorForm, JupiterAction, JupiterRunnable,
   JupiterVariableForm, JupiterApp, JupiterRoute, jupiterformutils,
-  JupiterObject, LCLType;
+  JupiterObject, JupiterDialogForm, JupiterGeneratorMenuItem, JupiterVariable,
+  LCLType;
 
 type
 
@@ -19,8 +20,8 @@ type
   TFGenerator = class(TFCustomJupiterForm)
     edFile: TEdit;
     edMenuItemLocation: TEdit;
-    edMenuItemTitle: TEdit;
     edMenuItemRoute: TEdit;
+    edMenuItemTitle: TEdit;
     gbMenu: TGroupBox;
     Label1: TLabel;
     Label2: TLabel;
@@ -28,54 +29,75 @@ type
     Label4: TLabel;
     Label5: TLabel;
     Label6: TLabel;
+    Label7: TLabel;
     lbFormList: TListBox;
     lbMenuList: TListBox;
+    lvIcons: TListView;
     lvActions: TListView;
     lvFields: TListView;
+    lvMenuVariables: TListView;
     mmCurrentMenuInfo: TMemo;
     mmLines: TMemo;
     Panel1: TPanel;
     Panel2: TPanel;
     Panel3: TPanel;
+    pnMenuVariable: TPanel;
+    pnMenuForm: TPanel;
     pnBodyMenuItem: TPanel;
     pnForm: TPanel;
     pcTabs: TPageControl;
     sbActionDelete: TSpeedButton;
+    sbMenuParamAdd: TSpeedButton;
     sbFieldDelete: TSpeedButton;
     sbActionAdd: TSpeedButton;
     sbFieldAdd: TSpeedButton;
+    sbMenuParamDelete: TSpeedButton;
     spForms: TSplitter;
     spForms1: TSplitter;
     Splitter1: TSplitter;
     Splitter2: TSplitter;
+    Splitter3: TSplitter;
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
+    tsIcon: TTabSheet;
     tvCurrentMenu: TTreeView;
     tsForms: TTabSheet;
     tsInicio: TTabSheet;
+    procedure edMenuItemLocationChange(Sender: TObject);
+    procedure edMenuItemRouteChange(Sender: TObject);
+    procedure edMenuItemTitleChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure lbFormListClick(Sender: TObject);
+    procedure lbMenuListClick(Sender: TObject);
     procedure lvActionsDblClick(Sender: TObject);
     procedure lvActionsSelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
     procedure lvFieldsDblClick(Sender: TObject);
     procedure lvFieldsSelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
+    procedure lvMenuVariablesDblClick(Sender: TObject);
     procedure sbActionAddClick(Sender: TObject);
     procedure sbActionDeleteClick(Sender: TObject);
     procedure sbFieldAddClick(Sender: TObject);
     procedure sbFieldDeleteClick(Sender: TObject);
+    procedure sbMenuParamAddClick(Sender: TObject);
+    procedure sbMenuParamDeleteClick(Sender: TObject);
     procedure tvCurrentMenuClick(Sender: TObject);
   private
     FFormID : String;
     FMenuFile : String;
 
     procedure Internal_ShowForm(prFile : String);
+    procedure Internal_ShowMenuItem(prFile : String);
+    procedure Internal_SetMenuItem(prFile : String);
     procedure Internal_EditAction(prActionIndex : Integer; prAction : TJupiterAction);
     procedure Internal_DeleteAction(prActionIndex : Integer);
+    procedure Internal_DeleteParam(prParamIndex : Integer);
     procedure Internal_EditField(prFieldIndex : Integer; prField : TJupiterVariableForm);
+    procedure Internal_EditParam(prParamIndex : Integer; prParam : TJupiterVariable);
     procedure Internal_DeleteField(prFieldIndex : Integer);
     procedure Internal_PrepareForm; override;
     procedure Internal_RefreshClick(Sender: TObject);
+    procedure Internal_NewMenuItemClick(Sender: TObject);
 
     procedure Internal_UpdateFormForm;
   protected
@@ -103,6 +125,14 @@ begin
     Exit;
 
   Self.Internal_ShowForm(lbFormList.Items[lbFormList.ItemIndex]);
+end;
+
+procedure TFGenerator.lbMenuListClick(Sender: TObject);
+begin
+  if lbMenuList.ItemIndex = NULL_KEY then
+    Exit;
+
+  Self.Internal_ShowMenuItem(lbMenuList.Items[lbMenuList.ItemIndex]);
 end;
 
 procedure TFGenerator.lvActionsDblClick(Sender: TObject);
@@ -155,6 +185,26 @@ begin
   Self.Internal_UpdateFormForm;
 end;
 
+procedure TFGenerator.lvMenuVariablesDblClick(Sender: TObject);
+begin
+  if not Assigned(lvMenuVariables.Selected) then
+    Exit;
+
+  if not Assigned(lvMenuVariables.Selected.Data) then
+    Exit;
+
+  Application.CreateForm(TFNewParam, FNewParam);
+  try
+    FNewParam.ParamIndex := TJupiterVariable(lvMenuVariables.Selected.Data).Tag;
+    FNewParam.Param := TJupiterVariable(lvMenuVariables.Selected.Data);
+
+    if FNewParam.ShowModal = mrOK then
+      Self.Internal_EditParam(FNewParam.ParamIndex, FNewParam.Param);
+  finally
+    FreeAndNil(FNewParam);
+  end;
+end;
+
 procedure TFGenerator.sbActionAddClick(Sender: TObject);
 begin
   Application.CreateForm(TFNewAction, FNewAction);
@@ -205,6 +255,31 @@ begin
     Self.Internal_DeleteField(TJupiterVariableForm(lvFields.Selected.Data).Tag);
 end;
 
+procedure TFGenerator.sbMenuParamAddClick(Sender: TObject);
+begin
+  Application.CreateForm(TFNewParam, FNewParam);
+  try
+    FNewParam.ParamIndex := NULL_KEY;
+
+    if FNewParam.ShowModal = mrOK then
+      Self.Internal_EditParam(FNewParam.ParamIndex, FNewParam.Param);
+  finally
+    FreeAndNil(FNewParam);
+  end;
+end;
+
+procedure TFGenerator.sbMenuParamDeleteClick(Sender: TObject);
+begin
+  if not Assigned(lvMenuVariables.Selected) then
+    Exit;
+
+  if not Assigned(lvMenuVariables.Selected.Data) then
+    Exit;
+
+  if Application.MessageBox('Deseja realmente excluir', 'Excluir Parâmetro', MB_ICONQUESTION + MB_YESNO) = ID_YES then
+    Self.Internal_DeleteParam(TJupiterVariable(lvMenuVariables.Selected.Data).Tag);
+end;
+
 procedure TFGenerator.tvCurrentMenuClick(Sender: TObject);
 var
   vrVez : Integer;
@@ -244,11 +319,74 @@ begin
 end;
 
 procedure TFGenerator.FormCreate(Sender: TObject);
+var
+  vrVez  : Integer;
+  vrItem : TListItem;
 begin
   inherited;
 
   Self.FFormID   := EmptyStr;
   Self.FMenuFile := EmptyStr;
+
+  lvIcons.Items.Clear;
+  lvIcons.LargeImages := FMain.ilIconFamily;
+  lvIcons.SmallImages := FMain.ilIconFamily;
+//  lvIcons.StateImages := FMain.ilIconFamily;
+
+  for vrVez := 0 to FMain.ilIconFamily.Count - 1 do
+  begin
+    vrItem := lvIcons.Items.Add;
+    vrItem.Caption := IntToStr(vrVez);
+    vrItem.ImageIndex := vrVez;
+  end;
+end;
+
+procedure TFGenerator.edMenuItemTitleChange(Sender: TObject);
+begin
+  if Self.FMenuFile = EmptyStr then
+    Exit;
+
+  if edMenuItemTitle.Text = EmptyStr then
+  begin
+    ShowMessage('O campo Título é obrigatório');
+
+    edMenuItemTitle.SetFocus;
+    Exit;
+  end;
+
+  Self.Internal_SetMenuItem(Self.FMenuFile);
+end;
+
+procedure TFGenerator.edMenuItemRouteChange(Sender: TObject);
+begin
+  if Self.FMenuFile = EmptyStr then
+    Exit;
+
+  if edMenuItemRoute.Text = EmptyStr then
+  begin
+    ShowMessage('O campo Rota de Destino é obrigatório');
+
+    edMenuItemRoute.SetFocus;
+    Exit;
+  end;
+
+  Self.Internal_SetMenuItem(Self.FMenuFile);
+end;
+
+procedure TFGenerator.edMenuItemLocationChange(Sender: TObject);
+begin
+  if Self.FMenuFile = EmptyStr then
+    Exit;
+
+  if edMenuItemLocation.Text = EmptyStr then
+  begin
+    ShowMessage('O campo Rota de Origem é obrigatório');
+
+    edMenuItemLocation.SetFocus;
+    Exit;
+  end;
+
+  Self.Internal_SetMenuItem(Self.FMenuFile);
 end;
 
 procedure TFGenerator.FormShow(Sender: TObject);
@@ -317,6 +455,71 @@ begin
   end;
 end;
 
+procedure TFGenerator.Internal_ShowMenuItem(prFile: String);
+var
+  vrMenuItem   : TJupiterGeneratorMenuItem;
+  vrEnviroment : TJupiterEnviroment;
+  vrVez        : Integer;
+  vrRow        : TListItem;
+begin
+  vrEnviroment := TJupiterEnviroment.Create;
+  vrMenuItem   := TJupiterGeneratorMenuItem.Create;
+  try
+    Self.FMenuFile := EmptyStr;
+
+    vrMenuItem.FileName := vrEnviroment.FullPath('modules/generator/menus/' + prFile);
+
+    edMenuItemTitle.Caption    := vrMenuItem.Title;
+    edMenuItemLocation.Caption := vrMenuItem.LocationPath;
+    edMenuItemRoute.Caption    := vrMenuItem.RoutePath;
+
+    Self.FMenuFile := vrMenuItem.FileName;
+
+    lvMenuVariables.Items.Clear;
+
+    for vrVez := 0 to vrMenuItem.Params.Size - 1 do
+    begin
+      vrRow         := lvMenuVariables.Items.Add;
+      vrRow.Caption := vrMenuItem.Params.VariableByIndex(vrVez).ID;
+      vrRow.SubItems.Add(vrMenuItem.Params.VariableByIndex(vrVez).Value);
+      vrRow.SubItems.Add(vrMenuItem.Params.VariableByIndex(vrVez).Title);
+
+      vrRow.Data := TJupiterVariable.Create;
+
+      with TJupiterVariable(vrRow.Data) do
+      begin
+        ID    := vrMenuItem.Params.VariableByIndex(vrVez).ID;
+        Value := vrMenuItem.Params.VariableByIndex(vrVez).Value;
+        Title := vrMenuItem.Params.VariableByIndex(vrVez).Title;
+        Tag   := vrMenuItem.Params.VariableByIndex(vrVez).Tag;
+      end;
+    end;
+
+    Self.UpdateForm;
+    Self.Internal_UpdateFormForm;
+  finally
+    FreeAndNil(vrMenuItem);
+    FreeAndNil(vrEnviroment);
+  end;
+end;
+
+procedure TFGenerator.Internal_SetMenuItem(prFile: String);
+var
+  vrMenuItem : TJupiterGeneratorMenuItem;
+begin
+  vrMenuItem := TJupiterGeneratorMenuItem.Create;
+  try
+    vrMenuItem.FileName := prFile;
+
+    vrMenuItem.Title        := edMenuItemTitle.Caption;
+    vrMenuItem.LocationPath := edMenuItemLocation.Caption;
+    vrMenuItem.RoutePath    := edMenuItemRoute.Caption;
+    vrMenuItem.SaveFile;
+  finally
+    FreeAndNil(vrMenuItem);
+  end;
+end;
+
 procedure TFGenerator.Internal_EditAction(prActionIndex: Integer; prAction: TJupiterAction);
 var
   vrGenerator : TJupiterGeneratorForm;
@@ -374,6 +577,24 @@ begin
   end;
 end;
 
+procedure TFGenerator.Internal_DeleteParam(prParamIndex: Integer);
+var
+  vrMenuItem : TJupiterGeneratorMenuItem;
+begin
+  vrMenuItem := TJupiterGeneratorMenuItem.Create;
+  try
+    vrMenuItem.FileName := Self.FMenuFile;
+
+    vrMenuItem.Params.DeleteAtIndex(prParamIndex);
+
+    vrMenuItem.SaveFile;
+  finally
+    FreeAndNil(vrMenuItem);
+
+    Self.Internal_ShowMenuItem(ExtractFileName(Self.FMenuFile));
+  end;
+end;
+
 procedure TFGenerator.Internal_EditField(prFieldIndex: Integer; prField: TJupiterVariableForm);
 var
   vrGenerator : TJupiterGeneratorForm;
@@ -427,6 +648,38 @@ begin
   end;
 end;
 
+procedure TFGenerator.Internal_EditParam(prParamIndex: Integer; prParam: TJupiterVariable);
+var
+  vrMenuItem : TJupiterGeneratorMenuItem;
+begin
+  vrMenuItem := TJupiterGeneratorMenuItem.Create;
+  try
+    vrMenuItem.FileName := Self.FMenuFile;
+
+    vrMenuItem.Title        := edMenuItemTitle.Caption;
+    vrMenuItem.LocationPath := edMenuItemLocation.Caption;
+    vrMenuItem.RoutePath    := edMenuItemRoute.Caption;
+
+    if prParamIndex = -1 then
+      vrMenuItem.Params.AddConfig(prParam.ID, prParam.Value, prParam.Title)
+    else
+    begin
+      with vrMenuItem.Params.VariableByIndex(prParamIndex) do
+      begin
+        ID    := prParam.ID;
+        Value := prParam.Value;
+        Title := prParam.Title;
+      end;
+    end;
+
+    vrMenuItem.SaveFile;
+  finally
+    FreeAndNil(vrMenuItem);
+
+    Self.Internal_ShowMenuItem(ExtractFileName(Self.FMenuFile));
+  end;
+end;
+
 procedure TFGenerator.Internal_DeleteField(prFieldIndex: Integer);
 var
   vrGenerator : TJupiterGeneratorForm;
@@ -460,14 +713,7 @@ begin
   vrAction      := TJupiterAction.Create('Novo Menu', TJupiterRunnable.Create(''), nil);
   vrAction.Hint := 'Clique aqui para criar um novo item de menu';
   vrAction.Icon := ICON_NEW;
-  vrAction.OnClick := @Internal_RefreshClick;
-
-  Self.Actions.Add(vrAction);
-
-  vrAction      := TJupiterAction.Create('Salvar Menu', TJupiterRunnable.Create(''), nil);
-  vrAction.Hint := 'Clique aqui para salvar o item de menu';
-  vrAction.Icon := ICON_SAVE;
-  vrAction.OnClick := @Internal_RefreshClick;
+  vrAction.OnClick := @Internal_NewMenuItemClick;
 
   Self.Actions.Add(vrAction);
 
@@ -489,6 +735,14 @@ begin
   sbFieldDelete.Enabled    := False;
   sbFieldDelete.Images     := FMain.ilIconFamily;
   sbFieldDelete.ImageIndex := ICON_DELETE;
+
+  sbMenuParamAdd.Enabled    := False;
+  sbMenuParamAdd.Images     := FMain.ilIconFamily;
+  sbMenuParamAdd.ImageIndex := ICON_NEW;
+
+  sbMenuParamDelete.Enabled    := False;
+  sbMenuParamDelete.Images     := FMain.ilIconFamily;
+  sbMenuParamDelete.ImageIndex := ICON_DELETE;
 
   lvActions.LargeImages := FMain.ilIconFamily;
   lvActions.SmallImages := FMain.ilIconFamily;
@@ -512,16 +766,55 @@ begin
   Self.UpdateForm;
 end;
 
+procedure TFGenerator.Internal_NewMenuItemClick(Sender: TObject);
+var
+  vrDialog     : TJupiterDialogForm;
+  vrMenuItem   : TJupiterGeneratorMenuItem;
+  vrEnviroment : TJupiterEnviroment;
+begin
+  vrDialog     := TJupiterDialogForm.Create;
+  vrMenuItem   := TJupiterGeneratorMenuItem.Create;
+  vrEnviroment := TJupiterEnviroment.Create;
+  try
+    vrDialog.Title := 'Novo item do menu';
+    vrDialog.Hint  := 'Crie um novo item de menu.';
+
+    vrDialog.Fields.AddField('ID', 'ID do item de Menu', '');
+
+    vrDialog.Fields.VariableFormById('ID').Required := True;
+
+    if vrDialog.Show then
+    begin
+      vrMenuItem.FileName     := vrEnviroment.FullPath('modules/generator/menus/' + vrDialog.Fields.VariableFormById('ID').Value + '.xml');
+      vrMenuItem.Title        := vrDialog.Fields.VariableFormById('ID').Value;
+      vrMenuItem.LocationPath := ROOT_PATH;
+      vrMenuItem.RoutePath    := EXPLORER_FORM_PATH;
+      vrMenuItem.SaveFile;
+
+      pcTabs.ActivePageIndex := 2;
+    end;
+  finally
+    FreeAndNil(vrDialog);
+    FreeAndNil(vrMenuItem);
+    FreeAndNil(vrEnviroment);
+
+    Self.UpdateForm;
+  end;
+end;
+
 procedure TFGenerator.Internal_UpdateFormForm;
 begin
   sbActionAdd.Enabled := Trim(edFile.Text) <> EmptyStr;
   sbFieldAdd.Enabled  := Trim(edFile.Text) <> EmptyStr;
+  sbMenuParamAdd.Enabled := Trim(Self.FMenuFile) <> EmptyStr;
 
   lvActions.Enabled := Trim(edFile.Text) <> EmptyStr;
   lvFields.Enabled := Trim(edFile.Text) <> EmptyStr;
 
   sbActionDelete.Enabled := Assigned(lvActions.Selected);
   sbFieldDelete.Enabled  := Assigned(lvFields.Selected);
+
+  sbMenuParamDelete.Enabled := Assigned(lvMenuVariables.Selected);
 end;
 
 procedure TFGenerator.Internal_UpdateComponents;
@@ -531,11 +824,10 @@ begin
   mmLines.Font.Size           := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
   mmCurrentMenuInfo.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
 
-  if Assigned(Self.Actions.GetActionButton(1, sbActions)) then
-    Self.Actions.GetActionButton(1, sbActions).Enabled := Self.FMenuFile = EmptyStr;
-
-  if Assigned(Self.Actions.GetActionButton(2, sbActions)) then
-    Self.Actions.GetActionButton(2, sbActions).Enabled := Self.FMenuFile <> EmptyStr;
+  edMenuItemTitle.Enabled    := Self.FMenuFile <> EmptyStr;
+  edMenuItemLocation.Enabled := Self.FMenuFile <> EmptyStr;
+  edMenuItemRoute.Enabled    := Self.FMenuFile <> EmptyStr;
+  lvMenuVariables.Enabled    := Self.FMenuFile <> EmptyStr;
 end;
 
 procedure TFGenerator.Internal_UpdateDatasets;

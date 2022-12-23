@@ -29,7 +29,8 @@ type
 
     function Internal_GetSize : Integer;
   published
-    property Size : Integer read Internal_GetSize;
+    property Count : Integer read Internal_GetSize;
+    property Size  : Integer read Internal_GetSize;
   public
     function GetAtIndex(prIndex : Integer) : TJupiterObject;
 
@@ -78,7 +79,7 @@ procedure TJupiterObjectList.DeleteAtIndex(prIndex: Integer);
 var
   vrObj : TJupiterObject;
 begin
-  vrObj := Self.GetAtIndex(GetAtIndex(prIndex);
+  vrObj := Self.GetAtIndex(prIndex);
 
   FreeAndNil(vrObj);
 

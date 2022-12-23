@@ -953,6 +953,10 @@ inherited FMain: TFMain
         Caption = 'Limpar pesquisa ao trocar item'
         Checked = True
       end
+      object miMaximizedForms: TMenuItem
+        Caption = 'Abrir formulários sempre maximizados'
+        OnClick = miMaximizedFormsClick
+      end
     end
     object MenuItem3: TMenuItem
       Caption = 'Ferramentas'
