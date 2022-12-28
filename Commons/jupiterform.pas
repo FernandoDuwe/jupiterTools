@@ -171,8 +171,8 @@ procedure TFJupiterForm.Internal_UpdateComponents;
 begin
   sbActions.Visible := Self.Actions.Size > 0;
 
-  miEditGenerator.Enabled := Self.Params.Exists(FIELD_ID_GENERADOR);
-  miViewParams.Enabled    := Self.Params.Size > 0;
+  miEditGenerator.Enabled := Params.Exists(FIELD_ID_GENERADOR);
+  miViewParams.Enabled    := Params.Size > 0;
 end;
 
 procedure TFJupiterForm.Internal_UpdateDatasets;
@@ -239,9 +239,13 @@ end;
 
 procedure TFJupiterForm.UpdateForm;
 begin
-  Self.Internal_UpdateDatasets;
-  Self.Internal_UpdateComponents;
-  Self.Internal_UpdateCalcs;
+  try
+    Self.Internal_UpdateDatasets;
+    Self.Internal_UpdateComponents;
+    Self.Internal_UpdateCalcs;
+  finally
+    Application.ProcessMessages;
+  end;
 end;
 
 procedure TFJupiterForm.Search(prSearch: String);

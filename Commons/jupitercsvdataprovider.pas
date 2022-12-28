@@ -27,6 +27,8 @@ type
   public
     procedure ProvideData; override;
     procedure SaveLine(prFields : TJupiterVariableList);
+
+    class procedure GetFieldsLayout(var prList : TStrings); override;
   end;
 
 
@@ -186,6 +188,11 @@ begin
   finally
     Self.Internal_SaveLine;
   end;
+end;
+
+class procedure TJupiterCSVDataProvider.GetFieldsLayout(var prList: TStrings);
+begin
+  inherited GetFieldsLayout(prList);
 end;
 
 function GetCSVColumn(prLine: String; prIndex: Integer): String;

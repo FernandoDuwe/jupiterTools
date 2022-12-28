@@ -59,7 +59,7 @@ procedure TFCustomJupiterForm.PrepareForm;
 begin
   inherited PrepareForm;
 
-  Self.FFormGenerator.Variables.CreateFromVariableList(Self.Generator.Fields);
+  Self.FFormGenerator.Variables.CopyFromVariableList(Self.Generator.Fields);
 
   if ((Assigned(Self.FFormGenerator.Variables)) and (Self.FFormGenerator.Variables.Size > 0)) then
     Self.FFormGenerator.DrawForm;

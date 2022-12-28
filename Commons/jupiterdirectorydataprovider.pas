@@ -21,6 +21,8 @@ type
       property SubFolders : Boolean read FSubFolders write FSubFolders;
     public
       procedure ProvideData; override;
+
+      class procedure GetFieldsLayout(var prList : TStrings); override;
     end;
 
 implementation
@@ -55,6 +57,15 @@ begin
      raise Exception.Create('Path must be valid');
 
   Self.Internal_Search(Self.Path);
+end;
+
+class procedure TJupiterDirectoryDataProvider.GetFieldsLayout(
+  var prList: TStrings);
+begin
+  inherited GetFieldsLayout(prList);
+
+  prList.Add('Folder');
+  prList.Add('Path');
 end;
 
 end.

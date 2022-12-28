@@ -20,6 +20,8 @@ type
     property FileName : String read FFileName write FFileName;
   public
     procedure ProvideData; override;
+
+    class procedure GetFieldsLayout(var prList : TStrings); override;
   end;
 
 implementation
@@ -39,9 +41,13 @@ begin
                                        EmptyStr,
                                        'Tempo Inicial');
 
-  if Trim(prStartTime) <> EmptyStr then
+  if Trim(prEndTime) <> EmptyStr then
     Self.GetLastRow.Fields.AddVariable('endTime',
                                        Format('%0:s %1:s', [GetCSVColumn(prEndTime, 1), GetCSVColumn(prEndTime, 2)]),
+                                       'Tempo Final')
+  else
+    Self.GetLastRow.Fields.AddVariable('endTime',
+                                       EmptyStr,
                                        'Tempo Final');
 end;
 
@@ -89,6 +95,15 @@ begin
     vrStr.Clear;
     FreeAndNil(vrStr);
   end;
+end;
+
+class procedure TJupiterTaskTimesDataProvider.GetFieldsLayout(
+  var prList: TStrings);
+begin
+  inherited GetFieldsLayout(prList);
+
+  prList.Add('startTime');
+  prList.Add('startTime');
 end;
 
 end.

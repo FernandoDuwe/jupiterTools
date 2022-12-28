@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, ExtCtrls, JupiterModule, JupiterObject, JupiterRoute, JupiterForm,
-  JupiterVariable, JupiterEnviroment, JupiterSystemMessage, SysUtils, Controls;
+  JupiterVariable, JupiterEnviroment, JupiterSystemMessage,
+  JupiterVariableDataProvider, SysUtils, Controls;
 
 type
 
@@ -23,7 +24,7 @@ type
     FCurrentForm    : TFJupiterForm;
     FParams         : TJupiterVariableList;
     FUserParams     : TJupiterVariableList;
-    FDataSetParams  : TJupiterVariableList;
+    FDataSetParams  : TJupiterVariableDataProviderList;
     FMainIcons      : TImageList;
 
   protected
@@ -40,7 +41,7 @@ type
     property ModulesList    : TJupiterModuleList   read FModules       write FModules;
     property Messages       : TJupiterObjectList   read FMessages      write FMessages;
     property Params         : TJupiterVariableList read FParams        write FParams;
-    property DataSetParams  : TJupiterVariableList read FDataSetParams write FDataSetParams;
+    property DataSetParams  : TJupiterVariableDataProviderList read FDataSetParams write FDataSetParams;
     property UserParams     : TJupiterVariableList read FUserParams    write FUserParams;
   public
     procedure AddModule(prModule : TJupiterModule);
@@ -72,11 +73,13 @@ var
 begin
   vrEnviroment := TJupiterEnviroment.Create;
   try
+    vrEnviroment.CreatePath('assets');
     vrEnviroment.CreatePath('datasets');
     vrEnviroment.CreatePath('modules');
     vrEnviroment.CreatePath('temp');
 
     Self.Params.FileName     := 'datasets/config.csv';
+    Self.DataSetParams.FileName := 'datasets/DatasetsConfig.csv';
     Self.UserParams.FileName := 'datasets/userConfig.csv';
 
     if not Self.Params.Exists(Self.AppID + '.ExecutablePath') then
@@ -157,6 +160,7 @@ end;
 procedure TJupiterApp.NavigateTo(prRoute: TJupiterRoute; prAsModal: Boolean);
 var
   vrVez : Integer;
+  vrVezDebug : Integer;
   vrFormRoute : TJupiterFormRoute;
   vrFormModal : TFJupiterForm;
 begin

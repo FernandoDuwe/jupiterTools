@@ -22,6 +22,8 @@ type
     property SubFolders : Boolean read FSubFolders write FSubFolders;
   public
     procedure ProvideData; override;
+
+    class procedure GetFieldsLayout(var prList : TStrings); override;
   end;
 
 implementation
@@ -37,7 +39,7 @@ begin
       if (((vrInfo.Name = '.') or (vrInfo.Name = '..')) or (vrInfo.Name = EmptyStr)) then
         Continue;
 
-      if DirectoryExists(Self.Path + vrInfo.Name) then
+      if DirectoryExists(prPath + vrInfo.Name) then
         if Self.SubFolders then
           Self.Internal_Search(Format('%0:s%1:s%2:s', [prPath, vrInfo.Name, GetDirectorySeparator]))
         else
@@ -63,6 +65,15 @@ begin
      raise Exception.Create('Path must be valid');
 
   Self.Internal_Search(Self.Path);
+end;
+
+class procedure TJupiterFileDataProvider.GetFieldsLayout(var prList: TStrings);
+begin
+  inherited GetFieldsLayout(prList);
+
+  prList.Add('FieldName');
+  prList.Add('File');
+  prList.Add('File');
 end;
 
 end.

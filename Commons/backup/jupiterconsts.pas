@@ -68,13 +68,17 @@ const
    DATAPROVIDER_TYPE_LIST_PATHS : String = 'TJupiterDirectoryDataProvider';
    DATAPROVIDER_TYPE_LIST_CSV   : String = 'TJupiterCSVDataProvider';
    DATAPROVIDER_TYPE_TASKS      : String = 'TJupiterTasksDataProvider';
+   DATAPROVIDER_TYPE_XML        : String = 'TJupiterXMLDataProvider';
+
+   // Providers
+   PROVIDER_LIST : Array[0..4] of String = ('TJupiterFileDataProvider', 'TJupiterDirectoryDataProvider', 'TJupiterCSVDataProvider', 'TJupiterTasksDataProvider', 'TJupiterXMLDataProvider');
 
    // Forms
    FORM_MARGIN_TOP      : Integer = 8;
    FORM_MARGIN_LEFT     : Integer = 8;
    FORM_MARGIN_RIGHT    : Integer = 16;
    FORM_MARGIN_BOTTOM   : Integer = 8;
-   FORM_ACTION_MINWIDTH : Integer = 150;
+   FORM_ACTION_MINWIDTH : Integer = 120;
 
    // Generator
    GENERATOR_SYSLAYER : SmallInt = 1000;

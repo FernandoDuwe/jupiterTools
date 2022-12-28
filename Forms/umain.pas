@@ -19,6 +19,7 @@ type
     cbNavigationMenu: TCoolBar;
     edSearch: TEdit;
     ilIconFamily: TImageList;
+    miPastaAssets: TMenuItem;
     miMaximizedForms: TMenuItem;
     miPastasJupiter: TMenuItem;
     miPastasModules: TMenuItem;
@@ -71,6 +72,7 @@ type
     procedure edSearchChange(Sender: TObject);
     procedure FormShortCut(var Msg: TLMKey; var Handled: Boolean);
     procedure FormShow(Sender: TObject);
+    procedure miPastaAssetsClick(Sender: TObject);
     procedure miDecFontSizeClick(Sender: TObject);
     procedure miIncFontSizeClick(Sender: TObject);
     procedure miMaximizedFormsClick(Sender: TObject);
@@ -181,6 +183,18 @@ begin
 
   vrJupiterApp.MainIcons := ilIconFamily;
   vrJupiterApp.NavigateTo(TJupiterRoute.Create(ROOT_FORM_PATH), False);
+end;
+
+procedure TFMain.miPastaAssetsClick(Sender: TObject);
+var
+  vrEnviroment : TJupiterEnviroment;
+begin
+  vrEnviroment := TJupiterEnviroment.Create;
+  try
+    TJupiterRunnable.Create(vrEnviroment.FullPath('assets/'), True);
+  finally
+    FreeAndNil(vrEnviroment);
+  end;
 end;
 
 procedure TFMain.miDecFontSizeClick(Sender: TObject);

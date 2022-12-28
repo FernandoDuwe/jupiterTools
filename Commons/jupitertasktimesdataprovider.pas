@@ -20,6 +20,8 @@ type
     property FileName : String read FFileName write FFileName;
   public
     procedure ProvideData; override;
+
+    class procedure GetFieldsLayout(var prList : TStrings); override;
   end;
 
 implementation
@@ -93,6 +95,15 @@ begin
     vrStr.Clear;
     FreeAndNil(vrStr);
   end;
+end;
+
+class procedure TJupiterTaskTimesDataProvider.GetFieldsLayout(
+  var prList: TStrings);
+begin
+  inherited GetFieldsLayout(prList);
+
+  prList.Add('startTime');
+  prList.Add('endTime');
 end;
 
 end.

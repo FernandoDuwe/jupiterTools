@@ -14,6 +14,7 @@ type
 
   TFHome = class(TFJupiterForm)
     Image1: TImage;
+    Label9: TLabel;
     lbVersion: TLabel;
     Label2: TLabel;
     Label3: TLabel;
@@ -35,6 +36,7 @@ type
     procedure Label6Click(Sender: TObject);
     procedure Label7Click(Sender: TObject);
     procedure Label8DblClick(Sender: TObject);
+    procedure Label9Click(Sender: TObject);
     procedure lbConfigLink1Click(Sender: TObject);
     procedure lbConfigLinkClick(Sender: TObject);
     procedure lbNewTaskLink1Click(Sender: TObject);
@@ -89,6 +91,11 @@ end;
 procedure TFHome.Label8DblClick(Sender: TObject);
 begin
   FMain.miPastasTemp.Click;
+end;
+
+procedure TFHome.Label9Click(Sender: TObject);
+begin
+  FMain.miPastaAssets.Click;
 end;
 
 procedure TFHome.lbConfigLink1Click(Sender: TObject);

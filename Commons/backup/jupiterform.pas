@@ -171,8 +171,11 @@ procedure TFJupiterForm.Internal_UpdateComponents;
 begin
   sbActions.Visible := Self.Actions.Size > 0;
 
-  miEditGenerator.Enabled := Self.Params.Exists(FIELD_ID_GENERADOR);
-  miViewParams.Enabled    := Self.Params.Size > 0;
+  miEditGenerator.Enabled := True; //Params.Exists(FIELD_ID_GENERADOR);
+  miViewParams.Enabled    := True; //Params.Size > 0;
+
+  vrJupiterApp.AddMessage('DEBUG: ' + Self.ClassName + ' (UpdateComponents)', IntToStr(Params.Size))
+      .Details.Add(IntToStr(Params.Size) + ' | ' + BoolToStr(Params.Exists(FIELD_ID_GENERADOR), True));
 end;
 
 procedure TFJupiterForm.Internal_UpdateDatasets;
@@ -228,8 +231,7 @@ begin
       Self.Generator.FormID := Self.Params.VariableById(FIELD_ID_GENERADOR).Value;
 
       // Adiciona as ações no formulario
-      for vrVez := 0 to Self.Generator.Actions.Size - 1 do
-        Self.Actions.Add(Self.Generator.Actions.GetAtIndex(vrVez));
+      Self.Actions.CopyFromList(Self.Generator.Actions);
     end;
   finally
     Self.Actions.BuildActions(sbActions);
@@ -240,9 +242,13 @@ end;
 
 procedure TFJupiterForm.UpdateForm;
 begin
-  Self.Internal_UpdateDatasets;
-  Self.Internal_UpdateComponents;
-  Self.Internal_UpdateCalcs;
+  try
+    Self.Internal_UpdateDatasets;
+    Self.Internal_UpdateComponents;
+    Self.Internal_UpdateCalcs;
+  finally
+    Application.ProcessMessages;
+  end;
 end;
 
 procedure TFJupiterForm.Search(prSearch: String);

@@ -5,7 +5,7 @@ unit JupiterTasksDataProvider;
 interface
 
 uses
-  Classes, SysUtils, JupiterDataProvider, JupiterConsts, JupiterApp;
+  Classes, SysUtils, JupiterDataProvider, JupiterConsts;
 
 type
 
@@ -16,9 +16,13 @@ type
     procedure Internal_Search(prPath, prClient : String); virtual;
   public
     procedure ProvideData; override;
+
+    class procedure GetFieldsLayout(var prList : TStrings); override;
   end;
 
 implementation
+
+uses JupiterApp;
 
 { TJupiterTasksDataProvider }
 
@@ -68,6 +72,15 @@ begin
     until FindNext(vrInfo) <> 0;
 
   FindClose(vrInfo);
+end;
+
+class procedure TJupiterTasksDataProvider.GetFieldsLayout(var prList: TStrings);
+begin
+  inherited GetFieldsLayout(prList);
+
+  prList.Add('Client');
+  prList.Add('Task');
+  prList.Add('Task');
 end;
 
 end.

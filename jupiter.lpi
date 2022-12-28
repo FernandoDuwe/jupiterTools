@@ -291,6 +291,19 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uNewParam"/>
       </Unit>
+      <Unit>
+        <Filename Value="Commons\jupitervariabledataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterVariableDataProvider"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms\unewdataset.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FNewDataSet"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uNewDataSet"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

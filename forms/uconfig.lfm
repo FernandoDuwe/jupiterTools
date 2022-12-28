@@ -8,6 +8,7 @@ inherited FConfig: TFConfig
   ClientWidth = 1292
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnShow = FormShow
   inherited sbActions: TScrollBox
     Width = 1292
   end

@@ -25,10 +25,13 @@ type
     FOnCopyListChangeValue : TJupiterVariableChangeValue;
     FOnChangeValue         : TJupiterVariableChangeValue;
 
-    procedure Internal_SetValue(prNewValue : String);
+  protected
+    procedure Internal_SetValue(prNewValue : String); virtual;
+    function  Internal_GetValue : String; virtual;
   published
+    property Value : String         read Internal_GetValue write Internal_SetValue;
+
     property ID    : String         read FID    write FID;
-    property Value : String         read FValue write Internal_SetValue;
     property Title : String         read FTitle write FTitle;
     property Save  : Boolean        read FSave  write FSave;
     property Owner : TJupiterObject read FOwner write FOwner;
@@ -38,6 +41,8 @@ type
     property OnOwnerChangeValue    : TJupiterVariableChangeValue read FOnOwnerChangeValue    write FOnOwnerChangeValue;
   public
     procedure SaveConfig;
+
+    procedure AsList(var prList : TStrings); virtual;
   end;
 
   { TJupiterVariableList }
@@ -49,13 +54,13 @@ type
     FReadingFile : Boolean;
     FCopyList    : TJupiterVariableList;
 
-    procedure Internal_GetFileVariables(prCompleteFileName : String);
     function  Internal_VariableCount : Integer;
     procedure Internal_SetFileName(prFileName : String);
-
     procedure Internal_SetCopyList(prCopyList : TJupiterVariableList);
     procedure Internal_OnCopyListChangeValue(prID, prNewValue : String);
+  protected
     procedure Internal_OnOwnerChangeValue(prID, prNewValue : String);
+    procedure Internal_GetFileVariables(prCompleteFileName : String); virtual;
   published
     property ChildList     : TJupiterObjectList   read FChildList write FChildList;
     property CopyList      : TJupiterVariableList read FCopyList  write Internal_SetCopyList;
@@ -64,8 +69,8 @@ type
   public
     procedure AddChildList(prList : TJupiterVariableList);
 
-    procedure AddConfig(prID : String; prValue : String; prTitle : String = '');
-    procedure AddVariable(prID : String; prValue : String; prTitle : String = '');
+    procedure AddConfig(prID : String; prValue : String; prTitle : String = ''); virtual;
+    procedure AddVariable(prID : String; prValue : String; prTitle : String = ''); virtual;
 
     function  Exists(prID : String) : Boolean;
     function  VariableById(prID : String) : TJupiterVariable;
@@ -76,7 +81,7 @@ type
     procedure DeleteVariable(prID : String);
 
     procedure CopyValues(prList : TJupiterVariableList);
-    procedure SaveToFile;
+    procedure SaveToFile; virtual;
 
     constructor Create;
     destructor Destroy; override;
@@ -102,6 +107,11 @@ begin
     Self.OnOwnerChangeValue(Self.ID, Self.Value);
 end;
 
+function TJupiterVariable.Internal_GetValue: String;
+begin
+  Result := Self.FValue;
+end;
+
 procedure TJupiterVariable.SaveConfig;
 begin
   if not Self.Save then
@@ -111,6 +121,27 @@ begin
     Exit;
 
   TJupiterVariableList(Self.Owner).AddConfig(Self.ID, Self.Value, Self.Title);
+end;
+
+procedure TJupiterVariable.AsList(var prList: TStrings);
+var
+  vrStr : TStrings;
+  vrVez : Integer;
+begin
+  prList.Clear;
+
+  vrStr := TStringList.Create;
+  try
+    vrStr.Clear;
+    vrStr.Delimiter     := '|';
+    vrStr.DelimitedText := StringReplace(Self.Value, ' ', EMPTY_SPACE_SEPARATOR, [rfIgnoreCase, rfReplaceAll]);
+
+    for vrVez := 0 to vrStr.Count - 1 do
+      prList.Add(StringReplace(vrStr[vrVez], EMPTY_SPACE_SEPARATOR, ' ', [rfIgnoreCase, rfReplaceAll]));
+  finally
+    vrStr.Clear;
+    FreeAndNil(vrStr);
+  end;
 end;
 
 { TJupiterVariableList }
@@ -187,7 +218,7 @@ end;
 
 procedure TJupiterVariableList.Internal_OnOwnerChangeValue(prID, prNewValue: String);
 begin
-  //
+  Self.SaveToFile;
 end;
 
 procedure TJupiterVariableList.AddChildList(prList: TJupiterVariableList);
@@ -356,13 +387,12 @@ var
   vrVez : Integer;
 begin
   for vrVez := 0 to prList.Size - 1 do
-    with prList.VariableByIndex(vrVez) do
-    begin
-      if Save then
-        Self.AddConfig(ID, Value, Title)
-      else
-        Self.AddVariable(ID, Value, Title);
-    end;
+  begin
+    if prList.VariableByIndex(vrVez).Save then
+      Self.AddConfig(prList.VariableByIndex(vrVez).ID, prList.VariableByIndex(vrVez).Value, prList.VariableByIndex(vrVez).Title)
+    else
+      Self.AddVariable(prList.VariableByIndex(vrVez).ID, prList.VariableByIndex(vrVez).Value, prList.VariableByIndex(vrVez).Title);
+  end;
 end;
 
 procedure TJupiterVariableList.SaveToFile;

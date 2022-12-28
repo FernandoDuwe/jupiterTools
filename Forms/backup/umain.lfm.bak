@@ -955,6 +955,7 @@ inherited FMain: TFMain
       end
       object miMaximizedForms: TMenuItem
         Caption = 'Abrir formulários sempre maximizados'
+        OnClick = miMaximizedFormsClick
       end
     end
     object MenuItem3: TMenuItem
@@ -974,6 +975,11 @@ inherited FMain: TFMain
       end
       object Separator5: TMenuItem
         Caption = '-'
+      end
+      object miPastaAssets: TMenuItem
+        Caption = 'assets'
+        ImageIndex = 2
+        OnClick = miPastaAssetsClick
       end
       object miPastasDatasets: TMenuItem
         Caption = 'datasets'

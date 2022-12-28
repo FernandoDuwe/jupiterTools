@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, Controls, SysUtils, JupiterConsts, JupiterObject, JupiterVariable,
-  JupiterVariableForm, ExtCtrls, Forms, StdCtrls;
+  JupiterVariableForm, JupiterVariableDataProvider, ExtCtrls, Forms, StdCtrls;
 
 type
 
@@ -14,27 +14,33 @@ type
 
   TJupiterFormField = class(TJupiterObject)
   protected
-    FVariable : TJupiterVariableForm;
-    FTabOrder : Integer;
-    FPanel    : TPanel;
+    FVariable    : TJupiterVariableForm;
+    FTabOrder    : Integer;
+    FPanel       : TPanel;
+    FPanelButton : TPanel;
+    FButtonTop   : Integer;
 
-    function Internal_GenerateHint : String;
-    function Internal_CreateContainer(prOwner : TScrollBox) : TPanel;
-    function Internal_CreatetTitle(prContainer : TPanel) : TLabel;
-    function Internal_CreateEdit(prContainer : TPanel; prTop : Integer) : TEdit;
+    function  Internal_GenerateHint : String;
+    function  Internal_CreateContainer(prOwner : TScrollBox) : TPanel;
+    function  Internal_CreateButtonContainer(prContainer : TPanel) : TPanel;
+    procedure Internal_CreateButtons(var prContainer : TPanel);
+    function  Internal_CreatetTitle(prContainer : TPanel) : TLabel;
+    function  Internal_CreateEdit(prContainer : TPanel; prTop : Integer) : TEdit;
+    function  Internal_CreateCombo(prContainer : TPanel; prTop : Integer) : TComboBox;
 
     procedure Internal_Change(prSender : TObject);
   published
-    property Panel    : TPanel read FPanel;
-    property TabOrder : Integer read FTabOrder write FTabOrder default 1;
-    property Variable : TJupiterVariableForm read FVariable write FVariable;
+    property Panel       : TPanel read FPanel;
+    property PanelButton : TPanel read FPanelButton;
+    property TabOrder    : Integer read FTabOrder write FTabOrder default 1;
+    property Variable    : TJupiterVariableForm read FVariable write FVariable;
   public
     procedure Draw(prOwner : TScrollBox);
   end;
 
 implementation
 
-uses StrUtils;
+uses Buttons, JupiterApp, StrUtils;
 
 { TJupiterFormField }
 
@@ -61,6 +67,71 @@ begin
   Result.TabOrder   := GENERATOR_SYSLAYER + Self.TabOrder;
 end;
 
+function TJupiterFormField.Internal_CreateButtonContainer(prContainer : TPanel): TPanel;
+begin
+  Result            := TPanel.Create(prContainer);
+  Result.Parent     := prContainer;
+  Result.Align      := alRight;
+  Result.Width      := FORM_MARGIN_RIGHT;
+  Result.Caption    := EmptyStr;
+  Result.BevelOuter := bvNone;
+  Result.TabStop    := False;
+
+  Self.Internal_CreateButtons(Result);
+end;
+
+procedure TJupiterFormField.Internal_CreateButtons(var prContainer: TPanel);
+var
+  vrButton : TSpeedButton;
+  vrCont   : Integer;
+begin
+  vrCont := 0;
+
+  if Self.Variable.CopyButton then
+    vrCont := vrCont + 1;
+
+  if Self.Variable.RunButton then
+    vrCont := vrCont + 1;
+
+  prContainer.Width := (vrCont * 34) + FORM_MARGIN_LEFT;
+
+  vrCont := 0;
+
+  if Self.Variable.RunButton then
+  begin
+    vrButton            := TSpeedButton.Create(prContainer);
+    vrButton.Parent     := prContainer;
+    vrButton.Height     := 32;
+    vrButton.Width      := 32;
+    vrButton.Hint       := 'Clique aqui para executar';
+    vrButton.ShowHint   := True;
+    vrButton.Top        := Self.FButtonTop - 5;
+    vrButton.Left       := (vrCont * 34);
+    vrButton.Flat       := True;
+    vrButton.Images     := vrJupiterApp.MainIcons;
+    vrButton.ImageIndex := ICON_PLAY;
+
+    vrCont := vrCont + 1;
+  end;
+
+  if Self.Variable.CopyButton then
+  begin
+    vrButton          := TSpeedButton.Create(prContainer);
+    vrButton.Parent   := prContainer;
+    vrButton.Height   := 32;
+    vrButton.Width    := 32;
+    vrButton.Hint     := 'Clique aqui para copiar o conteúdo';
+    vrButton.ShowHint := True;
+    vrButton.Top      := Self.FButtonTop - 5;
+    vrButton.Left     := (vrCont * 34);
+    vrButton.Flat     := True;
+    vrButton.Images   := vrJupiterApp.MainIcons;
+    vrButton.ImageIndex := ICON_COPY;
+
+    vrCont := vrCont + 1;
+  end;
+end;
+
 function TJupiterFormField.Internal_CreatetTitle(prContainer: TPanel): TLabel;
 begin
   Result         := TLabel.Create(prContainer);
@@ -76,7 +147,7 @@ begin
   Result.Parent   := prContainer;
   Result.Top      := prTop;
   Result.Left     := FORM_MARGIN_LEFT;
-  Result.Width    := prContainer.Width - (FORM_MARGIN_LEFT + FORM_MARGIN_RIGHT);
+  Result.Width    := prContainer.Width - (FORM_MARGIN_LEFT + Self.PanelButton.Width);
   Result.Caption  := Self.Variable.Value;
   Result.Anchors  := [akTop, akLeft, akRight];
   Result.Enabled  := not Self.Variable.ReadOnly;
@@ -85,25 +156,93 @@ begin
   Result.ShowHint := True;
   Result.TabOrder := 1;
   Result.TabStop  := True;
+
+  if ((vrJupiterApp.Params.Exists(Self.Variable.ID)) and (not Self.Variable.CleanOnShow)) then
+    Result.Text := vrJupiterApp.Params.VariableById(Self.Variable.ID).Value
+  else
+    Result.Text := EmptyStr;
+end;
+
+function TJupiterFormField.Internal_CreateCombo(prContainer: TPanel; prTop: Integer): TComboBox;
+var
+  vrStr : TStrings;
+begin
+  Result          := TComboBox.Create(prContainer);
+  Result.Parent   := prContainer;
+  Result.Top      := prTop;
+  Result.Left     := FORM_MARGIN_LEFT;
+  Result.Width    := prContainer.Width - (FORM_MARGIN_LEFT + Self.PanelButton.Width);
+  Result.Anchors  := [akTop, akLeft, akRight];
+  Result.Enabled  := not Self.Variable.ReadOnly;
+  Result.OnChange := @Self.Internal_Change;
+  Result.Hint     := Self.Internal_GenerateHint;
+  Result.ShowHint := True;
+  Result.TabOrder := 1;
+  Result.TabStop  := True;
+
+  vrStr := TStringList.Create;
+  try
+    vrStr.Clear;
+
+    if vrJupiterApp.Params.Exists(Self.Variable.ListVariable) then
+    begin
+      if vrJupiterApp.Params.VariableById(Self.Variable.ListVariable) is TJupiterVariableDataProvider then
+        TJupiterVariableDataProvider(vrJupiterApp.Params.VariableById(Self.Variable.ListVariable)).AsList(vrStr)
+      else
+        vrJupiterApp.Params.VariableById(Self.Variable.ListVariable).AsList(vrStr);
+
+      Result.Items.Clear;
+      Result.Items.AddStrings(vrStr);
+    end;
+
+    if ((vrJupiterApp.Params.Exists(Self.Variable.ID)) and (not Self.Variable.CleanOnShow)) then
+    begin
+      Result.ItemIndex := Result.Items.IndexOf(vrJupiterApp.Params.VariableById(Self.Variable.ID).Value);
+      Result.Text      := vrJupiterApp.Params.VariableById(Self.Variable.ID).Value;
+    end
+    else
+    begin
+      Result.ItemIndex := -1;
+      Result.Text      := EmptyStr;
+    end;
+  finally
+    vrStr.Clear;
+    FreeAndNil(vrStr);
+  end;
 end;
 
 procedure TJupiterFormField.Internal_Change(prSender: TObject);
 begin
-  Self.Variable.Value := TEdit(prSender).Caption;
+  if Self.Variable.ComponentType = FIELD_TYPE_EDIT then
+    Self.Variable.Value := TEdit(prSender).Caption
+  else
+    Self.Variable.Value := TComboBox(prSender).Text;
 end;
 
 procedure TJupiterFormField.Draw(prOwner: TScrollBox);
 var
   vrContainer : TPanel;
-  vrLabel : TLabel;
-  vrEdit : TEdit;
+  vrLabel     : TLabel;
+  vrEdit      : TEdit;
+  vrCmb       : TComboBox;
 begin
   try
     vrContainer := Self.Internal_CreateContainer(prOwner);
     vrLabel     := Self.Internal_CreatetTitle(vrContainer);
-    vrEdit      := Self.Internal_CreateEdit(vrContainer, ((vrLabel.Top + vrLabel.Height) + FORM_MARGIN_BOTTOM));
+
+    Self.FButtonTop := ((vrLabel.Top + vrLabel.Height) + FORM_MARGIN_BOTTOM);
+
+    Self.FPanelButton := Self.Internal_CreateButtonContainer(vrContainer);
+
+    if Self.Variable.ComponentType = FIELD_TYPE_EDIT then
+      vrEdit := Self.Internal_CreateEdit(vrContainer, ((vrLabel.Top + vrLabel.Height) + FORM_MARGIN_BOTTOM))
+    else
+      vrCmb := Self.Internal_CreateCombo(vrContainer, ((vrLabel.Top + vrLabel.Height) + FORM_MARGIN_BOTTOM));
   finally
-    vrContainer.Height := (vrEdit.Top + vrEdit.Height) + FORM_MARGIN_BOTTOM;
+    if Self.Variable.ComponentType = FIELD_TYPE_EDIT then
+      vrContainer.Height := (vrEdit.Top + vrEdit.Height) + FORM_MARGIN_BOTTOM
+    else
+      vrContainer.Height := (vrCmb.Top + vrCmb.Height) + FORM_MARGIN_BOTTOM;
 
     Self.FPanel := vrContainer;
   end;

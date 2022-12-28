@@ -68,6 +68,14 @@ const
    DATAPROVIDER_TYPE_LIST_PATHS : String = 'TJupiterDirectoryDataProvider';
    DATAPROVIDER_TYPE_LIST_CSV   : String = 'TJupiterCSVDataProvider';
    DATAPROVIDER_TYPE_TASKS      : String = 'TJupiterTasksDataProvider';
+   DATAPROVIDER_TYPE_XML        : String = 'TJupiterXMLDataProvider';
+
+   // Providers
+   PROVIDER_LIST : Array[0..4] of String = ('TJupiterFileDataProvider',
+                                            'TJupiterDirectoryDataProvider',
+                                            'TJupiterCSVDataProvider',
+                                            'TJupiterTasksDataProvider',
+                                            'TJupiterXMLDataProvider');
 
    // Forms
    FORM_MARGIN_TOP      : Integer = 8;

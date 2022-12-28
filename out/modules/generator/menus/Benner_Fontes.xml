@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <content>
-  <title>MenuTestFormulario</title>
-  <routePath>/forms/custom/menuTestFormulario/</routePath>
-  <locationPath>/</locationPath>
+  <title>Fontes</title>
+  <routePath>/benner/projects</routePath>
+  <locationPath>/benner/</locationPath>
   <params>
     <param>
       <id>destinyPath</id>
@@ -11,8 +11,8 @@
     </param>
     <param>
       <id>Generator.FormId</id>
-      <value>FormID</value>
-      <title>Menu Teste Formulário</title>
+      <value>BENNER_FORM_FONTES</value>
+      <title>ID</title>
     </param>
   </params>
 </content>

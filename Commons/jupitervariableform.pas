@@ -70,6 +70,14 @@ begin
   Self.Value := prVariable.Value;
   Self.Title := prVariable.Title;
   Self.Save  := prVariable.Save;
+
+  Self.ReadOnly      := False;
+  Self.Required      := False;
+
+  Self.ComponentType := FIELD_TYPE_EDIT;
+  Self.CleanOnShow   := False;
+  Self.RunButton     := False;
+  Self.CopyButton    := True;
 end;
 
 { TJupiterVariableFormList }

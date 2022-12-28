@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, ExtCtrls, JupiterModule, JupiterObject, JupiterRoute, JupiterForm,
-  JupiterVariable, JupiterEnviroment, JupiterSystemMessage, SysUtils, Controls;
+  JupiterVariable, JupiterEnviroment, JupiterSystemMessage,
+  JupiterVariableDataProvider, SysUtils, Controls;
 
 type
 
@@ -23,7 +24,7 @@ type
     FCurrentForm    : TFJupiterForm;
     FParams         : TJupiterVariableList;
     FUserParams     : TJupiterVariableList;
-    FDataSetParams  : TJupiterVariableList;
+    FDataSetParams  : TJupiterVariableDataProviderList;
     FMainIcons      : TImageList;
 
   protected
@@ -40,7 +41,7 @@ type
     property ModulesList    : TJupiterModuleList   read FModules       write FModules;
     property Messages       : TJupiterObjectList   read FMessages      write FMessages;
     property Params         : TJupiterVariableList read FParams        write FParams;
-    property DataSetParams  : TJupiterVariableList read FDataSetParams write FDataSetParams;
+    property DataSetParams  : TJupiterVariableDataProviderList read FDataSetParams write FDataSetParams;
     property UserParams     : TJupiterVariableList read FUserParams    write FUserParams;
   public
     procedure AddModule(prModule : TJupiterModule);
@@ -72,6 +73,7 @@ var
 begin
   vrEnviroment := TJupiterEnviroment.Create;
   try
+    vrEnviroment.CreatePath('assets');
     vrEnviroment.CreatePath('datasets');
     vrEnviroment.CreatePath('modules');
     vrEnviroment.CreatePath('temp');
@@ -158,6 +160,7 @@ end;
 procedure TJupiterApp.NavigateTo(prRoute: TJupiterRoute; prAsModal: Boolean);
 var
   vrVez : Integer;
+  vrVezDebug : Integer;
   vrFormRoute : TJupiterFormRoute;
   vrFormModal : TFJupiterForm;
 begin
@@ -226,7 +229,7 @@ begin
 
   Self.FMessages      := TJupiterObjectList.Create;
   Self.FParams        := TJupiterVariableList.Create;
-  Self.FDataSetParams := TJupiterVariableList.Create;
+  Self.FDataSetParams := TJupiterVariableDataProviderList.Create;
   Self.FUserParams    := TJupiterVariableList.Create;
 
   Self.Params.AddChildList(Self.DataSetParams);

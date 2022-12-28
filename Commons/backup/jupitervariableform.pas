@@ -70,6 +70,14 @@ begin
   Self.Value := prVariable.Value;
   Self.Title := prVariable.Title;
   Self.Save  := prVariable.Save;
+
+  Self.ReadOnly      := False;
+  Self.Required      := False;
+
+  Self.ComponentType := FIELD_TYPE_EDIT;
+  Self.CleanOnShow   := False;
+  Self.RunButton     := False;
+  Self.CopyButton    := True;
 end;
 
 { TJupiterVariableFormList }
@@ -124,10 +132,22 @@ var
 begin
   for vrVez := 0 to prList.Size - 1 do
   begin
-    if prList.VariableByIndex(vrVez) is TJupiterVariable then
-      vrCurrentVariable := TJupiterVariableForm.CreateFromVariable(prList.VariableByIndex(vrVez))
+    if prList.VariableByIndex(vrVez) is TJupiterVariableForm then
+    begin
+      vrCurrentVariable               := TJupiterVariableForm.Create();
+      vrCurrentVariable.ID            := prList.VariableByIndex(vrVez).ID;
+      vrCurrentVariable.Title         := prList.VariableByIndex(vrVez).Title;
+      vrCurrentVariable.Value         := prList.VariableByIndex(vrVez).Value;
+      vrCurrentVariable.ReadOnly      := False;
+      vrCurrentVariable.Required      := False;
+
+      vrCurrentVariable.ComponentType := FIELD_TYPE_EDIT;
+      vrCurrentVariable.CleanOnShow   := False;
+      vrCurrentVariable.RunButton     := False;
+      vrCurrentVariable.CopyButton    := True;
+    end
     else
-      vrCurrentVariable := TJupiterVariableForm(prList.VariableByIndex(vrVez));
+      vrCurrentVariable := TJupiterVariableForm.CreateFromVariable(prList.VariableByIndex(vrVez));
 
     vrForm          := TJupiterVariableForm.Create;
     vrForm.Title    := vrCurrentVariable.Title;

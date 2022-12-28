@@ -21,6 +21,8 @@ type
       property SubFolders : Boolean read FSubFolders write FSubFolders;
     public
       procedure ProvideData; override;
+
+      class procedure GetFieldsLayout(var prList : TStrings); override;
     end;
 
 implementation
@@ -41,7 +43,7 @@ begin
 
       Self.AddRow;
       Self.GetLastRow.Fields.AddVariable('Folder', vrInfo.Name, 'Pasta');
-      Self.GetLastRow.Fields.AddVariable('Path', Format('%0:s%1:s%2:s', [Self.Path, vrInfo.Name, GetDirectorySeparator]), 'Caminho');
+      Self.GetLastRow.Fields.AddVariable('Path', Format('%0:s%1:s%2:s', [prPath, vrInfo.Name, GetDirectorySeparator]), 'Caminho');
     until FindNext(vrInfo) <> 0;
 
   FindClose(vrInfo);
@@ -55,6 +57,15 @@ begin
      raise Exception.Create('Path must be valid');
 
   Self.Internal_Search(Self.Path);
+end;
+
+class procedure TJupiterDirectoryDataProvider.GetFieldsLayout(
+  var prList: TStrings);
+begin
+  inherited GetFieldsLayout(prList);
+
+  prList.Add('Folder');
+  prList.Add('Folder');
 end;
 
 end.

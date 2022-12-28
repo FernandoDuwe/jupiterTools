@@ -16,6 +16,8 @@ type
     procedure Internal_Search(prPath, prClient : String); virtual;
   public
     procedure ProvideData; override;
+
+    class procedure GetFieldsLayout(var prList : TStrings); override;
   end;
 
 implementation
@@ -70,6 +72,15 @@ begin
     until FindNext(vrInfo) <> 0;
 
   FindClose(vrInfo);
+end;
+
+class procedure TJupiterTasksDataProvider.GetFieldsLayout(var prList: TStrings);
+begin
+  inherited GetFieldsLayout(prList);
+
+  prList.Add('Client');
+  prList.Add('Task');
+  prList.Add('Path');
 end;
 
 end.

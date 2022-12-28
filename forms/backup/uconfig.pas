@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, ExtCtrls,
-  uCustomJupiterForm, JupiterVariable, JupiterApp, JupiterModule,
+  uCustomJupiterForm, uNewDataSet, JupiterVariable, JupiterApp, JupiterModule,
   JupiterFormGenerator, JupiterAction, JupiterConsts, JupiterVariableForm,
   JupiterDialogForm;
 
@@ -27,6 +27,7 @@ type
     procedure Internal_ListModules(prOwner : TTreeNode);
     procedure Internal_PrepareForm; override;
     procedure Internal_NewConfigClick(Sender : TObject);
+    procedure Internal_NewDataSetClick(Sender : TObject);
     procedure Internal_SaveConfigClick(Sender : TObject);
   public
 
@@ -71,6 +72,12 @@ begin
   try
     if Assigned(Self.FOldVariant) then
       Self.FOldVariant.CopyValues(Self.FConfigGenerator.Variables);
+
+    if Assigned(Self.Actions.GetActionButton(1, sbActions)) then
+      Self.Actions.GetActionButton(1, sbActions).Enabled := TJupiterVariableList(tvNavigation.Selected.Data).Tag <> -3;
+
+    if Assigned(Self.Actions.GetActionButton(2, sbActions)) then
+      Self.Actions.GetActionButton(2, sbActions).Enabled := TJupiterVariableList(tvNavigation.Selected.Data).Tag = -3;
 
     Self.FConfigGenerator.SetVariables(TJupiterVariableFormList.CreateFromVariableList(TJupiterVariableList(tvNavigation.Selected.Data)));
     Self.FOldVariant := TJupiterVariableList(tvNavigation.Selected.Data);
@@ -122,11 +129,11 @@ begin
     Icon := ICON_ADD;
   end;
 
-  Self.Actions.Add(TJupiterAction.Create('Dataset', @Internal_NewConfigClick));
+  Self.Actions.Add(TJupiterAction.Create('Dataset', @Internal_NewDataSetClick));
 
   with TJupiterAction(Self.Actions.GetLastObject) do
   begin
-    Hint := 'Clique aqui para inserir um novo dataset';
+    Hint := 'Clique aqui para inserir um novo Dataset';
     Icon := ICON_ADD;
   end;
 
@@ -185,6 +192,24 @@ begin
     end;
   finally
     FreeAndNil(vrDialog);
+  end;
+end;
+
+procedure TFConfig.Internal_NewDataSetClick(Sender: TObject);
+begin
+  Application.CreateForm(TFNewDataSet, FNewDataSet);
+  try
+    if FNewDataSet.ShowModal = mrOK then
+    begin
+      Self.FConfigGenerator.Variables.AddConfig(FNewDataSet.edID.Text,
+                                                FNewDataSet.GetFieldValue,
+                                                FNewDataSet.edDescription.Text);
+
+      Self.FConfigGenerator.SetVariables(TJupiterVariableFormList.CreateFromVariableList(Self.FConfigGenerator.Variables));
+    end;
+  finally
+    FNewDataSet.Release;
+    FreeAndNil(FNewDataSet);
   end;
 end;
 

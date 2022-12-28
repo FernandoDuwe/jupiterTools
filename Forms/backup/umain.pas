@@ -19,6 +19,7 @@ type
     cbNavigationMenu: TCoolBar;
     edSearch: TEdit;
     ilIconFamily: TImageList;
+    miPastaAssets: TMenuItem;
     miMaximizedForms: TMenuItem;
     miPastasJupiter: TMenuItem;
     miPastasModules: TMenuItem;
@@ -71,8 +72,10 @@ type
     procedure edSearchChange(Sender: TObject);
     procedure FormShortCut(var Msg: TLMKey; var Handled: Boolean);
     procedure FormShow(Sender: TObject);
+    procedure miPastaAssetsClick(Sender: TObject);
     procedure miDecFontSizeClick(Sender: TObject);
     procedure miIncFontSizeClick(Sender: TObject);
+    procedure miMaximizedFormsClick(Sender: TObject);
     procedure miPastasJupiterClick(Sender: TObject);
     procedure MenuItem5Click(Sender: TObject);
     procedure miPastasModulesClick(Sender: TObject);
@@ -182,6 +185,18 @@ begin
   vrJupiterApp.NavigateTo(TJupiterRoute.Create(ROOT_FORM_PATH), False);
 end;
 
+procedure TFMain.miPastaAssetsClick(Sender: TObject);
+var
+  vrEnviroment : TJupiterEnviroment;
+begin
+  vrEnviroment := TJupiterEnviroment.Create;
+  try
+    TJupiterRunnable.Create(vrEnviroment.FullPath('assets/'), True);
+  finally
+    FreeAndNil(vrEnviroment);
+  end;
+end;
+
 procedure TFMain.miDecFontSizeClick(Sender: TObject);
 begin
   try
@@ -202,6 +217,11 @@ begin
   finally
     Self.UpdateForm;
   end;
+end;
+
+procedure TFMain.miMaximizedFormsClick(Sender: TObject);
+begin
+  miMaximizedForms.Checked := not miMaximizedForms.Checked;
 end;
 
 procedure TFMain.miPastasJupiterClick(Sender: TObject);

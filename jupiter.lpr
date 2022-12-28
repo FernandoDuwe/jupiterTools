@@ -19,7 +19,8 @@ uses
   JupiterVariableForm, JupiterDialogForm, uCurrentTask,
   JupiterTasksDataProvider, JupiterTaskTimesDataProvider, uEditor, uGenerator,
   uMessage, JupiterSystemMessage, JupiterGeneratorForm, JupiterXMLDataProvider,
-  uNewAction, uNewField, JupiterGeneratorMenuItem, jupiterformutils, uNewParam
+  uNewAction, uNewField, JupiterGeneratorMenuItem, jupiterformutils, uNewParam,
+  JupiterVariableDataProvider, uNewDataSet
   { you can add units after this };
 
 {$R *.res}
