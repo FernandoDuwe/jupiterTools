@@ -5,8 +5,9 @@ unit uEditor;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, SynEdit, JupiterForm,
-  JupiterConsts, JupiterAction, JupiterEnviroment, JupiterApp;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, SynEdit, SynCompletion,
+  JupiterForm, JupiterConsts, JupiterAction, JupiterEnviroment, JupiterApp,
+  JupiterVariable;
 
 type
 
@@ -14,10 +15,13 @@ type
 
   TFEditor = class(TFJupiterForm)
     seEditor: TSynEdit;
+    SynAutoComplete1: TSynAutoComplete;
+    SynCompletion1: TSynCompletion;
   private
     FFileName : String;
     FReadMode : Boolean;
 
+    procedure Internal_ListVariables;
     procedure Internal_PrepareForm; override;
     procedure Internal_UpdateComponents; override;
 
@@ -47,6 +51,30 @@ uses SynHighLighterPas, SynHighLighterCpp, SynHighLighterJava, SynHighLighterJSc
 {$R *.lfm}
 
 { TFEditor }
+
+procedure TFEditor.Internal_ListVariables;
+var
+  vrVez  : Integer;
+  vrVez2 : Integer;
+begin
+  for vrVez := 0 to vrJupiterApp.Params.Size - 1 do
+  begin
+    SynCompletion1.ItemList.Add(vrJupiterApp.Params.VariableByIndex(vrVez).ID);
+
+    SynAutoComplete1.AutoCompleteList.Add(vrJupiterApp.Params.VariableByIndex(vrVez).ID);
+  end;
+
+  for vrVez := 0 to vrJupiterApp.Params.ChildList.Size - 1 do
+    with TJupiterVariableList(vrJupiterApp.Params.ChildList.GetAtIndex(vrVez)) do
+    begin
+      for vrVez2 := 0 to Size - 1 do
+      begin
+        SynCompletion1.ItemList.Add(vrJupiterApp.Params.VariableByIndex(vrVez).ID);
+
+        SynAutoComplete1.AutoCompleteList.Add(vrJupiterApp.Params.VariableByIndex(vrVez).ID);
+      end;
+    end;
+end;
 
 procedure TFEditor.Internal_PrepareForm;
 begin
@@ -87,6 +115,8 @@ begin
   end;
 
   Self.FReadMode := True;
+
+  Self.Internal_ListVariables;
 end;
 
 procedure TFEditor.Internal_UpdateComponents;

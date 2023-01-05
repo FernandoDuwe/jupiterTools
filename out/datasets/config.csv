@@ -6,3 +6,4 @@ Enviroment.Run.Method;Método de execução (RunCommand / ShellExecute / CreateP
 Enviroment.Run.OpenInEditorPrefExtensions;Extensões de arquivos abertas em editor preferencial;.txt|.sql|.md;
 Enviroment.Run.ScriptExtensions;Extensões de arquivos de script;.bat;
 Interface.Font.Size;Tamanho da fonte;10;
+Interface.Form.ModalShowMaximized;Mostrar formulários modais maximizados;True;

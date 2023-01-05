@@ -1,4 +1,5 @@
 inherited FEditor: TFEditor
+  Left = 517
   inline seEditor: TSynEdit[3]
     Left = 0
     Height = 240
@@ -500,5 +501,28 @@ inherited FEditor: TFEditor
     end
   end
   inherited ppMenu: TPopupMenu[4]
+  end
+  object SynCompletion1: TSynCompletion[5]
+    Position = 0
+    LinesInWindow = 6
+    SelectedColor = clHighlight
+    CaseSensitive = False
+    Width = 500
+    AutoUseSingleIdent = True
+    ShortCut = 16416
+    EndOfTokenChr = '()[].'
+    ExecCommandID = ecSynCompletionExecute
+    Editor = seEditor
+    ToggleReplaceWhole = False
+    Left = 224
+    Top = 134
+  end
+  object SynAutoComplete1: TSynAutoComplete[6]
+    EndOfTokenChr = '()[].'
+    ShortCut = 8224
+    ExecCommandID = ecSynAutoCompletionExecute
+    Editor = seEditor
+    Left = 120
+    Top = 134
   end
 end
