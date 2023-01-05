@@ -22,6 +22,8 @@ type
     property FormGenerator : TJupiterFormGenerator read FFormGenerator write FFormGenerator;
   protected
     procedure Internal_PrepareForm; override;
+
+    procedure Internal_SaveGeneratorClick(Sender : TObject); override;
   public
     procedure PrepareForm; override;
   end;
@@ -53,6 +55,13 @@ end;
 procedure TFCustomJupiterForm.Internal_PrepareForm;
 begin
   inherited Internal_PrepareForm;
+end;
+
+procedure TFCustomJupiterForm.Internal_SaveGeneratorClick(Sender: TObject);
+begin
+  inherited Internal_SaveGeneratorClick(Sender);
+
+
 end;
 
 procedure TFCustomJupiterForm.PrepareForm;

@@ -14,7 +14,7 @@
       <id>User.CurrentProject</id>
       <value></value>
       <description>Projeto atual</description>
-      <required>0</required>
+      <required>-1</required>
       <readOnly>0</readOnly>
       <cleanOnShow>0</cleanOnShow>
       <componentType>Combo</componentType>

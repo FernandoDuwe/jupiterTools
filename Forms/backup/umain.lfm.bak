@@ -248,10 +248,12 @@ inherited FMain: TFMain
     end
   end
   inherited ppMenu: TPopupMenu[7]
+    Left = 360
+    Top = 104
   end
   object ilIconFamily: TImageList[8]
-    Left = 430
-    Top = 136
+    Left = 457
+    Top = 106
     Bitmap = {
       4C7A260000001000000010000000994B00000000000078DAECBD0558555BB73E
       3E09033D473D7AD4A3C7EECF3E76B7A2282A2A6517D88D58A02892D28A08A2B4
@@ -863,8 +865,8 @@ inherited FMain: TFMain
   end
   object mmMainMenu: TMainMenu[9]
     Images = ilIconFamily
-    Left = 528
-    Top = 135
+    Left = 555
+    Top = 105
     object miFormParams: TMenuItem
       Caption = 'Arquivo'
       object miNew: TMenuItem
@@ -1006,7 +1008,19 @@ inherited FMain: TFMain
     Enabled = False
     Interval = 500
     OnTimer = tmSearchTimer
-    Left = 608
-    Top = 134
+    Left = 635
+    Top = 104
+  end
+  object ppNotifier: TPopupNotifier[11]
+    Color = clInactiveBorder
+    Icon.Data = {
+      07544269746D617000000000
+    }
+    Text = 'Text'
+    Title = 'Caption'
+    TitleFont.Style = [fsBold]
+    Visible = False
+    Left = 744
+    Top = 104
   end
 end

@@ -23,6 +23,9 @@ type
     FIcon         : SmallInt;
     FOnClick      : TNotifyEvent;
 
+    FOnBeforeExecute : TJupiterAction;
+    FOnAfterExecute  : TJupiterAction;
+
     FConfirmBeforeExecute : Boolean;
   published
     property Title : String   read FTitle write FTitle;
@@ -35,7 +38,9 @@ type
 
     property ConfirmBeforeExecute : Boolean read FConfirmBeforeExecute write FConfirmBeforeExecute;
 
-    property OnClick  : TNotifyEvent     read FOnClick  write FOnClick;
+    property OnAfterExecute  : TJupiterAction read FOnAfterExecute  write FOnAfterExecute;
+    property OnBeforeExecute : TJupiterAction read FOnBeforeExecute write FOnBeforeExecute;
+    property OnClick         : TNotifyEvent   read FOnClick         write FOnClick;
 
     property VariableList : TJupiterVariableList read FVariableList write FVariableList;
   public
@@ -55,7 +60,7 @@ type
     procedure Internal_OnClick(Sender: TObject);
     function Internal_CreateButton(prAction : TJupiterAction; prIndex, prLeft : Integer; prOwner : TScrollBox) : TBitBtn;
   public
-    procedure CopyFromList(prCopyList : TJupiterActionList);
+    procedure CopyFromList(prCopyList : TJupiterActionList; prOnBeforeExecute : TJupiterAction = nil);
 
     procedure BuildActions(prOwner : TScrollBox);
 
@@ -111,7 +116,7 @@ begin
   Result.OnClick := @Self.Internal_OnClick;
 end;
 
-procedure TJupiterActionList.CopyFromList(prCopyList: TJupiterActionList);
+procedure TJupiterActionList.CopyFromList(prCopyList: TJupiterActionList; prOnBeforeExecute : TJupiterAction = nil);
 var
   vrVez           : Integer;
   vrAction        : TJupiterAction;
@@ -137,7 +142,7 @@ begin
 
     vrAction.Icon := vrCurrentAction.Icon;
     vrAction.ConfirmBeforeExecute := vrCurrentAction.ConfirmBeforeExecute;
-    vrAction.Hint := vrCurrentAction.Hint;;
+    vrAction.Hint := vrCurrentAction.Hint;
 
     Self.Add(vrAction);
   end;
@@ -183,6 +188,9 @@ begin
     if Application.MessageBox(PAnsiChar('Deseja realmente ' + Self.Title + '?'), PAnsiChar(Self.Title), MB_ICONQUESTION + MB_YESNO) = ID_NO then
       Exit;
 
+  if Assigned(Self.OnBeforeExecute) then
+    Self.OnBeforeExecute.Execute;
+
   if Assigned(Self.FOnClick) then
     Self.OnClick(Application.MainForm);
 
@@ -191,6 +199,9 @@ begin
 
   if Assigned(Self.Route) then
     vrJupiterApp.NavigateTo(Self.Route, not Application.MainForm.Showing);
+
+  if Assigned(Self.OnAfterExecute) then
+    Self.OnAfterExecute.Execute;
 end;
 
 constructor TJupiterAction.Create(prTitle : String; prRunnable: TJupiterRunnable; prLocation : TJupiterRoute);

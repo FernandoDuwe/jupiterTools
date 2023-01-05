@@ -6,19 +6,25 @@ interface
 
 uses
   Classes, Controls, SysUtils, JupiterConsts, JupiterObject, JupiterVariable,
-  JupiterVariableForm, JupiterVariableDataProvider, ExtCtrls, Forms, StdCtrls;
+  JupiterVariableForm, JupiterVariableDataProvider, JupiterRunnable,
+  JupiterEnviroment, ExtCtrls, Forms, StdCtrls;
 
 type
 
   { TJupiterFormField }
 
   TJupiterFormField = class(TJupiterObject)
+  private
+    function Internal_GetValue: String;
   protected
     FVariable    : TJupiterVariableForm;
     FTabOrder    : Integer;
     FPanel       : TPanel;
     FPanelButton : TPanel;
     FButtonTop   : Integer;
+
+    FEdit : TEdit;
+    FCmb  : TComboBox;
 
     function  Internal_GenerateHint : String;
     function  Internal_CreateContainer(prOwner : TScrollBox) : TPanel;
@@ -29,11 +35,14 @@ type
     function  Internal_CreateCombo(prContainer : TPanel; prTop : Integer) : TComboBox;
 
     procedure Internal_Change(prSender : TObject);
+    procedure Internal_RunButtonClick(Sender : TObject);
+    procedure Internal_CopyButtonClick(Sender : TObject);
   published
     property Panel       : TPanel read FPanel;
     property PanelButton : TPanel read FPanelButton;
     property TabOrder    : Integer read FTabOrder write FTabOrder default 1;
     property Variable    : TJupiterVariableForm read FVariable write FVariable;
+    property Value       : String read Internal_GetValue;
   public
     procedure Draw(prOwner : TScrollBox);
   end;
@@ -43,6 +52,17 @@ implementation
 uses Buttons, JupiterApp, StrUtils;
 
 { TJupiterFormField }
+
+function TJupiterFormField.Internal_GetValue: String;
+begin
+  Result := EmptyStr;
+
+  if Assigned(Self.FEdit) then
+    Result := Self.FEdit.Text;
+
+  if Assigned(Self.FCmb) then
+    Result := Self.FCmb.Text;
+end;
 
 function TJupiterFormField.Internal_GenerateHint: String;
 begin
@@ -110,6 +130,7 @@ begin
     vrButton.Flat       := True;
     vrButton.Images     := vrJupiterApp.MainIcons;
     vrButton.ImageIndex := ICON_PLAY;
+    vrButton.OnClick    := @Internal_RunButtonClick;
 
     vrCont := vrCont + 1;
   end;
@@ -127,6 +148,7 @@ begin
     vrButton.Flat     := True;
     vrButton.Images   := vrJupiterApp.MainIcons;
     vrButton.ImageIndex := ICON_COPY;
+    vrButton.OnClick    := @Internal_CopyButtonClick;
 
     vrCont := vrCont + 1;
   end;
@@ -219,12 +241,33 @@ begin
     Self.Variable.Value := TComboBox(prSender).Text;
 end;
 
+procedure TJupiterFormField.Internal_RunButtonClick(Sender: TObject);
+begin
+  if Self.Value = EmptyStr then
+    Exit;
+
+  TJupiterRunnable.Create(Self.Value, True);
+end;
+
+procedure TJupiterFormField.Internal_CopyButtonClick(Sender: TObject);
+var
+  vrEnviroment : TJupiterEnviroment;
+begin
+  if Self.Value = EmptyStr then
+    Exit;
+
+  vrEnviroment := TJupiterEnviroment.Create();
+  try
+    vrEnviroment.CopyToClipboard(Self.Value);
+  finally
+    FreeAndNil(vrEnviroment);
+  end;
+end;
+
 procedure TJupiterFormField.Draw(prOwner: TScrollBox);
 var
   vrContainer : TPanel;
   vrLabel     : TLabel;
-  vrEdit      : TEdit;
-  vrCmb       : TComboBox;
 begin
   try
     vrContainer := Self.Internal_CreateContainer(prOwner);
@@ -235,14 +278,14 @@ begin
     Self.FPanelButton := Self.Internal_CreateButtonContainer(vrContainer);
 
     if Self.Variable.ComponentType = FIELD_TYPE_EDIT then
-      vrEdit := Self.Internal_CreateEdit(vrContainer, ((vrLabel.Top + vrLabel.Height) + FORM_MARGIN_BOTTOM))
+      Self.FEdit := Self.Internal_CreateEdit(vrContainer, ((vrLabel.Top + vrLabel.Height) + FORM_MARGIN_BOTTOM))
     else
-      vrCmb := Self.Internal_CreateCombo(vrContainer, ((vrLabel.Top + vrLabel.Height) + FORM_MARGIN_BOTTOM));
+      Self.FCmb := Self.Internal_CreateCombo(vrContainer, ((vrLabel.Top + vrLabel.Height) + FORM_MARGIN_BOTTOM));
   finally
     if Self.Variable.ComponentType = FIELD_TYPE_EDIT then
-      vrContainer.Height := (vrEdit.Top + vrEdit.Height) + FORM_MARGIN_BOTTOM
+      vrContainer.Height := (Self.FEdit.Top + Self.FEdit.Height) + FORM_MARGIN_BOTTOM
     else
-      vrContainer.Height := (vrCmb.Top + vrCmb.Height) + FORM_MARGIN_BOTTOM;
+      vrContainer.Height := (Self.FCmb.Top + Self.FCmb.Height) + FORM_MARGIN_BOTTOM;
 
     Self.FPanel := vrContainer;
   end;

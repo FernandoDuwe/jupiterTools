@@ -11,6 +11,7 @@ inherited FCustomJupiterForm: TFCustomJupiterForm
     Alignment = taCenter
     ClientHeight = 50
     ParentColor = True
+    PopupMenu = ppMenu
   end
   object sbBody: TScrollBox[3]
     Left = 0

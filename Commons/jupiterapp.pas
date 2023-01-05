@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, ExtCtrls, JupiterModule, JupiterObject, JupiterRoute, JupiterForm,
-  JupiterVariable, JupiterEnviroment, JupiterSystemMessage,
+  JupiterVariable, JupiterEnviroment, JupiterSystemMessage, PopUpNotifier,
   JupiterVariableDataProvider, SysUtils, Controls;
 
 type
@@ -26,16 +26,18 @@ type
     FUserParams     : TJupiterVariableList;
     FDataSetParams  : TJupiterVariableDataProviderList;
     FMainIcons      : TImageList;
+    FPopupNotifier  : TPopupNotifier;
 
   protected
     procedure Internal_Prepare; virtual;
 
   published
-    property AppID       : String        read FAppID;
-    property AppName     : String        read FAppName;
-    property BodyPanel   : TPanel        read FBodyPanel   write FBodyPanel;
-    property CurrentForm : TFJupiterForm read FCurrentForm write FCurrentForm;
-    property MainIcons   : TImageList    read FMainIcons   write FMainIcons;
+    property AppID         : String         read FAppID;
+    property AppName       : String         read FAppName;
+    property BodyPanel     : TPanel         read FBodyPanel   write FBodyPanel;
+    property CurrentForm   : TFJupiterForm  read FCurrentForm write FCurrentForm;
+    property MainIcons     : TImageList     read FMainIcons   write FMainIcons;
+    property PopupNotifier : TPopupNotifier read FPopupNotifier write FPopupNotifier;
 
     property FormRoutes     : TJupiterObjectList   read FFormRoutes    write FFormRoutes;
     property ModulesList    : TJupiterModuleList   read FModules       write FModules;
@@ -51,6 +53,8 @@ type
     function ConsoleMode : Boolean;
 
     procedure NavigateTo(prRoute : TJupiterRoute; prAsModal : Boolean);
+
+    procedure Popup(prTitle : String; prStrMessage : TStrings);
 
     function GetActions(prRoute : TJupiterRoute) : TJupiterObjectList; virtual;
 
@@ -207,6 +211,27 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TJupiterApp.Popup(prTitle : String; prStrMessage : TStrings);
+var
+  vrVez : Integer;
+begin
+  if Self.PopupNotifier.Visible then
+    Self.PopupNotifier.Hide;
+
+  Self.PopupNotifier.Text  := EmptyStr;
+  Self.PopupNotifier.Title := prTitle;
+
+  if prStrMessage.Count > 0 then
+  begin
+    Self.PopupNotifier.Text := prStrMessage[0];
+
+    for vrVez := 1 to prStrMessage.Count -1 do
+       Self.PopupNotifier.Text := Self.PopupNotifier.Text + LineEnding + prStrMessage[vrVez];
+  end;
+
+  Self.PopupNotifier.ShowAtPos(Screen.Width - 10, Screen.Height - 35);
 end;
 
 function TJupiterApp.GetActions(prRoute: TJupiterRoute): TJupiterObjectList;

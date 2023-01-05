@@ -25,6 +25,7 @@ type
     miPastasModules: TMenuItem;
     miPastasDatasets: TMenuItem;
     miPastasTemp: TMenuItem;
+    ppNotifier: TPopupNotifier;
     Separator5: TMenuItem;
     miAutoUpdate: TMenuItem;
     miClearSearch: TMenuItem;
@@ -496,7 +497,8 @@ var
 begin
   inherited Internal_PrepareForm;
 
-  vrJupiterApp.BodyPanel := pnBody;
+  vrJupiterApp.BodyPanel     := pnBody;
+  vrJupiterApp.PopupNotifier := ppNotifier;
 
   if vrJupiterApp.Params.Exists(vrJupiterApp.AppID + '.Messages.Count') then
   begin

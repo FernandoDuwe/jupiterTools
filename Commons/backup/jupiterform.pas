@@ -41,6 +41,8 @@ type
     FPrepared   : Boolean;
     FIsModal    : Boolean;
 
+    FSaveGeneratorAction : TJupiterAction;
+
     procedure Internal_SetHint(prHint : String);
   published
     property Actions    : TJupiterActionList    read FActions   write FActions;
@@ -52,7 +54,10 @@ type
     property Generator  : TJupiterGeneratorForm read FGenerator write FGenerator;
     property SearchText : String                read FSearchText;
 
+    property SaveGeneratorAction : TJupiterAction read FSaveGeneratorAction write FSaveGeneratorAction;
   protected
+    procedure Internal_SaveGeneratorClick(Sender : TObject); virtual;
+
     procedure Internal_UpdateComponents; virtual;
     procedure Internal_UpdateDatasets; virtual;
     procedure Internal_UpdateCalcs; virtual;
@@ -89,6 +94,8 @@ begin
   Self.FRoute     := TJupiterRoute.Create(ROOT_PATH);
   Self.FGenerator := TJupiterGeneratorForm.Create;
 
+  Self.FSaveGeneratorAction := TJupiterAction.Create('Salvar', @Internal_SaveGeneratorClick);
+
   Self.IsModal  := False;
 end;
 
@@ -98,6 +105,7 @@ begin
   FreeAndNil(Self.FParams);
   FreeAndNil(Self.FRoute);
   FreeAndNil(Self.FGenerator);
+  FreeAndNil(Self.FSaveGeneratorAction);
 end;
 
 procedure TFJupiterForm.FormShow(Sender: TObject);
@@ -167,15 +175,17 @@ begin
   Self.UpdateForm;
 end;
 
+procedure TFJupiterForm.Internal_SaveGeneratorClick(Sender: TObject);
+begin
+  //
+end;
+
 procedure TFJupiterForm.Internal_UpdateComponents;
 begin
   sbActions.Visible := Self.Actions.Size > 0;
 
-  miEditGenerator.Enabled := True; //Params.Exists(FIELD_ID_GENERADOR);
-  miViewParams.Enabled    := True; //Params.Size > 0;
-
-  vrJupiterApp.AddMessage('DEBUG: ' + Self.ClassName + ' (UpdateComponents)', IntToStr(Params.Size))
-      .Details.Add(IntToStr(Params.Size) + ' | ' + BoolToStr(Params.Exists(FIELD_ID_GENERADOR), True));
+  miEditGenerator.Enabled := Params.Exists(FIELD_ID_GENERADOR);
+  miViewParams.Enabled    := Params.Size > 0;
 end;
 
 procedure TFJupiterForm.Internal_UpdateDatasets;

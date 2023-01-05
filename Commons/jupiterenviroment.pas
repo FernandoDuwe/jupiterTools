@@ -35,13 +35,14 @@ type
     function CanChangeFileContent(prFileName : String) : Boolean;
 
     procedure CopyFileTo(prOrigin, prDestiny : String);
+    procedure CopyToClipboard(prContent : String);
     function  IsOfExtension(prFileName, prGroupOfExtensions : String) : Boolean;
     function  OpenFile(prDefaultExtensions : String) : String;
   end;
 
 implementation
 
-uses Dialogs, JupiterApp, FileUtil;
+uses Dialogs, JupiterApp, FileUtil, Clipbrd;
 
 { TJupiterEnviroment }
 
@@ -208,6 +209,24 @@ end;
 procedure TJupiterEnviroment.CopyFileTo(prOrigin, prDestiny: String);
 begin
   CopyFile(prOrigin, prDestiny);
+end;
+
+procedure TJupiterEnviroment.CopyToClipboard(prContent: String);
+var
+  vrStr : TStrings;
+begin
+  vrStr := TStringList.Create;
+  try
+    Clipboard.AsText := prContent;
+
+    vrStr.Clear;
+    vrStr.Add('Copiado item para a área de transferência:');
+    vrStr.Add(prContent);
+
+    vrJupiterApp.Popup('Copiado item para a área de transferência', vrStr);
+  finally
+    FreeAndNil(vrStr);
+  end;
 end;
 
 function TJupiterEnviroment.IsOfExtension(prFileName, prGroupOfExtensions: String): Boolean;

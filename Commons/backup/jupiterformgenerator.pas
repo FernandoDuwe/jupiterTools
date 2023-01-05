@@ -72,12 +72,21 @@ begin
   end;
 end;
 
+procedure TJupiterFormGenerator.Internal_SaveGeneratorClick(Sender: TObject);
+begin
+
+end;
+
 procedure TJupiterFormGenerator.SetVariables(prVariables: TJupiterVariableFormList);
 begin
   Self.FVariables := prVariables;
 
   if Self.ClearContainerOnSet then
+  begin
+    Self.FAlreadyDrawed := False;
+
     Self.Internal_ClearContainer;
+  end;
 
   Self.Internal_DrawForm;
 end;
