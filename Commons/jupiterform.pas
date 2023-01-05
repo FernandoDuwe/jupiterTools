@@ -112,6 +112,9 @@ procedure TFJupiterForm.FormShow(Sender: TObject);
 begin
   try
     Self.PrepareForm;
+
+    if ((Self.IsModal) and (vrJupiterApp.Params.Exists('Interface.Form.ModalShowMaximized'))) then
+      Self.WindowState := wsMaximized;
   finally
     Self.UpdateForm;
   end;

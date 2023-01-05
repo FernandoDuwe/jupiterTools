@@ -51,7 +51,6 @@ type
   private
     FChildList   : TJupiterObjectList;
     FFileName    : String;
-    FReadingFile : Boolean;
     FCopyList    : TJupiterVariableList;
 
     function  Internal_VariableCount : Integer;
@@ -59,6 +58,8 @@ type
     procedure Internal_SetCopyList(prCopyList : TJupiterVariableList);
     procedure Internal_OnCopyListChangeValue(prID, prNewValue : String);
   protected
+    FReadingFile : Boolean;
+
     procedure Internal_OnOwnerChangeValue(prID, prNewValue : String);
     procedure Internal_GetFileVariables(prCompleteFileName : String); virtual;
   published
@@ -373,6 +374,7 @@ procedure TJupiterVariableList.DeleteVariable(prID: String);
 var
   vrIndex : Integer;
   vrObj   : TJupiterVariable;
+  vr
 begin
   vrIndex := Self.VariableIndexById(prID);
   vrObj   := Self.VariableByIndex(vrIndex);

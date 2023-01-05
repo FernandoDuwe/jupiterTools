@@ -23,7 +23,7 @@ inherited FGenerator: TFGenerator
   inherited sbBody: TScrollBox
     Height = 566
     Width = 1292
-    HorzScrollBar.Page = 546
+    HorzScrollBar.Page = 905
     VertScrollBar.Page = 455
     ClientHeight = 562
     ClientWidth = 1288
@@ -440,8 +440,10 @@ inherited FGenerator: TFGenerator
           Top = 0
           Width = 268
           Align = alLeft
+          ReadOnly = True
           TabOrder = 0
           OnClick = tvCurrentMenuClick
+          Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
         end
         object Splitter2: TSplitter
           Left = 268
@@ -479,14 +481,74 @@ inherited FGenerator: TFGenerator
         ClientHeight = 534
         ClientWidth = 1280
         object lvIcons: TListView
-          Left = 0
-          Height = 534
-          Top = 0
-          Width = 1280
+          Left = 114
+          Height = 484
+          Top = 50
+          Width = 1166
           Align = alClient
           Columns = <>
           TabOrder = 0
           ViewStyle = vsIcon
+          OnChange = lvIconsChange
+          OnClick = lvIconsClick
+        end
+        object Panel4: TPanel
+          Left = 0
+          Height = 484
+          Top = 50
+          Width = 114
+          Align = alLeft
+          BevelOuter = bvNone
+          ClientHeight = 484
+          ClientWidth = 114
+          TabOrder = 1
+          object imgIconBig: TImage
+            Left = 8
+            Height = 92
+            Top = 8
+            Width = 92
+            Center = True
+            Stretch = True
+            Transparent = True
+          end
+          object lbIcon: TLabel
+            Left = 8
+            Height = 15
+            Top = 112
+            Width = 32
+            Caption = 'Ícone:'
+            ParentColor = False
+          end
+          object mmIcon: TMemo
+            Left = 8
+            Height = 149
+            Top = 139
+            Width = 92
+            Lines.Strings = (
+              'mmIcon'
+            )
+            ReadOnly = True
+            TabOrder = 0
+          end
+        end
+        object Panel5: TPanel
+          Left = 0
+          Height = 50
+          Top = 0
+          Width = 1280
+          Align = alTop
+          BevelOuter = bvNone
+          ClientHeight = 50
+          ClientWidth = 1280
+          TabOrder = 2
+          object lbIconHint: TLabel
+            Left = 116
+            Height = 15
+            Top = 16
+            Width = 781
+            Caption = 'Aqui estão listados todos os ícones de sistema. É possível também adicionar ícones customizados, adicionando arquivos de imagens na pasta assets.'
+            ParentColor = False
+          end
         end
       end
     end

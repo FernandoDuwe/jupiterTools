@@ -23,6 +23,7 @@ type
     edMenuItemRoute: TEdit;
     edMenuItemTitle: TEdit;
     gbMenu: TGroupBox;
+    imgIconBig: TImage;
     Label1: TLabel;
     Label2: TLabel;
     Label3: TLabel;
@@ -30,17 +31,22 @@ type
     Label5: TLabel;
     Label6: TLabel;
     Label7: TLabel;
+    lbIconHint: TLabel;
+    lbIcon: TLabel;
     lbFormList: TListBox;
     lbMenuList: TListBox;
     lvIcons: TListView;
     lvActions: TListView;
     lvFields: TListView;
     lvMenuVariables: TListView;
+    mmIcon: TMemo;
     mmCurrentMenuInfo: TMemo;
     mmLines: TMemo;
     Panel1: TPanel;
     Panel2: TPanel;
     Panel3: TPanel;
+    Panel4: TPanel;
+    Panel5: TPanel;
     pnMenuVariable: TPanel;
     pnMenuForm: TPanel;
     pnBodyMenuItem: TPanel;
@@ -74,6 +80,9 @@ type
     procedure lvActionsSelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
     procedure lvFieldsDblClick(Sender: TObject);
     procedure lvFieldsSelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
+    procedure lvIconsChange(Sender: TObject; Item: TListItem;
+      Change: TItemChange);
+    procedure lvIconsClick(Sender: TObject);
     procedure lvMenuVariablesDblClick(Sender: TObject);
     procedure sbActionAddClick(Sender: TObject);
     procedure sbActionDeleteClick(Sender: TObject);
@@ -183,6 +192,36 @@ end;
 procedure TFGenerator.lvFieldsSelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
 begin
   Self.Internal_UpdateFormForm;
+end;
+
+procedure TFGenerator.lvIconsChange(Sender: TObject; Item: TListItem; Change: TItemChange);
+begin
+
+end;
+
+procedure TFGenerator.lvIconsClick(Sender: TObject);
+var
+  vrGraphic : TGraphic;
+begin
+  if not Assigned(lvIcons.Selected) then
+    Exit;
+
+  imgIconBig.Picture := nil;
+
+  FMain.ilIconFamily.Draw(imgIconBig.Canvas, 0, 0, StrToInt(lvIcons.Selected.Caption));
+
+  imgIconBig.Stretch := False;
+  imgIconBig.Center := False;
+
+  lbIcon.Caption := 'Ícone: ' + lvIcons.Selected.Caption;
+
+  imgIconBig.Stretch := True;
+  imgIconBig.Center := True;
+
+  mmIcon.Lines.Clear;
+  mmIcon.Lines.Add('ID: itemIcon');
+  mmIcon.Lines.Add('Desc: Ícone');
+  mmIcon.Lines.Add('Valor: ' + lvIcons.Selected.Caption);
 end;
 
 procedure TFGenerator.lvMenuVariablesDblClick(Sender: TObject);
@@ -413,6 +452,9 @@ begin
   ShowRouteOnTreeView(tvCurrentMenu, TJupiterRoute.Create(ROOT_PATH), vrMenuList, nil);
 
   tvCurrentMenu.FullExpand;
+
+  lvIcons.Selected := lvIcons.Items[0];
+  lvIconsClick(Sender);
 end;
 
 procedure TFGenerator.Internal_ShowForm(prFile: String);

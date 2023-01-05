@@ -8,14 +8,15 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, ExtCtrls,
   StdCtrls, Menus, PopupNotifier, Buttons, JupiterApp, JupiterRoute,
   JupiterConsts, JupiterObject, JupiterForm, JupiterAction, JupiterEnviroment,
-  JupiterRunnable, jupiterformutils, JupiterToolsModule, uPSComponent_Default,
-  LMessages, PairSplitter;
+  JupiterRunnable, jupiterformutils, JupiterFileDataProvider,
+  JupiterToolsModule, uPSComponent_Default, LMessages, PairSplitter;
 
 type
 
   { TFMain }
 
   TFMain = class(TFJupiterForm)
+    ApplicationProperties1: TApplicationProperties;
     cbNavigationMenu: TCoolBar;
     edSearch: TEdit;
     ilIconFamily: TImageList;
@@ -69,10 +70,13 @@ type
     tbMessage: TToolButton;
     ToolButton2: TToolButton;
     tvMenu: TTreeView;
+    procedure ApplicationProperties1Restore(Sender: TObject);
     procedure cbNavigationMenuChange(Sender: TObject);
     procedure edSearchChange(Sender: TObject);
     procedure FormShortCut(var Msg: TLMKey; var Handled: Boolean);
     procedure FormShow(Sender: TObject);
+    procedure miAutoUpdateClick(Sender: TObject);
+    procedure miClearSearchClick(Sender: TObject);
     procedure miPastaAssetsClick(Sender: TObject);
     procedure miDecFontSizeClick(Sender: TObject);
     procedure miIncFontSizeClick(Sender: TObject);
@@ -101,10 +105,14 @@ type
     procedure tvMenuClick(Sender: TObject);
   private
     procedure Internal_ListMenuItens;
+    procedure Internal_GetExternalIcons;
 
     procedure Internal_ShowRoute(prRoute : TJupiterRoute; prList : TJupiterObjectList; prNode : TTreeNode);
     procedure Internal_MessagesCountSetValue(prID, prNewValue : String);
     procedure Internal_CurrentFormTitleSetValue(prID, prNewValue : String);
+
+    procedure Internal_OnBeforeNavigate(Sender: TObject);
+    procedure Internal_OnAfterNavigate(Sender: TObject);
   protected
     procedure Internal_UpdateComponents; override;
     procedure Internal_PrepareForm; override;
@@ -172,6 +180,12 @@ begin
 
 end;
 
+procedure TFMain.ApplicationProperties1Restore(Sender: TObject);
+begin
+  if miAutoUpdate.Checked then
+    Self.UpdateForm;
+end;
+
 procedure TFMain.edSearchChange(Sender: TObject);
 begin
   tmSearch.Enabled := False;
@@ -180,10 +194,22 @@ end;
 
 procedure TFMain.FormShow(Sender: TObject);
 begin
+  Self.IsModal := True;
+
   inherited;
 
   vrJupiterApp.MainIcons := ilIconFamily;
   vrJupiterApp.NavigateTo(TJupiterRoute.Create(ROOT_FORM_PATH), False);
+end;
+
+procedure TFMain.miAutoUpdateClick(Sender: TObject);
+begin
+  miAutoUpdate.Checked := not miAutoUpdate.Checked;
+end;
+
+procedure TFMain.miClearSearchClick(Sender: TObject);
+begin
+  miClearSearch.Checked := not miClearSearch.Checked;
 end;
 
 procedure TFMain.miPastaAssetsClick(Sender: TObject);
@@ -222,7 +248,14 @@ end;
 
 procedure TFMain.miMaximizedFormsClick(Sender: TObject);
 begin
-  miMaximizedForms.Checked := not miMaximizedForms.Checked;
+  try
+    if not vrJupiterApp.Params.Exists('Interface.Form.ModalShowMaximized') then
+      vrJupiterApp.Params.AddConfig('Interface.Form.ModalShowMaximized', 'True', 'Mostrar formulários modais maximizados')
+    else
+      vrJupiterApp.Params.DeleteVariable('Interface.Form.ModalShowMaximized');
+  finally
+    Self.UpdateForm;
+  end;
 end;
 
 procedure TFMain.miPastasJupiterClick(Sender: TObject);
@@ -410,6 +443,42 @@ begin
   tvMenu.FullExpand;
 end;
 
+procedure TFMain.Internal_GetExternalIcons;
+var
+  vrFile       : TJupiterFileDataProvider;
+  vrEnviroment : TJupiterEnviroment;
+  vrVez        : Integer;
+
+  vrBitmap  : TBitmap;
+  vrPicture : TPicture;
+begin
+  vrEnviroment := TJupiterEnviroment.Create();
+  vrFile       := TJupiterFileDataProvider.Create;
+  try
+    vrFile.Path := vrEnviroment.FullPath('assets');
+    vrFile.SubFolders := True;
+    vrFile.ProvideData;
+
+    for vrVez := 0 to vrFile.Size - 1 do
+    begin
+      vrPicture := TPicture.Create;
+      try
+        vrPicture.LoadFromFile(vrFile.GetRowByIndex(vrVez).Fields.VariableById('File').Value);
+
+        vrBitmap := TBitmap.Create;
+        vrBitmap.Assign(vrPicture.Graphic);
+
+        ilIconFamily.Add(vrBitmap, nil);
+      finally
+        FreeAndNil(vrPicture);
+      end;
+    end;
+  finally
+    FreeAndNil(vrFile);
+    FreeAndNil(vrEnviroment);
+  end;
+end;
+
 procedure TFMain.Internal_ShowRoute(prRoute: TJupiterRoute; prList: TJupiterObjectList; prNode : TTreeNode);
 var
   vrVez    : Integer;
@@ -453,6 +522,18 @@ begin
   Self.Caption := Format('%0:s - %1:s', [prNewValue, vrJupiterApp.AppName]);
 end;
 
+procedure TFMain.Internal_OnBeforeNavigate(Sender: TObject);
+begin
+  if miClearSearch.Checked then
+    edSearch.Text := EmptyStr;
+end;
+
+procedure TFMain.Internal_OnAfterNavigate(Sender: TObject);
+begin
+  if edSearch.Text <> EmptyStr then
+    edSearchChange(Sender);
+end;
+
 procedure TFMain.Internal_UpdateComponents;
 begin
   inherited Internal_UpdateComponents;
@@ -473,6 +554,8 @@ begin
     tbMenu.Hint := 'Exibir menu';
   end;
 
+  miMaximizedForms.Checked := vrJupiterApp.Params.Exists('Interface.Form.ModalShowMaximized');
+
   with TJupiterToolsModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Tools')) do
   begin
     if ((Params.Exists(DefineParamName('Tasks.Current.Path'))) and
@@ -492,13 +575,13 @@ begin
 end;
 
 procedure TFMain.Internal_PrepareForm;
-var
-  vr : TDateTime;
 begin
   inherited Internal_PrepareForm;
 
-  vrJupiterApp.BodyPanel     := pnBody;
-  vrJupiterApp.PopupNotifier := ppNotifier;
+  vrJupiterApp.BodyPanel        := pnBody;
+  vrJupiterApp.PopupNotifier    := ppNotifier;
+  vrJupiterApp.OnBeforeNavigate := @Internal_OnBeforeNavigate;
+  vrJupiterApp.OnAfterNavigate  := @Internal_OnAfterNavigate;
 
   if vrJupiterApp.Params.Exists(vrJupiterApp.AppID + '.Messages.Count') then
   begin
@@ -511,6 +594,7 @@ begin
     vrJupiterApp.Params.VariableById('Interface.CurrentForm.Title').OnChangeValue := @Internal_CurrentFormTitleSetValue;
 
   Self.Internal_ListMenuItens;
+  Self.Internal_GetExternalIcons;
 end;
 
 end.

@@ -219,6 +219,10 @@ begin
   try
     Clipboard.AsText := prContent;
 
+    vrStr.Clear;
+    vrStr.Add('Copiado item para a área de transferência:');
+    vrStr.Add(prContent);
+
     vrJupiterApp.Popup('Copiado item para a área de transferência', vrStr);
   finally
     FreeAndNil(vrStr);

@@ -15,18 +15,20 @@ type
 
   TJupiterApp = class(TJupiterObject)
   private
-    FAppID          : String;
-    FAppName        : String;
-    FModules        : TJupiterModuleList;
-    FMessages       : TJupiterObjectList;
-    FFormRoutes     : TJupiterObjectList;
-    FBodyPanel      : TPanel;
-    FCurrentForm    : TFJupiterForm;
-    FParams         : TJupiterVariableList;
-    FUserParams     : TJupiterVariableList;
-    FDataSetParams  : TJupiterVariableDataProviderList;
-    FMainIcons      : TImageList;
-    FPopupNotifier  : TPopupNotifier;
+    FAppID            : String;
+    FAppName          : String;
+    FModules          : TJupiterModuleList;
+    FMessages         : TJupiterObjectList;
+    FFormRoutes       : TJupiterObjectList;
+    FBodyPanel        : TPanel;
+    FCurrentForm      : TFJupiterForm;
+    FParams           : TJupiterVariableList;
+    FUserParams       : TJupiterVariableList;
+    FDataSetParams    : TJupiterVariableDataProviderList;
+    FMainIcons        : TImageList;
+    FPopupNotifier    : TPopupNotifier;
+    FOnBeforeNavigate : TNotifyEvent;
+    FOnAfterNavigate  : TNotifyEvent;
 
   protected
     procedure Internal_Prepare; virtual;
@@ -45,6 +47,9 @@ type
     property Params         : TJupiterVariableList read FParams        write FParams;
     property DataSetParams  : TJupiterVariableDataProviderList read FDataSetParams write FDataSetParams;
     property UserParams     : TJupiterVariableList read FUserParams    write FUserParams;
+
+    property OnBeforeNavigate : TNotifyEvent read FOnBeforeNavigate write FOnBeforeNavigate;
+    property OnAfterNavigate  : TNotifyEvent read FOnAfterNavigate  write FOnAfterNavigate;
   public
     procedure AddModule(prModule : TJupiterModule);
     function AddMessage(prTitle, prOrigin : String) : TJupiterSystemMessage;
@@ -67,7 +72,7 @@ var
 
 implementation
 
-uses FileInfo, Forms;
+uses FileInfo, Forms, JupiterConsts;
 
 { TJupiterApp }
 
@@ -94,6 +99,18 @@ begin
 
     if not Self.Params.Exists(Self.AppID + '.Messages.Count') then
       Self.Params.AddVariable(Self.AppID + '.Messages.Count', IntToStr(Self.Messages.Size), 'Contador de Mensagens');
+
+    if not Self.Params.Exists(Self.AppID + '.CurrentVersion') then
+      Self.Params.AddVariable(Self.AppID + '.CurrentVersion', Self.GetVersion, 'Versão atual');
+
+    if not Self.Params.Exists('Enviroment.ComputerName') then
+      Self.Params.AddVariable('Enviroment.ComputerName', GetEnvironmentVariable('COMPUTERNAME'), 'Nome do computador');
+
+    if not Self.Params.Exists('Enviroment.CurrentOS') then
+      Self.Params.AddVariable('Enviroment.CurrentOS', GetCurrentOS, 'Sistema operacional atual');
+
+    if not Self.Params.Exists('Enviroment.DirectorySeparator') then
+      Self.Params.AddVariable('Enviroment.DirectorySeparator', DirectorySeparator, 'Separador de diretório');
 
     if not Self.Params.Exists('Enviroment.Run.ShellScript') then
        Self.Params.AddConfig('Enviroment.Run.ShellScript', 'cmd.exe', 'Aplicação que executará arquivo de bat ou shell');
@@ -134,9 +151,12 @@ function TJupiterApp.AddMessage(prTitle, prOrigin: String): TJupiterSystemMessag
 begin
   Result := TJupiterSystemMessage.Create(prTitle, prOrigin, EmptyStr);
 
-  Self.Messages.Add(Result);
+  if Messages <> nil then
+  begin
+    Self.Messages.Add(Result);
 
-  Self.Params.AddVariable(Self.AppID + '.Messages.Count', IntToStr(Self.Messages.Size), 'Contador de Mensagens');
+    Self.Params.AddVariable(Self.AppID + '.Messages.Count', IntToStr(Self.Messages.Size), 'Contador de Mensagens');
+  end;
 end;
 
 function TJupiterApp.GetVersion: String;
@@ -168,48 +188,56 @@ var
   vrFormRoute : TJupiterFormRoute;
   vrFormModal : TFJupiterForm;
 begin
-  for vrVez := 0 to Self.FormRoutes.Size - 1 do
-  begin
-    vrFormRoute := TJupiterFormRoute(Self.FormRoutes.GetAtIndex(vrVez));
+  if Assigned(Self.OnBeforeNavigate) then
+    Self.OnBeforeNavigate(Self);
 
-    if vrFormRoute.Path = prRoute.DestinyPath then
+  try
+    for vrVez := 0 to Self.FormRoutes.Size - 1 do
     begin
-      if prAsModal then
-      begin
-        Application.CreateForm(vrFormRoute.FormClass, vrFormModal);
-        try
-          vrFormModal.IsModal := prAsModal;
-          vrFormModal.Params.CopyValues(prRoute.Params);
+      vrFormRoute := TJupiterFormRoute(Self.FormRoutes.GetAtIndex(vrVez));
 
-          vrFormModal.ShowModal;
-        finally
-          vrFormModal.Release;
-          FreeAndNil(vrFormModal);
-        end;
-      end
-      else
+      if vrFormRoute.Path = prRoute.DestinyPath then
       begin
-        if Assigned(Self.CurrentForm) then
+        if prAsModal then
         begin
-          Self.CurrentForm.Release;
-          FreeAndNil(Self.FCurrentForm);
+          Application.CreateForm(vrFormRoute.FormClass, vrFormModal);
+          try
+            vrFormModal.IsModal := prAsModal;
+            vrFormModal.Params.CopyValues(prRoute.Params);
+
+            vrFormModal.ShowModal;
+          finally
+            vrFormModal.Release;
+            FreeAndNil(vrFormModal);
+          end;
+        end
+        else
+        begin
+          if Assigned(Self.CurrentForm) then
+          begin
+            Self.CurrentForm.Release;
+            FreeAndNil(Self.FCurrentForm);
+          end;
+
+          Self.CurrentForm := TFJupiterForm(vrFormRoute.FormClass.Create(Self.BodyPanel));
+
+          Self.CurrentForm.Parent      := Self.BodyPanel;
+          Self.CurrentForm.WindowState := wsMaximized;
+          Self.CurrentForm.BorderStyle := bsNone;
+          Self.CurrentForm.Align       := alClient;
+          Self.CurrentForm.IsModal     := prAsModal;
+
+          Self.CurrentForm.Params.CopyValues(prRoute.Params);
+
+          Self.CurrentForm.Show;
+
+          Exit;
         end;
-
-        Self.CurrentForm := TFJupiterForm(vrFormRoute.FormClass.Create(Self.BodyPanel));
-
-        Self.CurrentForm.Parent      := Self.BodyPanel;
-        Self.CurrentForm.WindowState := wsMaximized;
-        Self.CurrentForm.BorderStyle := bsNone;
-        Self.CurrentForm.Align       := alClient;
-        Self.CurrentForm.IsModal     := prAsModal;
-
-        Self.CurrentForm.Params.CopyValues(prRoute.Params);
-
-        Self.CurrentForm.Show;
-
-        Exit;
       end;
     end;
+  finally
+    if Assigned(Self.OnAfterNavigate) then
+      Self.OnAfterNavigate(Self);
   end;
 end;
 

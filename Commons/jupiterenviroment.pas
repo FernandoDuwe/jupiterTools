@@ -70,7 +70,7 @@ begin
   begin
     CreateDir(Result);
 
-    vrJupiterApp.AddMessage('Diretório criado', Self.ClassName).Details.Add('Diretório: ' + Result);
+    //vrJupiterApp.AddMessage('Diretório criado', Self.ClassName).Details.Add('Diretório: ' + Result);
   end;
 
   if Copy(Result, Length(Result), 1) <>  GetDirectorySeparator then

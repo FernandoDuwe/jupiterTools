@@ -1,7 +1,7 @@
 inherited FMain: TFMain
-  Left = 327
+  Left = 414
   Height = 727
-  Top = 177
+  Top = 210
   Width = 1297
   Caption = 'FMain'
   ClientHeight = 707
@@ -950,10 +950,12 @@ inherited FMain: TFMain
       object miAutoUpdate: TMenuItem
         Caption = 'Atualizar Automaticamente'
         Checked = True
+        OnClick = miAutoUpdateClick
       end
       object miClearSearch: TMenuItem
         Caption = 'Limpar pesquisa ao trocar item'
         Checked = True
+        OnClick = miClearSearchClick
       end
       object miMaximizedForms: TMenuItem
         Caption = 'Abrir formulários sempre maximizados'
@@ -1008,7 +1010,7 @@ inherited FMain: TFMain
     Enabled = False
     Interval = 500
     OnTimer = tmSearchTimer
-    Left = 635
+    Left = 648
     Top = 104
   end
   object ppNotifier: TPopupNotifier[11]
@@ -1022,5 +1024,10 @@ inherited FMain: TFMain
     Visible = False
     Left = 744
     Top = 104
+  end
+  object ApplicationProperties1: TApplicationProperties[12]
+    OnRestore = ApplicationProperties1Restore
+    Left = 848
+    Top = 106
   end
 end

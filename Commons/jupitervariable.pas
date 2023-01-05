@@ -374,13 +374,23 @@ procedure TJupiterVariableList.DeleteVariable(prID: String);
 var
   vrIndex : Integer;
   vrObj   : TJupiterVariable;
+  vrSave  : Boolean;
 begin
-  vrIndex := Self.VariableIndexById(prID);
-  vrObj   := Self.VariableByIndex(vrIndex);
+  try
+    vrSave := False;
 
-  FreeAndNil(vrObj);
+    vrIndex := Self.VariableIndexById(prID);
+    vrObj   := Self.VariableByIndex(vrIndex);
 
-  Self.FList.Delete(vrIndex);
+    vrSave := vrObj.Save;
+
+    FreeAndNil(vrObj);
+
+    Self.FList.Delete(vrIndex);
+  finally
+    if vrSave then
+      Self.SaveToFile;
+  end;
 end;
 
 procedure TJupiterVariableList.CopyValues(prList: TJupiterVariableList);

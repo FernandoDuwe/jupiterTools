@@ -27,6 +27,7 @@ uses
 
 begin
   RequireDerivedFormResource:=True;
+  Application.Title:='Jupiter';
   Application.Scaled:=True;
   Application.Initialize;
 

@@ -130,6 +130,9 @@ begin
                                   TJupiterRoute.Create(Self.RoutePath),
                                   TJupiterRoute.Create(Self.LocationPath));
 
+  if Self.Params.Exists('itemIcon') then
+    Result.Icon := StrToIntDef(Self.Params.VariableById('itemIcon').Value, 0);
+
   Result.Route.Params.CopyValues(Self.Params);
 end;
 

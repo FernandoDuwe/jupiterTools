@@ -84,6 +84,7 @@ begin
                             vrXML.GetRowByIndex(vrVez).Fields.VariableById('value').Value,
                             vrXML.GetRowByIndex(vrVez).Fields.VariableById('title').Value);
 
+      TJupiterVariable(Self.Params.GetLastObject).Tag := vrVez;
     end;
   finally
     FreeAndNil(vrXML);
@@ -128,6 +129,9 @@ begin
   Result := TJupiterAction.Create(Self.Title,
                                   TJupiterRoute.Create(Self.RoutePath),
                                   TJupiterRoute.Create(Self.LocationPath));
+
+  if Self.Params.Exists('itemIcon') then
+    Result.Icon := StrToInt(Self.Params.VariableById('itemIcon').Value);
 
   Result.Route.Params.CopyValues(Self.Params);
 end;

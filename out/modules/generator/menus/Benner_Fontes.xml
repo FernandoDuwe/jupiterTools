@@ -14,5 +14,10 @@
       <value>BENNER_FORM_FONTES</value>
       <title>ID</title>
     </param>
+    <param>
+      <id>itemIcon</id>
+      <value>38</value>
+      <title>Ícone</title>
+    </param>
   </params>
 </content>

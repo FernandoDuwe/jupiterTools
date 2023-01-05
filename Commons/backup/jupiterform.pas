@@ -241,7 +241,7 @@ begin
       Self.Generator.FormID := Self.Params.VariableById(FIELD_ID_GENERADOR).Value;
 
       // Adiciona as ações no formulario
-      Self.Actions.CopyFromList(Self.Generator.Actions);
+      Self.Actions.CopyFromList(Self.Generator.Actions, Self.SaveGeneratorAction);
     end;
   finally
     Self.Actions.BuildActions(sbActions);
