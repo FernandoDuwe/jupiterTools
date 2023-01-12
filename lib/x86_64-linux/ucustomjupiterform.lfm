@@ -1,0 +1,32 @@
+inherited FCustomJupiterForm: TFCustomJupiterForm
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  PopupMenu = nil
+  inherited sbActions: TScrollBox
+    PopupMenu = ppMenu
+  end
+  inherited pnHint: TPanel
+    Height = 50
+    Top = 306
+    Alignment = taCenter
+    ClientHeight = 50
+    ParentColor = True
+    PopupMenu = ppMenu
+  end
+  object sbBody: TScrollBox[3]
+    Left = 0
+    Height = 256
+    Top = 50
+    Width = 668
+    HorzScrollBar.Page = 1
+    VertScrollBar.Page = 1
+    Align = alClient
+    Color = clDefault
+    ParentColor = False
+    PopupMenu = ppMenu
+    TabOrder = 1
+  end
+  inherited ppMenu: TPopupMenu[4]
+    Top = 136
+  end
+end

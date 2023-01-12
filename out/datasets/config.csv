@@ -1,9 +1,0 @@
-ID;DESCRIPTION;VALUE;
-Enviroment.Run.ShellScript;Aplicação que executará arquivo de bat ou shell;cmd.exe;
-Enviroment.DoNotChangeContentExtensions;Extensões de arquivos que não terão seu conteúdo alterado;.doc|.docx|.pdf;
-Enviroment.Run.EditorPref;Editor preferencial (caminho ou comando);notepad.exe;
-Enviroment.Run.Method;Método de execução (RunCommand / ShellExecute / CreateProcess);CreateProcess;
-Enviroment.Run.OpenInEditorPrefExtensions;Extensões de arquivos abertas em editor preferencial;.txt|.sql|.md;
-Enviroment.Run.ScriptExtensions;Extensões de arquivos de script;.bat;
-Interface.Font.Size;Tamanho da fonte;10;
-Interface.Form.ModalShowMaximized;Mostrar formulários modais maximizados;True;

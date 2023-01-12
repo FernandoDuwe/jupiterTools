@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, Buttons,
   ComCtrls, StdCtrls, Menus, JupiterRoute, JupiterConsts, JupiterVariable,
-  JupiterAction, JupiterFormGenerator, JupiterGeneratorForm;
+  JupiterAction, JupiterFormGenerator, JupiterGeneratorForm, jupiterformutils;
 
 type
 
@@ -96,6 +96,8 @@ begin
 
   Self.FSaveGeneratorAction := TJupiterAction.Create('Salvar', @Internal_SaveGeneratorClick);
 
+  Self.FActions.PopupMenu := ppMenu;
+
   Self.IsModal  := False;
 end;
 
@@ -113,8 +115,20 @@ begin
   try
     Self.PrepareForm;
 
-    if ((Self.IsModal) and (vrJupiterApp.Params.Exists('Interface.Form.ModalShowMaximized'))) then
-      Self.WindowState := wsMaximized;
+    if Self.IsModal then
+    begin
+      if vrJupiterApp.Params.Exists('Interface.Form.ModalShowMaximized') then
+        Self.WindowState := wsMaximized
+      else
+      begin
+        Self.Position := poDefault;
+
+        Self.Height := PercentOfScreen(Screen.Height, 80);
+        Self.Width := PercentOfScreen(Screen.Width, 80);
+
+        Self.Position := poScreenCenter;
+      end;
+    end;
   finally
     Self.UpdateForm;
   end;
@@ -247,6 +261,8 @@ begin
       Self.Actions.CopyFromList(Self.Generator.Actions, Self.SaveGeneratorAction);
     end;
   finally
+    ppMenu.Images := vrJupiterApp.MainIcons;
+
     Self.Actions.BuildActions(sbActions);
 
     Self.Prepared := True;

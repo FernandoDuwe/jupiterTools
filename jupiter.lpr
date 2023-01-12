@@ -10,17 +10,17 @@ uses
   athreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, uMain, JupiterConsts, JupiterObject, JupiterRoute, JupiterVariable,
+  Forms, JupiterConsts, JupiterObject, JupiterRoute, JupiterVariable,
   JupiterRunnable, JupiterAction, JupiterForm, JupiterModule, JupiterApp,
   pascalscript, JupiterToolsModule, uHome, uExplorer, JupiterGeneratorModule,
   JupiterStandardModule, uCustomJupiterForm, uNewTask, JupiterDataProvider,
   JupiterFileDataProvider, JupiterDirectoryDataProvider, JupiterCSVDataProvider,
   uConfig, JupiterEnviroment, JupiterFormGenerator, JupiterFormField,
   JupiterVariableForm, JupiterDialogForm, uCurrentTask,
-  JupiterTasksDataProvider, JupiterTaskTimesDataProvider, uEditor, uGenerator,
+  JupiterTasksDataProvider, JupiterTaskTimesDataProvider, uEditor,
   uMessage, JupiterSystemMessage, JupiterGeneratorForm, JupiterXMLDataProvider,
   uNewAction, uNewField, JupiterGeneratorMenuItem, jupiterformutils, uNewParam,
-  JupiterVariableDataProvider, uNewDataSet
+  JupiterVariableDataProvider, uNewDataSet, uMain, uGenerator
   { you can add units after this };
 
 {$R *.res}

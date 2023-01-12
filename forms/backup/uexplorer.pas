@@ -171,6 +171,19 @@ begin
 
   Self.Actions.Add(vrAction);
 
+  if Self.ChecklistMode then
+  begin
+    vrAction      := TJupiterAction.Create('Marcar todos', TJupiterRunnable.Create(''), nil);
+    vrAction.Hint := 'Clique aqui para marcar todos os itens';
+    vrAction.Icon := ICON_CHECK;
+    vrAction.OnClick := @Internal_RefreshClick;
+
+    vrAction      := TJupiterAction.Create('Desmarcar todos', TJupiterRunnable.Create(''), nil);
+    vrAction.Hint := 'Clique aqui para desmarcar todos os itens';
+    vrAction.Icon := NULL_KEY;
+    vrAction.OnClick := @Internal_RefreshClick;
+  end;
+
   if Self.Params.Exists('hint') then
     Self.Hint := Self.Params.VariableById('hint').Value;
 end;
@@ -232,7 +245,7 @@ begin
           if ((Self.CheckMode) or (Self.ChecklistMode)) then
             vrItem.ImageIndex := NULL_KEY
           else
-            vrItem.ImageIndex := vrEnviroment.IconOfFile(vrItem.Caption);
+            vrItem.ImageIndex := vrEnviroment.IconOfFile(TrimRight(vrItem.Caption));
 
           vrItem.Data := TJupiterVariableList.Create;
 

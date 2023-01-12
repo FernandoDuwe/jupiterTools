@@ -29,7 +29,7 @@ type
 
 implementation
 
-uses JupiterApp, LCLIntf, Process, ShellApi;
+uses JupiterApp, LCLIntf, Process {$IFDEF WINDOWS} , ShellApi {$ENDIF};
 
 { TJupiterRunnable }
 
@@ -164,7 +164,9 @@ begin
         begin
           vrMetodo := 'ShellExecute';
 
-          ShellExecute(0, nil, PAnsiChar(vrJupiterApp.Params.VariableById('Enviroment.Run.EditorPref').Value), PAnsiChar(prFile), nil, 0);
+          {$IFDEF WINDOWS}
+                    ShellExecute(0, nil, PAnsiChar(vrJupiterApp.Params.VariableById('Enviroment.Run.EditorPref').Value), PAnsiChar(prFile), nil, 0);
+          {$ENDIF}
         end
         else
         begin

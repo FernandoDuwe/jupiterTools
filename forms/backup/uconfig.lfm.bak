@@ -1,37 +1,38 @@
 inherited FConfig: TFConfig
-  Left = 153
+  Left = 190
   Height = 689
-  Top = 59
+  Top = 78
   Width = 1292
   Caption = 'Configurações de sistema'
   ClientHeight = 689
   ClientWidth = 1292
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnShow = FormShow
   inherited sbActions: TScrollBox
     Width = 1292
   end
   inherited sbStatus: TStatusBar
-    Top = 666
+    Top = 670
     Width = 1292
   end
   inherited pnHint: TPanel
-    Top = 616
+    Top = 620
     Width = 1292
     ClientWidth = 1292
     TabOrder = 3
   end
   inherited sbBody: TScrollBox
-    Left = 289
-    Height = 566
-    Width = 1003
-    PopupMenu = ppMenu
+    Left = 367
+    Height = 560
+    Top = 60
+    Width = 925
   end
   object tvNavigation: TTreeView[4]
     Left = 0
-    Height = 566
-    Top = 50
-    Width = 284
+    Height = 560
+    Top = 60
+    Width = 362
     Align = alLeft
     ReadOnly = True
     TabOrder = 2
@@ -39,9 +40,9 @@ inherited FConfig: TFConfig
     Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
   end
   object Splitter1: TSplitter[5]
-    Left = 284
-    Height = 566
-    Top = 50
+    Left = 362
+    Height = 560
+    Top = 60
     Width = 5
   end
   inherited ppMenu: TPopupMenu[6]

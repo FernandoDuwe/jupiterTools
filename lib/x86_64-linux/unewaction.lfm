@@ -1,0 +1,143 @@
+inherited FNewAction: TFNewAction
+  Left = 667
+  Height = 531
+  Top = 188
+  Width = 696
+  ClientHeight = 531
+  ClientWidth = 696
+  OnCreate = FormCreate
+  inherited sbActions: TScrollBox
+    Width = 696
+  end
+  inherited sbStatus: TStatusBar
+    Top = 508
+    Width = 696
+  end
+  inherited pnHint: TPanel
+    Top = 458
+    Width = 696
+    ClientWidth = 696
+  end
+  inherited sbBody: TScrollBox
+    Height = 408
+    Width = 696
+    HorzScrollBar.Page = 582
+    VertScrollBar.Page = 208
+    ClientHeight = 404
+    ClientWidth = 692
+    object edTitle: TEdit[0]
+      Left = 8
+      Height = 23
+      Top = 34
+      Width = 664
+      Anchors = [akTop, akLeft, akRight]
+      TabOrder = 0
+    end
+    object Label2: TLabel[1]
+      Left = 8
+      Height = 15
+      Top = 10
+      Width = 30
+      Caption = 'Título'
+      ParentColor = False
+      ParentFont = False
+    end
+    object edHint: TEdit[2]
+      Left = 8
+      Height = 23
+      Top = 104
+      Width = 664
+      Anchors = [akTop, akLeft, akRight]
+      TabOrder = 1
+    end
+    object Label3: TLabel[3]
+      Left = 8
+      Height = 15
+      Top = 80
+      Width = 23
+      Caption = 'Dica'
+      ParentColor = False
+      ParentFont = False
+    end
+    object PageControl1: TPageControl[4]
+      Left = 8
+      Height = 136
+      Top = 256
+      Width = 664
+      ActivePage = TabSheet1
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      TabIndex = 0
+      TabOrder = 2
+      object TabSheet1: TTabSheet
+        Caption = 'Executar arquivo/Diretório'
+        ClientHeight = 108
+        ClientWidth = 656
+        object edRunnableFile: TEdit
+          Left = 8
+          Height = 23
+          Top = 34
+          Width = 636
+          Anchors = [akTop, akLeft, akRight]
+          TabOrder = 0
+        end
+        object Label4: TLabel
+          Left = 8
+          Height = 15
+          Top = 10
+          Width = 93
+          Caption = 'Arquivo/Diretório'
+          ParentColor = False
+          ParentFont = False
+        end
+        object Label1: TLabel
+          Left = 8
+          Height = 15
+          Top = 64
+          Width = 566
+          Caption = 'Adicione aqui um comando ou arquivo/diretório a ser executado. Você pode utilizar as variávies de sistema.'
+          ParentColor = False
+        end
+      end
+    end
+    object Label5: TLabel[5]
+      Left = 12
+      Height = 15
+      Top = 152
+      Width = 29
+      Caption = 'Ícone'
+      ParentColor = False
+    end
+    object sbIcon: TSpeedButton[6]
+      Left = 12
+      Height = 32
+      Top = 176
+      Width = 32
+    end
+    object seIcon: TSpinEdit[7]
+      Left = 54
+      Height = 23
+      Top = 180
+      Width = 50
+      OnChange = seIconChange
+      TabOrder = 3
+    end
+    object Label6: TLabel[8]
+      Left = 184
+      Height = 15
+      Top = 152
+      Width = 27
+      Caption = 'Flags'
+      Font.Style = [fsBold]
+      ParentColor = False
+      ParentFont = False
+    end
+    object cbConfirmBeforeRun: TCheckBox[9]
+      Left = 184
+      Height = 19
+      Top = 180
+      Width = 174
+      Caption = 'Confirmar antes de executar?'
+      TabOrder = 4
+    end
+  end
+end

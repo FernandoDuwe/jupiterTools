@@ -222,8 +222,8 @@ begin
     lbCurrentProject.Caption := Params.VariableById('Jupiter.Tools.Tasks.Current.Client').Value;
     lbCurrentTask.Caption    := Params.VariableById('Jupiter.Tools.Tasks.Current.Number').Value;
 
-    Self.Actions.GetActionButton(1, sbActions).Enabled := not StartedTime;
-    Self.Actions.GetActionButton(2, sbActions).Enabled := StartedTime;
+    Self.Actions.EnableDisableAction(1, sbActions, not StartedTime);
+    Self.Actions.EnableDisableAction(2, sbActions, StartedTime);
   end;
 end;
 

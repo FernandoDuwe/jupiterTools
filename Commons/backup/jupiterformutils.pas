@@ -11,6 +11,8 @@ uses
 
   procedure ShowRouteOnTreeView(prTreeView : TTreeView; prRoute : TJupiterRoute; prList : TJupiterObjectList; prNode : TTreeNode);
 
+  function PercentOfScreen(prTotalSize, prPercent : Integer) : Integer;
+
 implementation
 
 procedure CopyNodes(prSourceNode, prTargetNode: TTreeNode);
@@ -50,17 +52,22 @@ begin
       Continue;
 
     if Assigned(prNode) then
-      vrNode := tvMenu.Items.AddChild(prNode, vrAction.Title)
+      vrNode := prTreeView.Items.AddChild(prNode, vrAction.Title)
     else
-      vrNode := tvMenu.Items.Add(nil, vrAction.Title);
+      vrNode := prTreeView.Items.Add(nil, vrAction.Title);
 
     vrNode.ImageIndex := vrAction.Icon;
     vrNode.SelectedIndex := vrAction.Icon;
     vrNode.Data := vrAction;
 
     if Assigned(vrAction.Route) then
-      ShowRouteOnTreeView(vrAction.Route, prList, vrNode);
+      ShowRouteOnTreeView(prTreeView, vrAction.Route, prList, vrNode);
   end;
+end;
+
+function PercentOfScreen(prTotalSize, prPercent: Integer): Integer;
+begin
+  Result := Round(prTotalSize / (prPercent));
 end;
 
 end.

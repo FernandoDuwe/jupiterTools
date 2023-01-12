@@ -6,8 +6,8 @@ interface
 
 uses
   Classes, Controls, SysUtils, JupiterConsts, JupiterObject, JupiterVariable,
-  JupiterVariableForm, JupiterVariableDataProvider, JupiterRunnable, ExtCtrls,
-  Forms, StdCtrls;
+  JupiterVariableForm, JupiterVariableDataProvider, JupiterRunnable,
+  JupiterEnviroment, ExtCtrls, Forms, StdCtrls;
 
 type
 
@@ -179,8 +179,8 @@ begin
   Result.TabOrder := 1;
   Result.TabStop  := True;
 
-  if ((vrJupiterApp.Params.Exists(Self.Variable.ID)) and (not Self.Variable.CleanOnShow)) then
-    Result.Text := vrJupiterApp.Params.VariableById(Self.Variable.ID).Value
+  if (not Self.Variable.CleanOnShow) then
+    Result.Text := Self.Variable.Value
   else
     Result.Text := EmptyStr;
 end;
@@ -217,10 +217,16 @@ begin
       Result.Items.AddStrings(vrStr);
     end;
 
-    if ((vrJupiterApp.Params.Exists(Self.Variable.ID)) and (not Self.Variable.CleanOnShow)) then
+    if (not Self.Variable.CleanOnShow) then
     begin
-      Result.ItemIndex := Result.Items.IndexOf(vrJupiterApp.Params.VariableById(Self.Variable.ID).Value);
-      Result.Text      := vrJupiterApp.Params.VariableById(Self.Variable.ID).Value;
+      Result.ItemIndex := Result.Items.IndexOf(Self.Variable.Value);
+      Result.Text      := Self.Variable.Value;
+
+      if vrJupiterApp.Params.Exists(Self.Variable.ID) then
+      begin
+        Result.ItemIndex := Result.Items.IndexOf(vrJupiterApp.Params.VariableById(Self.Variable.ID).Value);
+        Result.Text      := vrJupiterApp.Params.VariableById(Self.Variable.ID).Value;
+      end;
     end
     else
     begin
@@ -250,9 +256,18 @@ begin
 end;
 
 procedure TJupiterFormField.Internal_CopyButtonClick(Sender: TObject);
+var
+  vrEnviroment : TJupiterEnviroment;
 begin
   if Self.Value = EmptyStr then
     Exit;
+
+  vrEnviroment := TJupiterEnviroment.Create();
+  try
+    vrEnviroment.CopyToClipboard(Self.Value);
+  finally
+    FreeAndNil(vrEnviroment);
+  end;
 end;
 
 procedure TJupiterFormField.Draw(prOwner: TScrollBox);
@@ -274,9 +289,9 @@ begin
       Self.FCmb := Self.Internal_CreateCombo(vrContainer, ((vrLabel.Top + vrLabel.Height) + FORM_MARGIN_BOTTOM));
   finally
     if Self.Variable.ComponentType = FIELD_TYPE_EDIT then
-      vrContainer.Height := (Self.FEdit.Top + Self.FEdit.Height) + FORM_MARGIN_BOTTOM
+      vrContainer.Height := (Self.FEdit.Top + Self.FEdit.Height) + FORM_MARGIN_BOTTOM_TONEXT
     else
-      vrContainer.Height := (Self.FCmb.Top + Self.FCmb.Height) + FORM_MARGIN_BOTTOM;
+      vrContainer.Height := (Self.FCmb.Top + Self.FCmb.Height) + FORM_MARGIN_BOTTOM_TONEXT;
 
     Self.FPanel := vrContainer;
   end;

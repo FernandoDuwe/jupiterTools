@@ -11,6 +11,8 @@ uses
 
   procedure ShowRouteOnTreeView(prTreeView : TTreeView; prRoute : TJupiterRoute; prList : TJupiterObjectList; prNode : TTreeNode);
 
+  function PercentOfScreen(prTotalSize, prPercent : Integer) : Integer;
+
 implementation
 
 procedure CopyNodes(prSourceNode, prTargetNode: TTreeNode);
@@ -61,6 +63,11 @@ begin
     if Assigned(vrAction.Route) then
       ShowRouteOnTreeView(prTreeView, vrAction.Route, prList, vrNode);
   end;
+end;
+
+function PercentOfScreen(prTotalSize, prPercent: Integer): Integer;
+begin
+  Result := Round((prPercent / 100) * prTotalSize);
 end;
 
 end.

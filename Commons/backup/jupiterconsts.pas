@@ -71,14 +71,19 @@ const
    DATAPROVIDER_TYPE_XML        : String = 'TJupiterXMLDataProvider';
 
    // Providers
-   PROVIDER_LIST : Array[0..4] of String = ('TJupiterFileDataProvider', 'TJupiterDirectoryDataProvider', 'TJupiterCSVDataProvider', 'TJupiterTasksDataProvider', 'TJupiterXMLDataProvider');
+   PROVIDER_LIST : Array[0..4] of String = ('TJupiterFileDataProvider',
+                                            'TJupiterDirectoryDataProvider',
+                                            'TJupiterCSVDataProvider',
+                                            'TJupiterTasksDataProvider',
+                                            'TJupiterXMLDataProvider');
 
    // Forms
-   FORM_MARGIN_TOP      : Integer = 8;
-   FORM_MARGIN_LEFT     : Integer = 8;
-   FORM_MARGIN_RIGHT    : Integer = 16;
-   FORM_MARGIN_BOTTOM   : Integer = 8;
-   FORM_ACTION_MINWIDTH : Integer = 120;
+   FORM_MARGIN_TOP           : Integer = 8;
+   FORM_MARGIN_LEFT          : Integer = 8;
+   FORM_MARGIN_RIGHT         : Integer = 16;
+   FORM_MARGIN_BOTTOM        : Integer = 8;
+   FORM_MARGIN_BOTTOM_TONEXT : Integer = 16; // Bottom to the next field
+   FORM_ACTION_MINWIDTH      : Integer = 140;
 
    // Generator
    GENERATOR_SYSLAYER : SmallInt = 1000;

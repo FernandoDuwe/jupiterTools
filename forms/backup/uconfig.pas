@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, ExtCtrls,
   uCustomJupiterForm, uNewDataSet, JupiterVariable, JupiterApp, JupiterModule,
   JupiterFormGenerator, JupiterAction, JupiterConsts, JupiterVariableForm,
-  JupiterDialogForm;
+  JupiterDialogForm, jupiterformutils;
 
 type
 
@@ -19,6 +19,7 @@ type
     tvNavigation: TTreeView;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure tvNavigationSelectionChanged(Sender: TObject);
   private
     FConfigGenerator : TJupiterFormGenerator;
@@ -58,6 +59,15 @@ begin
   FreeAndNil(Self.FConfigGenerator);
 
   inherited;
+end;
+
+procedure TFConfig.FormShow(Sender: TObject);
+begin
+  inherited;
+
+  tvNavigation.Width := PercentOfScreen(Self.Width, 30);
+
+  tvNavigationSelectionChanged(Sender);
 end;
 
 procedure TFConfig.tvNavigationSelectionChanged(Sender: TObject);

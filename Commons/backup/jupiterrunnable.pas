@@ -17,7 +17,7 @@ type
 
     procedure Internal_CreateProcess(prFileName : String; prParams : String; var prOutput : String);
   published
-    property CommandLine : String write FCommandLine read FCommandLine;
+    property CommandLine : String read FCommandLine write FCommandLine ;
   public
     procedure Execute;
     procedure OpenFolder(prFolder : String);
@@ -29,7 +29,7 @@ type
 
 implementation
 
-uses JupiterApp, LCLIntf, Process, ShellApi;
+uses JupiterApp, LCLIntf, Process {$IFDEF WINDOWS} , ShellApi {$ENDIF};
 
 { TJupiterRunnable }
 
@@ -164,7 +164,9 @@ begin
         begin
           vrMetodo := 'ShellExecute';
 
-          ShellExecute(0, nil, PAnsiChar(vrJupiterApp.Params.VariableById('Enviroment.Run.EditorPref').Value), PAnsiChar(prFile), nil, 0);
+          {$IFDEF WINDOWS}
+                    ShellExecute(0, nil, PAnsiChar(vrJupiterApp.Params.VariableById('Enviroment.Run.EditorPref').Value), PAnsiChar(prFile), nil, 0);
+           {$ENDIF}
         end
         else
         begin

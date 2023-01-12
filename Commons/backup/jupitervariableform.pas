@@ -133,19 +133,7 @@ begin
   for vrVez := 0 to prList.Size - 1 do
   begin
     if prList.VariableByIndex(vrVez) is TJupiterVariableForm then
-    begin
-      vrCurrentVariable               := TJupiterVariableForm.Create();
-      vrCurrentVariable.ID            := prList.VariableByIndex(vrVez).ID;
-      vrCurrentVariable.Title         := prList.VariableByIndex(vrVez).Title;
-      vrCurrentVariable.Value         := prList.VariableByIndex(vrVez).Value;
-      vrCurrentVariable.ReadOnly      := False;
-      vrCurrentVariable.Required      := False;
-
-      vrCurrentVariable.ComponentType := FIELD_TYPE_EDIT;
-      vrCurrentVariable.CleanOnShow   := False;
-      vrCurrentVariable.RunButton     := False;
-      vrCurrentVariable.CopyButton    := True;
-    end
+      vrCurrentVariable := TJupiterVariableForm(prList.VariableByIndex(vrVez))
     else
       vrCurrentVariable := TJupiterVariableForm.CreateFromVariable(prList.VariableByIndex(vrVez));
 

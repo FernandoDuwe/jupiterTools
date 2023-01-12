@@ -1,0 +1,135 @@
+inherited FCurrentTask: TFCurrentTask
+  Left = 455
+  Height = 678
+  Top = 66
+  Width = 968
+  Caption = 'Tarefa atual'
+  ClientHeight = 678
+  ClientWidth = 968
+  OnShow = FormShow
+  inherited sbActions: TScrollBox
+    Width = 968
+  end
+  inherited sbStatus: TStatusBar
+    Top = 655
+    Width = 968
+  end
+  inherited pnHint: TPanel
+    Top = 605
+    Width = 968
+    ClientWidth = 968
+  end
+  inherited sbBody: TScrollBox
+    Height = 555
+    Width = 968
+    HorzScrollBar.Page = 254
+    VertScrollBar.Page = 512
+    ClientHeight = 551
+    ClientWidth = 964
+    object pnCurrentTask: TPanel[0]
+      Left = 0
+      Height = 512
+      Top = 0
+      Width = 964
+      Align = alTop
+      BevelOuter = bvNone
+      ClientHeight = 512
+      ClientWidth = 964
+      TabOrder = 0
+      object Label1: TLabel
+        Left = 8
+        Height = 15
+        Top = 8
+        Width = 80
+        Caption = 'Cliente/Projeto'
+        ParentColor = False
+      end
+      object lbCurrentProject: TLabel
+        Left = 8
+        Height = 15
+        Top = 32
+        Width = 93
+        Caption = 'lbCurrentProject'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label2: TLabel
+        Left = 160
+        Height = 15
+        Top = 8
+        Width = 94
+        Caption = 'Número da Tarefa'
+        ParentColor = False
+      end
+      object lbCurrentTask: TLabel
+        Left = 160
+        Height = 15
+        Top = 32
+        Width = 77
+        Caption = 'lbCurrentTask'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label3: TLabel
+        Left = 8
+        Height = 15
+        Top = 72
+        Width = 49
+        Caption = 'Arquivos'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+      end
+      object lvTimes: TListView
+        Left = 8
+        Height = 152
+        Top = 344
+        Width = 940
+        Anchors = [akLeft, akRight, akBottom]
+        Columns = <        
+          item
+            Caption = 'Início'
+            Width = 140
+          end        
+          item
+            Caption = 'Fim'
+            Width = 140
+          end>
+        GridLines = True
+        ReadOnly = True
+        SortType = stText
+        TabOrder = 0
+        ViewStyle = vsReport
+      end
+      object Label4: TLabel
+        Left = 8
+        Height = 15
+        Top = 320
+        Width = 43
+        Anchors = [akLeft, akBottom]
+        Caption = 'Tempos'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
+      end
+      object tvExplorer: TTreeView
+        Left = 8
+        Height = 193
+        Top = 96
+        Width = 940
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        Images = FMain.ilIconFamily
+        ReadOnly = True
+        TabOrder = 1
+        OnDblClick = lvFilesDblClick
+        Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
+      end
+    end
+  end
+  inherited ppMenu: TPopupMenu
+    Left = 352
+    Top = 88
+  end
+end

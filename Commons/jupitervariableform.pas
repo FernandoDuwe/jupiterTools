@@ -106,13 +106,14 @@ procedure TJupiterVariableFormList.AddField(prID, prTitle, prValue: String; prRe
 var
   vrField : TJupiterVariableForm;
 begin
-  vrField          := TJupiterVariableForm.Create;
-  vrField.Title    := prTitle;
-  vrField.ID       := prID;
-  vrField.Value    := prValue;
-  vrField.Save     := False;
-  vrField.ReadOnly := prReadOnly;
-  vrField.Required := prRequired;
+  vrField               := TJupiterVariableForm.Create;
+  vrField.Title         := prTitle;
+  vrField.ID            := prID;
+  vrField.Value         := prValue;
+  vrField.Save          := False;
+  vrField.ReadOnly      := prReadOnly;
+  vrField.Required      := prRequired;
+  vrField.ComponentType := FIELD_TYPE_EDIT;
 
   Self.Add(vrField);
 end;

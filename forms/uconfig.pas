@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, ExtCtrls,
   uCustomJupiterForm, uNewDataSet, JupiterVariable, JupiterApp, JupiterModule,
   JupiterFormGenerator, JupiterAction, JupiterConsts, JupiterVariableForm,
-  JupiterDialogForm;
+  JupiterDialogForm, jupiterformutils;
 
 type
 
@@ -65,6 +65,8 @@ procedure TFConfig.FormShow(Sender: TObject);
 begin
   inherited;
 
+  tvNavigation.Width := PercentOfScreen(Self.Width, 30);
+
   tvNavigationSelectionChanged(Sender);
 end;
 
@@ -82,10 +84,10 @@ begin
       Self.FOldVariant.CopyValues(Self.FConfigGenerator.Variables);
 
     if Assigned(Self.Actions.GetActionButton(1, sbActions)) then
-      Self.Actions.GetActionButton(1, sbActions).Enabled := TJupiterVariableList(tvNavigation.Selected.Data).Tag <> -3;
+      Self.Actions.EnableDisableAction(1, sbActions, TJupiterVariableList(tvNavigation.Selected.Data).Tag <> -3);
 
     if Assigned(Self.Actions.GetActionButton(2, sbActions)) then
-      Self.Actions.GetActionButton(2, sbActions).Enabled := TJupiterVariableList(tvNavigation.Selected.Data).Tag = -3;
+      Self.Actions.EnableDisableAction(2, sbActions, TJupiterVariableList(tvNavigation.Selected.Data).Tag = -3);
 
     Self.FConfigGenerator.SetVariables(TJupiterVariableFormList.CreateFromVariableList(TJupiterVariableList(tvNavigation.Selected.Data)));
     Self.FOldVariant := TJupiterVariableList(tvNavigation.Selected.Data);

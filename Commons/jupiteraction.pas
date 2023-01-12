@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, JupiterObject, JupiterRoute, JupiterRunnable, JupiterVariable,
-  JupiterConsts, SysUtils, Forms, Buttons;
+  JupiterConsts, SysUtils, Forms, Buttons, Menus;
 
 type
 
@@ -56,6 +56,10 @@ type
   { TJupiterActionList }
 
   TJupiterActionList = class(TJupiterObjectList)
+  private
+    FPopupMenu : TPopupMenu;
+  published
+    property PopupMenu : TPopupMenu read FPopupMenu write FPopupMenu;
   protected
     procedure Internal_OnClick(Sender: TObject);
     function Internal_CreateButton(prAction : TJupiterAction; prIndex, prLeft : Integer; prOwner : TScrollBox) : TBitBtn;
@@ -65,6 +69,11 @@ type
     procedure BuildActions(prOwner : TScrollBox);
 
     function GetActionButton(prActionIndex : Integer; prOwner : TScrollBox) : TBitBtn;
+    function GetMenuItem(prActionIndex : Integer) : TMenuItem;
+
+    procedure DisableAction(prActionIndex : Integer; prOwner : TScrollBox);
+    procedure EnableAction(prActionIndex : Integer; prOwner : TScrollBox);
+    procedure EnableDisableAction(prActionIndex : Integer; prOwner : TScrollBox; prEnabled : Boolean);
   end;
 
 implementation
@@ -77,7 +86,10 @@ procedure TJupiterActionList.Internal_OnClick(Sender: TObject);
 var
   vrAction : TJupiterAction;
 begin
-  vrAction := TJupiterAction(Self.GetAtIndex(TBitBtn(Sender).Tag));
+  if Sender is TBitBtn then
+    vrAction := TJupiterAction(Self.GetAtIndex(TBitBtn(Sender).Tag))
+  else
+    vrAction := TJupiterAction(Self.GetAtIndex(TMenuItem(Sender).Tag));
 
   if Assigned(vrAction) then
     vrAction.Execute;
@@ -86,6 +98,7 @@ end;
 function TJupiterActionList.Internal_CreateButton(prAction: TJupiterAction; prIndex, prLeft: Integer; prOwner: TScrollBox): TBitBtn;
 var
   vrWidth : Integer;
+  vrPopupMenu : TMenuItem;
 begin
   Result            := TBitBtn.Create(prOwner);
   Result.Parent     := prOwner;
@@ -114,6 +127,15 @@ begin
   Result.Height  := prOwner.Height - (FORM_MARGIN_TOP + FORM_MARGIN_BOTTOM);
   Result.Tag     := prIndex;
   Result.OnClick := @Self.Internal_OnClick;
+
+  vrPopupMenu := TMenuItem.Create(Self.PopupMenu);
+  vrPopupMenu.Caption    := prAction.Title;
+  vrPopupMenu.Hint       := prAction.Hint;
+  vrPopupMenu.ImageIndex := prAction.Icon;
+  vrPopupMenu.Tag        := prIndex;
+  vrPopupMenu.OnClick    := @Self.Internal_OnClick;
+
+  Self.PopupMenu.Items.Add(vrPopupMenu);
 end;
 
 procedure TJupiterActionList.CopyFromList(prCopyList: TJupiterActionList; prOnBeforeExecute : TJupiterAction = nil);
@@ -152,11 +174,20 @@ end;
 
 procedure TJupiterActionList.BuildActions(prOwner: TScrollBox);
 var
-  vrLeft  : Integer;
-  vrVez   : Integer;
-  vrSpeed : TBitBtn;
+  vrLeft      : Integer;
+  vrVez       : Integer;
+  vrSpeed     : TBitBtn;
+  vrPopupMenu : TMenuItem;
 begin
+  if Self.Size = 0 then
+    Exit;
+
   vrLeft := FORM_MARGIN_LEFT;
+
+  vrPopupMenu := TMenuItem.Create(Self.PopupMenu);
+  vrPopupMenu.Caption := '-';
+
+  Self.PopupMenu.Items.Add(vrPopupMenu);
 
   for vrVez := 0 to Self.Size - 1 do
   begin
@@ -180,6 +211,40 @@ begin
     if TBitBtn(prOwner.Controls[vrVez]).Tag = prActionIndex then
       Result := TBitBtn(prOwner.Controls[vrVez]);
   end;
+end;
+
+function TJupiterActionList.GetMenuItem(prActionIndex: Integer): TMenuItem;
+var
+  vrVez : Integer;
+begin
+  Result := nil;
+
+  for vrVez := 0 to Self.PopupMenu.Items.Count -1 do
+  begin
+    if Self.PopupMenu.Items[vrVez].Tag = prActionIndex then
+      Result := Self.PopupMenu.Items[vrVez];
+  end;
+end;
+
+procedure TJupiterActionList.DisableAction(prActionIndex: Integer; prOwner: TScrollBox);
+begin
+  Self.GetActionButton(prActionIndex, prOwner).Enabled := False;
+
+  Self.GetMenuItem(prActionIndex).Enabled := False;
+end;
+
+procedure TJupiterActionList.EnableAction(prActionIndex: Integer; prOwner: TScrollBox);
+begin
+  Self.GetActionButton(prActionIndex, prOwner).Enabled := True;
+
+  Self.GetMenuItem(prActionIndex).Enabled := True;
+end;
+
+procedure TJupiterActionList.EnableDisableAction(prActionIndex: Integer; prOwner: TScrollBox; prEnabled: Boolean);
+begin
+  Self.GetActionButton(prActionIndex, prOwner).Enabled := prEnabled;
+
+  Self.GetMenuItem(prActionIndex).Enabled := prEnabled;
 end;
 
 { TJupiterAction }
