@@ -39,12 +39,17 @@ type
 
 implementation
 
+uses JupiterApp;
+
 { TJupiterFormGenerator }
 
 procedure TJupiterFormGenerator.Internal_CreateComponent(prVariable: TJupiterVariableForm; prTabOrder : Integer);
 var
   vrField : TJupiterFormField;
 begin
+  if vrJupiterApp.Params.Exists(prVariable.ID) then
+    prVariable.Value := vrJupiterApp.Params.VariableById(prVariable.ID).Value;
+
   vrField := TJupiterFormField.Create;
   vrField.Variable := prVariable;
   vrField.TabOrder := prTabOrder;

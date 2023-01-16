@@ -29,7 +29,10 @@ type
 
     procedure Internal_OnClick(prParams : TJupiterVariableList);
     procedure Internal_RefreshClick(Sender: TObject);
+    procedure Internal_MarcarTodosClick(Sender: TObject);
+    procedure Internal_DesmarcarTodosClick(Sender: TObject);
     function  Internal_HideColumn(prColumnName : String) : Boolean;
+    procedure Internal_CheckBoxChangeAll(prNewValue : Boolean);
   published
     property CheckMode     : Boolean read InternalGetCheckMode;
     property ChecklistMode : Boolean read InternalGetCheckListMode;
@@ -176,14 +179,14 @@ begin
     vrAction      := TJupiterAction.Create('Marcar todos', TJupiterRunnable.Create(''), nil);
     vrAction.Hint := 'Clique aqui para marcar todos os itens';
     vrAction.Icon := ICON_CHECK;
-    vrAction.OnClick := @Internal_RefreshClick;
+    vrAction.OnClick := @Internal_MarcarTodosClick;
 
     Self.Actions.Add(vrAction);
 
     vrAction      := TJupiterAction.Create('Desmarcar todos', TJupiterRunnable.Create(''), nil);
     vrAction.Hint := 'Clique aqui para desmarcar todos os itens';
     vrAction.Icon := NULL_KEY;
-    vrAction.OnClick := @Internal_RefreshClick;
+    vrAction.OnClick := @Internal_DesmarcarTodosClick;
 
     Self.Actions.Add(vrAction);
   end;
@@ -293,6 +296,40 @@ begin
     for vrVez := 0 to lvItems.Columns.Count - 1 do
 
   end;
+end;
+
+procedure TFExplorer.Internal_MarcarTodosClick(Sender: TObject);
+begin
+  try
+    Self.Internal_CheckBoxChangeAll(True);
+  finally
+    Self.UpdateForm;
+  end;
+end;
+
+procedure TFExplorer.Internal_DesmarcarTodosClick(Sender: TObject);
+begin
+  try
+    Self.Internal_CheckBoxChangeAll(False);
+  finally
+    Self.UpdateForm;
+  end;
+end;
+
+procedure TFExplorer.Internal_CheckBoxChangeAll(prNewValue : Boolean);
+var
+  vrVez : INteger;
+begin
+  for vrVez := 0 to lvItems.Items.Count - 1 do
+    with TJupiterVariableList(lvItems.Items[vrVez].Data) do
+    begin
+      if prNewValue then
+        VariableById(Self.Params.VariableById('checklistField').Value).Value := '1'
+      else
+        VariableById(Self.Params.VariableById('checklistField').Value).Value := '0';
+
+      TJupiterCSVDataProvider(Self.Provider).SaveLine(TJupiterVariableList(lvItems.Items[vrVez].Data));
+    end;
 end;
 
 end.

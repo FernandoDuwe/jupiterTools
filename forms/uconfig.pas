@@ -209,6 +209,8 @@ procedure TFConfig.Internal_NewDataSetClick(Sender: TObject);
 begin
   Application.CreateForm(TFNewDataSet, FNewDataSet);
   try
+    FNewDataSet.IsModal := True;
+
     if FNewDataSet.ShowModal = mrOK then
     begin
       Self.FConfigGenerator.Variables.AddConfig(FNewDataSet.edID.Text,

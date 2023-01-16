@@ -453,6 +453,10 @@ begin
 
   tvCurrentMenu.FullExpand;
 
+  lbFormList.Width    := PercentOfScreen(Self.Width, 30);
+  lbMenuList.Width    := PercentOfScreen(Self.Width, 30);
+  tvCurrentMenu.Width := PercentOfScreen(Self.Width, 30);
+
   lvIcons.Selected := lvIcons.Items[0];
   lvIconsClick(Sender);
 end;

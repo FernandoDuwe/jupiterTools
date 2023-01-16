@@ -112,8 +112,11 @@ begin
     if not Self.Params.Exists('Enviroment.DirectorySeparator') then
       Self.Params.AddVariable('Enviroment.DirectorySeparator', DirectorySeparator, 'Separador de diretório');
 
+    if not Self.Params.Exists('Enviroment.BasePath') then
+      Self.Params.AddVariable('Enviroment.BasePath', GetRootDirectory, 'Diretório raiz');
+
     if not Self.Params.Exists('Enviroment.Run.ShellScript') then
-       Self.Params.AddConfig('Enviroment.Run.ShellScript', 'cmd.exe', 'Aplicação que executará arquivo de bat ou shell');
+       Self.Params.AddConfig('Enviroment.Run.ShellScript', GetCommandLineTool, 'Aplicação que executará arquivo de bat ou shell');
 
     if not Self.Params.Exists('Enviroment.DoNotChangeContentExtensions') then
        Self.Params.AddConfig('Enviroment.DoNotChangeContentExtensions', '.doc|.docx|.pdf', 'Extensões de arquivos que não terão seu conteúdo alterado');

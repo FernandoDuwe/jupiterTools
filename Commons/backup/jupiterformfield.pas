@@ -180,7 +180,9 @@ begin
   Result.TabStop  := True;
 
   if (not Self.Variable.CleanOnShow) then
-    Result.Text := Self.Variable.Value
+  begin
+    Result.Text := vrJupiterApp.Params.ResolveString(Self.Variable.Value);
+  end
   else
     Result.Text := EmptyStr;
 end;
@@ -222,11 +224,13 @@ begin
       Result.ItemIndex := Result.Items.IndexOf(Self.Variable.Value);
       Result.Text      := Self.Variable.Value;
 
+      {
       if vrJupiterApp.Params.Exists(Self.Variable.ID) then
       begin
         Result.ItemIndex := Result.Items.IndexOf(vrJupiterApp.Params.VariableById(Self.Variable.ID).Value);
         Result.Text      := vrJupiterApp.Params.VariableById(Self.Variable.ID).Value;
       end;
+      }
     end
     else
     begin

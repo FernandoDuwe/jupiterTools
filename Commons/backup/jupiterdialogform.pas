@@ -57,6 +57,7 @@ begin
   Application.CreateForm(TFCustomJupiterForm, FCurrentForm);
   try
     FCurrentForm.Caption                 := Self.Title;
+
     FCurrentForm.FormGenerator.Variables.CopyFromVariableList(Self.Fields);
     FCurrentForm.FormGenerator.Variables.CopyList := Self.Fields;
 

@@ -877,6 +877,10 @@ inherited FMain: TFMain
           ImageIndex = 0
           OnClick = miNewTaskClick
         end
+        object miNewCheckList: TMenuItem
+          Caption = 'Checklist'
+          ImageIndex = 0
+        end
       end
       object miOpen: TMenuItem
         Caption = 'Abrir'

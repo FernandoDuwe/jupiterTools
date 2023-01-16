@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
   uCustomJupiterForm, JupiterConsts, JupiterAction, JupiterCSVDataProvider,
-  JupiterDirectoryDataProvider, JupiterFileDataProvider;
+  JupiterDirectoryDataProvider, JupiterFileDataProvider, jupiterformutils;
 
 type
 
@@ -28,6 +28,7 @@ type
     Label7: TLabel;
     lbProviders: TListBox;
     Splitter1: TSplitter;
+    procedure FormShow(Sender: TObject);
     procedure lbProvidersClick(Sender: TObject);
   private
     procedure Internal_SaveClick(Sender : TObject);
@@ -54,6 +55,13 @@ uses LCLType;
 procedure TFNewDataSet.lbProvidersClick(Sender: TObject);
 begin
   Self.UpdateForm;
+end;
+
+procedure TFNewDataSet.FormShow(Sender: TObject);
+begin
+  inherited;
+
+  gbProvider.Width := PercentOfScreen(Self.Width, 30);
 end;
 
 procedure TFNewDataSet.Internal_SaveClick(Sender: TObject);

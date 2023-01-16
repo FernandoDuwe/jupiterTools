@@ -20,6 +20,7 @@ type
     cbNavigationMenu: TCoolBar;
     edSearch: TEdit;
     ilIconFamily: TImageList;
+    miNewCheckList: TMenuItem;
     miPastaAssets: TMenuItem;
     miMaximizedForms: TMenuItem;
     miPastasJupiter: TMenuItem;
@@ -92,6 +93,7 @@ type
     procedure miExitClick(Sender: TObject);
     procedure miGeneratorClick(Sender: TObject);
     procedure miNewTaskClick(Sender: TObject);
+    procedure miNewCheckListClick(Sender: TObject);
     procedure miOpenCSVClick(Sender: TObject);
     procedure miOpenCurrentTaskClick(Sender: TObject);
     procedure miUpdateClick(Sender: TObject);
@@ -127,7 +129,7 @@ implementation
 
 {$R *.lfm}
 
-uses LCLType;
+uses LCLType, JupiterDialogForm;
 
 { TFMain }
 
@@ -198,8 +200,12 @@ begin
 
   inherited;
 
+  pnMenu.Width := PercentOfScreen(Self.Width, 30);
+
   vrJupiterApp.MainIcons := ilIconFamily;
   vrJupiterApp.NavigateTo(TJupiterRoute.Create(ROOT_FORM_PATH), False);
+
+  miNewCheckList.OnClick := @miNewCheckListClick;
 end;
 
 procedure TFMain.miAutoUpdateClick(Sender: TObject);
@@ -370,6 +376,31 @@ end;
 procedure TFMain.miNewTaskClick(Sender: TObject);
 begin
   vrJupiterApp.NavigateTo(TJupiterRoute.Create(NEWTASK_FORM_PATH), True);
+end;
+
+procedure TFMain.miNewCheckListClick(Sender: TObject);
+var
+  vrDialog : TJupiterDialogForm;
+begin
+  vrDialog := TJupiterDialogForm.Create;
+  try
+    vrDialog.Title := 'Nova Checklist';
+    vrDialog.Hint  := 'Crie uma nova checklist.';
+
+    vrDialog.Fields.AddField('NAME', 'Nome da Checklist', '');
+
+
+    if vrDialog.Show then
+    begin
+      Self.FConfigGenerator.Variables.AddConfig(vrDialog.Fields.VariableFormById('ID').Value,
+                                                vrDialog.Fields.VariableFormById('VALUE').Value,
+                                                vrDialog.Fields.VariableFormById('DESC').Value);
+
+      Self.FConfigGenerator.SetVariables(TJupiterVariableFormList.CreateFromVariableList(Self.FConfigGenerator.Variables));
+    end;
+  finally
+    FreeAndNil(vrDialog);
+  end;
 end;
 
 procedure TFMain.miOpenCSVClick(Sender: TObject);

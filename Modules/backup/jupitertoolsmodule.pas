@@ -57,8 +57,8 @@ begin
     vrEnviroment.CreatePath('modules/tools/library/');
     vrEnviroment.CreatePath('modules/tools/templates/');
 
-    if not Self.Params.Exists(Self.DefineParamName('Tasks.Path')) then
-       Self.Params.AddConfig(Self.DefineParamName('Tasks.Path'), vrEnviroment.CreatePath('Tarefas/'), 'Diretório de tarefas');
+    if ((not Self.Params.Exists(Self.DefineParamName('Tasks.Path'))) or (not DirectoryExists(Self.Params.VariableById(Self.DefineParamName('Tasks.Path')).Value))) then
+       Self.Params.AddConfig(Self.DefineParamName('Tasks.Path'), vrEnviroment.CreatePath('Tarefas/'), 'Diretório de tarefas')
 
     if not Self.Params.Exists(Self.DefineParamName('Tasks.Current.Client')) then
       Self.Params.AddConfig(Self.DefineParamName('Tasks.Current.Client'), EmptyStr, 'Cliente da tarefa atual');
@@ -245,7 +245,7 @@ begin
 
   with TJupiterAction(prList.GetLastObject) do
   begin
-    Icon := ICON_OPEN;
+    Icon := ICON_NEW;
 
     Route.Params.AddVariable('title', 'Arquivos da tarefa atual', 'Título');
     Route.Params.AddVariable('type', DATAPROVIDER_TYPE_LIST_FILES, 'Tipo');

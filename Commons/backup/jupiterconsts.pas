@@ -82,7 +82,13 @@ const
    FORM_MARGIN_LEFT          : Integer = 8;
    FORM_MARGIN_RIGHT         : Integer = 16;
    FORM_MARGIN_BOTTOM        : Integer = 8;
-   FORM_MARGIN_BOTTOM_TONEXT : Integer = 16; // Bottom to the next field
+
+   {$IFDEF WINDOWS}
+     FORM_MARGIN_BOTTOM_TONEXT : Integer = 10; // Bottom to the next field
+   {$ELSE}
+     FORM_MARGIN_BOTTOM_TONEXT : Integer = 20; // Bottom to the next field
+   {$ENDIF}
+
    FORM_ACTION_MINWIDTH      : Integer = 140;
 
    // Generator
@@ -93,6 +99,8 @@ const
 
    function GetCurrentOS : String;
    function GetDirectorySeparator : String;
+   function GetRootDirectory : String;
+   function GetCommandLineTool : String;
 
 implementation
 
@@ -112,6 +120,26 @@ begin
   {$ELSE}
      Result := '/';
   {$ENDIF}
+end;
+
+function GetRootDirectory: String;
+begin
+  {$IFDEF WINDOWS}
+     Result := 'C:\';
+  {$ELSE}
+     Result := '/home/';
+  {$ENDIF}
+end;
+
+function GetCommandLineTool : String;
+begin
+  {$IFDEF WINDOWS}
+     Result := 'cmd.exe';
+  {$ELSE}
+     Result := 'terminal';
+  {$ENDIF}
+end;
+
 end;
 
 end.

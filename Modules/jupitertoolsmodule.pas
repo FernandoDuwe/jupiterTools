@@ -57,7 +57,7 @@ begin
     vrEnviroment.CreatePath('modules/tools/library/');
     vrEnviroment.CreatePath('modules/tools/templates/');
 
-    if not Self.Params.Exists(Self.DefineParamName('Tasks.Path')) then
+    if ((not Self.Params.Exists(Self.DefineParamName('Tasks.Path'))) or (not DirectoryExists(Self.Params.VariableById(Self.DefineParamName('Tasks.Path')).Value))) then
        Self.Params.AddConfig(Self.DefineParamName('Tasks.Path'), vrEnviroment.CreatePath('Tarefas/'), 'Diretório de tarefas');
 
     if not Self.Params.Exists(Self.DefineParamName('Tasks.Current.Client')) then

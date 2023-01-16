@@ -12,7 +12,6 @@ inherited FGenerator: TFGenerator
     Width = 1292
   end
   inherited sbStatus: TStatusBar
-    Height = 19
     Top = 670
     Width = 1292
   end
@@ -20,21 +19,18 @@ inherited FGenerator: TFGenerator
     Top = 620
     Width = 1292
     ClientWidth = 1292
-    inherited lbHelp: TLabel
-      Height = 17
-      Width = 44
-    end
   end
   inherited sbBody: TScrollBox
-    Height = 570
+    Height = 560
+    Top = 60
     Width = 1292
     HorzScrollBar.Page = 1120
     VertScrollBar.Page = 458
-    ClientHeight = 568
+    ClientHeight = 558
     ClientWidth = 1290
     object pcTabs: TPageControl[0]
       Left = 0
-      Height = 568
+      Height = 558
       Top = 0
       Width = 1290
       ActivePage = tsInicio
@@ -43,11 +39,11 @@ inherited FGenerator: TFGenerator
       TabOrder = 0
       object tsInicio: TTabSheet
         Caption = 'Início'
-        ClientHeight = 537
+        ClientHeight = 527
         ClientWidth = 1280
         object mmLines: TMemo
           Left = 0
-          Height = 537
+          Height = 527
           Top = 0
           Width = 1280
           Align = alClient
@@ -65,11 +61,11 @@ inherited FGenerator: TFGenerator
       end
       object tsForms: TTabSheet
         Caption = 'Formulários'
-        ClientHeight = 537
+        ClientHeight = 527
         ClientWidth = 1280
         object lbFormList: TListBox
           Left = 0
-          Height = 537
+          Height = 527
           Top = 0
           Width = 268
           Align = alLeft
@@ -80,18 +76,18 @@ inherited FGenerator: TFGenerator
         end
         object spForms: TSplitter
           Left = 268
-          Height = 537
+          Height = 527
           Top = 0
           Width = 5
         end
         object pnForm: TPanel
           Left = 273
-          Height = 537
+          Height = 527
           Top = 0
           Width = 1007
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 537
+          ClientHeight = 527
           ClientWidth = 1007
           TabOrder = 2
           object Panel1: TPanel
@@ -194,12 +190,12 @@ inherited FGenerator: TFGenerator
           end
           object Panel3: TPanel
             Left = 0
-            Height = 260
+            Height = 250
             Top = 277
             Width = 1007
             Align = alClient
             BevelOuter = bvNone
-            ClientHeight = 260
+            ClientHeight = 250
             ClientWidth = 1007
             TabOrder = 3
             object Label3: TLabel
@@ -212,7 +208,7 @@ inherited FGenerator: TFGenerator
             end
             object lvFields: TListView
               Left = 7
-              Height = 202
+              Height = 192
               Top = 40
               Width = 976
               Anchors = [akTop, akLeft, akRight, akBottom]
@@ -262,11 +258,11 @@ inherited FGenerator: TFGenerator
       end
       object TabSheet1: TTabSheet
         Caption = 'Menus'
-        ClientHeight = 537
+        ClientHeight = 527
         ClientWidth = 1280
         object lbMenuList: TListBox
           Left = 0
-          Height = 537
+          Height = 527
           Top = 0
           Width = 268
           Align = alLeft
@@ -277,18 +273,18 @@ inherited FGenerator: TFGenerator
         end
         object spForms1: TSplitter
           Left = 268
-          Height = 537
+          Height = 527
           Top = 0
           Width = 5
         end
         object pnBodyMenuItem: TPanel
           Left = 273
-          Height = 537
+          Height = 527
           Top = 0
           Width = 1007
           Align = alClient
           BevelOuter = bvNone
-          ClientHeight = 537
+          ClientHeight = 527
           ClientWidth = 1007
           TabOrder = 2
           object pnMenuForm: TPanel
@@ -364,11 +360,11 @@ inherited FGenerator: TFGenerator
           end
           object pnMenuVariable: TPanel
             Left = 0
-            Height = 308
+            Height = 298
             Top = 229
             Width = 1007
             Align = alClient
-            ClientHeight = 308
+            ClientHeight = 298
             ClientWidth = 1007
             TabOrder = 2
             object Label7: TLabel
@@ -381,7 +377,7 @@ inherited FGenerator: TFGenerator
             end
             object lvMenuVariables: TListView
               Left = 7
-              Height = 250
+              Height = 240
               Top = 40
               Width = 976
               Anchors = [akTop, akLeft, akRight, akBottom]
@@ -432,11 +428,11 @@ inherited FGenerator: TFGenerator
       end
       object TabSheet2: TTabSheet
         Caption = 'Menu Atual'
-        ClientHeight = 537
+        ClientHeight = 527
         ClientWidth = 1280
         object tvCurrentMenu: TTreeView
           Left = 0
-          Height = 537
+          Height = 527
           Top = 0
           Width = 268
           Align = alLeft
@@ -447,23 +443,23 @@ inherited FGenerator: TFGenerator
         end
         object Splitter2: TSplitter
           Left = 268
-          Height = 537
+          Height = 527
           Top = 0
           Width = 5
         end
         object gbMenu: TGroupBox
           Left = 273
-          Height = 537
+          Height = 527
           Top = 0
           Width = 1007
           Align = alClient
           Caption = 'Informações'
-          ClientHeight = 519
+          ClientHeight = 509
           ClientWidth = 1005
           TabOrder = 2
           object mmCurrentMenuInfo: TMemo
             Left = 0
-            Height = 519
+            Height = 509
             Top = 0
             Width = 1005
             Align = alClient
@@ -478,11 +474,11 @@ inherited FGenerator: TFGenerator
       end
       object tsIcon: TTabSheet
         Caption = 'Ícones'
-        ClientHeight = 537
+        ClientHeight = 527
         ClientWidth = 1280
         object lvIcons: TListView
           Left = 114
-          Height = 487
+          Height = 477
           Top = 50
           Width = 1166
           Align = alClient
@@ -494,12 +490,12 @@ inherited FGenerator: TFGenerator
         end
         object Panel4: TPanel
           Left = 0
-          Height = 487
+          Height = 477
           Top = 50
           Width = 114
           Align = alLeft
           BevelOuter = bvNone
-          ClientHeight = 487
+          ClientHeight = 477
           ClientWidth = 114
           TabOrder = 1
           object imgIconBig: TImage

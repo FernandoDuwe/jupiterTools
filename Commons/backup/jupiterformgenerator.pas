@@ -45,6 +45,9 @@ procedure TJupiterFormGenerator.Internal_CreateComponent(prVariable: TJupiterVar
 var
   vrField : TJupiterFormField;
 begin
+  if vrJupiterApp.Params.Exists(prVariable.ID) then
+    prVariable.Value := vrJupiterApp.Params.VariableById(prVariable.ID).Value;
+
   vrField := TJupiterFormField.Create;
   vrField.Variable := prVariable;
   vrField.TabOrder := prTabOrder;
@@ -70,11 +73,6 @@ begin
   begin
     Self.Internal_CreateComponent(Self.Variables.VariableFormByIndex(vrVez), vrVez + 1);
   end;
-end;
-
-procedure TJupiterFormGenerator.Internal_SaveGeneratorClick(Sender: TObject);
-begin
-
 end;
 
 procedure TJupiterFormGenerator.SetVariables(prVariables: TJupiterVariableFormList);

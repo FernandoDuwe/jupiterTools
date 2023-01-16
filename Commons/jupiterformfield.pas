@@ -181,10 +181,7 @@ begin
 
   if (not Self.Variable.CleanOnShow) then
   begin
-    Result.Text := Self.Variable.Value;
-
-    if vrJupiterApp.Params.Exists(Self.Variable.ID) then
-      Result.Text := vrJupiterApp.Params.VariableById(Self.Variable.ID).Value;
+    Result.Text := vrJupiterApp.Params.ResolveString(Self.Variable.Value);
   end
   else
     Result.Text := EmptyStr;
@@ -224,14 +221,8 @@ begin
 
     if (not Self.Variable.CleanOnShow) then
     begin
-      Result.ItemIndex := Result.Items.IndexOf(Self.Variable.Value);
-      Result.Text      := Self.Variable.Value;
-
-      if vrJupiterApp.Params.Exists(Self.Variable.ID) then
-      begin
-        Result.ItemIndex := Result.Items.IndexOf(vrJupiterApp.Params.VariableById(Self.Variable.ID).Value);
-        Result.Text      := vrJupiterApp.Params.VariableById(Self.Variable.ID).Value;
-      end;
+      Result.ItemIndex := Result.Items.IndexOf(vrJupiterApp.Params.ResolveString(Self.Variable.Value));
+      Result.Text      := vrJupiterApp.Params.ResolveString(Self.Variable.Value);
     end
     else
     begin

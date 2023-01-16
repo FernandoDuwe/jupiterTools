@@ -140,7 +140,8 @@ var
 begin
   Application.CreateForm(TFGenerator, vrGenerator);
   try
-    vrGenerator.FormID := Self.Params.VariableById(FIELD_ID_GENERADOR).Value;
+    vrGenerator.IsModal := True;
+    vrGenerator.FormID  := Self.Params.VariableById(FIELD_ID_GENERADOR).Value;
     vrGenerator.ShowModal;
   finally
     vrGenerator.Release;

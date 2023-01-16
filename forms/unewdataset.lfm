@@ -6,146 +6,144 @@ inherited FNewDataSet: TFNewDataSet
   Caption = 'Novo Dataset'
   ClientHeight = 624
   ClientWidth = 999
+  OnShow = FormShow
   inherited sbActions: TScrollBox
     Width = 999
   end
   inherited sbStatus: TStatusBar
-    Top = 601
+    Top = 605
     Width = 999
   end
   inherited pnHint: TPanel
-    Top = 551
+    Top = 555
     Width = 999
     ClientWidth = 999
   end
   inherited sbBody: TScrollBox
     Left = 264
-    Height = 501
+    Height = 495
+    Top = 60
     Width = 735
-    HorzScrollBar.Page = 170
-    VertScrollBar.Page = 367
-    ClientHeight = 497
-    ClientWidth = 731
+    HorzScrollBar.Page = 218
+    VertScrollBar.Page = 378
+    ClientHeight = 493
+    ClientWidth = 733
     object Label2: TLabel[0]
       Left = 8
-      Height = 15
+      Height = 17
       Top = 10
-      Width = 11
+      Width = 14
       Caption = 'ID'
-      ParentColor = False
       ParentFont = False
     end
     object edID: TEdit[1]
       Left = 8
-      Height = 23
+      Height = 34
       Top = 34
-      Width = 711
+      Width = 713
       Anchors = [akTop, akLeft, akRight]
       TabOrder = 0
     end
     object Label4: TLabel[2]
       Left = 8
-      Height = 15
+      Height = 17
       Top = 80
-      Width = 51
+      Width = 66
       Caption = 'Descrição'
-      ParentColor = False
       ParentFont = False
     end
     object edDescription: TEdit[3]
       Left = 8
-      Height = 23
+      Height = 34
       Top = 104
-      Width = 711
+      Width = 713
       Anchors = [akTop, akLeft, akRight]
       TabOrder = 1
     end
     object Label5: TLabel[4]
       Left = 8
-      Height = 15
+      Height = 17
       Top = 152
-      Width = 39
+      Width = 48
       Caption = 'Campo'
-      ParentColor = False
       ParentFont = False
     end
     object cbCampo: TComboBox[5]
       Left = 8
-      Height = 23
+      Height = 34
       Top = 176
-      Width = 711
+      Width = 713
       Anchors = [akTop, akLeft, akRight]
-      ItemHeight = 15
+      ItemHeight = 0
       TabOrder = 2
     end
     object edFile: TEdit[6]
       Left = 8
-      Height = 23
+      Height = 34
       Top = 248
-      Width = 711
+      Width = 713
       Anchors = [akTop, akLeft, akRight]
       TabOrder = 3
     end
     object Label6: TLabel[7]
       Left = 8
-      Height = 15
+      Height = 17
       Top = 224
-      Width = 96
+      Width = 115
       Caption = 'Caminho/Arquivo'
-      ParentColor = False
       ParentFont = False
     end
     object cbSubFolders: TCheckBox[8]
       Left = 8
-      Height = 19
+      Height = 23
       Top = 280
-      Width = 162
+      Width = 210
       Caption = 'Pesquisar em subdiretórios'
       TabOrder = 4
     end
     object Label7: TLabel[9]
       Left = 8
-      Height = 15
+      Height = 17
       Top = 320
-      Width = 70
+      Width = 89
       Caption = 'Pesquisar em'
-      ParentColor = False
       ParentFont = False
     end
     object edSearchNode: TEdit[10]
       Left = 8
-      Height = 23
+      Height = 34
       Top = 344
-      Width = 711
+      Width = 713
       Anchors = [akTop, akLeft, akRight]
       TabOrder = 5
     end
   end
   object gbProvider: TGroupBox[4]
     Left = 0
-    Height = 501
-    Top = 50
+    Height = 495
+    Top = 60
     Width = 259
     Align = alLeft
     Caption = 'DataProvider'
-    ClientHeight = 481
-    ClientWidth = 255
+    ClientHeight = 477
+    ClientWidth = 257
     TabOrder = 4
     object lbProviders: TListBox
       Left = 0
-      Height = 481
+      Height = 477
       Top = 0
-      Width = 255
+      Width = 257
       Align = alClient
       ItemHeight = 0
       OnClick = lbProvidersClick
       TabOrder = 0
+      TopIndex = -1
     end
   end
   object Splitter1: TSplitter[5]
     Left = 259
-    Height = 501
-    Top = 50
+    Height = 495
+    Top = 60
     Width = 5
   end
   inherited ppMenu: TPopupMenu[6]

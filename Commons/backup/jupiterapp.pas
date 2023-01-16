@@ -112,6 +112,9 @@ begin
     if not Self.Params.Exists('Enviroment.DirectorySeparator') then
       Self.Params.AddVariable('Enviroment.DirectorySeparator', DirectorySeparator, 'Separador de diretório');
 
+    if not Self.Params.Exists('Enviroment.BasePath') then
+      Self.Params.AddVariable('Enviroment.BasePath', GetRootDirectory, 'Diretório raiz');
+
     if not Self.Params.Exists('Enviroment.Run.ShellScript') then
        Self.Params.AddConfig('Enviroment.Run.ShellScript', 'cmd.exe', 'Aplicação que executará arquivo de bat ou shell');
 
@@ -151,11 +154,11 @@ function TJupiterApp.AddMessage(prTitle, prOrigin: String): TJupiterSystemMessag
 begin
   Result := TJupiterSystemMessage.Create(prTitle, prOrigin, EmptyStr);
 
-  if Self.FMessages <> nil then
+  if Messages <> nil then
   begin
-//    Self.Messages.Add(Result);
+    Self.Messages.Add(Result);
 
-  //  Self.Params.AddVariable(Self.AppID + '.Messages.Count', IntToStr(Self.Messages.Size), 'Contador de Mensagens');
+    Self.Params.AddVariable(Self.AppID + '.Messages.Count', IntToStr(Self.Messages.Size), 'Contador de Mensagens');
   end;
 end;
 
