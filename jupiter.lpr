@@ -17,10 +17,11 @@ uses
   JupiterFileDataProvider, JupiterDirectoryDataProvider, JupiterCSVDataProvider,
   uConfig, JupiterEnviroment, JupiterFormGenerator, JupiterFormField,
   JupiterVariableForm, JupiterDialogForm, uCurrentTask,
-  JupiterTasksDataProvider, JupiterTaskTimesDataProvider, uEditor,
-  uMessage, JupiterSystemMessage, JupiterGeneratorForm, JupiterXMLDataProvider,
+  JupiterTasksDataProvider, JupiterTaskTimesDataProvider, uEditor, uMessage,
+  JupiterSystemMessage, JupiterGeneratorForm, JupiterXMLDataProvider,
   uNewAction, uNewField, JupiterGeneratorMenuItem, jupiterformutils, uNewParam,
-  JupiterVariableDataProvider, uNewDataSet, uMain, uGenerator
+  JupiterVariableDataProvider, uNewDataSet, uMain, uGenerator, jupiterScript,
+  uScriptEditor, jupiterScriptFunctions
   { you can add units after this };
 
 {$R *.res}
@@ -46,12 +47,14 @@ begin
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(NEWTASK_FORM_PATH, TFNewTask));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(TASK_FORM_PATH, TFCurrentTask));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(EDITOR_FORM_PATH, TFEditor));
+  vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(SCRIPTEDITOR_FORM_PATH, TFScriptEditor));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(GENERATOR_FORM_PATH, TFGenerator));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(MESSAGES_PATH, TFMessage));
 
   if not vrJupiterApp.ConsoleMode then
     Application.CreateForm(TFMain, FMain);
 
+  Application.CreateForm(TFScriptEditor, FScriptEditor);
   Application.Run;
 end.
 

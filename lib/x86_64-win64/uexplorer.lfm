@@ -9,20 +9,20 @@ inherited FExplorer: TFExplorer
     Width = 451
   end
   inherited sbStatus: TStatusBar
-    Top = 354
+    Top = 358
     Width = 451
   end
   inherited pnHint: TPanel
     Height = 30
-    Top = 324
+    Top = 328
     Width = 451
     ClientHeight = 30
     ClientWidth = 451
   end
   object lvItems: TListView[3]
     Left = 0
-    Height = 274
-    Top = 50
+    Height = 268
+    Top = 60
     Width = 451
     Align = alClient
     Columns = <>

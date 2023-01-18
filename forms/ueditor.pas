@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, SynEdit, SynCompletion,
   JupiterForm, JupiterConsts, JupiterAction, JupiterEnviroment, JupiterApp,
-  JupiterVariable;
+  JupiterVariable, jupiterformutils;
 
 type
 
@@ -17,6 +17,7 @@ type
     seEditor: TSynEdit;
     SynAutoComplete1: TSynAutoComplete;
     SynCompletion1: TSynCompletion;
+    procedure FormShow(Sender: TObject);
   private
     FFileName : String;
     FReadMode : Boolean;
@@ -51,6 +52,13 @@ uses SynHighLighterPas, SynHighLighterCpp, SynHighLighterJava, SynHighLighterJSc
 {$R *.lfm}
 
 { TFEditor }
+
+procedure TFEditor.FormShow(Sender: TObject);
+begin
+  inherited;
+
+  SynCompletion1.Width := PercentOfScreen(Self.Width, 40);
+end;
 
 procedure TFEditor.Internal_ListVariables;
 var

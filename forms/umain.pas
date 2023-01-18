@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, ExtCtrls,
   StdCtrls, Menus, PopupNotifier, Buttons, JupiterApp, JupiterRoute,
   JupiterConsts, JupiterObject, JupiterForm, JupiterAction, JupiterEnviroment,
-  JupiterRunnable, jupiterformutils, JupiterFileDataProvider,
+  JupiterRunnable, jupiterformutils, JupiterFileDataProvider, jupiterScript,
   JupiterToolsModule, uPSComponent_Default, LMessages, PairSplitter;
 
 type
@@ -20,6 +20,7 @@ type
     cbNavigationMenu: TCoolBar;
     edSearch: TEdit;
     ilIconFamily: TImageList;
+    MenuItem1: TMenuItem;
     miNewCheckList: TMenuItem;
     miPastaAssets: TMenuItem;
     miMaximizedForms: TMenuItem;
@@ -63,7 +64,6 @@ type
     tbOptions: TToolBar;
     TbSystemBar: TToolButton;
     tmSearch: TTimer;
-    ToolBar1: TToolBar;
     tbSearch: TToolBar;
     tbSystemButtons: TToolBar;
     ToolBar2: TToolBar;
@@ -76,6 +76,7 @@ type
     procedure edSearchChange(Sender: TObject);
     procedure FormShortCut(var Msg: TLMKey; var Handled: Boolean);
     procedure FormShow(Sender: TObject);
+    procedure MenuItem1Click(Sender: TObject);
     procedure miAutoUpdateClick(Sender: TObject);
     procedure miClearSearchClick(Sender: TObject);
     procedure miPastaAssetsClick(Sender: TObject);
@@ -206,6 +207,32 @@ begin
   vrJupiterApp.NavigateTo(TJupiterRoute.Create(ROOT_FORM_PATH), False);
 
   miNewCheckList.OnClick := @miNewCheckListClick;
+end;
+
+procedure TFMain.MenuItem1Click(Sender: TObject);
+var
+  vrDialog     : TJupiterDialogForm;
+  vrEnviroment : TJupiterEnviroment;
+  vrScript     : TJupiterScript;
+begin
+  vrDialog     := TJupiterDialogForm.Create;
+  vrEnviroment := TJupiterEnviroment.Create;
+  vrScript     := TJupiterScript.Create;
+  try
+    vrDialog.Title := 'Novo arquivo .jpas';
+    vrDialog.Hint  := 'Crie um novo arquivo programável Jupiter.';
+
+    vrDialog.Fields.AddField('NAME', 'Nome do programa', '');
+    vrDialog.Fields.AddField('PATH', 'Salvar em', vrEnviroment.FullPath('modules/tools/library/'));
+
+    if vrDialog.Show then
+      vrScript.CreateNewFile(vrDialog.Fields.VariableFormById('NAME').Value,
+                             vrDialog.Fields.VariableFormById('PATH').Value);
+  finally
+    FreeAndNil(vrDialog);
+    FreeAndNil(vrEnviroment);
+    FreeAndNil(vrScript);
+  end;
 end;
 
 procedure TFMain.miAutoUpdateClick(Sender: TObject);
@@ -380,10 +407,16 @@ end;
 
 procedure TFMain.miNewCheckListClick(Sender: TObject);
 var
-  vrDialog : TJupiterDialogForm;
+  vrDialog     : TJupiterDialogForm;
+  vrStr        : TStrings;
+  vrEnviroment : TJupiterEnviroment;
 begin
-  vrDialog := TJupiterDialogForm.Create;
+  vrDialog     := TJupiterDialogForm.Create;
+  vrStr        := TStringList.Create;
+  vrEnviroment := TJupiterEnviroment.Create;
   try
+    vrStr.Clear;
+
     vrDialog.Title := 'Nova Checklist';
     vrDialog.Hint  := 'Crie uma nova checklist.';
 
@@ -391,14 +424,14 @@ begin
 
     if vrDialog.Show then
     begin
-      {
-      Self.FConfigGenerator.Variables.AddConfig(vrDialog.Fields.VariableFormById('ID').Value,
-                                                vrDialog.Fields.VariableFormById('VALUE').Value,
-                                                vrDialog.Fields.VariableFormById('DESC').Value);
-      }
+      vrStr.Add('Item;Checked;');
+
+      vrStr.SaveToFile(vrEnviroment.FullPath('modules/tools/checklists/') + DirectorySeparator + vrDialog.Fields.VariableById('NAME').Value + '.ckl');
     end;
   finally
     FreeAndNil(vrDialog);
+    FreeAndNil(vrStr);
+    FreeAndNil(vrEnviroment);
   end;
 end;
 

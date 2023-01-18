@@ -8,16 +8,17 @@ uses
   Classes, SysUtils;
 
 const
-   ROOT_PATH           : String = '/';
-   ROOT_FORM_PATH      : String = '/forms/';
-   CONFIG_PATH         : String = '/forms/config/';
-   EXPLORER_FORM_PATH  : String = '/forms/explorer/';
-   EDITOR_FORM_PATH    : String = '/forms/editor/';
-   GENERATOR_FORM_PATH : String = '/forms/generator/';
-   MESSAGES_PATH       : String = '/forms/messages/';
-   CUSTOM_FORM_PATH    : String = '/forms/custom/';
-   NEWTASK_FORM_PATH   : String = '/forms/custom/newTask/';
-   TASK_FORM_PATH      : String = '/forms/custom/currentTask/';
+   ROOT_PATH              : String = '/';
+   ROOT_FORM_PATH         : String = '/forms/';
+   CONFIG_PATH            : String = '/forms/config/';
+   EXPLORER_FORM_PATH     : String = '/forms/explorer/';
+   EDITOR_FORM_PATH       : String = '/forms/editor/';
+   SCRIPTEDITOR_FORM_PATH : String = '/forms/editor/jpas/';
+   GENERATOR_FORM_PATH    : String = '/forms/generator/';
+   MESSAGES_PATH          : String = '/forms/messages/';
+   CUSTOM_FORM_PATH       : String = '/forms/custom/';
+   NEWTASK_FORM_PATH      : String = '/forms/custom/newTask/';
+   TASK_FORM_PATH         : String = '/forms/custom/currentTask/';
 
    ICON_ADD       : SmallInt = 0;
    ICON_NEW       : SmallInt = 1;

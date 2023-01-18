@@ -146,7 +146,11 @@ begin
 
           Route.Params.AddVariable('title', 'Arquivo: ' + Fields.VariableById('FieldName').Value, 'Título');
           Route.Params.AddVariable('filename', Fields.VariableById('File').Value, 'Arquivo');
-          Route.Params.AddVariable('destinyPath', EDITOR_FORM_PATH, 'Destino');
+
+          if ExtractFileExt(Fields.VariableById('File').Value) = '.jpas' then
+            Route.Params.AddVariable('destinyPath', SCRIPTEDITOR_FORM_PATH, 'Destino')
+          else
+            Route.Params.AddVariable('destinyPath', EDITOR_FORM_PATH, 'Destino');
         end;
       end;
   finally

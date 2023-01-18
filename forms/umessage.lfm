@@ -6,10 +6,12 @@ inherited FMessage: TFMessage
   Caption = 'Mensagens do Sistema'
   ClientHeight = 679
   ClientWidth = 1204
+  OnShow = FormShow
   inherited sbActions: TScrollBox
     Width = 1204
   end
   inherited sbStatus: TStatusBar
+    Height = 23
     Top = 656
     Width = 1204
   end
@@ -17,14 +19,19 @@ inherited FMessage: TFMessage
     Top = 606
     Width = 1204
     ClientWidth = 1204
+    inherited lbHelp: TLabel
+      Height = 15
+      Width = 35
+    end
   end
   inherited sbBody: TScrollBox
     Left = 265
-    Height = 556
+    Height = 546
+    Top = 60
     Width = 939
     HorzScrollBar.Page = 466
     VertScrollBar.Page = 87
-    ClientHeight = 552
+    ClientHeight = 542
     ClientWidth = 935
     object lbTitleTile: TLabel[0]
       Left = 8
@@ -90,7 +97,7 @@ inherited FMessage: TFMessage
     end
     object mmDetails: TMemo[7]
       Left = 8
-      Height = 440
+      Height = 430
       Top = 96
       Width = 916
       Anchors = [akTop, akLeft, akRight, akBottom]
@@ -106,8 +113,8 @@ inherited FMessage: TFMessage
   end
   object lbResume: TListBox[4]
     Left = 0
-    Height = 556
-    Top = 50
+    Height = 546
+    Top = 60
     Width = 260
     Align = alLeft
     ItemHeight = 0
@@ -116,8 +123,8 @@ inherited FMessage: TFMessage
   end
   object Splitter1: TSplitter[5]
     Left = 260
-    Height = 556
-    Top = 50
+    Height = 546
+    Top = 60
     Width = 5
   end
   inherited ppMenu: TPopupMenu[6]

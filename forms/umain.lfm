@@ -4,7 +4,7 @@ inherited FMain: TFMain
   Top = 210
   Width = 1297
   Caption = 'FMain'
-  ClientHeight = 702
+  ClientHeight = 707
   ClientWidth = 1297
   Menu = mmMainMenu
   OnShortCut = FormShortCut
@@ -14,7 +14,8 @@ inherited FMain: TFMain
     Width = 1297
   end
   inherited sbStatus: TStatusBar
-    Top = 617
+    Height = 23
+    Top = 618
     Width = 1297
     Panels = <    
       item
@@ -24,23 +25,27 @@ inherited FMain: TFMain
     SimplePanel = False
   end
   inherited pnHint: TPanel
-    Top = 636
+    Top = 641
     Width = 1297
     ClientWidth = 1297
+    inherited lbHelp: TLabel
+      Height = 15
+      Width = 35
+    end
   end
   object pnMenu: TPanel[3]
     Left = 0
-    Height = 513
+    Height = 514
     Top = 104
     Width = 362
     Align = alLeft
     BevelOuter = bvNone
-    ClientHeight = 513
+    ClientHeight = 514
     ClientWidth = 362
     TabOrder = 1
     object tvMenu: TTreeView
       Left = 0
-      Height = 513
+      Height = 514
       Top = 0
       Width = 362
       Align = alClient
@@ -55,13 +60,13 @@ inherited FMain: TFMain
   end
   object spSplitter: TSplitter[4]
     Left = 362
-    Height = 513
+    Height = 514
     Top = 104
     Width = 5
   end
   object pnBody: TPanel[5]
     Left = 367
-    Height = 513
+    Height = 514
     Top = 104
     Width = 930
     Align = alClient
@@ -95,19 +100,6 @@ inherited FMain: TFMain
     GrabStyle = gsGripper
     Images = ilIconFamily
     OnChange = cbNavigationMenuChange
-    object ToolBar1: TToolBar
-      AnchorSideLeft.Control = cbNavigationMenu
-      AnchorSideTop.Control = cbNavigationMenu
-      Left = 24
-      Height = 1
-      Top = 14
-      Width = 150
-      Align = alNone
-      BorderSpacing.Left = 22
-      BorderSpacing.Top = 12
-      Caption = 'ToolBar1'
-      TabOrder = 0
-    end
     object tbOptions: TToolBar
       AnchorSideLeft.Control = cbNavigationMenu
       AnchorSideTop.Control = cbNavigationMenu
@@ -122,7 +114,7 @@ inherited FMain: TFMain
       EdgeInner = esNone
       EdgeOuter = esNone
       Images = ilIconFamily
-      TabOrder = 1
+      TabOrder = 0
       Transparent = True
       object tbMenu: TToolButton
         Left = 1
@@ -166,7 +158,7 @@ inherited FMain: TFMain
       BorderSpacing.Left = 22
       BorderSpacing.Top = 42
       Caption = 'tbSearch'
-      TabOrder = 2
+      TabOrder = 1
     end
     object edSearch: TEdit
       AnchorSideLeft.Control = cbNavigationMenu
@@ -179,7 +171,7 @@ inherited FMain: TFMain
       BorderSpacing.Left = 127
       BorderSpacing.Top = 3
       OnChange = edSearchChange
-      TabOrder = 3
+      TabOrder = 2
       TextHint = 'Pesquisar'
     end
     object tbSystemButtons: TToolBar
@@ -195,7 +187,7 @@ inherited FMain: TFMain
       Caption = 'tbSystemButtons'
       EdgeInner = esNone
       EdgeOuter = esNone
-      TabOrder = 4
+      TabOrder = 3
       Transparent = True
     end
     object ToolBar2: TToolBar
@@ -213,7 +205,7 @@ inherited FMain: TFMain
       EdgeInner = esNone
       EdgeOuter = esNone
       Images = ilIconFamily
-      TabOrder = 5
+      TabOrder = 4
       Transparent = True
       object TbSystemBar: TToolButton
         Left = 1
@@ -880,6 +872,12 @@ inherited FMain: TFMain
         object miNewCheckList: TMenuItem
           Caption = 'Checklist'
           ImageIndex = 0
+          OnClick = miNewCheckListClick
+        end
+        object MenuItem1: TMenuItem
+          Caption = 'Arquivo .jpas'
+          ImageIndex = 0
+          OnClick = MenuItem1Click
         end
       end
       object miOpen: TMenuItem

@@ -1,9 +1,21 @@
 inherited FEditor: TFEditor
   Left = 517
+  OnShow = FormShow
+  inherited sbStatus: TStatusBar
+    Height = 23
+    Top = 356
+  end
+  inherited pnHint: TPanel
+    Top = 290
+    inherited lbHelp: TLabel
+      Height = 15
+      Width = 35
+    end
+  end
   inline seEditor: TSynEdit[3]
     Left = 0
-    Height = 240
-    Top = 50
+    Height = 230
+    Top = 60
     Width = 668
     Align = alClient
     Font.Height = -13

@@ -1,22 +1,80 @@
-inherited FEditor: TFEditor
-  Left = 517
+inherited FScriptEditor: TFScriptEditor
+  Left = 494
+  Height = 652
+  Top = 181
+  Width = 1084
+  ClientHeight = 652
+  ClientWidth = 1084
   OnShow = FormShow
+  inherited sbActions: TScrollBox
+    Width = 1084
+  end
   inherited sbStatus: TStatusBar
     Height = 23
-    Top = 356
+    Top = 629
+    Width = 1084
   end
   inherited pnHint: TPanel
-    Top = 290
+    Top = 563
+    Width = 1084
+    ClientWidth = 1084
     inherited lbHelp: TLabel
       Height = 15
       Width = 35
     end
   end
-  inline seEditor: TSynEdit[3]
+  object pcOutput: TPageControl[3]
     Left = 0
-    Height = 230
+    Height = 139
+    Top = 424
+    Width = 1084
+    ActivePage = tsMessages
+    Align = alBottom
+    PopupMenu = ppMenu
+    TabIndex = 0
+    TabOrder = 3
+    object tsMessages: TTabSheet
+      Caption = 'Mensagens'
+      ClientHeight = 111
+      ClientWidth = 1076
+      object mmMessages: TMemo
+        Left = 0
+        Height = 111
+        Top = 0
+        Width = 1076
+        Align = alClient
+        ReadOnly = True
+        TabOrder = 0
+      end
+    end
+    object TabSheet1: TTabSheet
+      Caption = 'Execução'
+      ClientHeight = 111
+      ClientWidth = 1076
+      object mmRun: TMemo
+        Left = 0
+        Height = 111
+        Top = 0
+        Width = 1076
+        Align = alClient
+        TabOrder = 0
+      end
+    end
+  end
+  object Splitter1: TSplitter[4]
+    Cursor = crVSplit
+    Left = 0
+    Height = 5
+    Top = 419
+    Width = 1084
+    Align = alBottom
+    ResizeAnchor = akBottom
+  end
+  inline syEdit: TSynEdit[5]
+    Left = 0
+    Height = 359
     Top = 60
-    Width = 668
+    Width = 1084
     Align = alClient
     Font.Height = -13
     Font.Name = 'Courier New'
@@ -25,11 +83,12 @@ inherited FEditor: TFEditor
     ParentColor = False
     ParentFont = False
     PopupMenu = ppMenu
-    TabOrder = 3
+    TabOrder = 5
     Gutter.Width = 57
     Gutter.MouseActions = <>
     RightGutter.Width = 0
     RightGutter.MouseActions = <>
+    Highlighter = syPas
     Keystrokes = <    
       item
         Command = ecUp
@@ -454,9 +513,6 @@ inherited FEditor: TFEditor
     MouseActions = <>
     MouseTextActions = <>
     MouseSelActions = <>
-    Lines.Strings = (
-      'seEditor'
-    )
     VisibleSpecialChars = [vscSpace, vscTabAtLast]
     SelectedColor.BackPriority = 50
     SelectedColor.ForePriority = 50
@@ -512,29 +568,64 @@ inherited FEditor: TFEditor
       end
     end
   end
-  inherited ppMenu: TPopupMenu[4]
+  inherited ppMenu: TPopupMenu[6]
   end
-  object SynCompletion1: TSynCompletion[5]
+  object syPas: TSynPasSyn[7]
+    Enabled = False
+    CompilerMode = pcmDelphi
+    NestedComments = False
+    TypeHelpers = True
+    Left = 416
+    Top = 136
+  end
+  object SynAutoComplete1: TSynAutoComplete[8]
+    AutoCompleteList.Strings = (
+      'AddConfiguration('''', '''', '''');'
+      'AddLogMessage('''', '''');'
+      'AddVariable('''', '''', '''');'
+      'Application'
+      'InputText('''');'
+      'WriteLn('''');'
+      'Readln();'
+      'RunCommandLine('''');'
+      'ShowPopup('''', '''');'
+      'VariableExists('''')'
+      'VariableValueByID('''')'
+    )
+    EndOfTokenChr = '()[].'
+    ShortCut = 8224
+    ExecCommandID = ecSynAutoCompletionExecute
+    Editor = syEdit
+    Left = 520
+    Top = 136
+  end
+  object SynCompletion1: TSynCompletion[9]
+    ItemList.Strings = (
+      'AddConfiguration('''', '''', '''');'
+      'AddLogMessage('''', '''');'
+      'AddVariable('''', '''', '''');'
+      'Application'
+      'InputText('''');'
+      'WriteLn('''');'
+      'Readln();'
+      'RunCommandLine('''');'
+      'ShowPopup('''', '''');'
+      'VariableExists('''')'
+      'VariableValueByID('''')'
+    )
     Position = 0
     LinesInWindow = 6
     SelectedColor = clHighlight
     CaseSensitive = False
-    Width = 500
+    Width = 262
     AutoUseSingleIdent = True
     ShortCut = 16416
     EndOfTokenChr = '()[].'
+    OnCodeCompletion = SynCompletion1CodeCompletion
     ExecCommandID = ecSynCompletionExecute
-    Editor = seEditor
+    Editor = syEdit
     ToggleReplaceWhole = False
-    Left = 224
-    Top = 134
-  end
-  object SynAutoComplete1: TSynAutoComplete[6]
-    EndOfTokenChr = '()[].'
-    ShortCut = 8224
-    ExecCommandID = ecSynAutoCompletionExecute
-    Editor = seEditor
-    Left = 120
-    Top = 134
+    Left = 654
+    Top = 136
   end
 end

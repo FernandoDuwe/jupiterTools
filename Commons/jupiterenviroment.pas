@@ -173,7 +173,7 @@ end;
 
 function TJupiterEnviroment.IsTechFile(prFileName: String): Boolean;
 begin
-  Result := Pos(AnsiUpperCase(ExtractFileExt(prFileName)), AnsiUpperCase('.bat .cs .php .js .py .vb .json .xml .sql')) <> 0;
+  Result := Pos(AnsiUpperCase(ExtractFileExt(prFileName)), AnsiUpperCase('.bat .cs .php .js .py .vb .json .xml .sql .jpas')) <> 0;
 end;
 
 function TJupiterEnviroment.IsTextFile(prFileName: String): Boolean;

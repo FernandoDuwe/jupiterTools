@@ -11,10 +11,10 @@ object FJupiterForm: TFJupiterForm
   OnShow = FormShow
   PopupMenu = ppMenu
   Position = poScreenCenter
-  LCLVersion = '2.2.4.0'
+  LCLVersion = '2.2.0.4'
   object sbActions: TScrollBox
     Left = 0
-    Height = 50
+    Height = 60
     Top = 0
     Width = 668
     HorzScrollBar.Page = 1
@@ -25,15 +25,15 @@ object FJupiterForm: TFJupiterForm
   end
   object sbStatus: TStatusBar
     Left = 0
-    Height = 23
-    Top = 356
+    Height = 19
+    Top = 360
     Width = 668
     Panels = <>
   end
   object pnHint: TPanel
     Left = 0
     Height = 66
-    Top = 290
+    Top = 294
     Width = 668
     Align = alBottom
     Alignment = taLeftJustify
@@ -45,11 +45,10 @@ object FJupiterForm: TFJupiterForm
     Visible = False
     object lbHelp: TLabel
       Left = 64
-      Height = 15
+      Height = 17
       Top = 24
-      Width = 35
+      Width = 44
       Caption = 'lbHelp'
-      ParentColor = False
       ParentFont = False
     end
     object imgInfo: TImage
@@ -119,8 +118,8 @@ object FJupiterForm: TFJupiterForm
     end
   end
   object ppMenu: TPopupMenu
-    Left = 333
-    Top = 134
+    Left = 328
+    Top = 136
     object miRefresh: TMenuItem
       Caption = 'Atualizar'
       OnClick = miRefreshClick
