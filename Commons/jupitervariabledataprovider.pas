@@ -104,11 +104,18 @@ var
 begin
   prList.Clear;
 
+  vrFieldName := EmptyStr;
+
   vrProvider := FactoryDataProviderFromString(Self.Value, vrFieldName);
 
   for vrVez := 0 to vrProvider.Count - 1 do
     with vrProvider.GetRowByIndex(vrVez) do
-      prList.Add(Fields.VariableById(vrFieldName).Value);
+    begin
+      if Fields.Exists(vrFieldName) then
+        prList.Add(Fields.VariableById(vrFieldName).Value)
+      else
+        prList.Add(EmptyStr);
+    end;
 end;
 
 end.

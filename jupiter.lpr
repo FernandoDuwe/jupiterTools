@@ -13,7 +13,7 @@ uses
   Forms, JupiterConsts, JupiterObject, JupiterRoute, JupiterVariable,
   JupiterRunnable, JupiterAction, JupiterForm, JupiterModule, JupiterApp,
   pascalscript, JupiterToolsModule, uHome, uExplorer, JupiterGeneratorModule,
-  JupiterStandardModule, uCustomJupiterForm, uNewTask, JupiterDataProvider,
+  JupiterStandardModule, uNewTask, JupiterDataProvider,
   JupiterFileDataProvider, JupiterDirectoryDataProvider, JupiterCSVDataProvider,
   uConfig, JupiterEnviroment, JupiterFormGenerator, JupiterFormField,
   JupiterVariableForm, JupiterDialogForm, uCurrentTask,
@@ -21,7 +21,7 @@ uses
   JupiterSystemMessage, JupiterGeneratorForm, JupiterXMLDataProvider,
   uNewAction, uNewField, JupiterGeneratorMenuItem, jupiterformutils, uNewParam,
   JupiterVariableDataProvider, uNewDataSet, uMain, uGenerator, jupiterScript,
-  uScriptEditor, jupiterScriptFunctions
+  uScriptEditor, uCustomJupiterForm, jupiterScriptFunctions
   { you can add units after this };
 
 {$R *.res}

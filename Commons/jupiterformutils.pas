@@ -63,6 +63,13 @@ begin
     if Assigned(vrAction.Route) then
       ShowRouteOnTreeView(prTreeView, vrAction.Route, prList, vrNode);
   end;
+
+  prTreeView.FullExpand;
+
+  for vrVez := 0 to prTreeView.Items.Count - 1 do
+  begin
+
+  end;
 end;
 
 function PercentOfScreen(prTotalSize, prPercent: Integer): Integer;

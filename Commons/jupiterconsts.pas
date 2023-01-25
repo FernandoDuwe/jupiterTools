@@ -64,6 +64,7 @@ const
    EMPTY_SPACE_SEPARATOR  : String = '/JUPITERTOOLS\|/JUPITERTOOLS\';
    COLUMN_SPACE_SEPARATOR : String = '      ';
    FIELD_ID_GENERADOR     : String = 'Generator.FormId';
+   FIELD_TREE_COLAPSE     : String = 'MenuTree_Colapse';
 
    DATAPROVIDER_TYPE_LIST_FILES : String = 'TJupiterFileDataProvider';
    DATAPROVIDER_TYPE_LIST_PATHS : String = 'TJupiterDirectoryDataProvider';

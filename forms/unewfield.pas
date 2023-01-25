@@ -64,6 +64,8 @@ begin
   inherited;
 
   Self.FieldIndex := NULL_KEY;
+
+  Self.IsModal := True;
 end;
 
 procedure TFNewField.Internal_SaveFieldClick(Sender: TObject);

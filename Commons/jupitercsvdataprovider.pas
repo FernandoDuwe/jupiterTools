@@ -93,7 +93,9 @@ begin
     if Self.Internal_GetCSVColumn(prHeaderLine, vrVez) = EmptyStr then
       Continue;
 
-    Self.GetLastRow.Fields.AddVariable(Self.Internal_GetCSVColumn(prHeaderLine, vrVez), Self.Internal_GetCSVColumn(prLineStr, vrVez), Self.Internal_GetCSVColumn(prHeaderLine, vrVez));
+    Self.GetLastRow.Fields.AddVariable(Self.Internal_GetCSVColumn(prHeaderLine, vrVez),
+                                       Self.Internal_GetCSVColumn(prLineStr, vrVez),
+                                       Self.Internal_GetCSVColumn(prHeaderLine, vrVez));
   end;
 
   Self.GetLastRow.Fields.AddVariable('Line', IntToStr(Self.Size), 'Linha');

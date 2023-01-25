@@ -451,8 +451,6 @@ begin
 
   ShowRouteOnTreeView(tvCurrentMenu, TJupiterRoute.Create(ROOT_PATH), vrMenuList, nil);
 
-  tvCurrentMenu.FullExpand;
-
   lbFormList.Width    := PercentOfScreen(Self.Width, 30);
   lbMenuList.Width    := PercentOfScreen(Self.Width, 30);
   tvCurrentMenu.Width := PercentOfScreen(Self.Width, 30);

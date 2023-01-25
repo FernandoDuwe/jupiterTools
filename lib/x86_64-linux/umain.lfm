@@ -95,19 +95,6 @@ inherited FMain: TFMain
     GrabStyle = gsGripper
     Images = ilIconFamily
     OnChange = cbNavigationMenuChange
-    object ToolBar1: TToolBar
-      AnchorSideLeft.Control = cbNavigationMenu
-      AnchorSideTop.Control = cbNavigationMenu
-      Left = 24
-      Height = 1
-      Top = 14
-      Width = 150
-      Align = alNone
-      BorderSpacing.Left = 22
-      BorderSpacing.Top = 12
-      Caption = 'ToolBar1'
-      TabOrder = 0
-    end
     object tbOptions: TToolBar
       AnchorSideLeft.Control = cbNavigationMenu
       AnchorSideTop.Control = cbNavigationMenu
@@ -122,7 +109,7 @@ inherited FMain: TFMain
       EdgeInner = esNone
       EdgeOuter = esNone
       Images = ilIconFamily
-      TabOrder = 1
+      TabOrder = 0
       Transparent = True
       object tbMenu: TToolButton
         Left = 1
@@ -166,7 +153,7 @@ inherited FMain: TFMain
       BorderSpacing.Left = 22
       BorderSpacing.Top = 42
       Caption = 'tbSearch'
-      TabOrder = 2
+      TabOrder = 1
     end
     object edSearch: TEdit
       AnchorSideLeft.Control = cbNavigationMenu
@@ -179,7 +166,7 @@ inherited FMain: TFMain
       BorderSpacing.Left = 127
       BorderSpacing.Top = 3
       OnChange = edSearchChange
-      TabOrder = 3
+      TabOrder = 2
       TextHint = 'Pesquisar'
     end
     object tbSystemButtons: TToolBar
@@ -195,7 +182,7 @@ inherited FMain: TFMain
       Caption = 'tbSystemButtons'
       EdgeInner = esNone
       EdgeOuter = esNone
-      TabOrder = 4
+      TabOrder = 3
       Transparent = True
     end
     object ToolBar2: TToolBar
@@ -213,7 +200,7 @@ inherited FMain: TFMain
       EdgeInner = esNone
       EdgeOuter = esNone
       Images = ilIconFamily
-      TabOrder = 5
+      TabOrder = 4
       Transparent = True
       object TbSystemBar: TToolButton
         Left = 1
@@ -880,6 +867,12 @@ inherited FMain: TFMain
         object miNewCheckList: TMenuItem
           Caption = 'Checklist'
           ImageIndex = 0
+          OnClick = miNewCheckListClick
+        end
+        object MenuItem1: TMenuItem
+          Caption = 'Arquivo .jpas'
+          ImageIndex = 0
+          OnClick = MenuItem1Click
         end
       end
       object miOpen: TMenuItem
@@ -889,6 +882,11 @@ inherited FMain: TFMain
           Caption = 'Arquivo .CSV'
           ImageIndex = 32
           OnClick = miOpenCSVClick
+        end
+        object MenuItem6: TMenuItem
+          Caption = 'Arquivo .JPAS'
+          ImageIndex = 30
+          OnClick = MenuItem6Click
         end
       end
       object Separator1: TMenuItem

@@ -77,6 +77,7 @@ type
     procedure FormShortCut(var Msg: TLMKey; var Handled: Boolean);
     procedure FormShow(Sender: TObject);
     procedure MenuItem1Click(Sender: TObject);
+    procedure MenuItem6Click(Sender: TObject);
     procedure miAutoUpdateClick(Sender: TObject);
     procedure miClearSearchClick(Sender: TObject);
     procedure miPastaAssetsClick(Sender: TObject);
@@ -232,6 +233,30 @@ begin
     FreeAndNil(vrDialog);
     FreeAndNil(vrEnviroment);
     FreeAndNil(vrScript);
+  end;
+end;
+
+procedure TFMain.MenuItem6Click(Sender: TObject);
+var
+  vrEnviroment : TJupiterEnviroment;
+  vrFile       : String;
+  vrRoute      : TJupiterRoute;
+begin
+  vrEnviroment := TJupiterEnviroment.Create();
+  try
+    vrFile := vrEnviroment.OpenFile('*.jpas');
+
+    if vrFile <> EmptyStr then
+    begin
+      vrRoute := TJupiterRoute.Create(SCRIPTEDITOR_FORM_PATH);
+
+      Route.Params.AddVariable('title', 'Arquivo: ' + ExtractFileName(vrFile), 'Título');
+      Route.Params.AddVariable('filename', vrFile, 'Arquivo');
+
+      vrJupiterApp.NavigateTo(vrRoute, False);
+    end;
+  finally
+    FreeAndNil(vrEnviroment);
   end;
 end;
 
@@ -502,8 +527,6 @@ begin
   vrMenuList := vrJupiterApp.GetActions(TJupiterRoute.Create(ROOT_PATH));
 
   ShowRouteOnTreeView(tvMenu, TJupiterRoute.Create(ROOT_PATH), vrMenuList, nil);
-
-  tvMenu.FullExpand;
 end;
 
 procedure TFMain.Internal_GetExternalIcons;
@@ -524,6 +547,9 @@ begin
 
     for vrVez := 0 to vrFile.Size - 1 do
     begin
+      if not vrEnviroment.IsPictureFile(vrFile.GetRowByIndex(vrVez).Fields.VariableById('File').Value) then
+        Continue;
+
       vrPicture := TPicture.Create;
       try
         vrPicture.LoadFromFile(vrFile.GetRowByIndex(vrVez).Fields.VariableById('File').Value);

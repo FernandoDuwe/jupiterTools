@@ -116,6 +116,7 @@ begin
       Result := TJupiterCSVDataProvider.Create;
       TJupiterCSVDataProvider(Result).Filename := vrStr[1];
       Result.ProvideData;
+      Exit;
     end;
 
     if vrStr[0] = DATAPROVIDER_TYPE_LIST_PATHS then

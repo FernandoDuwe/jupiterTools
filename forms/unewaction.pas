@@ -60,6 +60,8 @@ begin
   inherited;
 
   Self.ActionIndex := NULL_KEY;
+
+  Self.IsModal := True;
 end;
 
 procedure TFNewAction.seIconChange(Sender: TObject);
