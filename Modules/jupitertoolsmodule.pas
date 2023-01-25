@@ -130,6 +130,7 @@ begin
 
           Route.Params.AddVariable('runnableField', 'File', 'Campo a ser executado');
           Route.Params.AddVariable('destinyPath', EXPLORER_FORM_PATH, 'Destino');
+          Route.Params.AddVariable(FIELD_TREE_COLAPSE, 'True', 'Árvore fechada ao executar');
         end;
 
         Self.Internal_ListLibrary(prDir + Fields.VariableById('Folder').Value + '/', prList);
@@ -317,6 +318,7 @@ begin
 
       Route.Params.AddVariable('runnableField', 'File', 'Campo a ser executado');
       Route.Params.AddVariable('destinyPath', EXPLORER_FORM_PATH, 'Destino');
+      Route.Params.AddVariable(FIELD_TREE_COLAPSE, 'True', 'Árvore fechada ao executar');
     end;
 
     Self.Internal_ListLibrary(EmptyStr, Result);

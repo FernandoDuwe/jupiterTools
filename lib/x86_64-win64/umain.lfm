@@ -4,7 +4,7 @@ inherited FMain: TFMain
   Top = 210
   Width = 1297
   Caption = 'FMain'
-  ClientHeight = 707
+  ClientHeight = 702
   ClientWidth = 1297
   Menu = mmMainMenu
   OnShortCut = FormShortCut
@@ -14,8 +14,7 @@ inherited FMain: TFMain
     Width = 1297
   end
   inherited sbStatus: TStatusBar
-    Height = 23
-    Top = 618
+    Top = 617
     Width = 1297
     Panels = <    
       item
@@ -25,27 +24,23 @@ inherited FMain: TFMain
     SimplePanel = False
   end
   inherited pnHint: TPanel
-    Top = 641
+    Top = 636
     Width = 1297
     ClientWidth = 1297
-    inherited lbHelp: TLabel
-      Height = 15
-      Width = 35
-    end
   end
   object pnMenu: TPanel[3]
     Left = 0
-    Height = 514
+    Height = 513
     Top = 104
     Width = 362
     Align = alLeft
     BevelOuter = bvNone
-    ClientHeight = 514
+    ClientHeight = 513
     ClientWidth = 362
     TabOrder = 1
     object tvMenu: TTreeView
       Left = 0
-      Height = 514
+      Height = 513
       Top = 0
       Width = 362
       Align = alClient
@@ -60,13 +55,13 @@ inherited FMain: TFMain
   end
   object spSplitter: TSplitter[4]
     Left = 362
-    Height = 514
+    Height = 513
     Top = 104
     Width = 5
   end
   object pnBody: TPanel[5]
     Left = 367
-    Height = 514
+    Height = 513
     Top = 104
     Width = 930
     Align = alClient
@@ -887,6 +882,11 @@ inherited FMain: TFMain
           Caption = 'Arquivo .CSV'
           ImageIndex = 32
           OnClick = miOpenCSVClick
+        end
+        object MenuItem6: TMenuItem
+          Caption = 'Arquivo .JPAS'
+          ImageIndex = 30
+          OnClick = MenuItem6Click
         end
       end
       object Separator1: TMenuItem

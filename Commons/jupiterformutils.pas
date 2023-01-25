@@ -5,7 +5,8 @@ unit jupiterformutils;
 interface
 
 uses
-  Classes, ComCtrls, JupiterRoute, JupiterObject, JupiterAction, SysUtils;
+  Classes, ComCtrls, JupiterRoute, JupiterObject, JupiterAction, JupiterConsts,
+  SysUtils;
 
   procedure CopyNodes(prSourceNode, prTargetNode: TTreeNode);
 
@@ -37,9 +38,10 @@ end;
 
 procedure ShowRouteOnTreeView(prTreeView : TTreeView; prRoute : TJupiterRoute; prList : TJupiterObjectList; prNode : TTreeNode);
 var
-  vrVez    : Integer;
-  vrNode   : TTreeNode;
-  vrAction : TJupiterAction;
+  vrVez      : Integer;
+  vrNode     : TTreeNode;
+  vrAction   : TJupiterAction;
+  vrTreeItem : TTreeNode;
 begin
   for vrVez := 0 to prList.Size - 1 do
   begin
@@ -68,7 +70,17 @@ begin
 
   for vrVez := 0 to prTreeView.Items.Count - 1 do
   begin
+    vrTreeItem := prTreeView.Items[vrVez];
 
+    if vrTreeItem.Count = 0 then
+      Continue;
+
+    if not Assigned(vrTreeItem.Data) then
+      Continue;
+
+    with TJupiterAction(vrTreeItem.Data) do
+      if Route.Params.Exists(FIELD_TREE_COLAPSE) then
+        vrTreeItem.Collapse(False);
   end;
 end;
 
