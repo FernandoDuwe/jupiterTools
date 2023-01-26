@@ -5,7 +5,8 @@ unit JupiterRunnable;
 interface
 
 uses
-  Classes, Controls, Forms, JupiterObject, JupiterEnviroment, SysUtils;
+  Classes, Controls, Forms, JupiterObject, JupiterEnviroment,
+  SysUtils;
 
 type
 
@@ -23,13 +24,14 @@ type
     procedure OpenFolder(prFolder : String);
     procedure OpenScript(prScript : String);
     procedure OpenFile(prFile : String);
+    procedure OpenJPasScript(prScriptFile : String);
 
     constructor Create(prCommandLine : String; prRunOnCreate : Boolean = False);
   end;
 
 implementation
 
-uses JupiterApp, LCLIntf, Process {$IFDEF WINDOWS} , ShellApi {$ENDIF};
+uses JupiterApp, LCLIntf, Process {$IFDEF WINDOWS} , ShellApi {$ENDIF}, jupiterScript;
 
 { TJupiterRunnable }
 
@@ -74,6 +76,14 @@ begin
     if DirectoryExists(vrCommandLine) then
     begin
       Self.OpenFolder(vrCommandLine);
+      Exit;
+    end;
+
+    vrContent := Pos(AnsiUpperCase(ExtractFileExt(vrCommandLine)), AnsiUpperCase('.jpas'));
+
+    if vrContent <> 0 then
+    begin
+      Self.OpenJPasScript(vrCommandLine);
       Exit;
     end;
 
@@ -189,6 +199,53 @@ begin
       Details.Add('Saída: ');
       Details.Add(vrOutput);
     end;
+  end;
+end;
+
+procedure TJupiterRunnable.OpenJPasScript(prScriptFile: String);
+var
+  vrScript : TJupiterScript;
+  vrMessage : TStrings;
+begin
+  vrScript := TJupiterScript.Create;
+  try
+    vrScript.LoadFromFile(prScriptFile);
+
+    vrScript.Execute;
+
+    vrJupiterApp.AddMessage(ExtractFileName(prScriptFile) + ': Iniciando', Self.ClassName).Details.Add('Arquivo: ' + prScriptFile);
+
+    vrJupiterApp.AddMessage(ExtractFileName(prScriptFile) + ': Compilando', Self.ClassName).Details.AddStrings(vrScript.Messages);
+
+    if vrScript.Compiled then
+    begin
+      vrJupiterApp.AddMessage(ExtractFileName(prScriptFile) + ': Executando', Self.ClassName).Details.AddStrings(vrScript.RunMessages);
+
+      if vrScript.Runned then
+        vrJupiterApp.AddMessage(ExtractFileName(prScriptFile) + ': Execução bem sucedida', Self.ClassName).Details.Add('Arquivo: ' + prScriptFile)
+      else
+      begin
+        vrJupiterApp.AddMessage(ExtractFileName(prScriptFile) + ': Erro ao executar', Self.ClassName).Details.Add('Arquivo: ' + prScriptFile);
+
+        vrMessage := TStringList.Create;
+        vrMessage.Clear;
+        vrMessage.Add('Erro ao executar o script: ' + ExtractFileName(prScriptFile));
+        vrMessage.AddStrings(vrScript.Messages);
+
+        vrJupiterApp.Popup('Erro ao executar', vrMessage);
+      end;
+    end
+    else
+    begin
+      vrMessage := TStringList.Create;
+      vrMessage.Clear;
+      vrMessage.Add('Erro ao compilar o script: ' + ExtractFileName(prScriptFile));
+      vrMessage.AddStrings(vrScript.Messages);
+
+      vrJupiterApp.Popup('Erro ao compilar', vrMessage);
+    end;
+  finally
+    FreeAndNil(vrScript);
   end;
 end;
 

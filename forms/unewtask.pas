@@ -34,6 +34,7 @@ type
     procedure Internal_ListFiles;
   protected
     procedure Internal_PrepareForm; override;
+    procedure Internal_UpdateComponents; override;
     procedure Internal_UpdateDatasets; override;
   public
 
@@ -180,6 +181,13 @@ begin
   end;
 
   Self.Params.AddVariable(FIELD_ID_GENERADOR, 'NewTaskForm', 'ID do formulário');
+end;
+
+procedure TFNewTask.Internal_UpdateComponents;
+begin
+  inherited Internal_UpdateComponents;
+
+  cbFiles.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
 end;
 
 procedure TFNewTask.Internal_UpdateDatasets;

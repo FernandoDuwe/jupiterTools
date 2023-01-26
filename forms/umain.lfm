@@ -4,7 +4,7 @@ inherited FMain: TFMain
   Top = 210
   Width = 1297
   Caption = 'FMain'
-  ClientHeight = 702
+  ClientHeight = 707
   ClientWidth = 1297
   Menu = mmMainMenu
   OnShortCut = FormShortCut
@@ -14,7 +14,8 @@ inherited FMain: TFMain
     Width = 1297
   end
   inherited sbStatus: TStatusBar
-    Top = 617
+    Height = 23
+    Top = 618
     Width = 1297
     Panels = <    
       item
@@ -24,23 +25,27 @@ inherited FMain: TFMain
     SimplePanel = False
   end
   inherited pnHint: TPanel
-    Top = 636
+    Top = 641
     Width = 1297
     ClientWidth = 1297
+    inherited lbHelp: TLabel
+      Height = 15
+      Width = 35
+    end
   end
   object pnMenu: TPanel[3]
     Left = 0
-    Height = 513
+    Height = 514
     Top = 104
     Width = 362
     Align = alLeft
     BevelOuter = bvNone
-    ClientHeight = 513
+    ClientHeight = 514
     ClientWidth = 362
     TabOrder = 1
     object tvMenu: TTreeView
       Left = 0
-      Height = 513
+      Height = 514
       Top = 0
       Width = 362
       Align = alClient
@@ -55,13 +60,13 @@ inherited FMain: TFMain
   end
   object spSplitter: TSplitter[4]
     Left = 362
-    Height = 513
+    Height = 514
     Top = 104
     Width = 5
   end
   object pnBody: TPanel[5]
     Left = 367
-    Height = 513
+    Height = 514
     Top = 104
     Width = 930
     Align = alClient

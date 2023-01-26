@@ -13,24 +13,29 @@ inherited FConfig: TFConfig
     Width = 1292
   end
   inherited sbStatus: TStatusBar
-    Top = 670
+    Height = 23
+    Top = 666
     Width = 1292
   end
   inherited pnHint: TPanel
-    Top = 620
+    Top = 616
     Width = 1292
     ClientWidth = 1292
     TabOrder = 3
+    inherited lbHelp: TLabel
+      Height = 15
+      Width = 35
+    end
   end
   inherited sbBody: TScrollBox
     Left = 367
-    Height = 560
+    Height = 556
     Top = 60
     Width = 925
   end
   object tvNavigation: TTreeView[4]
     Left = 0
-    Height = 560
+    Height = 556
     Top = 60
     Width = 362
     Align = alLeft
@@ -41,7 +46,7 @@ inherited FConfig: TFConfig
   end
   object Splitter1: TSplitter[5]
     Left = 362
-    Height = 560
+    Height = 556
     Top = 60
     Width = 5
   end

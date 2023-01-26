@@ -108,6 +108,7 @@ begin
   Result.ShowHint   := Trim(prAction.Hint) <> EmptyStr;
   Result.ImageIndex := prAction.Icon;
   Result.Left       := prLeft;
+  Result.Font.Size  := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
 
   if Result.ImageIndex <> - 1 then
     Result.Images := vrJupiterApp.MainIcons;

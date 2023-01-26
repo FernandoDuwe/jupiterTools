@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, ComCtrls, JupiterRoute, JupiterObject, JupiterAction, JupiterConsts,
-  SysUtils;
+  SysUtils, Forms;
 
   procedure CopyNodes(prSourceNode, prTargetNode: TTreeNode);
 
@@ -14,7 +14,11 @@ uses
 
   function PercentOfScreen(prTotalSize, prPercent : Integer) : Integer;
 
+  procedure DrawForm(prComponent : TComponent);
+
 implementation
+
+uses JupiterApp, ExtCtrls, Menus, StdCtrls;
 
 procedure CopyNodes(prSourceNode, prTargetNode: TTreeNode);
 
@@ -87,6 +91,47 @@ end;
 function PercentOfScreen(prTotalSize, prPercent: Integer): Integer;
 begin
   Result := Round((prPercent / 100) * prTotalSize);
+end;
+
+procedure DrawForm(prComponent: TComponent);
+var
+  vrVez : Integer;
+begin
+  for vrVez := 0 to prComponent.ComponentCount - 1 do
+  begin
+    if prComponent.Components[vrVez] is TLabel then
+      TLabel(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+
+    if prComponent.Components[vrVez] is TEdit then
+      TEdit(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+
+    if prComponent.Components[vrVez] is TComboBox then
+      TComboBox(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+
+    if prComponent.Components[vrVez] is TCheckBox then
+      TCheckBox(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+
+    if prComponent.Components[vrVez] is TScrollBox then
+    begin
+      TScrollBox(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+
+      DrawForm(prComponent.Components[vrVez]);
+    end;
+
+    if prComponent.Components[vrVez] is TPanel then
+    begin
+      TPanel(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+
+      DrawForm(prComponent.Components[vrVez]);
+    end;
+
+    if prComponent.Components[vrVez] is TGroupBox then
+    begin
+      TGroupBox(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+
+      DrawForm(prComponent.Components[vrVez]);
+    end;
+  end;
 end;
 
 end.

@@ -11,138 +11,148 @@ inherited FNewDataSet: TFNewDataSet
     Width = 999
   end
   inherited sbStatus: TStatusBar
-    Top = 605
+    Height = 23
+    Top = 601
     Width = 999
   end
   inherited pnHint: TPanel
-    Top = 555
+    Top = 551
     Width = 999
     ClientWidth = 999
+    inherited lbHelp: TLabel
+      Height = 15
+      Width = 35
+    end
   end
   inherited sbBody: TScrollBox
     Left = 264
-    Height = 495
+    Height = 491
     Top = 60
     Width = 735
-    HorzScrollBar.Page = 218
-    VertScrollBar.Page = 378
-    ClientHeight = 493
-    ClientWidth = 733
+    HorzScrollBar.Page = 170
+    VertScrollBar.Page = 367
+    ClientHeight = 487
+    ClientWidth = 731
     object Label2: TLabel[0]
       Left = 8
-      Height = 17
+      Height = 15
       Top = 10
-      Width = 14
+      Width = 11
       Caption = 'ID'
+      ParentColor = False
       ParentFont = False
     end
     object edID: TEdit[1]
       Left = 8
-      Height = 34
+      Height = 23
       Top = 34
-      Width = 713
+      Width = 711
       Anchors = [akTop, akLeft, akRight]
       TabOrder = 0
+      Text = 'Provider.'
     end
     object Label4: TLabel[2]
       Left = 8
-      Height = 17
+      Height = 15
       Top = 80
-      Width = 66
+      Width = 51
       Caption = 'Descrição'
+      ParentColor = False
       ParentFont = False
     end
     object edDescription: TEdit[3]
       Left = 8
-      Height = 34
+      Height = 23
       Top = 104
-      Width = 713
+      Width = 711
       Anchors = [akTop, akLeft, akRight]
       TabOrder = 1
     end
     object Label5: TLabel[4]
       Left = 8
-      Height = 17
+      Height = 15
       Top = 152
-      Width = 48
+      Width = 39
       Caption = 'Campo'
+      ParentColor = False
       ParentFont = False
     end
     object cbCampo: TComboBox[5]
       Left = 8
-      Height = 34
+      Height = 23
       Top = 176
-      Width = 713
+      Width = 711
       Anchors = [akTop, akLeft, akRight]
-      ItemHeight = 0
+      ItemHeight = 15
       TabOrder = 2
     end
     object edFile: TEdit[6]
       Left = 8
-      Height = 34
+      Height = 23
       Top = 248
-      Width = 713
+      Width = 711
       Anchors = [akTop, akLeft, akRight]
       TabOrder = 3
     end
     object Label6: TLabel[7]
       Left = 8
-      Height = 17
+      Height = 15
       Top = 224
-      Width = 115
+      Width = 96
       Caption = 'Caminho/Arquivo'
+      ParentColor = False
       ParentFont = False
     end
     object cbSubFolders: TCheckBox[8]
       Left = 8
-      Height = 23
+      Height = 19
       Top = 280
-      Width = 210
+      Width = 162
       Caption = 'Pesquisar em subdiretórios'
       TabOrder = 4
     end
     object Label7: TLabel[9]
       Left = 8
-      Height = 17
+      Height = 15
       Top = 320
-      Width = 89
+      Width = 70
       Caption = 'Pesquisar em'
+      ParentColor = False
       ParentFont = False
     end
     object edSearchNode: TEdit[10]
       Left = 8
-      Height = 34
+      Height = 23
       Top = 344
-      Width = 713
+      Width = 711
       Anchors = [akTop, akLeft, akRight]
       TabOrder = 5
     end
   end
   object gbProvider: TGroupBox[4]
     Left = 0
-    Height = 495
+    Height = 491
     Top = 60
     Width = 259
     Align = alLeft
     Caption = 'DataProvider'
-    ClientHeight = 477
-    ClientWidth = 257
+    ClientHeight = 471
+    ClientWidth = 255
     TabOrder = 4
     object lbProviders: TListBox
       Left = 0
-      Height = 477
+      Height = 471
       Top = 0
-      Width = 257
+      Width = 255
       Align = alClient
       ItemHeight = 0
       OnClick = lbProvidersClick
       TabOrder = 0
-      TopIndex = -1
     end
   end
   object Splitter1: TSplitter[5]
     Left = 259
-    Height = 495
+    Height = 491
     Top = 60
     Width = 5
   end

@@ -65,6 +65,7 @@ const
    COLUMN_SPACE_SEPARATOR : String = '      ';
    FIELD_ID_GENERADOR     : String = 'Generator.FormId';
    FIELD_TREE_COLAPSE     : String = 'MenuTree_Colapse';
+   FIELD_FONT_SIZE        : String = 'Interface.Font.Size';
 
    DATAPROVIDER_TYPE_LIST_FILES : String = 'TJupiterFileDataProvider';
    DATAPROVIDER_TYPE_LIST_PATHS : String = 'TJupiterDirectoryDataProvider';

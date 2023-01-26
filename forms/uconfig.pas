@@ -68,6 +68,8 @@ begin
   tvNavigation.Width := PercentOfScreen(Self.Width, 30);
 
   tvNavigationSelectionChanged(Sender);
+
+  tvNavigation.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
 end;
 
 procedure TFConfig.tvNavigationSelectionChanged(Sender: TObject);

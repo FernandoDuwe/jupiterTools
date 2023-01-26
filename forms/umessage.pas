@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
   uCustomJupiterForm, JupiterApp, JupiterSystemMessage, JupiterAction,
-  JupiterRunnable, JupiterConsts, jupiterformutils;
+  JupiterRunnable, JupiterConsts, jupiterformutils, JupiterDialogForm;
 
 type
 
@@ -31,8 +31,10 @@ type
 
     procedure Internal_PrepareForm; override;
 
+    procedure Internal_AddMessageClick(Sender: TObject);
     procedure Internal_RefreshClick(Sender: TObject);
   protected
+    procedure Internal_UpdateComponents; override;
     procedure Internal_UpdateDatasets; override;
   public
 
@@ -78,19 +80,55 @@ var
 begin
   inherited Internal_PrepareForm;
 
-  vrAction      := TJupiterAction.Create('Atualizar', TJupiterRunnable.Create(''), nil);
+  vrAction      := TJupiterAction.Create('Nova Mensagem', @Internal_AddMessageClick, nil);
+  vrAction.Hint := 'Clique aqui para adicionar uma nova mensagem';
+  vrAction.Icon := ICON_ADD;
+
+  Self.Actions.Add(vrAction);
+
+  vrAction      := TJupiterAction.Create('Atualizar', @Internal_RefreshClick, nil);
   vrAction.Hint := 'Clique aqui para atualizar a página';
   vrAction.Icon := ICON_REFRESH;
-  vrAction.OnClick := @Internal_RefreshClick;
 
   Self.Actions.Add(vrAction);
 
   Self.Hint := 'Todas as ações executadas no sistema são gravadas nas mensagens e podem ser consultadas nessa tela';
 end;
 
+procedure TFMessage.Internal_AddMessageClick(Sender: TObject);
+var
+  vrDialog : TJupiterDialogForm;
+begin
+  vrDialog := TJupiterDialogForm.Create;
+  try
+    vrDialog.Title := 'Nova Mensagem';
+    vrDialog.Hint  := 'Crie uma nova mensagem para ser exibida no diário de execução do sistema.';
+
+    vrDialog.Fields.AddField('TITLE', 'Título', '');
+    vrDialog.Fields.AddField('DESC', 'Descrição', '');
+
+    if vrDialog.Show then
+    begin
+      vrJupiterApp.AddMessage(vrDialog.Fields.VariableById('TITLE').Value, 'Inserido pelo usuário').Details.Add(vrDialog.Fields.VariableById('DESC').Value);
+
+      Self.UpdateForm;
+    end;
+  finally
+    FreeAndNil(vrDialog);
+  end;
+end;
+
 procedure TFMessage.Internal_RefreshClick(Sender: TObject);
 begin
   Self.UpdateForm;
+end;
+
+procedure TFMessage.Internal_UpdateComponents;
+begin
+  inherited Internal_UpdateComponents;
+
+  lbResume.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
+  mmDetails.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
 end;
 
 procedure TFMessage.Internal_UpdateDatasets;

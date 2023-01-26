@@ -868,6 +868,15 @@ begin
   mmLines.Font.Size           := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
   mmCurrentMenuInfo.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
 
+  lbFormList.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
+  lvActions.Font.Size  := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
+  lvFields.Font.Size   := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
+
+  lbMenuList.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
+  lvMenuVariables.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
+
+  tvCurrentMenu.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
+
   edMenuItemTitle.Enabled    := Self.FMenuFile <> EmptyStr;
   edMenuItemLocation.Enabled := Self.FMenuFile <> EmptyStr;
   edMenuItemRoute.Enabled    := Self.FMenuFile <> EmptyStr;

@@ -11,7 +11,6 @@ inherited FMessage: TFMessage
     Width = 1204
   end
   inherited sbStatus: TStatusBar
-    Height = 23
     Top = 656
     Width = 1204
   end
@@ -19,18 +18,13 @@ inherited FMessage: TFMessage
     Top = 606
     Width = 1204
     ClientWidth = 1204
-    inherited lbHelp: TLabel
-      Height = 15
-      Width = 35
-    end
   end
   inherited sbBody: TScrollBox
     Left = 265
     Height = 546
-    Top = 60
     Width = 939
-    HorzScrollBar.Page = 466
-    VertScrollBar.Page = 87
+    HorzScrollBar.Page = 150
+    VertScrollBar.Page = 223
     ClientHeight = 542
     ClientWidth = 935
     object lbTitleTile: TLabel[0]
@@ -52,17 +46,17 @@ inherited FMessage: TFMessage
       ParentFont = False
     end
     object lbOriginTitle: TLabel[2]
-      Left = 208
+      Left = 8
       Height = 15
-      Top = 8
+      Top = 72
       Width = 40
       Caption = 'Origem'
       ParentColor = False
     end
     object lbOriginDesc: TLabel[3]
-      Left = 208
+      Left = 8
       Height = 15
-      Top = 32
+      Top = 96
       Width = 42
       Caption = 'Origem'
       Font.Style = [fsBold]
@@ -70,17 +64,17 @@ inherited FMessage: TFMessage
       ParentFont = False
     end
     object lbTimeTitle: TLabel[4]
-      Left = 408
+      Left = 8
       Height = 15
-      Top = 8
+      Top = 136
       Width = 55
       Caption = 'Data/Hora'
       ParentColor = False
     end
     object lbTimeDesc: TLabel[5]
-      Left = 408
+      Left = 8
       Height = 15
-      Top = 32
+      Top = 160
       Width = 58
       Caption = 'Data/Hora'
       Font.Style = [fsBold]
@@ -90,15 +84,15 @@ inherited FMessage: TFMessage
     object lbDetailsTitle: TLabel[6]
       Left = 8
       Height = 15
-      Top = 72
+      Top = 208
       Width = 45
       Caption = 'Detalhes'
       ParentColor = False
     end
     object mmDetails: TMemo[7]
       Left = 8
-      Height = 430
-      Top = 96
+      Height = 294
+      Top = 232
       Width = 916
       Anchors = [akTop, akLeft, akRight, akBottom]
       Font.Name = 'System'

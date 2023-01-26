@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, JupiterForm,
-  JupiterAction, JupiterConsts, JupiterRunnable, JupiterFormGenerator;
+  JupiterAction, JupiterConsts, JupiterRunnable, JupiterFormGenerator,
+  jupiterformutils;
 
 type
 
@@ -71,6 +72,8 @@ end;
 procedure TFCustomJupiterForm.PrepareForm;
 begin
   inherited PrepareForm;
+
+  DrawForm(Self);
 
   Self.FFormGenerator.Variables.CopyFromVariableList(Self.Generator.Fields);
 

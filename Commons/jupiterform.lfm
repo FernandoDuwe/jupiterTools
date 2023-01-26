@@ -11,7 +11,7 @@ object FJupiterForm: TFJupiterForm
   OnShow = FormShow
   PopupMenu = ppMenu
   Position = poScreenCenter
-  LCLVersion = '2.2.0.4'
+  LCLVersion = '2.2.4.0'
   object sbActions: TScrollBox
     Left = 0
     Height = 60
@@ -25,15 +25,15 @@ object FJupiterForm: TFJupiterForm
   end
   object sbStatus: TStatusBar
     Left = 0
-    Height = 19
-    Top = 360
+    Height = 23
+    Top = 356
     Width = 668
     Panels = <>
   end
   object pnHint: TPanel
     Left = 0
     Height = 66
-    Top = 294
+    Top = 290
     Width = 668
     Align = alBottom
     Alignment = taLeftJustify
@@ -45,10 +45,11 @@ object FJupiterForm: TFJupiterForm
     Visible = False
     object lbHelp: TLabel
       Left = 64
-      Height = 17
+      Height = 15
       Top = 24
-      Width = 44
+      Width = 35
       Caption = 'lbHelp'
+      ParentColor = False
       ParentFont = False
     end
     object imgInfo: TImage
@@ -118,6 +119,7 @@ object FJupiterForm: TFJupiterForm
     end
   end
   object ppMenu: TPopupMenu
+    OwnerDraw = True
     Left = 328
     Top = 136
     object miRefresh: TMenuItem

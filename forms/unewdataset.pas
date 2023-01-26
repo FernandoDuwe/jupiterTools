@@ -46,7 +46,7 @@ var
 
 implementation
 
-uses LCLType;
+uses LCLType, JupiterApp;
 
 {$R *.lfm}
 
@@ -120,6 +120,8 @@ begin
   cbSubFolders.Enabled := ((lbProviders.Items[lbProviders.ItemIndex] = DATAPROVIDER_TYPE_LIST_PATHS) or (lbProviders.Items[lbProviders.ItemIndex] = DATAPROVIDER_TYPE_LIST_FILES));
 
   edSearchNode.Enabled := (lbProviders.Items[lbProviders.ItemIndex] = DATAPROVIDER_TYPE_XML);
+
+  lbProviders.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
 end;
 
 procedure TFNewDataSet.Internal_UpdateDatasets;

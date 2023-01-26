@@ -37,6 +37,7 @@ type
     procedure Internal_Change(prSender : TObject);
     procedure Internal_RunButtonClick(Sender : TObject);
     procedure Internal_CopyButtonClick(Sender : TObject);
+    procedure Internal_CopyButtonDbClick(Sender : TObject);
   published
     property Panel       : TPanel read FPanel;
     property PanelButton : TPanel read FPanelButton;
@@ -66,13 +67,14 @@ end;
 
 function TJupiterFormField.Internal_GenerateHint: String;
 begin
-  Result := Format('%1:s%0:s%0:sID: %2:s%0:sObrigatório: %3:s%0:sSomente Leitura: %4:s%0:sGravável: %5:s',
+  Result := Format('%1:s%0:s%0:sID: %2:s%0:sObrigatório: %3:s%0:sSomente Leitura: %4:s%0:sGravável: %5:s%0:s%0:s%6:s',
                    [#13#10,
                     Self.Variable.Title,
                     Self.Variable.ID,
                     IfThen(Self.Variable.Required, 'Sim', 'Não'),
                     IfThen(Self.Variable.ReadOnly, 'Sim', 'Não'),
-                    IfThen(Self.Variable.Save, 'Sim', 'Não')]);
+                    IfThen(Self.Variable.Save, 'Sim', 'Não'),
+                    'Dê um duplo clique para copiar o nome do campo para a área de trasferência']);
 end;
 
 function TJupiterFormField.Internal_CreateContainer(prOwner: TScrollBox): TPanel;
@@ -149,6 +151,7 @@ begin
     vrButton.Images   := vrJupiterApp.MainIcons;
     vrButton.ImageIndex := ICON_COPY;
     vrButton.OnClick    := @Internal_CopyButtonClick;
+//    vrButton.OnDblClick := @Internal_CopyButtonDbClick;
 
     vrCont := vrCont + 1;
   end;
@@ -156,11 +159,12 @@ end;
 
 function TJupiterFormField.Internal_CreatetTitle(prContainer: TPanel): TLabel;
 begin
-  Result         := TLabel.Create(prContainer);
-  Result.Parent  := prContainer;
-  Result.Top     := FORM_MARGIN_TOP;
-  Result.Left    := FORM_MARGIN_LEFT;
-  Result.Caption := IfThen(Trim(Self.Variable.Title) = EmptyStr, Self.Variable.ID, Self.Variable.Title);
+  Result           := TLabel.Create(prContainer);
+  Result.Parent    := prContainer;
+  Result.Top       := FORM_MARGIN_TOP;
+  Result.Left      := FORM_MARGIN_LEFT;
+  Result.Caption   := IfThen(Trim(Self.Variable.Title) = EmptyStr, Self.Variable.ID, Self.Variable.Title);
+  Result.Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
 end;
 
 function TJupiterFormField.Internal_CreateEdit(prContainer: TPanel; prTop : Integer): TEdit;
@@ -178,6 +182,9 @@ begin
   Result.ShowHint := True;
   Result.TabOrder := 1;
   Result.TabStop  := True;
+  Result.Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+
+  Result.OnDblClick := @Internal_CopyButtonDbClick;
 
   if (not Self.Variable.CleanOnShow) then
   begin
@@ -203,6 +210,10 @@ begin
   Result.ShowHint := True;
   Result.TabOrder := 1;
   Result.TabStop  := True;
+
+  Result.Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+
+  Result.OnDblClick := @Internal_CopyButtonDbClick;
 
   vrStr := TStringList.Create;
   try
@@ -261,6 +272,18 @@ begin
   vrEnviroment := TJupiterEnviroment.Create();
   try
     vrEnviroment.CopyToClipboard(Self.Value);
+  finally
+    FreeAndNil(vrEnviroment);
+  end;
+end;
+
+procedure TJupiterFormField.Internal_CopyButtonDbClick(Sender: TObject);
+var
+  vrEnviroment : TJupiterEnviroment;
+begin
+  vrEnviroment := TJupiterEnviroment.Create();
+  try
+    vrEnviroment.CopyToClipboard(Self.Variable.ID);
   finally
     FreeAndNil(vrEnviroment);
   end;

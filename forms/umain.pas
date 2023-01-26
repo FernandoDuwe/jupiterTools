@@ -661,6 +661,8 @@ begin
       miCurrentTaskEndTime.Enabled   := False;
     end;
   end;
+
+  tvMenu.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
 end;
 
 procedure TFMain.Internal_PrepareForm;
