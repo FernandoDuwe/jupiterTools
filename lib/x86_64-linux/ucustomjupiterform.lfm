@@ -15,8 +15,8 @@ inherited FCustomJupiterForm: TFCustomJupiterForm
   end
   object sbBody: TScrollBox[3]
     Left = 0
-    Height = 256
-    Top = 50
+    Height = 246
+    Top = 60
     Width = 668
     HorzScrollBar.Page = 1
     VertScrollBar.Page = 1
@@ -27,6 +27,5 @@ inherited FCustomJupiterForm: TFCustomJupiterForm
     TabOrder = 1
   end
   inherited ppMenu: TPopupMenu[4]
-    Top = 136
   end
 end
