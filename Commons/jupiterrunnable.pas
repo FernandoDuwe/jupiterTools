@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, Controls, Forms, JupiterObject, JupiterEnviroment,
-  SysUtils;
+  JupiterSystemMessage, SysUtils;
 
 type
 
@@ -16,7 +16,7 @@ type
   private
     FCommandLine : String;
 
-    procedure Internal_CreateProcess(prFileName : String; prParams : String; var prOutput : String);
+    procedure Internal_CreateProcess(prFileName : String; prParams : String; var prOutput : String; prWaitUntilEnd : Boolean = True; prSilent : Boolean = False);
   published
     property CommandLine : String read FCommandLine write FCommandLine ;
   public
@@ -26,16 +26,18 @@ type
     procedure OpenFile(prFile : String);
     procedure OpenJPasScript(prScriptFile : String);
 
+    procedure RunCommandLine(var prOutput : String; prWait : Boolean = True);
+
     constructor Create(prCommandLine : String; prRunOnCreate : Boolean = False);
   end;
 
 implementation
 
-uses JupiterApp, LCLIntf, Process {$IFDEF WINDOWS} , ShellApi {$ENDIF}, jupiterScript;
+uses JupiterApp, LCLIntf, Process {$IFDEF WINDOWS} , ShellApi {$ENDIF}, jupiterScript, StrUtils;
 
 { TJupiterRunnable }
 
-procedure TJupiterRunnable.Internal_CreateProcess(prFileName: String; prParams: String; var prOutput : String);
+procedure TJupiterRunnable.Internal_CreateProcess(prFileName: String; prParams: String; var prOutput : String; prWaitUntilEnd : Boolean = True; prSilent : Boolean = False);
 var
   vrProcess : TProcess;
   vrOutput : TStrings;
@@ -45,7 +47,15 @@ begin
   try
     vrOutput.Clear;
 
-    vrProcess.Options := vrProcess.Options + [poWaitOnExit, poUsePipes];
+    if prWaitUntilEnd then
+    begin
+      vrProcess.Options := vrProcess.Options + [poWaitOnExit];
+      vrProcess.Options := vrProcess.Options + [poUsePipes];
+    end;
+
+    if prSilent then
+      vrProcess.Options := vrProcess.Options + [poNoConsole];
+
     vrProcess.Executable := prFileName;
 
     if prParams <> EmptyStr then
@@ -53,9 +63,12 @@ begin
 
     vrProcess.Execute;
 
-    vrOutput.LoadFromStream(vrProcess.Output);
+    if prWaitUntilEnd then
+    begin
+      vrOutput.LoadFromStream(vrProcess.Output);
 
-    prOutput := vrOutput.Text;
+      prOutput := vrOutput.Text;
+    end;
   finally
     vrProcess.Free;
     FreeAndNil(vrOutput);
@@ -67,6 +80,7 @@ var
   vrCommandLine : String;
   vrExtensions : String;
   vrContent : Integer;
+  vrOutput : String;
 begin
   Application.MainForm.Cursor := crHourGlass;
 
@@ -94,7 +108,12 @@ begin
     if vrContent <> 0 then
       Self.OpenScript(vrCommandLine)
     else
-      Self.OpenFile(vrCommandLine);
+    begin
+      if FileExists(vrCommandLine) then
+        Self.OpenFile(vrCommandLine)
+      else
+        Self.RunCommandLine(vrOutput, False);
+    end;
   finally
     Application.MainForm.Cursor := crDefault;
   end;
@@ -181,7 +200,7 @@ begin
         else
         begin
           vrMetodo := 'CreateProcess';
-          Self.Internal_CreateProcess(PAnsiChar(vrJupiterApp.Params.VariableById('Enviroment.Run.EditorPref').Value), PAnsiChar(prFile), vrOutput);
+          Self.Internal_CreateProcess(PAnsiChar(vrJupiterApp.Params.VariableById('Enviroment.Run.EditorPref').Value), PAnsiChar(prFile), vrOutput, False);
         end;
       end;
     end
@@ -246,6 +265,38 @@ begin
     end;
   finally
     FreeAndNil(vrScript);
+  end;
+end;
+
+procedure TJupiterRunnable.RunCommandLine(var prOutput: String; prWait : Boolean = True);
+var
+  vrStr     : TStrings;
+  vrVez     : Integer;
+  vrParams  : String;
+  vrMessage : TJupiterSystemMessage;
+begin
+  vrStr := TStringList.Create;
+  try
+    vrStr.Clear;
+    vrStr.Delimiter     := ' ';
+    vrStr.DelimitedText := vrJupiterApp.Params.ResolveString(Self.CommandLine);
+
+    vrParams := EmptyStr;
+
+    for vrVez := 1 to vrStr.Count - 1 do
+      vrParams := vrParams + ' ' + vrStr[vrVez];
+
+    Self.Internal_CreateProcess(vrStr[0], vrParams, prOutput, prWait, True);
+  finally
+    vrMessage := vrJupiterApp.AddMessage('Comando executado', Self.ClassName);
+
+    vrMessage.Details.Add('Comando: ' + vrStr[0]);
+    vrMessage.Details.Add('Parâmetros: ' + vrParams);
+    vrMessage.Details.Add('Saída:');
+    vrMessage.Details.Add(prOutput);
+
+    vrStr.Clear;
+    FreeAndNil(vrStr);
   end;
 end;
 

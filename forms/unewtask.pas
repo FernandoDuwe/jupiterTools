@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, CheckLst,
-  ExtCtrls, uCustomJupiterForm, JupiterConsts, JupiterAction,
+  ExtCtrls, uCustomJupiterForm, uMain, JupiterConsts, JupiterAction,
   JupiterDirectoryDataProvider, JupiterApp, JupiterFileDataProvider,
   JupiterEnviroment, JupiterRoute, JupiterToolsModule;
 
@@ -94,6 +94,8 @@ begin
       if cbStartTimer.Checked then
         SetStartTime;
     end;
+
+    FMain.UpdateForm;
 
     vrJupiterApp.NavigateTo(TJupiterRoute.Create(TASK_FORM_PATH), False);
   except

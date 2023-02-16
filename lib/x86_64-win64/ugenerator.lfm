@@ -12,7 +12,6 @@ inherited FGenerator: TFGenerator
     Width = 1292
   end
   inherited sbStatus: TStatusBar
-    Height = 23
     Top = 666
     Width = 1292
   end
@@ -20,14 +19,9 @@ inherited FGenerator: TFGenerator
     Top = 616
     Width = 1292
     ClientWidth = 1292
-    inherited lbHelp: TLabel
-      Height = 15
-      Width = 35
-    end
   end
   inherited sbBody: TScrollBox
     Height = 556
-    Top = 60
     Width = 1292
     HorzScrollBar.Page = 905
     VertScrollBar.Page = 455

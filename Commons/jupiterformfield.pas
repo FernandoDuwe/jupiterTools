@@ -176,7 +176,7 @@ begin
   Result.Width    := prContainer.Width - (FORM_MARGIN_LEFT + Self.PanelButton.Width);
   Result.Caption  := Self.Variable.Value;
   Result.Anchors  := [akTop, akLeft, akRight];
-  Result.Enabled  := not Self.Variable.ReadOnly;
+  Result.ReadOnly := Self.Variable.ReadOnly;
   Result.OnChange := @Self.Internal_Change;
   Result.Hint     := Self.Internal_GenerateHint;
   Result.ShowHint := True;
@@ -204,7 +204,7 @@ begin
   Result.Left     := FORM_MARGIN_LEFT;
   Result.Width    := prContainer.Width - (FORM_MARGIN_LEFT + Self.PanelButton.Width);
   Result.Anchors  := [akTop, akLeft, akRight];
-  Result.Enabled  := not Self.Variable.ReadOnly;
+  Result.ReadOnly := Self.Variable.ReadOnly;
   Result.OnChange := @Self.Internal_Change;
   Result.Hint     := Self.Internal_GenerateHint;
   Result.ShowHint := True;

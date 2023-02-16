@@ -97,7 +97,10 @@ begin
   Sender.AddFunction(@JupiterAddLogMessage, 'procedure AddLogMessage(prTitle, prDescription : String);');
   Sender.AddFunction(@JupiterShowPopup, 'procedure ShowPopup(prTitle, prDescription : String);');
 
-  Sender.AddFunction(@JupiterRunCommandLine, 'procedure RunCommandLine(prCommandLine: String);');
+  Sender.AddFunction(@JupiterRunCommandLine, 'function RunCommandLine(prCommandLine: String) : String;');
+  Sender.AddFunction(@JupiterRunnable, 'procedure Runnable(prCommandLine: String);');
+  Sender.AddFunction(@JupiterLoadFromFile, 'function LoadFromFile(prFileName : String) : String;');
+  Sender.AddFunction(@JupiterSaveToFile, 'procedure SaveToFile(prFileName, prData : String);');
 
   Sender.AddFunction(@JupiterAddConfiguration, 'procedure AddConfiguration(prID, prValue, prTitle : String);');
   Sender.AddFunction(@JupiterAddVariable, 'procedure AddVariable(prID, prValue, prTitle : String);');

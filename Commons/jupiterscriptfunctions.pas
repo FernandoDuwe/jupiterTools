@@ -17,7 +17,10 @@ uses
   procedure JupiterShowPopup(prTitle, prDescription : String);
 
   // Enviromental functions
-  procedure JupiterRunCommandLine(prCommandLine : String);
+  function JupiterRunCommandLine(prCommandLine : String) : String;
+  procedure JupiterRunnable(prCommandLine : String);
+  function JupiterLoadFromFile(prFileName : String) : String;
+  procedure JupiterSaveToFile(prFileName, prData : String);
 
   // VariableFuncions
   procedure JupiterAddConfiguration(prID, prValue, prTitle : String);
@@ -89,9 +92,55 @@ begin
   vrJupiterApp.Popup(prTitle, vrStr);
 end;
 
-procedure JupiterRunCommandLine(prCommandLine: String);
+function JupiterRunCommandLine(prCommandLine: String) : String;
+var
+  vrRunnable : TJupiterRunnable;
+begin
+  vrRunnable := TJupiterRunnable.Create(prCommandLine, False);
+  try
+    vrRunnable.RunCommandLine(Result);
+  finally
+    FreeAndNil(vrRunnable);
+  end;
+end;
+
+procedure JupiterRunnable(prCommandLine: String);
 begin
   TJupiterRunnable.Create(prCommandLine, True);
+end;
+
+function JupiterLoadFromFile(prFileName: String): String;
+var
+  vrStr : TStrings;
+begin
+  Result := EmptyStr;
+
+  if not FileExists(prFileName) then
+    Exit;
+
+  vrStr := TStringList.Create;
+  try
+    vrStr.LoadFromFile(prFileName);
+
+    Result := vrStr.Text;
+  finally
+    FreeAndNil(vrStr);
+  end;
+end;
+
+procedure JupiterSaveToFile(prFileName, prData : String);
+var
+  vrStr : TStrings;
+begin
+  vrStr := TStringList.Create;
+  try
+    vrStr.Clear;
+    vrStr.Add(prData);
+
+    vrStr.SaveToFile(prFileName);
+  finally
+    FreeAndNil(vrStr);
+  end;
 end;
 
 procedure JupiterAddConfiguration(prID, prValue, prTitle: String);

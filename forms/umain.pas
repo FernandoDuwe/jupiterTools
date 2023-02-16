@@ -229,6 +229,8 @@ begin
     if vrDialog.Show then
       vrScript.CreateNewFile(vrDialog.Fields.VariableFormById('NAME').Value,
                              vrDialog.Fields.VariableFormById('PATH').Value);
+
+    Self.UpdateForm;
   finally
     FreeAndNil(vrDialog);
     FreeAndNil(vrEnviroment);
@@ -452,6 +454,8 @@ begin
       vrStr.Add('Item;Checked;');
 
       vrStr.SaveToFile(vrEnviroment.FullPath('modules/tools/checklists/') + DirectorySeparator + vrDialog.Fields.VariableById('NAME').Value + '.ckl');
+
+      Self.UpdateForm;
     end;
   finally
     FreeAndNil(vrDialog);
@@ -525,6 +529,8 @@ var
   vrMenuList : TJupiterObjectList;
 begin
   vrMenuList := vrJupiterApp.GetActions(TJupiterRoute.Create(ROOT_PATH));
+
+  tvMenu.Items.Clear;
 
   ShowRouteOnTreeView(tvMenu, TJupiterRoute.Create(ROOT_PATH), vrMenuList, nil);
 end;
@@ -635,6 +641,8 @@ begin
     tbMenu.ImageIndex := ICON_LEFT;
 
     tbMenu.Hint := 'Esconder menu';
+
+    Self.Internal_ListMenuItens();
   end
   else
   begin

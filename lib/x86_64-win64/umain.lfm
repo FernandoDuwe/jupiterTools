@@ -14,7 +14,6 @@ inherited FMain: TFMain
     Width = 1297
   end
   inherited sbStatus: TStatusBar
-    Height = 23
     Top = 618
     Width = 1297
     Panels = <    
@@ -28,10 +27,6 @@ inherited FMain: TFMain
     Top = 641
     Width = 1297
     ClientWidth = 1297
-    inherited lbHelp: TLabel
-      Height = 15
-      Width = 35
-    end
   end
   object pnMenu: TPanel[3]
     Left = 0

@@ -11,7 +11,6 @@ inherited FNewTask: TFNewTask
     Width = 622
   end
   inherited sbStatus: TStatusBar
-    Height = 23
     Top = 603
     Width = 622
   end
@@ -19,14 +18,9 @@ inherited FNewTask: TFNewTask
     Top = 553
     Width = 622
     ClientWidth = 622
-    inherited lbHelp: TLabel
-      Height = 15
-      Width = 35
-    end
   end
   inherited sbBody: TScrollBox
     Height = 493
-    Top = 60
     Width = 622
     HorzScrollBar.Page = 603
     VertScrollBar.Page = 408

@@ -15,6 +15,7 @@ type
   { TFScriptEditor }
 
   TFScriptEditor = class(TFJupiterForm)
+    mmDoc: TMemo;
     mmRun: TMemo;
     mmMessages: TMemo;
     pcOutput: TPageControl;
@@ -24,6 +25,7 @@ type
     SynCompletion1: TSynCompletion;
     syPas: TSynPasSyn;
     TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
     tsMessages: TTabSheet;
     procedure FormShow(Sender: TObject);
     procedure SynCompletion1CodeCompletion(var Value: string;
@@ -109,6 +111,7 @@ begin
 
   mmMessages.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
   mmRun.Font.Size      := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
+  mmDoc.Font.Size      := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
 end;
 
 procedure TFScriptEditor.Internal_PrepareForm;
