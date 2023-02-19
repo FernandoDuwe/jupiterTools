@@ -74,6 +74,7 @@ type
     procedure ApplicationProperties1Restore(Sender: TObject);
     procedure cbNavigationMenuChange(Sender: TObject);
     procedure edSearchChange(Sender: TObject);
+    procedure FormResize(Sender: TObject);
     procedure FormShortCut(var Msg: TLMKey; var Handled: Boolean);
     procedure FormShow(Sender: TObject);
     procedure MenuItem1Click(Sender: TObject);
@@ -194,6 +195,18 @@ procedure TFMain.edSearchChange(Sender: TObject);
 begin
   tmSearch.Enabled := False;
   tmSearch.Enabled := True;
+end;
+
+procedure TFMain.FormResize(Sender: TObject);
+begin
+  if Assigned(vrJupiterApp.CurrentForm) then
+  begin
+    vrJupiterApp.CurrentForm.Repaint;
+    vrJupiterApp.CurrentForm.WindowState := wsNormal;
+    vrJupiterApp.CurrentForm.WindowState := wsMaximized;
+
+    Application.ProcessMessages;
+  end;
 end;
 
 procedure TFMain.FormShow(Sender: TObject);
@@ -669,6 +682,8 @@ begin
       miCurrentTaskEndTime.Enabled   := False;
     end;
   end;
+
+  FormResize(Self);
 
   tvMenu.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
 end;

@@ -7,6 +7,7 @@ inherited FMain: TFMain
   ClientHeight = 707
   ClientWidth = 1297
   Menu = mmMainMenu
+  OnResize = FormResize
   OnShortCut = FormShortCut
   OnShow = FormShow
   inherited sbActions: TScrollBox
@@ -236,7 +237,7 @@ inherited FMain: TFMain
   end
   inherited ppMenu: TPopupMenu[7]
     Left = 360
-    Top = 104
+    Top = 106
   end
   object ilIconFamily: TImageList[8]
     Left = 457

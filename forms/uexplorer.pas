@@ -8,7 +8,8 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, Buttons,
   Grids, JupiterForm, JupiterAction, JupiterRunnable, JupiterDataProvider,
   JupiterConsts, JupiterApp, JupiterVariable, JupiterEnviroment,
-  JupiterCSVDataProvider, JupiterDirectoryDataProvider, JupiterFileDataProvider;
+  JupiterCSVDataProvider, JupiterDirectoryDataProvider, JupiterFileDataProvider,
+  uCustomJupiterForm;
 
 type
 
@@ -23,6 +24,7 @@ type
     function  Internal_IfChecked(prValue1, prValue2 : String) : Boolean;
     function  InternalGetCheckMode : Boolean;
     function  InternalGetCheckListMode : Boolean;
+    function  InternalCSVMode : Boolean;
     function  Internal_RecordChecked(prParams : TJupiterVariableList) : Boolean;
     procedure Internal_ChangeValue(var prParams : TJupiterVariableList);
     function  InternalGetRunMode : Boolean;
@@ -34,6 +36,7 @@ type
     function  Internal_HideColumn(prColumnName : String) : Boolean;
     procedure Internal_CheckBoxChangeAll(prNewValue : Boolean);
   published
+    property CSVMode       : Boolean read InternalCSVMode;
     property CheckMode     : Boolean read InternalGetCheckMode;
     property ChecklistMode : Boolean read InternalGetCheckListMode;
     property RunMode       : Boolean read InternalGetRunMode;
@@ -87,6 +90,22 @@ begin
   Result := Self.Params.Exists('checklistField');
 end;
 
+function TFExplorer.InternalCSVMode: Boolean;
+begin
+  Result := False;
+
+  if not Self.Params.Exists('path') then
+    Exit;
+
+  if Self.RunMode then
+    Exit;
+
+  if Self.CheckMode then
+    Exit;
+
+  Result := AnsiUpperCase(ExtractFileExt(Self.Params.VariableById('path').Value)) = '.CSV';
+end;
+
 function TFExplorer.Internal_RecordChecked(prParams : TJupiterVariableList) : Boolean;
 begin
   Result := False;
@@ -130,6 +149,20 @@ begin
     Self.Internal_ChangeValue(prParams);
 
     TJupiterCSVDataProvider(Self.Provider).SaveLine(prParams);
+  end;
+
+  if Self.CSVMode then
+  begin
+    Application.CreateForm(TFCustomJupiterForm, FCustomJupiterForm);
+    try
+      FCustomJupiterForm.IsModal := True;
+      FCustomJupiterForm.Generator.Fields.CopyFromVariableList(prParams);
+
+      FCustomJupiterForm.ShowModal;
+    finally
+      FCustomJupiterForm.Release;
+      FreeAndNil(FCustomJupiterForm);
+    end;
   end;
 end;
 
@@ -187,6 +220,30 @@ begin
     vrAction.Hint := 'Clique aqui para desmarcar todos os itens';
     vrAction.Icon := NULL_KEY;
     vrAction.OnClick := @Internal_DesmarcarTodosClick;
+
+    Self.Actions.Add(vrAction);
+  end;
+
+  if Self.CSVMode then
+  begin
+    vrAction      := TJupiterAction.Create('Novo', TJupiterRunnable.Create(''), nil);
+    vrAction.Hint := 'Clique aqui para adicionar uma nova linha';
+    vrAction.Icon := ICON_NEW;
+    vrAction.OnClick := @Internal_MarcarTodosClick;
+
+    Self.Actions.Add(vrAction);
+
+    vrAction      := TJupiterAction.Create('Editar', TJupiterRunnable.Create(''), nil);
+    vrAction.Hint := 'Clique aqui para editar a linha atual';
+    vrAction.Icon := ICON_EDIT;
+    vrAction.OnClick := @Internal_MarcarTodosClick;
+
+    Self.Actions.Add(vrAction);
+
+    vrAction      := TJupiterAction.Create('Excluir', TJupiterRunnable.Create(''), nil);
+    vrAction.Hint := 'Clique aqui para excluir a linha atual';
+    vrAction.Icon := ICON_DELETE;
+    vrAction.OnClick := @Internal_MarcarTodosClick;
 
     Self.Actions.Add(vrAction);
   end;

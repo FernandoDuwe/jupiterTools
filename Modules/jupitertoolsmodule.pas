@@ -256,6 +256,7 @@ begin
     Route.Params.AddVariable('type', DATAPROVIDER_TYPE_LIST_FILES, 'Tipo');
     Route.Params.AddVariable('path', Self.Params.VariableById(Self.DefineParamName('Tasks.Current.Path')).Value, 'Diretório');
     Route.Params.AddVariable('subfolders', '1', 'Pesquisar em subpastas?');
+    Route.Params.AddVariable(FIELD_ID_GENERADOR, 'CurrentTaskFilesForm', 'ID do formulário');
 
     Route.Params.AddVariable('runnableField', 'File', 'Campo a ser executado');
     Route.Params.AddVariable('destinyPath', EXPLORER_FORM_PATH, 'Destino');

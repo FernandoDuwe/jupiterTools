@@ -98,6 +98,7 @@ begin
   Sender.AddFunction(@JupiterShowPopup, 'procedure ShowPopup(prTitle, prDescription : String);');
 
   Sender.AddFunction(@JupiterRunCommandLine, 'function RunCommandLine(prCommandLine: String) : String;');
+  Sender.AddFunction(@JupiterRunCommandLineNoWait, 'procedure RunCommandLineNoWait(prCommandLine: String);');
   Sender.AddFunction(@JupiterRunnable, 'procedure Runnable(prCommandLine: String);');
   Sender.AddFunction(@JupiterLoadFromFile, 'function LoadFromFile(prFileName : String) : String;');
   Sender.AddFunction(@JupiterSaveToFile, 'procedure SaveToFile(prFileName, prData : String);');

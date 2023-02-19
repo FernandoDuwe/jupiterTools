@@ -50,7 +50,7 @@ type
 
 implementation
 
-uses Buttons, JupiterApp, StrUtils;
+uses Buttons, JupiterApp, StrUtils, Graphics;
 
 { TJupiterFormField }
 
@@ -158,12 +158,22 @@ begin
 end;
 
 function TJupiterFormField.Internal_CreatetTitle(prContainer: TPanel): TLabel;
+var
+  vrSufix : String;
 begin
+  vrSufix := EmptyStr;
+
+  if Self.Variable.ReadOnly then
+    vrSufix := ' ^';
+
+  if Self.Variable.Required then
+    vrSufix := ' *';
+
   Result           := TLabel.Create(prContainer);
   Result.Parent    := prContainer;
   Result.Top       := FORM_MARGIN_TOP;
   Result.Left      := FORM_MARGIN_LEFT;
-  Result.Caption   := IfThen(Trim(Self.Variable.Title) = EmptyStr, Self.Variable.ID, Self.Variable.Title);
+  Result.Caption   := IfThen(Trim(Self.Variable.Title) = EmptyStr, Self.Variable.ID, Self.Variable.Title) + vrSufix;
   Result.Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
 end;
 

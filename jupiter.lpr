@@ -21,7 +21,7 @@ uses
   JupiterSystemMessage, JupiterGeneratorForm, JupiterXMLDataProvider,
   uNewAction, uNewField, JupiterGeneratorMenuItem, jupiterformutils, uNewParam,
   JupiterVariableDataProvider, uNewDataSet, uMain, uGenerator, jupiterScript,
-  uScriptEditor, uCustomJupiterForm, jupiterScriptFunctions, unit1
+  uScriptEditor, uCustomJupiterForm, jupiterScriptFunctions //, unit1
   { you can add units after this };
 
 {$R *.res}

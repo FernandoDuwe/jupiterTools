@@ -18,6 +18,7 @@ uses
 
   // Enviromental functions
   function JupiterRunCommandLine(prCommandLine : String) : String;
+  procedure  JupiterRunCommandLineNoWait(prCommandLine : String);
   procedure JupiterRunnable(prCommandLine : String);
   function JupiterLoadFromFile(prFileName : String) : String;
   procedure JupiterSaveToFile(prFileName, prData : String);
@@ -99,6 +100,19 @@ begin
   vrRunnable := TJupiterRunnable.Create(prCommandLine, False);
   try
     vrRunnable.RunCommandLine(Result);
+  finally
+    FreeAndNil(vrRunnable);
+  end;
+end;
+
+procedure JupiterRunCommandLineNoWait(prCommandLine: String);
+var
+  vrRunnable : TJupiterRunnable;
+  vrOutPut   : String;
+begin
+  vrRunnable := TJupiterRunnable.Create(prCommandLine, False);
+  try
+    vrRunnable.RunCommandLine(vrOutPut, False);
   finally
     FreeAndNil(vrRunnable);
   end;

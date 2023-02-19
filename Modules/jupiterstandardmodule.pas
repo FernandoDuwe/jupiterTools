@@ -13,6 +13,7 @@ type
 
   TJupiterStandardModule = class(TJupiterModule)
   protected
+    procedure Internal_Prepare; override;
     function Internal_GetModuleID : String; override;
     function Internal_GetModuleTitle : String; override;
   public
@@ -22,6 +23,17 @@ type
 implementation
 
 { TJupiterStandardModule }
+
+procedure TJupiterStandardModule.Internal_Prepare;
+begin
+  inherited Internal_Prepare;
+
+  if not Self.Params.Exists(Self.DefineParamName('Triggers.OnStart')) then
+    Self.Params.AddConfig(Self.DefineParamName('Triggers.OnStart'), EmptyStr, 'Gatilhos: Ao iniciar a aplicação');
+
+  if not Self.Params.Exists(Self.DefineParamName('Triggers.OnUpdate')) then
+    Self.Params.AddConfig(Self.DefineParamName('Triggers.OnUpdate'), EmptyStr, 'Gatilhos: Ao atualizar a aplicação');
+end;
 
 function TJupiterStandardModule.Internal_GetModuleID: String;
 begin
