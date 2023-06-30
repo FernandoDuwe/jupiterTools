@@ -7,6 +7,8 @@ inherited FMain: TFMain
   ClientHeight = 707
   ClientWidth = 1297
   Menu = mmMainMenu
+  OnActivate = FormActivate
+  OnCreate = FormCreate
   OnResize = FormResize
   OnShortCut = FormShortCut
   OnShow = FormShow
@@ -50,6 +52,7 @@ inherited FMain: TFMain
       SortType = stText
       StateImages = ilIconFamily
       TabOrder = 0
+      OnChange = tvMenuChange
       OnClick = tvMenuClick
       Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
     end
@@ -192,7 +195,7 @@ inherited FMain: TFMain
       Left = 529
       Height = 22
       Top = 11
-      Width = 70
+      Width = 93
       Align = alNone
       AutoSize = True
       BorderSpacing.Left = 527
@@ -233,15 +236,24 @@ inherited FMain: TFMain
         ParentShowHint = False
         ShowHint = True
       end
+      object tbPrompt: TToolButton
+        Left = 70
+        Hint = 'Prompt de comando (Ctrl + F9)'
+        Top = 0
+        ImageIndex = 18
+        OnClick = tbPromptClick
+        ParentShowHint = False
+        ShowHint = True
+      end
     end
   end
   inherited ppMenu: TPopupMenu[7]
-    Left = 360
-    Top = 106
+    Left = 400
+    Top = 122
   end
   object ilIconFamily: TImageList[8]
-    Left = 457
-    Top = 106
+    Left = 497
+    Top = 122
     Bitmap = {
       4C7A260000001000000010000000994B00000000000078DAECBD0558555BB73E
       3E09033D473D7AD4A3C7EECF3E76B7A2282A2A6517D88D58A02892D28A08A2B4
@@ -853,8 +865,8 @@ inherited FMain: TFMain
   end
   object mmMainMenu: TMainMenu[9]
     Images = ilIconFamily
-    Left = 555
-    Top = 105
+    Left = 595
+    Top = 121
     object miFormParams: TMenuItem
       Caption = 'Arquivo'
       object miNew: TMenuItem
@@ -964,6 +976,13 @@ inherited FMain: TFMain
         Caption = 'Abrir formulários sempre maximizados'
         OnClick = miMaximizedFormsClick
       end
+      object Separator6: TMenuItem
+        Caption = '-'
+      end
+      object miSearchMode: TMenuItem
+        Caption = 'Pesquisa: Formularios (Ctrl + S)'
+        OnClick = miSearchModeClick
+      end
     end
     object MenuItem3: TMenuItem
       Caption = 'Ferramentas'
@@ -971,6 +990,16 @@ inherited FMain: TFMain
         Caption = 'Generator'
         ImageIndex = 37
         OnClick = miGeneratorClick
+      end
+      object MenuItem8: TMenuItem
+        Caption = 'Monitor de processos'
+        ImageIndex = 28
+        OnClick = MenuItem8Click
+      end
+      object MenuItem7: TMenuItem
+        Caption = 'Prompt de comando'
+        ImageIndex = 18
+        OnClick = tbPromptClick
       end
     end
     object MenuItem4: TMenuItem
@@ -1013,8 +1042,8 @@ inherited FMain: TFMain
     Enabled = False
     Interval = 500
     OnTimer = tmSearchTimer
-    Left = 648
-    Top = 104
+    Left = 688
+    Top = 120
   end
   object ppNotifier: TPopupNotifier[11]
     Color = clInactiveBorder
@@ -1025,12 +1054,39 @@ inherited FMain: TFMain
     Title = 'Caption'
     TitleFont.Style = [fsBold]
     Visible = False
-    Left = 744
-    Top = 104
+    Left = 784
+    Top = 120
   end
   object ApplicationProperties1: TApplicationProperties[12]
+    OnActivate = ApplicationProperties1Activate
     OnRestore = ApplicationProperties1Restore
-    Left = 848
-    Top = 106
+    Left = 888
+    Top = 121
+  end
+  object tmInternalThread: TTimer[13]
+    Enabled = False
+    Interval = 5000
+    OnTimer = tmInternalThreadTimer
+    Left = 688
+    Top = 192
+  end
+  object acShortcuts: TActionList[14]
+    Left = 592
+    Top = 192
+    object acPrompt: TAction
+      Caption = 'Prompt de comando'
+      OnExecute = acPromptExecute
+      ShortCut = 16504
+    end
+    object acMenu: TAction
+      Caption = 'acMenu'
+      OnExecute = acMenuExecute
+      ShortCut = 16460
+    end
+    object acChangeSearchAction: TAction
+      Caption = 'acChangeSearchAction'
+      OnExecute = acChangeSearchActionExecute
+      ShortCut = 16467
+    end
   end
 end

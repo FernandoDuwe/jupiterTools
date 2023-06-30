@@ -8,7 +8,11 @@ object FJupiterForm: TFJupiterForm
   OnActivate = FormActivate
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnKeyPress = FormKeyPress
+  OnKeyUp = FormKeyUp
+  OnResize = FormResize
   OnShow = FormShow
+  OnUTF8KeyPress = FormUTF8KeyPress
   PopupMenu = ppMenu
   Position = poScreenCenter
   LCLVersion = '2.2.4.0'

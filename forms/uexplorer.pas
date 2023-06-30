@@ -9,7 +9,7 @@ uses
   Grids, JupiterForm, JupiterAction, JupiterRunnable, JupiterDataProvider,
   JupiterConsts, JupiterApp, JupiterVariable, JupiterEnviroment,
   JupiterCSVDataProvider, JupiterDirectoryDataProvider, JupiterFileDataProvider,
-  uCustomJupiterForm;
+  uCustomJupiterForm, uDynamicRecord, LCLType;
 
 type
 
@@ -18,8 +18,13 @@ type
   TFExplorer = class(TFJupiterForm)
     lvItems: TListView;
     procedure lvItemsDblClick(Sender: TObject);
+    procedure lvItemsSelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
   private
     FProvider  : TJupiterDataProvider;
+
+    FBtnNewBtn  : Integer;
+    FBtnEditBtn : Integer;
+    FBtnDelBtn  : Integer;
 
     function  Internal_IfChecked(prValue1, prValue2 : String) : Boolean;
     function  InternalGetCheckMode : Boolean;
@@ -33,6 +38,9 @@ type
     procedure Internal_RefreshClick(Sender: TObject);
     procedure Internal_MarcarTodosClick(Sender: TObject);
     procedure Internal_DesmarcarTodosClick(Sender: TObject);
+    procedure Internal_NewClick(Sender: TObject);
+    procedure Internal_EditClick(Sender: TObject);
+    procedure Internal_DeleteClick(Sender: TObject);
     function  Internal_HideColumn(prColumnName : String) : Boolean;
     procedure Internal_CheckBoxChangeAll(prNewValue : Boolean);
   published
@@ -72,6 +80,22 @@ begin
     Self.Internal_OnClick(TJupiterVariableList(lvItems.Selected.Data));
   finally
     Self.UpdateForm;
+  end;
+end;
+
+procedure TFExplorer.lvItemsSelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
+var
+  vrEdit : Boolean;
+begin
+  if Self.CSVMode then
+  begin
+    vrEdit := Assigned(Item) and Assigned(Item.Data);
+
+    Self.Actions.GetActionButton(Self.FBtnEditBtn, sbActions).Enabled := vrEdit;
+    Self.Actions.GetActionButton(Self.FBtnDelBtn, sbActions).Enabled  := vrEdit;
+
+    Self.Actions.GetMenuItem(Self.FBtnEditBtn).Enabled := vrEdit;
+    Self.Actions.GetMenuItem(Self.FBtnDelBtn).Enabled  := vrEdit;
   end;
 end;
 
@@ -224,28 +248,38 @@ begin
     Self.Actions.Add(vrAction);
   end;
 
+  Self.FBtnNewBtn  := NULL_KEY;
+  Self.FBtnEditBtn := NULL_KEY;
+  Self.FBtnDelBtn  := NULL_KEY;
+
   if Self.CSVMode then
   begin
     vrAction      := TJupiterAction.Create('Novo', TJupiterRunnable.Create(''), nil);
     vrAction.Hint := 'Clique aqui para adicionar uma nova linha';
     vrAction.Icon := ICON_NEW;
-    vrAction.OnClick := @Internal_MarcarTodosClick;
+    vrAction.OnClick := @Internal_NewClick;
 
     Self.Actions.Add(vrAction);
+
+    Self.FBtnNewBtn := Self.Actions.Count - 1;
 
     vrAction      := TJupiterAction.Create('Editar', TJupiterRunnable.Create(''), nil);
     vrAction.Hint := 'Clique aqui para editar a linha atual';
     vrAction.Icon := ICON_EDIT;
-    vrAction.OnClick := @Internal_MarcarTodosClick;
+    vrAction.OnClick := @Internal_EditClick;
 
     Self.Actions.Add(vrAction);
+
+    Self.FBtnEditBtn := Self.Actions.Count - 1;
 
     vrAction      := TJupiterAction.Create('Excluir', TJupiterRunnable.Create(''), nil);
     vrAction.Hint := 'Clique aqui para excluir a linha atual';
     vrAction.Icon := ICON_DELETE;
-    vrAction.OnClick := @Internal_MarcarTodosClick;
+    vrAction.OnClick := @Internal_DeleteClick;
 
     Self.Actions.Add(vrAction);
+
+    Self.FBtnDelBtn := Self.Actions.Count - 1;
   end;
 
   if Self.Params.Exists('hint') then
@@ -371,6 +405,46 @@ begin
   finally
     Self.UpdateForm;
   end;
+end;
+
+procedure TFExplorer.Internal_NewClick(Sender: TObject);
+begin
+  Application.CreateForm(TFDynamicRecord, FDynamicRecord);
+  try
+    FDynamicRecord.IsModal := True;
+    FDynamicRecord.CurrentRecord := TJupiterCSVDataProvider(Self.Provider).BlankLine;
+
+    FDynamicRecord.ShowModal;
+  finally
+    FDynamicRecord.Release;
+    FreeAndNil(FDynamicRecord);
+  end;
+end;
+
+procedure TFExplorer.Internal_EditClick(Sender: TObject);
+begin
+  if not Assigned(lvItems.Selected) then
+    Exit;
+
+  if not Assigned(lvItems.Selected.Data) then
+    Exit;
+
+  Application.CreateForm(TFDynamicRecord, FDynamicRecord);
+  try
+    FDynamicRecord.IsModal := True;
+    FDynamicRecord.CurrentRecord := TJupiterDataProviderRow.Create;
+//    FDynamicRecord.CurrentRecord.Fields.CopyList(TJupiterVariableList(lvItems.Selected.Data));
+
+    FDynamicRecord.ShowModal;
+  finally
+    FDynamicRecord.Release;
+    FreeAndNil(FDynamicRecord);
+  end;
+end;
+
+procedure TFExplorer.Internal_DeleteClick(Sender: TObject);
+begin
+  //
 end;
 
 procedure TFExplorer.Internal_CheckBoxChangeAll(prNewValue : Boolean);

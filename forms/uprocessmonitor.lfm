@@ -1,0 +1,89 @@
+inherited FProcessMonitor: TFProcessMonitor
+  Left = 529
+  Top = 279
+  Caption = 'Monitor de processos'
+  OnActivate = FormActivate
+  OnClose = FormClose
+  object lvProcessList: TListView[3]
+    Left = 0
+    Height = 194
+    Top = 96
+    Width = 668
+    Align = alClient
+    Columns = <    
+      item
+        Caption = 'ID'
+        Width = 100
+      end    
+      item
+        Caption = 'Descrição'
+        Width = 400
+      end    
+      item
+        Caption = 'Comando'
+        Width = 400
+      end    
+      item
+        Caption = 'Status'
+        Width = 150
+      end    
+      item
+        Caption = 'Data/Hora início'
+        Width = 150
+      end    
+      item
+        Caption = 'Data/Hora fim'
+        Width = 150
+      end>
+    TabOrder = 3
+    ViewStyle = vsReport
+    OnKeyPress = FormKeyPress
+    OnKeyUp = FormKeyUp
+    OnSelectItem = lvProcessListSelectItem
+    OnUTF8KeyPress = FormUTF8KeyPress
+  end
+  object pnProcessSelector: TPanel[4]
+    Left = 0
+    Height = 36
+    Top = 60
+    Width = 668
+    Align = alTop
+    BevelOuter = bvNone
+    ClientHeight = 36
+    ClientWidth = 668
+    TabOrder = 4
+    object cbNotStarted: TCheckBox
+      Left = 16
+      Height = 19
+      Top = 8
+      Width = 145
+      Caption = 'Processos não iniciados'
+      TabOrder = 0
+    end
+    object cbRunning: TCheckBox
+      Left = 192
+      Height = 19
+      Top = 8
+      Width = 82
+      Caption = 'Executando'
+      Checked = True
+      State = cbChecked
+      TabOrder = 1
+    end
+    object cbFinished: TCheckBox
+      Left = 304
+      Height = 19
+      Top = 8
+      Width = 73
+      Caption = 'Finalizado'
+      TabOrder = 2
+    end
+  end
+  inherited ppMenu: TPopupMenu[5]
+  end
+  object tmrUpdateScreen: TTimer[6]
+    OnTimer = tmrUpdateScreenTimer
+    Left = 392
+    Top = 136
+  end
+end

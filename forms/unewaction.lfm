@@ -10,98 +10,111 @@ inherited FNewAction: TFNewAction
     Width = 906
   end
   inherited sbStatus: TStatusBar
-    Top = 583
+    Top = 579
     Width = 906
   end
   inherited pnHint: TPanel
-    Top = 533
+    Top = 529
     Width = 906
     ClientWidth = 906
   end
   inherited sbBody: TScrollBox
-    Height = 473
-    Top = 60
+    Height = 469
     Width = 906
-    HorzScrollBar.Page = 733
-    VertScrollBar.Page = 214
-    ClientHeight = 471
-    ClientWidth = 904
+    HorzScrollBar.Page = 582
+    VertScrollBar.Page = 208
+    ClientHeight = 465
+    ClientWidth = 902
     object edTitle: TEdit[0]
       Left = 8
-      Height = 34
+      Height = 23
       Top = 34
-      Width = 876
+      Width = 874
       Anchors = [akTop, akLeft, akRight]
+      OnKeyPress = FormKeyPress
+      OnKeyUp = FormKeyUp
+      OnUTF8KeyPress = FormUTF8KeyPress
       TabOrder = 0
     end
     object Label2: TLabel[1]
       Left = 8
-      Height = 17
+      Height = 15
       Top = 10
-      Width = 39
+      Width = 30
       Caption = 'Título'
+      ParentColor = False
       ParentFont = False
     end
     object edHint: TEdit[2]
       Left = 8
-      Height = 34
+      Height = 23
       Top = 104
-      Width = 876
+      Width = 874
       Anchors = [akTop, akLeft, akRight]
+      OnKeyPress = FormKeyPress
+      OnKeyUp = FormKeyUp
+      OnUTF8KeyPress = FormUTF8KeyPress
       TabOrder = 1
     end
     object Label3: TLabel[3]
       Left = 8
-      Height = 17
+      Height = 15
       Top = 80
-      Width = 29
+      Width = 23
       Caption = 'Dica'
+      ParentColor = False
       ParentFont = False
     end
     object PageControl1: TPageControl[4]
       Left = 8
-      Height = 203
+      Height = 197
       Top = 256
-      Width = 876
+      Width = 874
       ActivePage = TabSheet1
       Anchors = [akTop, akLeft, akRight, akBottom]
       TabIndex = 0
       TabOrder = 2
       object TabSheet1: TTabSheet
         Caption = 'Executar arquivo/Diretório'
-        ClientHeight = 172
+        ClientHeight = 169
         ClientWidth = 866
         object edRunnableFile: TEdit
           Left = 8
-          Height = 34
+          Height = 23
           Top = 34
           Width = 846
           Anchors = [akTop, akLeft, akRight]
+          OnKeyPress = FormKeyPress
+          OnKeyUp = FormKeyUp
+          OnUTF8KeyPress = FormUTF8KeyPress
           TabOrder = 0
         end
         object Label4: TLabel
           Left = 8
-          Height = 17
+          Height = 15
           Top = 10
-          Width = 119
+          Width = 93
           Caption = 'Arquivo/Diretório'
+          ParentColor = False
           ParentFont = False
         end
         object Label1: TLabel
           Left = 8
-          Height = 17
+          Height = 15
           Top = 72
-          Width = 715
+          Width = 566
           Caption = 'Adicione aqui um comando ou arquivo/diretório a ser executado. Você pode utilizar as variávies de sistema.'
+          ParentColor = False
         end
       end
     end
     object Label5: TLabel[5]
       Left = 12
-      Height = 17
+      Height = 15
       Top = 152
-      Width = 36
+      Width = 29
       Caption = 'Ícone'
+      ParentColor = False
     end
     object sbIcon: TSpeedButton[6]
       Left = 12
@@ -111,26 +124,29 @@ inherited FNewAction: TFNewAction
     end
     object seIcon: TSpinEdit[7]
       Left = 54
-      Height = 34
+      Height = 23
       Top = 180
       Width = 50
       OnChange = seIconChange
+      OnKeyPress = FormKeyPress
+      OnKeyUp = FormKeyUp
       TabOrder = 3
     end
     object Label6: TLabel[8]
       Left = 184
-      Height = 17
+      Height = 15
       Top = 152
-      Width = 37
+      Width = 27
       Caption = 'Flags'
       Font.Style = [fsBold]
+      ParentColor = False
       ParentFont = False
     end
     object cbConfirmBeforeRun: TCheckBox[9]
       Left = 184
-      Height = 23
+      Height = 19
       Top = 180
-      Width = 220
+      Width = 174
       Caption = 'Confirmar antes de executar?'
       TabOrder = 4
     end

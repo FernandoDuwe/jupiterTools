@@ -11,17 +11,15 @@
       <UseXPManifest Value="True"/>
       <XPManifest>
         <DpiAware Value="True"/>
-        <ExecutionLevel Value="requireAdministrator"/>
         <TextDesc Value="Hub de Aplicações Jupiter"/>
       </XPManifest>
       <Icon Value="0"/>
     </General>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
-      <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="2"/>
       <MinorVersionNr Value="1"/>
-      <BuildNr Value="17"/>
+      <BuildNr Value="20"/>
       <Language Value="0416"/>
       <StringTable CompanyName="Jupiter Studios" FileDescription="Jupiter" InternalName="Jupiter" ProductName="Jupiter"/>
     </VersionInfo>
@@ -328,6 +326,40 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="jupiterScriptFunctions"/>
       </Unit>
+      <Unit>
+        <Filename Value="forms\udynamicrecord.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FDynamicRecord"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uDynamicRecord"/>
+      </Unit>
+      <Unit>
+        <Filename Value="Commons\jupiterthread.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterThread"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms\uprocessmonitor.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FProcessMonitor"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uProcessMonitor"/>
+      </Unit>
+      <Unit>
+        <Filename Value="Commons\jupiterstream.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterStream"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms\uprompt.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FPrompt"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uPrompt"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -343,7 +375,6 @@
     </SearchPaths>
     <Linking>
       <Debugging>
-        <GenerateDebugInfo Value="False"/>
         <DebugInfoType Value="dsDwarf2Set"/>
       </Debugging>
       <Options>

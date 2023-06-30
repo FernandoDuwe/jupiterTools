@@ -22,6 +22,7 @@ type
     FPanel       : TPanel;
     FPanelButton : TPanel;
     FButtonTop   : Integer;
+    FOnKeyUp     : TKeyEvent;
 
     FEdit : TEdit;
     FCmb  : TComboBox;
@@ -44,6 +45,8 @@ type
     property TabOrder    : Integer read FTabOrder write FTabOrder default 1;
     property Variable    : TJupiterVariableForm read FVariable write FVariable;
     property Value       : String read Internal_GetValue;
+
+    property OnKeyUp : TKeyEvent read FOnKeyUp write FOnKeyUp;
   public
     procedure Draw(prOwner : TScrollBox);
   end;
@@ -164,7 +167,7 @@ begin
   vrSufix := EmptyStr;
 
   if Self.Variable.ReadOnly then
-    vrSufix := ' ^';
+    vrSufix := ' º';
 
   if Self.Variable.Required then
     vrSufix := ' *';
@@ -193,6 +196,7 @@ begin
   Result.TabOrder := 1;
   Result.TabStop  := True;
   Result.Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+  Result.OnKeyUp   := Self.OnKeyUp;
 
   Result.OnDblClick := @Internal_CopyButtonDbClick;
 

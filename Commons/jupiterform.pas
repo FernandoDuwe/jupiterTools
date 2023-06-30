@@ -6,8 +6,9 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, Buttons,
-  ComCtrls, StdCtrls, Menus, JupiterRoute, JupiterConsts, JupiterVariable,
-  JupiterAction, JupiterFormGenerator, JupiterGeneratorForm, jupiterformutils;
+  ComCtrls, StdCtrls, Menus, ActnList, JupiterRoute, JupiterConsts,
+  JupiterVariable, JupiterAction, JupiterFormGenerator, JupiterGeneratorForm,
+  jupiterformutils, LCLType;
 
 type
 
@@ -26,33 +27,39 @@ type
     procedure FormActivate(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure FormKeyPress(Sender: TObject; var Key: char);
+    procedure FormKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure FormUTF8KeyPress(Sender: TObject; var UTF8Key: TUTF8Char);
     procedure miEditGeneratorClick(Sender: TObject);
     procedure miFormParamsClick(Sender: TObject);
     procedure miRefreshClick(Sender: TObject);
     procedure miViewParamsClick(Sender: TObject);
   private
-    FActions    : TJupiterActionList;
-    FParams     : TJupiterVariableList;
-    FRoute      : TJupiterRoute;
-    FGenerator  : TJupiterGeneratorForm;
-    FHint       : String;
-    FSearchText : String;
-    FPrepared   : Boolean;
-    FIsModal    : Boolean;
+    FActions     : TJupiterActionList;
+    FParams      : TJupiterVariableList;
+    FRoute       : TJupiterRoute;
+    FGenerator   : TJupiterGeneratorForm;
+    FHint        : String;
+    FSearchText  : String;
+    FPrepared    : Boolean;
+    FIsModal     : Boolean;
+    FSpecialSize : Boolean;
 
     FSaveGeneratorAction : TJupiterAction;
 
     procedure Internal_SetHint(prHint : String);
   published
-    property Actions    : TJupiterActionList    read FActions   write FActions;
-    property Hint       : String                read FHint      write Internal_SetHint;
-    property IsModal    : Boolean               read FIsModal   write FIsModal;
-    property Prepared   : Boolean               read FPrepared  write FPrepared;
-    property Params     : TJupiterVariableList  read FParams    write FParams;
-    property Route      : TJupiterRoute         read FRoute     write FRoute;
-    property Generator  : TJupiterGeneratorForm read FGenerator write FGenerator;
-    property SearchText : String                read FSearchText;
+    property Actions     : TJupiterActionList    read FActions     write FActions;
+    property Hint        : String                read FHint        write Internal_SetHint;
+    property IsModal     : Boolean               read FIsModal     write FIsModal;
+    property Prepared    : Boolean               read FPrepared    write FPrepared;
+    property Params      : TJupiterVariableList  read FParams      write FParams;
+    property Route       : TJupiterRoute         read FRoute       write FRoute;
+    property Generator   : TJupiterGeneratorForm read FGenerator   write FGenerator;
+    property SearchText  : String                read FSearchText;
+    property SpecialSize : Boolean               read FSpecialSize write FSpecialSize;
 
     property SaveGeneratorAction : TJupiterAction read FSaveGeneratorAction write FSaveGeneratorAction;
   protected
@@ -87,7 +94,8 @@ end;
 
 procedure TFJupiterForm.FormCreate(Sender: TObject);
 begin
-  Self.FPrepared := False;
+  Self.FSpecialSize := False;
+  Self.FPrepared    := False;
 
   Self.FActions   := TJupiterActionList.Create;
   Self.FParams    := TJupiterVariableList.Create;
@@ -110,12 +118,66 @@ begin
   FreeAndNil(Self.FSaveGeneratorAction);
 end;
 
+procedure TFJupiterForm.FormKeyPress(Sender: TObject; var Key: char);
+begin
+
+end;
+
+procedure TFJupiterForm.FormKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  try
+    if Key = VK_F1 then
+      Self.Actions.GetActionButton(0, sbActions).Click;
+
+    if Key = VK_F2 then
+      Self.Actions.GetActionButton(1, sbActions).Click;
+
+    if Key = VK_F3 then
+      Self.Actions.GetActionButton(2, sbActions).Click;
+
+    if Key = VK_F4 then
+      Self.Actions.GetActionButton(3, sbActions).Click;
+
+    if Key = VK_F5 then
+      Self.Actions.GetActionButton(4, sbActions).Click;
+
+    if Key = VK_F6 then
+      Self.Actions.GetActionButton(5, sbActions).Click;
+
+    if Key = VK_F7 then
+      Self.Actions.GetActionButton(6, sbActions).Click;
+
+    if Key = VK_F8 then
+      Self.Actions.GetActionButton(7, sbActions).Click;
+
+    if Key = VK_F9 then
+      Self.Actions.GetActionButton(8, sbActions).Click;
+
+    if Key = VK_F10 then
+      Self.Actions.GetActionButton(9, sbActions).Click;
+
+    if Key = VK_F11 then
+      Self.Actions.GetActionButton(10, sbActions).Click;
+
+    if Key = VK_F12 then
+      Self.Actions.GetActionButton(11, sbActions).Click;
+  except
+  end;
+end;
+
+procedure TFJupiterForm.FormResize(Sender: TObject);
+begin
+  if Self.Prepared then
+    Self.FActions.UpdateActions(sbActions);
+end;
+
 procedure TFJupiterForm.FormShow(Sender: TObject);
 begin
   try
     Self.PrepareForm;
 
-    if Self.IsModal then
+    if ((Self.IsModal) and (not Self.SpecialSize)) then
     begin
       if vrJupiterApp.Params.Exists('Interface.Form.ModalShowMaximized') then
         Self.WindowState := wsMaximized
@@ -132,6 +194,47 @@ begin
   finally
     Self.UpdateForm;
   end;
+end;
+
+procedure TFJupiterForm.FormUTF8KeyPress(Sender: TObject; var UTF8Key: TUTF8Char);
+begin
+  Exit;
+
+  if UTF8Key = #112 then
+    Self.Actions.GetActionButton(0, sbActions).Click;
+
+  if UTF8Key = #113 then
+    Self.Actions.GetActionButton(1, sbActions).Click;
+
+  if UTF8Key = #114 then
+    Self.Actions.GetActionButton(2, sbActions).Click;
+
+  if UTF8Key = #115 then
+    Self.Actions.GetActionButton(3, sbActions).Click;
+
+  if UTF8Key = #116 then
+    Self.Actions.GetActionButton(4, sbActions).Click;
+
+  if UTF8Key = #117 then
+    Self.Actions.GetActionButton(5, sbActions).Click;
+
+  if UTF8Key = #118 then
+    Self.Actions.GetActionButton(6, sbActions).Click;
+
+  if UTF8Key = #119 then
+    Self.Actions.GetActionButton(7, sbActions).Click;
+
+  if UTF8Key = #120 then
+    Self.Actions.GetActionButton(8, sbActions).Click;
+
+  if UTF8Key = #121 then
+    Self.Actions.GetActionButton(9, sbActions).Click;
+
+  if UTF8Key = #122 then
+    Self.Actions.GetActionButton(10, sbActions).Click;
+
+  if UTF8Key = #123 then
+    Self.Actions.GetActionButton(11, sbActions).Click;
 end;
 
 procedure TFJupiterForm.miEditGeneratorClick(Sender: TObject);

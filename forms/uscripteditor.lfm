@@ -39,6 +39,7 @@ inherited FScriptEditor: TFScriptEditor
         Width = 1076
         Align = alClient
         ReadOnly = True
+        ScrollBars = ssAutoBoth
         TabOrder = 0
       end
     end
@@ -52,6 +53,7 @@ inherited FScriptEditor: TFScriptEditor
         Top = 0
         Width = 1076
         Align = alClient
+        ScrollBars = ssAutoBoth
         TabOrder = 0
       end
     end
@@ -65,23 +67,8 @@ inherited FScriptEditor: TFScriptEditor
         Top = 0
         Width = 1076
         Align = alClient
-        Lines.Strings = (
-          'procedure Writeln(prMessage : String);'
-          'function Readln: String;'
-          'function InputText(prMessage : String) : String;'
-          'procedure AddLogMessage(prTitle, prDescription : String);'
-          'procedure ShowPopup(prTitle, prDescription : String);'
-          'function RunCommandLine(prCommandLine: String) : String;'
-          'procedure RunCommandLineNoWait(prCommandLine: String);'
-          'procedure Runnable(prCommandLine: String);'
-          'function LoadFromFile(prFileName : String) : String;'
-          'procedure SaveToFile(prFileName, prData : String);'
-          'procedure AddConfiguration(prID, prValue, prTitle : String);'
-          'procedure AddVariable(prID, prValue, prTitle : String);'
-          'function VariableExists(prVariableID : String) : Boolean;'
-          'function VariableValueByID(prVariableID : String) : String;'
-        )
         ReadOnly = True
+        ScrollBars = ssAutoBoth
         TabOrder = 0
       end
     end
@@ -109,6 +96,9 @@ inherited FScriptEditor: TFScriptEditor
     ParentFont = False
     PopupMenu = ppMenu
     TabOrder = 5
+    OnKeyPress = FormKeyPress
+    OnKeyUp = FormKeyUp
+    OnUTF8KeyPress = FormUTF8KeyPress
     Gutter.Width = 57
     Gutter.MouseActions = <>
     RightGutter.Width = 0
@@ -604,23 +594,6 @@ inherited FScriptEditor: TFScriptEditor
     Top = 136
   end
   object SynAutoComplete1: TSynAutoComplete[8]
-    AutoCompleteList.Strings = (
-      'AddConfiguration('''', '''', '''');'
-      'AddLogMessage('''', '''');'
-      'AddVariable('''', '''', '''');'
-      'Application'
-      'InputText('''');'
-      'LoadFromFile('''');'
-      'WriteLn('''');'
-      'Readln();'
-      'RunCommandLine('''');'
-      'RunCommandLineNoWait('''');'
-      'Runnable('''');'
-      'SaveToFile('''', '''');'
-      'ShowPopup('''', '''');'
-      'VariableExists('''')'
-      'VariableValueByID('''')'
-    )
     EndOfTokenChr = '()[].'
     ShortCut = 8224
     ExecCommandID = ecSynAutoCompletionExecute
@@ -629,28 +602,11 @@ inherited FScriptEditor: TFScriptEditor
     Top = 136
   end
   object SynCompletion1: TSynCompletion[9]
-    ItemList.Strings = (
-      'AddConfiguration('''', '''', '''');'
-      'AddLogMessage('''', '''');'
-      'AddVariable('''', '''', '''');'
-      'Application'
-      'InputText('''');'
-      'LoadFromFile('''');'
-      'WriteLn('''');'
-      'Readln();'
-      'RunCommandLine('''');'
-      'RunCommandLineNoWait('''');'
-      'Runnable('''');'
-      'SaveToFile('''', '''');'
-      'ShowPopup('''', '''');'
-      'VariableExists('''')'
-      'VariableValueByID('''')'
-    )
-    Position = 0
-    LinesInWindow = 6
+    Position = -1
+    LinesInWindow = 15
     SelectedColor = clHighlight
     CaseSensitive = False
-    Width = 262
+    Width = 400
     AutoUseSingleIdent = True
     ShortCut = 16416
     EndOfTokenChr = '()[].'

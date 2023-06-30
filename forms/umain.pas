@@ -9,18 +9,27 @@ uses
   StdCtrls, Menus, PopupNotifier, Buttons, JupiterApp, JupiterRoute,
   JupiterConsts, JupiterObject, JupiterForm, JupiterAction, JupiterEnviroment,
   JupiterRunnable, jupiterformutils, JupiterFileDataProvider, jupiterScript,
-  JupiterToolsModule, uPSComponent_Default, LMessages, PairSplitter;
+  JupiterToolsModule, uPSComponent_Default, LMessages, PairSplitter, ActnList;
 
 type
 
   { TFMain }
 
   TFMain = class(TFJupiterForm)
+    acPrompt: TAction;
+    acShortcuts: TActionList;
+    acMenu: TAction;
+    acChangeSearchAction: TAction;
     ApplicationProperties1: TApplicationProperties;
     cbNavigationMenu: TCoolBar;
     edSearch: TEdit;
     ilIconFamily: TImageList;
     MenuItem1: TMenuItem;
+    MenuItem6: TMenuItem;
+    MenuItem7: TMenuItem;
+    MenuItem8: TMenuItem;
+    Separator6: TMenuItem;
+    miSearchMode: TMenuItem;
     miNewCheckList: TMenuItem;
     miPastaAssets: TMenuItem;
     miMaximizedForms: TMenuItem;
@@ -63,6 +72,7 @@ type
     tbMenu: TToolButton;
     tbOptions: TToolBar;
     TbSystemBar: TToolButton;
+    tmInternalThread: TTimer;
     tmSearch: TTimer;
     tbSearch: TToolBar;
     tbSystemButtons: TToolBar;
@@ -70,15 +80,24 @@ type
     ToolButton1: TToolButton;
     tbMessage: TToolButton;
     ToolButton2: TToolButton;
+    tbPrompt: TToolButton;
     tvMenu: TTreeView;
+    procedure acChangeSearchActionExecute(Sender: TObject);
+    procedure acMenuExecute(Sender: TObject);
+    procedure acPromptExecute(Sender: TObject);
+    procedure ApplicationProperties1Activate(Sender: TObject);
     procedure ApplicationProperties1Restore(Sender: TObject);
     procedure cbNavigationMenuChange(Sender: TObject);
     procedure edSearchChange(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure FormShortCut(var Msg: TLMKey; var Handled: Boolean);
     procedure FormShow(Sender: TObject);
     procedure MenuItem1Click(Sender: TObject);
     procedure MenuItem6Click(Sender: TObject);
+    procedure MenuItem8Click(Sender: TObject);
+    procedure miSearchModeClick(Sender: TObject);
     procedure miAutoUpdateClick(Sender: TObject);
     procedure miClearSearchClick(Sender: TObject);
     procedure miPastaAssetsClick(Sender: TObject);
@@ -104,11 +123,16 @@ type
     procedure tbHomeClick(Sender: TObject);
     procedure tbMenuClick(Sender: TObject);
     procedure tbMessageClick(Sender: TObject);
+    procedure tbPromptClick(Sender: TObject);
+    procedure tmInternalThreadTimer(Sender: TObject);
     procedure tmSearchTimer(Sender: TObject);
     procedure ToolButton1Click(Sender: TObject);
     procedure ToolButton2Click(Sender: TObject);
+    procedure tvMenuChange(Sender: TObject; Node: TTreeNode);
     procedure tvMenuClick(Sender: TObject);
   private
+    FSearchMode : TJupiterSearchMode;
+
     procedure Internal_ListMenuItens;
     procedure Internal_GetExternalIcons;
 
@@ -132,7 +156,7 @@ implementation
 
 {$R *.lfm}
 
-uses LCLType, JupiterDialogForm;
+uses LCLType, JupiterDialogForm, StrUtils;
 
 { TFMain }
 
@@ -155,10 +179,39 @@ begin
   vrJupiterApp.NavigateTo(TJupiterRoute.Create(MESSAGES_PATH), True);
 end;
 
+procedure TFMain.tbPromptClick(Sender: TObject);
+begin
+  vrJupiterApp.NavigateTo(TJupiterRoute.Create(PROMPT_FORM_PATH), True);
+end;
+
+procedure TFMain.tmInternalThreadTimer(Sender: TObject);
+begin
+  tmInternalThread.Enabled := False;
+  try
+    if vrJupiterApp.Params.Exists('Jupiter.Standard.Triggers.OnExecuteCurrentThread') then
+          if Trim(vrJupiterApp.Params.VariableById('Jupiter.Standard.Triggers.OnExecuteCurrentThread').Value) <> EmptyStr then
+             vrJupiterApp.Threads.NewThread('Gatilho: Thread interna', TJupiterRunnable.Create(vrJupiterApp.Params.VariableById('Jupiter.Standard.Triggers.OnExecuteCurrentThread').Value));
+  finally
+    tmInternalThread.Enabled := True;
+  end;
+end;
+
 procedure TFMain.tmSearchTimer(Sender: TObject);
 begin
-  if Assigned(vrJupiterApp.CurrentForm) then
-    vrJupiterApp.CurrentForm.Search(edSearch.Text);
+  if Self.FSearchMode = jsmForm then
+  begin
+    if Assigned(vrJupiterApp.CurrentForm) then
+      vrJupiterApp.CurrentForm.Search(edSearch.Text);
+  end
+  else
+  begin
+    if Trim(edSearch.Text) <> EmptyStr then
+    begin
+      Self.Internal_ListMenuItens;
+
+      SearchOnTreeView(tvMenu, edSearch.Text);
+    end;
+  end;
 
   tmSearch.Enabled := False;
 end;
@@ -175,6 +228,11 @@ begin
   vrJupiterApp.NavigateTo(TJupiterRoute.Create(CONFIG_PATH), True);
 end;
 
+procedure TFMain.tvMenuChange(Sender: TObject; Node: TTreeNode);
+begin
+  tvMenuClick(Sender);
+end;
+
 procedure TFMain.FormShortCut(var Msg: TLMKey; var Handled: Boolean);
 begin
 
@@ -188,7 +246,36 @@ end;
 procedure TFMain.ApplicationProperties1Restore(Sender: TObject);
 begin
   if miAutoUpdate.Checked then
+  begin
     Self.UpdateForm;
+
+    if vrJupiterApp.Params.Exists('Jupiter.Standard.Triggers.OnUpdate') then
+      if Trim(vrJupiterApp.Params.VariableById('Jupiter.Standard.Triggers.OnUpdate').Value) <> EmptyStr then
+        vrJupiterApp.Threads.NewThread('Gatilho: Ao atualizar a aplicação', TJupiterRunnable.Create(vrJupiterApp.Params.VariableById('Jupiter.Standard.Triggers.OnUpdate').Value));
+  end;
+end;
+
+procedure TFMain.ApplicationProperties1Activate(Sender: TObject);
+begin
+
+end;
+
+procedure TFMain.acPromptExecute(Sender: TObject);
+begin
+  tbPrompt.Click;
+end;
+
+procedure TFMain.acMenuExecute(Sender: TObject);
+begin
+  tbMenu.Click;
+end;
+
+procedure TFMain.acChangeSearchActionExecute(Sender: TObject);
+begin
+  miSearchMode.Click;
+
+  if edSearch.CanFocus then
+    edSearch.SetFocus;
 end;
 
 procedure TFMain.edSearchChange(Sender: TObject);
@@ -197,8 +284,28 @@ begin
   tmSearch.Enabled := True;
 end;
 
+procedure TFMain.FormActivate(Sender: TObject);
+begin
+  inherited;
+
+  FormResize(Sender);
+
+  ApplicationProperties1Restore(Sender);
+end;
+
+procedure TFMain.FormCreate(Sender: TObject);
+begin
+  inherited;
+
+  Self.FSearchMode := jsmForm;
+end;
+
 procedure TFMain.FormResize(Sender: TObject);
 begin
+  cbNavigationMenu.Bands[1].Width := (Self.Width - ( (FORM_MARGIN_LEFT * 4) +
+                                                    cbNavigationMenu.Bands[0].Width +
+                                                    cbNavigationMenu.Bands[2].Width));
+
   if Assigned(vrJupiterApp.CurrentForm) then
   begin
     vrJupiterApp.CurrentForm.Repaint;
@@ -221,6 +328,14 @@ begin
   vrJupiterApp.NavigateTo(TJupiterRoute.Create(ROOT_FORM_PATH), False);
 
   miNewCheckList.OnClick := @miNewCheckListClick;
+
+  if vrJupiterApp.Params.Exists('Jupiter.Standard.Triggers.OnStart') then
+    if Trim(vrJupiterApp.Params.VariableById('Jupiter.Standard.Triggers.OnStart').Value) <> EmptyStr then
+      vrJupiterApp.Threads.NewThread('Gatilho: Ao iniciar a aplicação', TJupiterRunnable.Create(vrJupiterApp.Params.VariableById('Jupiter.Standard.Triggers.OnStart').Value));
+
+  if vrJupiterApp.Params.Exists('Jupiter.Standard.Triggers.OnExecuteCurrentThread') then
+        if Trim(vrJupiterApp.Params.VariableById('Jupiter.Standard.Triggers.OnExecuteCurrentThread').Value) <> EmptyStr then
+           tmInternalThread.Enabled := True;
 end;
 
 procedure TFMain.MenuItem1Click(Sender: TObject);
@@ -272,6 +387,23 @@ begin
     end;
   finally
     FreeAndNil(vrEnviroment);
+  end;
+end;
+
+procedure TFMain.MenuItem8Click(Sender: TObject);
+begin
+  vrJupiterApp.NavigateTo(TJupiterRoute.Create(PROCESS_MONITOR_PATH), True);
+end;
+
+procedure TFMain.miSearchModeClick(Sender: TObject);
+begin
+  try
+    if Self.FSearchMode = jsmForm then
+      Self.FSearchMode := jsmActions
+    else
+      Self.FSearchMode := jsmForm;
+  finally
+    Self.UpdateForm;
   end;
 end;
 
@@ -653,7 +785,7 @@ begin
   begin
     tbMenu.ImageIndex := ICON_LEFT;
 
-    tbMenu.Hint := 'Esconder menu';
+    tbMenu.Hint := 'Esconder menu (Ctrl + L)';
 
     Self.Internal_ListMenuItens();
   end
@@ -661,8 +793,11 @@ begin
   begin
     tbMenu.ImageIndex := ICON_RIGHT;
 
-    tbMenu.Hint := 'Exibir menu';
+    tbMenu.Hint := 'Exibir menu (Ctrl + L)';
   end;
+
+  edSearch.TextHint := IfThen(Self.FSearchMode = jsmActions, 'Pesquisar no menu', 'Pesquisar');
+  miSearchMode.Caption := IfThen(Self.FSearchMode = jsmActions, 'Pesquisa: Menu (Ctrl + S)', 'Pesquisa: Formularios (Ctrl + S)');
 
   miMaximizedForms.Checked := vrJupiterApp.Params.Exists('Interface.Form.ModalShowMaximized');
 

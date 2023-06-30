@@ -33,6 +33,10 @@ inherited FExplorer: TFExplorer
     TabOrder = 1
     ViewStyle = vsReport
     OnDblClick = lvItemsDblClick
+    OnKeyPress = FormKeyPress
+    OnKeyUp = FormKeyUp
+    OnSelectItem = lvItemsSelectItem
+    OnUTF8KeyPress = FormUTF8KeyPress
   end
   inherited ppMenu: TPopupMenu[4]
   end

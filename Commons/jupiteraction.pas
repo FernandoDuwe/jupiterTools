@@ -67,6 +67,7 @@ type
     procedure CopyFromList(prCopyList : TJupiterActionList; prOnBeforeExecute : TJupiterAction = nil);
 
     procedure BuildActions(prOwner : TScrollBox);
+    procedure UpdateActions(prOwner : TScrollBox);
 
     function GetActionButton(prActionIndex : Integer; prOwner : TScrollBox) : TBitBtn;
     function GetMenuItem(prActionIndex : Integer) : TMenuItem;
@@ -99,12 +100,18 @@ function TJupiterActionList.Internal_CreateButton(prAction: TJupiterAction; prIn
 var
   vrWidth : Integer;
   vrPopupMenu : TMenuItem;
+  vrShortcutButton : String;
 begin
+  vrShortcutButton := EmptyStr;
+
+  if (prIndex < 12) then
+    vrShortcutButton := Format(' (F%0:d)', [prIndex + 1]);
+
   Result            := TBitBtn.Create(prOwner);
   Result.Parent     := prOwner;
   Result.Top        := FORM_MARGIN_TOP;
-  Result.Caption    := prAction.Title;
-  Result.Hint       := prAction.Hint;
+  Result.Caption    := prAction.Title + vrShortcutButton;
+  Result.Hint       := prAction.Hint + vrShortcutButton;
   Result.ShowHint   := Trim(prAction.Hint) <> EmptyStr;
   Result.ImageIndex := prAction.Icon;
   Result.Left       := prLeft;
@@ -114,7 +121,6 @@ begin
     Result.Images := vrJupiterApp.MainIcons;
 
   Result.AutoSize := True;
-  Application.ProcessMessages;
 
   vrWidth := Result.Width;
 
@@ -179,6 +185,7 @@ var
   vrVez       : Integer;
   vrSpeed     : TBitBtn;
   vrPopupMenu : TMenuItem;
+  vrRight     : Integer;
 begin
   if Self.Size = 0 then
     Exit;
@@ -196,6 +203,29 @@ begin
 
     vrLeft := vrSpeed.Left + vrSpeed.Width + FORM_MARGIN_LEFT;
   end;
+
+  // Se o último botão estiver mais longe que o tamanho da tela, aumenta o scrollbox
+  if vrLeft > prOwner.Width then
+    prOwner.Height := prOwner.Height + 20;
+end;
+
+procedure TJupiterActionList.UpdateActions(prOwner: TScrollBox);
+var
+  vrLastButton : TBitBtn;
+  vrLeft : Integer;
+begin
+  if Self.Count = 0 then
+    Exit;
+
+  vrLastButton := Self.GetActionButton(Self.Count - 1, prOwner);
+
+  vrLeft :=  vrLastButton.Left + vrLastButton.Width + FORM_MARGIN_LEFT;
+
+  // Se o último botão estiver mais longe que o tamanho da tela, aumenta o scrollbox
+  if vrLeft > prOwner.Width then
+    prOwner.Height := 80
+  else
+    prOwner.Height := 60;
 end;
 
 function TJupiterActionList.GetActionButton(prActionIndex: Integer; prOwner: TScrollBox): TBitBtn;

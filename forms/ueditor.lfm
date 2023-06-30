@@ -1,17 +1,6 @@
 inherited FEditor: TFEditor
   Left = 517
   OnShow = FormShow
-  inherited sbStatus: TStatusBar
-    Height = 23
-    Top = 356
-  end
-  inherited pnHint: TPanel
-    Top = 290
-    inherited lbHelp: TLabel
-      Height = 15
-      Width = 35
-    end
-  end
   inline seEditor: TSynEdit[3]
     Left = 0
     Height = 230
@@ -26,6 +15,9 @@ inherited FEditor: TFEditor
     ParentFont = False
     PopupMenu = ppMenu
     TabOrder = 3
+    OnKeyPress = FormKeyPress
+    OnKeyUp = FormKeyUp
+    OnUTF8KeyPress = FormUTF8KeyPress
     Gutter.Width = 57
     Gutter.MouseActions = <>
     RightGutter.Width = 0

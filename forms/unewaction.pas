@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ComCtrls,
   Buttons, EditBtn, FileCtrl, ShellCtrls, Arrow, Spin, uCustomJupiterForm,
-  uMain, JupiterAction, JupiterConsts, JupiterRunnable;
+  uMain, JupiterAction, JupiterConsts, JupiterRunnable, LCLType;
 
 type
 
@@ -28,6 +28,7 @@ type
     sbIcon: TSpeedButton;
     seIcon: TSpinEdit;
     TabSheet1: TTabSheet;
+    procedure edTitleUTF8KeyPress(Sender: TObject; var UTF8Key: TUTF8Char);
     procedure FormCreate(Sender: TObject);
     procedure seIconChange(Sender: TObject);
   private
@@ -49,8 +50,6 @@ var
 
 implementation
 
-uses LCLType;
-
 {$R *.lfm}
 
 { TFNewAction }
@@ -62,6 +61,12 @@ begin
   Self.ActionIndex := NULL_KEY;
 
   Self.IsModal := True;
+end;
+
+procedure TFNewAction.edTitleUTF8KeyPress(Sender: TObject;
+  var UTF8Key: TUTF8Char);
+begin
+
 end;
 
 procedure TFNewAction.seIconChange(Sender: TObject);

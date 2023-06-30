@@ -7,7 +7,8 @@ interface
 uses
   Classes, JupiterModule, JupiterRoute, JupiterObject, JupiterAction,
   JupiterConsts, JupiterApp, JupiterEnviroment, JupiterCSVDataProvider,
-  JupiterDirectoryDataProvider, JupiterFileDataProvider, SysUtils;
+  JupiterDirectoryDataProvider, JupiterFileDataProvider, JupiterRunnable,
+  SysUtils;
 
 type
 
@@ -96,6 +97,10 @@ begin
   vrValue := StringReplace(vrValue, GetDirectorySeparator, ';', [rfReplaceAll, rfIgnoreCase]);
 
   Self.SetCurrentTask(GetCSVColumn(vrValue, 0), GetCSVColumn(vrValue, 1), prNewValue);
+  
+  if vrJupiterApp.Params.Exists('Jupiter.Standard.Triggers.OnChangeTask') then
+		if Trim(vrJupiterApp.Params.VariableById('Jupiter.Standard.Triggers.OnChangeTask').Value) <> EmptyStr then
+		   vrJupiterApp.Threads.NewThread('Gatilho: Ao alterar a tarefa atual', TJupiterRunnable.Create(vrJupiterApp.Params.VariableById('Jupiter.Standard.Triggers.OnChangeTask').Value));  
 end;
 
 procedure TJupiterToolsModule.Internal_ListLibrary(prDir : String; var prList: TJupiterObjectList);
@@ -406,7 +411,13 @@ begin
     Result := vrEnviroment.CreatePath(prTaskName);
 
     if prAsCurrentTask then
+    begin
        Self.Params.AddConfig(Self.DefineParamName('Tasks.Current.Path'), Result, 'Diretório da tarefa atual');
+
+      if vrJupiterApp.Params.Exists('Jupiter.Standard.Triggers.OnChangeTask') then
+            if Trim(vrJupiterApp.Params.VariableById('Jupiter.Standard.Triggers.OnChangeTask').Value) <> EmptyStr then
+               vrJupiterApp.Threads.NewThread('Gatilho: Ao alterar a tarefa atual', TJupiterRunnable.Create(vrJupiterApp.Params.VariableById('Jupiter.Standard.Triggers.OnChangeTask').Value));
+    end;
   finally
     FreeAndNil(vrEnviroment);
   end;

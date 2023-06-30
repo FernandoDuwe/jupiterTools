@@ -13,7 +13,6 @@ inherited FConfig: TFConfig
     Width = 1292
   end
   inherited sbStatus: TStatusBar
-    Height = 23
     Top = 666
     Width = 1292
   end
@@ -22,15 +21,10 @@ inherited FConfig: TFConfig
     Width = 1292
     ClientWidth = 1292
     TabOrder = 3
-    inherited lbHelp: TLabel
-      Height = 15
-      Width = 35
-    end
   end
   inherited sbBody: TScrollBox
     Left = 367
     Height = 556
-    Top = 60
     Width = 925
   end
   object tvNavigation: TTreeView[4]
@@ -41,7 +35,10 @@ inherited FConfig: TFConfig
     Align = alLeft
     ReadOnly = True
     TabOrder = 2
+    OnKeyPress = FormKeyPress
+    OnKeyUp = FormKeyUp
     OnSelectionChanged = tvNavigationSelectionChanged
+    OnUTF8KeyPress = FormUTF8KeyPress
     Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
   end
   object Splitter1: TSplitter[5]

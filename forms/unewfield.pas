@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ComCtrls,
   uCustomJupiterForm, JupiterVariableForm, JupiterConsts, JupiterAction,
-  JupiterApp, JupiterVariable;
+  JupiterApp, JupiterVariable, LCLType;
 
 type
 
@@ -53,7 +53,6 @@ var
 
 implementation
 
-uses LCLType;
 
 {$R *.lfm}
 

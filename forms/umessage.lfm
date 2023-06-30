@@ -99,6 +99,9 @@ inherited FMessage: TFMessage
       Lines.Strings = (
         'mmDetails'
       )
+      OnKeyPress = FormKeyPress
+      OnKeyUp = FormKeyUp
+      OnUTF8KeyPress = FormUTF8KeyPress
       ParentFont = False
       ReadOnly = True
       ScrollBars = ssBoth
@@ -113,6 +116,9 @@ inherited FMessage: TFMessage
     Align = alLeft
     ItemHeight = 0
     OnClick = lbResumeClick
+    OnKeyPress = FormKeyPress
+    OnKeyUp = FormKeyUp
+    OnUTF8KeyPress = FormUTF8KeyPress
     TabOrder = 4
   end
   object Splitter1: TSplitter[5]

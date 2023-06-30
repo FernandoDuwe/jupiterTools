@@ -22,7 +22,6 @@ type
     edMenuItemLocation: TEdit;
     edMenuItemRoute: TEdit;
     edMenuItemTitle: TEdit;
-    gbMenu: TGroupBox;
     imgIconBig: TImage;
     Label1: TLabel;
     Label2: TLabel;
@@ -39,8 +38,8 @@ type
     lvActions: TListView;
     lvFields: TListView;
     lvMenuVariables: TListView;
-    mmIcon: TMemo;
     mmCurrentMenuInfo: TMemo;
+    mmIcon: TMemo;
     mmLines: TMemo;
     Panel1: TPanel;
     Panel2: TPanel;

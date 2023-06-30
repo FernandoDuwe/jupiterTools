@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  uCustomJupiterForm, JupiterVariable, JupiterConsts, JupiterAction;
+  uCustomJupiterForm, JupiterVariable, JupiterConsts, JupiterAction, LCLType;
 
 type
 
@@ -19,6 +19,7 @@ type
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
+    procedure edIDKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormCreate(Sender: TObject);
   private
     FParam      : TJupiterVariable;
@@ -39,8 +40,6 @@ var
 
 implementation
 
-uses LCLType;
-
 {$R *.lfm}
 
 { TFNewParam }
@@ -50,6 +49,12 @@ begin
   inherited;
 
   Self.ParamIndex := NULL_KEY;
+end;
+
+procedure TFNewParam.edIDKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+
 end;
 
 procedure TFNewParam.Internal_SaveFieldClick(Sender: TObject);

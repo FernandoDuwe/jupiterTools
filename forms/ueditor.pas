@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, SynEdit, SynCompletion,
   JupiterForm, JupiterConsts, JupiterAction, JupiterEnviroment, JupiterApp,
-  JupiterVariable, jupiterformutils;
+  JupiterVariable, jupiterformutils, LCLType;
 
 type
 

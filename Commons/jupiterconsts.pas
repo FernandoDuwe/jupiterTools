@@ -8,17 +8,20 @@ uses
   Classes, SysUtils;
 
 const
-   ROOT_PATH              : String = '/';
-   ROOT_FORM_PATH         : String = '/forms/';
-   CONFIG_PATH            : String = '/forms/config/';
-   EXPLORER_FORM_PATH     : String = '/forms/explorer/';
-   EDITOR_FORM_PATH       : String = '/forms/editor/';
-   SCRIPTEDITOR_FORM_PATH : String = '/forms/editor/jpas/';
-   GENERATOR_FORM_PATH    : String = '/forms/generator/';
-   MESSAGES_PATH          : String = '/forms/messages/';
-   CUSTOM_FORM_PATH       : String = '/forms/custom/';
-   NEWTASK_FORM_PATH      : String = '/forms/custom/newTask/';
-   TASK_FORM_PATH         : String = '/forms/custom/currentTask/';
+   ROOT_PATH                : String = '/';
+   ROOT_FORM_PATH           : String = '/forms/';
+   CONFIG_PATH              : String = '/forms/config/';
+   EXPLORER_FORM_PATH       : String = '/forms/explorer/';
+   EDITOR_FORM_PATH         : String = '/forms/editor/';
+   SCRIPTEDITOR_FORM_PATH   : String = '/forms/editor/jpas/';
+   GENERATOR_FORM_PATH      : String = '/forms/generator/';
+   MESSAGES_PATH            : String = '/forms/messages/';
+   CUSTOM_FORM_PATH         : String = '/forms/custom/';
+   NEWTASK_FORM_PATH        : String = '/forms/custom/newTask/';
+   TASK_FORM_PATH           : String = '/forms/custom/currentTask/';
+   DYNAMIC_RECORD_FORM_PATH : String = '/forms/custom/record/dynamic/';
+   PROCESS_MONITOR_PATH     : String = '/forms/process/monitor/';
+   PROMPT_FORM_PATH         : String = '/forms/prompt/';
 
    ICON_ADD       : SmallInt = 0;
    ICON_NEW       : SmallInt = 1;
@@ -92,7 +95,7 @@ const
      FORM_MARGIN_BOTTOM_TONEXT : Integer = 20; // Bottom to the next field
    {$ENDIF}
 
-   FORM_ACTION_MINWIDTH      : Integer = 140;
+   FORM_ACTION_MINWIDTH      : Integer = 160;
 
    // Generator
    GENERATOR_SYSLAYER : SmallInt = 1000;
@@ -100,10 +103,20 @@ const
    FIELD_TYPE_EDIT  : String = 'Edit';
    FIELD_TYPE_COMBO : String = 'Combo';
 
+   // JupiterScripts (JPAS)
+   JPAS_INCLUDE : String = '';
+   JPAS_FLAG_GENERATEFULLFILE : String = '@FLAG_SAVE_COMPILED_FILE';
+   JPAS_FLAG_USERCOMMAND : String = '@FLAG_USER_COMMAND';
+
    function GetCurrentOS : String;
    function GetDirectorySeparator : String;
    function GetRootDirectory : String;
    function GetCommandLineTool : String;
+
+type
+  // JupiterThreads
+  TJupiterThreadsStatus = (jtsNotStarted, jtsRunning, jtsFinished);
+  TJupiterSearchMode = (jsmForm, jsmActions);
 
 implementation
 

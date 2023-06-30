@@ -7,7 +7,8 @@ interface
 uses
   Classes, ExtCtrls, JupiterModule, JupiterObject, JupiterRoute, JupiterForm,
   JupiterVariable, JupiterEnviroment, JupiterSystemMessage, PopUpNotifier,
-  JupiterVariableDataProvider, SysUtils, Controls;
+  JupiterVariableDataProvider, jupiterThread, JupiterRunnable, SysUtils,
+  Controls;
 
 type
 
@@ -19,16 +20,20 @@ type
     FAppName          : String;
     FModules          : TJupiterModuleList;
     FMessages         : TJupiterObjectList;
+    FThreads          : TJupiterThreadList;
     FFormRoutes       : TJupiterObjectList;
     FBodyPanel        : TPanel;
     FCurrentForm      : TFJupiterForm;
     FParams           : TJupiterVariableList;
     FUserParams       : TJupiterVariableList;
+    FRouteParams      : TJupiterVariableList;
     FDataSetParams    : TJupiterVariableDataProviderList;
     FMainIcons        : TImageList;
     FPopupNotifier    : TPopupNotifier;
     FOnBeforeNavigate : TNotifyEvent;
     FOnAfterNavigate  : TNotifyEvent;
+    FParamList        : TStrings;
+    FCurrentRoute     : TJupiterRoute;
 
   protected
     procedure Internal_Prepare; virtual;
@@ -38,12 +43,14 @@ type
     property AppName       : String         read FAppName;
     property BodyPanel     : TPanel         read FBodyPanel   write FBodyPanel;
     property CurrentForm   : TFJupiterForm  read FCurrentForm write FCurrentForm;
+    property CurrentRoute  : TJupiterRoute  read FCurrentRoute;
     property MainIcons     : TImageList     read FMainIcons   write FMainIcons;
     property PopupNotifier : TPopupNotifier read FPopupNotifier write FPopupNotifier;
 
     property FormRoutes     : TJupiterObjectList   read FFormRoutes    write FFormRoutes;
     property ModulesList    : TJupiterModuleList   read FModules       write FModules;
     property Messages       : TJupiterObjectList   read FMessages      write FMessages;
+    property Threads        : TJupiterThreadList   read FThreads       write FThreads;
     property Params         : TJupiterVariableList read FParams        write FParams;
     property DataSetParams  : TJupiterVariableDataProviderList read FDataSetParams write FDataSetParams;
     property UserParams     : TJupiterVariableList read FUserParams    write FUserParams;
@@ -53,6 +60,7 @@ type
   public
     procedure AddModule(prModule : TJupiterModule);
     function AddMessage(prTitle, prOrigin : String) : TJupiterSystemMessage;
+    procedure AddParam(prParam : String);
 
     function GetVersion : String;
     function ConsoleMode : Boolean;
@@ -62,6 +70,9 @@ type
     procedure Popup(prTitle : String; prStrMessage : TStrings);
 
     function GetActions(prRoute : TJupiterRoute) : TJupiterObjectList; virtual;
+
+    procedure ExecuteCommand(prParamList : TStrings); virtual;
+    procedure ExecuteCommandFromParamList(); virtual;
 
     constructor Create(prAppID, prAppName : String);
     destructor Destroy; override;
@@ -162,6 +173,11 @@ begin
   end;
 end;
 
+procedure TJupiterApp.AddParam(prParam: String);
+begin
+  Self.FParamList.Add(prParam);
+end;
+
 function TJupiterApp.GetVersion: String;
 var
   vrVersionInfo : TVersionInfo;
@@ -181,7 +197,10 @@ end;
 
 function TJupiterApp.ConsoleMode: Boolean;
 begin
-  Result := False;
+  Result := ((Self.FParamList.IndexOf('-c') <> -1) or
+             (Self.FParamList.IndexOf('-console') <> -1) or
+             (Self.FParamList.IndexOf('-h') <> -1) or
+             (Self.FParamList.IndexOf('-help') <> -1));
 end;
 
 procedure TJupiterApp.NavigateTo(prRoute: TJupiterRoute; prAsModal: Boolean);
@@ -191,6 +210,8 @@ var
   vrFormRoute : TJupiterFormRoute;
   vrFormModal : TFJupiterForm;
 begin
+  Self.FCurrentRoute := prRoute;
+
   if Assigned(Self.OnBeforeNavigate) then
     Self.OnBeforeNavigate(Self);
 
@@ -241,6 +262,10 @@ begin
   finally
     if Assigned(Self.OnAfterNavigate) then
       Self.OnAfterNavigate(Self);
+
+    if vrJupiterApp.Params.Exists('Jupiter.Standard.Triggers.OnChangeRoute') then
+          if Trim(vrJupiterApp.Params.VariableById('Jupiter.Standard.Triggers.OnChangeRoute').Value) <> EmptyStr then
+             vrJupiterApp.Threads.NewThread('Gatilho: Ao alterar a rota atual', TJupiterRunnable.Create(vrJupiterApp.Params.VariableById('Jupiter.Standard.Triggers.OnChangeRoute').Value));
   end;
 end;
 
@@ -275,6 +300,23 @@ begin
     Result.Merge(TJupiterModule(Self.ModulesList.GetAtIndex(vrVez)).GetActions(prRoute));
 end;
 
+procedure TJupiterApp.ExecuteCommand(prParamList: TStrings);
+var
+  vrVez : Integer;
+begin
+  //WriteLn(Self.AppID + ' - ' + Self.AppName);
+  //WriteLn('Versão: ' + Self.GetVersion);
+  WriteLn('Versão: ');
+
+  for vrVez := 0 to Self.ModulesList.Count - 1 do
+    Self.ModulesList.GetModuleByIndex(vrVez).ExecuteCommand(prParamList);
+end;
+
+procedure TJupiterApp.ExecuteCommandFromParamList;
+begin
+  Self.ExecuteCommand(Self.FParamList);
+end;
+
 constructor TJupiterApp.Create(prAppID, prAppName: String);
 begin
   Self.FAppID   := prAppID;
@@ -284,9 +326,13 @@ begin
   Self.FModules    := TJupiterModuleList.Create;
 
   Self.FMessages      := TJupiterObjectList.Create;
+  Self.FThreads       := TJupiterThreadList.Create;
   Self.FParams        := TJupiterVariableList.Create;
   Self.FDataSetParams := TJupiterVariableDataProviderList.Create;
   Self.FUserParams    := TJupiterVariableList.Create;
+
+  Self.FParamList := TStringList.Create;
+  Self.FParamList.Clear;
 
   Self.Params.AddChildList(Self.DataSetParams);
   Self.Params.AddChildList(Self.UserParams);
@@ -296,12 +342,16 @@ end;
 
 destructor TJupiterApp.Destroy;
 begin
+  Self.FParamList.Clear;
+
   FreeAndNil(Self.FFormRoutes);
   FreeAndNil(Self.FMessages);
+  FreeAndNil(Self.FThreads);
   FreeAndNil(Self.FModules);
   FreeAndNil(Self.FParams);
   FreeAndNil(Self.FDataSetParams);
   FreeAndNil(Self.FUserParams);
+  FreeAndNil(Self.FParamList);
 
   inherited Destroy;
 end;

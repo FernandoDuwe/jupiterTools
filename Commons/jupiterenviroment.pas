@@ -168,12 +168,12 @@ end;
 
 function TJupiterEnviroment.IsDocFile(prFileName: String): Boolean;
 begin
-  Result := Pos(AnsiUpperCase(ExtractFileExt(prFileName)), AnsiUpperCase('.doc .docx .rtf')) <> 0;
+  Result := Pos(AnsiUpperCase(ExtractFileExt(prFileName)), AnsiUpperCase('.doc .docx .rtf .pdf')) <> 0;
 end;
 
 function TJupiterEnviroment.IsTechFile(prFileName: String): Boolean;
 begin
-  Result := Pos(AnsiUpperCase(ExtractFileExt(prFileName)), AnsiUpperCase('.bat .cs .php .js .py .vb .json .xml .sql .jpas')) <> 0;
+  Result := Pos(AnsiUpperCase(ExtractFileExt(prFileName)), AnsiUpperCase('.bat .cs .php .js .py .vb .json .xml .sql .jpas .pck')) <> 0;
 end;
 
 function TJupiterEnviroment.IsTextFile(prFileName: String): Boolean;

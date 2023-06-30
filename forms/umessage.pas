@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
   uCustomJupiterForm, JupiterApp, JupiterSystemMessage, JupiterAction,
-  JupiterRunnable, JupiterConsts, jupiterformutils, JupiterDialogForm;
+  JupiterRunnable, JupiterConsts, jupiterformutils, JupiterDialogForm, LCLType;
 
 type
 
@@ -26,6 +26,7 @@ type
     Splitter1: TSplitter;
     procedure FormShow(Sender: TObject);
     procedure lbResumeClick(Sender: TObject);
+    procedure lbResumeKeyPress(Sender: TObject; var Key: char);
   private
     procedure Internal_ShowMessage(prIndex : Integer);
 
@@ -52,6 +53,11 @@ implementation
 procedure TFMessage.lbResumeClick(Sender: TObject);
 begin
   Self.Internal_ShowMessage(lbResume.ItemIndex);
+end;
+
+procedure TFMessage.lbResumeKeyPress(Sender: TObject; var Key: char);
+begin
+
 end;
 
 procedure TFMessage.FormShow(Sender: TObject);

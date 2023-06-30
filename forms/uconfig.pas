@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, ExtCtrls,
   uCustomJupiterForm, uNewDataSet, JupiterVariable, JupiterApp, JupiterModule,
   JupiterFormGenerator, JupiterAction, JupiterConsts, JupiterVariableForm,
-  JupiterDialogForm, jupiterformutils;
+  JupiterDialogForm, jupiterformutils, LCLType;
 
 type
 

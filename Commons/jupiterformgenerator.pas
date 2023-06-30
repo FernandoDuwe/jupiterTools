@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, Forms, JupiterConsts, JupiterObject, JupiterVariable,
-  JupiterFormField, JupiterVariableForm, SysUtils;
+  JupiterFormField, JupiterVariableForm, SysUtils, Controls;
 
 type
 
@@ -19,6 +19,7 @@ type
     FClearContainerOnSet : Boolean;
     FLastTop             : Integer;
     FAlreadyDrawed       : Boolean;
+    FOnKeyUp             : TKeyEvent;
 
     procedure Internal_CreateComponent(prVariable : TJupiterVariableForm; prTabOrder : Integer);
     procedure Internal_ClearContainer;
@@ -28,6 +29,8 @@ type
 
     property Container : TScrollBox               read FContainer write FContainer;
     property Variables : TJupiterVariableFormList read FVariables write FVariables;
+
+    property OnKeyUp : TKeyEvent read FOnKeyUp write FOnKeyUp;
   public
     procedure DrawForm;
 
@@ -55,6 +58,7 @@ begin
   vrField.TabOrder := prTabOrder;
   vrField.Draw(Self.Container);
   vrField.Panel.Top := Self.FLastTop;
+  vrField.OnKeyUp := Self.OnKeyUp;
 
   Self.FLastTop := vrField.Panel.Top + vrField.Panel.Height + 1;
 end;

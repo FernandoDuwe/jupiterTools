@@ -9,7 +9,7 @@ uses
   ComCtrls, uCustomJupiterForm, JupiterAction, JupiterConsts, JupiterApp,
   JupiterRunnable, JupiterFileDataProvider, JupiterTaskTimesDataProvider,
   JupiterDirectoryDataProvider, JupiterForm, JupiterEnviroment,
-  JupiterToolsModule;
+  JupiterToolsModule, LCLType;
 
 type
 

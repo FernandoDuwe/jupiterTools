@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, CheckLst,
   ExtCtrls, uCustomJupiterForm, uMain, JupiterConsts, JupiterAction,
   JupiterDirectoryDataProvider, JupiterApp, JupiterFileDataProvider,
-  JupiterEnviroment, JupiterRoute, JupiterToolsModule;
+  JupiterEnviroment, JupiterRoute, JupiterToolsModule, LCLType;
 
 type
 
@@ -45,7 +45,6 @@ var
 
 implementation
 
-uses LCLType;
 
 {$R *.lfm}
 

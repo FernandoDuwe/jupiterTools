@@ -33,11 +33,16 @@ type
     property Size  : Integer read Internal_GetSize;
   public
     function GetAtIndex(prIndex : Integer) : TJupiterObject;
+    function GetAtIndexAsObject(prIndex : Integer) : TObject;
 
     procedure Add(prJupiterObject : TJupiterObject);
+    procedure AddSimpleObject(prObject : TObject);
 
     procedure Merge(prOtherList : TJupiterObjectList);
     procedure DeleteAtIndex(prIndex : Integer);
+    procedure DeleteListItem(prIndex : Integer);
+
+    procedure ClearListItens;
 
     function GetLastObject : TJupiterObject;
 
@@ -62,9 +67,22 @@ begin
     Result := TJupiterObject(Self.FList[prIndex]);
 end;
 
+function TJupiterObjectList.GetAtIndexAsObject(prIndex: Integer): TObject;
+begin
+  Result := nil;
+
+  if ((prIndex >= 0) and (prIndex <= (Self.Size - 1))) then
+    Result := TObject(Self.FList[prIndex]);
+end;
+
 procedure TJupiterObjectList.Add(prJupiterObject: TJupiterObject);
 begin
   Self.FList.Add(prJupiterObject);
+end;
+
+procedure TJupiterObjectList.AddSimpleObject(prObject: TObject);
+begin
+  Self.FList.Add(prObject);
 end;
 
 procedure TJupiterObjectList.Merge(prOtherList: TJupiterObjectList);
@@ -83,7 +101,17 @@ begin
 
   FreeAndNil(vrObj);
 
+  Self.DeleteListItem(prIndex);
+end;
+
+procedure TJupiterObjectList.DeleteListItem(prIndex: Integer);
+begin
   Self.FList.Delete(prIndex);
+end;
+
+procedure TJupiterObjectList.ClearListItens;
+begin
+  Self.FList.Clear;
 end;
 
 function TJupiterObjectList.GetLastObject: TJupiterObject;
@@ -104,7 +132,9 @@ destructor TJupiterObjectList.Destroy;
 begin
   while Self.FList.Count > 0 do
   begin
-    Self.GetAtIndex(0).Free;
+    if Assigned(Self.GetAtIndexAsObject(0)) then
+      Self.GetAtIndexAsObject(0).Free;
+
     Self.FList.Delete(0);
   end;
 

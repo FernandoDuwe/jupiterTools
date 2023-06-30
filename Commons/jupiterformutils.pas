@@ -12,6 +12,8 @@ uses
 
   procedure ShowRouteOnTreeView(prTreeView : TTreeView; prRoute : TJupiterRoute; prList : TJupiterObjectList; prNode : TTreeNode);
 
+  procedure SearchOnTreeView(prTreeView : TTreeView; prSearch : String);
+
   function PercentOfScreen(prTotalSize, prPercent : Integer) : Integer;
 
   procedure DrawForm(prComponent : TComponent);
@@ -85,6 +87,35 @@ begin
     with TJupiterAction(vrTreeItem.Data) do
       if Route.Params.Exists(FIELD_TREE_COLAPSE) then
         vrTreeItem.Collapse(False);
+  end;
+end;
+
+procedure SearchOnTreeView(prTreeView: TTreeView; prSearch: String);
+var
+  vrVez : Integer;
+  vrAux : String;
+  vrDeleteList: TJupiterObjectList;
+begin
+  vrDeleteList := TJupiterObjectList.Create;
+  try
+    prTreeView.FullExpand;
+
+    prSearch := Trim(AnsiUpperCase(prSearch));
+
+    for vrVez := 0 to prTreeView.Items.Count -1 do
+    begin
+      vrAux := Trim(AnsiUpperCase(prTreeView.Items[vrVez].Text));
+
+      if ((prTreeView.Items[vrVez].Count = 0) and (Pos(prSearch, vrAux) = 0)) then
+        vrDeleteList.AddSimpleObject(prTreeView.Items[vrVez]);
+    end;
+
+    for vrVez := vrDeleteList.Count - 1 downto 0 do
+      prTreeView.Items.Delete(TTreeNode(vrDeleteList.GetAtIndexAsObject(vrVez)));
+
+    vrDeleteList.ClearListItens;
+  finally
+    FreeAndNil(vrDeleteList);
   end;
 end;
 

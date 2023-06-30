@@ -73,6 +73,8 @@ procedure TFCustomJupiterForm.PrepareForm;
 begin
   inherited PrepareForm;
 
+  Self.FFormGenerator.OnKeyUp := Self.OnKeyUp;
+
   DrawForm(Self);
 
   Self.FFormGenerator.Variables.CopyFromVariableList(Self.Generator.Fields);

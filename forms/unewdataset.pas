@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
   uCustomJupiterForm, JupiterConsts, JupiterAction, JupiterCSVDataProvider,
-  JupiterDirectoryDataProvider, JupiterFileDataProvider, jupiterformutils;
+  JupiterDirectoryDataProvider, JupiterFileDataProvider, jupiterformutils, LCLType;
 
 type
 
@@ -20,7 +20,6 @@ type
     edFile: TEdit;
     edSearchNode: TEdit;
     edID: TEdit;
-    gbProvider: TGroupBox;
     Label2: TLabel;
     Label4: TLabel;
     Label5: TLabel;
@@ -46,7 +45,7 @@ var
 
 implementation
 
-uses LCLType, JupiterApp;
+uses JupiterApp;
 
 {$R *.lfm}
 
@@ -61,7 +60,7 @@ procedure TFNewDataSet.FormShow(Sender: TObject);
 begin
   inherited;
 
-  gbProvider.Width := PercentOfScreen(Self.Width, 30);
+  lbProviders.Width := PercentOfScreen(Self.Width, 30);
 end;
 
 procedure TFNewDataSet.Internal_SaveClick(Sender: TObject);

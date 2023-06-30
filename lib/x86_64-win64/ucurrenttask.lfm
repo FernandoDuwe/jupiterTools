@@ -20,11 +20,11 @@ inherited FCurrentTask: TFCurrentTask
     ClientWidth = 968
   end
   inherited sbBody: TScrollBox
-    Height = 555
+    Height = 545
     Width = 968
     HorzScrollBar.Page = 254
     VertScrollBar.Page = 512
-    ClientHeight = 551
+    ClientHeight = 541
     ClientWidth = 964
     object pnCurrentTask: TPanel[0]
       Left = 0
@@ -102,6 +102,9 @@ inherited FCurrentTask: TFCurrentTask
         SortType = stText
         TabOrder = 0
         ViewStyle = vsReport
+        OnKeyPress = FormKeyPress
+        OnKeyUp = FormKeyUp
+        OnUTF8KeyPress = FormUTF8KeyPress
       end
       object Label4: TLabel
         Left = 8
@@ -124,6 +127,9 @@ inherited FCurrentTask: TFCurrentTask
         ReadOnly = True
         TabOrder = 1
         OnDblClick = lvFilesDblClick
+        OnKeyPress = FormKeyPress
+        OnKeyUp = FormKeyUp
+        OnUTF8KeyPress = FormUTF8KeyPress
         Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
       end
     end

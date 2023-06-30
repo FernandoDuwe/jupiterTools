@@ -37,6 +37,7 @@ type
     procedure Internal_ListVariables;
 
     procedure Internal_UpdateComponents; override;
+    procedure Internal_UpdateDatasets; override;
 
     procedure Internal_PrepareForm; override;
     procedure Internal_ExecuteClick(Sender : TObject);
@@ -101,6 +102,9 @@ begin
         SynAutoComplete1.AutoCompleteList.Add(VariableByIndex(vrVez2).ID);
       end;
     end;
+
+  TStringList(SynAutoComplete1.AutoCompleteList).Sort;
+  TStringList(SynCompletion1.ItemList).Sort;
 end;
 
 procedure TFScriptEditor.Internal_UpdateComponents;
@@ -112,6 +116,41 @@ begin
   mmMessages.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
   mmRun.Font.Size      := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
   mmDoc.Font.Size      := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
+
+  SynCompletion1.Width := PercentOfScreen(syEdit.Width, 50);
+end;
+
+procedure TFScriptEditor.Internal_UpdateDatasets;
+var
+  vrScript   : TJupiterScript;
+  vrVez      : Integer;
+  vrAnalyser : TJupiterScriptAnalyserList;
+begin
+  inherited Internal_UpdateDatasets;
+
+  vrScript := TJupiterScript.Create;
+  try
+   vrScript.Script.AddStrings(syEdit.Lines);
+
+    vrAnalyser := vrScript.AnalyseCode;
+
+    mmDoc.Lines.Clear;
+    SynAutoComplete1.AutoCompleteList.Clear;
+    SynCompletion1.ItemList.Clear;
+
+    for vrVez := 0 to vrAnalyser.Count - 1 do
+      with vrAnalyser.ItemByIndex(vrVez) do
+      begin
+        mmDoc.Lines.Add(DocText);
+        SynAutoComplete1.AutoCompleteList.Add(Text);
+        SynCompletion1.ItemList.Add(Text);
+      end;
+
+    TStringList(SynAutoComplete1.AutoCompleteList).Sort;
+    TStringList(SynCompletion1.ItemList).Sort;
+  finally
+    FreeAndNil(vrScript);
+  end;
 end;
 
 procedure TFScriptEditor.Internal_PrepareForm;
@@ -170,7 +209,11 @@ end;
 
 procedure TFScriptEditor.Internal_SaveFileClick(Sender: TObject);
 begin
-  syEdit.Lines.SaveToFile(Self.FileName);
+  try
+    syEdit.Lines.SaveToFile(Self.FileName);
+  finally
+    Self.UpdateForm;
+  end;
 end;
 
 end.

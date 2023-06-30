@@ -68,6 +68,8 @@ type
     property FileName      : String               read FFileName  write Internal_SetFileName;
     property VariableCount : Integer              read Internal_VariableCount;
   public
+    procedure FromStringList(prList : TStringList);
+
     procedure AddChildList(prList : TJupiterVariableList);
 
     procedure AddConfig(prID : String; prValue : String; prTitle : String = ''); virtual;
@@ -80,6 +82,7 @@ type
     function  ResolveString(prStr : String) : String;
     procedure ResolveFile(prFile : String);
     procedure DeleteVariable(prID : String);
+    function ToStringList : TStringList;
 
     procedure CopyValues(prList : TJupiterVariableList);
     procedure SaveToFile; virtual;
@@ -169,6 +172,34 @@ begin
 
     Self.FReadingFile := False;
   end;
+end;
+
+procedure TJupiterVariableList.FromStringList(prList: TStringList);
+var
+  vrProvider : TJupiterCSVDataProvider;
+  vrVez : Integer;
+begin
+  Self.FReadingFile := True;
+
+  vrProvider := TJupiterCSVDataProvider.Create;
+  try
+    if prList.Count = 0 then
+      prList.Add(EmptyStr);
+
+    vrProvider.CustomFile := prList;
+    vrProvider.ProvideData;
+
+    for vrVez := 0 to vrProvider.Size - 1 do
+      with vrProvider.GetRowByIndex(vrVez) do
+        Self.AddConfig(Fields.VariableById('ID').Value,
+                       Fields.VariableById('VALUE').Value,
+                       Fields.VariableById('DESCRIPTION').Value);
+  finally
+    FreeAndNil(vrProvider);
+
+    Self.FReadingFile := False;
+  end;
+
 end;
 
 function TJupiterVariableList.Internal_VariableCount: Integer;
@@ -391,6 +422,19 @@ begin
     if vrSave then
       Self.SaveToFile;
   end;
+end;
+
+function TJupiterVariableList.ToStringList: TStringList;
+var
+  vrVez : Integer;
+begin
+  Result := TStringList.Create;
+
+  Result.Add('key;value;title;');
+
+  for vrVez := 0 to Self.Count - 1 do
+    with Self.VariableByIndex(vrVez) do
+      Result.Add(Format('%0:s;%1:s;%2:s', [ID, Value, Title]));
 end;
 
 procedure TJupiterVariableList.CopyValues(prList: TJupiterVariableList);

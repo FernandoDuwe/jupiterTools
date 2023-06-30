@@ -52,6 +52,9 @@ inherited FNewTask: TFNewTask
         Top = 32
         Width = 591
         ItemHeight = 15
+        OnKeyPress = FormKeyPress
+        OnKeyUp = FormKeyUp
+        OnUTF8KeyPress = FormUTF8KeyPress
         Sorted = True
         TabOrder = 0
       end
@@ -69,6 +72,8 @@ inherited FNewTask: TFNewTask
         Height = 23
         Top = 96
         Width = 595
+        OnKeyPress = FormKeyPress
+        OnUTF8KeyPress = FormUTF8KeyPress
         TabOrder = 1
       end
       object Label3: TLabel
@@ -86,6 +91,9 @@ inherited FNewTask: TFNewTask
         Top = 160
         Width = 591
         ItemHeight = 0
+        OnKeyPress = FormKeyPress
+        OnKeyUp = FormKeyUp
+        OnUTF8KeyPress = FormUTF8KeyPress
         TabOrder = 2
       end
       object Label4: TLabel

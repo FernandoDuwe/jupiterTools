@@ -25,6 +25,7 @@ type
   public
     function GetActions(prRoute : TJupiterRoute) : TJupiterObjectList; virtual;
     function DefineParamName(prName : String) : String;
+    procedure ExecuteCommand(prParamList : TStrings); virtual;
 
     constructor Create;
     destructor Destroy; override;
@@ -84,6 +85,11 @@ end;
 function TJupiterModule.DefineParamName(prName: String): String;
 begin
   Result := Self.ModuleID + '.' + prName;
+end;
+
+procedure TJupiterModule.ExecuteCommand(prParamList: TStrings);
+begin
+  //
 end;
 
 constructor TJupiterModule.Create;

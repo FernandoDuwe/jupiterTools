@@ -14,11 +14,13 @@ type
 
   TJupiterRunnable = class(TJupiterObject)
   private
+    FLogMessage : Boolean;
     FCommandLine : String;
 
     procedure Internal_CreateProcess(prFileName : String; prParams : String; var prOutput : String; prWaitUntilEnd : Boolean = True; prSilent : Boolean = False);
   published
-    property CommandLine : String read FCommandLine write FCommandLine ;
+    property CommandLine : String  read FCommandLine write FCommandLine;
+    property LogMessage  : Boolean read FLogMessage  write FLogMessage;
   public
     procedure Execute;
     procedure OpenFolder(prFolder : String);
@@ -288,12 +290,15 @@ begin
 
     Self.Internal_CreateProcess(vrStr[0], vrParams, prOutput, prWait, True);
   finally
-    vrMessage := vrJupiterApp.AddMessage('Comando executado', Self.ClassName);
+    if Self.LogMessage then
+    begin
+      vrMessage := vrJupiterApp.AddMessage('Comando executado', Self.ClassName);
 
-    vrMessage.Details.Add('Comando: ' + vrStr[0]);
-    vrMessage.Details.Add('Parâmetros: ' + vrParams);
-    vrMessage.Details.Add('Saída:');
-    vrMessage.Details.Add(prOutput);
+      vrMessage.Details.Add('Comando: ' + vrStr[0]);
+      vrMessage.Details.Add('Parâmetros: ' + vrParams);
+      vrMessage.Details.Add('Saída:');
+      vrMessage.Details.Add(prOutput);
+    end;
 
     vrStr.Clear;
     FreeAndNil(vrStr);
@@ -302,6 +307,7 @@ end;
 
 constructor TJupiterRunnable.Create(prCommandLine: String; prRunOnCreate: Boolean);
 begin
+  Self.FLogMessage  := False;
   Self.FCommandLine := prCommandLine;
 
   if prRunOnCreate then

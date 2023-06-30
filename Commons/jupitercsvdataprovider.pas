@@ -15,15 +15,20 @@ type
 
   TJupiterCSVDataProvider = class(TJupiterDataProvider)
   private
-    FFilename    : String;
-    FColumnCount : Integer;
+    FFilename     : String;
+    FColumnCount  : Integer;
+    FBlankLine    : TJupiterDataProviderRow;
+    FExternalList : TStrings;
 
     function  Internal_GetCSVColumnCount(prLine : String) : Integer;
     function  Internal_GetCSVColumn(prLine: String; prIndex: Integer): String;
     procedure Internal_ProcessLine(prLineStr : String; prHeaderLine : String);
     procedure Internal_SaveLine;
+    procedure Internal_CreateBlankLine(prHeaderLine: String);
   published
     property Filename : String read FFilename write FFilename;
+    property BlankLine : TJupiterDataProviderRow read FBlankLine;
+    property CustomFile : TStrings read FExternalList write FExternalList;
   public
     procedure ProvideData; override;
     procedure SaveLine(prFields : TJupiterVariableList);
@@ -137,6 +142,25 @@ begin
   end;
 end;
 
+procedure TJupiterCSVDataProvider.Internal_CreateBlankLine(prHeaderLine: String);
+var
+  vrVez : Integer;
+begin
+  Self.FBlankLine := TJupiterDataProviderRow.Create;
+
+  for vrVez := 0 to Self.FColumnCount - 1 do
+  begin
+    if Self.Internal_GetCSVColumn(prHeaderLine, vrVez) = EmptyStr then
+      Continue;
+
+    Self.FBlankLine.Fields.AddVariable(Self.Internal_GetCSVColumn(prHeaderLine, vrVez),
+                                       EmptyStr,
+                                       Self.Internal_GetCSVColumn(prHeaderLine, vrVez));
+  end;
+
+  Self.FBlankLine.Fields.AddVariable('Line', '-1', 'Linha');
+end;
+
 procedure TJupiterCSVDataProvider.ProvideData;
 var
   vrFile : TStrings;
@@ -144,16 +168,22 @@ var
 begin
   inherited ProvideData;
 
-  if ((Trim(Self.Filename) = EmptyStr) or (not FileExists(Self.Filename))) then
+  if (((Trim(Self.Filename) = EmptyStr) or (not FileExists(Self.Filename))) and (not Assigned(Self.CustomFile))) then
      raise Exception.Create('Filename must be valid');
 
   vrFile := TStringList.Create;
   try
     vrFile.Clear;
-    vrFile.LoadFromFile(Self.Filename);
+
+    if not Assigned(Self.CustomFile) then
+      vrFile.LoadFromFile(Self.Filename)
+    else
+      vrFile.AddStrings(Self.CustomFile);
 
     if vrFile.Count > 0 then
        Self.FColumnCount := Self.Internal_GetCSVColumnCount(vrFile[0]);
+
+    Self.Internal_CreateBlankLine(vrFile[0]);
 
     for vrVez := 1 to vrFile.Count - 1 do
     begin
