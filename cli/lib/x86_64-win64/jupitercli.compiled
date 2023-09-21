@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Compiler Value="C:\lazarus\fpc\3.2.2\bin\x86_64-win64\fpc.exe" Date="1429738194"/>
+  <Params Value=" -MObjFPC -Scghi -O1 -g -gl -l -vewnhibq -FiC:\Projetos\jupiterTools\cli\lib\x86_64-win64 -FuC:\Projetos\jupiterTools\Commons -FuC:\Projetos\jupiterTools\cli\ -FUC:\Projetos\jupiterTools\cli\lib\x86_64-win64\ -FEC:\Projetos\jupiterTools\out\ -oC:\Projetos\jupiterTools\out\jupitercli.exe JUPITERCLI jupitercli.lpr"/>
+  <Complete Value="False"/>
+</CONFIG>

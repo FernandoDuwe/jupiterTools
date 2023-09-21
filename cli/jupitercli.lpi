@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectOptions>
+    <Version Value="12"/>
+    <PathDelim Value="\"/>
+    <General>
+      <Flags>
+        <MainUnitHasCreateFormStatements Value="False"/>
+        <MainUnitHasTitleStatement Value="False"/>
+        <MainUnitHasScaledStatement Value="False"/>
+      </Flags>
+      <SessionStorage Value="InProjectDir"/>
+      <Title Value="Jupiter Cli"/>
+      <UseAppBundle Value="False"/>
+      <ResourceType Value="res"/>
+      <Icon Value="0"/>
+    </General>
+    <VersionInfo>
+      <UseVersionInfo Value="True"/>
+      <MajorVersionNr Value="1"/>
+      <StringTable CompanyName="Jupiter Studios" FileDescription="Jupiter CLI Interface" InternalName="jupiter CLI"/>
+    </VersionInfo>
+    <BuildModes>
+      <Item Name="Default" Default="True"/>
+    </BuildModes>
+    <PublishOptions>
+      <Version Value="2"/>
+      <UseFileFilters Value="True"/>
+    </PublishOptions>
+    <RunParams>
+      <FormatVersion Value="2"/>
+    </RunParams>
+    <Units>
+      <Unit>
+        <Filename Value="jupitercli.lpr"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterobject.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterObject"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiteraction.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterAction"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterapp.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterApp"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterconsts.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterConsts"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupitercsvdataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterCSVDataProvider"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterdataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterDataProvider"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterdirectorydataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterDirectoryDataProvider"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterfiledataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterFileDataProvider"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupitermodule.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterModule"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterroute.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterRoute"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterrunnable.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterRunnable"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterscript.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterScript"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterscriptfunctions.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterScriptFunctions"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterstream.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterStream"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupitersystemmessage.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterSystemMessage"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupitertasksdataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterTasksDataProvider"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupitertasktimesdataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterTaskTimesDataProvider"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterthread.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterThread"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupitervariable.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterVariable"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupitervariabledataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterVariableDataProvider"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterxmldataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterXMLDataProvider"/>
+      </Unit>
+    </Units>
+  </ProjectOptions>
+  <CompilerOptions>
+    <Version Value="11"/>
+    <PathDelim Value="\"/>
+    <Target>
+      <Filename Value="..\out\jupitercli"/>
+    </Target>
+    <SearchPaths>
+      <IncludeFiles Value="$(ProjOutDir)"/>
+      <OtherUnitFiles Value="..\Commons"/>
+      <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
+    </SearchPaths>
+    <Other>
+      <CustomOptions Value="JUPITERCLI"/>
+    </Other>
+  </CompilerOptions>
+  <Debugging>
+    <Exceptions>
+      <Item>
+        <Name Value="EAbort"/>
+      </Item>
+      <Item>
+        <Name Value="ECodetoolError"/>
+      </Item>
+      <Item>
+        <Name Value="EFOpenError"/>
+      </Item>
+    </Exceptions>
+  </Debugging>
+</CONFIG>

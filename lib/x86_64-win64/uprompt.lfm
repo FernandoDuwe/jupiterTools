@@ -1,7 +1,6 @@
 inherited FPrompt: TFPrompt
   Left = 676
   Top = 224
-  BorderStyle = bsDialog
   Caption = 'Prompt de comando'
   OnActivate = FormActivate
   OnCreate = FormCreate
@@ -511,7 +510,9 @@ inherited FPrompt: TFPrompt
   inherited ppMenu: TPopupMenu[4]
     Left = 448
   end
-  object SynAutoComplete1: TSynAutoComplete[5]
+  inherited acActionShortcuts: TActionList[5]
+  end
+  object SynAutoComplete1: TSynAutoComplete[6]
     EndOfTokenChr = '()[].'
     ShortCut = 8224
     ExecCommandID = ecSynAutoCompletionExecute
@@ -519,7 +520,7 @@ inherited FPrompt: TFPrompt
     Left = 112
     Top = 136
   end
-  object SynCompletion1: TSynCompletion[6]
+  object SynCompletion1: TSynCompletion[7]
     Position = -1
     LinesInWindow = 15
     SelectedColor = clHighlight
@@ -535,7 +536,7 @@ inherited FPrompt: TFPrompt
     Left = 221
     Top = 136
   end
-  object SynPasSyn1: TSynPasSyn[7]
+  object SynPasSyn1: TSynPasSyn[8]
     Enabled = False
     CompilerMode = pcmDelphi
     NestedComments = False

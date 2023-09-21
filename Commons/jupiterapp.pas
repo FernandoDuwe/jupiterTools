@@ -74,6 +74,9 @@ type
     procedure ExecuteCommand(prParamList : TStrings); virtual;
     procedure ExecuteCommandFromParamList(); virtual;
 
+    function HasRoute(prRoutePath: String): Boolean;
+    function GoToRoute(prRoutePath: String): Boolean;
+
     constructor Create(prAppID, prAppName : String);
     destructor Destroy; override;
   end;
@@ -315,6 +318,16 @@ end;
 procedure TJupiterApp.ExecuteCommandFromParamList;
 begin
   Self.ExecuteCommand(Self.FParamList);
+end;
+
+function TJupiterApp.HasRoute(prRoutePath: String): Boolean;
+begin
+  //
+end;
+
+function TJupiterApp.GoToRoute(prRoutePath: String): Boolean;
+begin
+  //
 end;
 
 constructor TJupiterApp.Create(prAppID, prAppName: String);

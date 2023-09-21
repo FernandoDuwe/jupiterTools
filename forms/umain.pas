@@ -142,6 +142,7 @@ type
 
     procedure Internal_OnBeforeNavigate(Sender: TObject);
     procedure Internal_OnAfterNavigate(Sender: TObject);
+    procedure Internal_CallFormAction(prActionIndex : Integer);
   protected
     procedure Internal_UpdateComponents; override;
     procedure Internal_PrepareForm; override;
@@ -772,6 +773,11 @@ procedure TFMain.Internal_OnAfterNavigate(Sender: TObject);
 begin
   if edSearch.Text <> EmptyStr then
     edSearchChange(Sender);
+end;
+
+procedure TFMain.Internal_CallFormAction(prActionIndex: Integer);
+begin
+  //
 end;
 
 procedure TFMain.Internal_UpdateComponents;

@@ -251,6 +251,9 @@ begin
   Sender.AddFunction(@JupiterVariableValueRouteByID, 'function CurrentRouteVariableById(prVariableId : String): String;');
   Sender.AddFunction(@JupiterScriptGoToRoute, 'procedure GoToRoute(prRoutePath : String; prCSVParams : TStringList; prModal : Boolean);');
 
+  Sender.AddFunction(@JupiterScriptHasRoutePath, 'function HasRoutePath(prRoutePath: String): Boolean;');
+  Sender.AddFunction(@JupiterScriptGoToRoutePath, 'function GoToRoutePath(prRoutePath: String): Boolean;');
+
   Sender.AddRegisteredVariable('vars', 'Variant');
   Sender.AddRegisteredVariable('Application', 'TApplication');
 end;
@@ -376,6 +379,8 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function CurrentRouteParams: TStringList;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function CurrentRouteVariableById(prVariableId : String): String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure GoToRoute(prRoutePath : String; prCSVParams : TStringList; prModal : Boolean);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'function HasRoutePath(prRoutePath: String): Boolean;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'function GoToRoutePath(prRoutePath: String): Boolean;'));
 
   // Code functions
   Self.Internal_AnalyseUserCode(Result);

@@ -15,6 +15,19 @@ type
   { TFJupiterForm }
 
   TFJupiterForm = class(TForm)
+    acActionShortcuts: TActionList;
+    acF1: TAction;
+    acF2: TAction;
+    acF3: TAction;
+    acF4: TAction;
+    acF5: TAction;
+    acF6: TAction;
+    acF7: TAction;
+    acF8: TAction;
+    acF9: TAction;
+    acF10: TAction;
+    acF11: TAction;
+    acF12: TAction;
     imgInfo: TImage;
     lbHelp: TLabel;
     miViewParams: TMenuItem;
@@ -24,6 +37,18 @@ type
     ppMenu: TPopupMenu;
     sbActions: TScrollBox;
     sbStatus: TStatusBar;
+    procedure acF10Execute(Sender: TObject);
+    procedure acF11Execute(Sender: TObject);
+    procedure acF12Execute(Sender: TObject);
+    procedure acF1Execute(Sender: TObject);
+    procedure acF2Execute(Sender: TObject);
+    procedure acF3Execute(Sender: TObject);
+    procedure acF4Execute(Sender: TObject);
+    procedure acF5Execute(Sender: TObject);
+    procedure acF6Execute(Sender: TObject);
+    procedure acF7Execute(Sender: TObject);
+    procedure acF8Execute(Sender: TObject);
+    procedure acF9Execute(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -92,6 +117,78 @@ begin
   Self.UpdateForm;
 end;
 
+procedure TFJupiterForm.acF1Execute(Sender: TObject);
+begin
+  if Assigned(Self.Actions.GetActionButton(0, sbActions)) then
+    Self.Actions.GetActionButton(0, sbActions).Click;
+end;
+
+procedure TFJupiterForm.acF10Execute(Sender: TObject);
+begin
+  if Assigned(Self.Actions.GetActionButton(9, sbActions)) then
+    Self.Actions.GetActionButton(9, sbActions).Click;
+end;
+
+procedure TFJupiterForm.acF11Execute(Sender: TObject);
+begin
+  if Assigned(Self.Actions.GetActionButton(10, sbActions)) then
+    Self.Actions.GetActionButton(10, sbActions).Click;
+end;
+
+procedure TFJupiterForm.acF12Execute(Sender: TObject);
+begin
+  if Assigned(Self.Actions.GetActionButton(11, sbActions)) then
+    Self.Actions.GetActionButton(11, sbActions).Click;
+end;
+
+procedure TFJupiterForm.acF2Execute(Sender: TObject);
+begin
+  if Assigned(Self.Actions.GetActionButton(1, sbActions)) then
+    Self.Actions.GetActionButton(1, sbActions).Click;
+end;
+
+procedure TFJupiterForm.acF3Execute(Sender: TObject);
+begin
+  if Assigned(Self.Actions.GetActionButton(2, sbActions)) then
+    Self.Actions.GetActionButton(2, sbActions).Click;
+end;
+
+procedure TFJupiterForm.acF4Execute(Sender: TObject);
+begin
+  if Assigned(Self.Actions.GetActionButton(3, sbActions)) then
+    Self.Actions.GetActionButton(3, sbActions).Click;
+end;
+
+procedure TFJupiterForm.acF5Execute(Sender: TObject);
+begin
+  if Assigned(Self.Actions.GetActionButton(4, sbActions)) then
+    Self.Actions.GetActionButton(4, sbActions).Click;
+end;
+
+procedure TFJupiterForm.acF6Execute(Sender: TObject);
+begin
+  if Assigned(Self.Actions.GetActionButton(5, sbActions)) then
+    Self.Actions.GetActionButton(5, sbActions).Click;
+end;
+
+procedure TFJupiterForm.acF7Execute(Sender: TObject);
+begin
+  if Assigned(Self.Actions.GetActionButton(6, sbActions)) then
+    Self.Actions.GetActionButton(6, sbActions).Click;
+end;
+
+procedure TFJupiterForm.acF8Execute(Sender: TObject);
+begin
+  if Assigned(Self.Actions.GetActionButton(7, sbActions)) then
+    Self.Actions.GetActionButton(7, sbActions).Click;
+end;
+
+procedure TFJupiterForm.acF9Execute(Sender: TObject);
+begin
+  if Assigned(Self.Actions.GetActionButton(8, sbActions)) then
+    Self.Actions.GetActionButton(8, sbActions).Click;
+end;
+
 procedure TFJupiterForm.FormCreate(Sender: TObject);
 begin
   Self.FSpecialSize := False;
@@ -126,6 +223,8 @@ end;
 procedure TFJupiterForm.FormKeyUp(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
+  Exit;
+
   try
     if Key = VK_F1 then
       Self.Actions.GetActionButton(0, sbActions).Click;

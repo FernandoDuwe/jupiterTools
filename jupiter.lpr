@@ -77,12 +77,7 @@ begin
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(PROCESS_MONITOR_PATH, TFProcessMonitor));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(PROMPT_FORM_PATH, TFPrompt));
 
-  if not vrJupiterApp.ConsoleMode then
-  begin
-    Application.CreateForm(TFMain, FMain);
-    Application.Run;
-  end
-  else
-    vrJupiterApp.ExecuteCommandFromParamList;
+  Application.CreateForm(TFMain, FMain);
+  Application.Run;
 end.
 

@@ -5,7 +5,7 @@ unit JupiterEnviroment;
 interface
 
 uses
-  Classes, SysUtils, Forms, JupiterConsts, JupiterObject;
+  Classes, SysUtils, {$IFNDEF JUPITERCLI} Forms, {$ENDIF} JupiterConsts, JupiterObject;
 
 type
 

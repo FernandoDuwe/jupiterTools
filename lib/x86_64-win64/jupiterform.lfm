@@ -139,4 +139,67 @@ object FJupiterForm: TFJupiterForm
       OnClick = miViewParamsClick
     end
   end
+  object acActionShortcuts: TActionList
+    Left = 240
+    Top = 136
+    object acF1: TAction
+      Caption = 'acF1'
+      OnExecute = acF1Execute
+      ShortCut = 112
+    end
+    object acF2: TAction
+      Caption = 'acF2'
+      OnExecute = acF2Execute
+      ShortCut = 113
+    end
+    object acF3: TAction
+      Caption = 'acF3'
+      OnExecute = acF3Execute
+      ShortCut = 114
+    end
+    object acF4: TAction
+      Caption = 'acF4'
+      OnExecute = acF4Execute
+      ShortCut = 115
+    end
+    object acF5: TAction
+      Caption = 'acF5'
+      OnExecute = acF5Execute
+      ShortCut = 116
+    end
+    object acF6: TAction
+      Caption = 'acF6'
+      OnExecute = acF6Execute
+      ShortCut = 117
+    end
+    object acF7: TAction
+      Caption = 'acF7'
+      OnExecute = acF7Execute
+      ShortCut = 118
+    end
+    object acF8: TAction
+      Caption = 'acF8'
+      OnExecute = acF8Execute
+      ShortCut = 119
+    end
+    object acF9: TAction
+      Caption = 'acF9'
+      OnExecute = acF9Execute
+      ShortCut = 120
+    end
+    object acF10: TAction
+      Caption = 'acF10'
+      OnExecute = acF10Execute
+      ShortCut = 121
+    end
+    object acF11: TAction
+      Caption = 'acF11'
+      OnExecute = acF11Execute
+    end
+    object acF12: TAction
+      Caption = 'acF12'
+      OnExecute = acF12Execute
+      ShortCut = 123
+    end
+  end
 end

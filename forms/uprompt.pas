@@ -53,7 +53,6 @@ procedure TFPrompt.FormCreate(Sender: TObject);
 begin
   inherited;
 
-  Self.SpecialSize := True;
   Self.FEditMode := True;
 
   sePrompt.Lines.Clear;
@@ -161,6 +160,8 @@ begin
 
     TStringList(SynAutoComplete1.AutoCompleteList).Sort;
     TStringList(SynCompletion1.ItemList).Sort;
+
+    SynCompletion1.Width := PercentOfScreen(Self.Width, 40);
   finally
     FreeAndNil(vrScript);
     FreeAndNil(vrEnviroment);

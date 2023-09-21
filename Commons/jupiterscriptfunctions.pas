@@ -27,6 +27,8 @@ uses
   procedure JupiterRunnableInThread(prTitle, prCommandLine : String);
   function JupiterLoadFromFile(prFileName : String) : String;
   procedure JupiterSaveToFile(prFileName, prData : String);
+  function JupiterScriptHasRoutePath(prRoutePath : String) : Boolean;
+  function JupiterScriptGoToRoutePath(prRoutePath : String) : Boolean;
 
   // Variable funcions
   procedure JupiterAddConfiguration(prID, prValue, prTitle : String);
@@ -200,6 +202,16 @@ begin
   finally
     FreeAndNil(vrStr);
   end;
+end;
+
+function JupiterScriptHasRoutePath(prRoutePath: String): Boolean;
+begin
+  Result := vrJupiterApp.HasRoute(prRoutePath);
+end;
+
+function JupiterScriptGoToRoutePath(prRoutePath: String): Boolean;
+begin
+  Result := vrJupiterApp.GoToRoute(prRoutePath);
 end;
 
 procedure JupiterAddConfiguration(prID, prValue, prTitle: String);
