@@ -14,23 +14,28 @@ type
 
   TJupiterAction = class(TJupiterObject)
   private
-    FRunnable     : TJupiterRunnable;
-    FLocation     : TJupiterRoute;
-    FRoute        : TJupiterRoute;
-    FVariableList : TJupiterVariableList;
-    FTitle        : String;
-    FHint         : String;
-    FIcon         : SmallInt;
-    FOnClick      : TNotifyEvent;
+    FRunnable      : TJupiterRunnable;
+    FLocation      : TJupiterRoute;
+    FRoute         : TJupiterRoute;
+    FVariableList  : TJupiterVariableList;
+    FTitle         : String;
+    FHint          : String;
+    FIcon          : SmallInt;
+    FType          : Integer;
+    FOnClick       : TNotifyEvent;
+    FOnClickScript : TStrings;
 
     FOnBeforeExecute : TJupiterAction;
     FOnAfterExecute  : TJupiterAction;
 
     FConfirmBeforeExecute : Boolean;
+
+    procedure Internal_SetOnClickScript(Value : TStrings);
   published
-    property Title : String   read FTitle write FTitle;
-    property Hint  : String   read FHint  write FHint;
-    property Icon  : SmallInt read FIcon  write FIcon;
+    property Title      : String   read FTitle write FTitle;
+    property Hint       : String   read FHint  write FHint;
+    property Icon       : SmallInt read FIcon  write FIcon;
+    property ActionType : Integer  read FType  write FType;
 
     property Runnable : TJupiterRunnable read FRunnable write FRunnable;
     property Location : TJupiterRoute    read FLocation write FLocation;
@@ -41,6 +46,7 @@ type
     property OnAfterExecute  : TJupiterAction read FOnAfterExecute  write FOnAfterExecute;
     property OnBeforeExecute : TJupiterAction read FOnBeforeExecute write FOnBeforeExecute;
     property OnClick         : TNotifyEvent   read FOnClick         write FOnClick;
+    property OnClickScript   : TStrings       read FOnClickScript   write Internal_SetOnClickScript;
 
     property VariableList : TJupiterVariableList read FVariableList write FVariableList;
   public
@@ -62,6 +68,7 @@ type
     property PopupMenu : TPopupMenu read FPopupMenu write FPopupMenu;
   protected
     procedure Internal_OnClick(Sender: TObject);
+
     function Internal_CreateButton(prAction : TJupiterAction; prIndex, prLeft : Integer; prOwner : TScrollBox) : TBitBtn;
   public
     procedure CopyFromList(prCopyList : TJupiterActionList; prOnBeforeExecute : TJupiterAction = nil);
@@ -172,6 +179,10 @@ begin
     vrAction.Icon := vrCurrentAction.Icon;
     vrAction.ConfirmBeforeExecute := vrCurrentAction.ConfirmBeforeExecute;
     vrAction.Hint := vrCurrentAction.Hint;
+    vrAction.ActionType := vrCurrentAction.ActionType;
+
+    if Assigned(vrCurrentAction.OnClickScript) then
+      vrAction.OnClickScript.AddStrings(vrCurrentAction.OnClickScript);
 
     vrAction.OnBeforeExecute := prOnBeforeExecute;
 
@@ -280,6 +291,12 @@ end;
 
 { TJupiterAction }
 
+procedure TJupiterAction.Internal_SetOnClickScript(Value: TStrings);
+begin
+  Self.FOnClickScript.Clear;
+  Self.FOnClickScript.AddStrings(Value);
+end;
+
 procedure TJupiterAction.Execute;
 begin
   if Self.ConfirmBeforeExecute then
@@ -292,11 +309,14 @@ begin
   if Assigned(Self.FOnClick) then
     Self.OnClick(Application.MainForm);
 
-  if Assigned(Self.Runnable) then
+  if ((Assigned(Self.Runnable)) and (Self.Runnable.CommandLine <> EmptyStr)) then
     Self.Runnable.Execute;
 
   if Assigned(Self.Route) then
     vrJupiterApp.NavigateTo(Self.Route, not Application.MainForm.Showing);
+
+  if (Self.OnClickScript.Text <> EmptyStr) then
+    vrJupiterApp.RunScript(Self.OnClickScript);
 
   if Assigned(Self.OnAfterExecute) then
     Self.OnAfterExecute.Execute;
@@ -304,38 +324,50 @@ end;
 
 constructor TJupiterAction.Create(prTitle : String; prRunnable: TJupiterRunnable; prLocation : TJupiterRoute);
 begin
-  Self.FTitle    := prTitle;
-  Self.FRunnable := prRunnable;
-  Self.FLocation := prLocation;
-  Self.Icon      := -1;
+  Self.FTitle     := prTitle;
+  Self.FRunnable  := prRunnable;
+  Self.FLocation  := prLocation;
+  Self.Icon       := -1;
+  Self.ActionType := 0;
 
   Self.FConfirmBeforeExecute := False;
 
   Self.FVariableList := TJupiterVariableList.Create;
+
+  Self.FOnClickScript := TStringList.Create;
+  Self.FOnClickScript.Clear;
 end;
 
 constructor TJupiterAction.Create(prTitle : String; prRoute: TJupiterRoute; prLocation : TJupiterRoute);
 begin
-  Self.FTitle    := prTitle;
-  Self.FRoute    := prRoute;
-  Self.FLocation := prLocation;
-  Self.Icon      := -1;
+  Self.FTitle     := prTitle;
+  Self.FRoute     := prRoute;
+  Self.FLocation  := prLocation;
+  Self.Icon       := -1;
+  Self.ActionType := 0;
 
   Self.FConfirmBeforeExecute := False;
 
   Self.FVariableList := TJupiterVariableList.Create;
+
+  Self.FOnClickScript := TStringList.Create;
+  Self.FOnClickScript.Clear;
 end;
 
 constructor TJupiterAction.Create(prTitle: String; prOnClick: TNotifyEvent; prLocation: TJupiterRoute);
 begin
-  Self.FTitle    := prTitle;
-  Self.FOnClick  := prOnClick;
-  Self.FLocation := prLocation;
-  Self.Icon      := -1;
+  Self.FTitle     := prTitle;
+  Self.FOnClick   := prOnClick;
+  Self.FLocation  := prLocation;
+  Self.Icon       := -1;
+  Self.ActionType := 0;
 
   Self.FConfirmBeforeExecute := False;
 
   Self.FVariableList := TJupiterVariableList.Create;
+
+  Self.FOnClickScript := TStringList.Create;
+  Self.FOnClickScript.Clear;
 end;
 
 destructor TJupiterAction.Destroy;

@@ -5,7 +5,8 @@ unit JupiterTasksDataProvider;
 interface
 
 uses
-  Classes, SysUtils, JupiterDataProvider, JupiterConsts;
+  Classes, SysUtils, JupiterDataProvider, JupiterConsts, JupiterEnviroment,
+  JupiterCSVDataProvider;
 
 type
 
@@ -14,8 +15,10 @@ type
   TJupiterTasksDataProvider = class(TJupiterDataProvider)
   protected
     procedure Internal_Search(prPath, prClient : String); virtual;
+    procedure Internal_GetDataFromCache(prFileCachePath : String);
   public
     procedure ProvideData; override;
+    procedure CreateCacheData;
 
     class procedure GetFieldsLayout(var prList : TStrings); override;
   end;
@@ -50,12 +53,51 @@ begin
   FindClose(vrInfo);
 end;
 
+procedure TJupiterTasksDataProvider.Internal_GetDataFromCache(prFileCachePath : String);
+var
+  vrCSV : TJupiterCSVDataProvider;
+  vrVez : Integer;
+  vrVez2 : Integer;
+begin
+  vrCSV :=  TJupiterCSVDataProvider.Create;
+  try
+    vrCSV.Filename := prFileCachePath;
+    vrCSV.ProvideData;
+
+    for vrVez := 0 to vrCSV.Count - 1 do
+      with vrCSV.GetRowByIndex(vrVez) do
+      begin
+        Self.AddRow;
+
+        for vrVez2 := 0 to Fields.Count -1 do
+          Self.GetLastRow.Fields.AddVariable(Fields.VariableByIndex(vrVez2).ID,
+                                             Fields.VariableByIndex(vrVez2).Value,
+                                             Fields.VariableByIndex(vrVez2).Title);
+      end;
+  finally
+    FreeAndNil(vrCSV);
+  end;
+end;
+
 procedure TJupiterTasksDataProvider.ProvideData;
 var
-  vrInfo : TSearchRec;
-  vrPath : String;
+  vrInfo       : TSearchRec;
+  vrPath       : String;
+  vrEnviroment : TJupiterEnviroment;
 begin
   inherited ProvideData;
+
+  vrEnviroment := TJupiterEnviroment.Create;
+  try
+    if FileExists(vrEnviroment.FullPath('/temp/taskDataProvider.cache')) then
+    begin
+      Self.Internal_GetDataFromCache(vrEnviroment.FullPath('/temp/taskDataProvider.cache'));
+
+      Exit;
+    end;
+  finally
+    FreeAndNil(vrEnviroment);
+  end;
 
   vrPath := vrJupiterApp.ModulesList.GetModuleById('Jupiter.Tools').Params.VariableById('Jupiter.Tools.Tasks.Path').Value;
 
@@ -72,6 +114,45 @@ begin
     until FindNext(vrInfo) <> 0;
 
   FindClose(vrInfo);
+end;
+
+procedure TJupiterTasksDataProvider.CreateCacheData;
+var
+  vrStr        : TStrings;
+  vrVez        : Integer;
+  vrVez2       : Integer;
+  vrLine       : String;
+  vrEnviroment : TJupiterEnviroment;
+begin
+  vrStr := TStringList.Create;
+  vrEnviroment := TJupiterEnviroment.Create;
+  try
+    if FileExists(vrEnviroment.FullPath('/temp/taskDataProvider.cache')) then
+      DeleteFile(vrEnviroment.FullPath('/temp/taskDataProvider.cache'));
+
+    ProvideData;
+
+    vrStr.Clear;
+    vrStr.Add('Client;Task;Path;');
+
+    for vrVez := 0 to Self.Count - 1 do
+    begin
+      vrLine := EmptyStr;
+
+      with Self.GetRowByIndex(vrVez) do
+      begin
+        for vrVez2 := 0 to Fields.Count - 1 do
+          vrLine := vrLine + Fields.VariableByIndex(vrVez2).Value + ';';
+      end;
+
+      vrStr.Add(vrLine);
+    end;
+
+    vrStr.SaveToFile(vrEnviroment.FullPath('/temp/taskDataProvider.cache'));
+  finally
+    FreeAndNil(vrStr);
+    FreeAndNil(vrEnviroment);
+  end;
 end;
 
 class procedure TJupiterTasksDataProvider.GetFieldsLayout(var prList: TStrings);

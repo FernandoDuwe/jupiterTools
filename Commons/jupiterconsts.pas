@@ -22,6 +22,10 @@ const
    DYNAMIC_RECORD_FORM_PATH : String = '/forms/custom/record/dynamic/';
    PROCESS_MONITOR_PATH     : String = '/forms/process/monitor/';
    PROMPT_FORM_PATH         : String = '/forms/prompt/';
+   LAYOUT_BUILDER_PATH      : String = '/forms/layout/builder/';
+   LAYOUT_READER_PATH       : String = '/forms/layout/reader/';
+   CLI_MANAGER_PATH         : String = '/forms/cli/manager/';
+   CLI_NEWCOMMAND_PATH      : String = '/forms/cli/newCommand/';
 
    ICON_ADD       : SmallInt = 0;
    ICON_NEW       : SmallInt = 1;

@@ -32,6 +32,8 @@ type
   public
     procedure ProvideData; override;
     procedure SaveLine(prFields : TJupiterVariableList);
+    procedure SaveFile;
+    procedure RemoveLine(prLineNumber : Integer);
 
     class procedure GetFieldsLayout(var prList : TStrings); override;
   end;
@@ -217,6 +219,20 @@ begin
     else
       with Self.GetRowByIndex(vrLine - 1) do
         Fields.CopyValues(prFields);
+  finally
+    Self.Internal_SaveLine;
+  end;
+end;
+
+procedure TJupiterCSVDataProvider.SaveFile;
+begin
+  Self.Internal_SaveLine;
+end;
+
+procedure TJupiterCSVDataProvider.RemoveLine(prLineNumber: Integer);
+begin
+  try
+    Self.DeleteAtIndex(prLineNumber);
   finally
     Self.Internal_SaveLine;
   end;

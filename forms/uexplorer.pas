@@ -375,7 +375,7 @@ begin
     if ((Self.Params.Exists('Hint.Success')) and (vrCountChecked <> Self.Provider.Size)) then
       Self.Params.DeleteVariable('Hint.Success')
     else
-      if ((vrCountChecked > 0) and (vrCountChecked = Self.Provider.Size)) then
+      if ((vrCountChecked > 0) and (vrCountChecked = Self.Provider.Size)) and (ChecklistMode) then
         Self.Params.AddVariable('Hint.Success', 'Hint.Success', 'Sucesso');
 
   finally
@@ -383,9 +383,6 @@ begin
 
     lvItems.Visible := True;
     lvItems.EnableAutoSizing;
-
-    for vrVez := 0 to lvItems.Columns.Count - 1 do
-
   end;
 end;
 

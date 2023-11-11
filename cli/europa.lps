@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="12"/>
+    <BuildModes Active="Default"/>
+    <Units>
+      <Unit>
+        <Filename Value="europa.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="25"/>
+        <CursorPos X="35" Y="39"/>
+        <UsageCount Value="23"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterconsts.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterConsts"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="121"/>
+        <CursorPos X="65" Y="136"/>
+        <UsageCount Value="22"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterobject.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterObject"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="43" Y="18"/>
+        <UsageCount Value="22"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupitervariable.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterVariable"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="47" Y="18"/>
+        <UsageCount Value="22"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterdataprovider.pas"/>
+        <UnitName Value="JupiterDataProvider"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="68" Y="14"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterenviroment.pas"/>
+        <UnitName Value="JupiterEnviroment"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="25"/>
+        <CursorPos X="45" Y="41"/>
+        <UsageCount Value="11"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterapp.pas"/>
+        <UnitName Value="JupiterApp"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="12" Y="8"/>
+        <UsageCount Value="11"/>
+      </Unit>
+    </Units>
+    <General>
+      <ActiveWindowIndexAtStart Value="-1"/>
+    </General>
+    <JumpHistory HistoryIndex="-1"/>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes ActiveMode=""/>
+    </RunParams>
+  </ProjectSession>
+</CONFIG>

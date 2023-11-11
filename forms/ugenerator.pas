@@ -34,6 +34,7 @@ type
     lbIcon: TLabel;
     lbFormList: TListBox;
     lbMenuList: TListBox;
+    lbReleaseNotes: TListBox;
     lvIcons: TListView;
     lvActions: TListView;
     lvFields: TListView;
@@ -64,6 +65,7 @@ type
     Splitter3: TSplitter;
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
+    TabSheet3: TTabSheet;
     tsIcon: TTabSheet;
     tvCurrentMenu: TTreeView;
     tsForms: TTabSheet;
@@ -579,6 +581,8 @@ begin
       begin
         Hint := prAction.Hint;
         Icon := prAction.Icon;
+        ActionType := prAction.ActionType;
+        OnClickScript.AddStrings(prAction.OnClickScript);
 
         ConfirmBeforeExecute := prAction.ConfirmBeforeExecute;
       end;
@@ -593,6 +597,9 @@ begin
         ConfirmBeforeExecute := prAction.ConfirmBeforeExecute;
 
         Runnable.CommandLine := prAction.Runnable.CommandLine;
+
+        ActionType := prAction.ActionType;
+        OnClickScript.AddStrings(prAction.OnClickScript);
       end;
     end;
 

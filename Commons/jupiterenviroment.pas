@@ -5,7 +5,7 @@ unit JupiterEnviroment;
 interface
 
 uses
-  Classes, SysUtils, {$IFNDEF JUPITERCLI} Forms, {$ENDIF} JupiterConsts, JupiterObject;
+  Classes, SysUtils {$IFNDEF JUPITERCLI}, Forms{$ENDIF}, JupiterConsts, JupiterObject;
 
 type
 
@@ -115,7 +115,7 @@ begin
     Exit;
   end;
 
-  Result := NULL_KEY;
+  Result := ICON_DOCFILE;
 
   if AnsiUpperCase(ExtractFileName(prFileName)) = AnsiUpperCase('Tempos.txt') then
   begin
@@ -173,7 +173,7 @@ end;
 
 function TJupiterEnviroment.IsTechFile(prFileName: String): Boolean;
 begin
-  Result := Pos(AnsiUpperCase(ExtractFileExt(prFileName)), AnsiUpperCase('.bat .cs .php .js .py .vb .json .xml .sql .jpas .pck')) <> 0;
+  Result := Pos(AnsiUpperCase(ExtractFileExt(prFileName)), AnsiUpperCase('.bat .cs .php .js .py .vb .json .xml .sql .jpas .pck .jlt')) <> 0;
 end;
 
 function TJupiterEnviroment.IsTextFile(prFileName: String): Boolean;

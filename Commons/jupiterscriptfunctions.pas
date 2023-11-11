@@ -6,12 +6,13 @@ interface
 
 uses
   Classes, SysUtils, JupiterApp, JupiterRunnable, JupiterDialogForm,
-  JupiterRoute, Forms;
+  JupiterRoute, JupiterTasksDataProvider, Forms;
 
   // I/O Functions
   procedure JupiterWriteLn(prMessage : String);
   function JupiterReadLn : String;
   function JupiterInputText(prMessage : String) : String;
+  function JupiterParamByName(prParamName : String) : String;
 
   // Messages & Popup
   procedure JupiterAddLogMessage(prTitle, prDescription : String);
@@ -29,6 +30,7 @@ uses
   procedure JupiterSaveToFile(prFileName, prData : String);
   function JupiterScriptHasRoutePath(prRoutePath : String) : Boolean;
   function JupiterScriptGoToRoutePath(prRoutePath : String) : Boolean;
+  procedure JupiterScriptCreateTaskDataCache;
 
   // Variable funcions
   procedure JupiterAddConfiguration(prID, prValue, prTitle : String);
@@ -95,11 +97,6 @@ begin
   end;
 end;
 
-procedure JupiterAddLogMessage(prTitle, prDescription: String);
-begin
-  vrJupiterApp.AddMessage(prTitle, 'JupiterScript').Details.Add(prDescription);
-end;
-
 procedure JupiterShowPopup(prTitle, prDescription: String);
 var
   vrStr : TStrings;
@@ -109,6 +106,26 @@ begin
   vrStr.Add(prDescription);
 
   vrJupiterApp.Popup(prTitle, vrStr);
+end;
+
+procedure JupiterScriptGoToRoute(prRoutePath : String; prCSVParams : TStringList; prModal : Boolean);
+var
+  vrRoute : TJupiterRoute;
+begin
+  vrRoute := TJupiterRoute.Create(prRoutePath);
+  vrRoute.Params.FromStringList(prCSVParams);
+
+  vrJupiterApp.NavigateTo(vrRoute, prModal);
+end;
+
+function JupiterParamByName(prParamName: String): String;
+begin
+  //
+end;
+
+procedure JupiterAddLogMessage(prTitle, prDescription: String);
+begin
+  vrJupiterApp.AddMessage(prTitle, 'JupiterScript').Details.Add(prDescription);
 end;
 
 procedure JupiterShowInfoMessage(prMessage: String);
@@ -214,14 +231,32 @@ begin
   Result := vrJupiterApp.GoToRoute(prRoutePath);
 end;
 
+procedure JupiterScriptCreateTaskDataCache;
+var
+  vrTask : TJupiterTasksDataProvider;
+begin
+  vrTask := TJupiterTasksDataProvider.Create;
+  try
+    vrTask.CreateCacheData;
+  finally
+    FreeAndNil(vrTask);
+  end;
+end;
+
 procedure JupiterAddConfiguration(prID, prValue, prTitle: String);
 begin
-  vrJupiterApp.UserParams.AddConfig(prID, prValue, prTitle);
+  if vrJupiterApp.Params.Exists(prID) then
+    vrJupiterApp.Params.VariableById(prID).Value := prValue
+  else
+    vrJupiterApp.UserParams.AddConfig(prID, prValue, prTitle);
 end;
 
 procedure JupiterAddVariable(prID, prValue, prTitle: String);
 begin
-  vrJupiterApp.UserParams.AddVariable(prID, prValue, prTitle);
+  if vrJupiterApp.Params.Exists(prID) then
+    vrJupiterApp.Params.VariableById(prID).Value := prValue
+  else
+    vrJupiterApp.UserParams.AddVariable(prID, prValue, prTitle);
 end;
 
 function JupiterVariableExists(prVariableID : String) : Boolean;
@@ -257,16 +292,6 @@ end;
 function JupiterGetCurrentRouteParams: TStringList;
 begin
   Result := vrJupiterApp.CurrentRoute.Params.ToStringList;
-end;
-
-procedure JupiterScriptGoToRoute(prRoutePath : String; prCSVParams : TStringList; prModal : Boolean);
-var
-  vrRoute : TJupiterRoute;
-begin
-  vrRoute := TJupiterRoute.Create(prRoutePath);
-  vrRoute.Params.FromStringList(prCSVParams);
-
-  vrJupiterApp.NavigateTo(vrRoute, prModal);
 end;
 
 end.

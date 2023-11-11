@@ -564,6 +564,30 @@ inherited FGenerator: TFGenerator
           end
         end
       end
+      object TabSheet3: TTabSheet
+        Caption = 'Release Notes'
+        ClientHeight = 524
+        ClientWidth = 1280
+        object lbReleaseNotes: TListBox
+          Left = 0
+          Height = 524
+          Top = 0
+          Width = 1280
+          Align = alClient
+          Items.Strings = (
+            'Versão 2.2'
+            ''
+            '  - Criação de Caches em tarefas;'
+            '  - Variável Workdir;'
+            '  - Gerador de Layouts e Leitor de Layouts;'
+            '  - CLI;'
+            '  - Release Notes;'
+            '  - Actions podem executar JPAS;'
+          )
+          ItemHeight = 15
+          TabOrder = 0
+        end
+      end
     end
   end
   inherited ppMenu: TPopupMenu

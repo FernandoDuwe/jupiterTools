@@ -25,7 +25,8 @@ uses
   uNewAction, uNewField, JupiterGeneratorMenuItem, jupiterformutils, uNewParam,
   JupiterVariableDataProvider, uNewDataSet, uMain, uGenerator, jupiterScript,
   uScriptEditor, uCustomJupiterForm, jupiterScriptFunctions, uDynamicRecord,
-  jupiterThread, uProcessMonitor, jupiterStream, uPrompt;
+  jupiterThread, uProcessMonitor, jupiterStream, uPrompt, ulayoutbuilder, 
+jupiterclimodule, ulayoutreader, uclimanager, jupiterclicommand, unewcommandcli;
 
 {$R *.res}
 
@@ -59,6 +60,7 @@ begin
     vrJupiterApp.AddMessage('Iniciando', Application.Title);
 
   vrJupiterApp.AddModule(TJupiterStandardModule.Create);
+  vrJupiterApp.AddModule(TJupiterCLIModule.Create);
   vrJupiterApp.AddModule(TJupiterToolsModule.Create);
   vrJupiterApp.AddModule(TJupiterGeneratorModule.Create);
 
@@ -76,6 +78,10 @@ begin
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(DYNAMIC_RECORD_FORM_PATH, TFDynamicRecord));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(PROCESS_MONITOR_PATH, TFProcessMonitor));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(PROMPT_FORM_PATH, TFPrompt));
+  vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(LAYOUT_BUILDER_PATH, TFLayoutBuilder));
+  vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(LAYOUT_READER_PATH, TFLayoutReader));
+  vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(CLI_MANAGER_PATH, TFCLIManager));
+  vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(CLI_NEWCOMMAND_PATH, TFNewCommandCli));
 
   Application.CreateForm(TFMain, FMain);
   Application.Run;

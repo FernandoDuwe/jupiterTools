@@ -1,0 +1,98 @@
+inherited FLayoutReader: TFLayoutReader
+  Height = 705
+  Width = 1101
+  Caption = 'Layout Reader'
+  ClientHeight = 705
+  ClientWidth = 1101
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  inherited sbActions: TScrollBox
+    Width = 1101
+  end
+  inherited sbStatus: TStatusBar
+    Top = 682
+    Width = 1101
+  end
+  inherited pnHint: TPanel
+    Top = 616
+    Width = 1101
+    ClientWidth = 1101
+  end
+  object pnBottom: TPanel[3]
+    Left = 0
+    Height = 556
+    Top = 60
+    Width = 515
+    Align = alLeft
+    BevelOuter = bvNone
+    ClientHeight = 556
+    ClientWidth = 515
+    TabOrder = 3
+    object vlFields: TValueListEditor
+      Left = 0
+      Height = 517
+      Top = 39
+      Width = 515
+      Align = alClient
+      Color = clDefault
+      DefaultColWidth = 100
+      FixedCols = 0
+      RowCount = 2
+      TabOrder = 0
+      Strings.Strings = (
+        '1=1'
+      )
+      TitleCaptions.Strings = (
+        'Campo (Tipo, Inicio, Tam.)'
+        'Valor'
+      )
+      ColWidths = (
+        100
+        411
+      )
+    end
+    object Panel1: TPanel
+      Left = 0
+      Height = 39
+      Top = 0
+      Width = 515
+      Align = alTop
+      BevelOuter = bvNone
+      Caption = 'Panel1'
+      ClientHeight = 39
+      ClientWidth = 515
+      TabOrder = 1
+      object cbLayouts: TComboBox
+        Left = 8
+        Height = 23
+        Top = 8
+        Width = 501
+        Anchors = [akTop, akLeft, akRight]
+        ItemHeight = 15
+        OnChange = cbLayoutsChange
+        Style = csDropDownList
+        TabOrder = 0
+      end
+    end
+  end
+  object Splitter1: TSplitter[4]
+    Left = 515
+    Height = 556
+    Top = 60
+    Width = 5
+  end
+  object lbFile: TListBox[5]
+    Left = 520
+    Height = 556
+    Top = 60
+    Width = 581
+    Align = alClient
+    ItemHeight = 0
+    OnClick = lbFileClick
+    TabOrder = 5
+  end
+  inherited ppMenu: TPopupMenu[6]
+  end
+  inherited acActionShortcuts: TActionList[7]
+  end
+end

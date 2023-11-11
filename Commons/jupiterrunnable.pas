@@ -5,7 +5,8 @@ unit JupiterRunnable;
 interface
 
 uses
-  Classes, Controls, Forms, JupiterObject, JupiterEnviroment,
+  Classes, Controls, Forms,
+  JupiterObject, JupiterEnviroment,
   JupiterSystemMessage, SysUtils;
 
 type
@@ -284,6 +285,9 @@ begin
     vrStr.DelimitedText := vrJupiterApp.Params.ResolveString(Self.CommandLine);
 
     vrParams := EmptyStr;
+
+    if vrStr.Count = 0 then
+      Exit;
 
     for vrVez := 1 to vrStr.Count - 1 do
       vrParams := vrParams + ' ' + vrStr[vrVez];

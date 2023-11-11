@@ -1,0 +1,34 @@
+inherited FCLIManager: TFCLIManager
+  Caption = 'Comandos do CLI'
+  OnCreate = FormCreate
+  object lvCommands: TListView[3]
+    Left = 0
+    Height = 230
+    Top = 60
+    Width = 668
+    Align = alClient
+    Columns = <    
+      item
+        Caption = 'Nome do Comando'
+        Width = 200
+      end    
+      item
+        Caption = 'Comando'
+        Width = 300
+      end    
+      item
+        Caption = 'Parâmetros'
+        Width = 100
+      end>
+    GridLines = True
+    ReadOnly = True
+    SortType = stText
+    TabOrder = 3
+    ViewStyle = vsReport
+    OnSelectItem = lvCommandsSelectItem
+  end
+  inherited ppMenu: TPopupMenu[4]
+  end
+  inherited acActionShortcuts: TActionList[5]
+  end
+end

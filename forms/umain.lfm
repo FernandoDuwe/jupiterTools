@@ -251,7 +251,9 @@ inherited FMain: TFMain
     Left = 400
     Top = 122
   end
-  object ilIconFamily: TImageList[8]
+  inherited acActionShortcuts: TActionList[8]
+  end
+  object ilIconFamily: TImageList[9]
     Left = 497
     Top = 122
     Bitmap = {
@@ -863,7 +865,7 @@ inherited FMain: TFMain
       E2550EC6BF96EE06EB0500DF7E7849
     }
   end
-  object mmMainMenu: TMainMenu[9]
+  object mmMainMenu: TMainMenu[10]
     Images = ilIconFamily
     Left = 595
     Top = 121
@@ -886,6 +888,11 @@ inherited FMain: TFMain
           Caption = 'Arquivo .jpas'
           ImageIndex = 0
           OnClick = MenuItem1Click
+        end
+        object MenuItem9: TMenuItem
+          Caption = 'Layout'
+          ImageIndex = 0
+          OnClick = MenuItem9Click
         end
       end
       object miOpen: TMenuItem
@@ -959,6 +966,12 @@ inherited FMain: TFMain
         ImageIndex = 11
         OnClick = miDecFontSizeClick
       end
+      object MenuItem10: TMenuItem
+        Caption = 'Redimensionar'
+        Hint = 'Redimensionar aplicação para o padrão apresentado ao abrir'
+        ImageIndex = 26
+        OnClick = MenuItem10Click
+      end
       object Separator4: TMenuItem
         Caption = '-'
       end
@@ -1001,6 +1014,19 @@ inherited FMain: TFMain
         ImageIndex = 18
         OnClick = tbPromptClick
       end
+      object MenuItem11: TMenuItem
+        Caption = 'Comandos do CLI'
+        ImageIndex = 18
+        OnClick = MenuItem11Click
+      end
+      object Separator7: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem12: TMenuItem
+        Caption = 'Leitor de Layouts'
+        ImageIndex = 17
+        OnClick = MenuItem12Click
+      end
     end
     object MenuItem4: TMenuItem
       Caption = 'Pastas'
@@ -1038,14 +1064,14 @@ inherited FMain: TFMain
       OnClick = MenuItem5Click
     end
   end
-  object tmSearch: TTimer[10]
+  object tmSearch: TTimer[11]
     Enabled = False
     Interval = 500
     OnTimer = tmSearchTimer
     Left = 688
     Top = 120
   end
-  object ppNotifier: TPopupNotifier[11]
+  object ppNotifier: TPopupNotifier[12]
     Color = clInactiveBorder
     Icon.Data = {
       07544269746D617000000000
@@ -1057,20 +1083,20 @@ inherited FMain: TFMain
     Left = 784
     Top = 120
   end
-  object ApplicationProperties1: TApplicationProperties[12]
+  object ApplicationProperties1: TApplicationProperties[13]
     OnActivate = ApplicationProperties1Activate
     OnRestore = ApplicationProperties1Restore
     Left = 888
     Top = 121
   end
-  object tmInternalThread: TTimer[13]
+  object tmInternalThread: TTimer[14]
     Enabled = False
     Interval = 5000
     OnTimer = tmInternalThreadTimer
     Left = 688
     Top = 192
   end
-  object acShortcuts: TActionList[14]
+  object acShortcuts: TActionList[15]
     Left = 592
     Top = 192
     object acPrompt: TAction

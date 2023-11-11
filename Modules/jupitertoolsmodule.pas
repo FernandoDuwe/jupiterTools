@@ -156,7 +156,12 @@ begin
           if ExtractFileExt(Fields.VariableById('File').Value) = '.jpas' then
             Route.Params.AddVariable('destinyPath', SCRIPTEDITOR_FORM_PATH, 'Destino')
           else
-            Route.Params.AddVariable('destinyPath', EDITOR_FORM_PATH, 'Destino');
+          begin
+            if ExtractFileExt(Fields.VariableById('File').Value) = '.jlt' then
+              Route.Params.AddVariable('destinyPath', LAYOUT_BUILDER_PATH, 'Destino')
+            else
+              Route.Params.AddVariable('destinyPath', EDITOR_FORM_PATH, 'Destino');
+          end;
         end;
       end;
   finally

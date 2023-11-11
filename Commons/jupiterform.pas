@@ -97,7 +97,7 @@ type
     procedure Internal_PrepareForm; virtual;
   public
     procedure PrepareForm; virtual;
-    procedure UpdateForm; virtual;
+    procedure UpdateForm(prUpdateDatasets : Boolean = True; prUpdateComponentes : Boolean = True; prUpdateCalcs : Boolean = True); virtual;
     procedure Search(prSearch : String); virtual;
   end;
 
@@ -114,7 +114,7 @@ uses JupiterApp, JupiterDialogForm, uGenerator;
 
 procedure TFJupiterForm.FormActivate(Sender: TObject);
 begin
-  Self.UpdateForm;
+  Self.UpdateForm();
 end;
 
 procedure TFJupiterForm.acF1Execute(Sender: TObject);
@@ -392,7 +392,7 @@ begin
     lbHelp.Left   := 64;
   end;
 
-  Self.UpdateForm;
+  Self.UpdateForm(False);
 end;
 
 procedure TFJupiterForm.Internal_SaveGeneratorClick(Sender: TObject);
@@ -472,12 +472,17 @@ begin
   end;
 end;
 
-procedure TFJupiterForm.UpdateForm;
+procedure TFJupiterForm.UpdateForm(prUpdateDatasets : Boolean = True; prUpdateComponentes : Boolean = True; prUpdateCalcs : Boolean = True);
 begin
   try
-    Self.Internal_UpdateDatasets;
-    Self.Internal_UpdateComponents;
-    Self.Internal_UpdateCalcs;
+    if prUpdateDatasets then
+      Self.Internal_UpdateDatasets;
+
+    if prUpdateComponentes then
+      Self.Internal_UpdateComponents;
+
+    if prUpdateCalcs then
+      Self.Internal_UpdateCalcs;
   finally
     Application.ProcessMessages;
   end;

@@ -40,7 +40,7 @@ type
   published
     property CurrentSelected : Integer read FCurrentSelected write Internal_SetCurrentSelected;
   public
-    procedure UpdateForm; override;
+    procedure UpdateForm(prUpdateDatasets : Boolean = True; prUpdateComponentes : Boolean = True; prUpdateCalcs : Boolean = True); override;
   end;
 
 var
@@ -208,7 +208,8 @@ begin
   Self.Actions.GetActionButton(1, sbActions).Enabled := Self.FCurrentSelected <> NULL_KEY;
 end;
 
-procedure TFProcessMonitor.UpdateForm;
+procedure TFProcessMonitor.UpdateForm(prUpdateDatasets: Boolean;
+  prUpdateComponentes: Boolean; prUpdateCalcs: Boolean);
 begin
   inherited UpdateForm;
 

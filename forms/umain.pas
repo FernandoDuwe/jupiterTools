@@ -25,9 +25,14 @@ type
     edSearch: TEdit;
     ilIconFamily: TImageList;
     MenuItem1: TMenuItem;
+    MenuItem10: TMenuItem;
+    MenuItem11: TMenuItem;
+    MenuItem12: TMenuItem;
+    Separator7: TMenuItem;
     MenuItem6: TMenuItem;
     MenuItem7: TMenuItem;
     MenuItem8: TMenuItem;
+    MenuItem9: TMenuItem;
     Separator6: TMenuItem;
     miSearchMode: TMenuItem;
     miNewCheckList: TMenuItem;
@@ -94,9 +99,13 @@ type
     procedure FormResize(Sender: TObject);
     procedure FormShortCut(var Msg: TLMKey; var Handled: Boolean);
     procedure FormShow(Sender: TObject);
+    procedure MenuItem10Click(Sender: TObject);
+    procedure MenuItem11Click(Sender: TObject);
+    procedure MenuItem12Click(Sender: TObject);
     procedure MenuItem1Click(Sender: TObject);
     procedure MenuItem6Click(Sender: TObject);
     procedure MenuItem8Click(Sender: TObject);
+    procedure MenuItem9Click(Sender: TObject);
     procedure miSearchModeClick(Sender: TObject);
     procedure miAutoUpdateClick(Sender: TObject);
     procedure miClearSearchClick(Sender: TObject);
@@ -230,8 +239,19 @@ begin
 end;
 
 procedure TFMain.tvMenuChange(Sender: TObject; Node: TTreeNode);
+var
+  vrAction : TJupiterAction;
 begin
-  tvMenuClick(Sender);
+  if not Assigned(tvMenu.Selected) then
+    Exit;
+
+  if not Assigned(tvMenu.Selected.Data) then
+    Exit;
+
+  vrAction := TJupiterAction(tvMenu.Selected.Data);
+
+  if Assigned(vrAction.Route) then
+    vrJupiterApp.NavigateTo(vrAction.Route, False);
 end;
 
 procedure TFMain.FormShortCut(var Msg: TLMKey; var Handled: Boolean);
@@ -323,7 +343,7 @@ begin
 
   inherited;
 
-  pnMenu.Width := PercentOfScreen(Self.Width, 30);
+  MenuItem10.Click;
 
   vrJupiterApp.MainIcons := ilIconFamily;
   vrJupiterApp.NavigateTo(TJupiterRoute.Create(ROOT_FORM_PATH), False);
@@ -337,6 +357,21 @@ begin
   if vrJupiterApp.Params.Exists('Jupiter.Standard.Triggers.OnExecuteCurrentThread') then
         if Trim(vrJupiterApp.Params.VariableById('Jupiter.Standard.Triggers.OnExecuteCurrentThread').Value) <> EmptyStr then
            tmInternalThread.Enabled := True;
+end;
+
+procedure TFMain.MenuItem10Click(Sender: TObject);
+begin
+  pnMenu.Width := PercentOfScreen(Self.Width, 30);
+end;
+
+procedure TFMain.MenuItem11Click(Sender: TObject);
+begin
+  vrJupiterApp.NavigateTo(TJupiterRoute.Create(CLI_MANAGER_PATH), True);
+end;
+
+procedure TFMain.MenuItem12Click(Sender: TObject);
+begin
+  vrJupiterApp.NavigateTo(TJupiterRoute.Create(LAYOUT_READER_PATH), True);
 end;
 
 procedure TFMain.MenuItem1Click(Sender: TObject);
@@ -375,10 +410,14 @@ var
 begin
   vrEnviroment := TJupiterEnviroment.Create();
   try
+    vrEnviroment.BasePath := vrJupiterApp.Params.VariableById('Enviroment.WorkDir').Value;
+
     vrFile := vrEnviroment.OpenFile('*.jpas');
 
     if vrFile <> EmptyStr then
     begin
+      vrJupiterApp.Params.VariableById('Enviroment.WorkDir').Value := ExtractFileDir(vrFile);
+
       vrRoute := TJupiterRoute.Create(SCRIPTEDITOR_FORM_PATH);
 
       Route.Params.AddVariable('title', 'Arquivo: ' + ExtractFileName(vrFile), 'Título');
@@ -394,6 +433,38 @@ end;
 procedure TFMain.MenuItem8Click(Sender: TObject);
 begin
   vrJupiterApp.NavigateTo(TJupiterRoute.Create(PROCESS_MONITOR_PATH), True);
+end;
+
+procedure TFMain.MenuItem9Click(Sender: TObject);
+var
+  vrDialog     : TJupiterDialogForm;
+  vrStr        : TStrings;
+  vrEnviroment : TJupiterEnviroment;
+begin
+  vrDialog     := TJupiterDialogForm.Create;
+  vrStr        := TStringList.Create;
+  vrEnviroment := TJupiterEnviroment.Create;
+  try
+    vrStr.Clear;
+
+    vrDialog.Title := 'Novo Layout';
+    vrDialog.Hint  := 'Crie um novo layout.';
+
+    vrDialog.Fields.AddField('NAME', 'Nome do Layout', '');
+
+    if vrDialog.Show then
+    begin
+      vrStr.Add('Field;Type;Start;Size;');
+
+      vrStr.SaveToFile(vrEnviroment.FullPath('modules/tools/library/') + DirectorySeparator + vrDialog.Fields.VariableById('NAME').Value + '.jlt');
+
+      Self.UpdateForm;
+    end;
+  finally
+    FreeAndNil(vrDialog);
+    FreeAndNil(vrStr);
+    FreeAndNil(vrEnviroment);
+  end;
 end;
 
 procedure TFMain.miSearchModeClick(Sender: TObject);
@@ -618,10 +689,14 @@ var
 begin
   vrEnviroment := TJupiterEnviroment.Create();
   try
+    vrEnviroment.BasePath := vrJupiterApp.Params.VariableById('Enviroment.WorkDir').Value;
+
     vrFile := vrEnviroment.OpenFile('*.csv');
 
     if vrFile <> EmptyStr then
     begin
+      vrJupiterApp.Params.VariableById('Enviroment.WorkDir').Value := ExtractFileDir(vrFile);
+
       vrRoute := TJupiterRoute.Create(EXPLORER_FORM_PATH);
 
       vrRoute.Params.AddVariable('type', DATAPROVIDER_TYPE_LIST_CSV, 'Tipo');
@@ -655,19 +730,8 @@ begin
 end;
 
 procedure TFMain.tvMenuClick(Sender: TObject);
-var
-  vrAction : TJupiterAction;
 begin
-  if not Assigned(tvMenu.Selected) then
-    Exit;
 
-  if not Assigned(tvMenu.Selected.Data) then
-    Exit;
-
-  vrAction := TJupiterAction(tvMenu.Selected.Data);
-
-  if Assigned(vrAction.Route) then
-    vrJupiterApp.NavigateTo(vrAction.Route, False);
 end;
 
 procedure TFMain.Internal_ListMenuItens;

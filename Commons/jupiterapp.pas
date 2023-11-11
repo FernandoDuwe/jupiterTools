@@ -5,10 +5,11 @@ unit JupiterApp;
 interface
 
 uses
-  Classes, ExtCtrls, JupiterModule, JupiterObject, JupiterRoute, JupiterForm,
+  Classes, ExtCtrls,
+  JupiterModule, JupiterObject, JupiterRoute, JupiterForm,
   JupiterVariable, JupiterEnviroment, JupiterSystemMessage, PopUpNotifier,
-  JupiterVariableDataProvider, jupiterThread, JupiterRunnable, SysUtils,
-  Controls;
+  JupiterVariableDataProvider, jupiterThread, JupiterRunnable, jupiterScript,
+  SysUtils, Controls;
 
 type
 
@@ -22,14 +23,17 @@ type
     FMessages         : TJupiterObjectList;
     FThreads          : TJupiterThreadList;
     FFormRoutes       : TJupiterObjectList;
+
     FBodyPanel        : TPanel;
     FCurrentForm      : TFJupiterForm;
+
     FParams           : TJupiterVariableList;
     FUserParams       : TJupiterVariableList;
     FRouteParams      : TJupiterVariableList;
     FDataSetParams    : TJupiterVariableDataProviderList;
     FMainIcons        : TImageList;
     FPopupNotifier    : TPopupNotifier;
+
     FOnBeforeNavigate : TNotifyEvent;
     FOnAfterNavigate  : TNotifyEvent;
     FParamList        : TStrings;
@@ -41,9 +45,12 @@ type
   published
     property AppID         : String         read FAppID;
     property AppName       : String         read FAppName;
+
     property BodyPanel     : TPanel         read FBodyPanel   write FBodyPanel;
     property CurrentForm   : TFJupiterForm  read FCurrentForm write FCurrentForm;
+
     property CurrentRoute  : TJupiterRoute  read FCurrentRoute;
+
     property MainIcons     : TImageList     read FMainIcons   write FMainIcons;
     property PopupNotifier : TPopupNotifier read FPopupNotifier write FPopupNotifier;
 
@@ -59,7 +66,7 @@ type
     property OnAfterNavigate  : TNotifyEvent read FOnAfterNavigate  write FOnAfterNavigate;
   public
     procedure AddModule(prModule : TJupiterModule);
-    function AddMessage(prTitle, prOrigin : String) : TJupiterSystemMessage;
+    function  AddMessage(prTitle, prOrigin : String) : TJupiterSystemMessage;
     procedure AddParam(prParam : String);
 
     function GetVersion : String;
@@ -76,6 +83,8 @@ type
 
     function HasRoute(prRoutePath: String): Boolean;
     function GoToRoute(prRoutePath: String): Boolean;
+
+    procedure RunScript(prScript : TStrings);
 
     constructor Create(prAppID, prAppName : String);
     destructor Destroy; override;
@@ -147,6 +156,9 @@ begin
     if not Self.Params.Exists('Enviroment.Run.ScriptExtensions') then
        Self.Params.AddConfig('Enviroment.Run.ScriptExtensions', '.bat', 'Extensões de arquivos de script');
 
+    if not Self.Params.Exists('Enviroment.WorkDir') then
+      Self.Params.AddVariable('Enviroment.WorkDir', ExtractFileDir(Application.ExeName), 'Diretório de trabalho atual');
+
     if not Self.Params.Exists('Interface.Font.Size') then
        Self.Params.AddConfig('Interface.Font.Size', '8', 'Tamanho da fonte');
 
@@ -200,10 +212,7 @@ end;
 
 function TJupiterApp.ConsoleMode: Boolean;
 begin
-  Result := ((Self.FParamList.IndexOf('-c') <> -1) or
-             (Self.FParamList.IndexOf('-console') <> -1) or
-             (Self.FParamList.IndexOf('-h') <> -1) or
-             (Self.FParamList.IndexOf('-help') <> -1));
+  Result := False;
 end;
 
 procedure TJupiterApp.NavigateTo(prRoute: TJupiterRoute; prAsModal: Boolean);
@@ -328,6 +337,41 @@ end;
 function TJupiterApp.GoToRoute(prRoutePath: String): Boolean;
 begin
   //
+end;
+
+procedure TJupiterApp.RunScript(prScript: TStrings);
+var
+  vrScript     : TJupiterScript;
+  vrEnviroment : TJupiterEnviroment;
+  vrJupiterMessage : TJupiterSystemMessage;
+begin
+  vrScript     := TJupiterScript.Create;
+  vrEnviroment := TJupiterEnviroment.Create;
+  try
+    vrScript.LoadFromFile(vrEnviroment.FullPath('modules/jpas/promptCommand.jpas'));
+
+    vrScript.UserCommand := prScript.Text;
+    vrScript.Execute;
+
+    if not vrScript.Runned then
+    begin
+      vrJupiterMessage := Self.AddMessage('Erro ao executar', Self.ClassName);
+      vrJupiterMessage.Details.AddStrings(vrScript.Messages);
+
+      Self.Popup('Erro ao executar script', vrScript.Messages);
+    end
+    else
+    begin
+      vrJupiterMessage := Self.AddMessage('Comando executado', Self.ClassName);
+      vrJupiterMessage.Details.AddStrings(vrScript.RunMessages);
+
+      if Trim(vrScript.RunMessages.Text) <> EmptyStr then
+        Self.Popup('Script', vrScript.RunMessages);
+    end;
+  finally
+    FreeAndNil(vrScript);
+    FreeAndNil(vrEnviroment);
+  end;
 end;
 
 constructor TJupiterApp.Create(prAppID, prAppName: String);

@@ -44,7 +44,7 @@ type
     procedure pnTitleClick(Sender: TObject);
     procedure tvFoldersDblClick(Sender: TObject);
   private
-
+    procedure Internal_PrepareForm; override;
   protected
     procedure Internal_UpdateComponents; override;
     procedure Internal_UpdateDatasets; override;
@@ -142,6 +142,11 @@ begin
     Exit;
 
   TJupiterRunnable.Create(TJupiterVariableList(tvFolders.Selected.Data).VariableById('Path').Value, True);
+end;
+
+procedure TFHome.Internal_PrepareForm;
+begin
+  Self.Params.AddVariable(FIELD_ID_GENERADOR, 'HomeForm', 'ID do formulário');
 end;
 
 procedure TFHome.Internal_UpdateComponents;

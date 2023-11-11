@@ -109,6 +109,12 @@ begin
       TJupiterAction(Self.Actions.GetLastObject).Icon                 := StrToIntDef(vrXML.GetRowByIndex(vrVez).Fields.VariableById('icon').Value, NULL_KEY);
       TJupiterAction(Self.Actions.GetLastObject).ConfirmBeforeExecute := StrToBool(vrXML.GetRowByIndex(vrVez).Fields.VariableById('confirmBeforeExecute').Value);
       TJupiterAction(Self.Actions.GetLastObject).Tag := vrVez;
+
+      if vrXML.GetRowByIndex(vrVez).Fields.Exists('type') then
+        TJupiterAction(Self.Actions.GetLastObject).ActionType := StrToIntDef(vrXML.GetRowByIndex(vrVez).Fields.VariableById('type').Value, NULL_KEY);
+
+      if vrXML.GetRowByIndex(vrVez).Fields.Exists('onClickScript') then
+        TJupiterAction(Self.Actions.GetLastObject).OnClickScript.Add(vrXML.GetRowByIndex(vrVez).Fields.VariableById('onClickScript').Value);
     end;
   finally
     FreeAndNil(vrXML);
@@ -167,6 +173,10 @@ begin
       vrStr.Add('      <file>' + TJupiterAction(Self.Actions.GetAtIndex(vrVez)).Runnable.CommandLine + '</file>');
       vrStr.Add('      <icon>' + IntToStr(TJupiterAction(Self.Actions.GetAtIndex(vrVez)).Icon) + '</icon>');
       vrStr.Add('      <confirmBeforeExecute>' + BoolToStr(TJupiterAction(Self.Actions.GetAtIndex(vrVez)).ConfirmBeforeExecute) + '</confirmBeforeExecute>');
+      vrStr.Add('      <type>' + IntToStr(TJupiterAction(Self.Actions.GetAtIndex(vrVez)).ActionType) + '</type>');
+      vrStr.Add('      <onClickScript>');
+      vrStr.AddStrings(TJupiterAction(Self.Actions.GetAtIndex(vrVez)).OnClickScript);
+      vrStr.Add('      </onClickScript>');
       vrStr.Add('    </action>');
     end;
 

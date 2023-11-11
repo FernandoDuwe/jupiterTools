@@ -225,6 +225,7 @@ begin
   Sender.AddFunction(@JupiterShowPopup, 'procedure ShowPopup(prTitle, prDescription : String);');
   Sender.AddFunction(@JupiterShowInfoMessage, 'procedure ShowInfoMessage(prMessage : String);');
   Sender.AddFunction(@JupiterShowErrorMessage, 'procedure ShowErrorMessage(prMessage : String);');
+  Sender.AddFunction(@JupiterParamByName, 'function ParamByName(prParamName : String) : String;');
 
   Sender.AddFunction(@JupiterRunCommandLine, 'function RunCommandLine(prCommandLine: String) : String;');
   Sender.AddFunction(@JupiterRunCommandLineNoMessage, 'function RunCommandLineNoMessage(prCommandLine: String) : String;');
@@ -233,6 +234,7 @@ begin
   Sender.AddFunction(@JupiterRunnableInThread, 'procedure RunnableInThread(prTitle, prCommandLine: String);');
   Sender.AddFunction(@JupiterLoadFromFile, 'function LoadFromFile(prFileName : String) : String;');
   Sender.AddFunction(@JupiterSaveToFile, 'procedure SaveToFile(prFileName, prData : String);');
+  Sender.AddFunction(@JupiterScriptCreateTaskDataCache, 'procedure CreateTaskDataCache();');
 
   Sender.AddFunction(@JupiterAddConfiguration, 'procedure AddConfiguration(prID, prValue, prTitle : String);');
   Sender.AddFunction(@JupiterAddVariable, 'procedure AddVariable(prID, prValue, prTitle : String);');
@@ -381,6 +383,8 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure GoToRoute(prRoutePath : String; prCSVParams : TStringList; prModal : Boolean);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'function HasRoutePath(prRoutePath: String): Boolean;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'function GoToRoutePath(prRoutePath: String): Boolean;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CreateTaskDataCache();'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function ParamByName(prParamName : String) : String;'));
 
   // Code functions
   Self.Internal_AnalyseUserCode(Result);
