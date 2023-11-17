@@ -65,9 +65,9 @@ inherited FNewCommandCli: TFNewCommandCli
       Height = 280
       Top = 152
       Width = 1039
-      ActivePage = tsCode
+      ActivePage = tsParams
       Anchors = [akTop, akLeft, akRight, akBottom]
-      TabIndex = 1
+      TabIndex = 0
       TabOrder = 2
       object tsParams: TTabSheet
         Caption = 'Parâmetros'

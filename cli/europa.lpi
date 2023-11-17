@@ -14,12 +14,16 @@
       <UseAppBundle Value="False"/>
       <ResourceType Value="res"/>
       <UseXPManifest Value="True"/>
+      <XPManifest>
+        <ExecutionLevel Value="requireAdministrator"/>
+      </XPManifest>
       <Icon Value="0"/>
     </General>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="1"/>
+      <BuildNr Value="4"/>
+      <Language Value="0416"/>
     </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>
@@ -31,6 +35,11 @@
     <RunParams>
       <FormatVersion Value="2"/>
     </RunParams>
+    <RequiredPackages>
+      <Item>
+        <PackageName Value="pascalscript"/>
+      </Item>
+    </RequiredPackages>
     <Units>
       <Unit>
         <Filename Value="europa.lpr"/>
@@ -51,6 +60,45 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterVariable"/>
       </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterapp.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterApp"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterrunnable.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterRunnable"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterscript.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterScript"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiteraction.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterAction"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterenviroment.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterEnviroment"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterfiledataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterFileDataProvider"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterclicommand.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterscriptfunctions.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterScriptFunctions"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -66,6 +114,7 @@
     </SearchPaths>
     <Linking>
       <Debugging>
+        <GenerateDebugInfo Value="False"/>
         <DebugInfoType Value="dsDwarf2Set"/>
       </Debugging>
     </Linking>

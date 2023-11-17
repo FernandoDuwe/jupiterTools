@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, JupiterApp, JupiterRunnable, JupiterDialogForm,
-  JupiterRoute, JupiterTasksDataProvider, Forms;
+  JupiterRoute, JupiterTasksDataProvider, jupiterclicommand, Forms;
 
   // I/O Functions
   procedure JupiterWriteLn(prMessage : String);
@@ -55,8 +55,14 @@ uses jupiterScript, LCLType;
 
 procedure JupiterWriteLn(prMessage : String);
 begin
+  {$IFNDEF JUPITERCLI}
   if Assigned(vrJupiterScript) then
     vrJupiterScript.RunMessages.Add(prMessage);
+  {$ENDIF}
+
+  {$IFDEF JUPITERCLI}
+     WriteLn(prMessage);
+  {$ENDIF}
 end;
 
 function JupiterReadLn: String;
@@ -65,6 +71,7 @@ var
 begin
   Result := EmptyStr;
 
+  {$IFNDEF JUPITERCLI}
   vrDialog := TJupiterDialogForm.Create;
   try
     vrDialog.Title := 'Inserir informação';
@@ -76,6 +83,11 @@ begin
   finally
     FreeAndNil(vrDialog);
   end;
+  {$ENDIF}
+
+  {$IFDEF JUPITERCLI}
+
+  {$ENDIF}
 end;
 
 function JupiterInputText(prMessage: String): String;
@@ -119,8 +131,20 @@ begin
 end;
 
 function JupiterParamByName(prParamName: String): String;
+var
+  vrVez : Integer;
+  vrCommand : TJupiterCLICommand;
 begin
-  //
+  Result := EmptyStr;
+
+  if not Assigned(vrJupiterApp.CurrentCLICommand) then
+    Exit;
+
+  vrCommand := TJupiterCLICommand(vrJupiterApp.CurrentCLICommand);
+
+  for vrVez := 0 to vrCommand.ParamList.Count - 1 do
+    if TJupiterCLICommandParam(vrCommand.ParamList.GetAtIndex(vrVez)).ParamName = prParamName then
+      Result := TJupiterCLICommandParam(vrCommand.ParamList.GetAtIndex(vrVez)).Value;
 end;
 
 procedure JupiterAddLogMessage(prTitle, prDescription: String);

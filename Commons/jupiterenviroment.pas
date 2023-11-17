@@ -54,7 +54,14 @@ begin
     Exit;
   end;
 
+  Result := './';
+
+  if ParamCount > 0 then
+    Result := ExtractFileDir(ParamStr(0));
+
+  {$IFNDEF JUPITERCLI}
   Result := ExtractFileDir(Application.ExeName);
+  {$ENDIF}
 
   if Copy(Result, Length(Result), 1) <>  GetDirectorySeparator then
      Result := Result + GetDirectorySeparator;
@@ -240,6 +247,7 @@ var
 begin
   Result := EmptyStr;
 
+  {$IFNDEF JUPITERCLI}
   vrDialog := TOpenDialog.Create(Application.MainForm);
   try
     vrDialog.InitialDir := Self.BasePath;
@@ -262,6 +270,7 @@ begin
   finally
     FreeAndNil(vrDialog);
   end;
+  {$ENDIF}
 end;
 
 end.

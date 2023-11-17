@@ -5,9 +5,9 @@ unit JupiterApp;
 interface
 
 uses
-  Classes, ExtCtrls,
-  JupiterModule, JupiterObject, JupiterRoute, JupiterForm,
-  JupiterVariable, JupiterEnviroment, JupiterSystemMessage, PopUpNotifier,
+  Classes, {$IFNDEF JUPITERCLI} ExtCtrls, {$ENDIF}
+  JupiterModule, JupiterObject, JupiterRoute, {$IFNDEF JUPITERCLI} JupiterForm, {$ENDIF}
+  JupiterVariable, JupiterEnviroment, JupiterSystemMessage, {$IFNDEF JUPITERCLI} PopUpNotifier, {$ENDIF}
   JupiterVariableDataProvider, jupiterThread, JupiterRunnable, jupiterScript,
   SysUtils, Controls;
 
@@ -24,20 +24,26 @@ type
     FThreads          : TJupiterThreadList;
     FFormRoutes       : TJupiterObjectList;
 
+    {$IFNDEF JUPITERCLI}
     FBodyPanel        : TPanel;
     FCurrentForm      : TFJupiterForm;
+    {$ENDIF}
 
     FParams           : TJupiterVariableList;
     FUserParams       : TJupiterVariableList;
     FRouteParams      : TJupiterVariableList;
     FDataSetParams    : TJupiterVariableDataProviderList;
-    FMainIcons        : TImageList;
-    FPopupNotifier    : TPopupNotifier;
 
-    FOnBeforeNavigate : TNotifyEvent;
-    FOnAfterNavigate  : TNotifyEvent;
-    FParamList        : TStrings;
-    FCurrentRoute     : TJupiterRoute;
+    {$IFNDEF JUPITERCLI}
+    FMainIcons         : TImageList;
+    FPopupNotifier     : TPopupNotifier;
+    {$ENDIF}
+
+    FOnBeforeNavigate  : TNotifyEvent;
+    FOnAfterNavigate   : TNotifyEvent;
+    FParamList         : TStrings;
+    FCurrentRoute      : TJupiterRoute;
+    FCurrentCLICommand : TJupiterObject;
 
   protected
     procedure Internal_Prepare; virtual;
@@ -46,13 +52,20 @@ type
     property AppID         : String         read FAppID;
     property AppName       : String         read FAppName;
 
+    {$IFNDEF JUPITERCLI}
     property BodyPanel     : TPanel         read FBodyPanel   write FBodyPanel;
     property CurrentForm   : TFJupiterForm  read FCurrentForm write FCurrentForm;
+    {$ENDIF}
+
+
+    property CurrentCLICommand : TJupiterObject read FCurrentCLICommand write FCurrentCLICommand;
 
     property CurrentRoute  : TJupiterRoute  read FCurrentRoute;
 
+    {$IFNDEF JUPITERCLI}
     property MainIcons     : TImageList     read FMainIcons   write FMainIcons;
     property PopupNotifier : TPopupNotifier read FPopupNotifier write FPopupNotifier;
+    {$ENDIF}
 
     property FormRoutes     : TJupiterObjectList   read FFormRoutes    write FFormRoutes;
     property ModulesList    : TJupiterModuleList   read FModules       write FModules;
@@ -216,12 +229,15 @@ begin
 end;
 
 procedure TJupiterApp.NavigateTo(prRoute: TJupiterRoute; prAsModal: Boolean);
+{$IFNDEF JUPITERCLI}
 var
   vrVez : Integer;
   vrVezDebug : Integer;
   vrFormRoute : TJupiterFormRoute;
   vrFormModal : TFJupiterForm;
+{$ENDIF}
 begin
+  {$IFNDEF JUPITERCLI}
   Self.FCurrentRoute := prRoute;
 
   if Assigned(Self.OnBeforeNavigate) then
@@ -279,12 +295,14 @@ begin
           if Trim(vrJupiterApp.Params.VariableById('Jupiter.Standard.Triggers.OnChangeRoute').Value) <> EmptyStr then
              vrJupiterApp.Threads.NewThread('Gatilho: Ao alterar a rota atual', TJupiterRunnable.Create(vrJupiterApp.Params.VariableById('Jupiter.Standard.Triggers.OnChangeRoute').Value));
   end;
+  {$ENDIF}
 end;
 
 procedure TJupiterApp.Popup(prTitle : String; prStrMessage : TStrings);
 var
   vrVez : Integer;
 begin
+  {$IFNDEF JUPITERCLI}
   if Self.PopupNotifier.Visible then
     Self.PopupNotifier.Hide;
 
@@ -300,6 +318,7 @@ begin
   end;
 
   Self.PopupNotifier.ShowAtPos(Screen.Width - 10, Screen.Height - 35);
+  {$ENDIF}
 end;
 
 function TJupiterApp.GetActions(prRoute: TJupiterRoute): TJupiterObjectList;
@@ -374,7 +393,7 @@ begin
   end;
 end;
 
-constructor TJupiterApp.Create(prAppID, prAppName: String);
+constructor TJupiterApp.Create(prAppID, prAppName : String);
 begin
   Self.FAppID   := prAppID;
   Self.FAppName := prAppName;

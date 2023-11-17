@@ -8,18 +8,17 @@
       <Unit>
         <Filename Value="europa.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="25"/>
-        <CursorPos X="35" Y="39"/>
-        <UsageCount Value="23"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="161"/>
+        <CursorPos X="58" Y="170"/>
+        <UsageCount Value="22"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="..\Commons\jupiterconsts.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterConsts"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="121"/>
-        <CursorPos X="65" Y="136"/>
         <UsageCount Value="22"/>
       </Unit>
       <Unit>
@@ -27,7 +26,7 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterObject"/>
         <EditorIndex Value="-1"/>
-        <CursorPos X="43" Y="18"/>
+        <CursorPos X="58" Y="22"/>
         <UsageCount Value="22"/>
       </Unit>
       <Unit>
@@ -35,40 +34,127 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterVariable"/>
         <EditorIndex Value="-1"/>
-        <CursorPos X="47" Y="18"/>
+        <TopLine Value="210"/>
+        <CursorPos Y="158"/>
         <UsageCount Value="22"/>
       </Unit>
       <Unit>
-        <Filename Value="..\Commons\jupiterdataprovider.pas"/>
-        <UnitName Value="JupiterDataProvider"/>
+        <Filename Value="..\Commons\jupiterapp.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterApp"/>
         <EditorIndex Value="-1"/>
-        <CursorPos X="68" Y="14"/>
-        <UsageCount Value="10"/>
+        <TopLine Value="376"/>
+        <CursorPos X="59" Y="396"/>
+        <UsageCount Value="22"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterrunnable.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterRunnable"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="102"/>
+        <CursorPos X="61" Y="111"/>
+        <UsageCount Value="22"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterscript.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterScript"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="209"/>
+        <CursorPos X="46" Y="214"/>
+        <UsageCount Value="22"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiteraction.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterAction"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="119"/>
+        <CursorPos X="3" Y="130"/>
+        <UsageCount Value="22"/>
       </Unit>
       <Unit>
         <Filename Value="..\Commons\jupiterenviroment.pas"/>
+        <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterEnviroment"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="25"/>
-        <CursorPos X="45" Y="41"/>
-        <UsageCount Value="11"/>
+        <TopLine Value="35"/>
+        <CursorPos Y="62"/>
+        <UsageCount Value="22"/>
       </Unit>
       <Unit>
-        <Filename Value="..\Commons\jupiterapp.pas"/>
-        <UnitName Value="JupiterApp"/>
+        <Filename Value="..\Commons\jupiterfiledataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterFileDataProvider"/>
         <EditorIndex Value="-1"/>
-        <CursorPos X="12" Y="8"/>
-        <UsageCount Value="11"/>
+        <TopLine Value="28"/>
+        <CursorPos X="47" Y="53"/>
+        <UsageCount Value="22"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterclicommand.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="73"/>
+        <CursorPos X="74" Y="80"/>
+        <UsageCount Value="22"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterscriptfunctions.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterScriptFunctions"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="281"/>
+        <CursorPos Y="294"/>
+        <UsageCount Value="22"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterform.pas"/>
+        <UnitName Value="JupiterForm"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="43" Y="15"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterdialogform.pas"/>
+        <UnitName Value="JupiterDialogForm"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="20"/>
+        <CursorPos X="5" Y="23"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\components\PascalScript\Source\x64.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="99"/>
+        <CursorPos Y="123"/>
+        <UsageCount Value="10"/>
       </Unit>
     </Units>
-    <General>
-      <ActiveWindowIndexAtStart Value="-1"/>
-    </General>
-    <JumpHistory HistoryIndex="-1"/>
+    <JumpHistory>
+      <Position>
+        <Filename Value="europa.lpr"/>
+        <Caret Line="183" Column="95" TopLine="161"/>
+      </Position>
+    </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>
-      <Modes ActiveMode=""/>
+      <Modes ActiveMode="default">
+        <Mode Name="default">
+          <local>
+            <CommandLineParams Value="WES"/>
+          </local>
+        </Mode>
+      </Modes>
     </RunParams>
+    <HistoryLists>
+      <List Name="LaunchingApplication" Type="File" Count="1">
+        <Item1 Value="C:\Windows\system32\cmd.exe /C ${TargetCmdLine}"/>
+      </List>
+      <List Name="CommandLineParameters" Count="1">
+        <Item1 Value="WES"/>
+      </List>
+    </HistoryLists>
   </ProjectSession>
 </CONFIG>

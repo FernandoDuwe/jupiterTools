@@ -5,7 +5,7 @@ unit JupiterRunnable;
 interface
 
 uses
-  Classes, Controls, Forms,
+  Classes, {$IFNDEF JUPITERCLI} Controls, Forms, {$ENDIF}
   JupiterObject, JupiterEnviroment,
   JupiterSystemMessage, SysUtils;
 
@@ -85,7 +85,9 @@ var
   vrContent : Integer;
   vrOutput : String;
 begin
+  {$IFNDEF JUPITERCLI}
   Application.MainForm.Cursor := crHourGlass;
+  {$ENDIF}
 
   try
     vrCommandLine := vrJupiterApp.Params.ResolveString(Self.CommandLine);
@@ -118,7 +120,9 @@ begin
         Self.RunCommandLine(vrOutput, False);
     end;
   finally
+    {$IFNDEF JUPITERCLI}
     Application.MainForm.Cursor := crDefault;
+    {$ENDIF}
   end;
 end;
 

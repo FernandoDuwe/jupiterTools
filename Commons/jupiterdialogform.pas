@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, Controls, Forms, JupiterObject, JupiterVariableForm, JupiterAction,
-  JupiterConsts, SysUtils, uCustomJupiterForm;
+  JupiterConsts, SysUtils {$IFNDEF JUPITERCLI}, uCustomJupiterForm {$ENDIF};
 
 type
 
@@ -17,7 +17,11 @@ type
     FTitle       : String;
     FHint        : String;
     FFields      : TJupiterVariableFormList;
+
+    {$IFNDEF JUPITERCLI}
     FCurrentForm : TFCustomJupiterForm;
+    {$ENDIF}
+
     FOnlyShow    : Boolean;
 
     procedure Internal_BtnClick(Sender: TObject);
@@ -41,6 +45,7 @@ uses LCLType;
 
 procedure TJupiterDialogForm.Internal_BtnClick(Sender: TObject);
 begin
+  {$IFNDEF JUPITERCLI}
   try
     Self.Fields.Validate;
 
@@ -48,12 +53,14 @@ begin
   except
     Application.MessageBox(PAnsiChar(Exception(ExceptObject).Message), PAnsiChar(Self.Title), MB_ICONERROR + MB_OK);
   end;
+  {$ENDIF}
 end;
 
 function TJupiterDialogForm.Show: Boolean;
 begin
   Result := False;
 
+  {$IFNDEF JUPITERCLI}
   Application.CreateForm(TFCustomJupiterForm, FCurrentForm);
   try
     FCurrentForm.IsModal := True;
@@ -82,6 +89,7 @@ begin
     FCurrentForm.Release;
     FreeAndNil(FCurrentForm);
   end;
+  {$ENDIF}
 end;
 
 constructor TJupiterDialogForm.Create;

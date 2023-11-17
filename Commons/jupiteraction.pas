@@ -124,8 +124,10 @@ begin
   Result.Left       := prLeft;
   Result.Font.Size  := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
 
+  {$IFNDEF JUPITERCLI}
   if Result.ImageIndex <> - 1 then
     Result.Images := vrJupiterApp.MainIcons;
+  {$ENDIF}
 
   Result.AutoSize := True;
 

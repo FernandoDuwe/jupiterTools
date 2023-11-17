@@ -16,9 +16,11 @@ type
    private
      FParamName : String;
      FRequired : Boolean;
+     FValue : String;
    published
      property ParamName : String  read FParamName write FParamName;
      property Required  : Boolean read FRequired  write FRequired;
+     property Value     : String  read FValue     write FValue;
    public
      function ToString() : String;
      procedure FromString(prLine : String);
@@ -71,7 +73,9 @@ end;
 procedure TJupiterCLICommandParam.FromString(prLine: String);
 begin
   Self.ParamName := GetCSVColumn(prLine, 0);
-  Self.Required := GetCSVColumn(prLine, 1) = '1';
+  Self.Required  := GetCSVColumn(prLine, 1) = '1';
+
+  Self.Value := EmptyStr;
 end;
 
 { TJupiterCLICommand }
