@@ -18,6 +18,13 @@ type
     function Internal_GetModuleID : String; override;
     function Internal_GetModuleTitle : String; override;
   public
+    function CompactMode : Boolean;
+    function ShowActionsInForm : Boolean;
+    function HideMenuTree : Boolean;
+    procedure SetUserPreferences(prPreferencesTag : String);
+    procedure SetUserStartRoute(prRoute : String);
+    function GetUserStartRoute : String;
+
     function GetActions(prRoute : TJupiterRoute) : TJupiterObjectList; override;
   end;
 
@@ -70,6 +77,12 @@ begin
   if not Self.Params.Exists(Self.DefineParamName('Triggers.OnExecuteCurrentThread')) then
     Self.Params.AddConfig(Self.DefineParamName('Triggers.OnExecuteCurrentThread'), EmptyStr, 'Gatilhos: Thread executada a cada 5 segundos na aplicação');
 
+    if not Self.Params.Exists(Self.DefineParamName('UI.UserPreferences')) then
+    Self.Params.AddConfig(Self.DefineParamName('UI.UserPreferences'), EmptyStr, 'Preferências do usuário');
+
+    if not Self.Params.Exists(Self.DefineParamName('UI.UserPreferences.StartRoute')) then
+    Self.Params.AddConfig(Self.DefineParamName('UI.UserPreferences.StartRoute'), EmptyStr, 'Rota inicial');
+
   Self.Internal_GenerateDefaultScript;
 end;
 
@@ -81,6 +94,36 @@ end;
 function TJupiterStandardModule.Internal_GetModuleTitle: String;
 begin
   Result := 'Básico';
+end;
+
+function TJupiterStandardModule.CompactMode: Boolean;
+begin
+  Result := Pos('#COMPACTMODE', AnsiUpperCase(Self.Params.VariableById(Self.DefineParamName('UI.UserPreferences')).Value)) <> 0;
+end;
+
+function TJupiterStandardModule.ShowActionsInForm: Boolean;
+begin
+  Result := Pos('#SHOWACTIONSINFORM', AnsiUpperCase(Self.Params.VariableById(Self.DefineParamName('UI.UserPreferences')).Value)) <> 0;
+end;
+
+function TJupiterStandardModule.HideMenuTree: Boolean;
+begin
+  Result := Pos('#HIDEMENUTREE', AnsiUpperCase(Self.Params.VariableById(Self.DefineParamName('UI.UserPreferences')).Value)) <> 0;
+end;
+
+procedure TJupiterStandardModule.SetUserPreferences(prPreferencesTag: String);
+begin
+  Self.Params.VariableById(Self.DefineParamName('UI.UserPreferences')).Value := prPreferencesTag;
+end;
+
+procedure TJupiterStandardModule.SetUserStartRoute(prRoute: String);
+begin
+  Self.Params.VariableById(Self.DefineParamName('UI.UserPreferences.StartRoute')).Value := prRoute;
+end;
+
+function TJupiterStandardModule.GetUserStartRoute: String;
+begin
+  Result := Self.Params.VariableById(Self.DefineParamName('UI.UserPreferences.StartRoute')).Value;
 end;
 
 function TJupiterStandardModule.GetActions(prRoute: TJupiterRoute): TJupiterObjectList;

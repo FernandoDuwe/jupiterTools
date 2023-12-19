@@ -26,6 +26,8 @@ const
    LAYOUT_READER_PATH       : String = '/forms/layout/reader/';
    CLI_MANAGER_PATH         : String = '/forms/cli/manager/';
    CLI_NEWCOMMAND_PATH      : String = '/forms/cli/newCommand/';
+   TIME_CONTROL_PATH        : String = '/forms/timeControl/';
+   USER_PREF_PATH           : String = '/forms/config/preferences';
 
    ICON_ADD       : SmallInt = 0;
    ICON_NEW       : SmallInt = 1;
@@ -99,7 +101,8 @@ const
      FORM_MARGIN_BOTTOM_TONEXT : Integer = 20; // Bottom to the next field
    {$ENDIF}
 
-   FORM_ACTION_MINWIDTH      : Integer = 160;
+   FORM_ACTION_MINWIDTH         : Integer = 160;
+   FORM_ACTION_MINWIDTH_COMPACT : Integer = 80;
 
    // Generator
    GENERATOR_SYSLAYER : SmallInt = 1000;

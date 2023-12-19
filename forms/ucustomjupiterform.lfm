@@ -28,4 +28,6 @@ inherited FCustomJupiterForm: TFCustomJupiterForm
   end
   inherited ppMenu: TPopupMenu[4]
   end
+  inherited acActionShortcuts: TActionList[5]
+  end
 end

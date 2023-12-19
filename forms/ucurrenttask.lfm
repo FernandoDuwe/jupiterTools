@@ -6,6 +6,7 @@ inherited FCurrentTask: TFCurrentTask
   Caption = 'Tarefa atual'
   ClientHeight = 678
   ClientWidth = 968
+  OnCreate = FormCreate
   OnShow = FormShow
   inherited sbActions: TScrollBox
     Width = 968

@@ -25,6 +25,7 @@ type
     Label3: TLabel;
     Label4: TLabel;
     Panel1: TPanel;
+    procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure Panel1Resize(Sender: TObject);
   private
@@ -60,6 +61,13 @@ end;
 procedure TFNewTask.FormShow(Sender: TObject);
 begin
   inherited;
+end;
+
+procedure TFNewTask.FormCreate(Sender: TObject);
+begin
+  inherited;
+
+  Self.DontShowActionInForm := True;
 end;
 
 procedure TFNewTask.Internal_SaveConfigClick(Sender: TObject);

@@ -20,7 +20,7 @@
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="2"/>
       <MinorVersionNr Value="2"/>
-      <BuildNr Value="3"/>
+      <BuildNr Value="9"/>
       <Language Value="0416"/>
       <StringTable CompanyName="Jupiter Studios" FileDescription="Jupiter" InternalName="Jupiter" ProductName="Jupiter"/>
     </VersionInfo>
@@ -396,6 +396,29 @@
         <ComponentName Value="FNewCommandCli"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms\utimecontrol.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FTimeControl"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit>
+      <Unit>
+        <Filename Value="Commons\jupitertimecontroldataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterTimeControlDataProvider"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms\uuserpreferences.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FUserPreferences"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit>
+      <Unit>
+        <Filename Value="Commons\jupiterformaction.pas"/>
+        <IsPartOfProject Value="True"/>
       </Unit>
     </Units>
   </ProjectOptions>

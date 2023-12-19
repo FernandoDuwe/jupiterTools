@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, JupiterApp, JupiterRunnable, JupiterDialogForm,
-  JupiterRoute, JupiterTasksDataProvider, jupiterclicommand, Forms;
+  JupiterRoute, JupiterTasksDataProvider, jupiterclicommand, JupiterModule,
+  JupiterToolsModule, Forms;
 
   // I/O Functions
   procedure JupiterWriteLn(prMessage : String);
@@ -48,6 +49,11 @@ uses
   function JupiterGetCurrentRoute : String;
   function JupiterGetCurrentRouteParams : TStringList;
   procedure JupiterScriptGoToRoute(prRoutePath : String; prCSVParams : TStringList; prModal : Boolean);
+
+  // Task Functions
+  procedure JupiterToolsRegisterStartTime;
+  procedure JupiterToolsRegisterEndTime;
+  function  JupiterToolsStartedTime : Boolean;
 
 implementation
 
@@ -128,6 +134,23 @@ begin
   vrRoute.Params.FromStringList(prCSVParams);
 
   vrJupiterApp.NavigateTo(vrRoute, prModal);
+end;
+
+procedure JupiterToolsRegisterStartTime;
+begin
+  if not TJupiterToolsModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Tools')).StartedTime then
+    TJupiterToolsModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Tools')).SetStartTime;
+end;
+
+procedure JupiterToolsRegisterEndTime;
+begin
+  if TJupiterToolsModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Tools')).StartedTime then
+    TJupiterToolsModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Tools')).SetEndTime;
+end;
+
+function JupiterToolsStartedTime: Boolean;
+begin
+  Result := TJupiterToolsModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Tools')).StartedTime;
 end;
 
 function JupiterParamByName(prParamName: String): String;

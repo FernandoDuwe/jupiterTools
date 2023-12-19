@@ -19,6 +19,8 @@ type
     FColumnCount  : Integer;
     FBlankLine    : TJupiterDataProviderRow;
     FExternalList : TStrings;
+    FFilterColumn : Integer;
+    FFilterValue  : String;
 
     function  Internal_GetCSVColumnCount(prLine : String) : Integer;
     function  Internal_GetCSVColumn(prLine: String; prIndex: Integer): String;
@@ -26,16 +28,21 @@ type
     procedure Internal_SaveLine;
     procedure Internal_CreateBlankLine(prHeaderLine: String);
   published
-    property Filename : String read FFilename write FFilename;
+    property Filename     : String  read FFilename     write FFilename;
+    property FilterColumn : Integer read FFilterColumn write FFilterColumn;
+    property FilterValue  : String  read FFilterValue  write FFilterValue;
+
     property BlankLine : TJupiterDataProviderRow read FBlankLine;
     property CustomFile : TStrings read FExternalList write FExternalList;
   public
     procedure ProvideData; override;
     procedure SaveLine(prFields : TJupiterVariableList);
     procedure SaveFile;
-    procedure RemoveLine(prLineNumber : Integer);
+    procedure RemoveLine(prLineNumber : Integer; prDeleteFile : Boolean = True);
 
     class procedure GetFieldsLayout(var prList : TStrings); override;
+
+    constructor Create; override;
   end;
 
 
@@ -99,6 +106,14 @@ begin
   begin
     if Self.Internal_GetCSVColumn(prHeaderLine, vrVez) = EmptyStr then
       Continue;
+
+    if Self.FilterColumn = vrVez then
+      if Self.FilterValue <> Self.Internal_GetCSVColumn(prLineStr, vrVez) then
+      begin
+        Self.RemoveLine(Self.Count - 1, False); // Apaga a última linha
+
+        Exit;
+      end;
 
     Self.GetLastRow.Fields.AddVariable(Self.Internal_GetCSVColumn(prHeaderLine, vrVez),
                                        Self.Internal_GetCSVColumn(prLineStr, vrVez),
@@ -229,18 +244,27 @@ begin
   Self.Internal_SaveLine;
 end;
 
-procedure TJupiterCSVDataProvider.RemoveLine(prLineNumber: Integer);
+procedure TJupiterCSVDataProvider.RemoveLine(prLineNumber: Integer; prDeleteFile : Boolean = True);
 begin
   try
     Self.DeleteAtIndex(prLineNumber);
   finally
-    Self.Internal_SaveLine;
+    if prDeleteFile then
+      Self.Internal_SaveLine;
   end;
 end;
 
 class procedure TJupiterCSVDataProvider.GetFieldsLayout(var prList: TStrings);
 begin
   inherited GetFieldsLayout(prList);
+end;
+
+constructor TJupiterCSVDataProvider.Create;
+begin
+  inherited Create;
+
+  Self.FilterColumn := NULL_KEY;
+  Self.FilterValue  := EmptyStr;
 end;
 
 function GetCSVColumn(prLine: String; prIndex: Integer): String;

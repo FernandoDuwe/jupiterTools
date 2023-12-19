@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, Buttons,
   ComCtrls, StdCtrls, Menus, ActnList, JupiterRoute, JupiterConsts,
   JupiterVariable, JupiterAction, JupiterFormGenerator, JupiterGeneratorForm,
-  jupiterformutils, LCLType;
+  jupiterformutils, JupiterStandardModule, LCLType;
 
 type
 
@@ -201,7 +201,8 @@ begin
 
   Self.FSaveGeneratorAction := TJupiterAction.Create('Salvar', @Internal_SaveGeneratorClick);
 
-  Self.FActions.PopupMenu := ppMenu;
+  Self.FActions.PopupMenu   := ppMenu;
+  Self.FActions.CompactMode := TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).CompactMode;
 
   Self.IsModal  := False;
 end;

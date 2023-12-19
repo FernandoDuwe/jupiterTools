@@ -42,11 +42,13 @@ type
     procedure DeleteAtIndex(prIndex : Integer);
     procedure DeleteListItem(prIndex : Integer);
 
+    function IsEmpty : Boolean;
+
     procedure ClearListItens;
 
     function GetLastObject : TJupiterObject;
 
-    constructor Create;
+    constructor Create; virtual;
     destructor Destroy; override;
   end;
 
@@ -107,6 +109,11 @@ end;
 procedure TJupiterObjectList.DeleteListItem(prIndex: Integer);
 begin
   Self.FList.Delete(prIndex);
+end;
+
+function TJupiterObjectList.IsEmpty: Boolean;
+begin
+  Result := Self.Count = 0;
 end;
 
 procedure TJupiterObjectList.ClearListItens;

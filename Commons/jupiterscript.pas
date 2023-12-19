@@ -256,6 +256,10 @@ begin
   Sender.AddFunction(@JupiterScriptHasRoutePath, 'function HasRoutePath(prRoutePath: String): Boolean;');
   Sender.AddFunction(@JupiterScriptGoToRoutePath, 'function GoToRoutePath(prRoutePath: String): Boolean;');
 
+  Sender.AddFunction(@JupiterToolsRegisterStartTime, 'procedure ToolsRegisterStartTime;');
+  Sender.AddFunction(@JupiterToolsRegisterEndTime, 'procedure ToolsRegisterEndTime;');
+  Sender.AddFunction(@JupiterToolsStartedTime, 'function ToolsStartedTime : Boolean;');
+
   Sender.AddRegisteredVariable('vars', 'Variant');
   Sender.AddRegisteredVariable('Application', 'TApplication');
 end;
@@ -385,6 +389,10 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'function GoToRoutePath(prRoutePath: String): Boolean;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CreateTaskDataCache();'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function ParamByName(prParamName : String) : String;'));
+
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure ToolsRegisterStartTime();'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure ToolsRegisterEndTime();'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function ToolsStartedTime() : Boolean;'));
 
   // Code functions
   Self.Internal_AnalyseUserCode(Result);

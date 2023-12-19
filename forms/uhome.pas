@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
   Buttons, ComCtrls, JupiterForm, JupiterApp, JupiterConsts, JupiterRoute,
   JupiterDirectoryDataProvider, JupiterEnviroment, JupiterRunnable,
-  JupiterVariable, uMain, uConfig, LCLType;
+  JupiterVariable, JupiterFormGenerator, uMain, uConfig, LCLType;
 
 type
 
@@ -16,19 +16,12 @@ type
 
   TFHome = class(TFJupiterForm)
     Image1: TImage;
-    lbConfigLink2: TLabel;
     lbVersion: TLabel;
-    Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
-    lbConfigLink: TLabel;
-    lbConfigLink1: TLabel;
-    lbNewTaskLink: TLabel;
-    lbNewTaskLink1: TLabel;
     lbTitle: TLabel;
     pnTitle: TPanel;
     sbBody: TScrollBox;
-    tvFolders: TTreeView;
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure Label5Click(Sender: TObject);
@@ -44,6 +37,8 @@ type
     procedure pnTitleClick(Sender: TObject);
     procedure tvFoldersDblClick(Sender: TObject);
   private
+    FFormGenerator : TJupiterFormGenerator;
+
     procedure Internal_PrepareForm; override;
   protected
     procedure Internal_UpdateComponents; override;
@@ -64,8 +59,23 @@ implementation
 
 procedure TFHome.FormResize(Sender: TObject);
 begin
-  pnTitle.Top  := Round((sbBody.Height / 2) - (pnTitle.Height / 2));
-  pnTitle.Left := Round((sbBody.Width / 2) - (pnTitle.Width / 2));
+//  pnTitle.Top  := Round((sbBody.Height / 2) - (pnTitle.Height / 2));
+//  pnTitle.Left := Round((sbBody.Width / 2) - (pnTitle.Width / 2));
+end;
+
+procedure TFHome.FormCreate(Sender: TObject);
+begin
+  inherited;
+
+  Self.FFormGenerator := TJupiterFormGenerator.Create;
+  Self.FFormGenerator.Container := sbBody;
+end;
+
+procedure TFHome.FormDestroy(Sender: TObject);
+begin
+  Self.FFormGenerator.Free;
+
+  inherited;
 end;
 
 procedure TFHome.FormShow(Sender: TObject);
@@ -73,6 +83,14 @@ begin
   inherited;
 
   FormResize(Sender);
+
+  Self.FFormGenerator.ActionList := Self.Actions;
+  Self.FFormGenerator.Raised := True;
+  Self.FFormGenerator.ActionColor := clWhite;
+  Self.FFormGenerator.DrawForm;
+
+  pnTitle.Align := alBottom;
+  pnTitle.Align := alTop;
 end;
 
 procedure TFHome.Label5Click(Sender: TObject);
@@ -134,7 +152,7 @@ begin
 end;
 
 procedure TFHome.tvFoldersDblClick(Sender: TObject);
-begin
+begin             {
   if not Assigned(tvFolders.Selected) then
     Exit;
 
@@ -142,6 +160,7 @@ begin
     Exit;
 
   TJupiterRunnable.Create(TJupiterVariableList(tvFolders.Selected.Data).VariableById('Path').Value, True);
+  }
 end;
 
 procedure TFHome.Internal_PrepareForm;
@@ -165,7 +184,7 @@ var
   vrNode       : TTreeNode;
 begin
   inherited Internal_UpdateDatasets;
-
+  {
   tvFolders.Items.Clear;
 
   vrProvider   := TJupiterDirectoryDataProvider.Create;
@@ -192,7 +211,7 @@ begin
   finally
     FreeAndNil(vrProvider);
     FreeAndNil(vrEnviroment);
-  end;
+  end;                                     }
 end;
 
 procedure TFHome.Internal_SearchSubFolders(prFolder: String; prNode: TTreeNode);
@@ -202,7 +221,7 @@ var
   vrNode       : TTreeNode;
 begin
   inherited Internal_UpdateDatasets;
-
+                  {
   vrProvider   := TJupiterDirectoryDataProvider.Create;
   try
     vrProvider.Path := prFolder;
@@ -223,7 +242,7 @@ begin
       end;
   finally
     FreeAndNil(vrProvider);
-  end;
+  end;             }
 end;
 
 end.

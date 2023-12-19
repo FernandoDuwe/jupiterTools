@@ -9,7 +9,8 @@ uses
   Classes, SysUtils, JupiterConsts, JupiterObject, JupiterVariable,
   JupiterAction, JupiterFileDataProvider, JupiterEnviroment, JupiterRunnable,
   jupiterclicommand, JupiterApp, jupiterScriptFunctions, jupiterScript,
-  pascalscript, CustApp, Interfaces
+  jupiterclimodule, JupiterGeneratorModule, JupiterStandardModule,
+  JupiterToolsModule, pascalscript, CustApp, Interfaces
   { you can add units after this };
 
 type
@@ -168,14 +169,18 @@ begin
       vrCLI.LoadFromFile;
 
       WriteLn(Format('  * %0:s - %1:s', [vrCLI.CommandName, vrCLI.Command]));
-      WriteLn('    Params:');
 
-      for vrVez2 := 0 to vrCLI.ParamList.Count - 1 do
+      if vrCLI.ParamList.Count > 0 then
       begin
-        if TJupiterCLICommandParam(vrCLI.ParamList.GetAtIndex(vrVez2)).Required then
-          WriteLn(Format('    - %0:s - %1:s', [TJupiterCLICommandParam(vrCLI.ParamList.GetAtIndex(vrVez2)).ParamName, 'Required']))
-        else
-          WriteLn(Format('    - %0:s - %1:s', [TJupiterCLICommandParam(vrCLI.ParamList.GetAtIndex(vrVez2)).ParamName, 'Optional']));
+        WriteLn('    Params:');
+
+        for vrVez2 := 0 to vrCLI.ParamList.Count - 1 do
+        begin
+          if TJupiterCLICommandParam(vrCLI.ParamList.GetAtIndex(vrVez2)).Required then
+            WriteLn(Format('    - %0:s - %1:s', [TJupiterCLICommandParam(vrCLI.ParamList.GetAtIndex(vrVez2)).ParamName, 'Required']))
+          else
+            WriteLn(Format('    - %0:s - %1:s', [TJupiterCLICommandParam(vrCLI.ParamList.GetAtIndex(vrVez2)).ParamName, 'Optional']));
+        end;
       end;
 
       WriteLn(EmptyStr);
@@ -193,10 +198,18 @@ var
 
 begin
   vrJupiterApp := TJupiterApp.Create('jupiter', 'Europa - CLI for Jupiter');
+  try
+    vrJupiterApp.AddModule(TJupiterStandardModule.Create);
+    vrJupiterApp.AddModule(TJupiterCLIModule.Create);
+    vrJupiterApp.AddModule(TJupiterToolsModule.Create);
+    vrJupiterApp.AddModule(TJupiterGeneratorModule.Create);
 
-  Application := TEuropa.Create(nil);
-  Application.Title := 'Europa';
-  Application.Run;
-  Application.Free;
+    Application := TEuropa.Create(nil);
+    Application.Title := 'Europa';
+    Application.Run;
+    Application.Free;
+  finally
+    // vrJupiterApp.Free;
+  end;
 end.
 

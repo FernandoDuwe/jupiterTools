@@ -25,8 +25,10 @@ uses
   uNewAction, uNewField, JupiterGeneratorMenuItem, jupiterformutils, uNewParam,
   JupiterVariableDataProvider, uNewDataSet, uMain, uGenerator, jupiterScript,
   uScriptEditor, uCustomJupiterForm, jupiterScriptFunctions, uDynamicRecord,
-  jupiterThread, uProcessMonitor, jupiterStream, uPrompt, ulayoutbuilder, 
-jupiterclimodule, ulayoutreader, uclimanager, jupiterclicommand, unewcommandcli;
+  jupiterThread, uProcessMonitor, jupiterStream, uPrompt, ulayoutbuilder,
+  jupiterclimodule, ulayoutreader, uclimanager, jupiterclicommand,
+  unewcommandcli, utimecontrol, jupiterTimeControlDataProvider, 
+uuserpreferences, jupiterformaction;
 
 {$R *.res}
 
@@ -82,6 +84,8 @@ begin
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(LAYOUT_READER_PATH, TFLayoutReader));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(CLI_MANAGER_PATH, TFCLIManager));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(CLI_NEWCOMMAND_PATH, TFNewCommandCli));
+  vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(TIME_CONTROL_PATH, TFTimeControl));
+  vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(USER_PREF_PATH, TFUserPreferences));
 
   Application.CreateForm(TFMain, FMain);
   Application.Run;

@@ -363,6 +363,7 @@ var
   vrScript     : TJupiterScript;
   vrEnviroment : TJupiterEnviroment;
   vrJupiterMessage : TJupiterSystemMessage;
+  vrVez : Integer;
 begin
   vrScript     := TJupiterScript.Create;
   vrEnviroment := TJupiterEnviroment.Create;
@@ -374,10 +375,20 @@ begin
 
     if not vrScript.Runned then
     begin
-      vrJupiterMessage := Self.AddMessage('Erro ao executar', Self.ClassName);
-      vrJupiterMessage.Details.AddStrings(vrScript.Messages);
+      if Self.ConsoleMode then
+      begin
+        WriteLn('Exception:');
 
-      Self.Popup('Erro ao executar script', vrScript.Messages);
+        for vrVez := 0 to vrScript.Messages.Count - 1 do
+          WriteLn(vrScript.Messages[vrVez]);
+      end
+      else
+      begin
+        vrJupiterMessage := Self.AddMessage('Erro ao executar', Self.ClassName);
+        vrJupiterMessage.Details.AddStrings(vrScript.Messages);
+
+        Self.Popup('Erro ao executar script', vrScript.Messages);
+      end;
     end
     else
     begin

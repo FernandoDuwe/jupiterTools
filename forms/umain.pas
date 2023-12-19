@@ -28,6 +28,9 @@ type
     MenuItem10: TMenuItem;
     MenuItem11: TMenuItem;
     MenuItem12: TMenuItem;
+    MenuItem13: TMenuItem;
+    MenuItem14: TMenuItem;
+    MenuItem15: TMenuItem;
     Separator7: TMenuItem;
     MenuItem6: TMenuItem;
     MenuItem7: TMenuItem;
@@ -102,6 +105,9 @@ type
     procedure MenuItem10Click(Sender: TObject);
     procedure MenuItem11Click(Sender: TObject);
     procedure MenuItem12Click(Sender: TObject);
+    procedure MenuItem13Click(Sender: TObject);
+    procedure MenuItem14Click(Sender: TObject);
+    procedure MenuItem15Click(Sender: TObject);
     procedure MenuItem1Click(Sender: TObject);
     procedure MenuItem6Click(Sender: TObject);
     procedure MenuItem8Click(Sender: TObject);
@@ -148,6 +154,7 @@ type
     procedure Internal_ShowRoute(prRoute : TJupiterRoute; prList : TJupiterObjectList; prNode : TTreeNode);
     procedure Internal_MessagesCountSetValue(prID, prNewValue : String);
     procedure Internal_CurrentFormTitleSetValue(prID, prNewValue : String);
+    function Internal_GoToPageItem(prItemRouteForm : String) : Boolean;
 
     procedure Internal_OnBeforeNavigate(Sender: TObject);
     procedure Internal_OnAfterNavigate(Sender: TObject);
@@ -166,7 +173,7 @@ implementation
 
 {$R *.lfm}
 
-uses LCLType, JupiterDialogForm, StrUtils;
+uses LCLType, JupiterDialogForm, StrUtils, JupiterStandardModule;
 
 { TFMain }
 
@@ -357,6 +364,12 @@ begin
   if vrJupiterApp.Params.Exists('Jupiter.Standard.Triggers.OnExecuteCurrentThread') then
         if Trim(vrJupiterApp.Params.VariableById('Jupiter.Standard.Triggers.OnExecuteCurrentThread').Value) <> EmptyStr then
            tmInternalThread.Enabled := True;
+
+  if TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).HideMenuTree then
+    tbMenu.Click;
+
+  if TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).GetUserStartRoute <> EmptyStr then
+    Self.Internal_GoToPageItem(TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).GetUserStartRoute);
 end;
 
 procedure TFMain.MenuItem10Click(Sender: TObject);
@@ -372,6 +385,21 @@ end;
 procedure TFMain.MenuItem12Click(Sender: TObject);
 begin
   vrJupiterApp.NavigateTo(TJupiterRoute.Create(LAYOUT_READER_PATH), True);
+end;
+
+procedure TFMain.MenuItem13Click(Sender: TObject);
+begin
+  vrJupiterApp.NavigateTo(TJupiterRoute.Create(TIME_CONTROL_PATH), True);
+end;
+
+procedure TFMain.MenuItem14Click(Sender: TObject);
+begin
+  vrJupiterApp.NavigateTo(TJupiterRoute.Create(TIME_CONTROL_PATH), True);
+end;
+
+procedure TFMain.MenuItem15Click(Sender: TObject);
+begin
+  vrJupiterApp.NavigateTo(TJupiterRoute.Create(USER_PREF_PATH), True);
 end;
 
 procedure TFMain.MenuItem1Click(Sender: TObject);
@@ -825,6 +853,42 @@ end;
 procedure TFMain.Internal_CurrentFormTitleSetValue(prID, prNewValue: String);
 begin
   Self.Caption := Format('%0:s - %1:s', [prNewValue, vrJupiterApp.AppName]);
+end;
+
+function TFMain.Internal_GoToPageItem(prItemRouteForm: String) : Boolean;
+var
+  vrVez    : Integer;
+  vrRoute  : String;
+  vrFormId : String;
+begin
+  Result := False;
+
+  for vrVez := 0 to tvMenu.Items.Count -1 do
+  begin
+    if not Assigned(tvMenu.Items[vrVez]) then
+      Continue;
+
+    if not Assigned(tvMenu.Items[vrVez].Data) then
+      Continue;
+
+    vrRoute  := EmptyStr;
+    vrFormId := EmptyStr;
+
+    if TJupiterAction(tvMenu.Items[vrVez].Data).Route.Params.Exists('destinyPath') then
+      vrRoute := TJupiterAction(tvMenu.Items[vrVez].Data).Route.Params.VariableById('destinyPath').Value;
+
+    if TJupiterAction(tvMenu.Items[vrVez].Data).Route.Params.Exists('Generator.FormId') then
+      vrFormId := TJupiterAction(tvMenu.Items[vrVez].Data).Route.Params.VariableById('Generator.FormId').Value;
+
+    if ((vrFormId = prItemRouteForm) or (vrRoute = prItemRouteForm)) then
+    begin
+      Result := True;
+      tvMenu.Selected := tvMenu.Items[vrVez];
+
+      tvMenuChange(Self, tvMenu.Items[vrVez]);
+      Exit;
+    end;
+  end;
 end;
 
 procedure TFMain.Internal_OnBeforeNavigate(Sender: TObject);

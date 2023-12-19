@@ -8,7 +8,7 @@ uses
   Classes, JupiterModule, JupiterRoute, JupiterObject, JupiterAction,
   JupiterConsts, JupiterApp, JupiterEnviroment, JupiterCSVDataProvider,
   JupiterDirectoryDataProvider, JupiterFileDataProvider, JupiterRunnable,
-  SysUtils;
+  jupiterTimeControlDataProvider, SysUtils;
 
 type
 
@@ -40,7 +40,7 @@ type
 
 implementation
 
-uses uExplorer, StrUtils;
+uses StrUtils;
 
 { TJupiterToolsModule }
 
@@ -366,6 +366,17 @@ begin
       Route.Params.AddVariable('hint', 'Arquivos de configuração de favoritos. Dê um duplo clique para abrir', 'Dica');
     end;
 
+    Result.Add(TJupiterAction.Create('Meus Tempos', TJupiterRoute.Create('/tools/myTimes/'), TJupiterRoute.Create('/tools/')));
+
+    with TJupiterAction(Result.GetLastObject) do
+    begin
+      Icon := ICON_STARTTIME;
+
+      Route.Params.AddVariable('title', 'Meus Tempos', 'Título');
+
+      Route.Params.AddVariable('destinyPath', TIME_CONTROL_PATH, 'Destino');
+    end;
+
     Result.Add(TJupiterAction.Create('Arquivos', TJupiterRoute.Create('/tools/favorites/apps/'), TJupiterRoute.Create('/tools/favorites/')));
 
     with TJupiterAction(Result.GetLastObject) do
@@ -464,7 +475,7 @@ begin
     if not FileExists(vrDestiny) then
       vrEnviroment.CopyFileTo(vrEnviroment.FullPath(prFile), vrDestiny);
 
-    if FileExists(vrDestiny) then
+    if ((FileExists(vrDestiny)) and (vrEnviroment.CanChangeFileContent(vrDestiny))) then
       vrJupiterApp.Params.ResolveFile(vrDestiny);
   finally
     FreeAndNil(vrEnviroment);
@@ -473,13 +484,15 @@ end;
 
 procedure TJupiterToolsModule.SetStartTime;
 var
-  vrStr        : TStrings;
-  vrEnviroment : TJupiterEnviroment;
+  vrStr         : TStrings;
+  vrEnviroment  : TJupiterEnviroment;
+  vrTimeControl : TJupiterTimeControlDataProvider;
 begin
-  vrStr        := TStringList.Create;
-  vrEnviroment := TJupiterEnviroment.Create;
+  vrTimeControl := TJupiterTimeControlDataProvider.Create;
+  vrStr         := TStringList.Create;
+  vrEnviroment  := TJupiterEnviroment.Create;
   try
-    vrEnviroment.BasePath :=  Self.Params.VariableById(Self.DefineParamName('Tasks.Current.Path')).Value;
+    vrEnviroment.BasePath := Self.Params.VariableById(Self.DefineParamName('Tasks.Current.Path')).Value;
 
     if FileExists(vrEnviroment.FullPath('Tempos.txt')) then
       vrStr.LoadFromFile(vrEnviroment.FullPath('Tempos.txt'));
@@ -490,21 +503,29 @@ begin
     vrStr.Add(Format('I;%0:s;%1:s;', [FormatDateTime('dd/mm/yyyy', Now), FormatDateTime('hh:nn', Now)]));
 
     vrStr.SaveToFile(vrEnviroment.FullPath('Tempos.txt'));
+
+    vrTimeControl.ProvideData;
+
+    if not vrTimeControl.Started then
+      vrTimeControl.RegisterStartTime('Tarefa: ' + Self.Params.VariableById(Self.DefineParamName('Tasks.Current.Number')).Value);
   finally
     vrStr.Clear;
     FreeAndNil(vrStr);
 
     FreeAndNil(vrEnviroment);
+    FreeAndNil(vrTimeControl);
   end;
 end;
 
 procedure TJupiterToolsModule.SetEndTime;
 var
-  vrStr        : TStrings;
-  vrEnviroment : TJupiterEnviroment;
+  vrStr         : TStrings;
+  vrEnviroment  : TJupiterEnviroment;
+  vrTimeControl : TJupiterTimeControlDataProvider;
 begin
-  vrStr        := TStringList.Create;
-  vrEnviroment := TJupiterEnviroment.Create;
+  vrTimeControl := TJupiterTimeControlDataProvider.Create;
+  vrStr         := TStringList.Create;
+  vrEnviroment  := TJupiterEnviroment.Create;
   try
     vrEnviroment.BasePath :=  Self.Params.VariableById(Self.DefineParamName('Tasks.Current.Path')).Value;
 
@@ -514,11 +535,17 @@ begin
     vrStr.Add(Format('F;%0:s;%1:s;', [FormatDateTime('dd/mm/yyyy', Now), FormatDateTime('hh:nn', Now)]));
 
     vrStr.SaveToFile(vrEnviroment.FullPath('Tempos.txt'));
+
+    vrTimeControl.ProvideData;
+
+    if not vrTimeControl.Ended then
+      vrTimeControl.RegisterEndTime;
   finally
     vrStr.Clear;
     FreeAndNil(vrStr);
 
     FreeAndNil(vrEnviroment);
+    FreeAndNil(vrTimeControl);
   end;
 end;
 

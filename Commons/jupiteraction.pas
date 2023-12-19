@@ -64,7 +64,10 @@ type
   TJupiterActionList = class(TJupiterObjectList)
   private
     FPopupMenu : TPopupMenu;
+    FCompactMode : Boolean;
   published
+    property CompactMode : Boolean read FCompactMode write FCompactMode;
+
     property PopupMenu : TPopupMenu read FPopupMenu write FPopupMenu;
   protected
     procedure Internal_OnClick(Sender: TObject);
@@ -82,6 +85,8 @@ type
     procedure DisableAction(prActionIndex : Integer; prOwner : TScrollBox);
     procedure EnableAction(prActionIndex : Integer; prOwner : TScrollBox);
     procedure EnableDisableAction(prActionIndex : Integer; prOwner : TScrollBox; prEnabled : Boolean);
+
+    constructor Create; override;
   end;
 
 implementation
@@ -108,16 +113,25 @@ var
   vrWidth : Integer;
   vrPopupMenu : TMenuItem;
   vrShortcutButton : String;
+  vrShortCutCompact : String;
 begin
-  vrShortcutButton := EmptyStr;
+  vrShortcutButton  := EmptyStr;
+  vrShortCutCompact := EmptyStr;
 
   if (prIndex < 12) then
     vrShortcutButton := Format(' (F%0:d)', [prIndex + 1]);
 
+  vrShortCutCompact := Format('F%0:d', [prIndex + 1]);
+
   Result            := TBitBtn.Create(prOwner);
   Result.Parent     := prOwner;
   Result.Top        := FORM_MARGIN_TOP;
-  Result.Caption    := prAction.Title + vrShortcutButton;
+
+  if not Self.CompactMode then
+    Result.Caption := prAction.Title + vrShortcutButton
+  else
+    Result.Caption := vrShortCutCompact;
+
   Result.Hint       := prAction.Hint + vrShortcutButton;
   Result.ShowHint   := Trim(prAction.Hint) <> EmptyStr;
   Result.ImageIndex := prAction.Icon;
@@ -141,6 +155,10 @@ begin
     Result.Width := vrWidth;
 
   Result.Height  := prOwner.Height - (FORM_MARGIN_TOP + FORM_MARGIN_BOTTOM);
+
+  if Self.CompactMode then
+    Result.Width := FORM_ACTION_MINWIDTH_COMPACT;
+
   Result.Tag     := prIndex;
   Result.OnClick := @Self.Internal_OnClick;
 
@@ -289,6 +307,13 @@ begin
   Self.GetActionButton(prActionIndex, prOwner).Enabled := prEnabled;
 
   Self.GetMenuItem(prActionIndex).Enabled := prEnabled;
+end;
+
+constructor TJupiterActionList.Create;
+begin
+  inherited Create;
+
+  Self.FCompactMode := False;
 end;
 
 { TJupiterAction }

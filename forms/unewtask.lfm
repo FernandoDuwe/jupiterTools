@@ -6,6 +6,7 @@ inherited FNewTask: TFNewTask
   Caption = 'Criar uma nova tarefa'
   ClientHeight = 626
   ClientWidth = 622
+  OnCreate = FormCreate
   OnShow = FormShow
   inherited sbActions: TScrollBox
     Width = 622

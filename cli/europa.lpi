@@ -22,7 +22,7 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="1"/>
-      <BuildNr Value="4"/>
+      <BuildNr Value="7"/>
       <Language Value="0416"/>
     </VersionInfo>
     <BuildModes>
@@ -99,6 +99,25 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="jupiterScriptFunctions"/>
       </Unit>
+      <Unit>
+        <Filename Value="..\Modules\jupiterclimodule.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Modules\jupitergeneratormodule.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterGeneratorModule"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Modules\jupiterstandardmodule.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterStandardModule"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Modules\jupitertoolsmodule.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterToolsModule"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -109,7 +128,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="..\Commons"/>
+      <OtherUnitFiles Value="..\Commons;..\Modules"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Linking>

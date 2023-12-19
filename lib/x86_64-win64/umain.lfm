@@ -927,8 +927,18 @@ inherited FMain: TFMain
         ImageIndex = 22
         OnClick = miCurrentTaskEndTimeClick
       end
+      object MenuItem14: TMenuItem
+        Caption = 'Meus Tempos'
+        ImageIndex = 21
+        OnClick = MenuItem14Click
+      end
       object Separator2: TMenuItem
         Caption = '-'
+      end
+      object MenuItem15: TMenuItem
+        Caption = 'Preferências'
+        ImageIndex = 26
+        OnClick = MenuItem15Click
       end
       object miMessage: TMenuItem
         Caption = 'Mensagens'
@@ -1026,6 +1036,11 @@ inherited FMain: TFMain
         Caption = 'Leitor de Layouts'
         ImageIndex = 17
         OnClick = MenuItem12Click
+      end
+      object MenuItem13: TMenuItem
+        Caption = 'Meus Tempos'
+        ImageIndex = 21
+        OnClick = MenuItem13Click
       end
     end
     object MenuItem4: TMenuItem

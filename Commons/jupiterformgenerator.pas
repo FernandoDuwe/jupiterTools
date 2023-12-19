@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, Forms, JupiterConsts, JupiterObject, JupiterVariable,
-  JupiterFormField, JupiterVariableForm, SysUtils, Controls;
+  JupiterFormField, JupiterVariableForm, JupiterAction, jupiterformaction,
+  SysUtils, Controls, Graphics;
 
 type
 
@@ -19,13 +20,22 @@ type
     FClearContainerOnSet : Boolean;
     FLastTop             : Integer;
     FAlreadyDrawed       : Boolean;
+    FActionsInForm       : Boolean;
     FOnKeyUp             : TKeyEvent;
+    FActionList          : TJupiterActionList;
+    FRaised              : Boolean;
+    FActionColor         : TColor;
 
     procedure Internal_CreateComponent(prVariable : TJupiterVariableForm; prTabOrder : Integer);
+    procedure Internal_CreateAction(prAction : TJupiterAction; prTabOrder : Integer);
     procedure Internal_ClearContainer;
     procedure Internal_DrawForm;
   published
+    property ActionList : TJupiterActionList read FActionList write FActionList;
+    property ActionsInForm : Boolean read FActionsInForm write FActionsInForm;
     property ClearContainerOnSet : Boolean read FClearContainerOnSet write FClearContainerOnSet default False;
+    property Raised   : Boolean        read FRaised   write FRaised;
+    property ActionColor : TColor read FActionColor write FActionColor;
 
     property Container : TScrollBox               read FContainer write FContainer;
     property Variables : TJupiterVariableFormList read FVariables write FVariables;
@@ -42,7 +52,7 @@ type
 
 implementation
 
-uses JupiterApp;
+uses ExtCtrls, JupiterApp;
 
 { TJupiterFormGenerator }
 
@@ -63,6 +73,20 @@ begin
   Self.FLastTop := vrField.Panel.Top + vrField.Panel.Height + 1;
 end;
 
+procedure TJupiterFormGenerator.Internal_CreateAction(prAction: TJupiterAction; prTabOrder : Integer);
+var
+  vrAction : TJupiterFormAction;
+begin
+  vrAction := TJupiterFormAction.Create;
+  vrAction.Raised := Self.Raised;
+  vrAction.Action :=  prAction;
+  vrAction.TabOrder := prTabOrder;
+  vrAction.Draw(Self.Container);
+  vrAction.Panel.Top := Self.FLastTop;
+
+  Self.FLastTop := vrAction.Panel.Top + vrAction.Panel.Height + 1;
+end;
+
 procedure TJupiterFormGenerator.Internal_ClearContainer;
 begin
   while Self.Container.ControlCount > 0 do
@@ -72,12 +96,32 @@ end;
 procedure TJupiterFormGenerator.Internal_DrawForm;
 var
   vrVez : Integer;
+  vrTabOrder : Integer;
+  vrContainer : TPanel;
 begin
   Self.FLastTop := 0;
 
   for vrVez := 0 to Self.Variables.Size - 1 do
   begin
     Self.Internal_CreateComponent(Self.Variables.VariableFormByIndex(vrVez), vrVez + 1);
+
+    vrTabOrder := vrVez + 1;
+  end;
+
+  vrTabOrder := vrTabOrder + 1;;
+
+  if Assigned(Self.ActionList) then
+  begin
+    for vrVez := 0 to Self.ActionList.Count - 1 do
+    begin
+      Self.Internal_CreateAction(TJupiterAction(Self.ActionList.GetAtIndex(vrVez)), vrTabOrder);
+
+      vrTabOrder := vrTabOrder + 1;;
+    end;
+
+    vrContainer        := TPanel.Create(Self.FContainer);
+    vrContainer.Parent := Self.FContainer;
+    vrContainer.Align  := alClient;
   end;
 end;
 
@@ -106,6 +150,7 @@ end;
 constructor TJupiterFormGenerator.Create;
 begin
   Self.FAlreadyDrawed := False;
+  Self.FActionColor := clDefault;
 
   Self.FVariables := TJupiterVariableFormList.Create;
 end;

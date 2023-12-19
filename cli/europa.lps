@@ -9,10 +9,10 @@
         <Filename Value="europa.lpr"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="161"/>
-        <CursorPos X="58" Y="170"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="153"/>
+        <CursorPos X="78" Y="182"/>
         <UsageCount Value="22"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="..\Commons\jupiterconsts.pas"/>
@@ -43,8 +43,8 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterApp"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="376"/>
-        <CursorPos X="59" Y="396"/>
+        <TopLine Value="367"/>
+        <CursorPos X="68" Y="377"/>
         <UsageCount Value="22"/>
       </Unit>
       <Unit>
@@ -110,6 +110,35 @@
         <UsageCount Value="22"/>
       </Unit>
       <Unit>
+        <Filename Value="..\Modules\jupiterclimodule.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="20"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Modules\jupitergeneratormodule.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterGeneratorModule"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="20"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Modules\jupiterstandardmodule.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterStandardModule"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="20"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Modules\jupitertoolsmodule.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterToolsModule"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="31"/>
+        <CursorPos X="6" Y="43"/>
+        <UsageCount Value="20"/>
+      </Unit>
+      <Unit>
         <Filename Value="..\Commons\jupiterform.pas"/>
         <UnitName Value="JupiterForm"/>
         <EditorIndex Value="-1"/>
@@ -132,12 +161,10 @@
         <UsageCount Value="10"/>
       </Unit>
     </Units>
-    <JumpHistory>
-      <Position>
-        <Filename Value="europa.lpr"/>
-        <Caret Line="183" Column="95" TopLine="161"/>
-      </Position>
-    </JumpHistory>
+    <General>
+      <ActiveWindowIndexAtStart Value="-1"/>
+    </General>
+    <JumpHistory HistoryIndex="-1"/>
     <RunParams>
       <FormatVersion Value="2"/>
       <Modes ActiveMode="default">

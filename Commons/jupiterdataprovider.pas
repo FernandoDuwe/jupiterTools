@@ -28,6 +28,7 @@ type
     procedure AddRow;
     function GetLastRow : TJupiterDataProviderRow;
     function GetRowByIndex(prIndex : Integer) : TJupiterDataProviderRow;
+    procedure ClearRows;
 
     procedure ProvideData; virtual;
 
@@ -179,6 +180,16 @@ end;
 function TJupiterDataProvider.GetRowByIndex(prIndex: Integer): TJupiterDataProviderRow;
 begin
   Result := TJupiterDataProviderRow(Self.GetAtIndex(prIndex));
+end;
+
+procedure TJupiterDataProvider.ClearRows;
+begin
+  try
+    while Self.Count > 0 do
+      Self.DeleteAtIndex(0);
+  finally
+    Self.ClearListItens;
+  end;
 end;
 
 procedure TJupiterDataProvider.ProvideData;

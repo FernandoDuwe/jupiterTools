@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, JupiterForm,
   JupiterAction, JupiterConsts, JupiterRunnable, JupiterFormGenerator,
-  jupiterformutils;
+  jupiterformutils, JupiterApp, JupiterStandardModule;
 
 type
 
@@ -18,8 +18,12 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
   private
+    FDontShowActionInForm : Boolean;
+
     FFormGenerator : TJupiterFormGenerator;
   published
+    property DontShowActionInForm : Boolean read FDontShowActionInForm write FDontShowActionInForm;
+
     property FormGenerator : TJupiterFormGenerator read FFormGenerator write FFormGenerator;
   protected
     procedure Internal_PrepareForm; override;
@@ -42,6 +46,8 @@ procedure TFCustomJupiterForm.FormCreate(Sender: TObject);
 begin
   inherited;
 
+  Self.DontShowActionInForm := False;
+
   Self.FFormGenerator := TJupiterFormGenerator.Create;
   Self.FFormGenerator.Container := sbBody;
 end;
@@ -56,6 +62,9 @@ end;
 procedure TFCustomJupiterForm.Internal_PrepareForm;
 begin
   inherited Internal_PrepareForm;
+
+  Self.FormGenerator.ActionsInForm := TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).ShowActionsInForm;
+  sbActions.Visible := not TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).ShowActionsInForm;
 end;
 
 procedure TFCustomJupiterForm.Internal_SaveGeneratorClick(Sender: TObject);
@@ -78,6 +87,9 @@ begin
   DrawForm(Self);
 
   Self.FFormGenerator.Variables.CopyFromVariableList(Self.Generator.Fields);
+
+  if (((TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).ShowActionsInForm) and (Params.Exists(FIELD_ID_GENERADOR))) and (not Self.DontShowActionInForm)) then
+     Self.FormGenerator.ActionList := Self.Actions;
 
   if ((Assigned(Self.FFormGenerator.Variables)) and (Self.FFormGenerator.Variables.Size > 0)) then
     Self.FFormGenerator.DrawForm;

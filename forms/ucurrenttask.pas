@@ -25,6 +25,7 @@ type
     lvTimes: TListView;
     pnCurrentTask: TPanel;
     tvExplorer: TTreeView;
+    procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure lvFilesDblClick(Sender: TObject);
   private
@@ -68,6 +69,13 @@ begin
   inherited;
 
   pnCurrentTask.Height := sbBody.Height - 5;
+end;
+
+procedure TFCurrentTask.FormCreate(Sender: TObject);
+begin
+  inherited;
+
+  Self.DontShowActionInForm := True;
 end;
 
 procedure TFCurrentTask.Internal_MarcarTempoInicial(Sender: TObject);

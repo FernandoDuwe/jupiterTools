@@ -481,7 +481,14 @@ begin
     begin
       vrRow := lvActions.Items.Add;
       vrRow.Caption := TJupiterAction(vrGenerator.Actions.GetAtIndex(vrVez)).Title;
-      vrRow.SubItems.Add(TJupiterAction(vrGenerator.Actions.GetAtIndex(vrVez)).Runnable.CommandLine);
+
+      if TJupiterAction(vrGenerator.Actions.GetAtIndex(vrVez)).ActionType = 0 then
+        vrRow.SubItems.Add(TJupiterAction(vrGenerator.Actions.GetAtIndex(vrVez)).Runnable.CommandLine);
+
+      if TJupiterAction(vrGenerator.Actions.GetAtIndex(vrVez)).ActionType = 1 then
+        vrRow.SubItems.Add(TJupiterAction(vrGenerator.Actions.GetAtIndex(vrVez)).OnClickScript.Text);
+
+
       vrRow.Data := TJupiterAction(vrGenerator.Actions.GetAtIndex(vrVez));
     end;
 
