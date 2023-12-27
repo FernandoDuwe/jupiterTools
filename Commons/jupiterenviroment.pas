@@ -23,7 +23,7 @@ type
     function CreateFile(prPath, prContent : String) : String;
     function FullPath(prPath : String) : String;
     function IconOfFile(prFileName : String) : Integer;
-
+    function Exists(prPath : String) : Boolean;
     function IsDocFile(prFileName : String) : Boolean;
     function IsTechFile(prFileName : String) : Boolean;
     function IsTextFile(prFileName : String) : Boolean;
@@ -171,6 +171,11 @@ begin
     Result := ICON_APPLICATION;
     Exit;
   end;
+end;
+
+function TJupiterEnviroment.Exists(prPath: String): Boolean;
+begin
+  Result := FileExists(prPath) or DirectoryExists(prPath);
 end;
 
 function TJupiterEnviroment.IsDocFile(prFileName: String): Boolean;

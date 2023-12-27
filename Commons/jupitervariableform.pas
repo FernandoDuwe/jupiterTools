@@ -5,7 +5,7 @@ unit JupiterVariableForm;
 interface
 
 uses
-  Classes, SysUtils, JupiterConsts, JupiterVariable;
+  Classes, SysUtils, JupiterConsts, JupiterVariable, JupiterEnviroment;
 
 type
 
@@ -130,29 +130,38 @@ var
   vrVez  : Integer;
   vrForm : TJupiterVariableForm;
   vrCurrentVariable : TJupiterVariableForm;
+  vrEnviroment : TJupiterEnviroment;
 begin
-  for vrVez := 0 to prList.Size - 1 do
-  begin
-    if prList.VariableByIndex(vrVez) is TJupiterVariableForm then
-      vrCurrentVariable := TJupiterVariableForm(prList.VariableByIndex(vrVez))
-    else
-      vrCurrentVariable := TJupiterVariableForm.CreateFromVariable(prList.VariableByIndex(vrVez));
+  vrEnviroment := TJupiterEnviroment.Create;
+  try
+    for vrVez := 0 to prList.Size - 1 do
+    begin
+      if prList.VariableByIndex(vrVez) is TJupiterVariableForm then
+        vrCurrentVariable := TJupiterVariableForm(prList.VariableByIndex(vrVez))
+      else
+        vrCurrentVariable := TJupiterVariableForm.CreateFromVariable(prList.VariableByIndex(vrVez));
 
-    vrForm          := TJupiterVariableForm.Create;
-    vrForm.Title    := vrCurrentVariable.Title;
-    vrForm.ID       := vrCurrentVariable.ID;
-    vrForm.Value    := vrCurrentVariable.Value;
-    vrForm.Save     := vrCurrentVariable.Save;
-    vrForm.ReadOnly := vrCurrentVariable.ReadOnly;
-    vrForm.Required := vrCurrentVariable.Required;
+      vrForm          := TJupiterVariableForm.Create;
+      vrForm.Title    := vrCurrentVariable.Title;
+      vrForm.ID       := vrCurrentVariable.ID;
+      vrForm.Value    := vrCurrentVariable.Value;
+      vrForm.Save     := vrCurrentVariable.Save;
+      vrForm.ReadOnly := vrCurrentVariable.ReadOnly;
+      vrForm.Required := vrCurrentVariable.Required;
 
-    vrForm.ComponentType := vrCurrentVariable.ComponentType;
-    vrForm.CleanOnShow   := vrCurrentVariable.CleanOnShow;
-    vrForm.RunButton     := vrCurrentVariable.RunButton;
-    vrForm.CopyButton    := vrCurrentVariable.CopyButton;
-    vrForm.ListVariable  := vrCurrentVariable.ListVariable;
+      vrForm.ComponentType := vrCurrentVariable.ComponentType;
+      vrForm.CleanOnShow   := vrCurrentVariable.CleanOnShow;
+      vrForm.RunButton     := vrCurrentVariable.RunButton;
+      vrForm.CopyButton    := vrCurrentVariable.CopyButton;
+      vrForm.ListVariable  := vrCurrentVariable.ListVariable;
 
-    Self.Add(vrForm);
+      if ((not vrCurrentVariable.RunButton) and (vrEnviroment.Exists(vrCurrentVariable.Value))) then
+        vrForm.RunButton := True;
+
+      Self.Add(vrForm);
+    end;
+  finally
+    FreeAndNil(vrEnviroment);
   end;
 end;
 

@@ -313,7 +313,13 @@ begin
   try
     vrCreateColumns := lvItems.ColumnCount = 0;
 
+    Self.Provider.ClearRows;
+    Self.FProvider.ProvideData;
+
     vrCountChecked := 0;
+
+    for vrVez := 0 to lvItems.ColumnCount - 1 do
+      lvItems.Column[vrVez].AutoSize := False;
 
     for vrVez := 0 to Self.Provider.Size - 1 do
       with Self.Provider.GetRowByIndex(vrVez) do
@@ -332,7 +338,6 @@ begin
           begin
             vrColumn            := lvItems.Columns.Add;
             vrColumn.Caption    := Fields.VariableByIndex(vrVez2).Title + COLUMN_SPACE_SEPARATOR;
-            vrColumn.AutoSize   := True;
           end;
 
           if vrVez2 = 0 then
@@ -378,6 +383,8 @@ begin
       if ((vrCountChecked > 0) and (vrCountChecked = Self.Provider.Size)) and (ChecklistMode) then
         Self.Params.AddVariable('Hint.Success', 'Hint.Success', 'Sucesso');
 
+    for vrVez := 0 to lvItems.ColumnCount - 1 do
+      lvItems.Column[vrVez].AutoSize := True;
   finally
     Self.Params.AddVariable('Size', IntToStr(lvItems.Items.Count), 'Qtd. de registros');
 

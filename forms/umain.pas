@@ -9,7 +9,8 @@ uses
   StdCtrls, Menus, PopupNotifier, Buttons, JupiterApp, JupiterRoute,
   JupiterConsts, JupiterObject, JupiterForm, JupiterAction, JupiterEnviroment,
   JupiterRunnable, jupiterformutils, JupiterFileDataProvider, jupiterScript,
-  JupiterToolsModule, uPSComponent_Default, LMessages, PairSplitter, ActnList;
+  JupiterDirectoryDataProvider, JupiterToolsModule, uPSComponent_Default,
+  LMessages, PairSplitter, ActnList;
 
 type
 
@@ -39,12 +40,8 @@ type
     Separator6: TMenuItem;
     miSearchMode: TMenuItem;
     miNewCheckList: TMenuItem;
-    miPastaAssets: TMenuItem;
     miMaximizedForms: TMenuItem;
     miPastasJupiter: TMenuItem;
-    miPastasModules: TMenuItem;
-    miPastasDatasets: TMenuItem;
-    miPastasTemp: TMenuItem;
     ppNotifier: TPopupNotifier;
     Separator5: TMenuItem;
     miAutoUpdate: TMenuItem;
@@ -145,6 +142,7 @@ type
     procedure ToolButton2Click(Sender: TObject);
     procedure tvMenuChange(Sender: TObject; Node: TTreeNode);
     procedure tvMenuClick(Sender: TObject);
+    procedure menuFolderClick(Sender: TObject);
   private
     FSearchMode : TJupiterSearchMode;
 
@@ -162,6 +160,7 @@ type
   protected
     procedure Internal_UpdateComponents; override;
     procedure Internal_PrepareForm; override;
+    procedure Internal_LoadDirectoryStructure(prDirectory : String; prAfterThan : TMenuItem);
   public
 
   end;
@@ -326,6 +325,8 @@ begin
   inherited;
 
   Self.FSearchMode := jsmForm;
+
+  Self.Internal_LoadDirectoryStructure(EmptyStr, MenuItem4);
 end;
 
 procedure TFMain.FormResize(Sender: TObject);
@@ -353,7 +354,17 @@ begin
   MenuItem10.Click;
 
   vrJupiterApp.MainIcons := ilIconFamily;
-  vrJupiterApp.NavigateTo(TJupiterRoute.Create(ROOT_FORM_PATH), False);
+
+  if TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).HideMenuTree then
+    tbMenu.Click;
+
+  if TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).GetUserStartRoute <> EmptyStr then
+  begin
+    if not Self.Internal_GoToPageItem(TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).GetUserStartRoute) then
+      vrJupiterApp.NavigateTo(TJupiterRoute.Create(ROOT_FORM_PATH), False);
+  end
+  else
+    vrJupiterApp.NavigateTo(TJupiterRoute.Create(ROOT_FORM_PATH), False);
 
   miNewCheckList.OnClick := @miNewCheckListClick;
 
@@ -364,12 +375,6 @@ begin
   if vrJupiterApp.Params.Exists('Jupiter.Standard.Triggers.OnExecuteCurrentThread') then
         if Trim(vrJupiterApp.Params.VariableById('Jupiter.Standard.Triggers.OnExecuteCurrentThread').Value) <> EmptyStr then
            tmInternalThread.Enabled := True;
-
-  if TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).HideMenuTree then
-    tbMenu.Click;
-
-  if TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).GetUserStartRoute <> EmptyStr then
-    Self.Internal_GoToPageItem(TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).GetUserStartRoute);
 end;
 
 procedure TFMain.MenuItem10Click(Sender: TObject);
@@ -762,6 +767,17 @@ begin
 
 end;
 
+procedure TFMain.menuFolderClick(Sender: TObject);
+begin
+  if Sender is TMenuItem then
+  begin
+    if TMenuItem(Sender).Count > 0 then
+      Exit;
+
+    TJupiterRunnable.Create(TMenuItem(Sender).Hint, True);
+  end;
+end;
+
 procedure TFMain.Internal_ListMenuItens;
 var
   vrMenuList : TJupiterObjectList;
@@ -978,6 +994,42 @@ begin
 
   Self.Internal_ListMenuItens;
   Self.Internal_GetExternalIcons;
+end;
+
+procedure TFMain.Internal_LoadDirectoryStructure(prDirectory: String; prAfterThan: TMenuItem);
+var
+  vrEnviroment : TJupiterEnviroment;
+  vrDirectory : TJupiterDirectoryDataProvider;
+  vrVez : Integer;
+  vrMenuItem : TMenuItem;
+begin
+  vrEnviroment := TJupiterEnviroment.Create;
+  vrDirectory  := TJupiterDirectoryDataProvider.Create;
+  try
+    vrDirectory.Path := vrEnviroment.FullPath(prDirectory);
+    vrDirectory.SubFolders := False;
+    vrDirectory.ProvideData;
+
+    for vrVez := 0 to vrDirectory.Count - 1 do
+    begin
+      vrMenuItem            := TMenuItem.Create(mmMainMenu);
+      vrMenuItem.Caption    := vrDirectory.GetRowByIndex(vrVez).Fields.VariableById('Folder').Value;
+      vrMenuItem.ImageIndex := ICON_OPEN;
+      vrMenuItem.OnClick    := @menuFolderClick;
+
+      if prDirectory = EmptyStr then
+        Self.Internal_LoadDirectoryStructure(vrDirectory.GetRowByIndex(vrVez).Fields.VariableById('Folder').Value + GetDirectorySeparator, vrMenuItem)
+      else
+        Self.Internal_LoadDirectoryStructure(prDirectory + GetDirectorySeparator + vrDirectory.GetRowByIndex(vrVez).Fields.VariableById('Folder').Value + GetDirectorySeparator, vrMenuItem);
+
+      vrMenuItem.Hint := vrDirectory.GetRowByIndex(vrVez).Fields.VariableById('Path').Value;
+
+      prAfterThan.Add(vrMenuItem);
+    end;
+  finally
+    FreeAndNil(vrEnviroment);
+    FreeAndNil(vrDirectory);
+  end;
 end;
 
 end.

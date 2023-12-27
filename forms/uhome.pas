@@ -100,22 +100,22 @@ end;
 
 procedure TFHome.Label6Click(Sender: TObject);
 begin
-  FMain.miPastasDatasets.Click;
+
 end;
 
 procedure TFHome.Label7Click(Sender: TObject);
 begin
-  FMain.miPastasModules.Click;
+
 end;
 
 procedure TFHome.Label8DblClick(Sender: TObject);
 begin
-  FMain.miPastasTemp.Click;
+
 end;
 
 procedure TFHome.Label9Click(Sender: TObject);
 begin
-  FMain.miPastaAssets.Click;
+
 end;
 
 procedure TFHome.lbConfigLink1Click(Sender: TObject);

@@ -84,15 +84,20 @@ begin
 
   Self.FFormGenerator.OnKeyUp := Self.OnKeyUp;
 
-  DrawForm(Self);
+  sbBody.Visible := False;
+  try
+    DrawForm(Self);
 
-  Self.FFormGenerator.Variables.CopyFromVariableList(Self.Generator.Fields);
+    Self.FFormGenerator.Variables.CopyFromVariableList(Self.Generator.Fields);
 
-  if (((TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).ShowActionsInForm) and (Params.Exists(FIELD_ID_GENERADOR))) and (not Self.DontShowActionInForm)) then
-     Self.FormGenerator.ActionList := Self.Actions;
+    if (((TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).ShowActionsInForm) and (Params.Exists(FIELD_ID_GENERADOR))) and (not Self.DontShowActionInForm)) then
+       Self.FormGenerator.ActionList := Self.Actions;
 
-  if ((Assigned(Self.FFormGenerator.Variables)) and (Self.FFormGenerator.Variables.Size > 0)) then
-    Self.FFormGenerator.DrawForm;
+    if ((Assigned(Self.FFormGenerator.Variables)) and (Self.FFormGenerator.Variables.Size > 0)) then
+      Self.FFormGenerator.DrawForm;
+  finally
+    sbBody.Visible := True;
+  end;
 end;
 
 end.

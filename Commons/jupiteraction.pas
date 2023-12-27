@@ -145,7 +145,7 @@ begin
 
   Result.AutoSize := True;
 
-  vrWidth := Result.Width;
+  vrWidth := Result.Width + 20;
 
   Result.AutoSize := False;
 
@@ -163,7 +163,7 @@ begin
   Result.OnClick := @Self.Internal_OnClick;
 
   vrPopupMenu := TMenuItem.Create(Self.PopupMenu);
-  vrPopupMenu.Caption    := prAction.Title;
+  vrPopupMenu.Caption    := prAction.Title + vrShortcutButton;
   vrPopupMenu.Hint       := prAction.Hint;
   vrPopupMenu.ImageIndex := prAction.Icon;
   vrPopupMenu.Tag        := prIndex;

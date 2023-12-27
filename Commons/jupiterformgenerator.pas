@@ -122,6 +122,11 @@ begin
     vrContainer        := TPanel.Create(Self.FContainer);
     vrContainer.Parent := Self.FContainer;
     vrContainer.Align  := alClient;
+
+    if not Self.Raised then
+      vrContainer.BevelOuter := bvNone
+    else
+      vrContainer.BevelOuter := bvRaised;
   end;
 end;
 

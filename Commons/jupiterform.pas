@@ -464,6 +464,9 @@ begin
       // Adiciona as ações no formulario
       Self.Actions.CopyFromList(Self.Generator.Actions, Self.SaveGeneratorAction);
     end;
+
+    if Self.Params.Exists('title') then
+      Self.Caption := Self.Params.VariableById('title').Value;
   finally
     ppMenu.Images := vrJupiterApp.MainIcons;
 
