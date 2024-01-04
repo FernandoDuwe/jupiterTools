@@ -9,8 +9,8 @@ uses
   StdCtrls, Menus, PopupNotifier, Buttons, JupiterApp, JupiterRoute,
   JupiterConsts, JupiterObject, JupiterForm, JupiterAction, JupiterEnviroment,
   JupiterRunnable, jupiterformutils, JupiterFileDataProvider, jupiterScript,
-  JupiterDirectoryDataProvider, JupiterToolsModule, uPSComponent_Default,
-  LMessages, PairSplitter, ActnList;
+  JupiterDirectoryDataProvider, JupiterToolsModule, jupiterdatabase, SQLDB,
+  uPSComponent_Default, LMessages, PairSplitter, ActnList, ButtonPanel, EditBtn;
 
 type
 
@@ -32,6 +32,7 @@ type
     MenuItem13: TMenuItem;
     MenuItem14: TMenuItem;
     MenuItem15: TMenuItem;
+    miEditorSQL: TMenuItem;
     Separator7: TMenuItem;
     MenuItem6: TMenuItem;
     MenuItem7: TMenuItem;
@@ -96,6 +97,7 @@ type
     procedure edSearchChange(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure FormShortCut(var Msg: TLMKey; var Handled: Boolean);
     procedure FormShow(Sender: TObject);
@@ -109,6 +111,7 @@ type
     procedure MenuItem6Click(Sender: TObject);
     procedure MenuItem8Click(Sender: TObject);
     procedure MenuItem9Click(Sender: TObject);
+    procedure miEditorSQLClick(Sender: TObject);
     procedure miSearchModeClick(Sender: TObject);
     procedure miAutoUpdateClick(Sender: TObject);
     procedure miClearSearchClick(Sender: TObject);
@@ -329,6 +332,11 @@ begin
   Self.Internal_LoadDirectoryStructure(EmptyStr, MenuItem4);
 end;
 
+procedure TFMain.FormDestroy(Sender: TObject);
+begin
+  inherited;
+end;
+
 procedure TFMain.FormResize(Sender: TObject);
 begin
   cbNavigationMenu.Bands[1].Width := (Self.Width - ( (FORM_MARGIN_LEFT * 4) +
@@ -498,6 +506,11 @@ begin
     FreeAndNil(vrStr);
     FreeAndNil(vrEnviroment);
   end;
+end;
+
+procedure TFMain.miEditorSQLClick(Sender: TObject);
+begin
+  vrJupiterApp.NavigateTo(TJupiterRoute.Create(SQLEDITOR_FORM_PATH), False);
 end;
 
 procedure TFMain.miSearchModeClick(Sender: TObject);
@@ -971,6 +984,8 @@ begin
   FormResize(Self);
 
   tvMenu.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
+
+  miEditorSQL.Enabled := TJupiterDatabaseModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Database')).IsActive;
 end;
 
 procedure TFMain.Internal_PrepareForm;

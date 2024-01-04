@@ -36,6 +36,9 @@
     </RunParams>
     <RequiredPackages>
       <Item>
+        <PackageName Value="FCL"/>
+      </Item>
+      <Item>
         <PackageName Value="SynEdit"/>
       </Item>
       <Item>
@@ -420,6 +423,25 @@
         <Filename Value="Commons\jupiterformaction.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
+      <Unit>
+        <Filename Value="data\udm.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="DMMain"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="DataModule"/>
+      </Unit>
+      <Unit>
+        <Filename Value="Modules\jupiterdatabase.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms\usqleditor.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FSQLEditor"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="usqlEditor"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -430,7 +452,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="Forms;Commons;Modules"/>
+      <OtherUnitFiles Value="Forms;Commons;Modules;data"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Linking>

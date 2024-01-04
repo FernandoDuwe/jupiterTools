@@ -1,0 +1,24 @@
+object DMMain: TDMMain
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  OldCreateOrder = False
+  Height = 217
+  HorizontalOffset = 521
+  VerticalOffset = 121
+  Width = 458
+  object sqlConnector: TSQLConnector
+    Connected = False
+    LoginPrompt = False
+    KeepConnection = True
+    Transaction = sqlTransaction
+    ConnectorType = 'Firebird'
+    Left = 48
+    Top = 16
+  end
+  object sqlTransaction: TSQLTransaction
+    Active = False
+    Database = sqlConnector
+    Left = 160
+    Top = 16
+  end
+end

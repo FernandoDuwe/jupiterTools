@@ -28,7 +28,7 @@ uses
   jupiterThread, uProcessMonitor, jupiterStream, uPrompt, ulayoutbuilder,
   jupiterclimodule, ulayoutreader, uclimanager, jupiterclicommand,
   unewcommandcli, utimecontrol, jupiterTimeControlDataProvider, 
-uuserpreferences, jupiterformaction;
+uuserpreferences, jupiterformaction, udm, jupiterdatabase, usqlEditor;
 
 {$R *.res}
 
@@ -65,6 +65,7 @@ begin
   vrJupiterApp.AddModule(TJupiterCLIModule.Create);
   vrJupiterApp.AddModule(TJupiterToolsModule.Create);
   vrJupiterApp.AddModule(TJupiterGeneratorModule.Create);
+  vrJupiterApp.AddModule(TJupiterDatabaseModule.Create);
 
   // Forms
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(ROOT_FORM_PATH, TFHome));
@@ -75,6 +76,7 @@ begin
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(TASK_FORM_PATH, TFCurrentTask));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(EDITOR_FORM_PATH, TFEditor));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(SCRIPTEDITOR_FORM_PATH, TFScriptEditor));
+  vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(SQLEDITOR_FORM_PATH, TFSQLEditor));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(GENERATOR_FORM_PATH, TFGenerator));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(MESSAGES_PATH, TFMessage));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(DYNAMIC_RECORD_FORM_PATH, TFDynamicRecord));
@@ -88,6 +90,7 @@ begin
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(USER_PREF_PATH, TFUserPreferences));
 
   Application.CreateForm(TFMain, FMain);
+  Application.CreateForm(TDMMain, DMMain);
   Application.Run;
 end.
 

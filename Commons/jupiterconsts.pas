@@ -14,6 +14,7 @@ const
    EXPLORER_FORM_PATH       : String = '/forms/explorer/';
    EDITOR_FORM_PATH         : String = '/forms/editor/';
    SCRIPTEDITOR_FORM_PATH   : String = '/forms/editor/jpas/';
+   SQLEDITOR_FORM_PATH      : String = '/forms/editor/SQL/';
    GENERATOR_FORM_PATH      : String = '/forms/generator/';
    MESSAGES_PATH            : String = '/forms/messages/';
    CUSTOM_FORM_PATH         : String = '/forms/custom/';
