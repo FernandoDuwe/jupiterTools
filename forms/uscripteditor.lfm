@@ -585,7 +585,9 @@ inherited FScriptEditor: TFScriptEditor
   end
   inherited ppMenu: TPopupMenu[6]
   end
-  object syPas: TSynPasSyn[7]
+  inherited acActionShortcuts: TActionList[7]
+  end
+  object syPas: TSynPasSyn[8]
     Enabled = False
     CompilerMode = pcmDelphi
     NestedComments = False
@@ -593,7 +595,7 @@ inherited FScriptEditor: TFScriptEditor
     Left = 416
     Top = 136
   end
-  object SynAutoComplete1: TSynAutoComplete[8]
+  object SynAutoComplete1: TSynAutoComplete[9]
     EndOfTokenChr = '()[].'
     ShortCut = 8224
     ExecCommandID = ecSynAutoCompletionExecute
@@ -601,7 +603,7 @@ inherited FScriptEditor: TFScriptEditor
     Left = 520
     Top = 136
   end
-  object SynCompletion1: TSynCompletion[9]
+  object SynCompletion1: TSynCompletion[10]
     Position = -1
     LinesInWindow = 15
     SelectedColor = clHighlight

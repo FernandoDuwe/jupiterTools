@@ -505,8 +505,14 @@ inherited FEditor: TFEditor
     end
   end
   inherited ppMenu: TPopupMenu[4]
+    object miOpenInSQLEditor: TMenuItem[3]
+      Caption = 'Abrir o texto selecionado no editor SQL'
+      OnClick = miOpenInSQLEditorClick
+    end
   end
-  object SynCompletion1: TSynCompletion[5]
+  inherited acActionShortcuts: TActionList[5]
+  end
+  object SynCompletion1: TSynCompletion[6]
     Position = 0
     LinesInWindow = 6
     SelectedColor = clHighlight
@@ -521,7 +527,7 @@ inherited FEditor: TFEditor
     Left = 224
     Top = 134
   end
-  object SynAutoComplete1: TSynAutoComplete[6]
+  object SynAutoComplete1: TSynAutoComplete[7]
     EndOfTokenChr = '()[].'
     ShortCut = 8224
     ExecCommandID = ecSynAutoCompletionExecute

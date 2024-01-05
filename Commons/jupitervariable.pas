@@ -164,9 +164,9 @@ begin
 
     for vrVez := 0 to vrProvider.Size - 1 do
       with vrProvider.GetRowByIndex(vrVez) do
-        Self.AddConfig(Fields.VariableById('ID').Value,
-                       Fields.VariableById('VALUE').Value,
-                       Fields.VariableById('DESCRIPTION').Value);
+        Self.AddConfig(StringReplace(Fields.VariableById('ID').Value, CSV_SEPARATOR_REPLACER, ';', [rfIgnoreCase, rfReplaceAll]),
+                       StringReplace(Fields.VariableById('VALUE').Value, CSV_SEPARATOR_REPLACER, ';', [rfIgnoreCase, rfReplaceAll]),
+                       StringReplace(Fields.VariableById('DESCRIPTION').Value, CSV_SEPARATOR_REPLACER, ';', [rfIgnoreCase, rfReplaceAll]));
   finally
     FreeAndNil(vrProvider);
 
@@ -471,9 +471,9 @@ begin
       if not Self.VariableByIndex(vrVez).Save then
         Continue;
 
-      vrStrLine := Format('%0:s;%1:s;%2:s;', [StringReplace(Self.VariableByIndex(vrVez).ID, ';', ',', [rfIgnoreCase, rfReplaceAll]),
-                                              StringReplace(Self.VariableByIndex(vrVez).Title, ';', ',', [rfIgnoreCase, rfReplaceAll]),
-                                              StringReplace(Self.VariableByIndex(vrVez).Value, ';', ',', [rfIgnoreCase, rfReplaceAll])]);
+      vrStrLine := Format('%0:s;%1:s;%2:s;', [StringReplace(Self.VariableByIndex(vrVez).ID,    ';', CSV_SEPARATOR_REPLACER, [rfIgnoreCase, rfReplaceAll]),
+                                              StringReplace(Self.VariableByIndex(vrVez).Title, ';', CSV_SEPARATOR_REPLACER, [rfIgnoreCase, rfReplaceAll]),
+                                              StringReplace(Self.VariableByIndex(vrVez).Value, ';', CSV_SEPARATOR_REPLACER, [rfIgnoreCase, rfReplaceAll])]);
 
       vrStrLine := StringReplace(vrStrLine, #13, EmptyStr, [rfReplaceAll, rfIgnoreCase]);
       vrStrLine := StringReplace(vrStrLine, #10, EmptyStr, [rfReplaceAll, rfIgnoreCase]);

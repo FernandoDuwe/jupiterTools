@@ -77,6 +77,8 @@ const
    FIELD_TREE_COLAPSE     : String = 'MenuTree_Colapse';
    FIELD_FONT_SIZE        : String = 'Interface.Font.Size';
 
+   CSV_SEPARATOR_REPLACER : String = '[SEMICOLON]';
+
    DATAPROVIDER_TYPE_LIST_FILES : String = 'TJupiterFileDataProvider';
    DATAPROVIDER_TYPE_LIST_PATHS : String = 'TJupiterDirectoryDataProvider';
    DATAPROVIDER_TYPE_LIST_CSV   : String = 'TJupiterCSVDataProvider';

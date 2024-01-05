@@ -5,8 +5,8 @@ unit udm;
 interface
 
 uses
-  Classes, SysUtils, JupiterApp, JupiterSystemMessage, SQLDB, IBConnection,
-  oracleconnection;
+  Classes, SysUtils, JupiterApp, JupiterSystemMessage, SQLDB, odbcconn,
+  IBConnection, oracleconnection;
 
 type
 

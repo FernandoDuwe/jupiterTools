@@ -7,17 +7,20 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, SynEdit, SynCompletion,
   JupiterForm, JupiterConsts, JupiterAction, JupiterEnviroment, JupiterApp,
-  JupiterVariable, jupiterformutils, LCLType;
+  JupiterVariable, jupiterformutils, JupiterRoute, jupiterdatabase, LCLType,
+  Menus;
 
 type
 
   { TFEditor }
 
   TFEditor = class(TFJupiterForm)
+    miOpenInSQLEditor: TMenuItem;
     seEditor: TSynEdit;
     SynAutoComplete1: TSynAutoComplete;
     SynCompletion1: TSynCompletion;
     procedure FormShow(Sender: TObject);
+    procedure miOpenInSQLEditorClick(Sender: TObject);
   private
     FFileName : String;
     FReadMode : Boolean;
@@ -58,6 +61,20 @@ begin
   inherited;
 
   SynCompletion1.Width := PercentOfScreen(Self.Width, 40);
+end;
+
+procedure TFEditor.miOpenInSQLEditorClick(Sender: TObject);
+var
+  vrRoute : TJupiterRoute;
+begin
+  vrRoute := TJupiterRoute.Create(SQLEDITOR_FORM_PATH);
+
+  if Trim(seEditor.SelText) <> EmptyStr then
+    vrRoute.Params.AddVariable('SQL', seEditor.SelText, 'Texto')
+  else
+    vrRoute.Params.AddVariable('SQL', seEditor.Lines.Text, 'Texto');
+
+  vrJupiterApp.NavigateTo(vrRoute, True);
 end;
 
 procedure TFEditor.Internal_ListVariables;
@@ -125,6 +142,8 @@ begin
   Self.FReadMode := True;
 
   Self.Internal_ListVariables;
+
+  miOpenInSQLEditor.Enabled := TJupiterDatabaseModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Database')).IsActive;
 end;
 
 procedure TFEditor.Internal_UpdateComponents;

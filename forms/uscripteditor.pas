@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, ExtCtrls,
   StdCtrls, SynEdit, SynHighlighterPas, SynCompletion, JupiterForm,
   JupiterConsts, JupiterAction, jupiterScript, JupiterApp, JupiterVariable,
-  jupiterformutils, Types, LCLType;
+  jupiterformutils, Types, LCLType, Menus;
 
 type
 

@@ -21,18 +21,19 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uMain"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="335"/>
-        <CursorPos X="13" Y="337"/>
+        <TopLine Value="955"/>
+        <CursorPos X="117" Y="988"/>
         <UsageCount Value="200"/>
       </Unit>
       <Unit>
         <Filename Value="Commons\jupiterconsts.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterConsts"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="8"/>
-        <CursorPos X="28" Y="17"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="64"/>
+        <CursorPos X="26" Y="80"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="Commons\jupiterobject.pas"/>
@@ -58,10 +59,11 @@
         <Filename Value="Commons\jupitervariable.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterVariable"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="380"/>
-        <CursorPos X="40" Y="383"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="148"/>
+        <CursorPos X="28" Y="148"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="Commons\jupiterrunnable.pas"/>
@@ -87,11 +89,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="JupiterForm"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="83"/>
         <CursorPos Y="94"/>
         <UsageCount Value="200"/>
-        <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="Commons\jupitermodule.pas"/>
@@ -108,7 +109,7 @@
         <UnitName Value="JupiterApp"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="67"/>
-        <CursorPos X="15" Y="88"/>
+        <CursorPos X="77" Y="82"/>
         <UsageCount Value="200"/>
       </Unit>
       <Unit>
@@ -238,8 +239,8 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterEnviroment"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="109"/>
-        <CursorPos X="3" Y="111"/>
+        <TopLine Value="176"/>
+        <CursorPos X="3" Y="178"/>
         <UsageCount Value="201"/>
       </Unit>
       <Unit>
@@ -316,8 +317,8 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uEditor"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="130"/>
-        <CursorPos X="87" Y="158"/>
+        <TopLine Value="47"/>
+        <CursorPos X="36" Y="75"/>
         <UsageCount Value="200"/>
       </Unit>
       <Unit>
@@ -462,7 +463,7 @@
         <UnitName Value="uScriptEditor"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="92"/>
-        <CursorPos Y="120"/>
+        <CursorPos X="42" Y="120"/>
         <UsageCount Value="202"/>
       </Unit>
       <Unit>
@@ -533,9 +534,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="82"/>
-        <CursorPos X="3" Y="108"/>
-        <UsageCount Value="85"/>
+        <TopLine Value="179"/>
+        <CursorPos Y="186"/>
+        <UsageCount Value="88"/>
       </Unit>
       <Unit>
         <Filename Value="Modules\jupiterclimodule.pas"/>
@@ -543,7 +544,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="50"/>
         <CursorPos X="3" Y="67"/>
-        <UsageCount Value="72"/>
+        <UsageCount Value="75"/>
       </Unit>
       <Unit>
         <Filename Value="forms\ulayoutreader.pas"/>
@@ -554,7 +555,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="135"/>
         <CursorPos X="14" Y="163"/>
-        <UsageCount Value="71"/>
+        <UsageCount Value="74"/>
       </Unit>
       <Unit>
         <Filename Value="forms\uclimanager.pas"/>
@@ -565,7 +566,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="113"/>
         <CursorPos X="95" Y="119"/>
-        <UsageCount Value="71"/>
+        <UsageCount Value="74"/>
       </Unit>
       <Unit>
         <Filename Value="Commons\jupiterclicommand.pas"/>
@@ -573,7 +574,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="79"/>
         <CursorPos X="39" Y="82"/>
-        <UsageCount Value="67"/>
+        <UsageCount Value="70"/>
       </Unit>
       <Unit>
         <Filename Value="forms\unewcommandcli.pas"/>
@@ -585,7 +586,7 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="87"/>
         <CursorPos X="12" Y="121"/>
-        <UsageCount Value="65"/>
+        <UsageCount Value="68"/>
       </Unit>
       <Unit>
         <Filename Value="forms\utimecontrol.pas"/>
@@ -596,7 +597,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="106"/>
         <CursorPos X="78" Y="108"/>
-        <UsageCount Value="52"/>
+        <UsageCount Value="55"/>
       </Unit>
       <Unit>
         <Filename Value="Commons\jupitertimecontroldataprovider.pas"/>
@@ -605,7 +606,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="143"/>
         <CursorPos X="63" Y="188"/>
-        <UsageCount Value="51"/>
+        <UsageCount Value="54"/>
       </Unit>
       <Unit>
         <Filename Value="forms\uuserpreferences.pas"/>
@@ -616,7 +617,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="38"/>
         <CursorPos X="34" Y="62"/>
-        <UsageCount Value="35"/>
+        <UsageCount Value="38"/>
       </Unit>
       <Unit>
         <Filename Value="Commons\jupiterformaction.pas"/>
@@ -624,7 +625,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="2"/>
         <CursorPos X="45" Y="13"/>
-        <UsageCount Value="32"/>
+        <UsageCount Value="35"/>
       </Unit>
       <Unit>
         <Filename Value="data\udm.pas"/>
@@ -632,20 +633,22 @@
         <ComponentName Value="DMMain"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="DataModule"/>
-        <EditorIndex Value="2"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="3"/>
         <TopLine Value="32"/>
-        <CursorPos X="52" Y="53"/>
-        <UsageCount Value="23"/>
+        <CursorPos X="130" Y="50"/>
+        <UsageCount Value="26"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="Modules\jupiterdatabase.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="69"/>
-        <CursorPos X="75" Y="106"/>
-        <UsageCount Value="23"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="33"/>
+        <CursorPos X="16" Y="38"/>
+        <UsageCount Value="26"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="forms\usqleditor.pas"/>
@@ -654,11 +657,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="usqlEditor"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="62"/>
-        <CursorPos X="61" Y="65"/>
-        <UsageCount Value="22"/>
+        <TopLine Value="145"/>
+        <CursorPos X="96" Y="151"/>
+        <UsageCount Value="25"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -813,123 +814,123 @@
     <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="forms\usqleditor.pas"/>
-        <Caret Line="55" Column="54" TopLine="40"/>
+        <Caret Line="41" Column="38" TopLine="25"/>
       </Position>
       <Position>
         <Filename Value="forms\usqleditor.pas"/>
-        <Caret Line="61" Column="48" TopLine="42"/>
+        <Caret Line="138" Column="5" TopLine="135"/>
       </Position>
       <Position>
         <Filename Value="forms\usqleditor.pas"/>
-        <Caret Line="34" Column="50" TopLine="13"/>
+        <Caret Line="45" Column="30" TopLine="21"/>
       </Position>
       <Position>
         <Filename Value="forms\usqleditor.pas"/>
-        <Caret Line="79" Column="34" TopLine="75"/>
+        <Caret Line="40" Column="30" TopLine="24"/>
       </Position>
       <Position>
         <Filename Value="forms\usqleditor.pas"/>
-        <Caret Line="79" Column="55" TopLine="76"/>
+        <Caret Line="133" Column="7" TopLine="94"/>
       </Position>
       <Position>
         <Filename Value="forms\usqleditor.pas"/>
-        <Caret Line="80" Column="55" TopLine="77"/>
+        <Caret Line="41" Column="15" TopLine="20"/>
       </Position>
       <Position>
         <Filename Value="forms\usqleditor.pas"/>
-        <Caret Line="90" Column="32" TopLine="77"/>
+        <Caret Line="149" Column="12" TopLine="135"/>
       </Position>
       <Position>
         <Filename Value="forms\usqleditor.pas"/>
-        <Caret Line="37" Column="15" TopLine="15"/>
+        <Caret Line="142" Column="113" TopLine="127"/>
       </Position>
       <Position>
         <Filename Value="forms\usqleditor.pas"/>
-        <Caret Line="117" Column="61" TopLine="89"/>
+        <Caret Line="146" Column="48" TopLine="121"/>
       </Position>
       <Position>
         <Filename Value="forms\usqleditor.pas"/>
-        <Caret Line="115" Column="49" TopLine="91"/>
+        <Caret Line="45" Column="29" TopLine="21"/>
       </Position>
       <Position>
         <Filename Value="forms\usqleditor.pas"/>
-        <Caret Line="37" Column="15"/>
+        <Caret Line="222" Column="13" TopLine="181"/>
       </Position>
       <Position>
         <Filename Value="forms\usqleditor.pas"/>
-        <Caret Line="38" Column="15"/>
+        <Caret Line="41" Column="15" TopLine="25"/>
       </Position>
       <Position>
         <Filename Value="forms\usqleditor.pas"/>
-        <Caret Line="39" Column="15"/>
+        <Caret Line="152" Column="36" TopLine="135"/>
       </Position>
       <Position>
         <Filename Value="forms\usqleditor.pas"/>
-        <Caret Line="122" Column="35" TopLine="91"/>
+        <Caret Line="41" Column="15" TopLine="21"/>
       </Position>
       <Position>
-        <Filename Value="forms\usqleditor.pas"/>
-        <Caret Line="41" Column="33" TopLine="20"/>
+        <Filename Value="Modules\jupiterdatabase.pas"/>
+        <Caret Line="115" Column="42" TopLine="78"/>
       </Position>
       <Position>
-        <Filename Value="forms\usqleditor.pas"/>
-        <Caret Line="142" Column="37" TopLine="111"/>
+        <Filename Value="Modules\jupiterdatabase.pas"/>
+        <Caret Line="38" Column="16" TopLine="33"/>
       </Position>
       <Position>
-        <Filename Value="forms\usqleditor.pas"/>
-        <Caret Line="141" Column="37" TopLine="110"/>
+        <Filename Value="Commons\jupitervariable.pas"/>
+        <Caret Line="75" Column="15" TopLine="55"/>
       </Position>
       <Position>
-        <Filename Value="forms\usqleditor.pas"/>
-        <Caret Line="129" Column="48" TopLine="110"/>
+        <Filename Value="Commons\jupitervariable.pas"/>
+        <Caret Line="289" Column="19" TopLine="260"/>
       </Position>
       <Position>
-        <Filename Value="forms\usqleditor.pas"/>
-        <Caret Line="59" TopLine="38"/>
+        <Filename Value="Commons\jupitervariable.pas"/>
+        <Caret Line="88" Column="15" TopLine="68"/>
       </Position>
       <Position>
-        <Filename Value="data\udm.pas"/>
-        <Caret Line="61" Column="56" TopLine="31"/>
+        <Filename Value="Commons\jupitervariable.pas"/>
+        <Caret Line="464" Column="44" TopLine="434"/>
       </Position>
       <Position>
-        <Filename Value="data\udm.pas"/>
-        <Caret Line="62" Column="56" TopLine="32"/>
+        <Filename Value="Commons\jupitervariable.pas"/>
+        <Caret Line="90" Column="22" TopLine="59"/>
       </Position>
       <Position>
-        <Filename Value="forms\usqleditor.pas"/>
-        <Caret Line="131" Column="60" TopLine="118"/>
+        <Filename Value="Commons\jupitervariable.pas"/>
+        <Caret Line="496" Column="3" TopLine="470"/>
       </Position>
       <Position>
-        <Filename Value="forms\usqleditor.pas"/>
-        <Caret Line="41" Column="33" TopLine="22"/>
+        <Filename Value="Commons\jupitervariable.pas"/>
+        <Caret Line="50" Column="53" TopLine="47"/>
       </Position>
       <Position>
-        <Filename Value="forms\usqleditor.pas"/>
-        <Caret Line="173" Column="37" TopLine="139"/>
+        <Filename Value="Commons\jupitervariable.pas"/>
+        <Caret Line="53" Column="14" TopLine="45"/>
       </Position>
       <Position>
-        <Filename Value="forms\usqleditor.pas"/>
-        <Caret Line="73" TopLine="53"/>
+        <Filename Value="Commons\jupitervariable.pas"/>
+        <Caret Line="57" Column="35" TopLine="45"/>
       </Position>
       <Position>
-        <Filename Value="forms\usqleditor.pas"/>
-        <Caret Line="149" Column="53" TopLine="125"/>
+        <Filename Value="Commons\jupitervariable.pas"/>
+        <Caret Line="58" Column="46" TopLine="45"/>
       </Position>
       <Position>
-        <Filename Value="forms\usqleditor.pas"/>
-        <Caret Line="35" Column="19" TopLine="21"/>
+        <Filename Value="Commons\jupitervariable.pas"/>
+        <Caret Line="57" Column="57" TopLine="45"/>
       </Position>
       <Position>
-        <Filename Value="forms\usqleditor.pas"/>
-        <Caret Line="74" TopLine="62"/>
+        <Filename Value="Commons\jupitervariable.pas"/>
+        <Caret Line="217" Column="4" TopLine="210"/>
       </Position>
       <Position>
-        <Filename Value="forms\usqleditor.pas"/>
-        <Caret Line="165" TopLine="135"/>
+        <Filename Value="Commons\jupitervariable.pas"/>
+        <Caret Line="64" Column="15" TopLine="43"/>
       </Position>
       <Position>
-        <Filename Value="forms\usqleditor.pas"/>
-        <Caret Line="35" Column="25" TopLine="23"/>
+        <Filename Value="Commons\jupitervariable.pas"/>
+        <Caret Line="169" Column="70" TopLine="153"/>
       </Position>
     </JumpHistory>
     <RunParams>

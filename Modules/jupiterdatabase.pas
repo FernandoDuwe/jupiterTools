@@ -27,6 +27,7 @@ type
     function GetDatabase : String;
     function GetUserName : String;
     function GetPassword : String;
+    function GetTerminator : String;
   end;
 
 implementation
@@ -51,6 +52,9 @@ begin
 
   if not Self.Params.Exists(Self.DefineParamName('Config.Password')) then
     Self.Params.AddConfig(Self.DefineParamName('Config.Password'), EmptyStr, 'Senha');
+
+  if not Self.Params.Exists(Self.DefineParamName('Config.Terminator')) then
+    Self.Params.AddConfig(Self.DefineParamName('Config.Terminator'), ';', 'Caracter identificador de fim de instrução');
 end;
 
 function TJupiterDatabaseModule.Internal_GetModuleID: String;
@@ -104,6 +108,11 @@ end;
 function TJupiterDatabaseModule.GetPassword: String;
 begin
   Result := Self.Params.VariableById(Self.DefineParamName('Config.Password')).Value;
+end;
+
+function TJupiterDatabaseModule.GetTerminator: String;
+begin
+  Result := Self.Params.VariableById(Self.DefineParamName('Config.Terminator')).Value;
 end;
 
 end.

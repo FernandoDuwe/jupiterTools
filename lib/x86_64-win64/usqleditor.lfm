@@ -626,6 +626,7 @@ inherited FSQLEditor: TFSQLEditor
   end
   object sqlQuery: TSQLQuery[8]
     FieldDefs = <>
+    Transaction = sqlTransaction
     Params = <>
     Macros = <>
     Left = 480
@@ -665,5 +666,36 @@ inherited FSQLEditor: TFSQLEditor
     Editor = syEditor
     Left = 584
     Top = 224
+  end
+  object sqlTransaction: TSQLTransaction[13]
+    Active = False
+    Action = caRollbackRetaining
+    Left = 480
+    Top = 160
+  end
+  object sqlScript: TSQLScript[14]
+    Transaction = sqlTransaction
+    AutoCommit = False
+    UseDollarString = False
+    Directives.Strings = (
+      'SET TERM'
+      'COMMIT WORK'
+      'COMMIT RETAIN'
+      'COMMIT'
+      '#IFDEF'
+      '#IFNDEF'
+      '#ELSE'
+      '#ENDIF'
+      '#DEFINE'
+      '#UNDEF'
+      '#UNDEFINE'
+    )
+    Terminator = ';'
+    CommentsinSQL = True
+    UseSetTerm = True
+    UseCommit = True
+    UseDefines = True
+    Left = 392
+    Top = 96
   end
 end
