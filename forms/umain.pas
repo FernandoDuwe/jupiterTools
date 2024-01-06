@@ -9,8 +9,9 @@ uses
   StdCtrls, Menus, PopupNotifier, Buttons, JupiterApp, JupiterRoute,
   JupiterConsts, JupiterObject, JupiterForm, JupiterAction, JupiterEnviroment,
   JupiterRunnable, jupiterformutils, JupiterFileDataProvider, jupiterScript,
-  JupiterDirectoryDataProvider, JupiterToolsModule, jupiterdatabase, SQLDB,
-  uPSComponent_Default, LMessages, PairSplitter, ActnList, ButtonPanel, EditBtn;
+  JupiterDirectoryDataProvider, JupiterToolsModule, jupiterdatabase,
+  JupiterFormTab, SQLDB, uPSComponent_Default, LMessages, PairSplitter,
+  ActnList, ButtonPanel, EditBtn;
 
 type
 
@@ -23,8 +24,11 @@ type
     acChangeSearchAction: TAction;
     ApplicationProperties1: TApplicationProperties;
     cbNavigationMenu: TCoolBar;
+    cbNavigation: TComboBox;
     edSearch: TEdit;
     ilIconFamily: TImageList;
+    ilTabs: TImageList;
+    JupiterFormTab1: TJupiterFormTab;
     MenuItem1: TMenuItem;
     MenuItem10: TMenuItem;
     MenuItem11: TMenuItem;
@@ -33,6 +37,7 @@ type
     MenuItem14: TMenuItem;
     MenuItem15: TMenuItem;
     miEditorSQL: TMenuItem;
+    pnBody: TPanel;
     Separator7: TMenuItem;
     MenuItem6: TMenuItem;
     MenuItem7: TMenuItem;
@@ -71,7 +76,6 @@ type
     MenuItem4: TMenuItem;
     MenuItem5: TMenuItem;
     mmMainMenu: TMainMenu;
-    pnBody: TPanel;
     pnMenu: TPanel;
     spSplitter: TSplitter;
     tbHome: TToolButton;
@@ -101,6 +105,7 @@ type
     procedure FormResize(Sender: TObject);
     procedure FormShortCut(var Msg: TLMKey; var Handled: Boolean);
     procedure FormShow(Sender: TObject);
+    procedure JupiterFormTab1Change(Sender: TObject);
     procedure MenuItem10Click(Sender: TObject);
     procedure MenuItem11Click(Sender: TObject);
     procedure MenuItem12Click(Sender: TObject);
@@ -175,7 +180,7 @@ implementation
 
 {$R *.lfm}
 
-uses LCLType, JupiterDialogForm, StrUtils, JupiterStandardModule;
+uses LCLType, JupiterDialogForm, StrUtils, JupiterStandardModule, JupiterFormTabSheet;
 
 { TFMain }
 
@@ -339,9 +344,8 @@ end;
 
 procedure TFMain.FormResize(Sender: TObject);
 begin
-  cbNavigationMenu.Bands[1].Width := (Self.Width - ( (FORM_MARGIN_LEFT * 4) +
-                                                    cbNavigationMenu.Bands[0].Width +
-                                                    cbNavigationMenu.Bands[2].Width));
+  cbNavigationMenu.Bands[1].Width := PercentOfScreen(Width, 30);
+  cbNavigationMenu.Bands[2].Width := PercentOfScreen(Width, 30);
 
   if Assigned(vrJupiterApp.CurrentForm) then
   begin
@@ -383,6 +387,15 @@ begin
   if vrJupiterApp.Params.Exists('Jupiter.Standard.Triggers.OnExecuteCurrentThread') then
         if Trim(vrJupiterApp.Params.VariableById('Jupiter.Standard.Triggers.OnExecuteCurrentThread').Value) <> EmptyStr then
            tmInternalThread.Enabled := True;
+end;
+
+procedure TFMain.JupiterFormTab1Change(Sender: TObject);
+begin
+  try
+    vrJupiterApp.CurrentForm := TFJupiterForm(TJupiterFormTabSheet(Sender).Form);
+  finally
+    Self.UpdateForm();
+  end;
 end;
 
 procedure TFMain.MenuItem10Click(Sender: TObject);
@@ -912,9 +925,10 @@ begin
     if ((vrFormId = prItemRouteForm) or (vrRoute = prItemRouteForm)) then
     begin
       Result := True;
+
       tvMenu.Selected := tvMenu.Items[vrVez];
 
-      tvMenuChange(Self, tvMenu.Items[vrVez]);
+//      tvMenuChange(Self, tvMenu.Items[vrVez]);
       Exit;
     end;
   end;
@@ -986,13 +1000,29 @@ begin
   tvMenu.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
 
   miEditorSQL.Enabled := TJupiterDatabaseModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Database')).IsActive;
+  JupiterFormTab1.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
+
+  edSearch.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
+  cbNavigation.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
 end;
 
 procedure TFMain.Internal_PrepareForm;
 begin
   inherited Internal_PrepareForm;
 
-  vrJupiterApp.BodyPanel        := pnBody;
+  if TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).TabMode then
+  begin
+    pnBody.BevelInner := bvNone;
+
+    vrJupiterApp.JupiterFormTab := JupiterFormTab1;
+  end
+  else
+  begin
+    JupiterFormTab1.Visible := False;
+
+    vrJupiterApp.BodyPanel := pnBody;
+  end;
+
   vrJupiterApp.PopupNotifier    := ppNotifier;
   vrJupiterApp.OnBeforeNavigate := @Internal_OnBeforeNavigate;
   vrJupiterApp.OnAfterNavigate  := @Internal_OnAfterNavigate;

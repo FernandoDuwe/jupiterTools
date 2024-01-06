@@ -21,7 +21,7 @@
       <MajorVersionNr Value="2"/>
       <MinorVersionNr Value="2"/>
       <RevisionNr Value="1"/>
-      <BuildNr Value="3"/>
+      <BuildNr Value="6"/>
       <Language Value="0416"/>
       <StringTable CompanyName="Jupiter Studios" FileDescription="Jupiter" InternalName="Jupiter" ProductName="Jupiter"/>
     </VersionInfo>
@@ -36,6 +36,9 @@
       <FormatVersion Value="2"/>
     </RunParams>
     <RequiredPackages>
+      <Item>
+        <PackageName Value="jupiterCommom"/>
+      </Item>
       <Item>
         <PackageName Value="FCL"/>
       </Item>

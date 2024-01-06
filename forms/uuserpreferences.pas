@@ -17,14 +17,17 @@ type
     cbCompactMode: TCheckBox;
     cbShowActionsInForm: TCheckBox;
     cbHideMenuTree: TCheckBox;
+    cbTabsNavigation: TCheckBox;
     edStartRoute: TEdit;
     Label2: TLabel;
     Label6: TLabel;
     Label7: TLabel;
     Label8: TLabel;
+    Label9: TLabel;
     pnCompactMode: TPanel;
     pnShowActionsInForm: TPanel;
     pnHideMenuTree: TPanel;
+    pnShowActionsInForm1: TPanel;
   private
     procedure Internal_SaveActionClick(Sender : TObject);
 
@@ -57,6 +60,9 @@ begin
   if cbHideMenuTree.Checked then
     vrStr := vrStr + ' #HIDEMENUTREE ';
 
+  if cbTabsNavigation.Checked then
+    vrStr := vrStr + ' #TABNAVIGATION ';
+
   TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).SetUserPreferences(vrStr);
 
   TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).SetUserStartRoute(edStartRoute.Text);
@@ -85,6 +91,8 @@ begin
   cbHideMenuTree.Checked := TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).HideMenuTree;
 
   edStartRoute.Text := TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).GetUserStartRoute;
+
+  cbTabsNavigation.Checked := TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).TabMode;
 end;
 
 end.

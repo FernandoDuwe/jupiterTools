@@ -24,6 +24,7 @@ type
     procedure SetUserPreferences(prPreferencesTag : String);
     procedure SetUserStartRoute(prRoute : String);
     function GetUserStartRoute : String;
+    function TabMode : Boolean;
 
     function GetActions(prRoute : TJupiterRoute) : TJupiterObjectList; override;
   end;
@@ -124,6 +125,11 @@ end;
 function TJupiterStandardModule.GetUserStartRoute: String;
 begin
   Result := Self.Params.VariableById(Self.DefineParamName('UI.UserPreferences.StartRoute')).Value;
+end;
+
+function TJupiterStandardModule.TabMode: Boolean;
+begin
+  Result := Pos('#TABNAVIGATION', AnsiUpperCase(Self.Params.VariableById(Self.DefineParamName('UI.UserPreferences')).Value)) <> 0;
 end;
 
 function TJupiterStandardModule.GetActions(prRoute: TJupiterRoute): TJupiterObjectList;

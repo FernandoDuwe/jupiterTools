@@ -1,5 +1,5 @@
 inherited FGenerator: TFGenerator
-  Left = 325
+  Left = 611
   Height = 689
   Top = 146
   Width = 1292
@@ -583,6 +583,11 @@ inherited FGenerator: TFGenerator
             '  - CLI;'
             '  - Release Notes;'
             '  - Actions podem executar JPAS;'
+            ''
+            '  Release 2.2.1'
+            '  - Adição do módulo Database;'
+            '  - Melhorias gerais em navegação e performance;'
+            '  - Criação do modo de multiplas tarefas;'
           )
           ItemHeight = 15
           TabOrder = 0

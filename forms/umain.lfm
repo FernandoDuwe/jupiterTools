@@ -1,7 +1,7 @@
 inherited FMain: TFMain
-  Left = 414
+  Left = 668
   Height = 727
-  Top = 210
+  Top = 213
   Width = 1297
   Caption = 'FMain'
   ClientHeight = 707
@@ -14,7 +14,7 @@ inherited FMain: TFMain
   OnShortCut = FormShortCut
   OnShow = FormShow
   inherited sbActions: TScrollBox
-    Top = 44
+    Top = 33
     Width = 1297
   end
   inherited sbStatus: TStatusBar
@@ -34,17 +34,17 @@ inherited FMain: TFMain
   end
   object pnMenu: TPanel[3]
     Left = 0
-    Height = 514
-    Top = 104
+    Height = 525
+    Top = 93
     Width = 362
     Align = alLeft
     BevelOuter = bvNone
-    ClientHeight = 514
+    ClientHeight = 525
     ClientWidth = 362
     TabOrder = 1
     object tvMenu: TTreeView
       Left = 0
-      Height = 514
+      Height = 525
       Top = 0
       Width = 362
       Align = alClient
@@ -60,24 +60,13 @@ inherited FMain: TFMain
   end
   object spSplitter: TSplitter[4]
     Left = 362
-    Height = 514
-    Top = 104
+    Height = 525
+    Top = 93
     Width = 5
   end
-  object pnBody: TPanel[5]
-    Left = 367
-    Height = 514
-    Top = 104
-    Width = 930
-    Align = alClient
-    BevelOuter = bvNone
-    BorderStyle = bsSingle
-    TabOrder = 3
-    OnClick = pnBodyClick
-  end
-  object cbNavigationMenu: TCoolBar[6]
+  object cbNavigationMenu: TCoolBar[5]
     Left = 0
-    Height = 44
+    Height = 33
     Top = 0
     Width = 1297
     AutoSize = True
@@ -90,13 +79,19 @@ inherited FMain: TFMain
       item
         Break = False
         Control = edSearch
-        Width = 400
+        Width = 100
+      end    
+      item
+        Break = False
+        Control = cbNavigation
+        Width = 129
       end    
       item
         Break = False
         Control = ToolBar2
         Width = 100
       end>
+    BorderWidth = 10
     GrabStyle = gsGripper
     Images = ilIconFamily
     OnChange = cbNavigationMenuChange
@@ -105,11 +100,11 @@ inherited FMain: TFMain
       AnchorSideTop.Control = cbNavigationMenu
       Left = 24
       Height = 22
-      Top = 11
+      Top = 5
       Width = 76
       Align = alNone
       BorderSpacing.Left = 22
-      BorderSpacing.Top = 9
+      BorderSpacing.Top = 3
       Caption = 'tbOptions'
       EdgeInner = esNone
       EdgeOuter = esNone
@@ -164,10 +159,9 @@ inherited FMain: TFMain
       AnchorSideLeft.Control = cbNavigationMenu
       AnchorSideTop.Control = cbNavigationMenu
       Left = 129
-      Height = 34
+      Height = 23
       Top = 5
-      Width = 371
-      AutoSize = False
+      Width = 71
       BorderSpacing.Left = 127
       BorderSpacing.Top = 3
       OnChange = edSearchChange
@@ -193,14 +187,14 @@ inherited FMain: TFMain
     object ToolBar2: TToolBar
       AnchorSideLeft.Control = cbNavigationMenu
       AnchorSideTop.Control = cbNavigationMenu
-      Left = 529
+      Left = 358
       Height = 22
-      Top = 11
+      Top = 5
       Width = 93
       Align = alNone
       AutoSize = True
-      BorderSpacing.Left = 527
-      BorderSpacing.Top = 9
+      BorderSpacing.Left = 356
+      BorderSpacing.Top = 3
       Caption = 'ToolBar2'
       EdgeInner = esNone
       EdgeOuter = esNone
@@ -246,6 +240,43 @@ inherited FMain: TFMain
         ParentShowHint = False
         ShowHint = True
       end
+    end
+    object cbNavigation: TComboBox
+      AnchorSideLeft.Control = cbNavigationMenu
+      AnchorSideTop.Control = cbNavigationMenu
+      Left = 229
+      Height = 23
+      Top = 5
+      Width = 100
+      BorderSpacing.Left = 227
+      BorderSpacing.Top = 3
+      ItemHeight = 15
+      Style = csDropDownList
+      TabOrder = 5
+    end
+  end
+  object pnBody: TPanel[6]
+    Left = 367
+    Height = 525
+    Top = 93
+    Width = 930
+    Align = alClient
+    BevelInner = bvLowered
+    ClientHeight = 525
+    ClientWidth = 930
+    TabOrder = 6
+    object JupiterFormTab1: TJupiterFormTab
+      Left = 2
+      Height = 521
+      Top = 2
+      Width = 926
+      Align = alClient
+      Images = ilTabs
+      TabOrder = 0
+      OnChange = JupiterFormTab1Change
+      Options = [nboShowCloseButtons]
+      AlwaysHaveForm = True
+      ComboBox = cbNavigation
     end
   end
   inherited ppMenu: TPopupMenu[7]
@@ -1115,5 +1146,33 @@ inherited FMain: TFMain
       OnExecute = acChangeSearchActionExecute
       ShortCut = 16467
     end
+  end
+  object ilTabs: TImageList[16]
+    Left = 496
+    Top = 192
+    Bitmap = {
+      4C7A020000001000000010000000960200000000000078DAA593CF6B134114C7
+      83D043455AA369AA280541237AD0E2C106AB286D681584160F052F85DE45142F
+      5A2BC18A0791FE03FA1F78F2A25E6C8D6941A8A552A4366DD2D66AB24976F3AB
+      B426A84DBEBEB7995977B7AB4433F0616767E6F3E6CD9B5D970B3B5C2E8C10CB
+      844664899C204F144CE4C5FC0A71CF55758304FE93FBC4D73AFC38B15187BF49
+      7CB38DFD201E8873CA31EE8F8A39F3DA2251B28D715D5C443B91116EBB181BB1
+      AD2D39F849E2A82986747D8452830FB14EC6F893FB37DF9C3373529CA5163F6B
+      CBD97C966C0DFE5D5BCEE6B30C3BF845873BB9653B6F528C151DFC7ABF1FA50E
+      9FF37A5487FF986820C6C4FD946A242B9C86ADAD2D8A04F093A9542AFC0A7ECA
+      39D99773722D44739F09C1736E127B3A6BA395D6EEF6BF3262B1BBBF37064FD7
+      220E5C5C829B9EDE5E2B6E31E709C4D0D235879DEDCF7EFB1493DD7D8108225F
+      7E62F4A946EB17686D15EE8F3ED1F4B9960B1FB0EBF41BC3E7C67E6B6009D31F
+      BF1B6337C714DD63B82FF77A115A43B37F629B7FB82F0A452DC3DC8682711D6E
+      E572199AA660763E8E83DD61C7FC7DFD5168EB15C3AF48A8EE994C129FA20ADA
+      BADF1AF9CB7B61DF1BE0FA2DE0C4400C1B9B9634A0AA292C2E2771E4D224B9E3
+      68F2577D798786CFF5A21843C184E1A65229CA3B85811B33BACB7B9B7DFBFEA7
+      AE2EA358AABAE9749A7C45F7573F2771ECB2757FF93DC9F31FBF12457E53E6AC
+      22A1283A9AA6E92CAE2838D41376BC3F5F7F0C6AAE1A8FD7E6722AFAAE4DEB70
+      5FC6988F24D016D85EFF16CA7D6AB684F5F51C0A59158377E479C731787B0685
+      4235C6F3D7AB68EA98B0FAF4FDEEED89D27FF00EA1A9355C7F388746512B86FB
+      3CC673EC9AF367DF7B360CF7F9F7FA38FF4B8D7A8DC3161AC59C5EFF4E6BFECD
+      1D2FF5F77F85DB2FEC17A22E
+    }
   end
 end

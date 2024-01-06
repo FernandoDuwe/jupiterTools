@@ -106,7 +106,7 @@ var
 
 implementation
 
-uses JupiterApp, JupiterDialogForm, uGenerator;
+uses JupiterApp, JupiterDialogForm, uGenerator, JupiterFormTabSheet;
 
 {$R *.lfm}
 
@@ -488,6 +488,9 @@ begin
     if prUpdateCalcs then
       Self.Internal_UpdateCalcs;
   finally
+    if Parent is TJupiterFormTabSheet then
+      TJupiterFormTabSheet(Parent).Update;
+
     Application.ProcessMessages;
   end;
 end;

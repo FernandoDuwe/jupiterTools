@@ -5,7 +5,7 @@ unit JupiterApp;
 interface
 
 uses
-  Classes, {$IFNDEF JUPITERCLI} ExtCtrls, {$ENDIF}
+  Classes, {$IFNDEF JUPITERCLI} ExtCtrls, JupiterFormTab, {$ENDIF}
   JupiterModule, JupiterObject, JupiterRoute, {$IFNDEF JUPITERCLI} JupiterForm, {$ENDIF}
   JupiterVariable, JupiterEnviroment, JupiterSystemMessage, {$IFNDEF JUPITERCLI} PopUpNotifier, {$ENDIF}
   JupiterVariableDataProvider, jupiterThread, JupiterRunnable, jupiterScript,
@@ -25,6 +25,7 @@ type
     FFormRoutes       : TJupiterObjectList;
 
     {$IFNDEF JUPITERCLI}
+    FJupiterFormTab   : TJupiterFormTab;
     FBodyPanel        : TPanel;
     FCurrentForm      : TFJupiterForm;
     {$ENDIF}
@@ -45,6 +46,8 @@ type
     FCurrentRoute      : TJupiterRoute;
     FCurrentCLICommand : TJupiterObject;
 
+    procedure Internal_OpenFormUnique(prRoute : TJupiterFormRoute; prOriginalRoute : TJupiterRoute; prAsModal : Boolean);
+    procedure Internal_OpenFormTabs(prRoute : TJupiterFormRoute; prOriginalRoute : TJupiterRoute; prAsModal : Boolean);
   protected
     procedure Internal_Prepare; virtual;
 
@@ -53,8 +56,9 @@ type
     property AppName       : String         read FAppName;
 
     {$IFNDEF JUPITERCLI}
-    property BodyPanel     : TPanel         read FBodyPanel   write FBodyPanel;
-    property CurrentForm   : TFJupiterForm  read FCurrentForm write FCurrentForm;
+    property BodyPanel      : TPanel          read FBodyPanel      write FBodyPanel;
+    property CurrentForm    : TFJupiterForm   read FCurrentForm    write FCurrentForm;
+    property JupiterFormTab : TJupiterFormTab read FJupiterFormTab write FJupiterFormTab;
     {$ENDIF}
 
 
@@ -111,6 +115,81 @@ implementation
 uses FileInfo, Forms, JupiterConsts;
 
 { TJupiterApp }
+
+procedure TJupiterApp.Internal_OpenFormUnique(prRoute: TJupiterFormRoute; prOriginalRoute : TJupiterRoute; prAsModal: Boolean);
+var
+  vrFormModal : TFJupiterForm;
+begin
+  if prAsModal then
+  begin
+    Application.CreateForm(prRoute.FormClass, vrFormModal);
+    try
+      vrFormModal.IsModal := prAsModal;
+      vrFormModal.Params.CopyValues(prOriginalRoute.Params);
+
+      vrFormModal.ShowModal;
+    finally
+      vrFormModal.Release;
+      FreeAndNil(vrFormModal);
+    end;
+
+    Exit;
+  end
+  else
+  begin
+    if Assigned(Self.CurrentForm) then
+    begin
+      Self.CurrentForm.Release;
+      FreeAndNil(Self.FCurrentForm);
+    end;
+
+    Self.CurrentForm := TFJupiterForm(prRoute.FormClass.Create(Self.BodyPanel));
+
+    Self.CurrentForm.Parent      := Self.BodyPanel;
+    Self.CurrentForm.WindowState := wsMaximized;
+    Self.CurrentForm.BorderStyle := bsNone;
+    Self.CurrentForm.Align       := alClient;
+    Self.CurrentForm.IsModal     := prAsModal;
+
+    Self.CurrentForm.Params.CopyValues(prOriginalRoute.Params);
+
+    Self.CurrentForm.Show;
+  end;
+end;
+
+procedure TJupiterApp.Internal_OpenFormTabs(prRoute: TJupiterFormRoute; prOriginalRoute : TJupiterRoute; prAsModal: Boolean);
+var
+  vrFormModal : TFJupiterForm;
+begin
+  if prAsModal then
+  begin
+    Application.CreateForm(prRoute.FormClass, vrFormModal);
+    try
+      vrFormModal.IsModal := prAsModal;
+      vrFormModal.Params.CopyValues(prOriginalRoute.Params);
+
+      vrFormModal.ShowModal;
+    finally
+      vrFormModal.Release;
+      FreeAndNil(vrFormModal);
+    end;
+
+    Exit;
+  end
+  else
+  begin
+    Self.CurrentForm := TFJupiterForm(prRoute.FormClass.Create(Self.JupiterFormTab));
+
+    Self.CurrentForm.WindowState := wsMaximized;
+    Self.CurrentForm.BorderStyle := bsNone;
+    Self.CurrentForm.Align       := alClient;
+    Self.CurrentForm.IsModal     := prAsModal;
+
+    Self.CurrentForm.Params.CopyValues(prOriginalRoute.Params);
+
+    Self.JupiterFormTab.AddForm(CurrentForm);
+  end;
+end;
 
 procedure TJupiterApp.Internal_Prepare;
 var
@@ -234,7 +313,6 @@ var
   vrVez : Integer;
   vrVezDebug : Integer;
   vrFormRoute : TJupiterFormRoute;
-  vrFormModal : TFJupiterForm;
 {$ENDIF}
 begin
   {$IFNDEF JUPITERCLI}
@@ -250,41 +328,13 @@ begin
 
       if vrFormRoute.Path = prRoute.DestinyPath then
       begin
-        if prAsModal then
-        begin
-          Application.CreateForm(vrFormRoute.FormClass, vrFormModal);
-          try
-            vrFormModal.IsModal := prAsModal;
-            vrFormModal.Params.CopyValues(prRoute.Params);
+        if Assigned(Self.BodyPanel) then
+          Self.Internal_OpenFormUnique(vrFormRoute, prRoute, prAsModal);
 
-            vrFormModal.ShowModal;
-          finally
-            vrFormModal.Release;
-            FreeAndNil(vrFormModal);
-          end;
-        end
-        else
-        begin
-          if Assigned(Self.CurrentForm) then
-          begin
-            Self.CurrentForm.Release;
-            FreeAndNil(Self.FCurrentForm);
-          end;
+        if Assigned(Self.JupiterFormTab) then
+          Self.Internal_OpenFormTabs(vrFormRoute, prRoute, prAsModal);
 
-          Self.CurrentForm := TFJupiterForm(vrFormRoute.FormClass.Create(Self.BodyPanel));
-
-          Self.CurrentForm.Parent      := Self.BodyPanel;
-          Self.CurrentForm.WindowState := wsMaximized;
-          Self.CurrentForm.BorderStyle := bsNone;
-          Self.CurrentForm.Align       := alClient;
-          Self.CurrentForm.IsModal     := prAsModal;
-
-          Self.CurrentForm.Params.CopyValues(prRoute.Params);
-
-          Self.CurrentForm.Show;
-
-          Exit;
-        end;
+        Exit;
       end;
     end;
   finally
