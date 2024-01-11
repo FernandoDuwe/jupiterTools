@@ -1,5 +1,5 @@
 inherited FMain: TFMain
-  Left = 668
+  Left = 614
   Height = 727
   Top = 213
   Width = 1297
@@ -274,9 +274,12 @@ inherited FMain: TFMain
       Images = ilTabs
       TabOrder = 0
       OnChange = JupiterFormTab1Change
+      OnChanging = JupiterFormTab1Changing
       Options = [nboShowCloseButtons]
       AlwaysHaveForm = True
       ComboBox = cbNavigation
+      OnCloseTab = JupiterFormTab1CloseTab
+      OnChangeFromComboBox = JupiterFormTab1ChangeFromComboBox
     end
   end
   inherited ppMenu: TPopupMenu[7]

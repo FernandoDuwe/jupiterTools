@@ -9,6 +9,8 @@ uses
 
 type
   TJupiterFormTabOnPrepareForm = procedure(var vrForm : TForm; prTab : TObject) of object;
+  TJupiterFormTabOnCloseTab = procedure(Sender : TObject) of object;
+  TJupiterFormTabOnChangeFromComboBox = procedure(Sender : TObject) of object;
 
   { TJupiterFormTab }
 
@@ -20,6 +22,8 @@ type
   protected
     FAlwaysHaveForm : Boolean;
     FOnPrepareForm : TJupiterFormTabOnPrepareForm;
+    FOnCloseTab : TJupiterFormTabOnCloseTab;
+    FOnChangeFromComboBox : TJupiterFormTabOnChangeFromComboBox;
     FComboBox : TComboBox;
 
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Integer); override;
@@ -29,6 +33,9 @@ type
     property AlwaysHaveForm : Boolean                      read FAlwaysHaveForm write FAlwaysHaveForm;
     property ComboBox       : TComboBox                    read FComboBox       write FComboBox;
     property OnPrepareForm  : TJupiterFormTabOnPrepareForm read FOnPrepareForm  write FOnPrepareForm;
+    property OnCloseTab     : TJupiterFormTabOnCloseTab    read FOnCloseTab     write FOnCloseTab;
+
+    property OnChangeFromComboBox : TJupiterFormTabOnChangeFromComboBox read FOnChangeFromComboBox write FOnChangeFromComboBox;
   public
     procedure AddForm(prForm : TForm);
 
@@ -73,6 +80,9 @@ begin
     Exit;
 
   Self.PageIndex := TComboBox(Sender).ItemIndex;
+
+  if Assigned(OnChangeFromComboBox) then
+    Self.OnChangeFromComboBox(Self);
 end;
 
 procedure TJupiterFormTab.MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
@@ -91,6 +101,9 @@ begin
       ActivePage.Free;
 
     Self.Internal_UpdateComboBox;
+
+    if Assigned(Self.OnCloseTab) then
+      Self.OnCloseTab(Self);
   end;
 end;
 

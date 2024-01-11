@@ -18,9 +18,11 @@ uses
 
   procedure DrawForm(prComponent : TComponent);
 
+  function IsSameForm(prForm1, prForm2 : TForm; prIgnoreVariables : Array of String) : Boolean;
+
 implementation
 
-uses JupiterApp, ExtCtrls, Menus, StdCtrls;
+uses JupiterApp, ExtCtrls, Menus, StdCtrls, JupiterForm, JupiterVariable;
 
 procedure CopyNodes(prSourceNode, prTargetNode: TTreeNode);
 
@@ -162,6 +164,45 @@ begin
 
       DrawForm(prComponent.Components[vrVez]);
     end;
+  end;
+end;
+
+function IsSameForm(prForm1, prForm2: TForm; prIgnoreVariables : Array of String): Boolean;
+var
+  vrParams1 : TJupiterVariableList;
+  vrParams2 : TJupiterVariableList;
+  vrVez     : Integer;
+begin
+  Result := False;
+
+  vrParams1 := TJupiterVariableList.Create;
+  vrParams2 := TJupiterVariableList.Create;
+  try
+    if prForm1.ClassName <> prForm2.ClassName then
+      Exit;
+
+    if prForm1 is TFJupiterForm then
+    begin
+      vrParams1.CopyValues(TFJupiterForm(prForm1).Params);
+      vrParams2.CopyValues(TFJupiterForm(prForm2).Params);
+
+      for vrVez := 0 to Length(prIgnoreVariables) -1 do
+      begin
+        if vrParams1.Exists(prIgnoreVariables[vrVez]) then
+          vrParams1.DeleteVariable(prIgnoreVariables[vrVez]);
+
+        if vrParams2.Exists(prIgnoreVariables[vrVez]) then
+          vrParams2.DeleteVariable(prIgnoreVariables[vrVez]);
+      end;
+
+      if not vrParams1.IsSame(vrParams2) then
+        Exit;
+    end;
+
+    Result := True;
+  finally
+    FreeAndNil(vrParams1);
+    FreeAndNil(vrParams2);
   end;
 end;
 

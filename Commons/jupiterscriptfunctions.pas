@@ -32,6 +32,10 @@ uses
   function JupiterScriptHasRoutePath(prRoutePath : String) : Boolean;
   function JupiterScriptGoToRoutePath(prRoutePath : String) : Boolean;
   procedure JupiterScriptCreateTaskDataCache;
+  function JupiterScriptIsConsole : Boolean;
+  function JupiterScriptFileExists(prFile : String) : Boolean;
+  function JupiterScriptDirectoryExists(prFile : String) : Boolean;
+  function JupiterScriptExtractFileDir(prFile : String) : String;
 
   // Variable funcions
   procedure JupiterAddConfiguration(prID, prValue, prTitle : String);
@@ -288,6 +292,26 @@ begin
   finally
     FreeAndNil(vrTask);
   end;
+end;
+
+function JupiterScriptIsConsole: Boolean;
+begin
+  Result := vrJupiterApp.ConsoleMode;
+end;
+
+function JupiterScriptFileExists(prFile: String): Boolean;
+begin
+  Result := FileExists(prFile);
+end;
+
+function JupiterScriptDirectoryExists(prFile: String): Boolean;
+begin
+  Result := DirectoryExists(prFile);
+end;
+
+function JupiterScriptExtractFileDir(prFile: String): String;
+begin
+  Result := ExtractFileDir(prFile);
 end;
 
 procedure JupiterAddConfiguration(prID, prValue, prTitle: String);

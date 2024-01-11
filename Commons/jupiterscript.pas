@@ -259,6 +259,10 @@ begin
   Sender.AddFunction(@JupiterToolsRegisterStartTime, 'procedure ToolsRegisterStartTime;');
   Sender.AddFunction(@JupiterToolsRegisterEndTime, 'procedure ToolsRegisterEndTime;');
   Sender.AddFunction(@JupiterToolsStartedTime, 'function ToolsStartedTime : Boolean;');
+  Sender.AddFunction(@JupiterScriptIsConsole, 'function IsConsole: Boolean;');
+  Sender.AddFunction(@JupiterScriptFileExists, 'function FileExists(prFile: String): Boolean;');
+  Sender.AddFunction(@JupiterScriptDirectoryExists, 'function DirectoryExists(prFile: String): Boolean;');
+  Sender.AddFunction(@JupiterScriptExtractFileDir, 'function ExtractFileDir(prFile: String): String;');
 
   Sender.AddRegisteredVariable('vars', 'Variant');
   Sender.AddRegisteredVariable('Application', 'TApplication');
@@ -393,6 +397,10 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure ToolsRegisterStartTime();'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure ToolsRegisterEndTime();'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function ToolsStartedTime() : Boolean;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function IsConsole(): Boolean;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function FileExists(prFile: String): Boolean;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function DirectoryExists(prFile: String): Boolean;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function ExtractFileDir(prFile: String): String;'));
 
   // Code functions
   Self.Internal_AnalyseUserCode(Result);

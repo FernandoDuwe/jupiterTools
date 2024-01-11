@@ -112,14 +112,18 @@ var
 
 implementation
 
-uses FileInfo, Forms, JupiterConsts;
+uses FileInfo, Forms, JupiterConsts {$IFNDEF JUPITERCLI}, JupiterFormTabSheet,  jupiterformutils {$ENDIF};
 
 { TJupiterApp }
 
 procedure TJupiterApp.Internal_OpenFormUnique(prRoute: TJupiterFormRoute; prOriginalRoute : TJupiterRoute; prAsModal: Boolean);
+{$IFNDEF JUPITERCLI}
 var
   vrFormModal : TFJupiterForm;
+  {$ENDIF}
 begin
+  {$IFNDEF JUPITERCLI}
+
   if prAsModal then
   begin
     Application.CreateForm(prRoute.FormClass, vrFormModal);
@@ -155,12 +159,18 @@ begin
 
     Self.CurrentForm.Show;
   end;
+  {$ENDIF}
 end;
 
 procedure TJupiterApp.Internal_OpenFormTabs(prRoute: TJupiterFormRoute; prOriginalRoute : TJupiterRoute; prAsModal: Boolean);
+{$IFNDEF JUPITERCLI}
 var
   vrFormModal : TFJupiterForm;
+  vrVez : Integer;
+{$ENDIF}
 begin
+  {$IFNDEF JUPITERCLI}
+
   if prAsModal then
   begin
     Application.CreateForm(prRoute.FormClass, vrFormModal);
@@ -187,8 +197,26 @@ begin
 
     Self.CurrentForm.Params.CopyValues(prOriginalRoute.Params);
 
+    for vrVez := 0 to Self.JupiterFormTab.PageCount - 1 do
+    begin
+      if not (Self.JupiterFormTab.Pages[vrVez] is TJupiterFormTabSheet) then
+        Continue;
+
+     if IsSameForm(TJupiterFormTabSheet(Self.JupiterFormTab.Pages[vrVez]).Form, Self.CurrentForm, [FIELD_ID_GENERADOR, 'Size', 'Hint.Success']) then
+      begin
+        Self.JupiterFormTab.ActivePageIndex := vrVez;
+
+        if Assigned(Self.JupiterFormTab.OnChange) then
+          Self.JupiterFormTab.OnChange(Self.JupiterFormTab.Page[vrVez]);
+
+        Exit;
+      end;
+    end;
+
     Self.JupiterFormTab.AddForm(CurrentForm);
   end;
+
+  {$ENDIF}
 end;
 
 procedure TJupiterApp.Internal_Prepare;
@@ -304,7 +332,13 @@ end;
 
 function TJupiterApp.ConsoleMode: Boolean;
 begin
+  {$IFNDEF JUPITERCLI}
   Result := False;
+  {$ENDIF}
+
+  {$IFDEF JUPITERCLI}
+  Result := True;
+  {$ENDIF}
 end;
 
 procedure TJupiterApp.NavigateTo(prRoute: TJupiterRoute; prAsModal: Boolean);

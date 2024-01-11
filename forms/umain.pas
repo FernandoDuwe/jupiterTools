@@ -106,6 +106,10 @@ type
     procedure FormShortCut(var Msg: TLMKey; var Handled: Boolean);
     procedure FormShow(Sender: TObject);
     procedure JupiterFormTab1Change(Sender: TObject);
+    procedure JupiterFormTab1ChangeFromComboBox(Sender: TObject);
+    procedure JupiterFormTab1Changing(Sender: TObject; var AllowChange: Boolean
+      );
+    procedure JupiterFormTab1CloseTab(Sender: TObject);
     procedure MenuItem10Click(Sender: TObject);
     procedure MenuItem11Click(Sender: TObject);
     procedure MenuItem12Click(Sender: TObject);
@@ -392,10 +396,35 @@ end;
 procedure TFMain.JupiterFormTab1Change(Sender: TObject);
 begin
   try
-    vrJupiterApp.CurrentForm := TFJupiterForm(TJupiterFormTabSheet(Sender).Form);
+    if Sender is TJupiterFormTab then
+      vrJupiterApp.CurrentForm := TFJupiterForm(TJupiterFormTabSheet(TJupiterFormTab(Sender).ActivePage).Form);
+
+    if Sender is TJupiterFormTabSheet then
+      vrJupiterApp.CurrentForm := TFJupiterForm(TJupiterFormTabSheet(Sender).Form);
+
+    if miClearSearch.Checked then
+      edSearch.Text := EmptyStr
+    else
+      if Assigned(vrJupiterApp.CurrentForm) then
+        vrJupiterApp.CurrentForm.Search(edSearch.Text);
   finally
     Self.UpdateForm();
   end;
+end;
+
+procedure TFMain.JupiterFormTab1ChangeFromComboBox(Sender: TObject);
+begin
+  JupiterFormTab1Change(Sender);
+end;
+
+procedure TFMain.JupiterFormTab1Changing(Sender: TObject; var AllowChange: Boolean);
+begin
+  AllowChange := True;
+end;
+
+procedure TFMain.JupiterFormTab1CloseTab(Sender: TObject);
+begin
+  JupiterFormTab1Change(Sender);
 end;
 
 procedure TFMain.MenuItem10Click(Sender: TObject);
@@ -522,8 +551,13 @@ begin
 end;
 
 procedure TFMain.miEditorSQLClick(Sender: TObject);
+var
+  vrRoute : TJupiterRoute;
 begin
-  vrJupiterApp.NavigateTo(TJupiterRoute.Create(SQLEDITOR_FORM_PATH), False);
+  vrRoute := TJupiterRoute.Create(SQLEDITOR_FORM_PATH);
+  vrRoute.Params.AddVariable('Timestamp', FormatDateTime('dd/mm/yyyy hh:nn:ss', Now));
+
+  vrJupiterApp.NavigateTo(vrRoute, False);
 end;
 
 procedure TFMain.miSearchModeClick(Sender: TObject);
@@ -1004,6 +1038,11 @@ begin
 
   edSearch.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
   cbNavigation.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
+
+  if Assigned(vrJupiterApp.CurrentForm) then
+    Self.Internal_CurrentFormTitleSetValue('', vrJupiterApp.CurrentForm.Caption);
+
+  cbNavigation.Enabled := JupiterFormTab1.Visible;
 end;
 
 procedure TFMain.Internal_PrepareForm;

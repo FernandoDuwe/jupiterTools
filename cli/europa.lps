@@ -8,8 +8,8 @@
       <Unit>
         <Filename Value="europa.lpr"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
         <TopLine Value="153"/>
         <CursorPos X="78" Y="182"/>
         <UsageCount Value="22"/>
@@ -42,10 +42,11 @@
         <Filename Value="..\Commons\jupiterapp.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterApp"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="367"/>
-        <CursorPos X="68" Y="377"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="187"/>
+        <CursorPos X="2" Y="219"/>
         <UsageCount Value="22"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="..\Commons\jupiterrunnable.pas"/>
@@ -160,11 +161,45 @@
         <CursorPos Y="123"/>
         <UsageCount Value="10"/>
       </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterformfield.pas"/>
+        <UnitName Value="JupiterFormField"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="103"/>
+        <CursorPos Y="137"/>
+        <UsageCount Value="10"/>
+      </Unit>
     </Units>
-    <General>
-      <ActiveWindowIndexAtStart Value="-1"/>
-    </General>
-    <JumpHistory HistoryIndex="-1"/>
+    <JumpHistory HistoryIndex="6">
+      <Position>
+        <Filename Value="..\Commons\jupiterapp.pas"/>
+        <Caret Line="107" Column="45" TopLine="96"/>
+      </Position>
+      <Position>
+        <Filename Value="..\Commons\jupiterapp.pas"/>
+        <Caret Line="211" Column="54" TopLine="185"/>
+      </Position>
+      <Position>
+        <Filename Value="..\Commons\jupiterapp.pas"/>
+        <Caret Line="325" Column="3" TopLine="288"/>
+      </Position>
+      <Position>
+        <Filename Value="..\Commons\jupiterapp.pas"/>
+        <Caret Line="115" Column="78" TopLine="94"/>
+      </Position>
+      <Position>
+        <Filename Value="..\Commons\jupiterapp.pas"/>
+        <Caret Line="326" Column="3" TopLine="290"/>
+      </Position>
+      <Position>
+        <Filename Value="..\Commons\jupiterapp.pas"/>
+        <Caret Line="115" Column="58" TopLine="100"/>
+      </Position>
+      <Position>
+        <Filename Value="..\Commons\jupiterapp.pas"/>
+        <Caret Line="162" Column="11" TopLine="125"/>
+      </Position>
+    </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>
       <Modes ActiveMode="default">

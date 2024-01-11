@@ -42,7 +42,6 @@ inherited FHome: TFHome
       Align = alTop
       ClientHeight = 80
       ClientWidth = 1184
-      Color = clWhite
       ParentColor = False
       TabOrder = 0
       OnClick = pnTitleClick
@@ -234,7 +233,6 @@ inherited FHome: TFHome
         Top = 48
         Width = 37
         Caption = 'Versão:'
-        Font.Color = clMedGray
         ParentColor = False
         ParentFont = False
       end

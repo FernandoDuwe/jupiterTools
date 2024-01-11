@@ -113,7 +113,6 @@ begin
   Self.FTimeDataProvider.CurrentDate := dtCurrentDate.Date;
 
   Self.Hint := 'Controle os seus horários, tarefas executadas e o tempo executado.';
-//  Self.Hint := 'Controle os seus horários, tarefas executadas e o tempo executado. Dê um duplo clique no lançamento para edita-lo.';
 
   Self.Params.AddVariable(FIELD_ID_GENERADOR, 'TimeControlForm', 'ID do formulário');
 

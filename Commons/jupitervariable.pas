@@ -82,7 +82,8 @@ type
     function  ResolveString(prStr : String) : String;
     procedure ResolveFile(prFile : String);
     procedure DeleteVariable(prID : String);
-    function ToStringList : TStringList;
+    function  ToStringList : TStringList;
+    function  IsSame(prVariableList : TJupiterVariableList) : Boolean;
 
     procedure CopyValues(prList : TJupiterVariableList);
     procedure SaveToFile; virtual;
@@ -435,6 +436,27 @@ begin
   for vrVez := 0 to Self.Count - 1 do
     with Self.VariableByIndex(vrVez) do
       Result.Add(Format('%0:s;%1:s;%2:s', [ID, Value, Title]));
+end;
+
+function TJupiterVariableList.IsSame(prVariableList: TJupiterVariableList): Boolean;
+var
+  vrVez : Integer;
+begin
+  Result := False;
+
+  if prVariableList.Count <> Self.Count then
+    Exit;
+
+  for vrVez := 0 to Self.Count - 1 do
+  begin
+    if not prVariableList.Exists(Self.VariableByIndex(vrVez).ID) then
+      Exit;
+
+    if prVariableList.VariableById(Self.VariableByIndex(vrVez).ID).Value <> Self.VariableByIndex(vrVez).Value then
+      Exit;
+  end;
+
+  Result := True;
 end;
 
 procedure TJupiterVariableList.CopyValues(prList: TJupiterVariableList);
