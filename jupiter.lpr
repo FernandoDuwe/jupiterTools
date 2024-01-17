@@ -28,7 +28,8 @@ uses
   jupiterThread, uProcessMonitor, jupiterStream, uPrompt, ulayoutbuilder,
   jupiterclimodule, ulayoutreader, uclimanager, jupiterclicommand,
   unewcommandcli, utimecontrol, jupiterTimeControlDataProvider, 
-uuserpreferences, jupiterformaction, udm, jupiterdatabase, usqlEditor;
+uuserpreferences, jupiterformaction, udm, jupiterdatabase, usqlEditor,
+umenuselector;
 
 {$R *.res}
 
@@ -78,6 +79,7 @@ begin
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(SCRIPTEDITOR_FORM_PATH, TFScriptEditor));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(SQLEDITOR_FORM_PATH, TFSQLEditor));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(GENERATOR_FORM_PATH, TFGenerator));
+  vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(MENU_SELECT_FORM_PATH, TFMenuSelector));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(MESSAGES_PATH, TFMessage));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(DYNAMIC_RECORD_FORM_PATH, TFDynamicRecord));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(PROCESS_MONITOR_PATH, TFProcessMonitor));
@@ -91,6 +93,7 @@ begin
 
   Application.CreateForm(TFMain, FMain);
   Application.CreateForm(TDMMain, DMMain);
+  Application.CreateForm(TFMenuSelector, FMenuSelector);
   Application.Run;
 end.
 

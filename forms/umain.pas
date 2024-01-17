@@ -22,6 +22,7 @@ type
     acShortcuts: TActionList;
     acMenu: TAction;
     acChangeSearchAction: TAction;
+    Action1: TAction;
     ApplicationProperties1: TApplicationProperties;
     cbNavigationMenu: TCoolBar;
     cbNavigation: TComboBox;
@@ -36,6 +37,8 @@ type
     MenuItem13: TMenuItem;
     MenuItem14: TMenuItem;
     MenuItem15: TMenuItem;
+    MenuItem16: TMenuItem;
+    MenuItem17: TMenuItem;
     miEditorSQL: TMenuItem;
     pnBody: TPanel;
     Separator7: TMenuItem;
@@ -91,14 +94,17 @@ type
     tbMessage: TToolButton;
     ToolButton2: TToolButton;
     tbPrompt: TToolButton;
+    ToolButton3: TToolButton;
     tvMenu: TTreeView;
     procedure acChangeSearchActionExecute(Sender: TObject);
     procedure acMenuExecute(Sender: TObject);
     procedure acPromptExecute(Sender: TObject);
+    procedure Action1Execute(Sender: TObject);
     procedure ApplicationProperties1Activate(Sender: TObject);
     procedure ApplicationProperties1Restore(Sender: TObject);
     procedure cbNavigationMenuChange(Sender: TObject);
     procedure edSearchChange(Sender: TObject);
+    procedure edSearchChangeBounds(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -116,6 +122,7 @@ type
     procedure MenuItem13Click(Sender: TObject);
     procedure MenuItem14Click(Sender: TObject);
     procedure MenuItem15Click(Sender: TObject);
+    procedure MenuItem17Click(Sender: TObject);
     procedure MenuItem1Click(Sender: TObject);
     procedure MenuItem6Click(Sender: TObject);
     procedure MenuItem8Click(Sender: TObject);
@@ -152,6 +159,7 @@ type
     procedure tmSearchTimer(Sender: TObject);
     procedure ToolButton1Click(Sender: TObject);
     procedure ToolButton2Click(Sender: TObject);
+    procedure ToolButton3Click(Sender: TObject);
     procedure tvMenuChange(Sender: TObject; Node: TTreeNode);
     procedure tvMenuClick(Sender: TObject);
     procedure menuFolderClick(Sender: TObject);
@@ -256,6 +264,11 @@ begin
   vrJupiterApp.NavigateTo(TJupiterRoute.Create(CONFIG_PATH), True);
 end;
 
+procedure TFMain.ToolButton3Click(Sender: TObject);
+begin
+  vrJupiterApp.NavigateTo(TJupiterRoute.Create(MENU_SELECT_FORM_PATH), True);
+end;
+
 procedure TFMain.tvMenuChange(Sender: TObject; Node: TTreeNode);
 var
   vrAction : TJupiterAction;
@@ -304,6 +317,11 @@ begin
   tbPrompt.Click;
 end;
 
+procedure TFMain.Action1Execute(Sender: TObject);
+begin
+  ToolButton3.Click;
+end;
+
 procedure TFMain.acMenuExecute(Sender: TObject);
 begin
   tbMenu.Click;
@@ -321,6 +339,11 @@ procedure TFMain.edSearchChange(Sender: TObject);
 begin
   tmSearch.Enabled := False;
   tmSearch.Enabled := True;
+end;
+
+procedure TFMain.edSearchChangeBounds(Sender: TObject);
+begin
+
 end;
 
 procedure TFMain.FormActivate(Sender: TObject);
@@ -455,6 +478,16 @@ end;
 procedure TFMain.MenuItem15Click(Sender: TObject);
 begin
   vrJupiterApp.NavigateTo(TJupiterRoute.Create(USER_PREF_PATH), True);
+end;
+
+procedure TFMain.MenuItem17Click(Sender: TObject);
+var
+  vrRoute : TJupiterRoute;
+begin
+  vrRoute := TJupiterRoute.Create(GENERATOR_FORM_PATH);
+  vrRoute.Params.AddVariable('Goto', 'ReleaseNotes', 'Ir para');
+
+  vrJupiterApp.NavigateTo(vrRoute, True);
 end;
 
 procedure TFMain.MenuItem1Click(Sender: TObject);

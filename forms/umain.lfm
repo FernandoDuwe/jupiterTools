@@ -74,7 +74,7 @@ inherited FMain: TFMain
       item
         Break = False
         Control = tbOptions
-        Width = 105
+        Width = 130
       end    
       item
         Break = False
@@ -101,7 +101,7 @@ inherited FMain: TFMain
       Left = 24
       Height = 22
       Top = 5
-      Width = 76
+      Width = 101
       Align = alNone
       BorderSpacing.Left = 22
       BorderSpacing.Top = 3
@@ -141,6 +141,16 @@ inherited FMain: TFMain
         ParentShowHint = False
         ShowHint = True
       end
+      object ToolButton3: TToolButton
+        Left = 70
+        Hint = 'Abrir Menu (Ctrl + Enter)'
+        Top = 0
+        Caption = 'ToolButton3'
+        ImageIndex = 20
+        OnClick = ToolButton3Click
+        ParentShowHint = False
+        ShowHint = True
+      end
     end
     object tbSearch: TToolBar
       AnchorSideLeft.Control = cbNavigationMenu
@@ -158,13 +168,14 @@ inherited FMain: TFMain
     object edSearch: TEdit
       AnchorSideLeft.Control = cbNavigationMenu
       AnchorSideTop.Control = cbNavigationMenu
-      Left = 129
+      Left = 154
       Height = 23
       Top = 5
       Width = 71
-      BorderSpacing.Left = 127
+      BorderSpacing.Left = 152
       BorderSpacing.Top = 3
       OnChange = edSearchChange
+      OnChangeBounds = edSearchChangeBounds
       TabOrder = 2
       TextHint = 'Pesquisar'
     end
@@ -187,13 +198,13 @@ inherited FMain: TFMain
     object ToolBar2: TToolBar
       AnchorSideLeft.Control = cbNavigationMenu
       AnchorSideTop.Control = cbNavigationMenu
-      Left = 358
+      Left = 383
       Height = 22
       Top = 5
       Width = 93
       Align = alNone
       AutoSize = True
-      BorderSpacing.Left = 356
+      BorderSpacing.Left = 381
       BorderSpacing.Top = 3
       Caption = 'ToolBar2'
       EdgeInner = esNone
@@ -244,11 +255,11 @@ inherited FMain: TFMain
     object cbNavigation: TComboBox
       AnchorSideLeft.Control = cbNavigationMenu
       AnchorSideTop.Control = cbNavigationMenu
-      Left = 229
+      Left = 254
       Height = 23
       Top = 5
       Width = 100
-      BorderSpacing.Left = 227
+      BorderSpacing.Left = 252
       BorderSpacing.Top = 3
       ItemHeight = 15
       Style = csDropDownList
@@ -272,10 +283,11 @@ inherited FMain: TFMain
       Width = 926
       Align = alClient
       Images = ilTabs
+      MultiLine = True
       TabOrder = 0
       OnChange = JupiterFormTab1Change
       OnChanging = JupiterFormTab1Changing
-      Options = [nboShowCloseButtons]
+      Options = [nboShowCloseButtons, nboMultiLine]
       AlwaysHaveForm = True
       ComboBox = cbNavigation
       OnCloseTab = JupiterFormTab1CloseTab
@@ -287,6 +299,11 @@ inherited FMain: TFMain
     Top = 122
   end
   inherited acActionShortcuts: TActionList[8]
+    object Action1: TAction[12]
+      Caption = 'acCtrlEnter'
+      OnExecute = Action1Execute
+      ShortCut = 16397
+    end
   end
   object ilIconFamily: TImageList[9]
     Left = 497
@@ -1096,7 +1113,14 @@ inherited FMain: TFMain
     end
     object MenuItem5: TMenuItem
       Caption = 'Ajuda'
-      OnClick = MenuItem5Click
+      object MenuItem16: TMenuItem
+        Caption = 'Sobre'
+        OnClick = MenuItem5Click
+      end
+      object MenuItem17: TMenuItem
+        Caption = 'Release notes'
+        OnClick = MenuItem17Click
+      end
     end
   end
   object tmSearch: TTimer[11]

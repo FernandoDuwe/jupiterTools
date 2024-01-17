@@ -391,6 +391,7 @@ begin
       Route.Params.AddVariable('destinyPath', EXPLORER_FORM_PATH, 'Destino');
       Route.Params.AddVariable('hint', 'Meus aplicativos favoritos, para alterar, clique em Favoritos, no menu principal', 'Dica');
       Route.Params.AddVariable('hideColumns', 'Line', 'Campos a esconder');
+      Route.Params.AddVariable('title', 'Arquivos favoritos', 'Título');
       Route.Params.AddVariable(FIELD_ID_GENERADOR, 'FavoriteAppsForm', 'ID do formulário');
     end;
 
@@ -408,6 +409,7 @@ begin
       Route.Params.AddVariable('destinyPath', EXPLORER_FORM_PATH, 'Destino');
       Route.Params.AddVariable('hint', 'Minhas pastas favoritas, para alterar, clique em Favoritos, no menu principal', 'Dica');
       Route.Params.AddVariable('hideColumns', 'Line', 'Campos a esconder');
+      Route.Params.AddVariable('title', 'Pastas favoritas', 'Título');
       Route.Params.AddVariable(FIELD_ID_GENERADOR, 'FavoritePathsForm', 'ID do formulário');
     end;
   finally

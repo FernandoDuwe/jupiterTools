@@ -21,6 +21,7 @@ const
    NEWTASK_FORM_PATH        : String = '/forms/custom/newTask/';
    TASK_FORM_PATH           : String = '/forms/custom/currentTask/';
    DYNAMIC_RECORD_FORM_PATH : String = '/forms/custom/record/dynamic/';
+   MENU_SELECT_FORM_PATH    : String = '/forms/menu/selector/';
    PROCESS_MONITOR_PATH     : String = '/forms/process/monitor/';
    PROMPT_FORM_PATH         : String = '/forms/prompt/';
    LAYOUT_BUILDER_PATH      : String = '/forms/layout/builder/';

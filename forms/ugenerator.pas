@@ -816,6 +816,10 @@ begin
       with TJupiterFormRoute(vrJupiterApp.FormRoutes.GetAtIndex(vrVez)) do
         mmLines.Lines.Add(Format('  - %1:s - %0:s;', [Path, FormClass.ClassName]));
   end;
+
+  if Self.Params.Exists('Goto') then
+    if Self.Params.VariableById('Goto').Value = 'ReleaseNotes' then
+      pcTabs.ActivePage := TabSheet3;
 end;
 
 procedure TFGenerator.Internal_RefreshClick(Sender: TObject);
