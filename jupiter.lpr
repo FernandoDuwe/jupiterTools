@@ -29,13 +29,43 @@ uses
   jupiterclimodule, ulayoutreader, uclimanager, jupiterclicommand,
   unewcommandcli, utimecontrol, jupiterTimeControlDataProvider, 
 uuserpreferences, jupiterformaction, udm, jupiterdatabase, usqlEditor,
-umenuselector;
+umenuselector, uwebexplorer, jupiterexternaldatasets;
 
 {$R *.res}
 
+  function RunBeforeStart(var prOutPut : String) : String;
+  var
+    vrParams : TJupiterVariableList;
+    vrRunnable : TJupiterRunnable;
+  begin
+    Result   := '';
+    prOutPut := '';
+
+    vrParams := TJupiterVariableList.Create;
+    try
+      vrParams.FileName := 'datasets/JupiterStandard.csv';
+
+      if vrParams.HasValue('Jupiter.Standard.Triggers.OnBeforeStart') then
+      begin
+        Result := vrParams.VariableById('Jupiter.Standard.Triggers.OnBeforeStart').Value;
+
+        vrRunnable := TJupiterRunnable.Create(Result, True);
+        prOutPut := vrRunnable.OutPut;
+        vrRunnable.Free;
+      end;
+    finally
+      vrParams.Free;
+    end;
+  end;
+
 var
-  vrVez : Integer;
+  vrVez     : Integer;
+  vrBefore  : String;
+  vrMessage : TJupiterSystemMessage;
+  vrOutPut  : String;
 begin
+  vrBefore := RunBeforeStart(vrOutPut);
+
   vrJupiterApp := TJupiterApp.Create('jupiter', 'Jupiter');
 
   for vrVez := 0 to ParamCount do
@@ -60,7 +90,18 @@ begin
   end;
 
   if not vrJupiterApp.ConsoleMode then
+  begin
     vrJupiterApp.AddMessage('Iniciando', Application.Title);
+
+    if vrBefore <> '' then
+    begin
+      vrMessage := vrJupiterApp.AddMessage('Evento executado antes da inicialização', Application.Title);
+      vrMessage.Details.Add('Comando: ' + vrBefore);
+      vrMessage.Details.Add('');
+      vrMessage.Details.Add('Execução:');
+      vrMessage.Details.Add(vrOutPut);
+    end;
+  end;
 
   vrJupiterApp.AddModule(TJupiterStandardModule.Create);
   vrJupiterApp.AddModule(TJupiterCLIModule.Create);
@@ -90,10 +131,12 @@ begin
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(CLI_NEWCOMMAND_PATH, TFNewCommandCli));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(TIME_CONTROL_PATH, TFTimeControl));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(USER_PREF_PATH, TFUserPreferences));
+  vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(WEB_EXPLORER_FORM_PATH, TFWebExplorer));
 
   Application.CreateForm(TFMain, FMain);
   Application.CreateForm(TDMMain, DMMain);
   Application.CreateForm(TFMenuSelector, FMenuSelector);
+  Application.CreateForm(TFWebExplorer, FWebExplorer);
   Application.Run;
 end.
 

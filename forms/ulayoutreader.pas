@@ -172,10 +172,13 @@ begin
   inherited Internal_UpdateComponents;
 
   if Self.Actions.Count > 0 then
+  begin
     Self.Actions.GetActionButton(0, sbActions).Enabled := ((Self.FFileName = EmptyStr) and (not FileExists(Self.FFileName)));
+    Self.Actions.GetMenuItem(0).Enabled := ((Self.FFileName = EmptyStr) and (not FileExists(Self.FFileName)));
 
 //  if Self.Actions.Count >= 1 then
 //    Self.Actions.GetActionButton(1, sbActions).Enabled := FileExists(Self.FFileName);
+  end;
 
   // lbFile.ReadOnly := ((Self.FFileName = EmptyStr) and (not FileExists(Self.FFileName)));
 end;

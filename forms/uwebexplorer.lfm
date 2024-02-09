@@ -1,0 +1,21 @@
+inherited FWebExplorer: TFWebExplorer
+  object WVWindowParent1: TWVWindowParent[3]
+    Left = 0
+    Height = 230
+    Top = 60
+    Width = 668
+    Align = alClient
+    TabOrder = 3
+    Browser = WVBrowser1
+  end
+  inherited ppMenu: TPopupMenu[4]
+  end
+  inherited acActionShortcuts: TActionList[5]
+  end
+  object WVBrowser1: TWVBrowser[6]
+    TargetCompatibleBrowserVersion = '114.0.1823.32'
+    AllowSingleSignOnUsingOSPrimaryAccount = False
+    Left = 60
+    Top = 75
+  end
+end

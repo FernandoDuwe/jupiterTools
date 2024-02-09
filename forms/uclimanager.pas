@@ -146,10 +146,16 @@ begin
   inherited Internal_UpdateComponents;
 
   if Self.Actions.Count > 1 then
+  begin
     Self.Actions.GetActionButton(1, sbActions).Enabled := (FIndex <> NULL_KEY);
+    Self.Actions.GetMenuItem(1).Enabled := (FIndex <> NULL_KEY);
+  end;
 
   if Self.Actions.Count > 2 then
+  begin
     Self.Actions.GetActionButton(2, sbActions).Enabled := (FIndex <> NULL_KEY);
+    Self.Actions.GetMenuItem(2).Enabled := (FIndex <> NULL_KEY);
+  end;
 end;
 
 procedure TFCLIManager.Internal_UpdateDatasets;

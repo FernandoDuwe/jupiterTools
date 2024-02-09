@@ -17,11 +17,13 @@ type
   private
     FLogMessage : Boolean;
     FCommandLine : String;
+    FOutPut : String;
 
     procedure Internal_CreateProcess(prFileName : String; prParams : String; var prOutput : String; prWaitUntilEnd : Boolean = True; prSilent : Boolean = False);
   published
     property CommandLine : String  read FCommandLine write FCommandLine;
     property LogMessage  : Boolean read FLogMessage  write FLogMessage;
+    property OutPut      : String  read FOutPut;
   public
     procedure Execute;
     procedure OpenFolder(prFolder : String);
@@ -86,42 +88,61 @@ var
   vrOutput : String;
 begin
   {$IFNDEF JUPITERCLI}
-  Application.MainForm.Cursor := crHourGlass;
+  if Assigned(Application.MainForm) then
+    Application.MainForm.Cursor := crHourGlass;
   {$ENDIF}
 
   try
-    vrCommandLine := vrJupiterApp.Params.ResolveString(Self.CommandLine);
-
-    if DirectoryExists(vrCommandLine) then
+    if Assigned(vrJupiterApp) then
     begin
-      Self.OpenFolder(vrCommandLine);
-      Exit;
-    end;
+      vrCommandLine := vrJupiterApp.Params.ResolveString(Self.CommandLine);
 
-    vrContent := Pos(AnsiUpperCase(ExtractFileExt(vrCommandLine)), AnsiUpperCase('.jpas'));
+      if DirectoryExists(vrCommandLine) then
+      begin
+        Self.OpenFolder(vrCommandLine);
+        Exit;
+      end;
 
-    if vrContent <> 0 then
-    begin
-      Self.OpenJPasScript(vrCommandLine);
-      Exit;
-    end;
+      vrContent := Pos(AnsiUpperCase(ExtractFileExt(vrCommandLine)), AnsiUpperCase('.jpas'));
 
-    vrExtensions := vrJupiterApp.Params.VariableById('Enviroment.Run.ScriptExtensions').Value;
+      if vrContent <> 0 then
+      begin
+        Self.OpenJPasScript(vrCommandLine);
+        Exit;
+      end;
 
-    vrContent := Pos(AnsiUpperCase(ExtractFileExt(vrCommandLine)), AnsiUpperCase(vrExtensions));
+      vrExtensions := vrJupiterApp.Params.VariableById('Enviroment.Run.ScriptExtensions').Value;
 
-    if vrContent <> 0 then
-      Self.OpenScript(vrCommandLine)
+      vrContent := Pos(AnsiUpperCase(ExtractFileExt(vrCommandLine)), AnsiUpperCase(vrExtensions));
+
+      if vrContent <> 0 then
+        Self.OpenScript(vrCommandLine)
+      else
+      begin
+        if FileExists(vrCommandLine) then
+          Self.OpenFile(vrCommandLine)
+        else
+          Self.RunCommandLine(vrOutput, False);
+      end;
+    end
     else
     begin
-      if FileExists(vrCommandLine) then
-        Self.OpenFile(vrCommandLine)
-      else
-        Self.RunCommandLine(vrOutput, False);
+      vrCommandLine := Self.CommandLine;
+
+      if DirectoryExists(vrCommandLine) then
+      begin
+        Self.OpenFolder(vrCommandLine);
+        Exit;
+      end;
+
+      Self.RunCommandLine(vrOutput, True);
     end;
   finally
+    Self.FOutPut := vrOutput;
+
     {$IFNDEF JUPITERCLI}
-    Application.MainForm.Cursor := crDefault;
+    if Assigned(Application.MainForm) then
+      Application.MainForm.Cursor := crDefault;
     {$ENDIF}
   end;
 end;
@@ -131,7 +152,8 @@ begin
   try
     OpenDocument(prFolder);
   finally
-    vrJupiterApp.AddMessage('Diretório Aberto', Self.ClassName).Details.Add('Pasta: ' + prFolder);
+    if Assigned(vrJupiterApp) then
+      vrJupiterApp.AddMessage('Diretório Aberto', Self.ClassName).Details.Add('Pasta: ' + prFolder);
   end;
 end;
 
@@ -182,7 +204,11 @@ var
 begin
   vrOutput := EmptyStr;
   vrMetodo := EmptyStr;
-  vrExtensions := vrJupiterApp.Params.VariableById('Enviroment.Run.OpenInEditorPrefExtensions').Value;
+
+  if Assigned(vrJupiterApp) then
+    vrExtensions := vrJupiterApp.Params.VariableById('Enviroment.Run.OpenInEditorPrefExtensions').Value
+  else
+    vrExtensions := EmptyStr;
 
   vrContent := Pos(AnsiUpperCase(ExtractFileExt(prFile)), AnsiUpperCase(vrExtensions));
 
@@ -286,7 +312,11 @@ begin
   try
     vrStr.Clear;
     vrStr.Delimiter     := ' ';
-    vrStr.DelimitedText := vrJupiterApp.Params.ResolveString(Self.CommandLine);
+
+    if Assigned(vrJupiterApp) then
+      vrStr.DelimitedText := vrJupiterApp.Params.ResolveString(Self.CommandLine)
+    else
+      vrStr.DelimitedText := Self.CommandLine;
 
     vrParams := EmptyStr;
 
@@ -315,6 +345,7 @@ end;
 
 constructor TJupiterRunnable.Create(prCommandLine: String; prRunOnCreate: Boolean);
 begin
+  Self.FOutPut      := EmptyStr;
   Self.FLogMessage  := False;
   Self.FCommandLine := prCommandLine;
 

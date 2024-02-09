@@ -38,6 +38,7 @@ type
     property OnChangeFromComboBox : TJupiterFormTabOnChangeFromComboBox read FOnChangeFromComboBox write FOnChangeFromComboBox;
   public
     procedure AddForm(prForm : TForm);
+    procedure CloseTab(prTabIndex : Integer);
 
     procedure UpdateComboBox;
     constructor Create(AOwner:TComponent); override;
@@ -120,7 +121,7 @@ begin
 
   bm := TBitmap.Create;
   try
-    bm.SetSize(24, 24);
+    bm.SetSize(16, 16);
     Images.GetBitmap(0, bm);
 
     for i := 0 to Pred(PageCount) do
@@ -140,6 +141,16 @@ begin
   inherited DoChange;
 
   Self.Internal_UpdateComboBox;
+end;
+
+procedure TJupiterFormTab.CloseTab(prTabIndex: Integer);
+begin
+  Pages[prTabIndex].Free;
+
+  Self.Internal_UpdateComboBox;
+
+  if Assigned(Self.OnCloseTab) then
+    Self.OnCloseTab(Self);
 end;
 
 procedure TJupiterFormTab.AddForm(prForm: TForm);

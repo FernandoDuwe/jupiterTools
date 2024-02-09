@@ -156,6 +156,9 @@ begin
 
   Self.Actions.GetActionButton(0, sbActions).Enabled := not Self.FReadMode;
   Self.Actions.GetActionButton(1, sbActions).Enabled := Self.FReadMode;
+
+  Self.Actions.GetMenuItem(0).Enabled := not Self.FReadMode;
+  Self.Actions.GetMenuItem(1).Enabled := Self.FReadMode;
 end;
 
 procedure TFEditor.Internal_SaveFileClick(Sender: TObject);

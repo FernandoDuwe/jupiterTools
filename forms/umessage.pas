@@ -132,9 +132,6 @@ end;
 procedure TFMessage.Internal_UpdateComponents;
 begin
   inherited Internal_UpdateComponents;
-
-  lbResume.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
-  mmDetails.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
 end;
 
 procedure TFMessage.Internal_UpdateDatasets;

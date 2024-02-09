@@ -11,7 +11,7 @@ uses
   JupiterXMLDataProvider, JupiterGeneratorForm, JupiterAction, JupiterRunnable,
   JupiterVariableForm, JupiterApp, JupiterRoute, jupiterformutils,
   JupiterObject, JupiterDialogForm, JupiterGeneratorMenuItem, JupiterVariable,
-  LCLType;
+  JupiterCSVDataProvider, LCLType;
 
 type
 
@@ -30,11 +30,14 @@ type
     Label5: TLabel;
     Label6: TLabel;
     Label7: TLabel;
+    Label8: TLabel;
     lbIconHint: TLabel;
     lbIcon: TLabel;
     lbFormList: TListBox;
+    lbIconHint1: TLabel;
     lbMenuList: TListBox;
     lbReleaseNotes: TListBox;
+    lvDatasets: TListView;
     lvIcons: TListView;
     lvActions: TListView;
     lvFields: TListView;
@@ -47,6 +50,7 @@ type
     Panel3: TPanel;
     Panel4: TPanel;
     Panel5: TPanel;
+    Panel6: TPanel;
     pnMenuVariable: TPanel;
     pnMenuForm: TPanel;
     pnBodyMenuItem: TPanel;
@@ -66,6 +70,7 @@ type
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
     TabSheet3: TTabSheet;
+    tsDatasets: TTabSheet;
     tsIcon: TTabSheet;
     tvCurrentMenu: TTreeView;
     tsForms: TTabSheet;
@@ -902,19 +907,23 @@ end;
 
 procedure TFGenerator.Internal_UpdateDatasets;
 var
-  vrFile       : TJupiterFileDataProvider;
-  vrFileMenu   : TJupiterFileDataProvider;
-  vrVez        : Integer;
-  vrEnviroment : TJupiterEnviroment;
+  vrFile        : TJupiterFileDataProvider;
+  vrFileMenu    : TJupiterFileDataProvider;
+  vrDatasets    : TJupiterCSVDataProvider;
+  vrVez         : Integer;
+  vrEnviroment  : TJupiterEnviroment;
+  vrDataSetItem : TListItem;
 begin
   inherited Internal_UpdateDatasets;
 
   lbFormList.Items.Clear;
   lbMenuList.Items.Clear;
+  lvDatasets.Items.Clear;
 
   vrFile           := TJupiterFileDataProvider.Create;
   vrEnviroment     := TJupiterEnviroment.Create;
   vrFileMenu       := TJupiterFileDataProvider.Create;
+  vrDatasets       := TJupiterCSVDataProvider.Create;
   try
     vrFile.Path := vrEnviroment.FullPath('modules/generator/');
     vrFile.ProvideData;
@@ -929,10 +938,26 @@ begin
     for vrVez := 0 to vrFileMenu.Size - 1 do
       with vrFileMenu.GetRowByIndex(vrVez) do
         lbMenuList.Items.Add(Fields.VariableById('FieldName').Value);
+
+    if vrEnviroment.Exists('datasets/JupiterExternalVariables.csv') then
+    begin
+      vrDatasets.Filename := vrEnviroment.FullPath('datasets/JupiterExternalVariables.csv');
+      vrDatasets.ProvideData;
+
+      for vrVez := 0 to vrDatasets.Count - 1 do
+        with vrDatasets.GetRowByIndex(vrVez) do
+        begin
+          vrDataSetItem := lvDatasets.Items.Add;
+          vrDataSetItem.Caption := Fields.VariableById('NAME').Value;
+          vrDataSetItem.SubItems.Add(Fields.VariableById('FILE').Value);
+          vrDataSetItem.Data := Fields;
+        end;
+    end;
   finally
     FreeAndNil(vrFile);
     FreeAndNil(vrFileMenu);
     FreeAndNil(vrEnviroment);
+    FreeAndNil(vrDatasets);
   end;
 end;
 

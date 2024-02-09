@@ -21,7 +21,7 @@
       <MajorVersionNr Value="2"/>
       <MinorVersionNr Value="2"/>
       <RevisionNr Value="1"/>
-      <BuildNr Value="11"/>
+      <BuildNr Value="17"/>
       <Language Value="0416"/>
       <StringTable CompanyName="Jupiter Studios" FileDescription="Jupiter" InternalName="Jupiter" ProductName="Jupiter"/>
     </VersionInfo>
@@ -36,6 +36,12 @@
       <FormatVersion Value="2"/>
     </RunParams>
     <RequiredPackages>
+      <Item>
+        <PackageName Value="WebView4Delphi"/>
+      </Item>
+      <Item>
+        <PackageName Value="TurboPowerIPro"/>
+      </Item>
       <Item>
         <PackageName Value="jupiterCommom"/>
       </Item>
@@ -452,6 +458,17 @@
         <ComponentName Value="FMenuSelector"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms\uwebexplorer.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FWebExplorer"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit>
+      <Unit>
+        <Filename Value="Commons\jupiterexternaldatasets.pas"/>
+        <IsPartOfProject Value="True"/>
       </Unit>
     </Units>
   </ProjectOptions>

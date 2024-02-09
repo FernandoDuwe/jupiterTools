@@ -141,6 +141,9 @@ begin
   Self.Actions.GetActionButton(0, sbActions).Enabled := Self.EditMode;
   Self.Actions.GetActionButton(1, sbActions).Enabled := not Self.EditMode;
 
+  Self.Actions.GetMenuItem(0).Enabled := Self.EditMode;
+  Self.Actions.GetMenuItem(1).Enabled := not Self.EditMode;
+
   vrScript     := TJupiterScript.Create;
   vrEnviroment := TJupiterEnviroment.Create;
   try

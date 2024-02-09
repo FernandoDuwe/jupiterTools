@@ -63,6 +63,9 @@ procedure TJupiterStandardModule.Internal_Prepare;
 begin
   inherited Internal_Prepare;
 
+    if not Self.Params.Exists(Self.DefineParamName('Triggers.OnBeforeStart')) then
+      Self.Params.AddConfig(Self.DefineParamName('Triggers.OnBeforeStart'), EmptyStr, 'Gatilhos: Antes de iniciar a aplicação');
+
   if not Self.Params.Exists(Self.DefineParamName('Triggers.OnStart')) then
     Self.Params.AddConfig(Self.DefineParamName('Triggers.OnStart'), EmptyStr, 'Gatilhos: Ao iniciar a aplicação');
 

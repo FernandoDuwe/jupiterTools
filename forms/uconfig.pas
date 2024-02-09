@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, ExtCtrls,
   uCustomJupiterForm, uNewDataSet, JupiterVariable, JupiterApp, JupiterModule,
   JupiterFormGenerator, JupiterAction, JupiterConsts, JupiterVariableForm,
-  JupiterDialogForm, jupiterformutils, LCLType;
+  JupiterDialogForm, jupiterformutils, jupiterexternaldatasets, LCLType;
 
 type
 
@@ -26,6 +26,7 @@ type
     FOldVariant : TJupiterVariableList;
   protected
     procedure Internal_ListModules(prOwner : TTreeNode);
+    procedure Internal_ListChildren(prVariableList : TJupiterVariableList; prOwner : TTreeNode);
     procedure Internal_PrepareForm; override;
     procedure Internal_NewConfigClick(Sender : TObject);
     procedure Internal_NewDataSetClick(Sender : TObject);
@@ -117,9 +118,33 @@ begin
     end;
 end;
 
+procedure TFConfig.Internal_ListChildren(prVariableList: TJupiterVariableList; prOwner: TTreeNode);
+var
+  vrVez       : Integer;
+  vrChild     : TTreeNode;
+  vrVariables : TJupiterVariableList;
+  vrExternal  : TJupiterExternalDatasets;
+begin
+  vrExternal := TJupiterExternalDatasets.Create;
+  try
+    for vrVez := 0 to prVariableList.ChildList.Count - 1 do
+    begin
+      vrChild := tvNavigation.Items.AddChild(prOwner, TJupiterVariableList(prVariableList.ChildList.GetAtIndex(vrVez)).Title);
+
+      vrVariables := TJupiterVariableList.Create;
+      vrVariables.CopyValues(TJupiterVariableList(prVariableList.ChildList.GetAtIndex(vrVez)));
+      vrVariables.Tag := (vrVez * -1) + 1000;
+
+      vrChild.Data := TJupiterVariableList(prVariableList.ChildList.GetAtIndex(vrVez));
+    end;
+  finally
+    FreeAndNil(vrExternal);
+  end;
+end;
+
 procedure TFConfig.Internal_PrepareForm;
 var
-  vrNode : TTreeNode;
+  vrNode  : TTreeNode;
 begin
   inherited Internal_PrepareForm;
 
@@ -174,6 +199,8 @@ begin
 
   TJupiterVariableList(vrNode.Data).CopyValues(vrJupiterApp.UserParams);
   TJupiterVariableList(vrNode.Data).Tag := -2;
+
+  Self.Internal_ListChildren(vrJupiterApp.UserParams, vrNode);
 
   tvNavigation.FullExpand;
 end;
@@ -259,6 +286,13 @@ begin
       begin
         vrJupiterApp.DataSetParams.CopyValues(TJupiterVariableList(tvNavigation.Items[vrVez].Data));
         vrJupiterApp.DataSetParams.SaveToFile;
+        Continue;
+      end;
+
+      if Tag <= -1000 then // User Variable
+      begin
+        TJupiterVariableList(vrJupiterApp.UserParams.ChildList.GetAtIndex((Tag * -1) - 1000)).CopyValues(TJupiterVariableList(tvNavigation.Items[vrVez].Data));
+        TJupiterVariableList(vrJupiterApp.UserParams.ChildList.GetAtIndex((Tag * -1) - 1000)).SaveToFile;
         Continue;
       end;
 

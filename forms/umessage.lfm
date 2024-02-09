@@ -95,7 +95,6 @@ inherited FMessage: TFMessage
       Top = 232
       Width = 916
       Anchors = [akTop, akLeft, akRight, akBottom]
-      Font.Name = 'System'
       Lines.Strings = (
         'mmDetails'
       )
@@ -130,5 +129,7 @@ inherited FMessage: TFMessage
   inherited ppMenu: TPopupMenu[6]
     Left = 640
     Top = 240
+  end
+  inherited acActionShortcuts: TActionList[7]
   end
 end

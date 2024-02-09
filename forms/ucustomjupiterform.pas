@@ -5,7 +5,7 @@ unit uCustomJupiterForm;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, JupiterForm,
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, JupiterForm,
   JupiterAction, JupiterConsts, JupiterRunnable, JupiterFormGenerator,
   jupiterformutils, JupiterApp, JupiterStandardModule;
 
@@ -31,6 +31,7 @@ type
     procedure Internal_SaveGeneratorClick(Sender : TObject); override;
   public
     procedure PrepareForm; override;
+    procedure Search(prSearch : String); override;
   end;
 
 var
@@ -98,6 +99,13 @@ begin
   finally
     sbBody.Visible := True;
   end;
+end;
+
+procedure TFCustomJupiterForm.Search(prSearch: String);
+begin
+  inherited Search(prSearch);
+
+  DrawFormInSearch(Self, prSearch, $005151FF);
 end;
 
 end.

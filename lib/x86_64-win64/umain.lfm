@@ -284,6 +284,7 @@ inherited FMain: TFMain
       Align = alClient
       Images = ilTabs
       MultiLine = True
+      PopupMenu = ppTabsMenu
       TabOrder = 0
       OnChange = JupiterFormTab1Change
       OnChanging = JupiterFormTab1Changing
@@ -1024,12 +1025,12 @@ inherited FMain: TFMain
         OnClick = miUpdateClick
       end
       object miIncFontSize: TMenuItem
-        Caption = 'Aumentar Fonte'
+        Caption = 'Aumentar Fonte (Ctrl +)'
         ImageIndex = 10
         OnClick = miIncFontSizeClick
       end
       object miDecFontSize: TMenuItem
-        Caption = 'Diminuir Fonte'
+        Caption = 'Diminuir Fonte (Ctrl -)'
         ImageIndex = 11
         OnClick = miDecFontSizeClick
       end
@@ -1121,6 +1122,10 @@ inherited FMain: TFMain
         Caption = 'Release notes'
         OnClick = MenuItem17Click
       end
+      object MenuItem21: TMenuItem
+        Caption = 'Página do projeto, no Github'
+        OnClick = MenuItem21Click
+      end
     end
   end
   object tmSearch: TTimer[11]
@@ -1173,6 +1178,26 @@ inherited FMain: TFMain
       OnExecute = acChangeSearchActionExecute
       ShortCut = 16467
     end
+    object acChangeTab: TAction
+      Caption = 'acChangeTab'
+      OnExecute = acChangeTabExecute
+      ShortCut = 16393
+    end
+    object acCloseTab: TAction
+      Caption = 'acCloseTab'
+      OnExecute = acCloseTabExecute
+      ShortCut = 16499
+    end
+    object acIncFontSize: TAction
+      Caption = 'acIncFontSize'
+      OnExecute = acIncFontSizeExecute
+      ShortCut = 16491
+    end
+    object acDecFontSize: TAction
+      Caption = 'acDecFontSize'
+      OnExecute = acDecFontSizeExecute
+      ShortCut = 16493
+    end
   end
   object ilTabs: TImageList[16]
     Left = 496
@@ -1201,5 +1226,21 @@ inherited FMain: TFMain
       3CC673EC9AF367DF7B360CF7F9F7FA38FF4B8D7A8DC3161AC59C5EFF4E6BFECD
       1D2FF5F77F85DB2FEC17A22E
     }
+  end
+  object ppTabsMenu: TPopupMenu[17]
+    Left = 400
+    Top = 192
+    object MenuItem18: TMenuItem
+      Caption = 'Fechar todas as abas, menos a atual'
+      OnClick = MenuItem18Click
+    end
+    object MenuItem19: TMenuItem
+      Caption = 'Ir para a próxima aba (Ctrl + Tab)'
+      OnClick = MenuItem19Click
+    end
+    object MenuItem20: TMenuItem
+      Caption = 'Fechar a aba atual (Ctrl + F4)'
+      OnClick = MenuItem20Click
+    end
   end
 end

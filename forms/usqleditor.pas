@@ -268,10 +268,16 @@ begin
   lbFields.Font.Size     := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
 
   if Self.Actions.Count > 2 then
+  begin
     Self.Actions.GetActionButton(2, sbActions).Enabled := sqlTransaction.Active;
+    Self.Actions.GetMenuItem(2).Enabled := sqlTransaction.Active;
+  end;
 
   if Self.Actions.Count > 3 then
+  begin
     Self.Actions.GetActionButton(3, sbActions).Enabled := sqlTransaction.Active;
+    Self.Actions.GetMenuItem(3).Enabled := sqlTransaction.Active;
+  end;
 end;
 
 procedure TFSQLEditor.Internal_UpdateDatasets;

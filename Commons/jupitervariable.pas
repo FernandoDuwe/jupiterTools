@@ -50,6 +50,7 @@ type
   TJupiterVariableList = class(TJupiterObjectList)
   private
     FChildList   : TJupiterObjectList;
+    FTitle       : String;
     FFileName    : String;
     FCopyList    : TJupiterVariableList;
 
@@ -66,6 +67,7 @@ type
     property ChildList     : TJupiterObjectList   read FChildList write FChildList;
     property CopyList      : TJupiterVariableList read FCopyList  write Internal_SetCopyList;
     property FileName      : String               read FFileName  write Internal_SetFileName;
+    property Title         : String               read FTitle     write FTitle;
     property VariableCount : Integer              read Internal_VariableCount;
   public
     procedure FromStringList(prList : TStringList);
@@ -76,6 +78,7 @@ type
     procedure AddVariable(prID : String; prValue : String; prTitle : String = ''); virtual;
 
     function  Exists(prID : String) : Boolean;
+    function  HasValue(prID : String) : Boolean;
     function  VariableById(prID : String) : TJupiterVariable;
     function  VariableIndexById(prID : String) : Integer;
     function  VariableByIndex(prIndex : Integer) : TJupiterVariable;
@@ -88,7 +91,7 @@ type
     procedure CopyValues(prList : TJupiterVariableList);
     procedure SaveToFile; virtual;
 
-    constructor Create;
+    constructor Create; virtual;
     destructor Destroy; override;
   end;
 
@@ -323,6 +326,11 @@ end;
 function TJupiterVariableList.Exists(prID: String): Boolean;
 begin
   Result := Self.VariableById(prID) <> nil;
+end;
+
+function TJupiterVariableList.HasValue(prID: String): Boolean;
+begin
+  Result := ((Self.Exists(prID)) and (Trim(Self.VariableById(prID).Value) <> EmptyStr));
 end;
 
 function TJupiterVariableList.VariableById(prID: String): TJupiterVariable;

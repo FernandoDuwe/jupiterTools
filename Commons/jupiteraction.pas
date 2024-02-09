@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, JupiterObject, JupiterRoute, JupiterRunnable, JupiterVariable,
-  JupiterConsts, SysUtils, Forms, Buttons, Menus;
+  JupiterConsts, jupiterformutils, SysUtils, Forms, Buttons, Menus;
 
 type
 
@@ -145,7 +145,9 @@ begin
 
   Result.AutoSize := True;
 
-  vrWidth := Result.Width + 20;
+  vrWidth := Result.Width + 40;
+
+  vrWidth := 40 + GetTextWidth(Result.Caption, Result.Font) + Result.Glyph.Width;
 
   Result.AutoSize := False;
 

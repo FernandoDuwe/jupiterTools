@@ -12,6 +12,7 @@ const
    ROOT_FORM_PATH           : String = '/forms/';
    CONFIG_PATH              : String = '/forms/config/';
    EXPLORER_FORM_PATH       : String = '/forms/explorer/';
+   WEB_EXPLORER_FORM_PATH   : String = '/forms/explorer/web/';
    EDITOR_FORM_PATH         : String = '/forms/editor/';
    SCRIPTEDITOR_FORM_PATH   : String = '/forms/editor/jpas/';
    SQLEDITOR_FORM_PATH      : String = '/forms/editor/SQL/';
@@ -105,7 +106,7 @@ const
      FORM_MARGIN_BOTTOM_TONEXT : Integer = 20; // Bottom to the next field
    {$ENDIF}
 
-   FORM_ACTION_MINWIDTH         : Integer = 160;
+   FORM_ACTION_MINWIDTH         : Integer = 120;
    FORM_ACTION_MINWIDTH_COMPACT : Integer = 80;
 
    // Generator
@@ -123,6 +124,7 @@ const
    function GetDirectorySeparator : String;
    function GetRootDirectory : String;
    function GetCommandLineTool : String;
+   function SearchIsPartOf(prData, prQuery : String) : Boolean;
 
 type
   // JupiterThreads
@@ -165,6 +167,14 @@ begin
   {$ELSE}
      Result := 'terminal';
   {$ENDIF}
+end;
+
+function SearchIsPartOf(prData, prQuery: String): Boolean;
+begin
+  prData  := AnsiUpperCase(prData);
+  prQuery := AnsiUpperCase(prQuery);
+
+  Result := Pos(prQuery, prData) <> 0;
 end;
 
 end.

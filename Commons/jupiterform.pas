@@ -106,7 +106,7 @@ var
 
 implementation
 
-uses JupiterApp, JupiterDialogForm, uGenerator, JupiterFormTabSheet;
+uses JupiterApp, uGenerator {$IFNDEF JUPITERCLI}, JupiterDialogForm, JupiterFormTabSheet {$ENDIF};
 
 {$R *.lfm}
 
@@ -119,73 +119,73 @@ end;
 
 procedure TFJupiterForm.acF1Execute(Sender: TObject);
 begin
-  if Assigned(Self.Actions.GetActionButton(0, sbActions)) then
+  if ((Assigned(Self.Actions.GetActionButton(0, sbActions))) and (Self.Actions.GetActionButton(0, sbActions).Enabled)) then
     Self.Actions.GetActionButton(0, sbActions).Click;
 end;
 
 procedure TFJupiterForm.acF10Execute(Sender: TObject);
 begin
-  if Assigned(Self.Actions.GetActionButton(9, sbActions)) then
+  if ((Assigned(Self.Actions.GetActionButton(9, sbActions))) and (Self.Actions.GetActionButton(9, sbActions).Enabled)) then
     Self.Actions.GetActionButton(9, sbActions).Click;
 end;
 
 procedure TFJupiterForm.acF11Execute(Sender: TObject);
 begin
-  if Assigned(Self.Actions.GetActionButton(10, sbActions)) then
+  if ((Assigned(Self.Actions.GetActionButton(10, sbActions))) and (Self.Actions.GetActionButton(10, sbActions).Enabled)) then
     Self.Actions.GetActionButton(10, sbActions).Click;
 end;
 
 procedure TFJupiterForm.acF12Execute(Sender: TObject);
 begin
-  if Assigned(Self.Actions.GetActionButton(11, sbActions)) then
+  if ((Assigned(Self.Actions.GetActionButton(11, sbActions))) and (Self.Actions.GetActionButton(11, sbActions).Enabled)) then
     Self.Actions.GetActionButton(11, sbActions).Click;
 end;
 
 procedure TFJupiterForm.acF2Execute(Sender: TObject);
 begin
-  if Assigned(Self.Actions.GetActionButton(1, sbActions)) then
+  if ((Assigned(Self.Actions.GetActionButton(1, sbActions))) and (Self.Actions.GetActionButton(1, sbActions).Enabled)) then
     Self.Actions.GetActionButton(1, sbActions).Click;
 end;
 
 procedure TFJupiterForm.acF3Execute(Sender: TObject);
 begin
-  if Assigned(Self.Actions.GetActionButton(2, sbActions)) then
+  if ((Assigned(Self.Actions.GetActionButton(2, sbActions))) and (Self.Actions.GetActionButton(2, sbActions).Enabled)) then
     Self.Actions.GetActionButton(2, sbActions).Click;
 end;
 
 procedure TFJupiterForm.acF4Execute(Sender: TObject);
 begin
-  if Assigned(Self.Actions.GetActionButton(3, sbActions)) then
+  if ((Assigned(Self.Actions.GetActionButton(3, sbActions))) and (Self.Actions.GetActionButton(3, sbActions).Enabled)) then
     Self.Actions.GetActionButton(3, sbActions).Click;
 end;
 
 procedure TFJupiterForm.acF5Execute(Sender: TObject);
 begin
-  if Assigned(Self.Actions.GetActionButton(4, sbActions)) then
+  if ((Assigned(Self.Actions.GetActionButton(4, sbActions))) and (Self.Actions.GetActionButton(4, sbActions).Enabled)) then
     Self.Actions.GetActionButton(4, sbActions).Click;
 end;
 
 procedure TFJupiterForm.acF6Execute(Sender: TObject);
 begin
-  if Assigned(Self.Actions.GetActionButton(5, sbActions)) then
+  if ((Assigned(Self.Actions.GetActionButton(5, sbActions))) and (Self.Actions.GetActionButton(5, sbActions).Enabled)) then
     Self.Actions.GetActionButton(5, sbActions).Click;
 end;
 
 procedure TFJupiterForm.acF7Execute(Sender: TObject);
 begin
-  if Assigned(Self.Actions.GetActionButton(6, sbActions)) then
+  if ((Assigned(Self.Actions.GetActionButton(6, sbActions))) and (Self.Actions.GetActionButton(6, sbActions).Enabled)) then
     Self.Actions.GetActionButton(6, sbActions).Click;
 end;
 
 procedure TFJupiterForm.acF8Execute(Sender: TObject);
 begin
-  if Assigned(Self.Actions.GetActionButton(7, sbActions)) then
+  if ((Assigned(Self.Actions.GetActionButton(7, sbActions))) and (Self.Actions.GetActionButton(7, sbActions).Enabled)) then
     Self.Actions.GetActionButton(7, sbActions).Click;
 end;
 
 procedure TFJupiterForm.acF9Execute(Sender: TObject);
 begin
-  if Assigned(Self.Actions.GetActionButton(8, sbActions)) then
+  if ((Assigned(Self.Actions.GetActionButton(8, sbActions))) and (Self.Actions.GetActionButton(8, sbActions).Enabled)) then
     Self.Actions.GetActionButton(8, sbActions).Click;
 end;
 
@@ -338,9 +338,12 @@ begin
 end;
 
 procedure TFJupiterForm.miEditGeneratorClick(Sender: TObject);
+{$IFNDEF JUPITERCLI}
 var
   vrGenerator : TFGenerator;
+  {$ENDIF}
 begin
+  {$IFNDEF JUPITERCLI}
   Application.CreateForm(TFGenerator, vrGenerator);
   try
     vrGenerator.IsModal := True;
@@ -350,6 +353,7 @@ begin
     vrGenerator.Release;
     FreeAndNil(vrGenerator);
   end;
+  {$ENDIF}
 end;
 
 procedure TFJupiterForm.miFormParamsClick(Sender: TObject);
@@ -362,9 +366,12 @@ begin
 end;
 
 procedure TFJupiterForm.miViewParamsClick(Sender: TObject);
+{$IFNDEF JUPITERCLI}
 var
   vrDialog : TJupiterDialogForm;
+{$ENDIF}
 begin
+  {$IFNDEF JUPITERCLI}
   vrDialog := TJupiterDialogForm.Create;
   try
     vrDialog.Title    := 'Parâmetros de ' + Self.Caption;
@@ -377,6 +384,7 @@ begin
   finally
     FreeAndNil(vrDialog);
   end;
+  {$ENDIF}
 end;
 
 procedure TFJupiterForm.Internal_SetHint(prHint: String);
@@ -468,9 +476,13 @@ begin
     if Self.Params.Exists('title') then
       Self.Caption := Self.Params.VariableById('title').Value;
   finally
+    {$IFNDEF JUPITERCLI}
     ppMenu.Images := vrJupiterApp.MainIcons;
+    {$ENDIF}
 
     Self.Actions.BuildActions(sbActions);
+
+    DrawForm(Self);
 
     Self.Prepared := True;
   end;
@@ -488,8 +500,10 @@ begin
     if prUpdateCalcs then
       Self.Internal_UpdateCalcs;
   finally
+    {$IFNDEF JUPITERCLI}
     if Parent is TJupiterFormTabSheet then
       TJupiterFormTabSheet(Parent).Update;
+    {$ENDIF}
 
     Application.ProcessMessages;
   end;

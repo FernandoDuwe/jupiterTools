@@ -23,6 +23,10 @@ type
     acMenu: TAction;
     acChangeSearchAction: TAction;
     Action1: TAction;
+    acChangeTab: TAction;
+    acCloseTab: TAction;
+    acIncFontSize: TAction;
+    acDecFontSize: TAction;
     ApplicationProperties1: TApplicationProperties;
     cbNavigationMenu: TCoolBar;
     cbNavigation: TComboBox;
@@ -39,8 +43,13 @@ type
     MenuItem15: TMenuItem;
     MenuItem16: TMenuItem;
     MenuItem17: TMenuItem;
+    MenuItem18: TMenuItem;
+    MenuItem19: TMenuItem;
+    MenuItem20: TMenuItem;
+    MenuItem21: TMenuItem;
     miEditorSQL: TMenuItem;
     pnBody: TPanel;
+    ppTabsMenu: TPopupMenu;
     Separator7: TMenuItem;
     MenuItem6: TMenuItem;
     MenuItem7: TMenuItem;
@@ -97,6 +106,10 @@ type
     ToolButton3: TToolButton;
     tvMenu: TTreeView;
     procedure acChangeSearchActionExecute(Sender: TObject);
+    procedure acChangeTabExecute(Sender: TObject);
+    procedure acCloseTabExecute(Sender: TObject);
+    procedure acDecFontSizeExecute(Sender: TObject);
+    procedure acIncFontSizeExecute(Sender: TObject);
     procedure acMenuExecute(Sender: TObject);
     procedure acPromptExecute(Sender: TObject);
     procedure Action1Execute(Sender: TObject);
@@ -123,7 +136,11 @@ type
     procedure MenuItem14Click(Sender: TObject);
     procedure MenuItem15Click(Sender: TObject);
     procedure MenuItem17Click(Sender: TObject);
+    procedure MenuItem18Click(Sender: TObject);
+    procedure MenuItem19Click(Sender: TObject);
     procedure MenuItem1Click(Sender: TObject);
+    procedure MenuItem20Click(Sender: TObject);
+    procedure MenuItem21Click(Sender: TObject);
     procedure MenuItem6Click(Sender: TObject);
     procedure MenuItem8Click(Sender: TObject);
     procedure MenuItem9Click(Sender: TObject);
@@ -335,6 +352,53 @@ begin
     edSearch.SetFocus;
 end;
 
+procedure TFMain.acChangeTabExecute(Sender: TObject);
+var
+  vrNextTab : Integer;
+begin
+  vrNextTab := JupiterFormTab1.ActivePageIndex + 1;
+
+  if vrNextTab > (JupiterFormTab1.PageCount - 1) then
+    vrNextTab := 0;
+
+  JupiterFormTab1.ActivePageIndex := vrNextTab;
+end;
+
+procedure TFMain.acCloseTabExecute(Sender: TObject);
+begin
+  MenuItem20.Click;
+end;
+
+procedure TFMain.acDecFontSizeExecute(Sender: TObject);
+var
+  vrStr : TStrings;
+begin
+  vrStr := TStringList.Create;
+  try
+    miDecFontSize.Click;
+  finally
+    vrStr.Clear;
+    vrStr.Add('Novo tamanho de fonte: ' + vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
+
+    vrJupiterApp.Popup('Tamanho de fonte alterada', vrStr);
+  end;
+end;
+
+procedure TFMain.acIncFontSizeExecute(Sender: TObject);
+var
+  vrStr : TStrings;
+begin
+  vrStr := TStringList.Create;
+  try
+    miIncFontSize.Click;
+  finally
+    vrStr.Clear;
+    vrStr.Add('Novo tamanho de fonte: ' + vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
+
+    vrJupiterApp.Popup('Tamanho de fonte alterada', vrStr);
+  end;
+end;
+
 procedure TFMain.edSearchChange(Sender: TObject);
 begin
   tmSearch.Enabled := False;
@@ -362,6 +426,9 @@ begin
   Self.FSearchMode := jsmForm;
 
   Self.Internal_LoadDirectoryStructure(EmptyStr, MenuItem4);
+
+  if TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).HideMenuTree then
+    pnMenu.Visible := False;
 end;
 
 procedure TFMain.FormDestroy(Sender: TObject);
@@ -393,9 +460,6 @@ begin
   MenuItem10.Click;
 
   vrJupiterApp.MainIcons := ilIconFamily;
-
-  if TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).HideMenuTree then
-    tbMenu.Click;
 
   if TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).GetUserStartRoute <> EmptyStr then
   begin
@@ -490,6 +554,27 @@ begin
   vrJupiterApp.NavigateTo(vrRoute, True);
 end;
 
+procedure TFMain.MenuItem18Click(Sender: TObject);
+var
+  vrCurrentTab : TTabSheet;
+  vrVez : Integer;
+begin
+  vrCurrentTab := JupiterFormTab1.ActivePage;
+
+  for vrVez := JupiterFormTab1.PageCount - 1 downto 0 do
+  begin
+    if vrCurrentTab = JupiterFormTab1.Page[vrVez] then
+      Continue;
+
+    JupiterFormTab1.CloseTab(vrVez);
+  end;
+end;
+
+procedure TFMain.MenuItem19Click(Sender: TObject);
+begin
+  acChangeTab.Execute;
+end;
+
 procedure TFMain.MenuItem1Click(Sender: TObject);
 var
   vrDialog     : TJupiterDialogForm;
@@ -516,6 +601,24 @@ begin
     FreeAndNil(vrEnviroment);
     FreeAndNil(vrScript);
   end;
+end;
+
+procedure TFMain.MenuItem20Click(Sender: TObject);
+begin
+  if JupiterFormTab1.PageCount <= 1 then
+    Exit;
+
+  JupiterFormTab1.CloseTab(JupiterFormTab1.ActivePageIndex);
+end;
+
+procedure TFMain.MenuItem21Click(Sender: TObject);
+var
+  vrRoute : TJupiterRoute;
+begin
+  vrRoute := TJupiterRoute.Create(WEB_EXPLORER_FORM_PATH);
+  vrRoute.Params.AddVariable('destiny', 'Destino', 'https://github.com/FernandoDuwe/jupiterTools');
+
+  vrJupiterApp.NavigateTo(vrRoute, True);
 end;
 
 procedure TFMain.MenuItem6Click(Sender: TObject);

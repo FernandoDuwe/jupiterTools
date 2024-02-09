@@ -5,8 +5,8 @@ unit jupiterformutils;
 interface
 
 uses
-  Classes, ComCtrls, JupiterRoute, JupiterObject, JupiterAction, JupiterConsts,
-  SysUtils, Forms;
+  Classes, ComCtrls, JupiterRoute, JupiterObject, JupiterConsts,
+  SysUtils, Forms, Graphics, EditBtn, CheckLst;
 
   procedure CopyNodes(prSourceNode, prTargetNode: TTreeNode);
 
@@ -18,11 +18,15 @@ uses
 
   procedure DrawForm(prComponent : TComponent);
 
+  procedure DrawFormInSearch(prComponent : TComponent; prSearch : String; prColor : TColor);
+
   function IsSameForm(prForm1, prForm2 : TForm; prIgnoreVariables : Array of String) : Boolean;
+
+  function GetTextWidth(prText: String; prFont: TFont): Integer;
 
 implementation
 
-uses JupiterApp, ExtCtrls, Menus, StdCtrls, JupiterForm, JupiterVariable;
+uses JupiterApp, ExtCtrls, Menus, StdCtrls, JupiterForm, JupiterVariable, JupiterAction;
 
 procedure CopyNodes(prSourceNode, prTargetNode: TTreeNode);
 
@@ -50,7 +54,12 @@ var
   vrNode     : TTreeNode;
   vrAction   : TJupiterAction;
   vrTreeItem : TTreeNode;
+  vrOldSortType : TSortType;
 begin
+  vrOldSortType := prTreeView.SortType;
+
+  prTreeView.SortType := stNone;
+
   for vrVez := 0 to prList.Size - 1 do
   begin
     vrAction := TJupiterAction(prList.GetAtIndex(vrVez));
@@ -97,7 +106,12 @@ var
   vrVez : Integer;
   vrAux : String;
   vrDeleteList: TJupiterObjectList;
+  vrOldSortType : TSortType;
 begin
+  vrOldSortType := prTreeView.SortType;
+
+  prTreeView.SortType := stNone;
+
   vrDeleteList := TJupiterObjectList.Create;
   try
     prTreeView.FullExpand;
@@ -116,7 +130,25 @@ begin
       prTreeView.Items.Delete(TTreeNode(vrDeleteList.GetAtIndexAsObject(vrVez)));
 
     vrDeleteList.ClearListItens;
+
+    if prTreeView.Items.Count > 0 then
+      prTreeView.Selected := prTreeView.Items[0];
+
+    for vrVez := 0 to prTreeView.Items.Count -1 do
+    begin
+      if AnsiUpperCase(Trim(prTreeView.Items[vrVez].Text)) = AnsiUpperCase(Trim(prSearch)) then
+      begin
+        prTreeView.Selected := prTreeView.Items[vrVez];
+
+        Exit;
+      end;
+
+      if Copy(AnsiUpperCase(Trim(prTreeView.Items[vrVez].Text)), 1, Length(AnsiUpperCase(Trim(prSearch)))) = AnsiUpperCase(Trim(prSearch)) then
+        prTreeView.Selected := prTreeView.Items[vrVez];
+    end;
   finally
+    prTreeView.SortType := vrOldSortType;
+
     FreeAndNil(vrDeleteList);
   end;
 end;
@@ -138,11 +170,26 @@ begin
     if prComponent.Components[vrVez] is TEdit then
       TEdit(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
 
+    if prComponent.Components[vrVez] is TDateEdit then
+      TDateEdit(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+
     if prComponent.Components[vrVez] is TComboBox then
       TComboBox(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
 
     if prComponent.Components[vrVez] is TCheckBox then
       TCheckBox(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+
+    if prComponent.Components[vrVez] is TListView then
+      TListView(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+
+    if prComponent.Components[vrVez] is TCheckListBox then
+      TCheckListBox(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+
+    if prComponent.Components[vrVez] is TTreeView then
+      TTreeView(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+
+    if prComponent.Components[vrVez] is TMemo then
+      TMemo(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
 
     if prComponent.Components[vrVez] is TScrollBox then
     begin
@@ -164,6 +211,55 @@ begin
 
       DrawForm(prComponent.Components[vrVez]);
     end;
+  end;
+end;
+
+procedure DrawFormInSearch(prComponent: TComponent; prSearch: String; prColor : TColor);
+var
+  vrVez : Integer;
+begin
+  for vrVez := 0 to prComponent.ComponentCount - 1 do
+  begin
+    if prComponent.Components[vrVez] is TLabel then
+    begin
+      TLabel(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+
+      if SearchIsPartOf(TLabel(prComponent.Components[vrVez]).Caption, prSearch) then
+        TLabel(prComponent.Components[vrVez]).Font.Color := prColor;
+    end;
+
+    if prComponent.Components[vrVez] is TEdit then
+    begin
+      TEdit(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+
+      if SearchIsPartOf(TEdit(prComponent.Components[vrVez]).Text, prSearch) then
+        TEdit(prComponent.Components[vrVez]).Font.Color := prColor;
+    end;
+
+    if prComponent.Components[vrVez] is TComboBox then
+    begin
+      TComboBox(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+
+      if SearchIsPartOf(TComboBox(prComponent.Components[vrVez]).Text, prSearch) then
+        TComboBox(prComponent.Components[vrVez]).Font.Color := prColor;
+    end;
+
+    if prComponent.Components[vrVez] is TCheckBox then
+    begin
+      TCheckBox(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+
+      if SearchIsPartOf(TCheckBox(prComponent.Components[vrVez]).Caption, prSearch) then
+        TCheckBox(prComponent.Components[vrVez]).Font.Color := prColor;
+    end;
+
+    if prComponent.Components[vrVez] is TScrollBox then
+      DrawFormInSearch(prComponent.Components[vrVez], prSearch, prColor);
+
+    if prComponent.Components[vrVez] is TPanel then
+      DrawFormInSearch(prComponent.Components[vrVez], prSearch, prColor);
+
+    if prComponent.Components[vrVez] is TGroupBox then
+      DrawFormInSearch(prComponent.Components[vrVez], prSearch, prColor);
   end;
 end;
 
@@ -203,6 +299,21 @@ begin
   finally
     FreeAndNil(vrParams1);
     FreeAndNil(vrParams2);
+  end;
+end;
+
+function GetTextWidth(prText: String; prFont: TFont): Integer;
+var
+  vrBMP : TBitmap;
+begin
+  Result := 0;
+
+  vrBMP := TBitmap.Create;
+  try
+    vrBMP.Canvas.Font.Assign(prFont);
+    Result := vrBMP.Canvas.TextWidth(prText);
+  finally
+    vrBMP.Free;
   end;
 end;
 

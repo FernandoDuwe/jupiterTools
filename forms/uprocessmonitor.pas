@@ -148,7 +148,10 @@ begin
 
   if Self.Actions.Count >= 1 then
     if Assigned(Self.Actions.GetActionButton(1, sbActions)) then
+    begin
       Self.Actions.GetActionButton(1, sbActions).Enabled := Self.FCurrentSelected <> NULL_KEY;
+      Self.Actions.GetMenuItem(1).Enabled := Self.FCurrentSelected <> NULL_KEY;
+    end;
 end;
 
 procedure TFProcessMonitor.Internal_UpdateDatasets;
@@ -206,6 +209,7 @@ begin
   Self.FCurrentSelected := prNew;
 
   Self.Actions.GetActionButton(1, sbActions).Enabled := Self.FCurrentSelected <> NULL_KEY;
+  Self.Actions.GetMenuItem(1).Enabled := Self.FCurrentSelected <> NULL_KEY;
 end;
 
 procedure TFProcessMonitor.UpdateForm(prUpdateDatasets: Boolean;

@@ -158,13 +158,22 @@ begin
   inherited Internal_UpdateComponents;
 
   if Self.Actions.Count > 0 then
+  begin
     Self.Actions.GetActionButton(0, sbActions).Enabled := not Self.FTimeDataProvider.Started;
+    Self.Actions.GetMenuItem(0).Enabled := not Self.FTimeDataProvider.Started;
+  end;
 
   if Self.Actions.Count > 1 then
+  begin
     Self.Actions.GetActionButton(1, sbActions).Enabled := ((Self.FTimeDataProvider.Started) and (not Self.FTimeDataProvider.Ended));
+    Self.Actions.GetMenuItem(1).Enabled := ((Self.FTimeDataProvider.Started) and (not Self.FTimeDataProvider.Ended));
+  end;
 
   if Self.Actions.Count > 2 then
+  begin
     Self.Actions.GetActionButton(2, sbActions).Enabled := Self.FTimeDataProvider.Count <> 0;
+    Self.Actions.GetMenuItem(2).Enabled := Self.FTimeDataProvider.Count <> 0;
+  end;
 end;
 
 procedure TFTimeControl.Internal_UpdateDatasets;

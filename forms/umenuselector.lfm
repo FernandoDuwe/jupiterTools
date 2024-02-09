@@ -46,7 +46,10 @@ inherited FMenuSelector: TFMenuSelector
       Width = 840
       Anchors = [akTop, akLeft, akRight, akBottom]
       Images = FMain.ilIconFamily
+      ReadOnly = True
+      ScrollBars = ssNone
       TabOrder = 1
+      Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
     end
   end
   inherited ppMenu: TPopupMenu[4]

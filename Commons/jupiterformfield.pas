@@ -133,7 +133,9 @@ begin
     vrButton.Top        := Self.FButtonTop - 5;
     vrButton.Left       := (vrCont * 34);
     vrButton.Flat       := True;
+    {$IFNDEF JUPITERCLI}
     vrButton.Images     := vrJupiterApp.MainIcons;
+    {$ENDIF}
     vrButton.ImageIndex := ICON_PLAY;
     vrButton.OnClick    := @Internal_RunButtonClick;
 
@@ -151,7 +153,9 @@ begin
     vrButton.Top      := Self.FButtonTop - 5;
     vrButton.Left     := (vrCont * 34);
     vrButton.Flat     := True;
+    {$IFNDEF JUPITERCLI}
     vrButton.Images   := vrJupiterApp.MainIcons;
+    {$ENDIF}
     vrButton.ImageIndex := ICON_COPY;
     vrButton.OnClick    := @Internal_CopyButtonClick;
 //    vrButton.OnDblClick := @Internal_CopyButtonDbClick;

@@ -9,7 +9,7 @@ uses
   JupiterModule, JupiterObject, JupiterRoute, {$IFNDEF JUPITERCLI} JupiterForm, {$ENDIF}
   JupiterVariable, JupiterEnviroment, JupiterSystemMessage, {$IFNDEF JUPITERCLI} PopUpNotifier, {$ENDIF}
   JupiterVariableDataProvider, jupiterThread, JupiterRunnable, jupiterScript,
-  SysUtils, Controls;
+  jupiterexternaldatasets, JupiterCSVDataProvider, SysUtils, Controls;
 
 type
 
@@ -489,26 +489,45 @@ begin
 end;
 
 constructor TJupiterApp.Create(prAppID, prAppName : String);
+var
+  vrExternalDatasets : TJupiterExternalDatasets;
+  vrVez         : Integer;
+  vrVariables   : TJupiterVariableList;
 begin
   Self.FAppID   := prAppID;
   Self.FAppName := prAppName;
 
-  Self.FFormRoutes := TJupiterObjectList.Create;
-  Self.FModules    := TJupiterModuleList.Create;
+  vrExternalDatasets := TJupiterExternalDatasets.Create;
+  try
+    Self.FFormRoutes := TJupiterObjectList.Create;
+    Self.FModules    := TJupiterModuleList.Create;
 
-  Self.FMessages      := TJupiterObjectList.Create;
-  Self.FThreads       := TJupiterThreadList.Create;
-  Self.FParams        := TJupiterVariableList.Create;
-  Self.FDataSetParams := TJupiterVariableDataProviderList.Create;
-  Self.FUserParams    := TJupiterVariableList.Create;
+    Self.FMessages      := TJupiterObjectList.Create;
+    Self.FThreads       := TJupiterThreadList.Create;
+    Self.FParams        := TJupiterVariableList.Create;
+    Self.FDataSetParams := TJupiterVariableDataProviderList.Create;
+    Self.FUserParams    := TJupiterVariableList.Create;
 
-  Self.FParamList := TStringList.Create;
-  Self.FParamList.Clear;
+    Self.FParamList := TStringList.Create;
+    Self.FParamList.Clear;
 
-  Self.Params.AddChildList(Self.DataSetParams);
-  Self.Params.AddChildList(Self.UserParams);
+    for vrVez := 0 to vrExternalDatasets.Count - 1 do
+      with TJupiterExternalDatasetItem(vrExternalDatasets.GetAtIndex(vrVez)) do
+      begin
+        vrVariables := TJupiterVariableList.Create;
+        vrVariables.Title    := Name;
+        vrVariables.FileName := FileName;
 
-  Self.Internal_Prepare;
+        Self.UserParams.AddChildList(vrVariables);
+      end;
+
+    Self.Params.AddChildList(Self.DataSetParams);
+    Self.Params.AddChildList(Self.UserParams);
+
+    Self.Internal_Prepare;
+  finally
+    FreeAndNil(vrExternalDatasets);
+  end;
 end;
 
 destructor TJupiterApp.Destroy;

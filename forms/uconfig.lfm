@@ -49,4 +49,6 @@ inherited FConfig: TFConfig
   end
   inherited ppMenu: TPopupMenu[6]
   end
+  inherited acActionShortcuts: TActionList[7]
+  end
 end

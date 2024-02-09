@@ -62,7 +62,10 @@ procedure TFMenuSelector.acAcimaExecute(Sender: TObject);
 var
   vrIndex : Integer;
 begin
-  vrIndex := tvMenu.Selected.AbsoluteIndex - 1;
+  vrIndex := 0;
+
+  if Assigned(tvMenu.Selected) then
+    vrIndex := tvMenu.Selected.AbsoluteIndex - 1;
 
   if vrIndex >= 0 then
     tvMenu.Selected := tvMenu.Items[vrIndex];
@@ -72,7 +75,10 @@ procedure TFMenuSelector.acAbaixoExecute(Sender: TObject);
 var
   vrIndex : Integer;
 begin
-  vrIndex := tvMenu.Selected.AbsoluteIndex + 1;
+  vrIndex := 0;
+
+  if Assigned(tvMenu.Selected) then
+    vrIndex := tvMenu.Selected.AbsoluteIndex + 1;
 
   if vrIndex < tvMenu.Items.Count then
     tvMenu.Selected := tvMenu.Items[vrIndex];
@@ -81,6 +87,7 @@ end;
 procedure TFMenuSelector.acEnterExecute(Sender: TObject);
 var
   vrAction : TJupiterAction;
+  vrVez : Integer;
 begin
   if not Assigned(tvMenu.Selected) then
     Exit;
@@ -88,10 +95,29 @@ begin
   if not Assigned(tvMenu.Selected.Data) then
     Exit;
 
-  vrAction := TJupiterAction(tvMenu.Selected.Data);
+  if tvMenu.MultiSelect then
+  begin
+    for vrVez := 0 to tvMenu.Items.Count - 1 do
+    begin
+      if not tvMenu.Items[vrVez].Selected then
+        Continue;
 
-  if Assigned(vrAction.Route) then
-    vrJupiterApp.NavigateTo(vrAction.Route, False);
+      if not Assigned(tvMenu.Items[vrVez].Data) then
+        Continue;
+
+      vrAction := TJupiterAction(tvMenu.Items[vrVez].Data);
+
+      if Assigned(vrAction.Route) then
+        vrJupiterApp.NavigateTo(vrAction.Route, False);
+    end;
+  end
+  else
+  begin
+    vrAction := TJupiterAction(tvMenu.Selected.Data);
+
+    if Assigned(vrAction.Route) then
+      vrJupiterApp.NavigateTo(vrAction.Route, False);
+  end;
 
   Self.Close;
 end;
@@ -104,7 +130,7 @@ begin
     Self.Position := poDefault;
 
     Self.Width  := PercentOfScreen(Screen.Width, 50);
-    Self.Height := PercentOfScreen(Screen.Height, 50);
+    Self.Height := PercentOfScreen(Screen.Height, 70);
   finally
     Self.Position := poScreenCenter;
   end;
@@ -112,14 +138,16 @@ end;
 
 procedure TFMenuSelector.tmSearchTimer(Sender: TObject);
 begin
-  Self.Search(edSearch.Text);
-
   tmSearch.Enabled := False;
+
+  Self.Search(edSearch.Text);
 end;
 
 procedure TFMenuSelector.Internal_PrepareForm;
 begin
   inherited Internal_PrepareForm;
+
+  tvMenu.MultiSelect := FMain.JupiterFormTab1.Visible;
 
   Self.SpecialSize := True;
 end;
@@ -138,9 +166,6 @@ begin
 
   if Trim(edSearch.Text) <> EmptyStr then
     SearchOnTreeView(tvMenu, edSearch.Text);
-
-  if tvMenu.Items.Count > 0 then
-    tvMenu.Selected := tvMenu.Items[0];
 end;
 
 end.
