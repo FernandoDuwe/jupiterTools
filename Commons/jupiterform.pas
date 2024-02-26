@@ -30,6 +30,7 @@ type
     acF12: TAction;
     imgInfo: TImage;
     lbHelp: TLabel;
+    miActionShortcut: TMenuItem;
     miViewParams: TMenuItem;
     miRefresh: TMenuItem;
     miEditGenerator: TMenuItem;
@@ -57,6 +58,7 @@ type
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormUTF8KeyPress(Sender: TObject; var UTF8Key: TUTF8Char);
+    procedure miActionShortcutClick(Sender: TObject);
     procedure miEditGeneratorClick(Sender: TObject);
     procedure miFormParamsClick(Sender: TObject);
     procedure miRefreshClick(Sender: TObject);
@@ -93,8 +95,11 @@ type
     procedure Internal_UpdateComponents; virtual;
     procedure Internal_UpdateDatasets; virtual;
     procedure Internal_UpdateCalcs; virtual;
-
     procedure Internal_PrepareForm; virtual;
+    procedure Internal_Resize; virtual;
+    function  Internal_ListShortcuts(prActionList : TActionList) : String;
+    function  Internal_ListAllShortcuts : String; virtual;
+    procedure Internal_ChangeShotcutCaption;
   public
     procedure PrepareForm; virtual;
     procedure UpdateForm(prUpdateDatasets : Boolean = True; prUpdateComponentes : Boolean = True; prUpdateCalcs : Boolean = True); virtual;
@@ -115,6 +120,8 @@ uses JupiterApp, uGenerator {$IFNDEF JUPITERCLI}, JupiterDialogForm, JupiterForm
 procedure TFJupiterForm.FormActivate(Sender: TObject);
 begin
   Self.UpdateForm();
+
+  Self.Internal_Resize;
 end;
 
 procedure TFJupiterForm.acF1Execute(Sender: TObject);
@@ -269,7 +276,10 @@ end;
 procedure TFJupiterForm.FormResize(Sender: TObject);
 begin
   if Self.Prepared then
+  begin
     Self.FActions.UpdateActions(sbActions);
+    Self.Internal_Resize;
+  end;
 end;
 
 procedure TFJupiterForm.FormShow(Sender: TObject);
@@ -335,6 +345,17 @@ begin
 
   if UTF8Key = #123 then
     Self.Actions.GetActionButton(11, sbActions).Click;
+end;
+
+procedure TFJupiterForm.miActionShortcutClick(Sender: TObject);
+var
+  vrStrMessage : String;
+begin
+  vrStrMessage := 'Lista disponível de atalhos' + #13#10 + #13#10;
+
+  vrStrMessage := vrStrMessage + Self.Internal_ListAllShortcuts;
+
+  Application.MessageBox(PAnsiChar(vrStrMessage), 'Atalhos', MB_ICONINFORMATION + MB_OK);
 end;
 
 procedure TFJupiterForm.miEditGeneratorClick(Sender: TObject);
@@ -413,8 +434,9 @@ procedure TFJupiterForm.Internal_UpdateComponents;
 begin
   sbActions.Visible := Self.Actions.Size > 0;
 
-  miEditGenerator.Enabled := Params.Exists(FIELD_ID_GENERADOR);
-  miViewParams.Enabled    := Params.Size > 0;
+  miEditGenerator.Enabled  := Params.Exists(FIELD_ID_GENERADOR);
+  miViewParams.Enabled     := Params.Size > 0;
+  miActionShortcut.Enabled := acActionShortcuts.ActionCount > 0;
 end;
 
 procedure TFJupiterForm.Internal_UpdateDatasets;
@@ -453,6 +475,62 @@ begin
   //
 end;
 
+procedure TFJupiterForm.Internal_Resize;
+begin
+  Application.ProcessMessages;
+  Self.Repaint;
+end;
+
+function TFJupiterForm.Internal_ListShortcuts(prActionList: TActionList): String;
+var
+  vrCaption : String;
+  vrShortcut : String;
+  vrVez : Integer;
+begin
+  Result := EmptyStr;
+
+  for vrVez := 0 to prActionList.ActionCount - 1 do
+  begin
+    vrCaption  := prActionList.Actions[vrVez].Name;
+    vrShortcut := EmptyStr;
+
+    if prActionList.Actions[vrVez] is TAction then
+    begin
+      if not TAction(prActionList.Actions[vrVez]).Enabled then
+        Continue;
+
+      if TAction(prActionList.Actions[vrVez]).Caption <> EmptyStr then
+        vrCaption := TAction(prActionList.Actions[vrVez]).Caption;
+
+      if TAction(prActionList.Actions[vrVez]).Hint <> EmptyStr then
+        vrShortcut := TAction(prActionList.Actions[vrVez]).Hint;
+    end;
+
+    Result := Result + '  - ' + vrCaption + ' (' + vrShortcut + ')' + #13#10;
+  end;
+end;
+
+function TFJupiterForm.Internal_ListAllShortcuts: String;
+begin
+  Result := EmptyStr;
+
+  Result := Result + Internal_ListShortcuts(acActionShortcuts);
+end;
+
+procedure TFJupiterForm.Internal_ChangeShotcutCaption;
+var
+  vrVez : Integer;
+begin
+  for vrVez := 0 to self.Actions.Count - 1 do
+  begin
+    if acActionShortcuts.Actions[vrVez] is TAction then
+    begin
+      TAction(acActionShortcuts.Actions[vrVez]).Caption := TJupiterAction(Self.Actions.GetAtIndex(vrVez)).Title;
+      TAction(acActionShortcuts.Actions[vrVez]).Enabled := True;
+    end;
+  end;
+end;
+
 procedure TFJupiterForm.PrepareForm;
 var
   vrVez : Integer;
@@ -482,6 +560,8 @@ begin
 
     Self.Actions.BuildActions(sbActions);
 
+    Self.Internal_ChangeShotcutCaption;
+
     DrawForm(Self);
 
     Self.Prepared := True;
@@ -505,7 +585,7 @@ begin
       TJupiterFormTabSheet(Parent).Update;
     {$ENDIF}
 
-    Application.ProcessMessages;
+    Self.Internal_Resize;
   end;
 end;
 

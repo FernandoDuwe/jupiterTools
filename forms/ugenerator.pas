@@ -35,9 +35,11 @@ type
     lbIcon: TLabel;
     lbFormList: TListBox;
     lbIconHint1: TLabel;
+    lbIconHint2: TLabel;
     lbMenuList: TListBox;
     lbReleaseNotes: TListBox;
     lvDatasets: TListView;
+    lvMainMenus: TListView;
     lvIcons: TListView;
     lvActions: TListView;
     lvFields: TListView;
@@ -51,6 +53,7 @@ type
     Panel4: TPanel;
     Panel5: TPanel;
     Panel6: TPanel;
+    Panel7: TPanel;
     pnMenuVariable: TPanel;
     pnMenuForm: TPanel;
     pnBodyMenuItem: TPanel;
@@ -70,6 +73,7 @@ type
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
     TabSheet3: TTabSheet;
+    tsMainMenu: TTabSheet;
     tsDatasets: TTabSheet;
     tsIcon: TTabSheet;
     tvCurrentMenu: TTreeView;
@@ -118,6 +122,7 @@ type
   protected
     procedure Internal_UpdateComponents; override;
     procedure Internal_UpdateDatasets; override;
+    procedure Internal_Resize; override;
   published
     property FormID : String read FFormID write FFormID;
   public
@@ -825,6 +830,16 @@ begin
   if Self.Params.Exists('Goto') then
     if Self.Params.VariableById('Goto').Value = 'ReleaseNotes' then
       pcTabs.ActivePage := TabSheet3;
+
+  mmLines.Lines.Add(EmptyStr);
+  mmLines.Lines.Add('Rotas do menu principal');
+  mmLines.Lines.Add('  - ' + MENU_FILE_PATH);
+  mmLines.Lines.Add('  - ' + MENU_FILE_NEW_PATH);
+  mmLines.Lines.Add('  - ' + MENU_FILE_OPEN_PATH);
+  mmLines.Lines.Add('  - ' + MENU_EDIT_PATH);
+  mmLines.Lines.Add('  - ' + MENU_TOOLS_PATH);
+  mmLines.Lines.Add('  - ' + MENU_FOLDERS_PATH);
+  mmLines.Lines.Add('  - ' + MENU_HELP_PATH);
 end;
 
 procedure TFGenerator.Internal_RefreshClick(Sender: TObject);
@@ -919,6 +934,7 @@ begin
   lbFormList.Items.Clear;
   lbMenuList.Items.Clear;
   lvDatasets.Items.Clear;
+  lvMainMenus.Items.Clear;
 
   vrFile           := TJupiterFileDataProvider.Create;
   vrEnviroment     := TJupiterEnviroment.Create;
@@ -953,12 +969,49 @@ begin
           vrDataSetItem.Data := Fields;
         end;
     end;
+
+    for vrVez := 0 to FMain.MenuRouteList.Count - 1 do
+    begin
+      if FMain.MenuRouteList.MenuRouteAtIndex(vrVez).Params.Count = 0 then
+        Continue;
+
+      with FMain.MenuRouteList.MenuRouteAtIndex(vrVez) do
+      begin
+        vrDataSetItem := lvMainMenus.Items.Add;
+        vrDataSetItem.Caption := Params.VariableById('title').Value;
+        vrDataSetItem.SubItems.Add(Params.VariableById('path').Value);
+        vrDataSetItem.SubItems.Add(Params.VariableById('command').Value);
+      end;
+    end;
   finally
     FreeAndNil(vrFile);
     FreeAndNil(vrFileMenu);
     FreeAndNil(vrEnviroment);
     FreeAndNil(vrDatasets);
   end;
+end;
+
+procedure TFGenerator.Internal_Resize;
+begin
+  inherited Internal_Resize;
+
+  lvActions.Columns[0].Width := PercentOfScreen(lvActions.Width, 50);
+  lvActions.Columns[1].Width := PercentOfScreen(lvActions.Width, 49);
+
+  lvFields.Columns[0].Width := PercentOfScreen(lvFields.Width, 33);
+  lvFields.Columns[1].Width := PercentOfScreen(lvFields.Width, 33);
+  lvFields.Columns[2].Width := PercentOfScreen(lvFields.Width, 33);
+
+  lvMenuVariables.Columns[0].Width := PercentOfScreen(lvMenuVariables.Width, 33);
+  lvMenuVariables.Columns[1].Width := PercentOfScreen(lvMenuVariables.Width, 33);
+  lvMenuVariables.Columns[2].Width := PercentOfScreen(lvMenuVariables.Width, 33);
+
+  lvDatasets.Columns[0].Width := PercentOfScreen(lvDatasets.Width, 50);
+  lvDatasets.Columns[1].Width := PercentOfScreen(lvDatasets.Width, 49);
+
+  lvMainMenus.Columns[0].Width := PercentOfScreen(lvMainMenus.Width, 33);
+  lvMainMenus.Columns[1].Width := PercentOfScreen(lvMainMenus.Width, 33);
+  lvMainMenus.Columns[2].Width := PercentOfScreen(lvMainMenus.Width, 33);
 end;
 
 end.

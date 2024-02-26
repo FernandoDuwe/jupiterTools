@@ -7,7 +7,8 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, JupiterForm,
   JupiterConsts, JupiterAction, JupiterRunnable, JupiterCSVDataProvider,
-  JupiterDialogForm, JupiterObject, JupiterApp, JupiterDataProvider;
+  JupiterDialogForm, JupiterObject, JupiterApp, JupiterDataProvider,
+  jupiterformutils;
 
 type
 
@@ -32,6 +33,7 @@ type
 
     procedure Internal_UpdateComponents; override;
     procedure Internal_UpdateDatasets; override;
+    procedure Internal_Resize; override;
   public
 
   end;
@@ -220,6 +222,16 @@ begin
       vrItem.SubItems.Add(Fields.VariableById('Size').Value);
       vrItem.Data := vrItemObj;
     end;
+end;
+
+procedure TFLayoutBuilder.Internal_Resize;
+begin
+  inherited Internal_Resize;
+
+  lvFields.Columns[0].Width := PercentOfScreen(lvFields.Width, 25);
+  lvFields.Columns[1].Width := PercentOfScreen(lvFields.Width, 25);
+  lvFields.Columns[2].Width := PercentOfScreen(lvFields.Width, 25);
+  lvFields.Columns[3].Width := PercentOfScreen(lvFields.Width, 24);
 end;
 
 end.

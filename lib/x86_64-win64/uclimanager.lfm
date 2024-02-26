@@ -1,11 +1,27 @@
 inherited FCLIManager: TFCLIManager
+  Height = 507
+  Width = 1046
   Caption = 'Comandos do CLI'
+  ClientHeight = 507
+  ClientWidth = 1046
   OnCreate = FormCreate
+  inherited sbActions: TScrollBox
+    Width = 1046
+  end
+  inherited sbStatus: TStatusBar
+    Top = 484
+    Width = 1046
+  end
+  inherited pnHint: TPanel
+    Top = 418
+    Width = 1046
+    ClientWidth = 1046
+  end
   object lvCommands: TListView[3]
     Left = 0
-    Height = 230
+    Height = 358
     Top = 60
-    Width = 668
+    Width = 1046
     Align = alClient
     Columns = <    
       item

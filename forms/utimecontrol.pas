@@ -36,6 +36,7 @@ type
     procedure Internal_UpdateComponents; override;
     procedure Internal_UpdateDatasets; override;
     procedure Internal_UpdateCalcs; override;
+    procedure Internal_Resize; override;
   public
 
   end;
@@ -202,6 +203,15 @@ begin
   inherited Internal_UpdateCalcs;
 
   lbTimes.Caption := FormatDateTime('hh:nn:ss', Self.FTimeDataProvider.ExecutedTime);
+end;
+
+procedure TFTimeControl.Internal_Resize;
+begin
+  inherited Internal_Resize;
+
+  lvTimes.Columns[0].Width := PercentOfScreen(lvTimes.Width, 25);
+  lvTimes.Columns[1].Width := PercentOfScreen(lvTimes.Width, 25);
+  lvTimes.Columns[2].Width := PercentOfScreen(lvTimes.Width, 49);
 end;
 
 end.

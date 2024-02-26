@@ -7,7 +7,8 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, ExtCtrls,
   StdCtrls, JupiterForm, JupiterAction, JupiterApp, JupiterConsts,
-  jupiterScriptFunctions, JupiterRunnable, jupiterThread, LCLType;
+  jupiterScriptFunctions, JupiterRunnable, jupiterThread, jupiterformutils,
+  LCLType;
 
 type
 
@@ -37,6 +38,7 @@ type
     procedure Internal_UpdateComponents; override;
     procedure Internal_UpdateDatasets; override;
     procedure Internal_SetCurrentSelected(prNew : Integer);
+    procedure Internal_Resize; override;
   published
     property CurrentSelected : Integer read FCurrentSelected write Internal_SetCurrentSelected;
   public
@@ -212,8 +214,19 @@ begin
   Self.Actions.GetMenuItem(1).Enabled := Self.FCurrentSelected <> NULL_KEY;
 end;
 
-procedure TFProcessMonitor.UpdateForm(prUpdateDatasets: Boolean;
-  prUpdateComponentes: Boolean; prUpdateCalcs: Boolean);
+procedure TFProcessMonitor.Internal_Resize;
+begin
+  inherited Internal_Resize;
+
+  lvProcessList.Columns[0].Width := PercentOfScreen(lvProcessList.Width, 10);
+  lvProcessList.Columns[1].Width := PercentOfScreen(lvProcessList.Width, 30);
+  lvProcessList.Columns[2].Width := PercentOfScreen(lvProcessList.Width, 29);
+  lvProcessList.Columns[3].Width := PercentOfScreen(lvProcessList.Width, 10);
+  lvProcessList.Columns[4].Width := PercentOfScreen(lvProcessList.Width, 10);
+  lvProcessList.Columns[5].Width := PercentOfScreen(lvProcessList.Width, 10);
+end;
+
+procedure TFProcessMonitor.UpdateForm(prUpdateDatasets: Boolean; prUpdateComponentes: Boolean; prUpdateCalcs: Boolean);
 begin
   inherited UpdateForm;
 

@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, ValEdit,
   StdCtrls, SynEdit, JupiterForm, JupiterConsts, JupiterAction, JupiterRunnable,
   JupiterEnviroment, jupiterformutils, JupiterFileDataProvider,
-  JupiterCSVDataProvider, JupiterApp;
+  JupiterCSVDataProvider, JupiterApp, utimecontrol;
 
 type
 
@@ -38,6 +38,7 @@ type
     procedure Internal_PrepareForm; override;
     procedure Internal_UpdateComponents; override;
     procedure Internal_UpdateDatasets; override;
+    procedure Internal_Resize; override;
 
     procedure Internal_ListLayouts;
   public
@@ -201,6 +202,13 @@ begin
 
       vlFields.Strings.AddPair(vrStr, vrStrContent);
     end;
+end;
+
+procedure TFLayoutReader.Internal_Resize;
+begin
+  inherited Internal_Resize;
+
+  vlFields.DefaultColWidth := PercentOfScreen(vlFields.Width, 49);
 end;
 
 procedure TFLayoutReader.Internal_ListLayouts;

@@ -32,6 +32,14 @@ const
    TIME_CONTROL_PATH        : String = '/forms/timeControl/';
    USER_PREF_PATH           : String = '/forms/config/preferences';
 
+   MENU_FILE_PATH       : String = '/menu/file/';
+   MENU_FILE_NEW_PATH   : String = '/menu/file/new/';
+   MENU_FILE_OPEN_PATH  : String = '/menu/file/open/';
+   MENU_EDIT_PATH       : String = '/menu/edit/';
+   MENU_TOOLS_PATH      : String = '/menu/tools/';
+   MENU_FOLDERS_PATH    : String = '/menu/folders/';
+   MENU_HELP_PATH       : String = '/menu/help/';
+
    ICON_ADD       : SmallInt = 0;
    ICON_NEW       : SmallInt = 1;
    ICON_OPEN      : SmallInt = 2;

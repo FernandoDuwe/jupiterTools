@@ -300,9 +300,10 @@ inherited FMain: TFMain
     Top = 122
   end
   inherited acActionShortcuts: TActionList[8]
-    object Action1: TAction[12]
-      Caption = 'acCtrlEnter'
-      OnExecute = Action1Execute
+    object acCtrlEnter: TAction[12]
+      Caption = 'Abrir Menu'
+      Hint = 'Ctrl+Enter'
+      OnExecute = acCtrlEnterExecute
       ShortCut = 16397
     end
   end
@@ -937,7 +938,7 @@ inherited FMain: TFMain
           ImageIndex = 0
           OnClick = miNewCheckListClick
         end
-        object MenuItem1: TMenuItem
+        object miShortcut: TMenuItem
           Caption = 'Arquivo .jpas'
           ImageIndex = 0
           OnClick = MenuItem1Click
@@ -1151,7 +1152,7 @@ inherited FMain: TFMain
     OnActivate = ApplicationProperties1Activate
     OnRestore = ApplicationProperties1Restore
     Left = 888
-    Top = 121
+    Top = 120
   end
   object tmInternalThread: TTimer[14]
     Enabled = False
@@ -1165,36 +1166,43 @@ inherited FMain: TFMain
     Top = 192
     object acPrompt: TAction
       Caption = 'Prompt de comando'
+      Hint = 'Ctrl+F9'
       OnExecute = acPromptExecute
       ShortCut = 16504
     end
     object acMenu: TAction
-      Caption = 'acMenu'
+      Caption = 'Esconder/Exibir menu lateral'
+      Hint = 'Ctrl+L'
       OnExecute = acMenuExecute
       ShortCut = 16460
     end
     object acChangeSearchAction: TAction
-      Caption = 'acChangeSearchAction'
+      Caption = 'Alterar o critério de pesquisa'
+      Hint = 'Ctrl+S'
       OnExecute = acChangeSearchActionExecute
       ShortCut = 16467
     end
     object acChangeTab: TAction
-      Caption = 'acChangeTab'
+      Caption = 'Trocar Aba'
+      Hint = 'Ctrl+Tab'
       OnExecute = acChangeTabExecute
       ShortCut = 16393
     end
     object acCloseTab: TAction
-      Caption = 'acCloseTab'
+      Caption = 'Fechar aba'
+      Hint = 'Ctrl+F4'
       OnExecute = acCloseTabExecute
       ShortCut = 16499
     end
     object acIncFontSize: TAction
-      Caption = 'acIncFontSize'
+      Caption = 'Aumentar fonte'
+      Hint = 'Ctrl+'
       OnExecute = acIncFontSizeExecute
       ShortCut = 16491
     end
     object acDecFontSize: TAction
-      Caption = 'acDecFontSize'
+      Caption = 'Diminuir fonte'
+      Hint = 'Ctr-'
       OnExecute = acDecFontSizeExecute
       ShortCut = 16493
     end

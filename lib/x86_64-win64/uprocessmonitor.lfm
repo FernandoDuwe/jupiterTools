@@ -1,14 +1,30 @@
 inherited FProcessMonitor: TFProcessMonitor
   Left = 529
+  Height = 523
   Top = 279
+  Width = 1200
   Caption = 'Monitor de processos'
+  ClientHeight = 523
+  ClientWidth = 1200
   OnActivate = FormActivate
   OnClose = FormClose
+  inherited sbActions: TScrollBox
+    Width = 1200
+  end
+  inherited sbStatus: TStatusBar
+    Top = 500
+    Width = 1200
+  end
+  inherited pnHint: TPanel
+    Top = 434
+    Width = 1200
+    ClientWidth = 1200
+  end
   object lvProcessList: TListView[3]
     Left = 0
-    Height = 194
+    Height = 338
     Top = 96
-    Width = 668
+    Width = 1200
     Align = alClient
     Columns = <    
       item
@@ -46,11 +62,11 @@ inherited FProcessMonitor: TFProcessMonitor
     Left = 0
     Height = 36
     Top = 60
-    Width = 668
+    Width = 1200
     Align = alTop
     BevelOuter = bvNone
     ClientHeight = 36
-    ClientWidth = 668
+    ClientWidth = 1200
     TabOrder = 4
     object cbNotStarted: TCheckBox
       Left = 16
@@ -81,7 +97,9 @@ inherited FProcessMonitor: TFProcessMonitor
   end
   inherited ppMenu: TPopupMenu[5]
   end
-  object tmrUpdateScreen: TTimer[6]
+  inherited acActionShortcuts: TActionList[6]
+  end
+  object tmrUpdateScreen: TTimer[7]
     OnTimer = tmrUpdateScreenTimer
     Left = 392
     Top = 136

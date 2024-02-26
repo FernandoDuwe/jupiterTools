@@ -27,6 +27,7 @@ type
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
     tsMessages: TTabSheet;
+    procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure SynCompletion1CodeCompletion(var Value: string;
       SourceValue: string; var SourceStart, SourceEnd: TPoint;
@@ -71,6 +72,11 @@ begin
   pcOutput.Height := PercentOfScreen(Self.Height, 30);
 
   SynCompletion1.Width := PercentOfScreen(Self.Width, 40);
+end;
+
+procedure TFScriptEditor.FormDestroy(Sender: TObject);
+begin
+  inherited;
 end;
 
 procedure TFScriptEditor.Internal_SetFileName(prFileName : String);
@@ -179,6 +185,9 @@ begin
     Hint := 'Clique aqui para executar o script';
     Icon := ICON_PLAY;
   end;
+
+  if Self.Params.Exists('LimitLine') then
+    syEdit.RightEdge := StrToIntDef(Self.Params.VariableById('LimitLine').Value, syEdit.RightEdge);
 
   Self.Internal_ListVariables;
 end;

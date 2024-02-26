@@ -1,5 +1,6 @@
 inherited FEditor: TFEditor
   Left = 517
+  OnDestroy = FormDestroy
   OnShow = FormShow
   inline seEditor: TSynEdit[3]
     Left = 0
@@ -508,6 +509,8 @@ inherited FEditor: TFEditor
     object miOpenInSQLEditor: TMenuItem[3]
       Caption = 'Abrir o texto selecionado no editor SQL'
       OnClick = miOpenInSQLEditorClick
+    end
+    inherited miActionShortcut: TMenuItem[4]
     end
   end
   inherited acActionShortcuts: TActionList[5]

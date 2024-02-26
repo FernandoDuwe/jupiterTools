@@ -9,7 +9,7 @@ uses
   ComCtrls, uCustomJupiterForm, JupiterAction, JupiterConsts, JupiterApp,
   JupiterRunnable, JupiterFileDataProvider, JupiterTaskTimesDataProvider,
   JupiterDirectoryDataProvider, JupiterForm, JupiterEnviroment,
-  JupiterToolsModule, LCLType;
+  jupiterformutils, JupiterToolsModule, LCLType;
 
 type
 
@@ -38,6 +38,7 @@ type
     procedure Internal_PrepareForm; override;
     procedure Internal_UpdateComponents; override;
     procedure Internal_UpdateDatasets; override;
+    procedure Internal_Resize; override;
   public
 
   end;
@@ -268,6 +269,14 @@ begin
   finally
     FreeAndNil(vrTempos);
   end;
+end;
+
+procedure TFCurrentTask.Internal_Resize;
+begin
+  inherited Internal_Resize;
+
+  lvTimes.Columns[0].Width := PercentOfScreen(lvTimes.Width, 50);
+  lvTimes.Columns[1].Width := PercentOfScreen(lvTimes.Width, 49);
 end;
 
 end.

@@ -7,7 +7,8 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ComCtrls,
   JupiterForm, JupiterAction, JupiterRunnable, JupiterConsts, JupiterObject,
-  JupiterFileDataProvider, JupiterEnviroment, jupiterclicommand, unewcommandcli;
+  JupiterFileDataProvider, JupiterEnviroment, jupiterclicommand,
+  jupiterformutils, unewcommandcli;
 
 type
 
@@ -28,6 +29,7 @@ type
     procedure Internal_PrepareForm; override;
     procedure Internal_UpdateComponents; override;
     procedure Internal_UpdateDatasets; override;
+    procedure Internal_Resize; override;
   public
 
   end;
@@ -200,6 +202,15 @@ begin
     FreeAndNil(vrFileDataProvider);
     FreeAndNil(vrEnviroment);
   end;
+end;
+
+procedure TFCLIManager.Internal_Resize;
+begin
+  inherited Internal_Resize;
+
+  lvCommands.Columns[0].Width := PercentOfScreen(lvCommands.Width, 30);
+  lvCommands.Columns[1].Width := PercentOfScreen(lvCommands.Width, 30);
+  lvCommands.Columns[2].Width := PercentOfScreen(lvCommands.Width, 29);
 end;
 
 end.

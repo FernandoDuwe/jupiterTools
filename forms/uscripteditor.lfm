@@ -5,6 +5,7 @@ inherited FScriptEditor: TFScriptEditor
   Width = 1084
   ClientHeight = 652
   ClientWidth = 1084
+  OnDestroy = FormDestroy
   OnShow = FormShow
   inherited sbActions: TScrollBox
     Width = 1084

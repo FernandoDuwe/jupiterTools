@@ -22,7 +22,7 @@ type
     acShortcuts: TActionList;
     acMenu: TAction;
     acChangeSearchAction: TAction;
-    Action1: TAction;
+    acCtrlEnter: TAction;
     acChangeTab: TAction;
     acCloseTab: TAction;
     acIncFontSize: TAction;
@@ -112,7 +112,7 @@ type
     procedure acIncFontSizeExecute(Sender: TObject);
     procedure acMenuExecute(Sender: TObject);
     procedure acPromptExecute(Sender: TObject);
-    procedure Action1Execute(Sender: TObject);
+    procedure acCtrlEnterExecute(Sender: TObject);
     procedure ApplicationProperties1Activate(Sender: TObject);
     procedure ApplicationProperties1Restore(Sender: TObject);
     procedure cbNavigationMenuChange(Sender: TObject);
@@ -180,8 +180,10 @@ type
     procedure tvMenuChange(Sender: TObject; Node: TTreeNode);
     procedure tvMenuClick(Sender: TObject);
     procedure menuFolderClick(Sender: TObject);
+    procedure MenuRouteListClick(Sender: TObject);
   private
-    FSearchMode : TJupiterSearchMode;
+    FSearchMode    : TJupiterSearchMode;
+    FMenuRouteList : TJupiterMenuRouteList;
 
     procedure Internal_ListMenuItens;
     procedure Internal_GetExternalIcons;
@@ -198,6 +200,10 @@ type
     procedure Internal_UpdateComponents; override;
     procedure Internal_PrepareForm; override;
     procedure Internal_LoadDirectoryStructure(prDirectory : String; prAfterThan : TMenuItem);
+    procedure Internal_PrepareMainMenu;
+    function  Internal_ListAllShortcuts : String; override;
+  published
+    property MenuRouteList : TJupiterMenuRouteList read FMenuRouteList write FMenuRouteList;
   public
 
   end;
@@ -334,7 +340,7 @@ begin
   tbPrompt.Click;
 end;
 
-procedure TFMain.Action1Execute(Sender: TObject);
+procedure TFMain.acCtrlEnterExecute(Sender: TObject);
 begin
   ToolButton3.Click;
 end;
@@ -423,6 +429,9 @@ procedure TFMain.FormCreate(Sender: TObject);
 begin
   inherited;
 
+  Self.FMenuRouteList := TJupiterMenuRouteList.Create;
+  Self.FMenuRouteList.MainMenu := mmMainMenu;
+
   Self.FSearchMode := jsmForm;
 
   Self.Internal_LoadDirectoryStructure(EmptyStr, MenuItem4);
@@ -433,6 +442,8 @@ end;
 
 procedure TFMain.FormDestroy(Sender: TObject);
 begin
+  FreeAndNil(Self.FMenuRouteList);
+
   inherited;
 end;
 
@@ -974,6 +985,37 @@ begin
   end;
 end;
 
+procedure TFMain.MenuRouteListClick(Sender: TObject);
+var
+  vrJupiterMenuRoute : TJupiterMenuRoute;
+  vrStr : TStrings;
+begin
+  if not (Sender is TMenuItem) then
+    Exit;
+
+  vrJupiterMenuRoute := Self.MenuRouteList.MenuRouteByMenuItem(TMenuItem(Sender));
+
+  if not Assigned(vrJupiterMenuRoute) then
+    Exit;
+
+  if not vrJupiterMenuRoute.Params.Exists('command') then
+    Exit;
+
+  if Trim(vrJupiterMenuRoute.Params.VariableById('command').Value) = EmptyStr then
+    Exit;
+
+  vrStr := TStringList.Create;
+  try
+    vrStr.Clear;
+    vrStr.Add(vrJupiterMenuRoute.Params.VariableById('command').Value);
+
+    vrJupiterApp.RunScript(vrStr);
+  finally
+    vrStr.Clear;
+    FreeAndNil(vrStr);
+  end;
+end;
+
 procedure TFMain.Internal_ListMenuItens;
 var
   vrMenuList : TJupiterObjectList;
@@ -1214,6 +1256,7 @@ begin
 
   Self.Internal_ListMenuItens;
   Self.Internal_GetExternalIcons;
+  Self.Internal_PrepareMainMenu;
 end;
 
 procedure TFMain.Internal_LoadDirectoryStructure(prDirectory: String; prAfterThan: TMenuItem);
@@ -1250,6 +1293,27 @@ begin
     FreeAndNil(vrEnviroment);
     FreeAndNil(vrDirectory);
   end;
+end;
+
+procedure TFMain.Internal_PrepareMainMenu;
+begin
+  Self.MenuRouteList.Add(TJupiterMenuRoute.Create(MENU_FILE_PATH, miFormParams));
+  Self.MenuRouteList.Add(TJupiterMenuRoute.Create(MENU_FILE_NEW_PATH, miNew));
+  Self.MenuRouteList.Add(TJupiterMenuRoute.Create(MENU_FILE_OPEN_PATH, miOpen));
+  Self.MenuRouteList.Add(TJupiterMenuRoute.Create(MENU_EDIT_PATH, MenuItem2));
+  Self.MenuRouteList.Add(TJupiterMenuRoute.Create(MENU_TOOLS_PATH, MenuItem3));
+  Self.MenuRouteList.Add(TJupiterMenuRoute.Create(MENU_FOLDERS_PATH, MenuItem4));
+  Self.MenuRouteList.Add(TJupiterMenuRoute.Create(MENU_HELP_PATH, MenuItem5));
+  Self.MenuRouteList.OnClick := @MenuRouteListClick;
+
+  Self.MenuRouteList.Render;
+end;
+
+function TFMain.Internal_ListAllShortcuts: String;
+begin
+  Result := inherited Internal_ListAllShortcuts;
+
+  Result := Result + Internal_ListShortcuts(acShortcuts);
 end;
 
 end.

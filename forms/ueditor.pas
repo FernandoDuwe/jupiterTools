@@ -19,6 +19,7 @@ type
     seEditor: TSynEdit;
     SynAutoComplete1: TSynAutoComplete;
     SynCompletion1: TSynCompletion;
+    procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure miOpenInSQLEditorClick(Sender: TObject);
   private
@@ -61,6 +62,15 @@ begin
   inherited;
 
   SynCompletion1.Width := PercentOfScreen(Self.Width, 40);
+end;
+
+procedure TFEditor.FormDestroy(Sender: TObject);
+begin
+  if not Self.ReadMode then
+    if Application.MessageBox(PAnsiChar('Deseja salvar ' + Self.Caption + '?'), 'Confirmação', MB_ICONQUESTION + MB_YESNO) = IDYES then
+      Self.Internal_SaveFileClick(Sender);
+
+  inherited;
 end;
 
 procedure TFEditor.miOpenInSQLEditorClick(Sender: TObject);
@@ -138,6 +148,9 @@ begin
     Hint := 'Clique aqui para copiar o conteúdo do arquivo';
     Icon := ICON_COPY;
   end;
+
+  if Self.Params.Exists('LimitLine') then
+    seEditor.RightEdge := StrToIntDef(Self.Params.VariableById('LimitLine').Value, seEditor.RightEdge);
 
   Self.FReadMode := True;
 

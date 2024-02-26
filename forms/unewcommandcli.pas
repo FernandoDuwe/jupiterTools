@@ -43,6 +43,7 @@ type
     procedure Internal_SaveActionClick(Sender : TObject);
     procedure Internal_UpdateComponents; override;
     procedure Internal_UpdateDatasets; override;
+    procedure Internal_Resize; override;
   published
     property CommandCLI : TJupiterCLICommand read FCommandCLI write FCommandCLI;
   public
@@ -208,6 +209,14 @@ begin
 
     vrListItem.Data := vrParam;
   end;
+end;
+
+procedure TFNewCommandCli.Internal_Resize;
+begin
+  inherited Internal_Resize;
+
+  lvMenuVariables.Columns[0].Width := PercentOfScreen(lvMenuVariables.Width, 69);
+  lvMenuVariables.Columns[1].Width := PercentOfScreen(lvMenuVariables.Width, 30);
 end;
 
 end.

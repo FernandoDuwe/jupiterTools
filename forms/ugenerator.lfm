@@ -272,8 +272,57 @@ inherited FGenerator: TFGenerator
           end
         end
       end
+      object tsMainMenu: TTabSheet
+        Caption = 'Menu Principal'
+        ClientHeight = 524
+        ClientWidth = 1280
+        object Panel7: TPanel
+          Left = 0
+          Height = 50
+          Top = 0
+          Width = 1280
+          Align = alTop
+          BevelOuter = bvNone
+          ClientHeight = 50
+          ClientWidth = 1280
+          TabOrder = 0
+          object lbIconHint2: TLabel
+            Left = 8
+            Height = 15
+            Top = 16
+            Width = 400
+            Caption = 'Abaixo você poderá configurar menus customizados para o menu principal.'
+            ParentColor = False
+          end
+        end
+        object lvMainMenus: TListView
+          Left = 0
+          Height = 474
+          Top = 50
+          Width = 1280
+          Align = alClient
+          Columns = <          
+            item
+              Caption = 'Título'
+              Width = 200
+            end          
+            item
+              Caption = 'Rota'
+              Width = 200
+            end          
+            item
+              Caption = 'Comando'
+            end>
+          GridLines = True
+          ReadOnly = True
+          SortType = stText
+          TabOrder = 1
+          ViewStyle = vsReport
+          OnSelectItem = lvFieldsSelectItem
+        end
+      end
       object TabSheet1: TTabSheet
-        Caption = 'Menus'
+        Caption = 'Menu Lateral'
         ClientHeight = 524
         ClientWidth = 1280
         object lbMenuList: TListBox
@@ -451,7 +500,7 @@ inherited FGenerator: TFGenerator
         end
       end
       object TabSheet2: TTabSheet
-        Caption = 'Menu Atual'
+        Caption = 'Menu Lateral Atual'
         ClientHeight = 524
         ClientWidth = 1280
         object tvCurrentMenu: TTreeView
