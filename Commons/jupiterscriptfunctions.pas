@@ -7,7 +7,8 @@ interface
 uses
   Classes, SysUtils, JupiterApp, JupiterRunnable, JupiterDialogForm,
   JupiterRoute, JupiterTasksDataProvider, jupiterclicommand, JupiterModule,
-  JupiterToolsModule, Forms;
+  JupiterFileDataProvider, JupiterDirectoryDataProvider, JupiterToolsModule,
+  Forms;
 
   // I/O Functions
   procedure JupiterWriteLn(prMessage : String);
@@ -36,6 +37,10 @@ uses
   function JupiterScriptFileExists(prFile : String) : Boolean;
   function JupiterScriptDirectoryExists(prFile : String) : Boolean;
   function JupiterScriptExtractFileDir(prFile : String) : String;
+  function JupiterScriptExtractFileExt(prFile : String) : String;
+  function JupiterScriptExtractFileName(prFile : String) : String;
+  function JupiterScriptReadDirectory(prDirectory : String; prSubFolders : Boolean) : TStrings;
+  function JupiterScriptReadFile(prDirectory : String; prSubFolders : Boolean) : TStrings;
 
   // Variable funcions
   procedure JupiterAddConfiguration(prID, prValue, prTitle : String);
@@ -312,6 +317,60 @@ end;
 function JupiterScriptExtractFileDir(prFile: String): String;
 begin
   Result := ExtractFileDir(prFile);
+end;
+
+function JupiterScriptExtractFileExt(prFile: String): String;
+begin
+  Result := ExtractFileExt(prFile);
+end;
+
+function JupiterScriptExtractFileName(prFile: String): String;
+begin
+  Result := ExtractFileName(prFile);
+end;
+
+function JupiterScriptReadDirectory(prDirectory: String; prSubFolders : Boolean): TStrings;
+var
+  vrDirectory : TJupiterDirectoryDataProvider;
+  vrVez : Integer;
+begin
+  vrDirectory := TJupiterDirectoryDataProvider.Create;
+  Result      := TStringList.Create;
+  try
+    Result.Clear;
+
+    vrDirectory.Path       := prDirectory;
+    vrDirectory.SubFolders := prSubFolders;
+    vrDirectory.ProvideData;
+
+    for vrVez := 0 to vrDirectory.Count - 1 do
+      with vrDirectory.GetRowByIndex(vrVez) do
+        Result.Add(Fields.VariableById('Path').Value);
+  finally
+    FreeAndNil(vrDirectory);
+  end;
+end;
+
+function JupiterScriptReadFile(prDirectory: String; prSubFolders: Boolean): TStrings;
+var
+  vrFile : TJupiterFileDataProvider;
+  vrVez : Integer;
+begin
+  vrFile := TJupiterFileDataProvider.Create;
+  Result := TStringList.Create;
+  try
+    Result.Clear;
+
+    vrFile.Path       := prDirectory;
+    vrFile.SubFolders := prSubFolders;
+    vrFile.ProvideData;
+
+    for vrVez := 0 to vrFile.Count - 1 do
+      with vrFile.GetRowByIndex(vrVez) do
+        Result.Add(Fields.VariableById('File').Value);
+  finally
+    FreeAndNil(vrFile);
+  end;
 end;
 
 procedure JupiterAddConfiguration(prID, prValue, prTitle: String);

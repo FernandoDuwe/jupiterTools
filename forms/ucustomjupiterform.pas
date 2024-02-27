@@ -65,6 +65,7 @@ begin
   inherited Internal_PrepareForm;
 
   Self.FormGenerator.ActionsInForm := TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).ShowActionsInForm;
+
   sbActions.Visible := not TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).ShowActionsInForm;
 end;
 
@@ -87,15 +88,23 @@ begin
 
   sbBody.Visible := False;
   try
-    DrawForm(Self);
-
     Self.FFormGenerator.Variables.CopyFromVariableList(Self.Generator.Fields);
 
     if (((TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).ShowActionsInForm) and (Params.Exists(FIELD_ID_GENERADOR))) and (not Self.DontShowActionInForm)) then
        Self.FormGenerator.ActionList := Self.Actions;
 
+    if Self.Params.Exists('ShowActionsInForm') then
+    begin
+      Self.FormGenerator.ActionsInForm := Self.Params.VariableById('ShowActionsInForm').Value = '1';
+
+      if Self.FormGenerator.ActionsInForm then
+        Self.FormGenerator.ActionList := Self.Actions;
+    end;
+
     if ((Assigned(Self.FFormGenerator.Variables)) and (Self.FFormGenerator.Variables.Size > 0)) then
       Self.FFormGenerator.DrawForm;
+
+    DrawForm(Self);
   finally
     sbBody.Visible := True;
   end;

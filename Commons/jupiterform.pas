@@ -111,7 +111,7 @@ var
 
 implementation
 
-uses JupiterApp, uGenerator {$IFNDEF JUPITERCLI}, JupiterDialogForm, JupiterFormTabSheet {$ENDIF};
+uses JupiterApp {$IFNDEF JUPITERCLI}, uGenerator , JupiterDialogForm, JupiterFormTabSheet {$ENDIF};
 
 {$R *.lfm}
 
@@ -472,7 +472,8 @@ end;
 
 procedure TFJupiterForm.Internal_PrepareForm;
 begin
-  //
+  if Self.Params.Exists('CompactMode') then
+    Self.FActions.CompactMode := Self.Params.VariableById('CompactMode').Value = '1';
 end;
 
 procedure TFJupiterForm.Internal_Resize;

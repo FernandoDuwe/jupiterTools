@@ -263,6 +263,10 @@ begin
   Sender.AddFunction(@JupiterScriptFileExists, 'function FileExists(prFile: String): Boolean;');
   Sender.AddFunction(@JupiterScriptDirectoryExists, 'function DirectoryExists(prFile: String): Boolean;');
   Sender.AddFunction(@JupiterScriptExtractFileDir, 'function ExtractFileDir(prFile: String): String;');
+  Sender.AddFunction(@JupiterScriptExtractFileExt, 'function ExtractFileExt(prFile: String): String;');
+  Sender.AddFunction(@JupiterScriptExtractFileName, 'function ExtractFileName(prFile: String): String;');
+  Sender.AddFunction(@JupiterScriptReadDirectory, 'function ReadDirectory(prDirectory: String; prSubFolders : Boolean): TStrings;');
+  Sender.AddFunction(@JupiterScriptReadFile, 'function ReadFile(prDirectory: String; prSubFolders : Boolean): TStrings;');
 
   Sender.AddRegisteredVariable('vars', 'Variant');
   Sender.AddRegisteredVariable('Application', 'TApplication');
@@ -401,6 +405,10 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function FileExists(prFile: String): Boolean;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function DirectoryExists(prFile: String): Boolean;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function ExtractFileDir(prFile: String): String;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function ExtractFileExt(prFile: String): String;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function ExtractFileName(prFile: String): String;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function ReadDirectory(prDirectory: String; prSubFolders : Boolean): TStrings;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function ReadFile(prDirectory: String; prSubFolders : Boolean): TStrings;'));
 
   // Code functions
   Self.Internal_AnalyseUserCode(Result);
