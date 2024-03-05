@@ -29,7 +29,7 @@ uses
   jupiterclimodule, ulayoutreader, uclimanager, jupiterclicommand,
   unewcommandcli, utimecontrol, jupiterTimeControlDataProvider, 
 uuserpreferences, jupiterformaction, udm, jupiterdatabase, usqlEditor,
-umenuselector, uwebexplorer, jupiterexternaldatasets;
+umenuselector, uwebexplorer, jupiterexternaldatasets, jupiterlayoutvalidator;
 
 {$R *.res}
 

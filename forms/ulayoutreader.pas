@@ -7,8 +7,8 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, ValEdit,
   StdCtrls, SynEdit, JupiterForm, JupiterConsts, JupiterAction, JupiterRunnable,
-  JupiterEnviroment, jupiterformutils, JupiterFileDataProvider,
-  JupiterCSVDataProvider, JupiterApp, utimecontrol;
+  JupiterEnviroment, jupiterformutils, JupiterFileDataProvider, Windows,
+  JupiterCSVDataProvider, JupiterApp, jupiterlayoutvalidator, utimecontrol;
 
 type
 
@@ -16,17 +16,20 @@ type
 
   TFLayoutReader = class(TFJupiterForm)
     cbLayouts: TComboBox;
-    lbFile: TListBox;
+    gbMessage: TGroupBox;
+    lbFile: TSynEdit;
+    lbMessages: TListBox;
     Panel1: TPanel;
+    Panel2: TPanel;
     pnBottom: TPanel;
     Splitter1: TSplitter;
+    Splitter2: TSplitter;
     vlFields: TValueListEditor;
     procedure cbLayoutsChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure lbFileChange(Sender: TObject);
     procedure lbFileClick(Sender: TObject);
-    procedure seFileTextChange(Sender: TObject);
-    procedure seFileTextClick(Sender: TObject);
   private
     FCurrentLine: String;
     FFileName : String;
@@ -34,6 +37,7 @@ type
 
     procedure Internal_OpenItemClick(Sender: TObject);
     procedure Internal_SaveItemClick(Sender: TObject);
+    procedure Internal_CompileItemClick(Sender: TObject);
 
     procedure Internal_PrepareForm; override;
     procedure Internal_UpdateComponents; override;
@@ -57,6 +61,8 @@ implementation
 procedure TFLayoutReader.FormCreate(Sender: TObject);
 begin
   inherited;
+
+  lbFile.Lines.Clear;
 
   Self.FCurrentLayout := TJupiterCSVDataProvider.Create;
 end;
@@ -82,26 +88,22 @@ begin
   inherited;
 end;
 
+procedure TFLayoutReader.lbFileChange(Sender: TObject);
+begin
+  lbFileClick(Sender);
+end;
+
 procedure TFLayoutReader.lbFileClick(Sender: TObject);
+var
+  vrLineNum : Integer;
 begin
   try
-    Self.FCurrentLine := EmptyStr;
+    vrLineNum := lbFile.CaretY - 1;
 
-    if lbFile.ItemIndex >= 0 then
-      Self.FCurrentLine := lbFile.Items[lbFile.ItemIndex];
+    Self.FCurrentLine := lbFile.Lines[vrLineNum];
   finally
     Self.UpdateForm();
   end;
-end;
-
-procedure TFLayoutReader.seFileTextChange(Sender: TObject);
-begin
-
-end;
-
-procedure TFLayoutReader.seFileTextClick(Sender: TObject);
-begin
-
 end;
 
 procedure TFLayoutReader.Internal_OpenItemClick(Sender: TObject);
@@ -119,7 +121,7 @@ begin
 
     vrJupiterApp.Params.VariableById('Enviroment.WorkDir').Value := ExtractFileDir(Self.FFileName);
 
-    lbFile.Items.LoadFromFile(Self.FFileName);
+    lbFile.Lines.LoadFromFile(Self.FFileName);
 
     Self.FCurrentLine := EmptyStr;
   finally
@@ -130,7 +132,68 @@ end;
 
 procedure TFLayoutReader.Internal_SaveItemClick(Sender: TObject);
 begin
-  lbFile.Items.SaveToFile(Self.FFileName);
+  lbFile.Lines.SaveToFile(Self.FFileName);
+end;
+
+procedure TFLayoutReader.Internal_CompileItemClick(Sender: TObject);
+var
+  vrErrorCount : Integer;
+  vrVez : Integer;
+  vrVez2 : Integer;
+  vrValidator : TJupiterLayoutValidator;
+  vrValidatorList : TStrings;
+begin
+  lbMessages.Items.Clear;
+
+  vrErrorCount := 0;
+
+  if Self.Params.Exists('Hint.Success') then
+    Self.Params.DeleteVariable('Hint.Success');
+
+  if Self.Params.Exists('Hint.Error') then
+    Self.Params.DeleteVariable('Hint.Error');
+
+  try
+    try
+      if ((cbLayouts.Items.Count = 0) or (cbLayouts.Text = EmptyStr)) then
+        raise Exception.Create('Nenhum layout selecionado. Selecione um layout e tente novamente.');
+
+      for vrVez := 0 to lbFile.Lines.Count - 1 do
+      begin
+        vrValidator := TJupiterLayoutValidator.Create;
+        try
+          vrValidator.FileName := cbLayouts.Text;
+          vrValidator.Line     := lbFile.Lines[vrVez];
+
+          vrValidatorList := vrValidator.Validate;
+
+          vrErrorCount := vrErrorCount + vrValidatorList.Count;
+
+          for vrVez2 := 0 to vrValidatorList.Count - 1 do
+            lbMessages.Items.Add(Format('Linha: %0:d: %1:s', [vrVez + 1, vrValidatorList[vrVez2]]));
+
+          FreeAndNil(vrValidatorList);
+        finally
+          FreeAndNil(vrValidator);
+        end;
+      end;
+
+      if vrErrorCount = 0 then
+      begin
+        lbMessages.Items.Add('Nenhum erro foi encontrado no layout.');
+
+        Self.Params.AddVariable('Hint.Success', EmptyStr, 'Hint de sucesso');
+      end
+      else
+        Self.Params.AddVariable('Hint.Error', EmptyStr, 'Hint de erro');
+    except
+      lbMessages.Items.Add('Erro: ' + Exception(ExceptObject).Message);
+
+      Self.Params.AddVariable('Hint.Error', EmptyStr, 'Hint de erro');
+    end;
+  finally
+    Self.UpdateForm(False, False);
+  end;
 end;
 
 procedure TFLayoutReader.Internal_PrepareForm;
@@ -142,7 +205,7 @@ begin
 
   Self.FFileName := EmptyStr;
 
-  lbFile.Items.Clear;
+  lbFile.Lines.Clear;
 
   inherited Internal_PrepareForm;
 
@@ -152,18 +215,26 @@ begin
   vrAction.OnClick := @Internal_OpenItemClick;
 
   Self.Actions.Add(vrAction);
-                                           {
+
   vrAction      := TJupiterAction.Create('Salvar', TJupiterRunnable.Create(''), nil);
   vrAction.Hint := 'Clique aqui para salvar as alterações efetuadas';
   vrAction.Icon := ICON_SAVE;
   vrAction.OnClick := @Internal_SaveItemClick;
 
   Self.Actions.Add(vrAction);
-  }
+
+  vrAction      := TJupiterAction.Create('Analisar', TJupiterRunnable.Create(''), nil);
+  vrAction.Hint := 'Clique aqui para analisar o arquivo atual';
+  vrAction.Icon := ICON_PLAY;
+  vrAction.OnClick := @Internal_CompileItemClick;
+
+  Self.Actions.Add(vrAction);
 
   pnBottom.Width := PercentOfScreen(Self.Width, 50);
 
   vlFields.DefaultColWidth := PercentOfScreen(vlFields.Width, 50);
+
+  gbMessage.Height := PercentOfScreen(Self.Height, 30);
 
   Self.Internal_ListLayouts;
 end;
@@ -177,11 +248,9 @@ begin
     Self.Actions.GetActionButton(0, sbActions).Enabled := ((Self.FFileName = EmptyStr) and (not FileExists(Self.FFileName)));
     Self.Actions.GetMenuItem(0).Enabled := ((Self.FFileName = EmptyStr) and (not FileExists(Self.FFileName)));
 
-//  if Self.Actions.Count >= 1 then
-//    Self.Actions.GetActionButton(1, sbActions).Enabled := FileExists(Self.FFileName);
+    if Self.Actions.Count >= 1 then
+      Self.Actions.GetActionButton(1, sbActions).Enabled := FileExists(Self.FFileName);
   end;
-
-  // lbFile.ReadOnly := ((Self.FFileName = EmptyStr) and (not FileExists(Self.FFileName)));
 end;
 
 procedure TFLayoutReader.Internal_UpdateDatasets;

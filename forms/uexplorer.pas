@@ -224,13 +224,14 @@ begin
 
   Self.FProvider := FactoryDataProvider(vrProvider, vrParam, Self.Params.Exists('subfolders'));
 
+  {
   vrAction      := TJupiterAction.Create('Atualizar', TJupiterRunnable.Create(''), nil);
   vrAction.Hint := 'Clique aqui para atualizar a página';
   vrAction.Icon := ICON_REFRESH;
   vrAction.OnClick := @Internal_RefreshClick;
 
   Self.Actions.Add(vrAction);
-
+  }
   if Self.ChecklistMode then
   begin
     vrAction      := TJupiterAction.Create('Marcar todos', TJupiterRunnable.Create(''), nil);

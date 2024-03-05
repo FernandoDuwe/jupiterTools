@@ -627,7 +627,7 @@ var
   vrRoute : TJupiterRoute;
 begin
   vrRoute := TJupiterRoute.Create(WEB_EXPLORER_FORM_PATH);
-  vrRoute.Params.AddVariable('destiny', 'Destino', 'https://github.com/FernandoDuwe/jupiterTools');
+  vrRoute.Params.AddVariable('destiny', 'https://github.com/FernandoDuwe/jupiterTools', 'Destino');
 
   vrJupiterApp.NavigateTo(vrRoute, True);
 end;
@@ -998,22 +998,27 @@ begin
   if not Assigned(vrJupiterMenuRoute) then
     Exit;
 
-  if not vrJupiterMenuRoute.Params.Exists('command') then
+  if ((not vrJupiterMenuRoute.Params.Exists('command')) and (not vrJupiterMenuRoute.Params.Exists('script'))) then
     Exit;
 
-  if Trim(vrJupiterMenuRoute.Params.VariableById('command').Value) = EmptyStr then
+  if ((Trim(vrJupiterMenuRoute.Params.VariableById('command').Value) = EmptyStr) and (Trim(vrJupiterMenuRoute.Params.VariableById('script').Value) = EmptyStr)) then
     Exit;
 
-  vrStr := TStringList.Create;
-  try
-    vrStr.Clear;
-    vrStr.Add(vrJupiterMenuRoute.Params.VariableById('command').Value);
+  if Trim(vrJupiterMenuRoute.Params.VariableById('command').Value) <> EmptyStr then
+  begin
+    vrStr := TStringList.Create;
+    try
+      vrStr.Clear;
+      vrStr.Add(vrJupiterMenuRoute.Params.VariableById('command').Value);
 
-    vrJupiterApp.RunScript(vrStr);
-  finally
-    vrStr.Clear;
-    FreeAndNil(vrStr);
-  end;
+      vrJupiterApp.RunScript(vrStr);
+    finally
+      vrStr.Clear;
+      FreeAndNil(vrStr);
+    end;
+  end
+  else
+    TJupiterRunnable.Create(vrJupiterMenuRoute.Params.VariableById('script').Value, True);
 end;
 
 procedure TFMain.Internal_ListMenuItens;

@@ -1,0 +1,63 @@
+inherited AboutForm: TAboutForm
+  Left = 690
+  Top = 404
+  Caption = 'Sobre Jupiter Plugin'
+  object Panel1: TPanel[0]
+    Left = 0
+    Height = 50
+    Top = 244
+    Width = 351
+    Align = alBottom
+    ClientHeight = 50
+    ClientWidth = 351
+    TabOrder = 0
+    object Button1: TButton
+      Left = 248
+      Height = 32
+      Top = 8
+      Width = 91
+      Caption = 'Ok'
+      ModalResult = 1
+      TabOrder = 0
+    end
+  end
+  object Panel2: TPanel[1]
+    Left = 0
+    Height = 244
+    Top = 0
+    Width = 351
+    Align = alClient
+    ClientHeight = 244
+    ClientWidth = 351
+    TabOrder = 1
+    object Label1: TLabel
+      Left = 16
+      Height = 13
+      Top = 8
+      Width = 78
+      Caption = 'Jupiter Plugin'
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = [fsBold]
+      ParentColor = False
+      ParentFont = False
+    end
+    object Label2: TLabel
+      Left = 16
+      Height = 13
+      Top = 40
+      Width = 203
+      Caption = 'Plugin Notepad++ para os sistemas Jupiter.'
+      ParentColor = False
+    end
+    object Label3: TLabel
+      Left = 16
+      Height = 13
+      Top = 72
+      Width = 54
+      Caption = 'Versão: 1.0'
+      ParentColor = False
+    end
+  end
+end

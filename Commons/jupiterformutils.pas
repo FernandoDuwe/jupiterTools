@@ -188,6 +188,9 @@ begin
     if prComponent.Components[vrVez] is TTreeView then
       TTreeView(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
 
+    if prComponent.Components[vrVez] is TListBox then
+      TListBox(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+
     if prComponent.Components[vrVez] is TMemo then
       TMemo(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
 

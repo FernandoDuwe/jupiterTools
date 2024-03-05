@@ -981,6 +981,7 @@ begin
         vrDataSetItem.Caption := Params.VariableById('title').Value;
         vrDataSetItem.SubItems.Add(Params.VariableById('path').Value);
         vrDataSetItem.SubItems.Add(Params.VariableById('command').Value);
+        vrDataSetItem.SubItems.Add(Params.VariableById('script').Value);
       end;
     end;
   finally
@@ -1009,9 +1010,10 @@ begin
   lvDatasets.Columns[0].Width := PercentOfScreen(lvDatasets.Width, 50);
   lvDatasets.Columns[1].Width := PercentOfScreen(lvDatasets.Width, 49);
 
-  lvMainMenus.Columns[0].Width := PercentOfScreen(lvMainMenus.Width, 33);
-  lvMainMenus.Columns[1].Width := PercentOfScreen(lvMainMenus.Width, 33);
-  lvMainMenus.Columns[2].Width := PercentOfScreen(lvMainMenus.Width, 33);
+  lvMainMenus.Columns[0].Width := PercentOfScreen(lvMainMenus.Width, 25);
+  lvMainMenus.Columns[1].Width := PercentOfScreen(lvMainMenus.Width, 25);
+  lvMainMenus.Columns[2].Width := PercentOfScreen(lvMainMenus.Width, 25);
+  lvMainMenus.Columns[3].Width := PercentOfScreen(lvMainMenus.Width, 24);
 end;
 
 end.

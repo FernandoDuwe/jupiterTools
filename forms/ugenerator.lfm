@@ -312,6 +312,9 @@ inherited FGenerator: TFGenerator
             end          
             item
               Caption = 'Comando'
+            end          
+            item
+              Caption = 'Arquivo'
             end>
           GridLines = True
           ReadOnly = True

@@ -68,7 +68,7 @@
         <Filename Value="..\Commons\jupiteraction.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterAction"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="5"/>
         <TopLine Value="201"/>
         <CursorPos X="3" Y="221"/>
         <UsageCount Value="23"/>
@@ -177,7 +177,8 @@
       <Unit>
         <Filename Value="..\Commons\jupiterxmldataprovider.pas"/>
         <UnitName Value="JupiterXMLDataProvider"/>
-        <EditorIndex Value="3"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
         <TopLine Value="36"/>
         <CursorPos X="31" Y="39"/>
         <UsageCount Value="11"/>
@@ -186,7 +187,7 @@
       <Unit>
         <Filename Value="..\components\jupiterformtabsheet.pas"/>
         <UnitName Value="JupiterFormTabSheet"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="3"/>
         <TopLine Value="54"/>
         <CursorPos X="180" Y="21"/>
         <UsageCount Value="10"/>
@@ -195,18 +196,16 @@
       <Unit>
         <Filename Value="..\components\jupiterformtab.pas"/>
         <UnitName Value="JupiterFormTab"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="4"/>
         <CursorPos X="19" Y="10"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="..\jupiter.lpi"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="-1"/>
         <CursorPos X="56" Y="19"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="XML"/>
       </Unit>
     </Units>

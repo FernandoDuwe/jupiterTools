@@ -461,7 +461,7 @@ begin
     end;
 
     if Self.Params.Exists('Hint.Error') then
-      pnHint.Color      := clInfoBk;
+      pnHint.Color      := $009B9BFF;
   end;
 
   if not Self.IsModal then
