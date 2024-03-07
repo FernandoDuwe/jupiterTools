@@ -1149,7 +1149,7 @@ inherited FMain: TFMain
     Top = 120
   end
   object ApplicationProperties1: TApplicationProperties[13]
-    OnActivate = ApplicationProperties1Activate
+    OnActivate = ApplicationProperties1Restore
     OnRestore = ApplicationProperties1Restore
     Left = 888
     Top = 120

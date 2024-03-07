@@ -97,10 +97,12 @@ type
     procedure Internal_UpdateCalcs; virtual;
     procedure Internal_PrepareForm; virtual;
     procedure Internal_Resize; virtual;
+    procedure Internal_Activate; virtual;
     function  Internal_ListShortcuts(prActionList : TActionList) : String;
     function  Internal_ListAllShortcuts : String; virtual;
     procedure Internal_ChangeShotcutCaption;
   public
+    procedure Activate; virtual;
     procedure PrepareForm; virtual;
     procedure UpdateForm(prUpdateDatasets : Boolean = True; prUpdateComponentes : Boolean = True; prUpdateCalcs : Boolean = True); virtual;
     procedure Search(prSearch : String); virtual;
@@ -119,6 +121,8 @@ uses JupiterApp {$IFNDEF JUPITERCLI}, uGenerator , JupiterDialogForm, JupiterFor
 
 procedure TFJupiterForm.FormActivate(Sender: TObject);
 begin
+  Self.Internal_Activate;
+
   Self.UpdateForm();
 
   Self.Internal_Resize;
@@ -482,6 +486,11 @@ begin
   Self.Repaint;
 end;
 
+procedure TFJupiterForm.Internal_Activate;
+begin
+  //
+end;
+
 function TFJupiterForm.Internal_ListShortcuts(prActionList: TActionList): String;
 var
   vrCaption : String;
@@ -530,6 +539,15 @@ begin
       TAction(acActionShortcuts.Actions[vrVez]).Enabled := True;
     end;
   end;
+end;
+
+procedure TFJupiterForm.Activate;
+begin
+  Self.Internal_Activate;
+
+  Self.UpdateForm();
+
+  Self.Internal_Resize;
 end;
 
 procedure TFJupiterForm.PrepareForm;

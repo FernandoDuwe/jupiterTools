@@ -86,6 +86,9 @@ begin
   begin
     Self.Caption := 'Fechando...';
 
+    Self.FForm.Close;
+    Self.FForm.Release;
+
     FreeAndNil(Self.FForm);
   end;
 

@@ -19,6 +19,7 @@ type
     seEditor: TSynEdit;
     SynAutoComplete1: TSynAutoComplete;
     SynCompletion1: TSynCompletion;
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure miOpenInSQLEditorClick(Sender: TObject);
@@ -29,6 +30,7 @@ type
     procedure Internal_ListVariables;
     procedure Internal_PrepareForm; override;
     procedure Internal_UpdateComponents; override;
+    procedure Internal_Activate; override;
 
     procedure Internal_SaveFileClick(Sender : TObject);
     procedure Internal_EditFileClick(Sender : TObject);
@@ -66,11 +68,14 @@ end;
 
 procedure TFEditor.FormDestroy(Sender: TObject);
 begin
+  inherited;
+end;
+
+procedure TFEditor.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
   if not Self.ReadMode then
     if Application.MessageBox(PAnsiChar('Deseja salvar ' + Self.Caption + '?'), 'Confirmação', MB_ICONQUESTION + MB_YESNO) = IDYES then
       Self.Internal_SaveFileClick(Sender);
-
-  inherited;
 end;
 
 procedure TFEditor.miOpenInSQLEditorClick(Sender: TObject);
@@ -172,6 +177,17 @@ begin
 
   Self.Actions.GetMenuItem(0).Enabled := not Self.FReadMode;
   Self.Actions.GetMenuItem(1).Enabled := Self.FReadMode;
+end;
+
+procedure TFEditor.Internal_Activate;
+begin
+  inherited Internal_Activate;
+
+  if Self.ReadMode then
+  begin
+    seEditor.Lines.LoadFromFile(Self.FileName);
+    Self.Internal_ResolveVariables;
+  end;
 end;
 
 procedure TFEditor.Internal_SaveFileClick(Sender: TObject);

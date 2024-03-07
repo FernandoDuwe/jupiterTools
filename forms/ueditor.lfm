@@ -1,5 +1,6 @@
 inherited FEditor: TFEditor
   Left = 517
+  OnClose = FormClose
   OnDestroy = FormDestroy
   OnShow = FormShow
   inline seEditor: TSynEdit[3]

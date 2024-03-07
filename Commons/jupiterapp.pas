@@ -143,6 +143,7 @@ begin
   begin
     if Assigned(Self.CurrentForm) then
     begin
+      Self.CurrentForm.Close;
       Self.CurrentForm.Release;
       FreeAndNil(Self.FCurrentForm);
     end;

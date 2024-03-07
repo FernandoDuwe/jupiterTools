@@ -20,8 +20,10 @@ type
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
+    Label5: TLabel;
     lbCurrentProject: TLabel;
     lbCurrentTask: TLabel;
+    lbExecutedTime: TLabel;
     lvTimes: TListView;
     pnCurrentTask: TPanel;
     tvExplorer: TTreeView;
@@ -238,9 +240,10 @@ end;
 
 procedure TFCurrentTask.Internal_UpdateDatasets;
 var
-  vrTempos   : TJupiterTaskTimesDataProvider;
-  vrVez      : Integer;
-  vrTimeNode : TListItem;
+  vrTempos       : TJupiterTaskTimesDataProvider;
+  vrVez          : Integer;
+  vrTimeNode     : TListItem;
+  vrExecutedTime : TTime;
 begin
   inherited Internal_UpdateDatasets;
 
@@ -266,6 +269,18 @@ begin
         vrTimeNode.Caption := Fields.VariableById('startTime').Value + COLUMN_SPACE_SEPARATOR;
         vrTimeNode.SubItems.Add(Fields.VariableById('endTime').Value + COLUMN_SPACE_SEPARATOR);
       end;
+
+    vrExecutedTime := 0;
+
+    for vrVez := 0 to lvTimes.Items.Count - 1 do
+    begin
+      if Trim(lvTimes.Items[vrVez].SubItems[0]) = EmptyStr then
+        Continue;
+
+      vrExecutedTime := vrExecutedTime + StrToDateTime(lvTimes.Items[vrVez].SubItems[0]) - StrToDateTime(lvTimes.Items[vrVez].Caption);
+    end;
+
+    lbExecutedTime.Caption := FormatDateTime('hh:nn:ss', vrExecutedTime);
   finally
     FreeAndNil(vrTempos);
   end;

@@ -1,4 +1,5 @@
 inherited FWebExplorer: TFWebExplorer
+  OnShow = FormShow
   object WVWindowParent1: TWVWindowParent[3]
     Left = 0
     Height = 230
@@ -15,7 +16,13 @@ inherited FWebExplorer: TFWebExplorer
   object WVBrowser1: TWVBrowser[6]
     TargetCompatibleBrowserVersion = '114.0.1823.32'
     AllowSingleSignOnUsingOSPrimaryAccount = False
+    OnAfterCreated = WVBrowser1AfterCreated
     Left = 60
     Top = 75
+  end
+  object Timer1: TTimer[7]
+    OnTimer = Timer1Timer
+    Left = 394
+    Top = 151
   end
 end

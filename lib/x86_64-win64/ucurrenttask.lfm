@@ -1,7 +1,7 @@
 inherited FCurrentTask: TFCurrentTask
-  Left = 455
+  Left = 492
   Height = 678
-  Top = 66
+  Top = 118
   Width = 968
   Caption = 'Tarefa atual'
   ClientHeight = 678
@@ -23,7 +23,7 @@ inherited FCurrentTask: TFCurrentTask
   inherited sbBody: TScrollBox
     Height = 545
     Width = 968
-    HorzScrollBar.Page = 254
+    HorzScrollBar.Page = 486
     VertScrollBar.Page = 512
     ClientHeight = 541
     ClientWidth = 964
@@ -56,7 +56,7 @@ inherited FCurrentTask: TFCurrentTask
         ParentFont = False
       end
       object Label2: TLabel
-        Left = 160
+        Left = 200
         Height = 15
         Top = 8
         Width = 94
@@ -64,7 +64,7 @@ inherited FCurrentTask: TFCurrentTask
         ParentColor = False
       end
       object lbCurrentTask: TLabel
-        Left = 160
+        Left = 200
         Height = 15
         Top = 32
         Width = 77
@@ -132,6 +132,24 @@ inherited FCurrentTask: TFCurrentTask
         OnKeyUp = FormKeyUp
         OnUTF8KeyPress = FormUTF8KeyPress
         Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
+      end
+      object Label5: TLabel
+        Left = 392
+        Height = 15
+        Top = 8
+        Width = 94
+        Caption = 'Tempo executado'
+        ParentColor = False
+      end
+      object lbExecutedTime: TLabel
+        Left = 392
+        Height = 15
+        Top = 32
+        Width = 90
+        Caption = 'lbExecutedTime'
+        Font.Style = [fsBold]
+        ParentColor = False
+        ParentFont = False
       end
     end
   end

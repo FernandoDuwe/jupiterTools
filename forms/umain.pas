@@ -126,8 +126,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure JupiterFormTab1Change(Sender: TObject);
     procedure JupiterFormTab1ChangeFromComboBox(Sender: TObject);
-    procedure JupiterFormTab1Changing(Sender: TObject; var AllowChange: Boolean
-      );
+    procedure JupiterFormTab1Changing(Sender: TObject; var AllowChange: Boolean);
     procedure JupiterFormTab1CloseTab(Sender: TObject);
     procedure MenuItem10Click(Sender: TObject);
     procedure MenuItem11Click(Sender: TObject);
@@ -182,6 +181,8 @@ type
     procedure menuFolderClick(Sender: TObject);
     procedure MenuRouteListClick(Sender: TObject);
   private
+    FPrepared : Boolean;
+
     FSearchMode    : TJupiterSearchMode;
     FMenuRouteList : TJupiterMenuRouteList;
 
@@ -202,6 +203,7 @@ type
     procedure Internal_LoadDirectoryStructure(prDirectory : String; prAfterThan : TMenuItem);
     procedure Internal_PrepareMainMenu;
     function  Internal_ListAllShortcuts : String; override;
+    procedure Internal_Activate; override;
   published
     property MenuRouteList : TJupiterMenuRouteList read FMenuRouteList write FMenuRouteList;
   public
@@ -320,8 +322,10 @@ end;
 
 procedure TFMain.ApplicationProperties1Restore(Sender: TObject);
 begin
-  if miAutoUpdate.Checked then
+  if ((miAutoUpdate.Checked) and (Self.FPrepared)) then
   begin
+    Self.Activate;
+
     Self.UpdateForm;
 
     if vrJupiterApp.Params.Exists('Jupiter.Standard.Triggers.OnUpdate') then
@@ -420,6 +424,8 @@ procedure TFMain.FormActivate(Sender: TObject);
 begin
   inherited;
 
+  Self.FPrepared := True;
+
   FormResize(Sender);
 
   ApplicationProperties1Restore(Sender);
@@ -427,6 +433,8 @@ end;
 
 procedure TFMain.FormCreate(Sender: TObject);
 begin
+  Self.FPrepared := False;
+
   inherited;
 
   Self.FMenuRouteList := TJupiterMenuRouteList.Create;
@@ -499,6 +507,9 @@ begin
 
     if Sender is TJupiterFormTabSheet then
       vrJupiterApp.CurrentForm := TFJupiterForm(TJupiterFormTabSheet(Sender).Form);
+
+    if Assigned(vrJupiterApp.CurrentForm) then
+      vrJupiterApp.CurrentForm.Activate;
 
     if miClearSearch.Checked then
       edSearch.Text := EmptyStr
@@ -1319,6 +1330,17 @@ begin
   Result := inherited Internal_ListAllShortcuts;
 
   Result := Result + Internal_ListShortcuts(acShortcuts);
+end;
+
+procedure TFMain.Internal_Activate;
+begin
+  inherited Internal_Activate;
+
+  if not Self.FPrepared then
+    Exit;
+
+  if Assigned(vrJupiterApp.CurrentForm) then
+    vrJupiterApp.CurrentForm.Activate;
 end;
 
 end.
