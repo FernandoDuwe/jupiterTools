@@ -1,0 +1,8 @@
+inherited FCurrentTaskPlugin: TFCurrentTaskPlugin
+  Left = 521
+  Top = 121
+  Caption = 'Tarefa atual'
+  OnCreate = FormCreate
+  OnHide = FormHide
+  OnShow = FormShow
+end

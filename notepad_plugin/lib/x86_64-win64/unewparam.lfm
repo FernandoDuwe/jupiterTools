@@ -1,0 +1,87 @@
+inherited FNewParam: TFNewParam
+  Height = 388
+  Width = 794
+  ClientHeight = 388
+  ClientWidth = 794
+  OnCreate = FormCreate
+  inherited sbActions: TScrollBox
+    Width = 794
+  end
+  inherited sbStatus: TStatusBar
+    Top = 365
+    Width = 794
+  end
+  inherited pnHint: TPanel
+    Top = 315
+    Width = 794
+    ClientWidth = 794
+  end
+  inherited sbBody: TScrollBox
+    Height = 255
+    Width = 794
+    HorzScrollBar.Page = 80
+    VertScrollBar.Page = 199
+    ClientHeight = 251
+    ClientWidth = 790
+    object edDescription: TEdit[0]
+      Left = 8
+      Height = 23
+      Top = 176
+      Width = 769
+      Anchors = [akTop, akLeft, akRight]
+      OnKeyPress = FormKeyPress
+      OnKeyUp = FormKeyUp
+      OnUTF8KeyPress = FormUTF8KeyPress
+      TabOrder = 2
+    end
+    object Label4: TLabel[1]
+      Left = 8
+      Height = 15
+      Top = 152
+      Width = 51
+      Caption = 'Descrição'
+      ParentColor = False
+      ParentFont = False
+    end
+    object edValue: TEdit[2]
+      Left = 8
+      Height = 23
+      Top = 104
+      Width = 769
+      Anchors = [akTop, akLeft, akRight]
+      OnKeyPress = FormKeyPress
+      OnKeyUp = FormKeyUp
+      OnUTF8KeyPress = FormUTF8KeyPress
+      TabOrder = 1
+    end
+    object Label3: TLabel[3]
+      Left = 8
+      Height = 15
+      Top = 80
+      Width = 26
+      Caption = 'Valor'
+      ParentColor = False
+      ParentFont = False
+    end
+    object edID: TEdit[4]
+      Left = 8
+      Height = 23
+      Top = 34
+      Width = 769
+      Anchors = [akTop, akLeft, akRight]
+      OnKeyPress = FormKeyPress
+      OnKeyUp = FormKeyUp
+      OnUTF8KeyPress = FormUTF8KeyPress
+      TabOrder = 0
+    end
+    object Label2: TLabel[5]
+      Left = 8
+      Height = 15
+      Top = 10
+      Width = 11
+      Caption = 'ID'
+      ParentColor = False
+      ParentFont = False
+    end
+  end
+end

@@ -64,9 +64,12 @@ procedure TFCustomJupiterForm.Internal_PrepareForm;
 begin
   inherited Internal_PrepareForm;
 
-  Self.FormGenerator.ActionsInForm := TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).ShowActionsInForm;
+  if Assigned(vrJupiterApp) then
+  begin
+    Self.FormGenerator.ActionsInForm := TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).ShowActionsInForm;
 
-  sbActions.Visible := not TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).ShowActionsInForm;
+    sbActions.Visible := not TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).ShowActionsInForm;
+  end;
 end;
 
 procedure TFCustomJupiterForm.Internal_SaveGeneratorClick(Sender: TObject);
@@ -90,8 +93,9 @@ begin
   try
     Self.FFormGenerator.Variables.CopyFromVariableList(Self.Generator.Fields);
 
-    if (((TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).ShowActionsInForm) and (Params.Exists(FIELD_ID_GENERADOR))) and (not Self.DontShowActionInForm)) then
-       Self.FormGenerator.ActionList := Self.Actions;
+    if Assigned(vrJupiterApp) then
+      if (((TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).ShowActionsInForm) and (Params.Exists(FIELD_ID_GENERADOR))) and (not Self.DontShowActionInForm)) then
+         Self.FormGenerator.ActionList := Self.Actions;
 
     if Self.Params.Exists('ShowActionsInForm') then
     begin

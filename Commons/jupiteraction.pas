@@ -136,10 +136,12 @@ begin
   Result.ShowHint   := Trim(prAction.Hint) <> EmptyStr;
   Result.ImageIndex := prAction.Icon;
   Result.Left       := prLeft;
-  Result.Font.Size  := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+
+  if Assigned(vrJupiterApp) then
+    Result.Font.Size  := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
 
   {$IFNDEF JUPITERCLI}
-  if Result.ImageIndex <> - 1 then
+  if ((Assigned(vrJupiterApp)) and (Result.ImageIndex <> - 1)) then
     Result.Images := vrJupiterApp.MainIcons;
   {$ENDIF}
 

@@ -9,9 +9,9 @@ uses
   StdCtrls, Menus, PopupNotifier, Buttons, JupiterApp, JupiterRoute,
   JupiterConsts, JupiterObject, JupiterForm, JupiterAction, JupiterEnviroment,
   JupiterRunnable, jupiterformutils, JupiterFileDataProvider, jupiterScript,
-  JupiterDirectoryDataProvider, JupiterToolsModule, jupiterdatabase,
-  JupiterFormTab, SQLDB, uPSComponent_Default, LMessages, PairSplitter,
-  ActnList, ButtonPanel, EditBtn;
+  JupiterDirectoryDataProvider, JupiterVariable, JupiterToolsModule,
+  jupiterdatabase, JupiterFormTab, SQLDB, uPSComponent_Default, LMessages,
+  PairSplitter, ActnList, ButtonPanel, EditBtn;
 
 type
 
@@ -34,7 +34,8 @@ type
     ilIconFamily: TImageList;
     ilTabs: TImageList;
     JupiterFormTab1: TJupiterFormTab;
-    MenuItem1: TMenuItem;
+    miNotepadPlugin: TMenuItem;
+    Separator8: TMenuItem;
     MenuItem10: TMenuItem;
     MenuItem11: TMenuItem;
     MenuItem12: TMenuItem;
@@ -48,6 +49,7 @@ type
     MenuItem20: TMenuItem;
     MenuItem21: TMenuItem;
     miEditorSQL: TMenuItem;
+    miShortcut: TMenuItem;
     pnBody: TPanel;
     ppTabsMenu: TPopupMenu;
     Separator7: TMenuItem;
@@ -144,6 +146,7 @@ type
     procedure MenuItem8Click(Sender: TObject);
     procedure MenuItem9Click(Sender: TObject);
     procedure miEditorSQLClick(Sender: TObject);
+    procedure miNotepadPluginClick(Sender: TObject);
     procedure miSearchModeClick(Sender: TObject);
     procedure miAutoUpdateClick(Sender: TObject);
     procedure miClearSearchClick(Sender: TObject);
@@ -718,6 +721,41 @@ begin
   vrJupiterApp.NavigateTo(vrRoute, False);
 end;
 
+procedure TFMain.miNotepadPluginClick(Sender: TObject);
+var
+  vrEnviroment  : TJupiterEnviroment;
+  vrNotepadPath : String;
+  vrVariable    : TJupiterVariableList;
+begin
+  vrEnviroment := TJupiterEnviroment.Create;
+  vrVariable   := TJupiterVariableList.Create;
+  try
+    vrNotepadPath := 'C:\Program Files\Notepad++\';
+
+    if not vrEnviroment.Exists(vrNotepadPath) then
+      vrNotepadPath := 'C:\Program Files (x86)\Notepad++\';
+
+    if not vrEnviroment.Exists(vrNotepadPath) then
+      raise Exception.Create('Diretório de instalação do Notepad++ não encontrado. Não é possível continuar.');
+
+    if not vrEnviroment.Exists(vrNotepadPath + 'plugins\jupiter_notepad_plugin\') then
+      CreateDir(vrNotepadPath + 'plugins\jupiter_notepad_plugin\');
+
+    vrEnviroment.CopyFileTo(vrEnviroment.FullPath('/jupiter_notepad_plugin.dll'), vrNotepadPath + 'plugins\jupiter_notepad_plugin\jupiter_notepad_plugin.dll');
+
+    if not vrEnviroment.Exists(vrNotepadPath + 'plugins\jupiter_notepad_plugin\jupiter_notepad_plugin.csv') then
+      vrEnviroment.CreateExternalFile(vrNotepadPath + 'plugins\jupiter_notepad_plugin\jupiter_notepad_plugin.csv', 'ID;DESCRIPTION;VALUE;');
+
+    vrVariable.FileName := vrNotepadPath + 'plugins\jupiter_notepad_plugin\jupiter_notepad_plugin.csv';
+    vrVariable.AddConfig('Jupiter.Home', vrEnviroment.BasePath, 'Jupiter home path');
+
+    Application.MessageBox('Instalação concluída com sucesso', 'Plugin Jupiter Notepad++', MB_ICONINFORMATION + MB_OK);
+  finally
+    FreeAndNil(vrEnviroment);
+    FreeAndNil(vrVariable);
+  end;
+end;
+
 procedure TFMain.miSearchModeClick(Sender: TObject);
 begin
   try
@@ -1180,63 +1218,72 @@ begin
 end;
 
 procedure TFMain.Internal_UpdateComponents;
+var
+  vrEnviroment : TJupiterEnviroment;
 begin
   inherited Internal_UpdateComponents;
 
-  if Assigned(vrJupiterApp.CurrentForm) then
-    vrJupiterApp.CurrentForm.UpdateForm;
+  vrEnviroment := TJupiterEnviroment.Create;
+  try
+    if Assigned(vrJupiterApp.CurrentForm) then
+      vrJupiterApp.CurrentForm.UpdateForm;
 
-  if pnMenu.Visible then
-  begin
-    tbMenu.ImageIndex := ICON_LEFT;
-
-    tbMenu.Hint := 'Esconder menu (Ctrl + L)';
-
-    Self.Internal_ListMenuItens();
-  end
-  else
-  begin
-    tbMenu.ImageIndex := ICON_RIGHT;
-
-    tbMenu.Hint := 'Exibir menu (Ctrl + L)';
-  end;
-
-  edSearch.TextHint := IfThen(Self.FSearchMode = jsmActions, 'Pesquisar no menu', 'Pesquisar');
-  miSearchMode.Caption := IfThen(Self.FSearchMode = jsmActions, 'Pesquisa: Menu (Ctrl + S)', 'Pesquisa: Formularios (Ctrl + S)');
-
-  miMaximizedForms.Checked := vrJupiterApp.Params.Exists('Interface.Form.ModalShowMaximized');
-
-  with TJupiterToolsModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Tools')) do
-  begin
-    if ((Params.Exists(DefineParamName('Tasks.Current.Path'))) and
-        (Params.VariableById(DefineParamName('Tasks.Current.Path')).Value <> EmptyStr)) then
+    if pnMenu.Visible then
     begin
-      miOpenCurrentTask.Enabled      := True;
-      miCurrentTaskStartTime.Enabled := not StartedTime;
-      miCurrentTaskEndTime.Enabled   := StartedTime;
+      tbMenu.ImageIndex := ICON_LEFT;
+
+      tbMenu.Hint := 'Esconder menu (Ctrl + L)';
+
+      Self.Internal_ListMenuItens();
     end
     else
     begin
-      miOpenCurrentTask.Enabled      := False;
-      miCurrentTaskStartTime.Enabled := False;
-      miCurrentTaskEndTime.Enabled   := False;
+      tbMenu.ImageIndex := ICON_RIGHT;
+
+      tbMenu.Hint := 'Exibir menu (Ctrl + L)';
     end;
+
+    edSearch.TextHint := IfThen(Self.FSearchMode = jsmActions, 'Pesquisar no menu', 'Pesquisar');
+    miSearchMode.Caption := IfThen(Self.FSearchMode = jsmActions, 'Pesquisa: Menu (Ctrl + S)', 'Pesquisa: Formularios (Ctrl + S)');
+
+    miMaximizedForms.Checked := vrJupiterApp.Params.Exists('Interface.Form.ModalShowMaximized');
+
+    with TJupiterToolsModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Tools')) do
+    begin
+      if ((Params.Exists(DefineParamName('Tasks.Current.Path'))) and
+          (Params.VariableById(DefineParamName('Tasks.Current.Path')).Value <> EmptyStr)) then
+      begin
+        miOpenCurrentTask.Enabled      := True;
+        miCurrentTaskStartTime.Enabled := not StartedTime;
+        miCurrentTaskEndTime.Enabled   := StartedTime;
+      end
+      else
+      begin
+        miOpenCurrentTask.Enabled      := False;
+        miCurrentTaskStartTime.Enabled := False;
+        miCurrentTaskEndTime.Enabled   := False;
+      end;
+    end;
+
+    FormResize(Self);
+
+    tvMenu.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
+
+    miEditorSQL.Enabled := TJupiterDatabaseModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Database')).IsActive;
+    JupiterFormTab1.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
+
+    edSearch.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
+    cbNavigation.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
+
+    if Assigned(vrJupiterApp.CurrentForm) then
+      Self.Internal_CurrentFormTitleSetValue('', vrJupiterApp.CurrentForm.Caption);
+
+    cbNavigation.Enabled := JupiterFormTab1.Visible;
+
+    miNotepadPlugin.Enabled := vrEnviroment.Exists(vrEnviroment.FullPath('jupiter_notepad_plugin.dll'));
+  finally
+    FreeAndNil(vrEnviroment);
   end;
-
-  FormResize(Self);
-
-  tvMenu.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
-
-  miEditorSQL.Enabled := TJupiterDatabaseModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Database')).IsActive;
-  JupiterFormTab1.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
-
-  edSearch.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
-  cbNavigation.Font.Size := StrToInt(vrJupiterApp.Params.VariableById('Interface.Font.Size').Value);
-
-  if Assigned(vrJupiterApp.CurrentForm) then
-    Self.Internal_CurrentFormTitleSetValue('', vrJupiterApp.CurrentForm.Caption);
-
-  cbNavigation.Enabled := JupiterFormTab1.Visible;
 end;
 
 procedure TFMain.Internal_PrepareForm;

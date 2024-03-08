@@ -1,7 +1,0 @@
-inherited HelloWorldDockingForm: THelloWorldDockingForm
-  Caption = 'HelloWorldDockingForm'
-  OnCreate = FormCreate
-  OnHide = FormHide
-  OnKeyPress = FormKeyPress
-  OnShow = FormShow
-end

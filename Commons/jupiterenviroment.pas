@@ -21,6 +21,7 @@ type
   public
     function CreatePath(prPath : String) : String;
     function CreateFile(prPath, prContent : String) : String;
+    function CreateExternalFile(prPath, prContent : String) : String;
     function FullPath(prPath : String) : String;
     function IconOfFile(prFileName : String) : Integer;
     function Exists(prPath : String) : Boolean;
@@ -89,6 +90,29 @@ var
   vrStr : TStrings;
 begin
   Result := Self.FullPath(prPath);
+
+  if FileExists(Result) then
+    Exit;
+
+  vrStr := TStringList.Create;
+  try
+    vrStr.Clear;
+    vrStr.Add(prContent);
+    vrStr.SaveToFile(Result);
+
+    vrJupiterApp.AddMessage('Arquivo criado', Self.ClassName).Details.Add('Arquivo: ' + Result);
+  finally
+    vrStr.Clear;
+    FreeAndNil(vrStr);
+  end;
+end;
+
+function TJupiterEnviroment.CreateExternalFile(prPath, prContent: String
+  ): String;
+var
+  vrStr : TStrings;
+begin
+  Result := prPath;
 
   if FileExists(Result) then
     Exit;

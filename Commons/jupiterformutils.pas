@@ -162,6 +162,9 @@ procedure DrawForm(prComponent: TComponent);
 var
   vrVez : Integer;
 begin
+  if not Assigned(vrJupiterApp) then
+    Exit;
+
   for vrVez := 0 to prComponent.ComponentCount - 1 do
   begin
     if prComponent.Components[vrVez] is TLabel then

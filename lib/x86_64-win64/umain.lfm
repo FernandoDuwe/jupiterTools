@@ -1009,6 +1009,13 @@ inherited FMain: TFMain
         ImageIndex = 14
         OnClick = ToolButton2Click
       end
+      object Separator8: TMenuItem
+        Caption = '-'
+      end
+      object miNotepadPlugin: TMenuItem
+        Caption = 'Instalar Plugin Notepad++'
+        OnClick = miNotepadPluginClick
+      end
       object Separator3: TMenuItem
         Caption = '-'
       end

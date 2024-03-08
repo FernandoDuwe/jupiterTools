@@ -213,7 +213,9 @@ begin
   Self.FSaveGeneratorAction := TJupiterAction.Create('Salvar', @Internal_SaveGeneratorClick);
 
   Self.FActions.PopupMenu   := ppMenu;
-  Self.FActions.CompactMode := TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).CompactMode;
+
+  if Assigned(vrJupiterApp) then
+    Self.FActions.CompactMode := TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).CompactMode;
 
   Self.IsModal  := False;
 end;
@@ -293,7 +295,7 @@ begin
 
     if ((Self.IsModal) and (not Self.SpecialSize)) then
     begin
-      if vrJupiterApp.Params.Exists('Interface.Form.ModalShowMaximized') then
+      if Assigned(vrJupiterApp) and vrJupiterApp.Params.Exists('Interface.Form.ModalShowMaximized') then
         Self.WindowState := wsMaximized
       else
       begin
@@ -469,7 +471,7 @@ begin
   end;
 
   if not Self.IsModal then
-    if vrJupiterApp.Params.Exists('Interface.CurrentForm.Title') then
+    if Assigned(vrJupiterApp) and vrJupiterApp.Params.Exists('Interface.CurrentForm.Title') then
       if ((Trim(Self.Caption) <> EmptyStr) and (Self.Caption <> vrJupiterApp.Params.VariableById('Interface.CurrentForm.Title').Value)) then
         vrJupiterApp.Params.VariableById('Interface.CurrentForm.Title').Value := Self.Caption;
 end;
@@ -574,7 +576,10 @@ begin
       Self.Caption := Self.Params.VariableById('title').Value;
   finally
     {$IFNDEF JUPITERCLI}
-    ppMenu.Images := vrJupiterApp.MainIcons;
+
+    if Assigned(vrJupiterApp) then
+      ppMenu.Images := vrJupiterApp.MainIcons;
+
     {$ENDIF}
 
     Self.Actions.BuildActions(sbActions);

@@ -219,6 +219,14 @@ begin
 
   vrEnviroment := TJupiterEnviroment.Create;
   try
+    if FileExists(prFileName) then
+    begin
+      Self.Internal_GetFileVariables(prFileName);
+      Exit;
+    end;
+
+    Self.FFileName := vrEnviroment.FullPath(prFileName);
+
     if FileExists(vrEnviroment.FullPath(prFileName)) then
       Self.Internal_GetFileVariables(vrEnviroment.FullPath(prFileName));
   finally
@@ -511,7 +519,7 @@ begin
       vrStr.Add(vrStrLine);
     end;
 
-    vrStr.SaveToFile(vrEnviroment.FullPath(Self.FileName));
+    vrStr.SaveToFile(Self.FileName);
   finally
     vrStr.Clear;
     FreeAndNil(vrStr);
