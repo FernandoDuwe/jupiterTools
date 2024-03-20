@@ -35,6 +35,7 @@
           </CodeGeneration>
           <Linking>
             <Debugging>
+              <GenerateDebugInfo Value="False"/>
               <DebugInfoType Value="dsDwarf3"/>
               <UseHeaptrc Value="True"/>
               <TrashVariables Value="True"/>
@@ -96,15 +97,17 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="10" Y="7"/>
-        <UsageCount Value="26"/>
+        <UsageCount Value="31"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit>
       <Unit>
         <Filename Value="lib\nppplugin.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="443"/>
-        <CursorPos X="5" Y="457"/>
-        <UsageCount Value="26"/>
+        <TopLine Value="633"/>
+        <CursorPos X="5" Y="674"/>
+        <UsageCount Value="31"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit>
       <Unit>
         <Filename Value="lib\SciSupport.pas"/>
@@ -112,7 +115,8 @@
         <UnitName Value="scisupport"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="10" Y="8"/>
-        <UsageCount Value="26"/>
+        <UsageCount Value="31"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit>
       <Unit>
         <Filename Value="lib\NppForms.pas"/>
@@ -122,7 +126,8 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="11" Y="31"/>
-        <UsageCount Value="26"/>
+        <UsageCount Value="31"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit>
       <Unit>
         <Filename Value="lib\NppDockingForms.pas"/>
@@ -131,19 +136,17 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
-        <CursorPos X="18" Y="30"/>
-        <UsageCount Value="26"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
+        <TopLine Value="150"/>
+        <CursorPos X="28" Y="154"/>
+        <UsageCount Value="31"/>
       </Unit>
       <Unit>
         <Filename Value="commons\jupiter_plugin.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="2"/>
-        <TopLine Value="32"/>
-        <CursorPos X="38" Y="56"/>
-        <UsageCount Value="26"/>
-        <Loaded Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="77"/>
+        <CursorPos X="26" Y="86"/>
+        <UsageCount Value="31"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit>
       <Unit>
@@ -151,22 +154,27 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterVariable"/>
         <EditorIndex Value="-1"/>
-        <CursorPos X="23" Y="12"/>
-        <UsageCount Value="24"/>
+        <TopLine Value="490"/>
+        <CursorPos X="19" Y="509"/>
+        <UsageCount Value="29"/>
       </Unit>
       <Unit>
         <Filename Value="..\Commons\jupiterobject.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterObject"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="24"/>
+        <UsageCount Value="29"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit>
       <Unit>
         <Filename Value="..\Commons\jupiterconsts.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterConsts"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="24"/>
+        <TopLine Value="97"/>
+        <CursorPos X="4" Y="117"/>
+        <UsageCount Value="29"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit>
       <Unit>
         <Filename Value="..\Commons\jupiterdialogform.pas"/>
@@ -175,7 +183,8 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="59"/>
         <CursorPos Y="63"/>
-        <UsageCount Value="24"/>
+        <UsageCount Value="29"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit>
       <Unit>
         <Filename Value="..\Commons\jupiterapp.pas"/>
@@ -183,7 +192,8 @@
         <UnitName Value="JupiterApp"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="15" Y="12"/>
-        <UsageCount Value="24"/>
+        <UsageCount Value="29"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit>
       <Unit>
         <Filename Value="..\Modules\jupiterstandardmodule.pas"/>
@@ -191,7 +201,8 @@
         <UnitName Value="JupiterStandardModule"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="44" Y="9"/>
-        <UsageCount Value="24"/>
+        <UsageCount Value="29"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit>
       <Unit>
         <Filename Value="..\forms\ucustomjupiterform.pas"/>
@@ -202,14 +213,20 @@
         <UnitName Value="uCustomJupiterForm"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="46"/>
-        <UsageCount Value="24"/>
+        <UsageCount Value="29"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit>
       <Unit>
         <Filename Value="..\data\udm.pas"/>
         <IsPartOfProject Value="True"/>
+        <ComponentName Value="DMMain"/>
         <HasResources Value="True"/>
-        <EditorIndex Value="-1"/>
-        <UsageCount Value="24"/>
+        <ResourceBaseClass Value="DataModule"/>
+        <EditorIndex Value="2"/>
+        <CursorPos X="29" Y="22"/>
+        <UsageCount Value="29"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="forms\upluginconfig.pas"/>
@@ -218,11 +235,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uPluginConfig"/>
-        <EditorIndex Value="1"/>
-        <CursorPos X="57" Y="12"/>
-        <UsageCount Value="22"/>
-        <Loaded Value="True"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="19"/>
+        <CursorPos Y="52"/>
+        <UsageCount Value="27"/>
       </Unit>
       <Unit>
         <Filename Value="forms\ucurrenttaskplugin.pas"/>
@@ -231,9 +247,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="ucurrentTaskPlugin"/>
-        <TopLine Value="44"/>
-        <CursorPos X="54" Y="68"/>
-        <UsageCount Value="22"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="89"/>
+        <CursorPos X="26" Y="94"/>
+        <UsageCount Value="27"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -253,6 +270,7 @@
         <EditorIndex Value="-1"/>
         <CursorPos X="20" Y="2"/>
         <UsageCount Value="11"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit>
       <Unit>
         <Filename Value="..\Commons\jupiterform.pas"/>
@@ -264,6 +282,7 @@
         <TopLine Value="86"/>
         <CursorPos X="14" Y="86"/>
         <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit>
       <Unit>
         <Filename Value="..\Commons\jupiterscript.pas"/>
@@ -271,12 +290,14 @@
         <EditorIndex Value="-1"/>
         <CursorPos X="37" Y="11"/>
         <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit>
       <Unit>
         <Filename Value="..\Modules\jupiterdatabase.pas"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="64" Y="9"/>
         <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit>
       <Unit>
         <Filename Value="..\forms\unewaction.pas"/>
@@ -284,21 +305,23 @@
         <EditorIndex Value="-1"/>
         <CursorPos X="144" Y="7"/>
         <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit>
       <Unit>
         <Filename Value="..\Commons\jupiterformutils.pas"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="194"/>
-        <CursorPos X="34" Y="224"/>
+        <CursorPos X="22"/>
         <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit>
       <Unit>
         <Filename Value="..\Commons\jupiteraction.pas"/>
         <UnitName Value="JupiterAction"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="118"/>
-        <CursorPos X="33" Y="125"/>
+        <TopLine Value="139"/>
+        <CursorPos X="27" Y="159"/>
         <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit>
       <Unit>
         <Filename Value="..\forms\uconfig.pas"/>
@@ -307,7 +330,7 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uConfig"/>
         <EditorIndex Value="-1"/>
-        <CursorPos X="34" Y="38"/>
+        <CursorPos X="145" Y="27"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit>
@@ -324,7 +347,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
-        <CursorPos X="44" Y="17"/>
+        <CursorPos X="12"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit>
@@ -341,15 +364,24 @@
       </Unit>
       <Unit>
         <Filename Value="..\forms\ucurrenttask.pas"/>
+        <ComponentName Value="FCurrentTask"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
         <UnitName Value="uCurrentTask"/>
-        <EditorIndex Value="-1"/>
-        <CursorPos X="3" Y="18"/>
-        <UsageCount Value="10"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="59"/>
+        <CursorPos X="39" Y="80"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="C:\Users\duwe\Downloads\lazarus-notepad-plus-plus-hello-world-plugin-master\helloworlddockingforms.pas"/>
+        <ComponentName Value="HelloWorldDockingForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
+        <CursorPos X="23" Y="22"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit>
@@ -377,43 +409,150 @@
         <CursorPos X="3" Y="775"/>
         <UsageCount Value="10"/>
       </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\lcl\controls.pp"/>
+        <UnitName Value="Controls"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="16"/>
+        <CursorPos X="14" Y="19"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\inc\objpash.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="180"/>
+        <CursorPos X="8" Y="201"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\win\wininc\unifun.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="163"/>
+        <CursorPos X="42" Y="183"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterrunnable.pas"/>
+        <UnitName Value="JupiterRunnable"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="21"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\forms\umain.pas"/>
+        <ComponentName Value="FMain"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uMain"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="28" Y="19"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterenviroment.pas"/>
+        <UnitName Value="JupiterEnviroment"/>
+        <EditorIndex Value="3"/>
+        <CursorPos X="23"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit>
     </Units>
-    <JumpHistory HistoryIndex="8">
+    <JumpHistory HistoryIndex="23">
       <Position>
-        <Filename Value="forms\ucurrenttaskplugin.pas"/>
-        <Caret Line="17" Column="15"/>
+        <Filename Value="..\forms\ucurrenttask.pas"/>
+        <Caret Line="27" Column="166"/>
+      </Position>
+      <Position>
+        <Filename Value="..\forms\ucurrenttask.pas"/>
+      </Position>
+      <Position>
+        <Filename Value="..\forms\ucurrenttask.pas"/>
+        <Caret Line="29" Column="15"/>
+      </Position>
+      <Position>
+        <Filename Value="..\forms\ucurrenttask.pas"/>
+        <Caret Line="67" Column="36" TopLine="39"/>
       </Position>
       <Position>
         <Filename Value="forms\ucurrenttaskplugin.pas"/>
-        <Caret Line="14" Column="90"/>
+        <Caret Line="44" Column="30" TopLine="30"/>
+      </Position>
+      <Position>
+        <Filename Value="..\forms\ucurrenttask.pas"/>
+        <Caret Line="112" TopLine="105"/>
+      </Position>
+      <Position>
+        <Filename Value="..\forms\ucurrenttask.pas"/>
+      </Position>
+      <Position>
+        <Filename Value="..\forms\ucurrenttask.pas"/>
+        <Caret Line="38" Column="38" TopLine="4"/>
+      </Position>
+      <Position>
+        <Filename Value="..\forms\ucurrenttask.pas"/>
+        <Caret Line="151" Column="3" TopLine="145"/>
+      </Position>
+      <Position>
+        <Filename Value="..\forms\ucurrenttask.pas"/>
+        <Caret Line="37" Column="15" TopLine="17"/>
+      </Position>
+      <Position>
+        <Filename Value="..\forms\ucurrenttask.pas"/>
+        <Caret Line="118" Column="3" TopLine="111"/>
       </Position>
       <Position>
         <Filename Value="forms\ucurrenttaskplugin.pas"/>
-        <Caret Line="18" Column="41" TopLine="3"/>
+        <Caret Line="112" TopLine="78"/>
       </Position>
       <Position>
         <Filename Value="forms\ucurrenttaskplugin.pas"/>
-        <Caret Line="54" Column="70" TopLine="17"/>
+        <Caret Line="45" Column="5" TopLine="24"/>
+      </Position>
+      <Position>
+        <Filename Value="..\forms\ucurrenttask.pas"/>
+        <Caret Line="37" Column="80" TopLine="16"/>
+      </Position>
+      <Position>
+        <Filename Value="..\forms\ucurrenttask.pas"/>
+        <Caret Line="142" Column="7" TopLine="111"/>
+      </Position>
+      <Position>
+        <Filename Value="..\forms\ucurrenttask.pas"/>
+        <Caret Line="38" Column="15" TopLine="16"/>
       </Position>
       <Position>
         <Filename Value="forms\ucurrenttaskplugin.pas"/>
-        <Caret Line="18" Column="42" TopLine="5"/>
+        <Caret Line="189" Column="7" TopLine="149"/>
       </Position>
       <Position>
         <Filename Value="forms\ucurrenttaskplugin.pas"/>
-        <Caret Line="62" TopLine="23"/>
+        <Caret Line="57" Column="83" TopLine="42"/>
       </Position>
       <Position>
         <Filename Value="forms\ucurrenttaskplugin.pas"/>
-        <Caret Line="8" Column="94"/>
+        <Caret Line="142" Column="27" TopLine="119"/>
+      </Position>
+      <Position>
+        <Filename Value="..\forms\ucurrenttask.pas"/>
+        <Caret Line="210" Column="45" TopLine="178"/>
+      </Position>
+      <Position>
+        <Filename Value="..\forms\ucurrenttask.pas"/>
+        <Caret Line="42" Column="30" TopLine="20"/>
       </Position>
       <Position>
         <Filename Value="forms\ucurrenttaskplugin.pas"/>
-        <Caret Line="37" Column="38" TopLine="10"/>
+        <Caret Line="66" Column="27" TopLine="43"/>
       </Position>
       <Position>
-        <Filename Value="commons\jupiter_plugin.pas"/>
-        <Caret Line="16" Column="31" TopLine="9"/>
+        <Filename Value="..\forms\ucurrenttask.pas"/>
+        <Caret Line="253" Column="5" TopLine="240"/>
+      </Position>
+      <Position>
+        <Filename Value="forms\ucurrenttaskplugin.pas"/>
+        <Caret Line="116" Column="54" TopLine="102"/>
       </Position>
     </JumpHistory>
     <RunParams>

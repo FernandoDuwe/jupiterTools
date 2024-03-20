@@ -664,8 +664,8 @@ begin
 
       vrRoute := TJupiterRoute.Create(SCRIPTEDITOR_FORM_PATH);
 
-      Route.Params.AddVariable('title', 'Arquivo: ' + ExtractFileName(vrFile), 'Título');
-      Route.Params.AddVariable('filename', vrFile, 'Arquivo');
+      vrRoute.Params.AddVariable('title', 'Arquivo: ' + ExtractFileName(vrFile), 'Título');
+      vrRoute.Params.AddVariable('filename', vrFile, 'Arquivo');
 
       vrJupiterApp.NavigateTo(vrRoute, False);
     end;

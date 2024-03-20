@@ -35,26 +35,36 @@ implementation
 { TJupiterDatabase }
 
 procedure TJupiterDatabaseModule.Internal_Prepare;
+var
+  vrEnviroment : TJupiterEnviroment;
 begin
   inherited Internal_Prepare;
 
-  if not Self.Params.Exists(Self.DefineParamName('Config.Driver')) then
-    Self.Params.AddConfig(Self.DefineParamName('Config.Driver'), EmptyStr, 'Driver utilizado');
+  vrEnviroment := TJupiterEnviroment.Create;
+  try
+    vrEnviroment.CreatePath('modules/database');
+    vrEnviroment.CreatePath('modules/database/data');
 
-  if not Self.Params.Exists(Self.DefineParamName('Config.Host')) then
-    Self.Params.AddConfig(Self.DefineParamName('Config.Host'), EmptyStr, 'Host/Servidor');
+    if not Self.Params.Exists(Self.DefineParamName('Config.Driver')) then
+      Self.Params.AddConfig(Self.DefineParamName('Config.Driver'), EmptyStr, 'Driver utilizado');
 
-  if not Self.Params.Exists(Self.DefineParamName('Config.Database')) then
-    Self.Params.AddConfig(Self.DefineParamName('Config.Database'), EmptyStr, 'Base de dados/Caminho');
+    if not Self.Params.Exists(Self.DefineParamName('Config.Host')) then
+      Self.Params.AddConfig(Self.DefineParamName('Config.Host'), EmptyStr, 'Host/Servidor');
 
-  if not Self.Params.Exists(Self.DefineParamName('Config.UserName')) then
-    Self.Params.AddConfig(Self.DefineParamName('Config.UserName'), EmptyStr, 'Usuário');
+    if not Self.Params.Exists(Self.DefineParamName('Config.Database')) then
+      Self.Params.AddConfig(Self.DefineParamName('Config.Database'), EmptyStr, 'Base de dados/Caminho');
 
-  if not Self.Params.Exists(Self.DefineParamName('Config.Password')) then
-    Self.Params.AddConfig(Self.DefineParamName('Config.Password'), EmptyStr, 'Senha');
+    if not Self.Params.Exists(Self.DefineParamName('Config.UserName')) then
+      Self.Params.AddConfig(Self.DefineParamName('Config.UserName'), EmptyStr, 'Usuário');
 
-  if not Self.Params.Exists(Self.DefineParamName('Config.Terminator')) then
-    Self.Params.AddConfig(Self.DefineParamName('Config.Terminator'), ';', 'Caracter identificador de fim de instrução');
+    if not Self.Params.Exists(Self.DefineParamName('Config.Password')) then
+      Self.Params.AddConfig(Self.DefineParamName('Config.Password'), EmptyStr, 'Senha');
+
+    if not Self.Params.Exists(Self.DefineParamName('Config.Terminator')) then
+      Self.Params.AddConfig(Self.DefineParamName('Config.Terminator'), ';', 'Caracter identificador de fim de instrução');
+  finally
+    FreeAndNil(vrEnviroment);
+  end;
 end;
 
 function TJupiterDatabaseModule.Internal_GetModuleID: String;

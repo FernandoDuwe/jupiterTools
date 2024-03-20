@@ -3,6 +3,7 @@ inherited FCurrentTask: TFCurrentTask
   Height = 678
   Top = 118
   Width = 968
+  ActiveControl = tvExplorer
   Caption = 'Tarefa atual'
   ClientHeight = 678
   ClientWidth = 968

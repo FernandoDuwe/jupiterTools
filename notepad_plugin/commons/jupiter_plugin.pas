@@ -32,6 +32,8 @@ var
 
 implementation
 
+uses Controls, Forms;
+
 procedure _OpenConfig; cdecl;
 begin
   Npp.OpenConfig;
@@ -49,11 +51,11 @@ begin
   FCurrentTaskPlugin := nil;
 
   Self.FVariables := TJupiterVariableList.Create;
-  Self.FVariables.FileName := './jupiter_notepad_plugin.csv';
+  Self.FVariables.FileName := './plugins/jupiter_notepad_plugin/jupiter_notepad_plugin.csv';
 
   Self.PluginName := 'Jupiter';
 
-  Self.AddFuncItem(AnsiToUtf8('Tarefa'), _OpenCurrentTask);
+  Self.AddFuncItem(AnsiToUtf8('Tarefa atual'), _OpenCurrentTask);
   Self.AddFuncItem(AnsiToUtf8('Config'), _OpenConfig);
 end;
 
@@ -70,18 +72,35 @@ var
 begin
   vrConfig := TFPluginConfig.Create(Self);
   try
+    if Self.FVariables.Exists('Jupiter.Home') then
+      vrConfig.edPath.Text := Self.FVariables.VariableById('Jupiter.Home').Value;
+
     vrConfig.ShowModal;
+
+    if vrConfig.OkClick then
+      Self.FVariables.AddConfig('Jupiter.Home', vrConfig.edPath.Text, 'Jupiter home path');
   finally
     vrConfig.Free;
   end;
 end;
 
 procedure TJupiterPlugin.OpenCurrentTask;
+var
+  vrVariable : TJupiterVariableList;
 begin
-  if (not Assigned(FCurrentTaskPlugin)) then
-     FCurrentTaskPlugin := TFCurrentTaskPlugin.Create(Self, 1);
+  vrVariable := TJupiterVariableList.Create;
+  try
+    vrVariable.FileName := Self.FVariables.VariableById('Jupiter.Home').Value + 'datasets\JupiterTools.csv';
 
-  FCurrentTaskPlugin.Show;
+    if (not Assigned(FCurrentTaskPlugin)) then
+      FCurrentTaskPlugin := TFCurrentTaskPlugin.Create(Self, 1);
+
+    FCurrentTaskPlugin.TaskPath := vrVariable.VariableById('Jupiter.Tools.Tasks.Current.Path').Value;
+
+    FCurrentTaskPlugin.Show;
+  finally
+    vrVariable.Free;
+  end;
 end;
 
 procedure TJupiterPlugin.DoNppnToolbarModification;

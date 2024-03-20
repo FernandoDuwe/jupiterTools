@@ -52,7 +52,7 @@ begin
     vrStr.Clear;
     vrStr.Add('NAME;FILE;');
 
-    vrEnviroment.CreateFile('datasets/JupiterExternalVariables.csv', vrStr.Text);
+    vrEnviroment.CreateFile('modules/generator/data/JupiterExternalVariables.csv', vrStr.Text);
   finally
     FreeAndNil(vrStr);
     FreeAndNil(vrEnviroment);
@@ -91,13 +91,13 @@ begin
   vrEnviroment := TJupiterEnviroment.Create;
   vrCSV        := TJupiterCSVDataProvider.Create;
   try
-    if not vrEnviroment.Exists(vrEnviroment.FullPath('datasets/JupiterExternalVariables.csv')) then
+    if not vrEnviroment.Exists(vrEnviroment.FullPath('modules/generator/data/JupiterExternalVariables.csv')) then
     begin
       Self.Internal_SaveFile();
       Exit;
     end;
 
-    vrCSV.Filename := vrEnviroment.FullPath('datasets/JupiterExternalVariables.csv');
+    vrCSV.Filename := vrEnviroment.FullPath('modules/generator/data/JupiterExternalVariables.csv');
     vrCSV.ProvideData;
 
     for vrVez := 0 to vrCSV.Count - 1 do

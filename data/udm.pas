@@ -5,8 +5,8 @@ unit udm;
 interface
 
 uses
-  Classes, SysUtils, JupiterApp, JupiterSystemMessage, SQLDB, odbcconn,
-  IBConnection, oracleconnection;
+  Classes, SysUtils, JupiterApp, JupiterSystemMessage, JupiterEnviroment, SQLDB,
+  odbcconn, IBConnection, oracleconnection;
 
 type
 
@@ -37,6 +37,7 @@ uses jupiterdatabase;
 procedure TDMMain.DataModuleCreate(Sender: TObject);
 var
   vrSystemMesssage : TJupiterSystemMessage;
+  vrEnviroment     : TJupiterEnviroment;
 begin
   if not TJupiterDatabaseModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Database')).HasConfig then
   begin
@@ -46,21 +47,32 @@ begin
     Exit;
   end;
 
-  sqlConnector.Connected     := False;
-  sqlConnector.ConnectorType := TJupiterDatabaseModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Database')).GetDriverType;
-  sqlConnector.HostName      := TJupiterDatabaseModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Database')).GetHost;
-  sqlConnector.DatabaseName  := TJupiterDatabaseModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Database')).GetDatabase;
-  sqlConnector.UserName      := TJupiterDatabaseModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Database')).GetUserName;
-  sqlConnector.Password      := TJupiterDatabaseModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Database')).GetPassword;
-
+  vrEnviroment := TJupiterEnviroment.Create;
   try
-    sqlConnector.Connected := True;
-    sqlTransaction.Active := True;
+    if vrEnviroment.Exists('/modules/database/data/params.txt') then
+    begin
+      sqlConnector.Params.Clear;
+      sqlConnector.Params.LoadFromFile(vrEnviroment.FullPath('/modules/database/data/params.txt'));
+    end;
 
-    vrSystemMesssage := vrJupiterApp.AddMessage('Conexão bem sucedida', Self.ClassName);
-  except
-    vrSystemMesssage := vrJupiterApp.AddMessage('Erro ao conectar a base de dados', Self.ClassName);
-    vrSystemMesssage.Details.Add(Exception(ExceptObject).Message);
+    sqlConnector.Connected     := False;
+    sqlConnector.ConnectorType := TJupiterDatabaseModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Database')).GetDriverType;
+    sqlConnector.HostName      := TJupiterDatabaseModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Database')).GetHost;
+    sqlConnector.DatabaseName  := TJupiterDatabaseModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Database')).GetDatabase;
+    sqlConnector.UserName      := TJupiterDatabaseModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Database')).GetUserName;
+    sqlConnector.Password      := TJupiterDatabaseModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Database')).GetPassword;
+
+    try
+      sqlConnector.Connected := True;
+      sqlTransaction.Active := True;
+
+      vrSystemMesssage := vrJupiterApp.AddMessage('Conexão bem sucedida', Self.ClassName);
+    except
+      vrSystemMesssage := vrJupiterApp.AddMessage('Erro ao conectar a base de dados', Self.ClassName);
+      vrSystemMesssage.Details.Add(Exception(ExceptObject).Message);
+    end;
+  finally
+    FreeAndNil(vrEnviroment);
   end;
 end;
 

@@ -955,9 +955,9 @@ begin
       with vrFileMenu.GetRowByIndex(vrVez) do
         lbMenuList.Items.Add(Fields.VariableById('FieldName').Value);
 
-    if vrEnviroment.Exists('datasets/JupiterExternalVariables.csv') then
+    if vrEnviroment.Exists('modules/generator/data/JupiterExternalVariables.csv') then
     begin
-      vrDatasets.Filename := vrEnviroment.FullPath('datasets/JupiterExternalVariables.csv');
+      vrDatasets.Filename := vrEnviroment.FullPath('modules/generator/data/JupiterExternalVariables.csv');
       vrDatasets.ProvideData;
 
       for vrVez := 0 to vrDatasets.Count - 1 do

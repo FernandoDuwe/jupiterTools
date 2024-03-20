@@ -100,7 +100,7 @@ type
 implementation
 
 uses
-  JupiterEnviroment;
+  JupiterApp, JupiterEnviroment;
 
 { TJupiterMenuRouteList }
 
@@ -199,7 +199,7 @@ begin
     if ((not Assigned(vrRoute)) or (not Assigned(vrRoute.MenuItem))) then
     begin
       vrMenuItem := TMenuItem.Create(Self.MainMenu);
-      vrMenuItem.Caption := Self.MenuRouteAtIndex(vrVez).Params.VariableById('title').Value;
+      vrMenuItem.Caption := vrJupiterApp.Params.ResolveString(Self.MenuRouteAtIndex(vrVez).Params.VariableById('title').Value);
       vrMenuItem.ImageIndex := StrToIntDef(Self.MenuRouteAtIndex(vrVez).Params.VariableById('icon').Value, -1);
       vrMenuItem.OnClick := Self.OnClick;
 
@@ -210,7 +210,7 @@ begin
     else
     begin
       vrMenuItem := TMenuItem.Create(Self.MainMenu);
-      vrMenuItem.Caption := Self.MenuRouteAtIndex(vrVez).Params.VariableById('title').Value;
+      vrMenuItem.Caption := vrJupiterApp.Params.ResolveString(Self.MenuRouteAtIndex(vrVez).Params.VariableById('title').Value);
       vrMenuItem.ImageIndex := StrToIntDef(Self.MenuRouteAtIndex(vrVez).Params.VariableById('icon').Value, -1);
       vrMenuItem.OnClick := Self.OnClick;
 

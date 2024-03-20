@@ -129,7 +129,12 @@ begin
     Application.CreateForm(prRoute.FormClass, vrFormModal);
     try
       vrFormModal.IsModal := prAsModal;
-      vrFormModal.Params.CopyValues(prOriginalRoute.Params);
+
+      if ((Assigned(prRoute)) and (prRoute.Params.Count > 0)) then
+        vrFormModal.Params.CopyValues(prRoute.Params);
+
+      if ((Assigned(prOriginalRoute)) and (prOriginalRoute.Params.Count > 0)) then
+        vrFormModal.Params.CopyValues(prOriginalRoute.Params);
 
       vrFormModal.ShowModal;
     finally
@@ -156,7 +161,11 @@ begin
     Self.CurrentForm.Align       := alClient;
     Self.CurrentForm.IsModal     := prAsModal;
 
-    Self.CurrentForm.Params.CopyValues(prOriginalRoute.Params);
+    if ((Assigned(prRoute)) and (prRoute.Params.Count > 0)) then
+      Self.CurrentForm.Params.CopyValues(prRoute.Params);
+
+    if ((Assigned(prOriginalRoute)) and (prOriginalRoute.Params.Count > 0)) then
+      Self.CurrentForm.Params.CopyValues(prOriginalRoute.Params);
 
     Self.CurrentForm.Show;
   end;
@@ -177,7 +186,12 @@ begin
     Application.CreateForm(prRoute.FormClass, vrFormModal);
     try
       vrFormModal.IsModal := prAsModal;
-      vrFormModal.Params.CopyValues(prOriginalRoute.Params);
+
+      if ((Assigned(prRoute)) and (prRoute.Params.Count > 0)) then
+        vrFormModal.Params.CopyValues(prRoute.Params);
+
+      if ((Assigned(prOriginalRoute)) and (prOriginalRoute.Params.Count > 0)) then
+        vrFormModal.Params.CopyValues(prOriginalRoute.Params);
 
       vrFormModal.ShowModal;
     finally
@@ -196,7 +210,11 @@ begin
     Self.CurrentForm.Align       := alClient;
     Self.CurrentForm.IsModal     := prAsModal;
 
-    Self.CurrentForm.Params.CopyValues(prOriginalRoute.Params);
+    if ((Assigned(prRoute)) and (prRoute.Params.Count > 0)) then
+      Self.CurrentForm.Params.CopyValues(prRoute.Params);
+
+    if ((Assigned(prOriginalRoute)) and (prOriginalRoute.Params.Count > 0)) then
+      Self.CurrentForm.Params.CopyValues(prOriginalRoute.Params);
 
     for vrVez := 0 to Self.JupiterFormTab.PageCount - 1 do
     begin

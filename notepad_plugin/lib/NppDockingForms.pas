@@ -83,17 +83,24 @@ end;
 constructor TNppDockingForm.Create(NppParent: TNppPlugin; DlgId: Integer);
 begin
   inherited Create(NppParent);
+
   self.FDlgId := DlgId;
+
   self.CmdId := self.Npp.CmdIdFromDlgId(DlgId);
+
   self.RegisterDockingForm(self.NppDefaultDockingMask);
+
   self.RemoveControlParent(self);
 end;
 
 constructor TNppDockingForm.Create(AOwner: TNppForm; DlgId: Integer);
 begin
   inherited Create(AOwner);
+
   self.FDlgId := DlgId;
+
   self.RegisterDockingForm(self.NppDefaultDockingMask);
+
   self.RemoveControlParent(self);
 end;
 
@@ -128,7 +135,7 @@ var
   r:Integer;
 begin
   self.HandleNeeded;
-  //self.Visible := true;
+//  self.Visible := true;
 
   FillChar(self.ToolbarData,sizeof(TToolbarData),0);
 
@@ -151,10 +158,17 @@ begin
 
 {$IFDEF NPPUNICODE}
   StringToWideChar(self.Caption, self.ToolbarData.Title, 500);
+
   GetModuleFileNameW(HInstance, self.ToolbarData.ModuleName, 1000);
+
   StringToWideChar(ExtractFileName(self.ToolbarData.ModuleName), self.ToolbarData.ModuleName, 1000);
+
   StringToWideChar('', self.ToolbarData.AdditionalInfo, 1);
-  r:=SendMessageW(self.Npp.NppData.NppHandle, NPPM_DMMREGASDCKDLG, 0, Integer(@self.ToolbarData));
+
+//  r := SendMessageW(self.Npp.NppData.NppHandle, NPPM_DMMREGASDCKDLG, 0, Integer(@self.ToolbarData));
+
+//  r := SendMessageW(self.Npp.NppData.NppHandle, NPPM_DMMREGASDCKDLG, Self.CmdId, Integer(@self.ToolbarData));
+
 {$ELSE}
   StrCopy(self.ToolbarData.Title, PChar(self.Caption));
   GetModuleFileNameA(HInstance, self.ToolbarData.ModuleName, 1000);
