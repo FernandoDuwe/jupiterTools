@@ -49,8 +49,23 @@ begin
     vrCommand.CommandName := 'Read config value';
     vrCommand.Command := 'Read';
     vrCommand.AddParam('PARAMNAME', True);
-    vrCommand.CommandText.Add('// Gravação de uma nova configuração');
+    vrCommand.CommandText.Add('// Exibição do valor de uma configuração');
     vrCommand.CommandText.Add('Writeln(VariableValueByID(ParamByName(''PARAMNAME'')));');
+
+    vrCommand.SaveToFile;
+  finally
+    FreeAndNil(vrCommand);
+  end;
+
+  Sleep(1000);
+
+  vrCommand := TJupiterCLICommand.Create;
+  try
+    vrCommand.CommandName := 'Run a file/code using Jupiter Runnable function';
+    vrCommand.Command := 'Runnable';
+    vrCommand.AddParam('FILENAME', True);
+    vrCommand.CommandText.Add('// Execução de um arquivo');
+    vrCommand.CommandText.Add('Runnable(ParamByName(''FILENAME''));');
 
     vrCommand.SaveToFile;
   finally
