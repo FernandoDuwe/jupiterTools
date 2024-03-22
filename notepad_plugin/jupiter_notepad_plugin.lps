@@ -222,8 +222,9 @@
         <ComponentName Value="DMMain"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="DataModule"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
-        <CursorPos X="29" Y="22"/>
+        <CursorPos X="51" Y="22"/>
         <UsageCount Value="29"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -368,9 +369,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uCurrentTask"/>
-        <IsVisibleTab Value="True"/>
         <TopLine Value="59"/>
-        <CursorPos X="39" Y="80"/>
+        <CursorPos X="24" Y="64"/>
         <UsageCount Value="11"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>

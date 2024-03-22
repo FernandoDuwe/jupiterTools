@@ -484,7 +484,7 @@ end;
 
 procedure TFJupiterForm.Internal_Resize;
 begin
-  Application.ProcessMessages;
+//  Application.ProcessMessages;
   Self.Repaint;
 end;
 
@@ -547,7 +547,7 @@ procedure TFJupiterForm.Activate;
 begin
   Self.Internal_Activate;
 
-  Self.UpdateForm();
+  // Self.UpdateForm();
 
   Self.Internal_Resize;
 end;
