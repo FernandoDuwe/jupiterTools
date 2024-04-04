@@ -96,6 +96,7 @@ type
     procedure Internal_UpdateDatasets; virtual;
     procedure Internal_UpdateCalcs; virtual;
     procedure Internal_PrepareForm; virtual;
+    procedure Internal_CreateCustomShortcuts; virtual;
     procedure Internal_Resize; virtual;
     procedure Internal_Activate; virtual;
     function  Internal_ListShortcuts(prActionList : TActionList) : String;
@@ -482,6 +483,11 @@ begin
     Self.FActions.CompactMode := Self.Params.VariableById('CompactMode').Value = '1';
 end;
 
+procedure TFJupiterForm.Internal_CreateCustomShortcuts;
+begin
+
+end;
+
 procedure TFJupiterForm.Internal_Resize;
 begin
 //  Application.ProcessMessages;
@@ -563,6 +569,8 @@ begin
     sbStatus.Visible := Self.BorderStyle <> bsNone;
 
     Self.Internal_PrepareForm;
+
+    Self.Internal_CreateCustomShortcuts;
 
     if Self.Params.Exists(FIELD_ID_GENERADOR) then
     begin

@@ -27,9 +27,10 @@ uses
   uScriptEditor, uCustomJupiterForm, jupiterScriptFunctions, uDynamicRecord,
   jupiterThread, uProcessMonitor, jupiterStream, uPrompt, ulayoutbuilder,
   jupiterclimodule, ulayoutreader, uclimanager, jupiterclicommand,
-  unewcommandcli, utimecontrol, jupiterTimeControlDataProvider, 
-uuserpreferences, jupiterformaction, udm, jupiterdatabase, usqlEditor,
-umenuselector, uwebexplorer, jupiterexternaldatasets, jupiterlayoutvalidator;
+  unewcommandcli, utimecontrol, jupiterTimeControlDataProvider,
+  uuserpreferences, jupiterformaction, udm, jupiterdatabase, usqlEditor,
+  umenuselector, uwebexplorer, jupiterexternaldatasets, jupiterlayoutvalidator,
+  jupitershortcut;
 
 {$R *.res}
 

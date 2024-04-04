@@ -158,7 +158,10 @@ begin
         vrNode.ImageIndex    := vrEnviroment.IconOfFile(Fields.VariableById('File').Value);
         vrNode.SelectedIndex := vrEnviroment.IconOfFile(Fields.VariableById('File').Value);
 
-        vrNode.Data := TJupiterRunnable.Create(Fields.VariableById('File').Value);
+        vrNode.Data := TJupiterRunnable.Create('europa runnable "' + Fields.VariableById('File').Value + '"');
+
+        TJupiterRunnable(vrNode.Data).LogMessage := False;
+        TJupiterRunnable(vrNode.Data).Wait       := False;
       end;
   finally
     FreeAndNil(vrFile);
@@ -195,6 +198,8 @@ begin
 
         vrNode.Data := TJupiterRunnable.Create(Fields.VariableById('Path').Value);
 
+        TJupiterRunnable(vrNode.Data).LogMessage := False;
+
         Self.Internal_ListFiles(vrNode, Fields.VariableById('Path').Value);
       end;
   finally
@@ -204,4 +209,5 @@ begin
 end;
 
 end.
+
 

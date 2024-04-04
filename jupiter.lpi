@@ -474,6 +474,10 @@
         <Filename Value="Commons\jupiterlayoutvalidator.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
+      <Unit>
+        <Filename Value="Commons\jupitershortcut.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

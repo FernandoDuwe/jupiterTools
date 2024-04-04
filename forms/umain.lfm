@@ -1152,6 +1152,7 @@ inherited FMain: TFMain
     Title = 'Caption'
     TitleFont.Style = [fsBold]
     Visible = False
+    OnClose = ppNotifierClose
     Left = 784
     Top = 120
   end
@@ -1257,5 +1258,11 @@ inherited FMain: TFMain
       Caption = 'Fechar a aba atual (Ctrl + F4)'
       OnClick = MenuItem20Click
     end
+  end
+  object tmPopupEnd: TTimer[18]
+    Interval = 3000
+    OnTimer = tmPopupEndTimer
+    Left = 688
+    Top = 272
   end
 end

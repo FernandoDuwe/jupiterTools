@@ -429,13 +429,7 @@ begin
     Result := vrEnviroment.CreatePath(prTaskName);
 
     if prAsCurrentTask then
-    begin
        Self.Params.AddConfig(Self.DefineParamName('Tasks.Current.Path'), Result, 'Diretório da tarefa atual');
-
-      if vrJupiterApp.Params.Exists('Jupiter.Standard.Triggers.OnChangeTask') then
-            if Trim(vrJupiterApp.Params.VariableById('Jupiter.Standard.Triggers.OnChangeTask').Value) <> EmptyStr then
-               vrJupiterApp.Threads.NewThread('Gatilho: Ao alterar a tarefa atual', TJupiterRunnable.Create(vrJupiterApp.Params.VariableById('Jupiter.Standard.Triggers.OnChangeTask').Value));
-    end;
   finally
     FreeAndNil(vrEnviroment);
   end;

@@ -9,7 +9,8 @@ uses
   JupiterModule, JupiterObject, JupiterRoute, {$IFNDEF JUPITERCLI} JupiterForm, {$ENDIF}
   JupiterVariable, JupiterEnviroment, JupiterSystemMessage, {$IFNDEF JUPITERCLI} PopUpNotifier, {$ENDIF}
   JupiterVariableDataProvider, jupiterThread, JupiterRunnable, jupiterScript,
-  jupiterexternaldatasets, JupiterCSVDataProvider, SysUtils, Controls;
+  jupiterexternaldatasets, JupiterCSVDataProvider, jupitershortcut, SysUtils,
+  Controls;
 
 type
 
@@ -42,9 +43,11 @@ type
 
     FOnBeforeNavigate  : TNotifyEvent;
     FOnAfterNavigate   : TNotifyEvent;
+    FOnShowPopup       : TNotifyEvent;
     FParamList         : TStrings;
     FCurrentRoute      : TJupiterRoute;
     FCurrentCLICommand : TJupiterObject;
+    FShorcuts          : TJupiterShortcutList;
 
     procedure Internal_OpenFormUnique(prRoute : TJupiterFormRoute; prOriginalRoute : TJupiterRoute; prAsModal : Boolean);
     procedure Internal_OpenFormTabs(prRoute : TJupiterFormRoute; prOriginalRoute : TJupiterRoute; prAsModal : Boolean);
@@ -74,6 +77,7 @@ type
     property FormRoutes     : TJupiterObjectList   read FFormRoutes    write FFormRoutes;
     property ModulesList    : TJupiterModuleList   read FModules       write FModules;
     property Messages       : TJupiterObjectList   read FMessages      write FMessages;
+    property Shortcuts      : TJupiterShortcutList read FShorcuts      write FShorcuts;
     property Threads        : TJupiterThreadList   read FThreads       write FThreads;
     property Params         : TJupiterVariableList read FParams        write FParams;
     property DataSetParams  : TJupiterVariableDataProviderList read FDataSetParams write FDataSetParams;
@@ -81,6 +85,7 @@ type
 
     property OnBeforeNavigate : TNotifyEvent read FOnBeforeNavigate write FOnBeforeNavigate;
     property OnAfterNavigate  : TNotifyEvent read FOnAfterNavigate  write FOnAfterNavigate;
+    property OnShowPopup      : TNotifyEvent read FOnShowPopup      write FOnShowPopup;
   public
     procedure AddModule(prModule : TJupiterModule);
     function  AddMessage(prTitle, prOrigin : String) : TJupiterSystemMessage;
@@ -421,6 +426,10 @@ begin
   end;
 
   Self.PopupNotifier.ShowAtPos(Screen.Width - 10, Screen.Height - 35);
+
+  if Assigned(Self.OnShowPopup) then
+    Self.OnShowPopup(Self);
+
   {$ENDIF}
 end;
 
@@ -516,6 +525,8 @@ begin
   Self.FAppID   := prAppID;
   Self.FAppName := prAppName;
 
+  Self.FShorcuts := TJupiterShortcutList.Create;
+
   vrExternalDatasets := TJupiterExternalDatasets.Create;
   try
     Self.FFormRoutes := TJupiterObjectList.Create;
@@ -553,6 +564,7 @@ destructor TJupiterApp.Destroy;
 begin
   Self.FParamList.Clear;
 
+  FreeAndNil(Self.FShorcuts);
   FreeAndNil(Self.FFormRoutes);
   FreeAndNil(Self.FMessages);
   FreeAndNil(Self.FThreads);

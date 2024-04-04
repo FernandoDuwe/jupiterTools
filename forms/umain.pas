@@ -9,9 +9,9 @@ uses
   StdCtrls, Menus, PopupNotifier, Buttons, JupiterApp, JupiterRoute,
   JupiterConsts, JupiterObject, JupiterForm, JupiterAction, JupiterEnviroment,
   JupiterRunnable, jupiterformutils, JupiterFileDataProvider, jupiterScript,
-  JupiterDirectoryDataProvider, JupiterVariable, JupiterToolsModule,
-  jupiterdatabase, JupiterFormTab, SQLDB, uPSComponent_Default, LMessages,
-  PairSplitter, ActnList, ButtonPanel, EditBtn;
+  JupiterDirectoryDataProvider, JupiterVariable, jupitershortcut,
+  JupiterToolsModule, jupiterdatabase, JupiterFormTab, SQLDB,
+  uPSComponent_Default, LMessages, PairSplitter, ActnList, ButtonPanel, EditBtn;
 
 type
 
@@ -96,6 +96,7 @@ type
     tbMenu: TToolButton;
     tbOptions: TToolBar;
     TbSystemBar: TToolButton;
+    tmPopupEnd: TTimer;
     tmInternalThread: TTimer;
     tmSearch: TTimer;
     tbSearch: TToolBar;
@@ -115,6 +116,7 @@ type
     procedure acMenuExecute(Sender: TObject);
     procedure acPromptExecute(Sender: TObject);
     procedure acCtrlEnterExecute(Sender: TObject);
+    procedure acCustomShortcut(Sender: TObject);
     procedure ApplicationProperties1Activate(Sender: TObject);
     procedure ApplicationProperties1Restore(Sender: TObject);
     procedure cbNavigationMenuChange(Sender: TObject);
@@ -170,11 +172,13 @@ type
     procedure miOpenCurrentTaskClick(Sender: TObject);
     procedure miUpdateClick(Sender: TObject);
     procedure pnBodyClick(Sender: TObject);
+    procedure ppNotifierClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure tbHomeClick(Sender: TObject);
     procedure tbMenuClick(Sender: TObject);
     procedure tbMessageClick(Sender: TObject);
     procedure tbPromptClick(Sender: TObject);
     procedure tmInternalThreadTimer(Sender: TObject);
+    procedure tmPopupEndTimer(Sender: TObject);
     procedure tmSearchTimer(Sender: TObject);
     procedure ToolButton1Click(Sender: TObject);
     procedure ToolButton2Click(Sender: TObject);
@@ -195,16 +199,18 @@ type
     procedure Internal_ShowRoute(prRoute : TJupiterRoute; prList : TJupiterObjectList; prNode : TTreeNode);
     procedure Internal_MessagesCountSetValue(prID, prNewValue : String);
     procedure Internal_CurrentFormTitleSetValue(prID, prNewValue : String);
-    function Internal_GoToPageItem(prItemRouteForm : String) : Boolean;
+    function  Internal_GoToPageItem(prItemRouteForm : String) : Boolean;
 
     procedure Internal_OnBeforeNavigate(Sender: TObject);
     procedure Internal_OnAfterNavigate(Sender: TObject);
+    procedure Internal_OnShowPopup(Sender: TObject);
     procedure Internal_CallFormAction(prActionIndex : Integer);
   protected
     procedure Internal_UpdateComponents; override;
     procedure Internal_PrepareForm; override;
     procedure Internal_LoadDirectoryStructure(prDirectory : String; prAfterThan : TMenuItem);
     procedure Internal_PrepareMainMenu;
+    procedure Internal_PrepareShortCuts;
     function  Internal_ListAllShortcuts : String; override;
     procedure Internal_Activate; override;
   published
@@ -258,6 +264,14 @@ begin
   finally
     tmInternalThread.Enabled := True;
   end;
+end;
+
+procedure TFMain.tmPopupEndTimer(Sender: TObject);
+begin
+  if ppNotifier.Visible then
+    ppNotifier.Hide;
+
+  tmPopupEnd.Enabled := False;
 end;
 
 procedure TFMain.tmSearchTimer(Sender: TObject);
@@ -350,6 +364,38 @@ end;
 procedure TFMain.acCtrlEnterExecute(Sender: TObject);
 begin
   ToolButton3.Click;
+end;
+
+procedure TFMain.acCustomShortcut(Sender: TObject);
+var
+  vrShortcut : TJupiterShortcut;
+  vrStr : TStrings;
+begin
+  if not (Sender is TAction) then
+    Exit;
+
+  vrShortcut := vrJupiterApp.Shortcuts.GetShortcutByIndex(TAction(Sender).Tag);
+
+  if vrShortcut.FileName <> EmptyStr then
+  begin
+    TJupiterRunnable.Create(vrShortcut.FileName, True);
+
+    Exit;
+  end;
+
+  if vrShortcut.CodeRun <> EmptyStr then
+  begin
+    vrStr := TStringList.Create;
+    try
+      vrStr.Clear;
+      vrStr.Add(vrShortcut.CodeRun);
+
+      vrJupiterApp.RunScript(vrStr);
+    finally
+      vrStr.Clear;
+      FreeAndNil(vrStr);
+    end;
+  end;
 end;
 
 procedure TFMain.acMenuExecute(Sender: TObject);
@@ -1018,6 +1064,12 @@ begin
 
 end;
 
+procedure TFMain.ppNotifierClose(Sender: TObject; var CloseAction: TCloseAction
+  );
+begin
+  tmPopupEnd.Enabled := False;
+end;
+
 procedure TFMain.tvMenuClick(Sender: TObject);
 begin
 
@@ -1212,6 +1264,11 @@ begin
     edSearchChange(Sender);
 end;
 
+procedure TFMain.Internal_OnShowPopup(Sender: TObject);
+begin
+  tmPopupEnd.Enabled := True;
+end;
+
 procedure TFMain.Internal_CallFormAction(prActionIndex: Integer);
 begin
   //
@@ -1287,39 +1344,48 @@ begin
 end;
 
 procedure TFMain.Internal_PrepareForm;
+var
+  vrEnviroment : TJupiterEnviroment;
 begin
   inherited Internal_PrepareForm;
 
-  if TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).TabMode then
-  begin
-    pnBody.BevelInner := bvNone;
+  vrEnviroment := TJupiterEnviroment.Create;
+  try
+    if TJupiterStandardModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Standard')).TabMode then
+    begin
+      pnBody.BevelInner := bvNone;
 
-    vrJupiterApp.JupiterFormTab := JupiterFormTab1;
-  end
-  else
-  begin
-    JupiterFormTab1.Visible := False;
+      vrJupiterApp.JupiterFormTab := JupiterFormTab1;
+    end
+    else
+    begin
+      JupiterFormTab1.Visible := False;
 
-    vrJupiterApp.BodyPanel := pnBody;
+      vrJupiterApp.BodyPanel := pnBody;
+    end;
+
+    vrJupiterApp.PopupNotifier    := ppNotifier;
+    vrJupiterApp.OnBeforeNavigate := @Internal_OnBeforeNavigate;
+    vrJupiterApp.OnAfterNavigate  := @Internal_OnAfterNavigate;
+    vrJupiterApp.OnShowPopup      := @Internal_OnShowPopup;
+
+    if vrJupiterApp.Params.Exists(vrJupiterApp.AppID + '.Messages.Count') then
+    begin
+      vrJupiterApp.Params.VariableById(vrJupiterApp.AppID + '.Messages.Count').OnChangeValue := @Internal_MessagesCountSetValue;
+
+      Internal_MessagesCountSetValue(EmptyStr, IntToStr(vrJupiterApp.Messages.Size));
+    end;
+
+    if vrJupiterApp.Params.Exists('Interface.CurrentForm.Title') then
+      vrJupiterApp.Params.VariableById('Interface.CurrentForm.Title').OnChangeValue := @Internal_CurrentFormTitleSetValue;
+
+    Self.Internal_ListMenuItens;
+    Self.Internal_GetExternalIcons;
+    Self.Internal_PrepareMainMenu;
+    Self.Internal_PrepareShortCuts;
+  finally
+    FreeAndNil(vrEnviroment);
   end;
-
-  vrJupiterApp.PopupNotifier    := ppNotifier;
-  vrJupiterApp.OnBeforeNavigate := @Internal_OnBeforeNavigate;
-  vrJupiterApp.OnAfterNavigate  := @Internal_OnAfterNavigate;
-
-  if vrJupiterApp.Params.Exists(vrJupiterApp.AppID + '.Messages.Count') then
-  begin
-    vrJupiterApp.Params.VariableById(vrJupiterApp.AppID + '.Messages.Count').OnChangeValue := @Internal_MessagesCountSetValue;
-
-    Internal_MessagesCountSetValue(EmptyStr, IntToStr(vrJupiterApp.Messages.Size));
-  end;
-
-  if vrJupiterApp.Params.Exists('Interface.CurrentForm.Title') then
-    vrJupiterApp.Params.VariableById('Interface.CurrentForm.Title').OnChangeValue := @Internal_CurrentFormTitleSetValue;
-
-  Self.Internal_ListMenuItens;
-  Self.Internal_GetExternalIcons;
-  Self.Internal_PrepareMainMenu;
 end;
 
 procedure TFMain.Internal_LoadDirectoryStructure(prDirectory: String; prAfterThan: TMenuItem);
@@ -1370,6 +1436,24 @@ begin
   Self.MenuRouteList.OnClick := @MenuRouteListClick;
 
   Self.MenuRouteList.Render;
+end;
+
+procedure TFMain.Internal_PrepareShortCuts;
+var
+  vrVez      : Integer;
+  vrShortCut : TAction;
+begin
+  for vrVez := 0 to vrJupiterApp.Shortcuts.Count - 1 do
+    with vrJupiterApp.Shortcuts.GetShortcutByIndex(vrVez) do
+    begin
+      vrShortCut := TAction.Create(acShortcuts);
+      vrShortCut.ActionList := acShortcuts;
+      vrShortCut.Caption    := Description;
+      vrShortCut.Hint       := ShortCutStr;
+      vrShortCut.ShortCut   := GetShortCut;
+      vrShortCut.Tag        := vrVez;
+      vrShortCut.OnExecute  := @acCustomShortcut;
+    end;
 end;
 
 function TFMain.Internal_ListAllShortcuts: String;

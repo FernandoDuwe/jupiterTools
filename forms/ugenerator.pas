@@ -36,6 +36,7 @@ type
     lbFormList: TListBox;
     lbIconHint1: TLabel;
     lbIconHint2: TLabel;
+    lbIconHint3: TLabel;
     lbMenuList: TListBox;
     lbReleaseNotes: TListBox;
     lvDatasets: TListView;
@@ -43,6 +44,7 @@ type
     lvIcons: TListView;
     lvActions: TListView;
     lvFields: TListView;
+    lvShortcut: TListView;
     lvMenuVariables: TListView;
     mmCurrentMenuInfo: TMemo;
     mmIcon: TMemo;
@@ -54,6 +56,7 @@ type
     Panel5: TPanel;
     Panel6: TPanel;
     Panel7: TPanel;
+    Panel8: TPanel;
     pnMenuVariable: TPanel;
     pnMenuForm: TPanel;
     pnBodyMenuItem: TPanel;
@@ -73,6 +76,7 @@ type
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
     TabSheet3: TTabSheet;
+    tsShortcuts: TTabSheet;
     tsMainMenu: TTabSheet;
     tsDatasets: TTabSheet;
     tsIcon: TTabSheet;
@@ -766,80 +770,90 @@ end;
 procedure TFGenerator.Internal_PrepareForm;
 var
   vrAction : TJupiterAction;
+  vrEnviroment : TJupiterEnviroment;
   vrVez : Integer;
 begin
   inherited Internal_PrepareForm;
 
-  vrAction      := TJupiterAction.Create('Atualizar', TJupiterRunnable.Create(''), nil);
-  vrAction.Hint := 'Clique aqui para atualizar a página';
-  vrAction.Icon := ICON_REFRESH;
-  vrAction.OnClick := @Internal_RefreshClick;
+  vrEnviroment := TJupiterEnviroment.Create;
+  try
+    vrAction      := TJupiterAction.Create('Atualizar', TJupiterRunnable.Create(''), nil);
+    vrAction.Hint := 'Clique aqui para atualizar a página';
+    vrAction.Icon := ICON_REFRESH;
+    vrAction.OnClick := @Internal_RefreshClick;
 
-  Self.Actions.Add(vrAction);
+    Self.Actions.Add(vrAction);
 
-  vrAction      := TJupiterAction.Create('Novo Menu', TJupiterRunnable.Create(''), nil);
-  vrAction.Hint := 'Clique aqui para criar um novo item de menu';
-  vrAction.Icon := ICON_NEW;
-  vrAction.OnClick := @Internal_NewMenuItemClick;
+    vrAction      := TJupiterAction.Create('Novo Menu', TJupiterRunnable.Create(''), nil);
+    vrAction.Hint := 'Clique aqui para criar um novo item de menu';
+    vrAction.Icon := ICON_NEW;
+    vrAction.OnClick := @Internal_NewMenuItemClick;
 
-  Self.Actions.Add(vrAction);
+    Self.Actions.Add(vrAction);
 
-  lvActions.Enabled := False;
-  lvFields.Enabled  := False;
+    lvActions.Enabled := False;
+    lvFields.Enabled  := False;
 
-  sbActionAdd.Enabled    := False;
-  sbActionAdd.Images     := FMain.ilIconFamily;
-  sbActionAdd.ImageIndex := ICON_NEW;
+    sbActionAdd.Enabled    := False;
+    sbActionAdd.Images     := FMain.ilIconFamily;
+    sbActionAdd.ImageIndex := ICON_NEW;
 
-  sbActionDelete.Enabled    := False;
-  sbActionDelete.Images     := FMain.ilIconFamily;
-  sbActionDelete.ImageIndex := ICON_DELETE;
+    sbActionDelete.Enabled    := False;
+    sbActionDelete.Images     := FMain.ilIconFamily;
+    sbActionDelete.ImageIndex := ICON_DELETE;
 
-  sbFieldAdd.Enabled    := False;
-  sbFieldAdd.Images     := FMain.ilIconFamily;
-  sbFieldAdd.ImageIndex := ICON_NEW;
+    sbFieldAdd.Enabled    := False;
+    sbFieldAdd.Images     := FMain.ilIconFamily;
+    sbFieldAdd.ImageIndex := ICON_NEW;
 
-  sbFieldDelete.Enabled    := False;
-  sbFieldDelete.Images     := FMain.ilIconFamily;
-  sbFieldDelete.ImageIndex := ICON_DELETE;
+    sbFieldDelete.Enabled    := False;
+    sbFieldDelete.Images     := FMain.ilIconFamily;
+    sbFieldDelete.ImageIndex := ICON_DELETE;
 
-  sbMenuParamAdd.Enabled    := False;
-  sbMenuParamAdd.Images     := FMain.ilIconFamily;
-  sbMenuParamAdd.ImageIndex := ICON_NEW;
+    sbMenuParamAdd.Enabled    := False;
+    sbMenuParamAdd.Images     := FMain.ilIconFamily;
+    sbMenuParamAdd.ImageIndex := ICON_NEW;
 
-  sbMenuParamDelete.Enabled    := False;
-  sbMenuParamDelete.Images     := FMain.ilIconFamily;
-  sbMenuParamDelete.ImageIndex := ICON_DELETE;
+    sbMenuParamDelete.Enabled    := False;
+    sbMenuParamDelete.Images     := FMain.ilIconFamily;
+    sbMenuParamDelete.ImageIndex := ICON_DELETE;
 
-  lvActions.LargeImages := FMain.ilIconFamily;
-  lvActions.SmallImages := FMain.ilIconFamily;
-  lvActions.StateImages := FMain.ilIconFamily;
+    lvActions.LargeImages := FMain.ilIconFamily;
+    lvActions.SmallImages := FMain.ilIconFamily;
+    lvActions.StateImages := FMain.ilIconFamily;
 
-  Self.Hint := 'No módulo Generator você pode criar suas próprias funcionalidades no sistema';
+    Self.Hint := 'No módulo Generator você pode criar suas próprias funcionalidades no sistema';
 
-  if vrJupiterApp.FormRoutes.Size > 0 then
-  begin
+    if vrJupiterApp.FormRoutes.Size > 0 then
+    begin
+      mmLines.Lines.Add(EmptyStr);
+      mmLines.Lines.Add('Formulários registrados');
+
+      for vrVez := 0 to vrJupiterApp.FormRoutes.Size - 1 do
+        with TJupiterFormRoute(vrJupiterApp.FormRoutes.GetAtIndex(vrVez)) do
+          mmLines.Lines.Add(Format('  - %1:s - %0:s;', [Path, FormClass.ClassName]));
+    end;
+
+    if Self.Params.Exists('Goto') then
+      if Self.Params.VariableById('Goto').Value = 'ReleaseNotes' then
+        pcTabs.ActivePage := TabSheet3;
+
     mmLines.Lines.Add(EmptyStr);
-    mmLines.Lines.Add('Formulários registrados');
+    mmLines.Lines.Add('Rotas do menu principal');
+    mmLines.Lines.Add('  - ' + MENU_FILE_PATH);
+    mmLines.Lines.Add('  - ' + MENU_FILE_NEW_PATH);
+    mmLines.Lines.Add('  - ' + MENU_FILE_OPEN_PATH);
+    mmLines.Lines.Add('  - ' + MENU_EDIT_PATH);
+    mmLines.Lines.Add('  - ' + MENU_TOOLS_PATH);
+    mmLines.Lines.Add('  - ' + MENU_FOLDERS_PATH);
+    mmLines.Lines.Add('  - ' + MENU_HELP_PATH);
 
-    for vrVez := 0 to vrJupiterApp.FormRoutes.Size - 1 do
-      with TJupiterFormRoute(vrJupiterApp.FormRoutes.GetAtIndex(vrVez)) do
-        mmLines.Lines.Add(Format('  - %1:s - %0:s;', [Path, FormClass.ClassName]));
+    Self.Params.AddVariable('File.MainMenu', vrEnviroment.FullPath('/modules/generator/data/main_menu_list.xml'), 'Arquivo com os menus customizados');
+    Self.Params.AddVariable('File.Datasets', vrEnviroment.FullPath('/modules/generator/data/JupiterExternalVariables.csv'), 'Arquivo com os datasets');
+    Self.Params.AddVariable('File.Shortcuts', vrEnviroment.FullPath('/modules/generator/data/shortcut_list.xml'), 'Arquivo com os atalhos');
+  finally
+    FreeAndNil(vrEnviroment);
   end;
-
-  if Self.Params.Exists('Goto') then
-    if Self.Params.VariableById('Goto').Value = 'ReleaseNotes' then
-      pcTabs.ActivePage := TabSheet3;
-
-  mmLines.Lines.Add(EmptyStr);
-  mmLines.Lines.Add('Rotas do menu principal');
-  mmLines.Lines.Add('  - ' + MENU_FILE_PATH);
-  mmLines.Lines.Add('  - ' + MENU_FILE_NEW_PATH);
-  mmLines.Lines.Add('  - ' + MENU_FILE_OPEN_PATH);
-  mmLines.Lines.Add('  - ' + MENU_EDIT_PATH);
-  mmLines.Lines.Add('  - ' + MENU_TOOLS_PATH);
-  mmLines.Lines.Add('  - ' + MENU_FOLDERS_PATH);
-  mmLines.Lines.Add('  - ' + MENU_HELP_PATH);
 end;
 
 procedure TFGenerator.Internal_RefreshClick(Sender: TObject);
@@ -935,6 +949,7 @@ begin
   lbMenuList.Items.Clear;
   lvDatasets.Items.Clear;
   lvMainMenus.Items.Clear;
+  lvShortcut.Items.Clear;
 
   vrFile           := TJupiterFileDataProvider.Create;
   vrEnviroment     := TJupiterEnviroment.Create;
@@ -984,6 +999,15 @@ begin
         vrDataSetItem.SubItems.Add(Params.VariableById('script').Value);
       end;
     end;
+
+    for vrVez := 0 to vrJupiterApp.Shortcuts.Count - 1 do
+    begin
+      vrDataSetItem := lvShortcut.Items.Add;
+      vrDataSetItem.Caption := vrJupiterApp.Shortcuts.GetShortcutByIndex(vrVez).Description;
+      vrDataSetItem.SubItems.Add(vrJupiterApp.Shortcuts.GetShortcutByIndex(vrVez).ShortCutStr);
+      vrDataSetItem.SubItems.Add(vrJupiterApp.Shortcuts.GetShortcutByIndex(vrVez).FileName);
+      vrDataSetItem.SubItems.Add(vrJupiterApp.Shortcuts.GetShortcutByIndex(vrVez).CodeRun);
+    end;
   finally
     FreeAndNil(vrFile);
     FreeAndNil(vrFileMenu);
@@ -1014,6 +1038,11 @@ begin
   lvMainMenus.Columns[1].Width := PercentOfScreen(lvMainMenus.Width, 25);
   lvMainMenus.Columns[2].Width := PercentOfScreen(lvMainMenus.Width, 25);
   lvMainMenus.Columns[3].Width := PercentOfScreen(lvMainMenus.Width, 24);
+
+  lvShortcut.Column[0].Width := PercentOfScreen(lvShortcut.Width, 25);
+  lvShortcut.Column[1].Width := PercentOfScreen(lvShortcut.Width, 25);
+  lvShortcut.Column[2].Width := PercentOfScreen(lvShortcut.Width, 25);
+  lvShortcut.Column[3].Width := PercentOfScreen(lvShortcut.Width, 24);
 end;
 
 end.

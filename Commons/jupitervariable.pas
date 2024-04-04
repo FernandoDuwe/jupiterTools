@@ -102,17 +102,24 @@ uses JupiterCSVDataProvider;
 { TJupiterVariable }
 
 procedure TJupiterVariable.Internal_SetValue(prNewValue: String);
+var
+  vrChangeValue : Boolean;
 begin
+  vrChangeValue := Self.FValue <> prNewValue;
+
   Self.FValue := prNewValue;
 
-  if Assigned(Self.OnCopyListChangeValue) then
-    Self.OnCopyListChangeValue(Self.ID, Self.Value);
+  if vrChangeValue then
+  begin
+    if Assigned(Self.OnCopyListChangeValue) then
+      Self.OnCopyListChangeValue(Self.ID, Self.Value);
 
-  if Assigned(Self.OnChangeValue) then
-    Self.OnChangeValue(Self.ID, Self.Value);
+    if Assigned(Self.OnChangeValue) then
+      Self.OnChangeValue(Self.ID, Self.Value);
 
-  if Assigned(Self.OnOwnerChangeValue) then
-    Self.OnOwnerChangeValue(Self.ID, Self.Value);
+    if Assigned(Self.OnOwnerChangeValue) then
+      Self.OnOwnerChangeValue(Self.ID, Self.Value);
+  end;
 end;
 
 function TJupiterVariable.Internal_GetValue: String;
