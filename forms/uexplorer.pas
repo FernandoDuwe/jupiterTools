@@ -9,7 +9,7 @@ uses
   Grids, JupiterForm, JupiterAction, JupiterRunnable, JupiterDataProvider,
   JupiterConsts, JupiterApp, JupiterVariable, JupiterEnviroment,
   JupiterCSVDataProvider, JupiterDirectoryDataProvider, JupiterFileDataProvider,
-  uCustomJupiterForm, uDynamicRecord, LCLType;
+  JupiterDialogForm, uCustomJupiterForm, uDynamicRecord, LCLType;
 
 type
 
@@ -21,6 +21,7 @@ type
     procedure lvItemsSelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
   private
     FProvider  : TJupiterDataProvider;
+    FHideDone  : Boolean;
 
     FBtnNewBtn  : Integer;
     FBtnEditBtn : Integer;
@@ -38,6 +39,8 @@ type
     procedure Internal_RefreshClick(Sender: TObject);
     procedure Internal_MarcarTodosClick(Sender: TObject);
     procedure Internal_DesmarcarTodosClick(Sender: TObject);
+    procedure Internal_EsconderMostrarConcluidosClick(Sender: TObject);
+    procedure Internal_AddCheckListItem(Sender: TObject);
     procedure Internal_NewClick(Sender: TObject);
     procedure Internal_EditClick(Sender: TObject);
     procedure Internal_DeleteClick(Sender: TObject);
@@ -211,6 +214,8 @@ var
   vrParam    : String;
   vrAction   : TJupiterAction;
 begin
+  Self.FHideDone := False;
+
   inherited Internal_PrepareForm;
 
   vrProvider := EmptyStr;
@@ -234,6 +239,11 @@ begin
   }
   if Self.ChecklistMode then
   begin
+    if not Self.Params.Exists('HideDone') then
+      Self.Params.AddVariable('HideDone', '0', 'Esconder itens concluídos');
+
+    Self.FHideDone := Self.Params.VariableById('HideDone').Value = '1';
+
     vrAction      := TJupiterAction.Create('Marcar todos', TJupiterRunnable.Create(''), nil);
     vrAction.Hint := 'Clique aqui para marcar todos os itens';
     vrAction.Icon := ICON_CHECK;
@@ -245,6 +255,20 @@ begin
     vrAction.Hint := 'Clique aqui para desmarcar todos os itens';
     vrAction.Icon := NULL_KEY;
     vrAction.OnClick := @Internal_DesmarcarTodosClick;
+
+    Self.Actions.Add(vrAction);
+
+    vrAction      := TJupiterAction.Create('Esconder/Mostrar concluídos', TJupiterRunnable.Create(''), nil);
+    vrAction.Hint := 'Esconder/Mostrar concluídos';
+    vrAction.Icon := ICON_FAVORITE;
+    vrAction.OnClick := @Internal_EsconderMostrarConcluidosClick;
+
+    Self.Actions.Add(vrAction);
+
+    vrAction      := TJupiterAction.Create('Adicionar item', TJupiterRunnable.Create(''), nil);
+    vrAction.Hint := 'Adicionar um novo item em checklist';
+    vrAction.Icon := ICON_ADD;
+    vrAction.OnClick := @Internal_AddCheckListItem;
 
     Self.Actions.Add(vrAction);
   end;
@@ -341,6 +365,10 @@ begin
             vrColumn.Caption    := Fields.VariableByIndex(vrVez2).Title + COLUMN_SPACE_SEPARATOR;
           end;
 
+          if ((Self.ChecklistMode) and (Self.Internal_RecordChecked(Fields))) then
+            if Self.FHideDone then
+              Continue;
+
           if vrVez2 = 0 then
             vrItem.Caption := vrJupiterApp.Params.ResolveString(Fields.VariableByIndex(vrVez2).Value + COLUMN_SPACE_SEPARATOR)
           else
@@ -409,6 +437,50 @@ begin
     Self.Internal_CheckBoxChangeAll(False);
   finally
     Self.UpdateForm;
+  end;
+end;
+
+procedure TFExplorer.Internal_EsconderMostrarConcluidosClick(Sender: TObject);
+begin
+  try
+    Self.FHideDone := not Self.FHideDone;
+
+    if Self.FHideDone then
+      Self.Params.AddVariable('HideDone', '1', 'Esconder itens concluídos')
+    else
+      Self.Params.AddVariable('HideDone', '0', 'Esconder itens concluídos');
+  finally
+    Self.UpdateForm();
+  end;
+end;
+
+procedure TFExplorer.Internal_AddCheckListItem(Sender: TObject);
+var
+  vrDialog : TJupiterDialogForm;
+  vrStr    : TStrings;
+begin
+  vrDialog     := TJupiterDialogForm.Create;
+  vrStr        := TStringList.Create;
+  try
+    vrStr.Clear;
+    vrStr.LoadFromFile(Params.VariableById('path').Value);
+
+    vrDialog.Title := 'Novo item em checklist';
+    vrDialog.Hint  := 'Adicione um novo item a Checklist.';
+
+    vrDialog.Fields.AddField('NAME', 'Item', '');
+
+    if vrDialog.Show then
+    begin
+      vrStr.Add(vrDialog.Fields.VariableById('NAME').Value + ';;');
+
+      vrStr.SaveToFile(Params.VariableById('path').Value);
+
+      Self.UpdateForm;
+    end;
+  finally
+    FreeAndNil(vrDialog);
+    FreeAndNil(vrStr);
   end;
 end;
 

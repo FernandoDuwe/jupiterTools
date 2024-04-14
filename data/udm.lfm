@@ -11,7 +11,7 @@ object DMMain: TDMMain
     LoginPrompt = False
     KeepConnection = True
     Transaction = sqlTransaction
-    ConnectorType = 'Firebird'
+    ConnectorType = 'MSSQLServer'
     Left = 48
     Top = 16
   end

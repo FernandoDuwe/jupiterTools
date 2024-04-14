@@ -8,6 +8,7 @@ inherited FMain: TFMain
   ClientWidth = 1297
   Menu = mmMainMenu
   OnActivate = FormActivate
+  OnClose = FormClose
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnResize = FormResize

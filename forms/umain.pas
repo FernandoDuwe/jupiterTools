@@ -123,6 +123,7 @@ type
     procedure edSearchChange(Sender: TObject);
     procedure edSearchChangeBounds(Sender: TObject);
     procedure FormActivate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormResize(Sender: TObject);
@@ -478,6 +479,13 @@ begin
   FormResize(Sender);
 
   ApplicationProperties1Restore(Sender);
+end;
+
+procedure TFMain.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  tmInternalThread.Enabled := False;
+  tmPopupEnd.Enabled := False;
+  tmSearch.Enabled := False;
 end;
 
 procedure TFMain.FormCreate(Sender: TObject);
