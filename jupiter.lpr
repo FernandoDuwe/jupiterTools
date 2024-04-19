@@ -30,7 +30,7 @@ uses
   unewcommandcli, utimecontrol, jupiterTimeControlDataProvider,
   uuserpreferences, jupiterformaction, udm, jupiterdatabase, usqlEditor,
   umenuselector, uwebexplorer, jupiterexternaldatasets, jupiterlayoutvalidator,
-  jupitershortcut;
+  jupitershortcut, jupiterautocompletesql, uCustomJupiterFormPanel;
 
 {$R *.res}
 
@@ -115,6 +115,7 @@ begin
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(CONFIG_PATH, TFConfig));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(EXPLORER_FORM_PATH, TFExplorer));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(CUSTOM_FORM_PATH, TFCustomJupiterForm));
+  vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(CUSTOM_FORM_PANEL_PATH, TFCustomJupiterFormPanel));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(NEWTASK_FORM_PATH, TFNewTask));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(TASK_FORM_PATH, TFCurrentTask));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(EDITOR_FORM_PATH, TFEditor));
@@ -136,8 +137,6 @@ begin
 
   Application.CreateForm(TFMain, FMain);
   Application.CreateForm(TDMMain, DMMain);
-  Application.CreateForm(TFMenuSelector, FMenuSelector);
-  Application.CreateForm(TFWebExplorer, FWebExplorer);
   Application.Run;
 end.
 

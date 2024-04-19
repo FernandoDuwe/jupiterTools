@@ -51,6 +51,9 @@ type
 
     procedure Internal_OpenFormUnique(prRoute : TJupiterFormRoute; prOriginalRoute : TJupiterRoute; prAsModal : Boolean);
     procedure Internal_OpenFormTabs(prRoute : TJupiterFormRoute; prOriginalRoute : TJupiterRoute; prAsModal : Boolean);
+
+    function Internal_CurrentDateOnGetValue(prID : String) : String;
+    function Internal_CurrentTimeOnGetValue(prID : String) : String;
   protected
     procedure Internal_Prepare; virtual;
 
@@ -243,6 +246,16 @@ begin
   {$ENDIF}
 end;
 
+function TJupiterApp.Internal_CurrentDateOnGetValue(prID: String): String;
+begin
+  Result := FormatDateTime('dd/mm/yyyy', Now);
+end;
+
+function TJupiterApp.Internal_CurrentTimeOnGetValue(prID: String): String;
+begin
+  Result := FormatDateTime('hh:nn:ss', Now);
+end;
+
 procedure TJupiterApp.Internal_Prepare;
 var
   vrEnviroment : TJupiterEnviroment;
@@ -281,6 +294,16 @@ begin
 
     if not Self.Params.Exists('Enviroment.BasePath') then
       Self.Params.AddVariable('Enviroment.BasePath', GetRootDirectory, 'Diretório raiz');
+
+    if not Self.Params.Exists('Enviroment.DateTime.CurrentDate') then
+      Self.Params.AddVariable('Enviroment.DateTime.CurrentDate', EmptyStr, 'Data atual');
+
+    Self.Params.VariableById('Enviroment.DateTime.CurrentDate').OnGetValue := @Internal_CurrentDateOnGetValue;
+
+    if not Self.Params.Exists('Enviroment.DateTime.CurrentTime') then
+      Self.Params.AddVariable('Enviroment.DateTime.CurrentTime', EmptyStr, 'Hora atual');
+
+    Self.Params.VariableById('Enviroment.DateTime.CurrentTime').OnGetValue := @Internal_CurrentTimeOnGetValue;
 
     if not Self.Params.Exists('Enviroment.Run.ShellScript') then
        Self.Params.AddConfig('Enviroment.Run.ShellScript', GetCommandLineTool, 'Aplicação que executará arquivo de bat ou shell');

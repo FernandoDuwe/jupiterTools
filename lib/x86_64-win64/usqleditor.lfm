@@ -6,6 +6,7 @@ inherited FSQLEditor: TFSQLEditor
   Caption = 'Editor SQL'
   ClientHeight = 607
   ClientWidth = 1079
+  OnCreate = FormCreate
   OnDestroy = FormDestroy
   inherited sbActions: TScrollBox
     Width = 1079
@@ -484,6 +485,7 @@ inherited FSQLEditor: TFSQLEditor
     MouseLinkColor.Foreground = clBlue
     LineHighlightColor.Background = clNone
     LineHighlightColor.Foreground = clNone
+    OnChange = syEditorChange
     inline SynLeftGutterPartList1: TSynGutterPartList
       object SynGutterMarks1: TSynGutterMarks
         Width = 24
@@ -535,9 +537,9 @@ inherited FSQLEditor: TFSQLEditor
       Height = 174
       Top = 0
       Width = 1079
-      ActivePage = tsStructure
+      ActivePage = tsResult
       Align = alClient
-      TabIndex = 2
+      TabIndex = 0
       TabOrder = 0
       object tsResult: TTabSheet
         Caption = 'Resultado'
@@ -555,6 +557,7 @@ inherited FSQLEditor: TFSQLEditor
           DataSource = dsQuery
           ReadOnly = True
           TabOrder = 0
+          OnDblClick = dbGridResultDblClick
         end
       end
       object tsMessages: TTabSheet
@@ -602,6 +605,8 @@ inherited FSQLEditor: TFSQLEditor
           Width = 870
           Align = alClient
           ItemHeight = 0
+          MultiSelect = True
+          OnKeyPress = lbFieldsKeyPress
           TabOrder = 2
         end
       end
@@ -618,11 +623,22 @@ inherited FSQLEditor: TFSQLEditor
   end
   inherited ppMenu: TPopupMenu[6]
     Left = 976
-    Top = 352
+    Top = 400
+    object Separator1: TMenuItem[4]
+      Caption = '-'
+    end
+    object miUpperCase: TMenuItem[5]
+      Caption = 'Ao digitar, sempre utilizar letras maísuculas'
+      Checked = True
+    end
+    object miNickNameTable: TMenuItem[6]
+      Caption = 'Ao completar, apelidar as tabelas'
+      Checked = True
+    end
   end
   inherited acActionShortcuts: TActionList[7]
     Left = 888
-    Top = 352
+    Top = 400
   end
   object sqlQuery: TSQLQuery[8]
     FieldDefs = <>

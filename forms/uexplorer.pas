@@ -352,6 +352,10 @@ begin
         if ((Trim(Self.SearchText) <> EmptyStr) and (not CanShowInSearch(Self.SearchText))) then
           Continue;
 
+        if ((Self.ChecklistMode) and (Self.Internal_RecordChecked(Fields))) then
+          if Self.FHideDone then
+            Continue;
+
         vrItem := lvItems.Items.Add;
 
         for vrVez2 := 0 to Fields.Size - 1 do

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, ComCtrls, JupiterRoute, JupiterObject, JupiterConsts,
-  SysUtils, Forms, Graphics, EditBtn, CheckLst;
+  SysUtils, Forms, Graphics, EditBtn, CheckLst, StdCtrls;
 
   procedure CopyNodes(prSourceNode, prTargetNode: TTreeNode);
 
@@ -18,6 +18,8 @@ uses
 
   procedure DrawForm(prComponent : TComponent);
 
+  function GetEditByTag(prComponent : TComponent; prTag : Integer) : TEdit;
+
   procedure DrawFormInSearch(prComponent : TComponent; prSearch : String; prColor : TColor);
 
   function IsSameForm(prForm1, prForm2 : TForm; prIgnoreVariables : Array of String) : Boolean;
@@ -26,7 +28,7 @@ uses
 
 implementation
 
-uses JupiterApp, ExtCtrls, Menus, StdCtrls, JupiterForm, JupiterVariable, JupiterAction;
+uses JupiterApp, ExtCtrls, Menus, JupiterForm, JupiterVariable, JupiterAction;
 
 procedure CopyNodes(prSourceNode, prTargetNode: TTreeNode);
 
@@ -217,6 +219,38 @@ begin
 
       DrawForm(prComponent.Components[vrVez]);
     end;
+  end;
+end;
+
+function GetEditByTag(prComponent: TComponent; prTag: Integer): TEdit;
+var
+  vrVez : Integer;
+begin
+  Result := nil;
+
+  for vrVez := 0 to prComponent.ComponentCount - 1 do
+  begin
+    if prComponent.Components[vrVez] is TScrollBox then
+      Result := GetEditByTag(prComponent.Components[vrVez], prTag);
+
+    if prComponent.Components[vrVez] is TPanel then
+      Result := GetEditByTag(prComponent.Components[vrVez], prTag);
+
+    if prComponent.Components[vrVez] is TGroupBox then
+      Result := GetEditByTag(prComponent.Components[vrVez], prTag);
+
+    if Result <> nil then
+      Exit;
+  end;
+
+  for vrVez := 0 to prComponent.ComponentCount - 1 do
+  begin
+    if prComponent.Components[vrVez] is TEdit then
+      if TEdit(prComponent.Components[vrVez]).Tag = prTag then
+      begin
+        Result := TEdit(prComponent.Components[vrVez]);
+        Exit;
+      end;
   end;
 end;
 

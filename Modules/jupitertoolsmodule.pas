@@ -8,7 +8,7 @@ uses
   Classes, JupiterModule, JupiterRoute, JupiterObject, JupiterAction,
   JupiterConsts, JupiterApp, JupiterEnviroment, JupiterCSVDataProvider,
   JupiterDirectoryDataProvider, JupiterFileDataProvider, JupiterRunnable,
-  jupiterTimeControlDataProvider, SysUtils;
+  jupiterTimeControlDataProvider, JupiterTaskTimesDataProvider, SysUtils;
 
 type
 
@@ -25,6 +25,7 @@ type
     procedure Internal_ListChecklists(var prList : TJupiterObjectList);
     procedure Internal_ListChecklistsFromCurrentTask(var prList : TJupiterObjectList);
     procedure Internal_ListTaskFiles(var prList : TJupiterObjectList);
+    function Internal_ExecutedTimeOnGetValue(prID : String) : String;
   public
     function GetActions(prRoute : TJupiterRoute) : TJupiterObjectList; override;
 
@@ -33,6 +34,7 @@ type
     procedure CopyFileFromTemplate(prPath: String; prFile: String);
     procedure SetStartTime;
     procedure SetEndTime;
+    function  GetExecutedTime : String;
     procedure ClearTime;
     function  StartedTime : Boolean;
     procedure SetCurrentTask(prClient, prTaskName, prCompletePath : String);
@@ -69,6 +71,11 @@ begin
 
     if not Self.Params.Exists(Self.DefineParamName('Tasks.Current.Path')) then
       Self.Params.AddConfig(Self.DefineParamName('Tasks.Current.Path'), EmptyStr, 'Diretório da tarefa atual');
+
+    if not Self.Params.Exists(Self.DefineParamName('Tasks.Current.ExecutedTime')) then
+      Self.Params.AddVariable(Self.DefineParamName('Tasks.Current.ExecutedTime'), EmptyStr, 'Tempo atual decorrido');
+
+    Self.Params.VariableById(Self.DefineParamName('Tasks.Current.ExecutedTime')).OnGetValue := @Internal_ExecutedTimeOnGetValue;
 
     Self.Params.VariableById(Self.DefineParamName('Tasks.Current.Path')).OnChangeValue := @Internal_OnChangeCurrentTask;
 
@@ -278,6 +285,12 @@ begin
     Icon := ICON_CHECK;
 
   Self.Internal_ListChecklistsFromCurrentTask(prList);
+end;
+
+function TJupiterToolsModule.Internal_ExecutedTimeOnGetValue(prID: String
+  ): String;
+begin
+  Result := GetExecutedTime;
 end;
 
 function TJupiterToolsModule.GetActions(prRoute: TJupiterRoute): TJupiterObjectList;
@@ -542,6 +555,36 @@ begin
 
     FreeAndNil(vrEnviroment);
     FreeAndNil(vrTimeControl);
+  end;
+end;
+
+function TJupiterToolsModule.GetExecutedTime: String;
+var
+  vrVez          : Integer;
+  vrExecutedTime : TTime;
+  vrTempos       : TJupiterTaskTimesDataProvider;
+begin
+  vrTempos := TJupiterTaskTimesDataProvider.Create;
+  try
+      vrTempos.FileName := Params.VariableById('Jupiter.Tools.Tasks.Current.Path').Value + 'Tempos.txt';
+
+    if FileExists(vrTempos.FileName) then
+      vrTempos.ProvideData;
+
+    vrExecutedTime := 0;
+
+    for vrVez := 0 to vrTempos.Size - 1 do
+      with vrTempos.GetRowByIndex(vrVez) do
+      begin
+        if Fields.VariableById('endTime').Value =  '' then
+          vrExecutedTime := vrExecutedTime + Now - StrToDateTime(Fields.VariableById('startTime').Value)
+        else
+          vrExecutedTime := vrExecutedTime + StrToDateTime(Fields.VariableById('endTime').Value) - StrToDateTime(Fields.VariableById('startTime').Value);
+      end;
+
+    Result := FormatDateTime('hh:nn:ss', vrExecutedTime);
+  finally
+    FreeAndNil(vrTempos);
   end;
 end;
 

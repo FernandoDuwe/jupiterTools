@@ -1,5 +1,8 @@
 inherited FCustomJupiterForm: TFCustomJupiterForm
+  OnActivate = FormActivate
+  OnClose = FormClose
   OnCreate = FormCreate
+  OnDeactivate = FormDeactivate
   OnDestroy = FormDestroy
   PopupMenu = nil
   inherited sbActions: TScrollBox
@@ -10,24 +13,41 @@ inherited FCustomJupiterForm: TFCustomJupiterForm
     Top = 306
     Alignment = taCenter
     ClientHeight = 50
-    ParentColor = True
     PopupMenu = ppMenu
+    TabOrder = 1
   end
-  object sbBody: TScrollBox[3]
+  object pnBody: TPanel[3]
     Left = 0
     Height = 246
     Top = 60
     Width = 668
-    HorzScrollBar.Page = 1
-    VertScrollBar.Page = 1
     Align = alClient
-    Color = clDefault
-    ParentColor = False
-    PopupMenu = ppMenu
-    TabOrder = 1
+    BevelOuter = bvNone
+    ClientHeight = 246
+    ClientWidth = 668
+    TabOrder = 3
+    object sbBody: TScrollBox
+      Left = 0
+      Height = 246
+      Top = 0
+      Width = 668
+      HorzScrollBar.Page = 1
+      VertScrollBar.Page = 1
+      Align = alClient
+      ParentBackground = True
+      PopupMenu = ppMenu
+      TabOrder = 0
+    end
   end
   inherited ppMenu: TPopupMenu[4]
   end
   inherited acActionShortcuts: TActionList[5]
+  end
+  object tmrUpdateAutoComponents: TTimer[6]
+    Enabled = False
+    OnTimer = tmrUpdateAutoComponentsTimer
+    OnStartTimer = tmrUpdateAutoComponentsStartTimer
+    Left = 400
+    Top = 136
   end
 end

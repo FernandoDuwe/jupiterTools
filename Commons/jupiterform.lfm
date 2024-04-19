@@ -44,7 +44,6 @@ object FJupiterForm: TFJupiterForm
     BevelOuter = bvNone
     ClientHeight = 66
     ClientWidth = 668
-    ParentColor = False
     TabOrder = 2
     Visible = False
     object lbHelp: TLabel

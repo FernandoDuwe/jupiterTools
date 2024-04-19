@@ -19,6 +19,7 @@ const
    GENERATOR_FORM_PATH      : String = '/forms/generator/';
    MESSAGES_PATH            : String = '/forms/messages/';
    CUSTOM_FORM_PATH         : String = '/forms/custom/';
+   CUSTOM_FORM_PANEL_PATH   : String = '/forms/custom/panel/';
    NEWTASK_FORM_PATH        : String = '/forms/custom/newTask/';
    TASK_FORM_PATH           : String = '/forms/custom/currentTask/';
    DYNAMIC_RECORD_FORM_PATH : String = '/forms/custom/record/dynamic/';
@@ -133,6 +134,7 @@ const
    function GetRootDirectory : String;
    function GetCommandLineTool : String;
    function SearchIsPartOf(prData, prQuery : String) : Boolean;
+   function CreateStringList(prContent : String) : TStrings;
 
 type
   // JupiterThreads
@@ -183,6 +185,13 @@ begin
   prQuery := AnsiUpperCase(prQuery);
 
   Result := Pos(prQuery, prData) <> 0;
+end;
+
+function CreateStringList(prContent: String): TStrings;
+begin
+  Result := TStringList.Create;
+  Result.Clear;
+  Result.Add(prContent);
 end;
 
 end.

@@ -23,6 +23,7 @@ type
     FPanelButton : TPanel;
     FButtonTop   : Integer;
     FOnKeyUp     : TKeyEvent;
+    FPanelMode   : Boolean;
 
     FEdit : TEdit;
     FCmb  : TComboBox;
@@ -45,6 +46,7 @@ type
     property TabOrder    : Integer read FTabOrder write FTabOrder default 1;
     property Variable    : TJupiterVariableForm read FVariable write FVariable;
     property Value       : String read Internal_GetValue;
+    property PanelMode   : Boolean read FPanelMode write FPanelMode;
 
     property OnKeyUp : TKeyEvent read FOnKeyUp write FOnKeyUp;
   public
@@ -182,6 +184,12 @@ begin
   Result.Left      := FORM_MARGIN_LEFT;
   Result.Caption   := IfThen(Trim(Self.Variable.Title) = EmptyStr, Self.Variable.ID, Self.Variable.Title) + vrSufix;
   Result.Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+
+  if Self.PanelMode then
+  begin
+    Result.Font.Color := clWhite;
+  //  Result.Font.Style := [fsBold];
+  end;
 end;
 
 function TJupiterFormField.Internal_CreateEdit(prContainer: TPanel; prTop : Integer): TEdit;
@@ -201,8 +209,22 @@ begin
   Result.TabStop  := True;
   Result.Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
   Result.OnKeyUp   := Self.OnKeyUp;
+  Result.Tag       := Self.Tag;
 
   Result.OnDblClick := @Internal_CopyButtonDbClick;
+
+  if Self.PanelMode then
+  begin
+    Result.Color := prContainer.Color;
+
+    if Self.Variable.ReadOnly then
+      Result.Font.Color := clYellow
+    else
+      Result.Font.Color := clAqua;
+
+    Result.Font.Style  := [fsBold];
+    Result.BorderStyle := bsNone;
+  end;
 
   if (not Self.Variable.CleanOnShow) then
   begin

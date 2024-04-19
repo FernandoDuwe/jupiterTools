@@ -6,9 +6,10 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, ComCtrls,
-  DBGrids, StdCtrls, SynEdit, SynHighlighterSQL, SynCompletion, JupiterForm,
-  jupiterformutils, JupiterAction, JupiterConsts, JupiterEnviroment, JupiterApp,
-  JupiterSystemMessage, udm, jupiterdatabase, SQLDB, DB;
+  DBGrids, StdCtrls, Menus, SynEdit, SynHighlighterSQL, SynCompletion,
+  JupiterForm, jupiterformutils, JupiterAction, JupiterConsts,
+  JupiterEnviroment, JupiterApp, JupiterSystemMessage, JupiterDialogForm,
+  jupiterautocompletesql, udm, jupiterdatabase, SQLDB, DB;
 
 type
 
@@ -19,6 +20,9 @@ type
     dbGridResult: TDBGrid;
     lbTables: TListBox;
     lbFields: TListBox;
+    miUpperCase: TMenuItem;
+    miNickNameTable: TMenuItem;
+    Separator1: TMenuItem;
     mmMessages: TMemo;
     pcPages: TPageControl;
     pnFooter: TPanel;
@@ -34,13 +38,21 @@ type
     tsMessages: TTabSheet;
     tsStructure: TTabSheet;
     tsResult: TTabSheet;
+    procedure dbGridResultDblClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure lbFieldsKeyPress(Sender: TObject; var Key: char);
     procedure lbTablesClick(Sender: TObject);
+    procedure syEditorChange(Sender: TObject);
+    procedure Internal_ChangeAutoComplete(prNewList : TStrings);
   private
+    FAutoComplete : TJupiterAutoCompleteSQL;
+
     procedure Internal_Executar(Sender : TObject);
     procedure Internal_ExecutarScript(Sender : TObject);
     procedure Internal_Commit(Sender : TObject);
     procedure Internal_Rollback(Sender : TObject);
+    procedure Internal_Export(Sender : TObject);
 
     procedure Internal_PrepareForm; override;
     procedure Internal_UpdateComponents; override;
@@ -66,7 +78,60 @@ begin
   if sqlTransaction.Active then
     sqlTransaction.RollbackRetaining;
 
+  FreeAndNil(Self.FAutoComplete);
+
   inherited;
+end;
+
+procedure TFSQLEditor.lbFieldsKeyPress(Sender: TObject; var Key: char);
+begin
+  if Key = #13 then
+  begin
+    syEditor.Lines.Clear;
+    syEditor.Lines.Add('SELECT');
+    syEditor.Lines.Add('FROM  A');
+  end;
+end;
+
+procedure TFSQLEditor.dbGridResultDblClick(Sender: TObject);
+var
+  vrDialog : TJupiterDialogForm;
+  vrVez : Integer;
+begin
+  if not sqlQuery.Active then
+    Exit;
+
+  if sqlQuery.EOF then
+    Exit;
+
+  vrDialog := TJupiterDialogForm.Create;
+  try
+    vrDialog.Title := 'Registro';
+    vrDialog.OnlyShow := True;
+
+    for vrVez := 0 to sqlQuery.Fields.Count - 1 do
+    begin
+      if sqlQuery.Fields[vrVez].IsNull then
+        vrDialog.Fields.AddField(sqlQuery.Fields[vrVez].FieldName, sqlQuery.Fields[vrVez].FieldName, '<NULL>', False, True)
+      else
+      begin
+        vrDialog.Fields.AddField(sqlQuery.Fields[vrVez].FieldName, sqlQuery.Fields[vrVez].FieldName, sqlQuery.Fields[vrVez].Value, False, True);
+
+        vrDialog.Fields.VariableFormById(sqlQuery.Fields[vrVez].FieldName).CopyButton := True;
+      end;
+    end;
+
+    vrDialog.Show;
+  finally
+    FreeAndNil(vrDialog);
+  end;
+end;
+
+procedure TFSQLEditor.FormCreate(Sender: TObject);
+begin
+  inherited;
+
+  Self.FAutoComplete := TJupiterAutoCompleteSQL.Create;
 end;
 
 procedure TFSQLEditor.lbTablesClick(Sender: TObject);
@@ -90,6 +155,20 @@ begin
   finally
     FreeAndNil(vrList);
   end;
+end;
+
+procedure TFSQLEditor.syEditorChange(Sender: TObject);
+begin
+  Self.FAutoComplete.SetScript(syEditor.Lines);
+end;
+
+procedure TFSQLEditor.Internal_ChangeAutoComplete(prNewList: TStrings);
+begin
+  SynAutoComplete1.AutoCompleteList.Clear;
+  SynAutoComplete1.AutoCompleteList.AddStrings(prNewList);
+
+  SynCompletion1.ItemList.Clear;
+  SynCompletion1.ItemList.AddStrings(prNewList);
 end;
 
 procedure TFSQLEditor.Internal_Executar(Sender: TObject);
@@ -192,6 +271,20 @@ begin
   end;
 end;
 
+procedure TFSQLEditor.Internal_Export(Sender: TObject);
+var
+  vrEnviroment : TJupiterEnviroment;
+begin
+  vrEnviroment := TJupiterEnviroment.Create;
+  try
+    vrEnviroment.CreateFile('/temp/export.csv', EmptyStr);
+
+    vrJupiterApp.Popup('Arquivo criado', CreateStringList('Arquivo /temp/export.csv criado'));
+  finally
+    FreeAndNil(vrEnviroment);
+  end;
+end;
+
 procedure TFSQLEditor.Internal_PrepareForm;
 var
   vrEnviroment : TJupiterEnviroment;
@@ -228,6 +321,14 @@ begin
   begin
     Hint := 'Cancelar alterações';
     Icon := ICON_DELETE;
+  end;
+
+  Self.Actions.Add(TJupiterAction.Create('Exportar', @Internal_Export));
+
+  with TJupiterAction(Self.Actions.GetLastObject) do
+  begin
+    Hint := 'Exportar resultado atual em .csv';
+    Icon := ICON_COPY;
   end;
 
   pnFooter.Height := PercentOfScreen(Self.Height, 30);

@@ -27,7 +27,7 @@ inherited FHome: TFHome
     Height = 573
     Top = 60
     Width = 1188
-    HorzScrollBar.Page = 144
+    HorzScrollBar.Page = 143
     Align = alClient
     ClientHeight = 569
     ClientWidth = 1184
@@ -40,9 +40,9 @@ inherited FHome: TFHome
       Top = 0
       Width = 1184
       Align = alTop
+      BevelOuter = bvNone
       ClientHeight = 80
       ClientWidth = 1184
-      ParentColor = False
       TabOrder = 0
       OnClick = pnTitleClick
       object lbTitle: TLabel

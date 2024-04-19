@@ -85,7 +85,7 @@ begin
   FormResize(Sender);
 
   Self.FFormGenerator.ActionList := Self.Actions;
-  Self.FFormGenerator.Raised := True;
+//  Self.FFormGenerator.Raised := True;
   Self.FFormGenerator.ActionColor := clWhite;
   Self.FFormGenerator.DrawForm;
 

@@ -5,19 +5,26 @@ unit uCustomJupiterForm;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, JupiterForm,
-  JupiterAction, JupiterConsts, JupiterRunnable, JupiterFormGenerator,
-  jupiterformutils, JupiterApp, JupiterStandardModule;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
+  JupiterForm, JupiterAction, JupiterConsts, JupiterRunnable,
+  JupiterFormGenerator, jupiterformutils, JupiterApp, JupiterStandardModule;
 
 type
 
   { TFCustomJupiterForm }
 
   TFCustomJupiterForm = class(TFJupiterForm)
+    pnBody: TPanel;
     sbBody: TScrollBox;
+    tmrUpdateAutoComponents: TTimer;
+    procedure FormActivate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
+    procedure FormDeactivate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-  private
+    procedure tmrUpdateAutoComponentsStartTimer(Sender: TObject);
+    procedure tmrUpdateAutoComponentsTimer(Sender: TObject);
+  protected
     FDontShowActionInForm : Boolean;
 
     FFormGenerator : TJupiterFormGenerator;
@@ -32,6 +39,8 @@ type
   public
     procedure PrepareForm; override;
     procedure Search(prSearch : String); override;
+
+    procedure UpdateForm(prUpdateDatasets : Boolean = True; prUpdateComponentes : Boolean = True; prUpdateCalcs : Boolean = True); override;
   end;
 
 var
@@ -50,14 +59,48 @@ begin
   Self.DontShowActionInForm := False;
 
   Self.FFormGenerator := TJupiterFormGenerator.Create;
+  Self.FFormGenerator.Form := Self;
   Self.FFormGenerator.Container := sbBody;
+end;
+
+procedure TFCustomJupiterForm.FormActivate(Sender: TObject);
+begin
+  inherited;
+
+  tmrUpdateAutoComponents.Enabled := Self.Showing and Self.FFormGenerator.HasAutoValueVariables;
+end;
+
+procedure TFCustomJupiterForm.FormClose(Sender: TObject;
+  var CloseAction: TCloseAction);
+begin
+  tmrUpdateAutoComponents.Enabled := False;
+end;
+
+procedure TFCustomJupiterForm.FormDeactivate(Sender: TObject);
+begin
+  tmrUpdateAutoComponents.Enabled := False;
 end;
 
 procedure TFCustomJupiterForm.FormDestroy(Sender: TObject);
 begin
+  tmrUpdateAutoComponents.Enabled := False;
+
   FreeAndNil(FFormGenerator);
 
   inherited;
+end;
+
+procedure TFCustomJupiterForm.tmrUpdateAutoComponentsStartTimer(Sender: TObject
+  );
+begin
+
+end;
+
+procedure TFCustomJupiterForm.tmrUpdateAutoComponentsTimer(Sender: TObject);
+begin
+  Self.FFormGenerator.UpdateForm;
+
+  tmrUpdateAutoComponents.Enabled := Self.Showing and Self.FFormGenerator.HasAutoValueVariables;
 end;
 
 procedure TFCustomJupiterForm.Internal_PrepareForm;
@@ -110,6 +153,8 @@ begin
 
     DrawForm(Self);
   finally
+    tmrUpdateAutoComponents.Enabled := Self.Showing and Self.FFormGenerator.HasAutoValueVariables;
+
     sbBody.Visible := True;
   end;
 end;
@@ -119,6 +164,19 @@ begin
   inherited Search(prSearch);
 
   DrawFormInSearch(Self, prSearch, $005151FF);
+end;
+
+procedure TFCustomJupiterForm.UpdateForm(prUpdateDatasets: Boolean; prUpdateComponentes: Boolean; prUpdateCalcs: Boolean);
+begin
+  tmrUpdateAutoComponents.Enabled := False;
+  try
+    if prUpdateComponentes then
+      Self.FFormGenerator.UpdateForm;
+
+    inherited UpdateForm(prUpdateDatasets, prUpdateComponentes, prUpdateCalcs);
+  finally
+    tmrUpdateAutoComponents.Enabled := Self.Showing and Self.FFormGenerator.HasAutoValueVariables;
+  end;
 end;
 
 end.
