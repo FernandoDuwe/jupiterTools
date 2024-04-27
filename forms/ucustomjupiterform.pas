@@ -128,6 +128,11 @@ end;
 
 procedure TFCustomJupiterForm.PrepareForm;
 begin
+  if Self.Params.Exists('UpdateTimerIntervalTime') then
+    tmrUpdateAutoComponents.Interval := StrToInt(Self.Params.VariableById('UpdateTimerIntervalTime').Value)
+  else
+    Self.Params.AddVariable('UpdateTimerIntervalTime', IntToStr(tmrUpdateAutoComponents.Interval), 'Intervalo de tempo em que os campos calculados são atualizados em tela');
+
   inherited PrepareForm;
 
   Self.FFormGenerator.OnKeyUp := Self.OnKeyUp;

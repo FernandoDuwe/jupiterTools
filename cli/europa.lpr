@@ -10,7 +10,8 @@ uses
   JupiterAction, JupiterFileDataProvider, JupiterEnviroment, JupiterRunnable,
   jupiterclicommand, JupiterApp, jupiterScriptFunctions, jupiterScript,
   jupiterclimodule, JupiterGeneratorModule, JupiterStandardModule,
-  JupiterToolsModule, pascalscript, CustApp, Interfaces
+  JupiterToolsModule, jupiterappmodule, pascalscript, CustApp, Interfaces,
+jupiterautoupdater, JupiterCSVDataProvider, JupiterXMLDataProvider
   { you can add units after this };
 
 type
@@ -21,6 +22,7 @@ type
   protected
     procedure DoRun; override;
     procedure Internal_RunScript;
+    procedure Internal_StartAutoUpdater;
     function Internal_GetCommand : String;
   published
     property Command : String read Internal_GetCommand;
@@ -65,7 +67,10 @@ begin
       Exit;
     end;
 
-    Self.Internal_RunScript;
+    if AnsiUpperCase(Self.Command) = 'AUTOUPDATER' then
+      Self.Internal_StartAutoUpdater
+    else
+      Self.Internal_RunScript;
   finally
     // stop program loop
     Terminate;
@@ -118,6 +123,30 @@ begin
   finally
     FreeAndNil(vrFileProvider);
     FreeAndNil(vrEnviroment);
+  end;
+end;
+
+procedure TEuropa.Internal_StartAutoUpdater;
+var
+  vrAuto : TJupiterAutoUpdater;
+begin
+  if ((not vrJupiterApp.Params.Exists('Jupiter.Application.AutoUpdater.KeyFile.xml')) or (vrJupiterApp.Params.VariableById('Jupiter.Application.AutoUpdater.KeyFile.xml').Value = '')) then
+  begin
+    WriteLn('Downloading script file not found!');
+    Exit;
+  end;
+
+  WriteLn('Starting updater routine...');
+  WriteLn('Downloading script file: ' + vrJupiterApp.Params.VariableById('Jupiter.Application.AutoUpdater.KeyFile.xml').Value);
+  WriteLn(EmptyStr);
+
+  vrAuto := TJupiterAutoUpdater.Create;
+  try
+    vrAuto.FileName := vrJupiterApp.Params.VariableById('Jupiter.Application.AutoUpdater.KeyFile.xml').Value;
+
+    vrAuto.Execute;
+  finally
+    FreeAndNil(vrAuto);
   end;
 end;
 
@@ -203,6 +232,7 @@ begin
     vrJupiterApp.AddModule(TJupiterCLIModule.Create);
     vrJupiterApp.AddModule(TJupiterToolsModule.Create);
     vrJupiterApp.AddModule(TJupiterGeneratorModule.Create);
+    vrJupiterApp.AddModule(TJupiterAppModule.Create);
 
     Application := TEuropa.Create(nil);
     Application.Title := 'Europa';

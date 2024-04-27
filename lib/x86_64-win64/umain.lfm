@@ -942,7 +942,7 @@ inherited FMain: TFMain
         object miShortcut: TMenuItem
           Caption = 'Arquivo .jpas'
           ImageIndex = 0
-          OnClick = MenuItem1Click
+          OnClick = miStartAutoUpdaterClick
         end
         object MenuItem9: TMenuItem
           Caption = 'Layout'
@@ -1126,6 +1126,10 @@ inherited FMain: TFMain
       object MenuItem16: TMenuItem
         Caption = 'Sobre'
         OnClick = MenuItem5Click
+      end
+      object miStartAutoUpdaterCMD: TMenuItem
+        Caption = 'Verificar por atualizações'
+        OnClick = miStartAutoUpdaterCMDClick
       end
       object MenuItem17: TMenuItem
         Caption = 'Release notes'

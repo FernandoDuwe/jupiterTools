@@ -10,6 +10,7 @@ uses
 const
    ROOT_PATH                : String = '/';
    ROOT_FORM_PATH           : String = '/forms/';
+   CHART_VIEWER_PATH        : String = '/forms/chart/viewer/';
    CONFIG_PATH              : String = '/forms/config/';
    EXPLORER_FORM_PATH       : String = '/forms/explorer/';
    WEB_EXPLORER_FORM_PATH   : String = '/forms/explorer/web/';

@@ -71,18 +71,38 @@ begin
 end;
 
 function TJupiterEnviroment.CreatePath(prPath: String) : String;
+var
+  vrStr     : TStrings;
+  vrStrPath : String;
+  vrVez     : Integer;
 begin
   Result := Self.FullPath(prPath);
 
-  if not DirectoryExists(Result) then
-  begin
-    CreateDir(Result);
+  vrStr := TStringList.Create;
+  try
+    vrStr.Clear;
+    vrStr.Delimiter     := DirectorySeparator;
+    vrStr.DelimitedText := Result;
 
-    //vrJupiterApp.AddMessage('Diretório criado', Self.ClassName).Details.Add('Diretório: ' + Result);
+    vrStrPath := EmptyStr;
+
+    for vrVez := 0 to vrStr.Count - 1 do
+    begin
+      vrStrPath := vrStrPath + vrStr[vrVez] + GetDirectorySeparator;
+
+      if not DirectoryExists(vrStrPath) then
+        CreateDir(vrStrPath);
+    end;
+
+    if Copy(Result, Length(Result), 1) <>  GetDirectorySeparator then
+       Result := Result + GetDirectorySeparator;
+
+    if ((Assigned(vrJupiterApp)) and (vrJupiterApp.Ready)) then
+      vrJupiterApp.AddMessage('Diretório criado', Self.ClassName).Details.Add('Diretório: ' + Result);
+  finally
+    vrStr.Clear;
+    FreeAndNil(vrStr);
   end;
-
-  if Copy(Result, Length(Result), 1) <>  GetDirectorySeparator then
-     Result := Result + GetDirectorySeparator;
 end;
 
 function TJupiterEnviroment.CreateFile(prPath, prContent : String): String;
@@ -90,6 +110,9 @@ var
   vrStr : TStrings;
 begin
   Result := Self.FullPath(prPath);
+
+  if not Self.Exists(ExtractFileDir(Result)) then
+    Self.CreatePath(ExtractFileDir(Result));
 
   if FileExists(Result) then
     Exit;
@@ -100,7 +123,8 @@ begin
     vrStr.Add(prContent);
     vrStr.SaveToFile(Result);
 
-    vrJupiterApp.AddMessage('Arquivo criado', Self.ClassName).Details.Add('Arquivo: ' + Result);
+    if ((Assigned(vrJupiterApp)) and (vrJupiterApp.Ready)) then
+      vrJupiterApp.AddMessage('Arquivo criado', Self.ClassName).Details.Add('Arquivo: ' + Result);
   finally
     vrStr.Clear;
     FreeAndNil(vrStr);
@@ -123,7 +147,8 @@ begin
     vrStr.Add(prContent);
     vrStr.SaveToFile(Result);
 
-    vrJupiterApp.AddMessage('Arquivo criado', Self.ClassName).Details.Add('Arquivo: ' + Result);
+    if ((Assigned(vrJupiterApp)) and (vrJupiterApp.Ready)) then
+      vrJupiterApp.AddMessage('Arquivo criado', Self.ClassName).Details.Add('Arquivo: ' + Result);
   finally
     vrStr.Clear;
     FreeAndNil(vrStr);
@@ -134,6 +159,12 @@ function TJupiterEnviroment.FullPath(prPath: String): String;
 begin
   prPath := StringReplace(prPath, '\', GetDirectorySeparator, [rfIgnoreCase, rfReplaceAll]);
   prPath := StringReplace(prPath, '/', GetDirectorySeparator, [rfIgnoreCase, rfReplaceAll]);
+
+  if Pos(Self.Internal_GetBasePath, prPath) > 0 then
+  begin
+    Result := prPath;
+    Exit;
+  end;
 
   Result := Self.Internal_GetBasePath + prPath;
 end;
@@ -294,7 +325,8 @@ begin
         Result := EmptyStr;
 
       if Result <> EmptyStr then
-        vrJupiterApp.AddMessage('Arquivo selecionado', Self.ClassName).Details.Add('Arquivo: ' + Result);
+        if ((Assigned(vrJupiterApp)) and (vrJupiterApp.Ready)) then
+          vrJupiterApp.AddMessage('Arquivo selecionado', Self.ClassName).Details.Add('Arquivo: ' + Result);
     end;
   finally
     FreeAndNil(vrDialog);

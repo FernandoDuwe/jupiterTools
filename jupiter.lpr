@@ -15,10 +15,10 @@ uses
   Interfaces, // this includes the LCL widgetset
   Forms, JupiterConsts, JupiterObject, JupiterRoute, JupiterVariable,
   JupiterRunnable, JupiterAction, JupiterForm, JupiterModule, JupiterApp,
-  pascalscript, JupiterToolsModule, uHome, uExplorer, JupiterGeneratorModule,
-  JupiterStandardModule, uNewTask, JupiterDataProvider, JupiterFileDataProvider,
-  JupiterDirectoryDataProvider, JupiterCSVDataProvider, uConfig,
-  JupiterEnviroment, JupiterFormGenerator, JupiterFormField,
+  pascalscript, tachartlazaruspkg, JupiterToolsModule, uHome, uExplorer,
+  JupiterGeneratorModule, JupiterStandardModule, uNewTask, JupiterDataProvider,
+  JupiterFileDataProvider, JupiterDirectoryDataProvider, JupiterCSVDataProvider,
+  uConfig, JupiterEnviroment, JupiterFormGenerator, JupiterFormField,
   JupiterVariableForm, JupiterDialogForm, uCurrentTask,
   JupiterTasksDataProvider, JupiterTaskTimesDataProvider, uEditor, uMessage,
   JupiterSystemMessage, JupiterGeneratorForm, JupiterXMLDataProvider,
@@ -30,7 +30,8 @@ uses
   unewcommandcli, utimecontrol, jupiterTimeControlDataProvider,
   uuserpreferences, jupiterformaction, udm, jupiterdatabase, usqlEditor,
   umenuselector, uwebexplorer, jupiterexternaldatasets, jupiterlayoutvalidator,
-  jupitershortcut, jupiterautocompletesql, uCustomJupiterFormPanel;
+  jupitershortcut, jupiterautocompletesql, uCustomJupiterFormPanel,
+  uchartViewer, jupiterappmodule;
 
 {$R *.res}
 
@@ -105,6 +106,7 @@ begin
   end;
 
   vrJupiterApp.AddModule(TJupiterStandardModule.Create);
+  vrJupiterApp.AddModule(TJupiterAppModule.Create);
   vrJupiterApp.AddModule(TJupiterCLIModule.Create);
   vrJupiterApp.AddModule(TJupiterToolsModule.Create);
   vrJupiterApp.AddModule(TJupiterGeneratorModule.Create);
@@ -112,6 +114,7 @@ begin
 
   // Forms
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(ROOT_FORM_PATH, TFHome));
+  vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(CHART_VIEWER_PATH, TFChartViewer));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(CONFIG_PATH, TFConfig));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(EXPLORER_FORM_PATH, TFExplorer));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(CUSTOM_FORM_PATH, TFCustomJupiterForm));

@@ -10,8 +10,9 @@ uses
   JupiterConsts, JupiterObject, JupiterForm, JupiterAction, JupiterEnviroment,
   JupiterRunnable, jupiterformutils, JupiterFileDataProvider, jupiterScript,
   JupiterDirectoryDataProvider, JupiterVariable, jupitershortcut,
-  JupiterToolsModule, jupiterdatabase, JupiterFormTab, SQLDB,
-  uPSComponent_Default, LMessages, PairSplitter, ActnList, ButtonPanel, EditBtn;
+  jupiterScriptFunctions, JupiterToolsModule, jupiterdatabase, jupiterappmodule,
+  JupiterFormTab, SQLDB, uPSComponent_Default, LMessages, PairSplitter,
+  ActnList, ButtonPanel, EditBtn;
 
 type
 
@@ -34,6 +35,7 @@ type
     ilIconFamily: TImageList;
     ilTabs: TImageList;
     JupiterFormTab1: TJupiterFormTab;
+    miStartAutoUpdaterCMD: TMenuItem;
     miNotepadPlugin: TMenuItem;
     Separator8: TMenuItem;
     MenuItem10: TMenuItem;
@@ -142,7 +144,7 @@ type
     procedure MenuItem17Click(Sender: TObject);
     procedure MenuItem18Click(Sender: TObject);
     procedure MenuItem19Click(Sender: TObject);
-    procedure MenuItem1Click(Sender: TObject);
+    procedure miStartAutoUpdaterClick(Sender: TObject);
     procedure MenuItem20Click(Sender: TObject);
     procedure MenuItem21Click(Sender: TObject);
     procedure MenuItem6Click(Sender: TObject);
@@ -171,6 +173,7 @@ type
     procedure miNewCheckListClick(Sender: TObject);
     procedure miOpenCSVClick(Sender: TObject);
     procedure miOpenCurrentTaskClick(Sender: TObject);
+    procedure miStartAutoUpdaterCMDClick(Sender: TObject);
     procedure miUpdateClick(Sender: TObject);
     procedure pnBodyClick(Sender: TObject);
     procedure ppNotifierClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -474,6 +477,8 @@ procedure TFMain.FormActivate(Sender: TObject);
 begin
   inherited;
 
+  vrJupiterApp.Ready := True;
+
   Self.FPrepared := True;
 
   FormResize(Sender);
@@ -654,7 +659,7 @@ begin
   acChangeTab.Execute;
 end;
 
-procedure TFMain.MenuItem1Click(Sender: TObject);
+procedure TFMain.miStartAutoUpdaterClick(Sender: TObject);
 var
   vrDialog     : TJupiterDialogForm;
   vrEnviroment : TJupiterEnviroment;
@@ -1060,6 +1065,31 @@ begin
   vrJupiterApp.NavigateTo(TJupiterRoute.Create(TASK_FORM_PATH), False);
 end;
 
+procedure TFMain.miStartAutoUpdaterCMDClick(Sender: TObject);
+var
+  vrEnviroment : TJupiterEnviroment;
+  vrStr : TStrings;
+begin
+  vrStr        := TStringList.Create;
+  vrEnviroment := TJupiterEnviroment.Create;
+  try
+    vrStr.Clear;
+    vrStr.Add('timeout 5');
+    vrStr.Add('europa autoupdater');
+
+    vrEnviroment.CreateFile(vrEnviroment.FullPath('temp/autoUpdater.bat'), vrStr.Text);
+
+    JupiterRunCommandLineNoWait(vrEnviroment.FullPath('temp/autoUpdater.bat'));
+
+    Application.Terminate;
+  finally
+    vrStr.Clear;
+
+    FreeAndNil(vrEnviroment);
+    FreeAndNil(vrStr);
+  end;
+end;
+
 procedure TFMain.miUpdateClick(Sender: TObject);
 begin
   Self.IsModal := True;
@@ -1346,6 +1376,8 @@ begin
     cbNavigation.Enabled := JupiterFormTab1.Visible;
 
     miNotepadPlugin.Enabled := vrEnviroment.Exists(vrEnviroment.FullPath('jupiter_notepad_plugin.dll'));
+
+    miStartAutoUpdaterCMD.Enabled := TJupiterAppModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Application')).UpdateAvaliable;
   finally
     FreeAndNil(vrEnviroment);
   end;

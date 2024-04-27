@@ -21,7 +21,7 @@
       <MajorVersionNr Value="2"/>
       <MinorVersionNr Value="2"/>
       <RevisionNr Value="2"/>
-      <BuildNr Value="10"/>
+      <BuildNr Value="11"/>
       <Language Value="0416"/>
       <StringTable CompanyName="Jupiter Studios" FileDescription="Jupiter" InternalName="Jupiter" ProductName="Jupiter"/>
     </VersionInfo>
@@ -36,6 +36,9 @@
       <FormatVersion Value="2"/>
     </RunParams>
     <RequiredPackages>
+      <Item>
+        <PackageName Value="TAChartLazarusPkg"/>
+      </Item>
       <Item>
         <PackageName Value="WebView4Delphi"/>
       </Item>
@@ -489,6 +492,18 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uCustomJupiterFormPanel"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms\uchartviewer.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FChartViewer"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uchartViewer"/>
+      </Unit>
+      <Unit>
+        <Filename Value="Modules\jupiterappmodule.pas"/>
+        <IsPartOfProject Value="True"/>
       </Unit>
     </Units>
   </ProjectOptions>

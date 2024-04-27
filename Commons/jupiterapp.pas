@@ -48,6 +48,7 @@ type
     FCurrentRoute      : TJupiterRoute;
     FCurrentCLICommand : TJupiterObject;
     FShorcuts          : TJupiterShortcutList;
+    FReady             : Boolean;
 
     procedure Internal_OpenFormUnique(prRoute : TJupiterFormRoute; prOriginalRoute : TJupiterRoute; prAsModal : Boolean);
     procedure Internal_OpenFormTabs(prRoute : TJupiterFormRoute; prOriginalRoute : TJupiterRoute; prAsModal : Boolean);
@@ -80,6 +81,7 @@ type
     property FormRoutes     : TJupiterObjectList   read FFormRoutes    write FFormRoutes;
     property ModulesList    : TJupiterModuleList   read FModules       write FModules;
     property Messages       : TJupiterObjectList   read FMessages      write FMessages;
+    property Ready          : Boolean              read FReady         write FReady;
     property Shortcuts      : TJupiterShortcutList read FShorcuts      write FShorcuts;
     property Threads        : TJupiterThreadList   read FThreads       write FThreads;
     property Params         : TJupiterVariableList read FParams        write FParams;
@@ -545,6 +547,7 @@ var
   vrVez         : Integer;
   vrVariables   : TJupiterVariableList;
 begin
+  Self.FReady   := False;
   Self.FAppID   := prAppID;
   Self.FAppName := prAppName;
 

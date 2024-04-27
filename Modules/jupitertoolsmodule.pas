@@ -564,6 +564,14 @@ var
   vrExecutedTime : TTime;
   vrTempos       : TJupiterTaskTimesDataProvider;
 begin
+  Result := EmptyStr;
+
+  if not Params.Exists('Jupiter.Tools.Tasks.Current.Path') then
+    Exit;
+
+  if Params.VariableById('Jupiter.Tools.Tasks.Current.Path').Value = '' then
+    Exit;
+
   vrTempos := TJupiterTaskTimesDataProvider.Create;
   try
       vrTempos.FileName := Params.VariableById('Jupiter.Tools.Tasks.Current.Path').Value + 'Tempos.txt';
