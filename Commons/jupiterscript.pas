@@ -220,6 +220,8 @@ begin
   Sender.AddFunction(@JupiterWriteLn, 'procedure Writeln(prMessage : String);');
   Sender.AddFunction(@JupiterReadLn, 'function Readln: String;');
   Sender.AddFunction(@JupiterInputText, 'function InputText(prMessage : String) : String;');
+  Sender.AddFunction(@JupiterInformStartProcessing, 'procedure InformStartProcessing();');
+  Sender.AddFunction(@JupiterInformStopProcessing, 'procedure InformStopProcessing();');
 
   Sender.AddFunction(@JupiterAddLogMessage, 'procedure AddLogMessage(prTitle, prDescription : String);');
   Sender.AddFunction(@JupiterShowPopup, 'procedure ShowPopup(prTitle, prDescription : String);');
@@ -371,6 +373,9 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Writeln(prMessage : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function Readln: String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function InputText(prMessage : String) : String;'));
+
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure InformStartProcessing();'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure InformStopProcessing();'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure AddLogMessage(prTitle, prDescription : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure ShowPopup(prTitle, prDescription : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure ShowInfoMessage(prMessage : String);'));

@@ -8,11 +8,10 @@
       <Unit>
         <Filename Value="jupiter.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="17"/>
         <CursorPos X="74" Y="38"/>
         <UsageCount Value="200"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="forms\umain.pas"/>
@@ -21,13 +20,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uMain"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="2"/>
-        <TopLine Value="1067"/>
-        <CursorPos X="28" Y="1080"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1372"/>
+        <CursorPos X="32" Y="1402"/>
         <UsageCount Value="200"/>
-        <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="Commons\jupiterconsts.pas"/>
@@ -63,29 +59,26 @@
         <Filename Value="Commons\jupitervariable.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterVariable"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="123"/>
         <CursorPos X="59" Y="150"/>
         <UsageCount Value="200"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="Commons\jupiterrunnable.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterRunnable"/>
-        <EditorIndex Value="5"/>
-        <TopLine Value="165"/>
-        <CursorPos X="27" Y="191"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="316"/>
+        <CursorPos X="35" Y="322"/>
         <UsageCount Value="200"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="Commons\jupiteraction.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterAction"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="131"/>
-        <CursorPos X="38" Y="163"/>
+        <CursorPos X="76" Y="35"/>
         <UsageCount Value="200"/>
       </Unit>
       <Unit>
@@ -112,19 +105,20 @@
         <Filename Value="Commons\jupiterapp.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterApp"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="347"/>
-        <CursorPos Y="350"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="422"/>
+        <CursorPos X="8" Y="444"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="Modules\jupitertoolsmodule.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterToolsModule"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="16"/>
         <CursorPos X="31" Y="67"/>
         <UsageCount Value="225"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="forms\uhome.pas"/>
@@ -453,11 +447,10 @@
         <Filename Value="Commons\jupiterscript.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="jupiterScript"/>
-        <EditorIndex Value="3"/>
-        <TopLine Value="198"/>
-        <CursorPos X="50" Y="232"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="344"/>
+        <CursorPos X="24" Y="347"/>
         <UsageCount Value="203"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="forms\uscripteditor.pas"/>
@@ -475,11 +468,10 @@
         <Filename Value="Commons\jupiterscriptfunctions.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="jupiterScriptFunctions"/>
-        <EditorIndex Value="4"/>
-        <TopLine Value="7"/>
-        <CursorPos X="14" Y="28"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="184"/>
+        <CursorPos X="27" Y="197"/>
         <UsageCount Value="202"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="forms\udynamicrecord.pas"/>
@@ -740,11 +732,10 @@
       <Unit>
         <Filename Value="Modules\jupiterappmodule.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="10"/>
         <CursorPos X="33" Y="41"/>
         <UsageCount Value="23"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\objpas\classes\classesh.inc"/>
@@ -788,9 +779,9 @@
         <Filename Value="C:\lazarus\lcl\controls.pp"/>
         <UnitName Value="Controls"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="160"/>
-        <CursorPos X="23" Y="183"/>
-        <UsageCount Value="9"/>
+        <TopLine Value="159"/>
+        <CursorPos X="3" Y="180"/>
+        <UsageCount Value="10"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\lcl\include\menuitem.inc"/>
@@ -1081,125 +1072,91 @@
         <UsageCount Value="10"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="29">
+    <JumpHistory HistoryIndex="21">
       <Position>
-        <Filename Value="Commons\jupiterrunnable.pas"/>
-        <Caret Line="36" Column="15" TopLine="15"/>
+        <Filename Value="Commons\jupiterapp.pas"/>
       </Position>
       <Position>
-        <Filename Value="Commons\jupiterrunnable.pas"/>
-        <Caret Line="323" Column="6" TopLine="309"/>
+        <Filename Value="Commons\jupiterapp.pas"/>
+        <Caret Line="280" Column="69" TopLine="264"/>
       </Position>
       <Position>
-        <Filename Value="Commons\jupiterrunnable.pas"/>
-        <Caret Line="30" Column="15" TopLine="15"/>
+        <Filename Value="Commons\jupiterapp.pas"/>
       </Position>
       <Position>
-        <Filename Value="forms\umain.pas"/>
-        <Caret Line="1087" Column="29" TopLine="1066"/>
+        <Filename Value="Commons\jupiterapp.pas"/>
+        <Caret Line="279" Column="34" TopLine="248"/>
       </Position>
       <Position>
-        <Filename Value="Commons\jupiterrunnable.pas"/>
-        <Caret Line="32" Column="23"/>
+        <Filename Value="Commons\jupiterapp.pas"/>
+        <Caret Line="59" Column="15" TopLine="42"/>
       </Position>
       <Position>
-        <Filename Value="forms\umain.pas"/>
-        <Caret Line="1083" Column="89" TopLine="1066"/>
+        <Filename Value="Commons\jupiterapp.pas"/>
+        <Caret Line="283" Column="45" TopLine="260"/>
       </Position>
       <Position>
-        <Filename Value="forms\umain.pas"/>
-        <Caret Line="1089" Column="71" TopLine="1066"/>
+        <Filename Value="Commons\jupiterapp.pas"/>
+        <Caret Line="116" Column="27" TopLine="84"/>
       </Position>
       <Position>
-        <Filename Value="Commons\jupiterrunnable.pas"/>
-        <Caret Line="32" Column="15" TopLine="11"/>
+        <Filename Value="Commons\jupiterapp.pas"/>
+        <Caret Line="551" Column="3" TopLine="548"/>
       </Position>
       <Position>
-        <Filename Value="Commons\jupiterrunnable.pas"/>
-        <Caret Line="176" TopLine="165"/>
+        <Filename Value="Commons\jupiterapp.pas"/>
+        <Caret Line="116" Column="15" TopLine="97"/>
       </Position>
       <Position>
-        <Filename Value="Commons\jupiterrunnable.pas"/>
-        <Caret Line="177" Column="24" TopLine="165"/>
+        <Filename Value="Commons\jupiterapp.pas"/>
+        <Caret Line="551" TopLine="547"/>
       </Position>
       <Position>
-        <Filename Value="Commons\jupiterrunnable.pas"/>
-        <Caret Line="176" TopLine="165"/>
+        <Filename Value="Commons\jupiterapp.pas"/>
+        <Caret Line="117" Column="32" TopLine="97"/>
       </Position>
       <Position>
-        <Filename Value="Commons\jupiterrunnable.pas"/>
-        <Caret Line="177" TopLine="165"/>
+        <Filename Value="Commons\jupiterapp.pas"/>
+        <Caret Line="562" TopLine="556"/>
       </Position>
       <Position>
-        <Filename Value="Commons\jupiterrunnable.pas"/>
-        <Caret Line="179" TopLine="165"/>
+        <Filename Value="Commons\jupiterapp.pas"/>
+        <Caret Line="117" Column="15" TopLine="98"/>
       </Position>
       <Position>
-        <Filename Value="Commons\jupiterrunnable.pas"/>
-        <Caret Line="180" TopLine="165"/>
+        <Filename Value="Commons\jupiterapp.pas"/>
+        <Caret Line="560" Column="3" TopLine="556"/>
       </Position>
       <Position>
-        <Filename Value="Commons\jupiterrunnable.pas"/>
-        <Caret Line="179" TopLine="165"/>
+        <Filename Value="Commons\jupiterapp.pas"/>
+        <Caret Line="116" Column="15" TopLine="98"/>
       </Position>
       <Position>
-        <Filename Value="Commons\jupiterrunnable.pas"/>
-        <Caret Line="180" TopLine="165"/>
+        <Filename Value="Commons\jupiterapp.pas"/>
+        <Caret Line="552" Column="3" TopLine="548"/>
       </Position>
       <Position>
-        <Filename Value="Commons\jupiterrunnable.pas"/>
-        <Caret Line="179" TopLine="165"/>
+        <Filename Value="Commons\jupiterapp.pas"/>
+        <Caret Line="116" Column="15" TopLine="97"/>
       </Position>
       <Position>
-        <Filename Value="Commons\jupiterrunnable.pas"/>
-        <Caret Line="180" TopLine="165"/>
+        <Filename Value="Commons\jupiterapp.pas"/>
+        <Caret Line="580" Column="22" TopLine="548"/>
       </Position>
       <Position>
-        <Filename Value="Commons\jupiterrunnable.pas"/>
-        <Caret Line="179" TopLine="165"/>
+        <Filename Value="Commons\jupiterapp.pas"/>
+        <Caret Line="117" Column="15" TopLine="98"/>
       </Position>
       <Position>
-        <Filename Value="Commons\jupiterrunnable.pas"/>
-        <Caret Line="184" Column="37" TopLine="165"/>
+        <Filename Value="Commons\jupiterapp.pas"/>
       </Position>
       <Position>
-        <Filename Value="Commons\jupiterrunnable.pas"/>
-        <Caret Line="189" TopLine="165"/>
+        <Filename Value="Commons\jupiterapp.pas"/>
+        <Caret Line="11" Column="77"/>
       </Position>
       <Position>
-        <Filename Value="Commons\jupitervariable.pas"/>
-        <Caret Line="131" TopLine="123"/>
-      </Position>
-      <Position>
-        <Filename Value="Commons\jupiterrunnable.pas"/>
-        <Caret Line="192" TopLine="165"/>
-      </Position>
-      <Position>
-        <Filename Value="Commons\jupiterscript.pas"/>
-        <Caret Line="437" Column="75" TopLine="416"/>
-      </Position>
-      <Position>
-        <Filename Value="Commons\jupiterscript.pas"/>
-      </Position>
-      <Position>
-        <Filename Value="Commons\jupiterscript.pas"/>
-        <Caret Line="233" Column="51" TopLine="198"/>
-      </Position>
-      <Position>
-        <Filename Value="Commons\jupiterscriptfunctions.pas"/>
-        <Caret Line="28" Column="14" TopLine="7"/>
-      </Position>
-      <Position>
-        <Filename Value="Commons\jupiterscript.pas"/>
-        <Caret Line="228" Column="58" TopLine="198"/>
-      </Position>
-      <Position>
-        <Filename Value="Commons\jupiterscript.pas"/>
-        <Caret Line="232" Column="50" TopLine="198"/>
-      </Position>
-      <Position>
-        <Filename Value="forms\umain.pas"/>
-        <Caret Line="1084" Column="35" TopLine="1067"/>
+        <Filename Value="Commons\jupiterapp.pas"/>
+        <Caret Line="114" Column="33" TopLine="81"/>
       </Position>
     </JumpHistory>
     <RunParams>

@@ -23,8 +23,12 @@ inherited FMain: TFMain
     Width = 1297
     Panels = <    
       item
+        Text = 'Pronto'
+        Width = 100
+      end    
+      item
         Text = 'Mensagens:'
-        Width = 50
+        Width = 150
       end>
     SimplePanel = False
   end

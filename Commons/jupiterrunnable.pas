@@ -19,10 +19,12 @@ type
     FWait       : Boolean;
     FCommandLine : String;
     FOutPut : String;
+    FGenerateLog : Boolean;
 
     procedure Internal_CreateProcess(prFileName : String; prParams : String; var prOutput : String; prWaitUntilEnd : Boolean = True; prSilent : Boolean = False);
   published
     property CommandLine : String  read FCommandLine write FCommandLine;
+    property GenerateLog : Boolean read FGenerateLog write FGenerateLog;
     property LogMessage  : Boolean read FLogMessage  write FLogMessage;
     property OutPut      : String  read FOutPut;
     property Wait        : Boolean read FWait        write FWait;
@@ -157,7 +159,7 @@ begin
   try
     OpenDocument(prFolder);
   finally
-    if Assigned(vrJupiterApp) then
+    if Assigned(vrJupiterApp) and Self.GenerateLog then
       vrJupiterApp.AddMessage('Diretório Aberto', Self.ClassName).Details.Add('Pasta: ' + prFolder);
   end;
 end;
@@ -183,8 +185,9 @@ begin
 
     vrStr.SaveToFile(vrFile);
 
-    with vrJupiterApp.AddMessage('Preparando script', Self.ClassName) do
-      Details.AddStrings(vrStr);
+    if Self.GenerateLog then
+      with vrJupiterApp.AddMessage('Preparando script', Self.ClassName) do
+        Details.AddStrings(vrStr);
 
     if ((not vrJupiterApp.Params.Exists('Enviroment.Run.ShellScript')) or (Trim(vrJupiterApp.Params.VariableById('Enviroment.Run.ShellScript').Value) = EmptyStr)) then
       RunCommand(vrFile, [], vrOutput, [poNoConsole])
@@ -248,14 +251,15 @@ begin
       OpenDocument(prFile);
     end;
   finally
-    with vrJupiterApp.AddMessage(ExtractFileName(prFile), Self.ClassName) do
-    begin
-      Details.Add('Arquivo: ' + prFile);
-      Details.Add('Método: ' + vrMetodo);
-      Details.Add(EmptyStr);
-      Details.Add('Saída: ');
-      Details.Add(vrOutput);
-    end;
+    if Self.GenerateLog then
+      with vrJupiterApp.AddMessage(ExtractFileName(prFile), Self.ClassName) do
+      begin
+        Details.Add('Arquivo: ' + prFile);
+        Details.Add('Método: ' + vrMetodo);
+        Details.Add(EmptyStr);
+        Details.Add('Saída: ');
+        Details.Add(vrOutput);
+      end;
   end;
 end;
 
@@ -270,15 +274,18 @@ begin
 
     vrScript.Execute;
 
-    vrJupiterApp.AddMessage(ExtractFileName(prScriptFile) + ': Iniciando', Self.ClassName).Details.Add('Arquivo: ' + prScriptFile);
+    if Self.GenerateLog then
+      vrJupiterApp.AddMessage(ExtractFileName(prScriptFile) + ': Iniciando', Self.ClassName).Details.Add('Arquivo: ' + prScriptFile);
 
-    vrJupiterApp.AddMessage(ExtractFileName(prScriptFile) + ': Compilando', Self.ClassName).Details.AddStrings(vrScript.Messages);
+    if Self.GenerateLog then
+      vrJupiterApp.AddMessage(ExtractFileName(prScriptFile) + ': Compilando', Self.ClassName).Details.AddStrings(vrScript.Messages);
 
     if vrScript.Compiled then
     begin
-      vrJupiterApp.AddMessage(ExtractFileName(prScriptFile) + ': Executando', Self.ClassName).Details.AddStrings(vrScript.RunMessages);
+      if Self.GenerateLog then
+        vrJupiterApp.AddMessage(ExtractFileName(prScriptFile) + ': Executando', Self.ClassName).Details.AddStrings(vrScript.RunMessages);
 
-      if vrScript.Runned then
+      if vrScript.Runned and Self.GenerateLog then
         vrJupiterApp.AddMessage(ExtractFileName(prScriptFile) + ': Execução bem sucedida', Self.ClassName).Details.Add('Arquivo: ' + prScriptFile)
       else
       begin
@@ -350,6 +357,7 @@ end;
 
 constructor TJupiterRunnable.Create(prCommandLine: String; prRunOnCreate: Boolean);
 begin
+  Self.FGenerateLog := False;
   Self.FWait        := True;
   Self.FOutPut      := EmptyStr;
   Self.FLogMessage  := False;

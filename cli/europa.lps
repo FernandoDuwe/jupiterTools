@@ -8,17 +8,18 @@
       <Unit>
         <Filename Value="europa.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="91"/>
-        <CursorPos X="8" Y="91"/>
-        <UsageCount Value="24"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="38"/>
+        <CursorPos Y="71"/>
+        <UsageCount Value="25"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="..\Commons\jupiterconsts.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterConsts"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="24"/>
+        <UsageCount Value="25"/>
       </Unit>
       <Unit>
         <Filename Value="..\Commons\jupiterobject.pas"/>
@@ -26,7 +27,7 @@
         <UnitName Value="JupiterObject"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="58" Y="22"/>
-        <UsageCount Value="24"/>
+        <UsageCount Value="25"/>
       </Unit>
       <Unit>
         <Filename Value="..\Commons\jupitervariable.pas"/>
@@ -35,15 +36,16 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="210"/>
         <CursorPos Y="158"/>
-        <UsageCount Value="24"/>
+        <UsageCount Value="25"/>
       </Unit>
       <Unit>
         <Filename Value="..\Commons\jupiterapp.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterApp"/>
         <EditorIndex Value="-1"/>
-        <CursorPos X="3" Y="19"/>
-        <UsageCount Value="24"/>
+        <TopLine Value="556"/>
+        <CursorPos X="39" Y="580"/>
+        <UsageCount Value="25"/>
       </Unit>
       <Unit>
         <Filename Value="..\Commons\jupiterrunnable.pas"/>
@@ -52,7 +54,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="102"/>
         <CursorPos X="61" Y="111"/>
-        <UsageCount Value="24"/>
+        <UsageCount Value="25"/>
       </Unit>
       <Unit>
         <Filename Value="..\Commons\jupiterscript.pas"/>
@@ -61,7 +63,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="209"/>
         <CursorPos X="46" Y="214"/>
-        <UsageCount Value="24"/>
+        <UsageCount Value="25"/>
       </Unit>
       <Unit>
         <Filename Value="..\Commons\jupiteraction.pas"/>
@@ -70,7 +72,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="201"/>
         <CursorPos X="3" Y="221"/>
-        <UsageCount Value="24"/>
+        <UsageCount Value="25"/>
       </Unit>
       <Unit>
         <Filename Value="..\Commons\jupiterenviroment.pas"/>
@@ -79,7 +81,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="35"/>
         <CursorPos Y="62"/>
-        <UsageCount Value="24"/>
+        <UsageCount Value="25"/>
       </Unit>
       <Unit>
         <Filename Value="..\Commons\jupiterfiledataprovider.pas"/>
@@ -88,7 +90,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="28"/>
         <CursorPos X="47" Y="53"/>
-        <UsageCount Value="24"/>
+        <UsageCount Value="25"/>
       </Unit>
       <Unit>
         <Filename Value="..\Commons\jupiterclicommand.pas"/>
@@ -96,7 +98,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="73"/>
         <CursorPos X="74" Y="80"/>
-        <UsageCount Value="24"/>
+        <UsageCount Value="25"/>
       </Unit>
       <Unit>
         <Filename Value="..\Commons\jupiterscriptfunctions.pas"/>
@@ -105,27 +107,27 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="281"/>
         <CursorPos Y="294"/>
-        <UsageCount Value="24"/>
+        <UsageCount Value="25"/>
       </Unit>
       <Unit>
         <Filename Value="..\Modules\jupiterclimodule.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="22"/>
+        <UsageCount Value="23"/>
       </Unit>
       <Unit>
         <Filename Value="..\Modules\jupitergeneratormodule.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterGeneratorModule"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="22"/>
+        <UsageCount Value="23"/>
       </Unit>
       <Unit>
         <Filename Value="..\Modules\jupiterstandardmodule.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterStandardModule"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="22"/>
+        <UsageCount Value="23"/>
       </Unit>
       <Unit>
         <Filename Value="..\Modules\jupitertoolsmodule.pas"/>
@@ -134,23 +136,22 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="31"/>
         <CursorPos X="6" Y="43"/>
-        <UsageCount Value="22"/>
+        <UsageCount Value="23"/>
       </Unit>
       <Unit>
         <Filename Value="..\Modules\jupiterappmodule.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="3" Y="15"/>
-        <UsageCount Value="21"/>
+        <UsageCount Value="22"/>
       </Unit>
       <Unit>
         <Filename Value="..\Commons\jupiterautoupdater.pas"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="25"/>
-        <CursorPos X="3" Y="59"/>
-        <UsageCount Value="21"/>
-        <Loaded Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="55"/>
+        <CursorPos X="27" Y="86"/>
+        <UsageCount Value="22"/>
       </Unit>
       <Unit>
         <Filename Value="..\Commons\jupitercsvdataprovider.pas"/>
@@ -159,7 +160,24 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="10"/>
         <CursorPos X="7" Y="20"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="21"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterxmldataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterXMLDataProvider"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="36"/>
+        <CursorPos X="43" Y="36"/>
+        <UsageCount Value="21"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\Commons\jupiterfiledownloader.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="38"/>
+        <CursorPos X="15" Y="38"/>
+        <UsageCount Value="21"/>
       </Unit>
       <Unit>
         <Filename Value="..\Commons\jupiterform.pas"/>
@@ -196,15 +214,6 @@
         <UsageCount Value="11"/>
       </Unit>
       <Unit>
-        <Filename Value="..\Commons\jupiterxmldataprovider.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="JupiterXMLDataProvider"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="36"/>
-        <CursorPos X="43" Y="36"/>
-        <UsageCount Value="20"/>
-      </Unit>
-      <Unit>
         <Filename Value="..\components\jupiterformtabsheet.pas"/>
         <UnitName Value="JupiterFormTabSheet"/>
         <EditorIndex Value="-1"/>
@@ -226,15 +235,26 @@
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="XML"/>
       </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-web\src\base\fphttpclient.pp"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1375"/>
+        <CursorPos X="16" Y="1391"/>
+        <UsageCount Value="10"/>
+      </Unit>
     </Units>
-    <JumpHistory HistoryIndex="1">
+    <JumpHistory HistoryIndex="2">
       <Position>
-        <Filename Value="..\Commons\jupiterautoupdater.pas"/>
-        <Caret Line="20" Column="60"/>
+        <Filename Value="europa.lpr"/>
+        <Caret Line="195" Column="53" TopLine="165"/>
       </Position>
       <Position>
-        <Filename Value="..\Commons\jupiterautoupdater.pas"/>
-        <Caret Line="40" TopLine="15"/>
+        <Filename Value="europa.lpr"/>
+        <Caret Line="24" Column="19" TopLine="12"/>
+      </Position>
+      <Position>
+        <Filename Value="europa.lpr"/>
+        <Caret Line="71" Column="26" TopLine="38"/>
       </Position>
     </JumpHistory>
     <RunParams>
@@ -242,7 +262,7 @@
       <Modes ActiveMode="default">
         <Mode Name="default">
           <local>
-            <CommandLineParams Value="WES"/>
+            <CommandLineParams Value="AUTOUPDATER"/>
           </local>
         </Mode>
       </Modes>
@@ -251,8 +271,9 @@
       <List Name="LaunchingApplication" Type="File" Count="1">
         <Item1 Value="C:\Windows\system32\cmd.exe /C ${TargetCmdLine}"/>
       </List>
-      <List Name="CommandLineParameters" Count="1">
-        <Item1 Value="WES"/>
+      <List Name="CommandLineParameters" Count="2">
+        <Item1 Value=" AUTOUPDATER"/>
+        <Item2 Value="WES"/>
       </List>
     </HistoryLists>
   </ProjectSession>

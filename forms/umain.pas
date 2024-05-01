@@ -202,6 +202,7 @@ type
 
     procedure Internal_ShowRoute(prRoute : TJupiterRoute; prList : TJupiterObjectList; prNode : TTreeNode);
     procedure Internal_MessagesCountSetValue(prID, prNewValue : String);
+    procedure Internal_CurrentStatusSetValue(prID, prNewValue : String);
     procedure Internal_CurrentFormTitleSetValue(prID, prNewValue : String);
     function  Internal_GoToPageItem(prItemRouteForm : String) : Boolean;
 
@@ -1242,10 +1243,15 @@ end;
 
 procedure TFMain.Internal_MessagesCountSetValue(prID, prNewValue : String);
 begin
-  sbStatus.Panels[0].Text := 'Mensagens: ' + prNewValue;
+  sbStatus.Panels[1].Text := 'Mensagens: ' + prNewValue;
 
-  tbMessage.Hint := sbStatus.Panels[0].Text;
-  miMessage.Hint := sbStatus.Panels[0].Text;
+  tbMessage.Hint := sbStatus.Panels[1].Text;
+  miMessage.Hint := sbStatus.Panels[1].Text;
+end;
+
+procedure TFMain.Internal_CurrentStatusSetValue(prID, prNewValue: String);
+begin
+  sbStatus.Panels[0].Text := prNewValue;
 end;
 
 procedure TFMain.Internal_CurrentFormTitleSetValue(prID, prNewValue: String);
@@ -1415,6 +1421,9 @@ begin
 
       Internal_MessagesCountSetValue(EmptyStr, IntToStr(vrJupiterApp.Messages.Size));
     end;
+
+    if vrJupiterApp.Params.Exists(vrJupiterApp.AppID + '.State.Current') then
+      vrJupiterApp.Params.VariableById(vrJupiterApp.AppID + '.State.Current').OnChangeValue := @Internal_CurrentStatusSetValue;
 
     if vrJupiterApp.Params.Exists('Interface.CurrentForm.Title') then
       vrJupiterApp.Params.VariableById('Interface.CurrentForm.Title').OnChangeValue := @Internal_CurrentFormTitleSetValue;

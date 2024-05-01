@@ -113,6 +113,9 @@ type
 
     procedure RunScript(prScript : TStrings);
 
+    procedure InformReady;
+    procedure InformProcessing;
+
     constructor Create(prAppID, prAppName : String);
     destructor Destroy; override;
   end;
@@ -279,6 +282,9 @@ begin
     if not Self.Params.Exists(Self.AppID + '.Path') then
       Self.Params.AddVariable(Self.AppID + '.Path', ExtractFileDir(Application.ExeName), 'Diretório do Executável');
 
+    if not Self.Params.Exists(Self.AppID + '.State.Current') then
+      Self.Params.AddVariable(Self.AppID + '.State.Current', 'Pronto', 'Status atual do aplicativo');
+
     if not Self.Params.Exists(Self.AppID + '.Messages.Count') then
       Self.Params.AddVariable(Self.AppID + '.Messages.Count', IntToStr(Self.Messages.Size), 'Contador de Mensagens');
 
@@ -435,6 +441,8 @@ procedure TJupiterApp.Popup(prTitle : String; prStrMessage : TStrings);
 var
   vrVez : Integer;
 begin
+  Exit;
+
   {$IFNDEF JUPITERCLI}
   if Self.PopupNotifier.Visible then
     Self.PopupNotifier.Hide;
@@ -529,8 +537,8 @@ begin
     end
     else
     begin
-      vrJupiterMessage := Self.AddMessage('Comando executado', Self.ClassName);
-      vrJupiterMessage.Details.AddStrings(vrScript.RunMessages);
+//      vrJupiterMessage := Self.AddMessage('Comando executado', Self.ClassName);
+//      vrJupiterMessage.Details.AddStrings(vrScript.RunMessages);
 
       if Trim(vrScript.RunMessages.Text) <> EmptyStr then
         Self.Popup('Script', vrScript.RunMessages);
@@ -538,6 +546,46 @@ begin
   finally
     FreeAndNil(vrScript);
     FreeAndNil(vrEnviroment);
+  end;
+end;
+
+procedure TJupiterApp.InformReady;
+begin
+  try
+    Self.Params.VariableById(Self.AppID + '.State.Current').Value := 'Pronto';
+
+    {$IFNDEF JUPITERCLI}
+    if Assigned(Application) and Assigned(Application.MainForm) then
+      Application.MainForm.Cursor := crDefault;
+
+    if Assigned(Self.CurrentForm) then
+      Self.CurrentForm.Cursor := crDefault;
+    {$ENDIF}
+  finally
+    {$IFNDEF JUPITERCLI}
+    if Assigned(Application) then
+      Application.ProcessMessages;
+    {$ENDIF}
+  end;
+end;
+
+procedure TJupiterApp.InformProcessing;
+begin
+  try
+    Self.Params.VariableById(Self.AppID + '.State.Current').Value := 'Processando...';
+
+    {$IFNDEF JUPITERCLI}
+    if Assigned(Application) and Assigned(Application.MainForm) then
+      Application.MainForm.Cursor := crHourGlass;
+
+    if Assigned(Self.CurrentForm) then
+      Self.CurrentForm.Cursor := crHourGlass;
+    {$ENDIF}
+  finally
+  {$IFNDEF JUPITERCLI}
+    if Assigned(Application) then
+      Application.ProcessMessages;
+    {$ENDIF}
   end;
 end;
 

@@ -8,13 +8,15 @@ uses
   Classes, SysUtils, JupiterApp, JupiterRunnable, JupiterDialogForm,
   JupiterRoute, JupiterTasksDataProvider, jupiterclicommand, JupiterModule,
   JupiterFileDataProvider, JupiterDirectoryDataProvider, JupiterToolsModule,
-  Forms;
+  Forms, Controls;
 
   // I/O Functions
   procedure JupiterWriteLn(prMessage : String);
   function JupiterReadLn : String;
   function JupiterInputText(prMessage : String) : String;
   function JupiterParamByName(prParamName : String) : String;
+  procedure JupiterInformStartProcessing;
+  procedure JupiterInformStopProcessing;
 
   // Messages & Popup
   procedure JupiterAddLogMessage(prTitle, prDescription : String);
@@ -25,7 +27,7 @@ uses
   // Enviromental functions
   function JupiterRunCommandLine(prCommandLine : String) : String;
   function JupiterRunCommandLineNoMessage(prCommandLine : String) : String;
-  procedure  JupiterRunCommandLineNoWait(prCommandLine : String);
+  procedure JupiterRunCommandLineNoWait(prCommandLine : String);
   procedure JupiterRunnable(prCommandLine : String);
   procedure JupiterRunnableInThread(prTitle, prCommandLine : String);
   function JupiterLoadFromFile(prFileName : String) : String;
@@ -177,6 +179,22 @@ begin
   for vrVez := 0 to vrCommand.ParamList.Count - 1 do
     if TJupiterCLICommandParam(vrCommand.ParamList.GetAtIndex(vrVez)).ParamName = prParamName then
       Result := TJupiterCLICommandParam(vrCommand.ParamList.GetAtIndex(vrVez)).Value;
+end;
+
+procedure JupiterInformStartProcessing;
+begin
+  if not Assigned(vrJupiterApp) then
+    Exit;
+
+  vrJupiterApp.InformProcessing;
+end;
+
+procedure JupiterInformStopProcessing;
+begin
+  if not Assigned(vrJupiterApp) then
+    Exit;
+
+  vrJupiterApp.InformReady;
 end;
 
 procedure JupiterAddLogMessage(prTitle, prDescription: String);

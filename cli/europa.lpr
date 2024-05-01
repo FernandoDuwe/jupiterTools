@@ -11,7 +11,8 @@ uses
   jupiterclicommand, JupiterApp, jupiterScriptFunctions, jupiterScript,
   jupiterclimodule, JupiterGeneratorModule, JupiterStandardModule,
   JupiterToolsModule, jupiterappmodule, pascalscript, CustApp, Interfaces,
-jupiterautoupdater, JupiterCSVDataProvider, JupiterXMLDataProvider
+jupiterautoupdater, JupiterCSVDataProvider, JupiterXMLDataProvider, 
+jupiterfiledownloader
   { you can add units after this };
 
 type
