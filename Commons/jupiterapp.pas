@@ -441,7 +441,13 @@ procedure TJupiterApp.Popup(prTitle : String; prStrMessage : TStrings);
 var
   vrVez : Integer;
 begin
-  Exit;
+  if Self.Params.Exists('Jupiter.Standard.UI.ShowPopup') then
+    if Self.Params.VariableById('Jupiter.Standard.UI.ShowPopup').Value <> '1' then
+    begin
+      Self.AddMessage(prTitle, 'Popup').Details.AddStrings(prStrMessage);
+
+      Exit;
+    end;
 
   {$IFNDEF JUPITERCLI}
   if Self.PopupNotifier.Visible then

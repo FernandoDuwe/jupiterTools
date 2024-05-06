@@ -21,6 +21,10 @@ inherited FTimeControl: TFTimeControl
       item
         Caption = 'Detalhes'
         Width = 400
+      end    
+      item
+        Caption = 'Linha'
+        Visible = False
       end>
     GridLines = True
     ParentShowHint = False
@@ -28,6 +32,8 @@ inherited FTimeControl: TFTimeControl
     RowSelect = True
     TabOrder = 3
     ViewStyle = vsReport
+    OnDblClick = lvTimesDblClick
+    OnSelectItem = lvTimesSelectItem
   end
   object pnDetails: TPanel[4]
     Left = 0

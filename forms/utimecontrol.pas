@@ -7,7 +7,8 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ComCtrls,
   ExtCtrls, Arrow, Calendar, EditBtn, JupiterForm, JupiterConsts, JupiterAction,
-  jupiterformutils, jupiterTimeControlDataProvider, JupiterRunnable;
+  jupiterformutils, jupiterTimeControlDataProvider, JupiterRunnable,
+  JupiterDialogForm;
 
 type
 
@@ -23,6 +24,9 @@ type
     Splitter1: TSplitter;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure lvTimesDblClick(Sender: TObject);
+    procedure lvTimesSelectItem(Sender: TObject; Item: TListItem;
+      Selected: Boolean);
   private
     FTimeDataProvider : TJupiterTimeControlDataProvider;
 
@@ -31,6 +35,7 @@ type
     procedure Internal_LimparTempos(Sender : TObject);
     procedure Internal_CriarTemposPadroes(Sender : TObject);
     procedure Internal_AbrirArquivoExternamente(Sender : TObject);
+    procedure Internal_ExcluirLinha(Sender : TObject);
 
     procedure Internal_PrepareForm; override;
     procedure Internal_UpdateComponents; override;
@@ -62,6 +67,39 @@ begin
   FreeAndNil(Self.FTimeDataProvider);
 
   inherited;
+end;
+
+procedure TFTimeControl.lvTimesDblClick(Sender: TObject);
+var
+  vrDialog : TJupiterDialogForm;
+begin
+  if not Assigned(lvTimes.Selected) then
+    Exit;
+
+  vrDialog := TJupiterDialogForm.Create;
+  try
+    vrDialog.Title := 'Editar marcação';
+    vrDialog.Fields.AddField('START', 'Início (hh:mm:ss)', lvTimes.Selected.Caption);
+    vrDialog.Fields.AddField('END', 'Fim (hh:mm:ss)', lvTimes.Selected.SubItems[0], False);
+    vrDialog.Fields.AddField('DETAILS', 'Detalhes', lvTimes.Selected.SubItems[1], False);
+    vrDialog.Fields.AddField('LINE', 'Linha', lvTimes.Selected.SubItems[2], True, True);
+
+    if vrDialog.Show then
+      Self.FTimeDataProvider.EditLine(vrDialog.Fields.VariableFormById('LINE').AsInteger,
+                                      vrDialog.Fields.VariableFormById('START').Value,
+                                      vrDialog.Fields.VariableFormById('END').Value,
+                                      vrDialog.Fields.VariableFormById('DETAILS').Value);
+  finally
+    FreeAndNil(vrDialog);
+
+    Self.UpdateForm();
+  end;
+end;
+
+procedure TFTimeControl.lvTimesSelectItem(Sender: TObject; Item: TListItem;
+  Selected: Boolean);
+begin
+  Self.UpdateForm(False, True, False);
 end;
 
 procedure TFTimeControl.Internal_MarcarTempoInicial(Sender: TObject);
@@ -105,6 +143,18 @@ begin
   TJupiterRunnable.Create(Self.FTimeDataProvider.Filename, True);
 end;
 
+procedure TFTimeControl.Internal_ExcluirLinha(Sender: TObject);
+begin
+  if not Assigned(lvTimes.Selected) then
+    Exit;
+
+  try
+    Self.FTimeDataProvider.RemoveLine(StrToInt(lvTimes.Selected.SubItems[2]));
+  finally
+    Self.UpdateForm();
+  end;
+end;
+
 procedure TFTimeControl.Internal_PrepareForm;
 begin
   inherited Internal_PrepareForm;
@@ -113,7 +163,7 @@ begin
 
   Self.FTimeDataProvider.CurrentDate := dtCurrentDate.Date;
 
-  Self.Hint := 'Controle os seus horários, tarefas executadas e o tempo executado.';
+  Self.Hint := 'Controle os seus horários, tarefas executadas e o tempo executado. Dê um duplo clique no registro para edita-lo.';
 
   Self.Params.AddVariable(FIELD_ID_GENERADOR, 'TimeControlForm', 'ID do formulário');
 
@@ -151,6 +201,15 @@ begin
     Icon := ICON_OPEN;
   end;
 
+  Self.Actions.Add(TJupiterAction.Create('Excluir registro', @Internal_ExcluirLinha));
+
+  with TJupiterAction(Self.Actions.GetLastObject) do
+  begin
+    ConfirmBeforeExecute := True;
+    Hint := 'Clique aqui para excluir a linha atual';
+    Icon := ICON_CANCEL;
+  end;
+
   pnDetails.Width := PercentOfScreen(Self.Width, 30);
 end;
 
@@ -175,6 +234,14 @@ begin
     Self.Actions.GetActionButton(2, sbActions).Enabled := Self.FTimeDataProvider.Count <> 0;
     Self.Actions.GetMenuItem(2).Enabled := Self.FTimeDataProvider.Count <> 0;
   end;
+
+  if Self.Actions.Count > 4 then
+  begin
+    if Assigned(lvTimes.Selected) then
+      Self.Actions.EnableAction(4, sbActions)
+    else
+      Self.Actions.DisableAction(4, sbActions);
+  end;
 end;
 
 procedure TFTimeControl.Internal_UpdateDatasets;
@@ -195,6 +262,7 @@ begin
     vrItem.Caption := Self.FTimeDataProvider.GetRowByIndex(vrVez).Fields.VariableById('start').Value;
     vrItem.SubItems.Add(Self.FTimeDataProvider.GetRowByIndex(vrVez).Fields.VariableById('end').Value);
     vrItem.SubItems.Add(Self.FTimeDataProvider.GetRowByIndex(vrVez).Fields.VariableById('info').Value);
+    vrItem.SubItems.Add(Self.FTimeDataProvider.GetRowByIndex(vrVez).Fields.VariableById('line').Value);
   end;
 end;
 

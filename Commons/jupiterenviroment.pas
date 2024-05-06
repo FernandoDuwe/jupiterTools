@@ -39,6 +39,7 @@ type
     procedure CopyToClipboard(prContent : String);
     function  IsOfExtension(prFileName, prGroupOfExtensions : String) : Boolean;
     function  OpenFile(prDefaultExtensions : String) : String;
+    function  SaveToFile(prDefaultExtensions : String) : String;
   end;
 
 implementation
@@ -327,6 +328,36 @@ begin
       if Result <> EmptyStr then
         if ((Assigned(vrJupiterApp)) and (vrJupiterApp.Ready)) then
           vrJupiterApp.AddMessage('Arquivo selecionado', Self.ClassName).Details.Add('Arquivo: ' + Result);
+    end;
+  finally
+    FreeAndNil(vrDialog);
+  end;
+  {$ENDIF}
+end;
+
+function TJupiterEnviroment.SaveToFile(prDefaultExtensions: String): String;
+var
+  vrDialog : TSaveDialog;
+begin
+  Result := EmptyStr;
+
+  {$IFNDEF JUPITERCLI}
+  vrDialog := TSaveDialog.Create(Application.MainForm);
+  try
+    vrDialog.InitialDir := Self.BasePath;
+
+    if Trim(prDefaultExtensions) <> EmptyStr then
+        vrDialog.Filter := Format('Arquivos com extensão %0:s|%0:s|', [prDefaultExtensions]);
+
+    vrDialog.Filter := vrDialog.Filter + 'Todos os arquivos|*.*';
+
+    if ((vrDialog.Execute) and (vrDialog.FileName <> EmptyStr)) then
+    begin
+      Result := vrDialog.FileName;
+
+      if Result <> EmptyStr then
+        if ((Assigned(vrJupiterApp)) and (vrJupiterApp.Ready)) then
+          vrJupiterApp.AddMessage('Arquivo salvo', Self.ClassName).Details.Add('Arquivo: ' + Result);
     end;
   finally
     FreeAndNil(vrDialog);

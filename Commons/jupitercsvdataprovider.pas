@@ -24,7 +24,7 @@ type
 
     function  Internal_GetCSVColumnCount(prLine : String) : Integer;
     function  Internal_GetCSVColumn(prLine: String; prIndex: Integer): String;
-    procedure Internal_ProcessLine(prLineStr : String; prHeaderLine : String);
+    procedure Internal_ProcessLine(prLineStr : String; prHeaderLine : String; prAbsoluteLine : Integer);
     procedure Internal_SaveLine;
     procedure Internal_CreateBlankLine(prHeaderLine: String);
   published
@@ -96,7 +96,7 @@ begin
   end;
 end;
 
-procedure TJupiterCSVDataProvider.Internal_ProcessLine(prLineStr: String; prHeaderLine: String);
+procedure TJupiterCSVDataProvider.Internal_ProcessLine(prLineStr: String; prHeaderLine: String; prAbsoluteLine : Integer);
 var
   vrVez : Integer;
 begin
@@ -120,7 +120,8 @@ begin
                                        Self.Internal_GetCSVColumn(prHeaderLine, vrVez));
   end;
 
-  Self.GetLastRow.Fields.AddVariable('Line', IntToStr(Self.Size), 'Linha');
+ // Self.GetLastRow.Fields.AddVariable('Line', IntToStr(Self.Size), 'Linha');
+ Self.GetLastRow.Fields.AddVariable('Line', IntToStr(prAbsoluteLine), 'Linha');
 end;
 
 procedure TJupiterCSVDataProvider.Internal_SaveLine;
@@ -207,7 +208,7 @@ begin
       if Trim(vrFile[vrVez]) = EmptyStr then
         Continue;
 
-      Self.Internal_ProcessLine(vrFile[vrVez], vrFile[0]);
+      Self.Internal_ProcessLine(vrFile[vrVez], vrFile[0], vrVez);
     end;
   finally
     vrFile.Clear;

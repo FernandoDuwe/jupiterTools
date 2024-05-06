@@ -1,8 +1,10 @@
 inherited FChartViewer: TFChartViewer
   Height = 658
   Width = 1101
+  Caption = 'Gerador de gráficos'
   ClientHeight = 658
   ClientWidth = 1101
+  OnResize = FormResize
   inherited sbActions: TScrollBox
     Width = 1101
   end
@@ -15,35 +17,194 @@ inherited FChartViewer: TFChartViewer
     Width = 1101
     ClientWidth = 1101
   end
-  object chChart: TChart[3]
+  object pcBody: TPageControl[3]
     Left = 0
     Height = 509
     Top = 60
     Width = 1101
-    AxisList = <    
-      item
-        Marks.LabelBrush.Style = bsClear
-        Minors = <>
-        Title.LabelFont.Orientation = 900
-        Title.LabelBrush.Style = bsClear
-      end    
-      item
-        Alignment = calBottom
-        Marks.LabelBrush.Style = bsClear
-        Minors = <>
-        Title.LabelBrush.Style = bsClear
-      end>
-    Title.Text.Strings = (
-      'TAChart'
-    )
+    ActivePage = tsReport
     Align = alClient
+    TabIndex = 0
+    TabOrder = 3
+    object tsReport: TTabSheet
+      Caption = 'Relatório'
+      ClientHeight = 481
+      ClientWidth = 1093
+      object pnChart: TPanel
+        Left = 0
+        Height = 481
+        Top = 0
+        Width = 1093
+        Align = alClient
+        BevelOuter = bvLowered
+        ClientHeight = 481
+        ClientWidth = 1093
+        TabOrder = 0
+        object ChartNavPanel1: TChartNavPanel
+          Left = 1
+          Height = 462
+          Top = 1
+          Width = 1091
+          Chart = chChart
+          Align = alClient
+        end
+        object chChart: TChart
+          Left = 1
+          Height = 462
+          Top = 1
+          Width = 1091
+          AxisList = <          
+            item
+              Marks.LabelBrush.Style = bsClear
+              Minors = <>
+              Title.LabelFont.Orientation = 900
+              Title.LabelBrush.Style = bsClear
+            end          
+            item
+              Alignment = calBottom
+              Marks.LabelBrush.Style = bsClear
+              Minors = <>
+              Title.LabelBrush.Style = bsClear
+            end>
+          Title.Text.Strings = (
+            'TAChart'
+          )
+          Align = alClient
+        end
+        object ChartNavScrollBar1: TChartNavScrollBar
+          Left = 1
+          Height = 17
+          Top = 463
+          Width = 1091
+          Chart = chChart
+          Align = alBottom
+          PageSize = 0
+          TabOrder = 2
+        end
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'Informações'
+      ClientHeight = 481
+      ClientWidth = 1093
+      object pnInfo: TPanel
+        Left = 0
+        Height = 481
+        Top = 0
+        Width = 1093
+        Align = alClient
+        BevelOuter = bvLowered
+        ClientHeight = 481
+        ClientWidth = 1093
+        TabOrder = 0
+        object lvInfo: TListView
+          Left = 1
+          Height = 479
+          Top = 1
+          Width = 1091
+          Align = alClient
+          Columns = <          
+            item
+              Caption = 'Fonte de Dados'
+            end          
+            item
+              Caption = 'Campo X'
+            end          
+            item
+              Caption = 'Campo Y'
+            end          
+            item
+              Caption = 'Campo Legenda'
+            end          
+            item
+              Caption = 'Campo Cor'
+            end          
+            item
+              Caption = 'Tipo de relatório'
+            end>
+          GridLines = True
+          TabOrder = 0
+          ViewStyle = vsReport
+        end
+      end
+    end
+    object tsOpcoes: TTabSheet
+      Caption = 'Opções'
+      ClientHeight = 481
+      ClientWidth = 1093
+      object pnOptions: TPanel
+        Left = 0
+        Height = 481
+        Top = 0
+        Width = 1093
+        Align = alClient
+        BevelOuter = bvLowered
+        ClientHeight = 481
+        ClientWidth = 1093
+        TabOrder = 0
+        object cbOptions: TChartListbox
+          Left = 1
+          Height = 479
+          Top = 1
+          Width = 1091
+          Chart = chChart
+          Align = alClient
+          BorderStyle = bsNone
+          ItemHeight = 0
+          TabOrder = 0
+        end
+      end
+    end
+    object tsLegenda: TTabSheet
+      Caption = 'Legenda'
+      ClientHeight = 481
+      ClientWidth = 1093
+      object pnLegend: TPanel
+        Left = 0
+        Height = 481
+        Top = 0
+        Width = 1093
+        Align = alClient
+        BevelOuter = bvLowered
+        ClientHeight = 481
+        ClientWidth = 1093
+        TabOrder = 0
+        object chLegend: TChartLegendPanel
+          Left = 1
+          Height = 479
+          Top = 1
+          Width = 1091
+          Align = alClient
+        end
+        object ChartLegendPanel1: TChartLegendPanel
+          Left = 1
+          Height = 479
+          Top = 1
+          Width = 1091
+          Chart = chChart
+          Align = alClient
+        end
+      end
+    end
   end
   inherited ppMenu: TPopupMenu[4]
   end
   inherited acActionShortcuts: TActionList[5]
   end
-  object lsChartSource: TListChartSource[6]
+  object chStyle: TChartStyles[6]
+    Styles = <>
+    Left = 328
+    Top = 208
+  end
+  object crToolset: TChartToolset[7]
     Left = 240
     Top = 208
+    object crToolsetLegendClickTool1: TLegendClickTool
+    end
+    object crToolsetDataPointHintTool1: TDataPointHintTool
+      UseApplicationHint = True
+    end
+    object crToolsetZoomMouseWheelTool1: TZoomMouseWheelTool
+    end
   end
 end

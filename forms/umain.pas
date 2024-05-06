@@ -35,6 +35,7 @@ type
     ilIconFamily: TImageList;
     ilTabs: TImageList;
     JupiterFormTab1: TJupiterFormTab;
+    miChart: TMenuItem;
     miStartAutoUpdaterCMD: TMenuItem;
     miNotepadPlugin: TMenuItem;
     Separator8: TMenuItem;
@@ -144,6 +145,8 @@ type
     procedure MenuItem17Click(Sender: TObject);
     procedure MenuItem18Click(Sender: TObject);
     procedure MenuItem19Click(Sender: TObject);
+    procedure MenuItem1Click(Sender: TObject);
+    procedure miChartClick(Sender: TObject);
     procedure miStartAutoUpdaterClick(Sender: TObject);
     procedure MenuItem20Click(Sender: TObject);
     procedure MenuItem21Click(Sender: TObject);
@@ -658,6 +661,16 @@ end;
 procedure TFMain.MenuItem19Click(Sender: TObject);
 begin
   acChangeTab.Execute;
+end;
+
+procedure TFMain.MenuItem1Click(Sender: TObject);
+begin
+
+end;
+
+procedure TFMain.miChartClick(Sender: TObject);
+begin
+  vrJupiterApp.NavigateTo(TJupiterRoute.Create(CHART_VIEWER_PATH), False);
 end;
 
 procedure TFMain.miStartAutoUpdaterClick(Sender: TObject);

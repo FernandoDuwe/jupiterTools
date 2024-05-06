@@ -1100,6 +1100,11 @@ inherited FMain: TFMain
         ImageIndex = 18
         OnClick = MenuItem11Click
       end
+      object miChart: TMenuItem
+        Caption = 'Gerador de gráficos'
+        ImageIndex = 33
+        OnClick = miChartClick
+      end
       object Separator7: TMenuItem
         Caption = '-'
       end

@@ -30,6 +30,8 @@ type
     procedure RegisterEndTime;
     procedure CleanTimes;
     procedure CreateStandardTimes;
+    procedure EditLine(prLine : Integer; prStart, prEnd, prDetails : String);
+    procedure RemoveLine(prLine : Integer);
 
     procedure ProvideData; override;
 
@@ -139,6 +141,41 @@ end;
 procedure TJupiterTimeControlDataProvider.CreateStandardTimes;
 begin
   //
+end;
+
+procedure TJupiterTimeControlDataProvider.EditLine(prLine: Integer; prStart,
+  prEnd, prDetails: String);
+var
+  vrStr : TStrings;
+begin
+  vrStr := TStringList.Create;
+  try
+    vrStr.Clear;
+    vrStr.LoadFromFile(Self.Filename);
+
+    vrStr[prLine] := GetCSVColumn(vrStr[prLine], 0) + ';' + prStart + ';' + prEnd + ';' + prDetails + ';';
+
+    vrStr.SaveToFile(Self.Filename);
+  finally
+    FreeAndNil(vrStr);
+  end;
+end;
+
+procedure TJupiterTimeControlDataProvider.RemoveLine(prLine: Integer);
+var
+  vrStr : TStrings;
+begin
+  vrStr := TStringList.Create;
+  try
+    vrStr.Clear;
+    vrStr.LoadFromFile(Self.Filename);
+
+    vrStr.Delete(prLine);
+
+    vrStr.SaveToFile(Self.Filename);
+  finally
+    FreeAndNil(vrStr);
+  end;
 end;
 
 procedure TJupiterTimeControlDataProvider.ProvideData;

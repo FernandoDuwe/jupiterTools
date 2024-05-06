@@ -47,6 +47,10 @@ type
 
     procedure SaveConfig;
 
+    function AsInteger : Integer;
+    function AsDouble : Double;
+    function IsEmpty : Boolean;
+
     procedure AsList(var prList : TStrings); virtual;
   end;
 
@@ -149,6 +153,21 @@ begin
     Exit;
 
   TJupiterVariableList(Self.Owner).AddConfig(Self.ID, Self.Value, Self.Title);
+end;
+
+function TJupiterVariable.AsInteger: Integer;
+begin
+  Result := StrToInt(Self.Value);
+end;
+
+function TJupiterVariable.AsDouble: Double;
+begin
+  Result := StrToFloat(Self.Value);
+end;
+
+function TJupiterVariable.IsEmpty: Boolean;
+begin
+  Result := Trim(Self.Value) = EmptyStr;
 end;
 
 procedure TJupiterVariable.AsList(var prList: TStrings);

@@ -245,6 +245,7 @@ begin
   Sender.AddFunction(@JupiterVariableResolve, 'function Resolve(prMessage: String): String;');
 
   Sender.AddFunction(@CreateDir, 'function CreateDir(Const NewDir : UnicodeString) : Boolean;');
+  Sender.AddFunction(@JupiterScriptCreateDir, 'procedure CreateEnviromentalDir(prDir: String);');
 //  Sender.AddFunction(@DirectoryExists, 'function DirectoryExists(Const Directory : RawByteString; FollowLink: Boolean = True) : Boolean;');
 //  Sender.AddFunction(@FileExists, 'function FileExists(Const FileName : RawByteString; FollowLink : Boolean = True) : Boolean;');
 
@@ -408,6 +409,7 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function ToolsStartedTime() : Boolean;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function IsConsole(): Boolean;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function FileExists(prFile: String): Boolean;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CreateEnviromentalDir(prDir: String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function DirectoryExists(prFile: String): Boolean;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function ExtractFileDir(prFile: String): String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function ExtractFileExt(prFile: String): String;'));

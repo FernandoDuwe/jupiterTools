@@ -358,6 +358,11 @@ end;
 constructor TJupiterRunnable.Create(prCommandLine: String; prRunOnCreate: Boolean);
 begin
   Self.FGenerateLog := False;
+
+  if Assigned(vrJupiterApp) then
+    if vrJupiterApp.Params.Exists('Jupiter.Standard.UI.DebugMode') then
+      Self.FGenerateLog := vrJupiterApp.Params.VariableById('Jupiter.Standard.UI.DebugMode').Value = '1';
+
   Self.FWait        := True;
   Self.FOutPut      := EmptyStr;
   Self.FLogMessage  := False;

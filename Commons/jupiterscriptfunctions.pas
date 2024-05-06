@@ -7,8 +7,8 @@ interface
 uses
   Classes, SysUtils, JupiterApp, JupiterRunnable, JupiterDialogForm,
   JupiterRoute, JupiterTasksDataProvider, jupiterclicommand, JupiterModule,
-  JupiterFileDataProvider, JupiterDirectoryDataProvider, JupiterToolsModule,
-  Forms, Controls;
+  JupiterFileDataProvider, JupiterDirectoryDataProvider, JupiterEnviroment,
+  JupiterToolsModule, Forms, Controls;
 
   // I/O Functions
   procedure JupiterWriteLn(prMessage : String);
@@ -36,6 +36,7 @@ uses
   function JupiterScriptGoToRoutePath(prRoutePath : String) : Boolean;
   procedure JupiterScriptCreateTaskDataCache;
   function JupiterScriptIsConsole : Boolean;
+  procedure JupiterScriptCreateDir(prDir : String);
   function JupiterScriptFileExists(prFile : String) : Boolean;
   function JupiterScriptDirectoryExists(prFile : String) : Boolean;
   function JupiterScriptExtractFileDir(prFile : String) : String;
@@ -320,6 +321,18 @@ end;
 function JupiterScriptIsConsole: Boolean;
 begin
   Result := vrJupiterApp.ConsoleMode;
+end;
+
+procedure JupiterScriptCreateDir(prDir: String);
+var
+  vrEnviroment : TJupiterEnviroment;
+begin
+  vrEnviroment := TJupiterEnviroment.Create;
+  try
+    vrEnviroment.CreatePath(prDir);
+  finally
+    FreeAndNil(vrEnviroment);
+  end;
 end;
 
 function JupiterScriptFileExists(prFile: String): Boolean;

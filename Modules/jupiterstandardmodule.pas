@@ -81,11 +81,17 @@ begin
   if not Self.Params.Exists(Self.DefineParamName('Triggers.OnExecuteCurrentThread')) then
     Self.Params.AddConfig(Self.DefineParamName('Triggers.OnExecuteCurrentThread'), EmptyStr, 'Gatilhos: Thread executada a cada 5 segundos na aplicação');
 
-    if not Self.Params.Exists(Self.DefineParamName('UI.UserPreferences')) then
+  if not Self.Params.Exists(Self.DefineParamName('UI.UserPreferences')) then
     Self.Params.AddConfig(Self.DefineParamName('UI.UserPreferences'), EmptyStr, 'Preferências do usuário');
 
-    if not Self.Params.Exists(Self.DefineParamName('UI.UserPreferences.StartRoute')) then
+  if not Self.Params.Exists(Self.DefineParamName('UI.UserPreferences.StartRoute')) then
     Self.Params.AddConfig(Self.DefineParamName('UI.UserPreferences.StartRoute'), EmptyStr, 'Rota inicial');
+
+  if not Self.Params.Exists(Self.DefineParamName('UI.ShowPopup')) then
+    Self.Params.AddConfig(Self.DefineParamName('UI.ShowPopup'), '1', 'Exibir Popup (1 - Sim, 2 - Não)');
+
+  if not Self.Params.Exists(Self.DefineParamName('UI.DebugMode')) then
+    Self.Params.AddConfig(Self.DefineParamName('UI.DebugMode'), '0', 'Modo Debug (1 - Sim, 2 - Não)');
 
   Self.Internal_GenerateDefaultScript;
 end;
