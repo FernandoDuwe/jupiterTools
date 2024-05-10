@@ -4,6 +4,10 @@ inherited FChartViewer: TFChartViewer
   Caption = 'Gerador de gráficos'
   ClientHeight = 658
   ClientWidth = 1101
+  OnActivate = FormActivate
+  OnClose = FormClose
+  OnDeactivate = FormDeactivate
+  OnDestroy = FormDestroy
   OnResize = FormResize
   inherited sbActions: TScrollBox
     Width = 1101
@@ -18,10 +22,10 @@ inherited FChartViewer: TFChartViewer
     ClientWidth = 1101
   end
   object pcBody: TPageControl[3]
-    Left = 0
+    Left = 219
     Height = 509
     Top = 60
-    Width = 1101
+    Width = 882
     ActivePage = tsReport
     Align = alClient
     TabIndex = 0
@@ -29,22 +33,22 @@ inherited FChartViewer: TFChartViewer
     object tsReport: TTabSheet
       Caption = 'Relatório'
       ClientHeight = 481
-      ClientWidth = 1093
+      ClientWidth = 874
       object pnChart: TPanel
         Left = 0
         Height = 481
         Top = 0
-        Width = 1093
+        Width = 874
         Align = alClient
         BevelOuter = bvLowered
         ClientHeight = 481
-        ClientWidth = 1093
+        ClientWidth = 874
         TabOrder = 0
         object ChartNavPanel1: TChartNavPanel
           Left = 1
           Height = 462
           Top = 1
-          Width = 1091
+          Width = 872
           Chart = chChart
           Align = alClient
         end
@@ -52,12 +56,13 @@ inherited FChartViewer: TFChartViewer
           Left = 1
           Height = 462
           Top = 1
-          Width = 1091
+          Width = 872
           AxisList = <          
             item
               Marks.LabelBrush.Style = bsClear
               Minors = <>
               Title.LabelFont.Orientation = 900
+              Title.Visible = True
               Title.LabelBrush.Style = bsClear
             end          
             item
@@ -66,6 +71,7 @@ inherited FChartViewer: TFChartViewer
               Minors = <>
               Title.LabelBrush.Style = bsClear
             end>
+          Legend.Visible = True
           Title.Text.Strings = (
             'TAChart'
           )
@@ -75,7 +81,7 @@ inherited FChartViewer: TFChartViewer
           Left = 1
           Height = 17
           Top = 463
-          Width = 1091
+          Width = 872
           Chart = chChart
           Align = alBottom
           PageSize = 0
@@ -86,22 +92,22 @@ inherited FChartViewer: TFChartViewer
     object TabSheet2: TTabSheet
       Caption = 'Informações'
       ClientHeight = 481
-      ClientWidth = 1093
+      ClientWidth = 874
       object pnInfo: TPanel
         Left = 0
         Height = 481
         Top = 0
-        Width = 1093
+        Width = 874
         Align = alClient
         BevelOuter = bvLowered
         ClientHeight = 481
-        ClientWidth = 1093
+        ClientWidth = 874
         TabOrder = 0
         object lvInfo: TListView
           Left = 1
           Height = 479
           Top = 1
-          Width = 1091
+          Width = 872
           Align = alClient
           Columns = <          
             item
@@ -114,89 +120,65 @@ inherited FChartViewer: TFChartViewer
               Caption = 'Campo Y'
             end          
             item
-              Caption = 'Campo Legenda'
+              Caption = 'Legenda'
             end          
             item
-              Caption = 'Campo Cor'
+              Caption = 'Cor'
             end          
             item
               Caption = 'Tipo de relatório'
             end>
           GridLines = True
+          ReadOnly = True
           TabOrder = 0
           ViewStyle = vsReport
+          OnDblClick = lvInfoDblClick
         end
       end
     end
-    object tsOpcoes: TTabSheet
+  end
+  object pcControls: TPageControl[4]
+    Left = 0
+    Height = 509
+    Top = 60
+    Width = 214
+    ActivePage = TabSheet1
+    Align = alLeft
+    TabIndex = 0
+    TabOrder = 4
+    object TabSheet1: TTabSheet
       Caption = 'Opções'
       ClientHeight = 481
-      ClientWidth = 1093
-      object pnOptions: TPanel
+      ClientWidth = 206
+      object clListBox: TChartListbox
         Left = 0
         Height = 481
         Top = 0
-        Width = 1093
+        Width = 206
+        Chart = chChart
         Align = alClient
-        BevelOuter = bvLowered
-        ClientHeight = 481
-        ClientWidth = 1093
+        BorderStyle = bsNone
+        ItemHeight = 0
         TabOrder = 0
-        object cbOptions: TChartListbox
-          Left = 1
-          Height = 479
-          Top = 1
-          Width = 1091
-          Chart = chChart
-          Align = alClient
-          BorderStyle = bsNone
-          ItemHeight = 0
-          TabOrder = 0
-        end
-      end
-    end
-    object tsLegenda: TTabSheet
-      Caption = 'Legenda'
-      ClientHeight = 481
-      ClientWidth = 1093
-      object pnLegend: TPanel
-        Left = 0
-        Height = 481
-        Top = 0
-        Width = 1093
-        Align = alClient
-        BevelOuter = bvLowered
-        ClientHeight = 481
-        ClientWidth = 1093
-        TabOrder = 0
-        object chLegend: TChartLegendPanel
-          Left = 1
-          Height = 479
-          Top = 1
-          Width = 1091
-          Align = alClient
-        end
-        object ChartLegendPanel1: TChartLegendPanel
-          Left = 1
-          Height = 479
-          Top = 1
-          Width = 1091
-          Chart = chChart
-          Align = alClient
-        end
       end
     end
   end
-  inherited ppMenu: TPopupMenu[4]
+  object spSplitter: TSplitter[5]
+    Left = 214
+    Height = 509
+    Top = 60
+    Width = 5
   end
-  inherited acActionShortcuts: TActionList[5]
+  inherited ppMenu: TPopupMenu[6]
   end
-  object chStyle: TChartStyles[6]
+  inherited acActionShortcuts: TActionList[7]
+  end
+  object chStyle: TChartStyles[8]
     Styles = <>
     Left = 328
     Top = 208
   end
-  object crToolset: TChartToolset[7]
+  object crToolset: TChartToolset[9]
     Left = 240
     Top = 208
     object crToolsetLegendClickTool1: TLegendClickTool
@@ -206,5 +188,13 @@ inherited FChartViewer: TFChartViewer
     end
     object crToolsetZoomMouseWheelTool1: TZoomMouseWheelTool
     end
+    object crToolsetLegendClickTool2: TLegendClickTool
+    end
+  end
+  object tmrUpdateAutoComponents: TTimer[10]
+    Enabled = False
+    OnTimer = tmrUpdateAutoComponentsTimer
+    Left = 440
+    Top = 136
   end
 end

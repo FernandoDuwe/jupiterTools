@@ -67,7 +67,7 @@ procedure TFCustomJupiterForm.FormActivate(Sender: TObject);
 begin
   inherited;
 
-  tmrUpdateAutoComponents.Enabled := Self.Showing and Self.FFormGenerator.HasAutoValueVariables;
+  tmrUpdateAutoComponents.Enabled := Self.Showing and Self.Params.Exists('UpdateTimerIntervalTime');
 end;
 
 procedure TFCustomJupiterForm.FormClose(Sender: TObject;
