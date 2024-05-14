@@ -188,7 +188,16 @@ inherited FChartViewer: TFChartViewer
     end
     object crToolsetZoomMouseWheelTool1: TZoomMouseWheelTool
     end
-    object crToolsetLegendClickTool2: TLegendClickTool
+    object crToolsetDataPointDistanceTool1: TDataPointDistanceTool
+      Marks.Format = '%0:.9g'
+    end
+    object crToolsetPanDragTool1: TPanDragTool
+    end
+    object crToolsetPanClickTool1: TPanClickTool
+    end
+    object crToolsetPanMouseWheelTool1: TPanMouseWheelTool
+    end
+    object crToolsetAxisClickTool1: TAxisClickTool
     end
   end
   object tmrUpdateAutoComponents: TTimer[10]

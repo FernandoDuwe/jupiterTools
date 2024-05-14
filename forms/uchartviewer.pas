@@ -12,7 +12,7 @@ uses
   JupiterObject, JupiterVariable, JupiterRoute, TACustomSource, TARadialSeries,
   TAStyles, TALegendPanel, TATools, TAMultiSeries, TAFuncSeries, TAChartListbox,
   TAChartImageList, TADbSource, TAChartCombos, TANavigation, TAIntervalSources,
-  TATransformations;
+  TATransformations, TADataTools;
 
 type
 
@@ -25,9 +25,13 @@ type
     chChart: TChart;
     chStyle: TChartStyles;
     crToolset: TChartToolset;
+    crToolsetAxisClickTool1: TAxisClickTool;
+    crToolsetDataPointDistanceTool1: TDataPointDistanceTool;
     crToolsetDataPointHintTool1: TDataPointHintTool;
     crToolsetLegendClickTool1: TLegendClickTool;
-    crToolsetLegendClickTool2: TLegendClickTool;
+    crToolsetPanClickTool1: TPanClickTool;
+    crToolsetPanDragTool1: TPanDragTool;
+    crToolsetPanMouseWheelTool1: TPanMouseWheelTool;
     crToolsetZoomMouseWheelTool1: TZoomMouseWheelTool;
     lvInfo: TListView;
     pcControls: TPageControl;
@@ -473,7 +477,12 @@ var
   vrVez : Integer;
 begin
   for vrVez := 0 to chChart.AxisList.Count - 1 do
-    chChart.AxisList[vrVez].Visible := not chChart.AxisList[vrVez].Visible;
+  begin
+    if chChart.AxisList[vrVez].Grid.Style = psDot then
+      chChart.AxisList[vrVez].Grid.Style := psClear
+    else
+      chChart.AxisList[vrVez].Grid.Style := psDot;
+  end;
 end;
 
 procedure TFChartViewer.PrepareForm;

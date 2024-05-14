@@ -285,6 +285,9 @@ begin
     if not Self.Params.Exists(Self.AppID + '.State.Current') then
       Self.Params.AddVariable(Self.AppID + '.State.Current', 'Pronto', 'Status atual do aplicativo');
 
+    if not Self.Params.Exists(Self.AppID + '.State.Message') then
+      Self.Params.AddVariable(Self.AppID + '.State.Message', '', 'Mensagem de Status atual do aplicativo');
+
     if not Self.Params.Exists(Self.AppID + '.Messages.Count') then
       Self.Params.AddVariable(Self.AppID + '.Messages.Count', IntToStr(Self.Messages.Size), 'Contador de Mensagens');
 
