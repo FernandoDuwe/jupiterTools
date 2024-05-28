@@ -25,11 +25,15 @@ inherited FCustomJupiterFormPanel: TFCustomJupiterFormPanel
     ClientHeight = 399
     ClientWidth = 864
     Color = 4210752
+    ParentBackground = False
+    ParentColor = False
     inherited sbBody: TScrollBox
       Height = 399
       Width = 864
-      Color = 4210752
+      Color = 3026478
+      ParentBackground = False
       ParentBiDiMode = False
+      ParentColor = False
       ParentFont = False
       ParentShowHint = False
     end

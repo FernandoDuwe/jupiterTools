@@ -95,6 +95,9 @@ type
     procedure AddModule(prModule : TJupiterModule);
     function  AddMessage(prTitle, prOrigin : String) : TJupiterSystemMessage;
     procedure AddParam(prParam : String);
+    procedure AddInfoPanel(prTitle : String);
+    procedure AddErrorPanel(prTitle : String);
+    procedure AddSucessPanel(prTitle : String);
 
     function GetVersion : String;
     function ConsoleMode : Boolean;
@@ -110,6 +113,7 @@ type
 
     function HasRoute(prRoutePath: String): Boolean;
     function GoToRoute(prRoutePath: String): Boolean;
+    procedure SetMessageState(prMessageState : String);
 
     procedure RunScript(prScript : TStrings);
 
@@ -125,7 +129,7 @@ var
 
 implementation
 
-uses FileInfo, Forms, JupiterConsts {$IFNDEF JUPITERCLI}, JupiterFormTabSheet,  jupiterformutils {$ENDIF};
+uses FileInfo, Forms, JupiterConsts {$IFNDEF JUPITERCLI}, JupiterFormTabSheet,  jupiterformutils, jupiterPanelNotifier {$ENDIF};
 
 { TJupiterApp }
 
@@ -368,7 +372,30 @@ end;
 
 procedure TJupiterApp.AddParam(prParam: String);
 begin
+  {$IFNDEF JUPITERCLI}
   Self.FParamList.Add(prParam);
+  {$ENDIF}
+end;
+
+procedure TJupiterApp.AddInfoPanel(prTitle: String);
+begin
+  {$IFNDEF JUPITERCLI}
+  TJupiterPanelNotifier.Create(prTitle, pntInfo);
+  {$ENDIF}
+end;
+
+procedure TJupiterApp.AddErrorPanel(prTitle: String);
+begin
+  {$IFNDEF JUPITERCLI}
+  TJupiterPanelNotifier.Create(prTitle, pntError);
+  {$ENDIF}
+end;
+
+procedure TJupiterApp.AddSucessPanel(prTitle: String);
+begin
+  {$IFNDEF JUPITERCLI}
+  TJupiterPanelNotifier.Create(prTitle, pntSucess);
+  {$ENDIF}
 end;
 
 function TJupiterApp.GetVersion: String;
@@ -510,6 +537,11 @@ end;
 function TJupiterApp.GoToRoute(prRoutePath: String): Boolean;
 begin
   //
+end;
+
+procedure TJupiterApp.SetMessageState(prMessageState: String);
+begin
+  Self.Params.VariableById(Self.AppID + '.State.Message').Value := prMessageState;
 end;
 
 procedure TJupiterApp.RunScript(prScript: TStrings);

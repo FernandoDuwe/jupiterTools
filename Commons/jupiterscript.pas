@@ -227,8 +227,10 @@ begin
   Sender.AddFunction(@JupiterShowPopup, 'procedure ShowPopup(prTitle, prDescription : String);');
   Sender.AddFunction(@JupiterShowInfoMessage, 'procedure ShowInfoMessage(prMessage : String);');
   Sender.AddFunction(@JupiterShowErrorMessage, 'procedure ShowErrorMessage(prMessage : String);');
+  Sender.AddFunction(@JupiterShowInfoPanel, 'procedure ShowInfoPanel(prTitle : String);');
+  Sender.AddFunction(@JupiterShowErrorPanel, 'procedure ShowErrorPanel(prTitle : String);');
+  Sender.AddFunction(@JupiterShowSucessPanel, 'procedure ShowSucessPanel(prTitle : String);');
   Sender.AddFunction(@JupiterParamByName, 'function ParamByName(prParamName : String) : String;');
-
   Sender.AddFunction(@JupiterRunCommandLine, 'function RunCommandLine(prCommandLine: String) : String;');
   Sender.AddFunction(@JupiterRunCommandLineNoMessage, 'function RunCommandLineNoMessage(prCommandLine: String) : String;');
   Sender.AddFunction(@JupiterRunCommandLineNoWait, 'procedure RunCommandLineNoWait(prCommandLine: String);');
@@ -381,6 +383,9 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure ShowPopup(prTitle, prDescription : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure ShowInfoMessage(prMessage : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure ShowErrorMessage(prMessage : String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure ShowInfoPanel(prTitle : String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure ShowErrorPanel(prTitle : String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure ShowSucessPanel(prTitle : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function RunCommandLine(prCommandLine: String) : String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function RunCommandLineNoMessage(prCommandLine: String) : String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure RunCommandLineNoWait(prCommandLine: String);'));

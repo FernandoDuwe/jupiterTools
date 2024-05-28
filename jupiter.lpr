@@ -31,7 +31,7 @@ uses
   uuserpreferences, jupiterformaction, udm, jupiterdatabase, usqlEditor,
   umenuselector, uwebexplorer, jupiterexternaldatasets, jupiterlayoutvalidator,
   jupitershortcut, jupiterautocompletesql, uCustomJupiterFormPanel,
-  uchartViewer, jupiterappmodule;
+  uchartViewer, jupiterappmodule, jupiterPanelNotifier;
 
 {$R *.res}
 

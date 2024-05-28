@@ -79,7 +79,10 @@ begin
     Self.Params.AddConfig(Self.DefineParamName('Triggers.OnChangeTask'), EmptyStr, 'Gatilhos: Ao alterar a tarefa atual');
 
   if not Self.Params.Exists(Self.DefineParamName('Triggers.OnExecuteCurrentThread')) then
-    Self.Params.AddConfig(Self.DefineParamName('Triggers.OnExecuteCurrentThread'), EmptyStr, 'Gatilhos: Thread executada a cada 5 segundos na aplicação');
+    Self.Params.AddConfig(Self.DefineParamName('Triggers.OnExecuteCurrentThread'), EmptyStr, 'Gatilhos: Thread executada a cada X tempo na aplicação');
+
+  if not Self.Params.Exists(Self.DefineParamName('Triggers.OnExecuteCurrentThread.Time')) then
+    Self.Params.AddConfig(Self.DefineParamName('Triggers.OnExecuteCurrentThread.Time'), '5000', 'Gatilhos: Intervalo de execução da Thread executada a cada X tempo na aplicação');
 
   if not Self.Params.Exists(Self.DefineParamName('UI.UserPreferences')) then
     Self.Params.AddConfig(Self.DefineParamName('UI.UserPreferences'), EmptyStr, 'Preferências do usuário');

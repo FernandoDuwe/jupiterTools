@@ -23,6 +23,9 @@ uses
   procedure JupiterShowPopup(prTitle, prDescription : String);
   procedure JupiterShowInfoMessage(prMessage : String);
   procedure JupiterShowErrorMessage(prMessage : String);
+  procedure JupiterShowInfoPanel(prTitle : String);
+  procedure JupiterShowErrorPanel(prTitle : String);
+  procedure JupiterShowSucessPanel(prTitle : String);
 
   // Enviromental functions
   function JupiterRunCommandLine(prCommandLine : String) : String;
@@ -211,6 +214,21 @@ end;
 procedure JupiterShowErrorMessage(prMessage: String);
 begin
   Application.MessageBox(PAnsiChar(prMessage), 'Aviso', MB_ICONERROR + MB_OK);
+end;
+
+procedure JupiterShowInfoPanel(prTitle: String);
+begin
+  vrJupiterApp.AddInfoPanel(prTitle);
+end;
+
+procedure JupiterShowErrorPanel(prTitle: String);
+begin
+  vrJupiterApp.AddErrorPanel(prTitle);
+end;
+
+procedure JupiterShowSucessPanel(prTitle: String);
+begin
+  vrJupiterApp.AddSucessPanel(prTitle);
 end;
 
 function JupiterRunCommandLine(prCommandLine: String) : String;

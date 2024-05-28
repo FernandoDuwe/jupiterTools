@@ -79,6 +79,12 @@ begin
 
     Self.Params.VariableById(Self.DefineParamName('Tasks.Current.Path')).OnChangeValue := @Internal_OnChangeCurrentTask;
 
+    if not Self.Params.Exists(Self.DefineParamName('Pomodoro.Time.Minutes')) then
+      Self.Params.AddConfig(Self.DefineParamName('Pomodoro.Time.Minutes'), '25', 'Pomodoro: Tempo de sessão (em minutos)');
+
+    if not Self.Params.Exists(Self.DefineParamName('Pomodoro.State.Active')) then
+      Self.Params.AddConfig(Self.DefineParamName('Pomodoro.State.Active'), '0', 'Pomodoro: Status atual');
+
     vrEnviroment.CreateFile('modules/tools/favorites/applications.csv', 'Descrição;Caminho;');
     vrEnviroment.CreateFile('modules/tools/favorites/folders.csv', 'Descrição;Caminho;');
   finally

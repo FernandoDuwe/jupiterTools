@@ -211,7 +211,7 @@ begin
   Result.OnKeyUp   := Self.OnKeyUp;
   Result.Tag       := Self.Tag;
 
-  Result.OnDblClick := @Internal_CopyButtonDbClick;
+//  Result.OnDblClick := @Internal_CopyButtonDbClick;
 
   if Self.PanelMode then
   begin
@@ -253,7 +253,7 @@ begin
 
   Result.Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
 
-  Result.OnDblClick := @Internal_CopyButtonDbClick;
+//  Result.OnDblClick := @Internal_CopyButtonDbClick;
 
   vrStr := TStringList.Create;
   try

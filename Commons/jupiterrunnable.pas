@@ -285,8 +285,11 @@ begin
       if Self.GenerateLog then
         vrJupiterApp.AddMessage(ExtractFileName(prScriptFile) + ': Executando', Self.ClassName).Details.AddStrings(vrScript.RunMessages);
 
-      if vrScript.Runned and Self.GenerateLog then
-        vrJupiterApp.AddMessage(ExtractFileName(prScriptFile) + ': Execução bem sucedida', Self.ClassName).Details.Add('Arquivo: ' + prScriptFile)
+      if vrScript.Runned then
+      begin
+        if Self.GenerateLog then
+          vrJupiterApp.AddMessage(ExtractFileName(prScriptFile) + ': Execução bem sucedida', Self.ClassName).Details.Add('Arquivo: ' + prScriptFile)
+      end
       else
       begin
         vrJupiterApp.AddMessage(ExtractFileName(prScriptFile) + ': Erro ao executar', Self.ClassName).Details.Add('Arquivo: ' + prScriptFile);

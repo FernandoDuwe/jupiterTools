@@ -1,10 +1,10 @@
 inherited FMain: TFMain
-  Left = 614
+  Left = 324
   Height = 727
-  Top = 213
+  Top = 173
   Width = 1297
   Caption = 'FMain'
-  ClientHeight = 707
+  ClientHeight = 727
   ClientWidth = 1297
   Menu = mmMainMenu
   OnActivate = FormActivate
@@ -19,7 +19,7 @@ inherited FMain: TFMain
     Width = 1297
   end
   inherited sbStatus: TStatusBar
-    Top = 618
+    Top = 638
     Width = 1297
     Panels = <    
       item
@@ -39,23 +39,23 @@ inherited FMain: TFMain
     SimplePanel = False
   end
   inherited pnHint: TPanel
-    Top = 641
+    Top = 661
     Width = 1297
     ClientWidth = 1297
   end
   object pnMenu: TPanel[3]
     Left = 0
-    Height = 525
+    Height = 545
     Top = 93
     Width = 362
     Align = alLeft
     BevelOuter = bvNone
-    ClientHeight = 525
+    ClientHeight = 545
     ClientWidth = 362
     TabOrder = 1
     object tvMenu: TTreeView
       Left = 0
-      Height = 525
+      Height = 545
       Top = 0
       Width = 362
       Align = alClient
@@ -71,7 +71,7 @@ inherited FMain: TFMain
   end
   object spSplitter: TSplitter[4]
     Left = 362
-    Height = 525
+    Height = 545
     Top = 93
     Width = 5
   end
@@ -185,10 +185,10 @@ inherited FMain: TFMain
       Width = 71
       BorderSpacing.Left = 152
       BorderSpacing.Top = 3
-      OnChange = edSearchChange
-      OnChangeBounds = edSearchChangeBounds
       TabOrder = 2
       TextHint = 'Pesquisar'
+      OnChange = edSearchChange
+      OnChangeBounds = edSearchChangeBounds
     end
     object tbSystemButtons: TToolBar
       AnchorSideLeft.Control = cbNavigationMenu
@@ -279,17 +279,17 @@ inherited FMain: TFMain
   end
   object pnBody: TPanel[6]
     Left = 367
-    Height = 525
+    Height = 545
     Top = 93
     Width = 930
     Align = alClient
     BevelInner = bvLowered
-    ClientHeight = 525
+    ClientHeight = 545
     ClientWidth = 930
     TabOrder = 6
     object JupiterFormTab1: TJupiterFormTab
       Left = 2
-      Height = 521
+      Height = 541
       Top = 2
       Width = 926
       Align = alClient
@@ -1124,6 +1124,17 @@ inherited FMain: TFMain
         ImageIndex = 21
         OnClick = MenuItem13Click
       end
+      object MenuItem1: TMenuItem
+        Caption = 'Pomodoro'
+        object miPomodoroStart: TMenuItem
+          Caption = 'Iniciar'
+          OnClick = miPomodoroStartClick
+        end
+        object miPomodoroEnd: TMenuItem
+          Caption = 'Parar'
+          OnClick = miPomodoroEndClick
+        end
+      end
     end
     object MenuItem4: TMenuItem
       Caption = 'Pastas'
@@ -1284,5 +1295,11 @@ inherited FMain: TFMain
     OnTimer = tmPopupEndTimer
     Left = 688
     Top = 272
+  end
+  object tmrPomodoroTimer: TTimer[19]
+    Enabled = False
+    OnTimer = tmrPomodoroTimerTimer
+    Left = 688
+    Top = 344
   end
 end

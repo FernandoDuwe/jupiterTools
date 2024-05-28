@@ -35,6 +35,9 @@ type
     ilIconFamily: TImageList;
     ilTabs: TImageList;
     JupiterFormTab1: TJupiterFormTab;
+    MenuItem1: TMenuItem;
+    miPomodoroStart: TMenuItem;
+    miPomodoroEnd: TMenuItem;
     miChart: TMenuItem;
     miStartAutoUpdaterCMD: TMenuItem;
     miNotepadPlugin: TMenuItem;
@@ -99,6 +102,7 @@ type
     tbMenu: TToolButton;
     tbOptions: TToolBar;
     TbSystemBar: TToolButton;
+    tmrPomodoroTimer: TTimer;
     tmPopupEnd: TTimer;
     tmInternalThread: TTimer;
     tmSearch: TTimer;
@@ -147,6 +151,8 @@ type
     procedure MenuItem19Click(Sender: TObject);
     procedure MenuItem1Click(Sender: TObject);
     procedure miChartClick(Sender: TObject);
+    procedure miPomodoroEndClick(Sender: TObject);
+    procedure miPomodoroStartClick(Sender: TObject);
     procedure miStartAutoUpdaterClick(Sender: TObject);
     procedure MenuItem20Click(Sender: TObject);
     procedure MenuItem21Click(Sender: TObject);
@@ -186,6 +192,7 @@ type
     procedure tbPromptClick(Sender: TObject);
     procedure tmInternalThreadTimer(Sender: TObject);
     procedure tmPopupEndTimer(Sender: TObject);
+    procedure tmrPomodoroTimerTimer(Sender: TObject);
     procedure tmSearchTimer(Sender: TObject);
     procedure ToolButton1Click(Sender: TObject);
     procedure ToolButton2Click(Sender: TObject);
@@ -281,6 +288,23 @@ begin
     ppNotifier.Hide;
 
   tmPopupEnd.Enabled := False;
+end;
+
+procedure TFMain.tmrPomodoroTimerTimer(Sender: TObject);
+begin
+  try
+    vrJupiterApp.AddSucessPanel('Pomodoro finalizado');
+
+    tmrPomodoroTimer.Enabled := False;
+
+    vrJupiterApp.AddMessage('Pomodoro finalizado', 'Usuário');
+
+    vrJupiterApp.Params.VariableById('Jupiter.Tools.Pomodoro.Time.Minutes').Value := '0';
+
+    vrJupiterApp.SetMessageState(EmptyStr);
+  finally
+    Self.UpdateForm(False, True, False);
+  end;
 end;
 
 procedure TFMain.tmSearchTimer(Sender: TObject);
@@ -493,6 +517,7 @@ end;
 
 procedure TFMain.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
+  tmrPomodoroTimer.Enabled := False;
   tmInternalThread.Enabled := False;
   tmPopupEnd.Enabled := False;
   tmSearch.Enabled := False;
@@ -560,6 +585,9 @@ begin
   if vrJupiterApp.Params.Exists('Jupiter.Standard.Triggers.OnStart') then
     if Trim(vrJupiterApp.Params.VariableById('Jupiter.Standard.Triggers.OnStart').Value) <> EmptyStr then
       vrJupiterApp.Threads.NewThread('Gatilho: Ao iniciar a aplicação', TJupiterRunnable.Create(vrJupiterApp.Params.VariableById('Jupiter.Standard.Triggers.OnStart').Value));
+
+  if vrJupiterApp.Params.Exists('Jupiter.Standard.Triggers.OnExecuteCurrentThread.Time') then
+    tmInternalThread.Interval := vrJupiterApp.Params.VariableById('Jupiter.Standard.Triggers.OnExecuteCurrentThread.Time').AsInteger;
 
   if vrJupiterApp.Params.Exists('Jupiter.Standard.Triggers.OnExecuteCurrentThread') then
         if Trim(vrJupiterApp.Params.VariableById('Jupiter.Standard.Triggers.OnExecuteCurrentThread').Value) <> EmptyStr then
@@ -672,6 +700,39 @@ end;
 procedure TFMain.miChartClick(Sender: TObject);
 begin
   vrJupiterApp.NavigateTo(TJupiterRoute.Create(CHART_VIEWER_PATH), False);
+end;
+
+procedure TFMain.miPomodoroEndClick(Sender: TObject);
+begin
+  try
+    tmrPomodoroTimer.Enabled := False;
+
+    vrJupiterApp.SetMessageState('Pomodoro finalizado pelo usuário');
+
+    vrJupiterApp.Params.VariableById('Jupiter.Tools.Pomodoro.Time.Minutes').Value := '0';
+  finally
+    Self.UpdateForm(False, True, False);
+  end;
+end;
+
+procedure TFMain.miPomodoroStartClick(Sender: TObject);
+begin
+  try
+    tmrPomodoroTimer.Interval := StrToIntDef(vrJupiterApp.Params.VariableById('Jupiter.Tools.Pomodoro.Time.Minutes').Value, 1) * 60000;
+    tmrPomodoroTimer.Enabled := True;
+
+    vrJupiterApp.AddMessage('Pomodoro iniciado', 'Usuário').Details.Add('Pomodoro iniciado.' + #13#10 +
+                                                               'Tempo em minutos: ' + IntToStr(StrToIntDef(vrJupiterApp.Params.VariableById('Jupiter.Tools.Pomodoro.Time.Minutes').Value, 1)) + #13#10 +
+                                                               'Tempo em milisegundos: ' + IntToStr(StrToIntDef(vrJupiterApp.Params.VariableById('Jupiter.Tools.Pomodoro.Time.Minutes').Value, 1) * 60000));
+
+    vrJupiterApp.AddInfoPanel('Pomodoro iniciado...');
+
+    vrJupiterApp.SetMessageState('Em pomodoro');
+
+    vrJupiterApp.Params.VariableById('Jupiter.Tools.Pomodoro.Time.Minutes').Value := '1';
+  finally
+    Self.UpdateForm(False, True, False);
+  end;
 end;
 
 procedure TFMain.miStartAutoUpdaterClick(Sender: TObject);
@@ -1403,6 +1464,9 @@ begin
     miNotepadPlugin.Enabled := vrEnviroment.Exists(vrEnviroment.FullPath('jupiter_notepad_plugin.dll'));
 
     miStartAutoUpdaterCMD.Enabled := TJupiterAppModule(vrJupiterApp.ModulesList.GetModuleById('Jupiter.Application')).UpdateAvaliable;
+
+    miPomodoroStart.Enabled := not tmrPomodoroTimer.Enabled;
+    miPomodoroEnd.Enabled := tmrPomodoroTimer.Enabled;
   finally
     FreeAndNil(vrEnviroment);
   end;
