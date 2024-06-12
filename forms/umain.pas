@@ -98,6 +98,7 @@ type
     mmMainMenu: TMainMenu;
     pnMenu: TPanel;
     spSplitter: TSplitter;
+    TabSheet1: TTabSheet;
     tbHome: TToolButton;
     tbMenu: TToolButton;
     tbOptions: TToolBar;
@@ -140,6 +141,7 @@ type
     procedure JupiterFormTab1ChangeFromComboBox(Sender: TObject);
     procedure JupiterFormTab1Changing(Sender: TObject; var AllowChange: Boolean);
     procedure JupiterFormTab1CloseTab(Sender: TObject);
+    procedure JupiterFormTab1CloseTabClicked(Sender: TObject);
     procedure MenuItem10Click(Sender: TObject);
     procedure MenuItem11Click(Sender: TObject);
     procedure MenuItem12Click(Sender: TObject);
@@ -629,6 +631,11 @@ end;
 procedure TFMain.JupiterFormTab1CloseTab(Sender: TObject);
 begin
   JupiterFormTab1Change(Sender);
+end;
+
+procedure TFMain.JupiterFormTab1CloseTabClicked(Sender: TObject);
+begin
+
 end;
 
 procedure TFMain.MenuItem10Click(Sender: TObject);
