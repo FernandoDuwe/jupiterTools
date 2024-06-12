@@ -12,7 +12,7 @@ uses
   JupiterDirectoryDataProvider, JupiterVariable, jupitershortcut,
   jupiterScriptFunctions, JupiterToolsModule, jupiterdatabase, jupiterappmodule,
   JupiterFormTab, SQLDB, uPSComponent_Default, LMessages, PairSplitter,
-  ActnList, ButtonPanel, EditBtn;
+  ActnList, ButtonPanel, EditBtn, Types;
 
 type
 
@@ -98,7 +98,6 @@ type
     mmMainMenu: TMainMenu;
     pnMenu: TPanel;
     spSplitter: TSplitter;
-    TabSheet1: TTabSheet;
     tbHome: TToolButton;
     tbMenu: TToolButton;
     tbOptions: TToolBar;
@@ -142,6 +141,8 @@ type
     procedure JupiterFormTab1Changing(Sender: TObject; var AllowChange: Boolean);
     procedure JupiterFormTab1CloseTab(Sender: TObject);
     procedure JupiterFormTab1CloseTabClicked(Sender: TObject);
+    procedure JupiterFormTab1ContextPopup(Sender: TObject; MousePos: TPoint;
+      var Handled: Boolean);
     procedure MenuItem10Click(Sender: TObject);
     procedure MenuItem11Click(Sender: TObject);
     procedure MenuItem12Click(Sender: TObject);
@@ -634,6 +635,12 @@ begin
 end;
 
 procedure TFMain.JupiterFormTab1CloseTabClicked(Sender: TObject);
+begin
+  JupiterFormTab1.CloseTab(JupiterFormTab1.ActivePageIndex);
+end;
+
+procedure TFMain.JupiterFormTab1ContextPopup(Sender: TObject; MousePos: TPoint;
+  var Handled: Boolean);
 begin
 
 end;
