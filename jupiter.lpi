@@ -40,9 +40,6 @@
         <PackageName Value="TAChartLazarusPkg"/>
       </Item>
       <Item>
-        <PackageName Value="WebView4Delphi"/>
-      </Item>
-      <Item>
         <PackageName Value="TurboPowerIPro"/>
       </Item>
       <Item>
@@ -73,54 +70,6 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uMain"/>
-      </Unit>
-      <Unit>
-        <Filename Value="Commons\jupiterconsts.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="JupiterConsts"/>
-      </Unit>
-      <Unit>
-        <Filename Value="Commons\jupiterobject.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="JupiterObject"/>
-      </Unit>
-      <Unit>
-        <Filename Value="Commons\jupiterroute.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="JupiterRoute"/>
-      </Unit>
-      <Unit>
-        <Filename Value="Commons\jupitervariable.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="JupiterVariable"/>
-      </Unit>
-      <Unit>
-        <Filename Value="Commons\jupiterrunnable.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="JupiterRunnable"/>
-      </Unit>
-      <Unit>
-        <Filename Value="Commons\jupiteraction.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="JupiterAction"/>
-      </Unit>
-      <Unit>
-        <Filename Value="Commons\jupiterform.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="FJupiterForm"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="JupiterForm"/>
-      </Unit>
-      <Unit>
-        <Filename Value="Commons\jupitermodule.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="JupiterModule"/>
-      </Unit>
-      <Unit>
-        <Filename Value="Commons\jupiterapp.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="JupiterApp"/>
       </Unit>
       <Unit>
         <Filename Value="Modules\jupitertoolsmodule.pas"/>
@@ -170,26 +119,6 @@
         <UnitName Value="uNewTask"/>
       </Unit>
       <Unit>
-        <Filename Value="Commons\jupiterdataprovider.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="JupiterDataProvider"/>
-      </Unit>
-      <Unit>
-        <Filename Value="Commons\jupiterfiledataprovider.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="JupiterFileDataProvider"/>
-      </Unit>
-      <Unit>
-        <Filename Value="Commons\jupiterdirectorydataprovider.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="JupiterDirectoryDataProvider"/>
-      </Unit>
-      <Unit>
-        <Filename Value="Commons\jupitercsvdataprovider.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="JupiterCSVDataProvider"/>
-      </Unit>
-      <Unit>
         <Filename Value="forms\uconfig.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FConfig"/>
@@ -198,47 +127,12 @@
         <UnitName Value="uConfig"/>
       </Unit>
       <Unit>
-        <Filename Value="Commons\jupiterenviroment.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="JupiterEnviroment"/>
-      </Unit>
-      <Unit>
-        <Filename Value="Commons\jupiterformgenerator.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="JupiterFormGenerator"/>
-      </Unit>
-      <Unit>
-        <Filename Value="Commons\jupiterformfield.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="JupiterFormField"/>
-      </Unit>
-      <Unit>
-        <Filename Value="Commons\jupitervariableform.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="JupiterVariableForm"/>
-      </Unit>
-      <Unit>
-        <Filename Value="Commons\jupiterdialogform.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="JupiterDialogForm"/>
-      </Unit>
-      <Unit>
         <Filename Value="forms\ucurrenttask.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FCurrentTask"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uCurrentTask"/>
-      </Unit>
-      <Unit>
-        <Filename Value="Commons\jupitertasksdataprovider.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="JupiterTasksDataProvider"/>
-      </Unit>
-      <Unit>
-        <Filename Value="Commons\jupitertasktimesdataprovider.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="JupiterTaskTimesDataProvider"/>
       </Unit>
       <Unit>
         <Filename Value="forms\ueditor.pas"/>
@@ -265,21 +159,6 @@
         <UnitName Value="uMessage"/>
       </Unit>
       <Unit>
-        <Filename Value="Commons\jupitersystemmessage.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="JupiterSystemMessage"/>
-      </Unit>
-      <Unit>
-        <Filename Value="Commons\jupitergeneratorform.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="JupiterGeneratorForm"/>
-      </Unit>
-      <Unit>
-        <Filename Value="Commons\jupiterxmldataprovider.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="JupiterXMLDataProvider"/>
-      </Unit>
-      <Unit>
         <Filename Value="forms\unewaction.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FNewAction"/>
@@ -296,26 +175,12 @@
         <UnitName Value="uNewField"/>
       </Unit>
       <Unit>
-        <Filename Value="Commons\jupitergeneratormenuitem.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="JupiterGeneratorMenuItem"/>
-      </Unit>
-      <Unit>
-        <Filename Value="Commons\jupiterformutils.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit>
-      <Unit>
         <Filename Value="forms\unewparam.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FNewParam"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uNewParam"/>
-      </Unit>
-      <Unit>
-        <Filename Value="Commons\jupitervariabledataprovider.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="JupiterVariableDataProvider"/>
       </Unit>
       <Unit>
         <Filename Value="forms\unewdataset.pas"/>
@@ -326,22 +191,12 @@
         <UnitName Value="uNewDataSet"/>
       </Unit>
       <Unit>
-        <Filename Value="Commons\jupiterscript.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="jupiterScript"/>
-      </Unit>
-      <Unit>
         <Filename Value="forms\uscripteditor.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FScriptEditor"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uScriptEditor"/>
-      </Unit>
-      <Unit>
-        <Filename Value="Commons\jupiterscriptfunctions.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="jupiterScriptFunctions"/>
       </Unit>
       <Unit>
         <Filename Value="forms\udynamicrecord.pas"/>
@@ -352,22 +207,12 @@
         <UnitName Value="uDynamicRecord"/>
       </Unit>
       <Unit>
-        <Filename Value="Commons\jupiterthread.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="jupiterThread"/>
-      </Unit>
-      <Unit>
         <Filename Value="forms\uprocessmonitor.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FProcessMonitor"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uProcessMonitor"/>
-      </Unit>
-      <Unit>
-        <Filename Value="Commons\jupiterstream.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="jupiterStream"/>
       </Unit>
       <Unit>
         <Filename Value="forms\uprompt.pas"/>
@@ -403,10 +248,6 @@
         <ResourceBaseClass Value="Form"/>
       </Unit>
       <Unit>
-        <Filename Value="Commons\jupiterclicommand.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit>
-      <Unit>
         <Filename Value="forms\unewcommandcli.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FNewCommandCli"/>
@@ -421,20 +262,11 @@
         <ResourceBaseClass Value="Form"/>
       </Unit>
       <Unit>
-        <Filename Value="Commons\jupitertimecontroldataprovider.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="jupiterTimeControlDataProvider"/>
-      </Unit>
-      <Unit>
         <Filename Value="forms\uuserpreferences.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FUserPreferences"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit>
-      <Unit>
-        <Filename Value="Commons\jupiterformaction.pas"/>
-        <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="data\udm.pas"/>
@@ -470,30 +302,6 @@
         <ResourceBaseClass Value="Form"/>
       </Unit>
       <Unit>
-        <Filename Value="Commons\jupiterexternaldatasets.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit>
-      <Unit>
-        <Filename Value="Commons\jupiterlayoutvalidator.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit>
-      <Unit>
-        <Filename Value="Commons\jupitershortcut.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit>
-      <Unit>
-        <Filename Value="Commons\jupiterautocompletesql.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit>
-      <Unit>
-        <Filename Value="Commons\ucustomjupiterformpanel.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="FCustomJupiterFormPanel"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="uCustomJupiterFormPanel"/>
-      </Unit>
-      <Unit>
         <Filename Value="forms\uchartviewer.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FChartViewer"/>
@@ -506,9 +314,213 @@
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="Commons\jupiterpanelnotifier.pas"/>
+        <Filename Value="commons\jupiterform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FJupiterForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="JupiterForm"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupitervariable.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterVariable"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupiterrunnable.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterRunnable"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupitersystemmessage.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterSystemMessage"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupiterapp.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterApp"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupiteraction.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterAction"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupiterautocompletesql.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupiterautoupdater.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupiterclicommand.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupiterconsts.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterConsts"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupitercsvdataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterCSVDataProvider"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupiterdataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterDataProvider"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupiterdialogform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterDialogForm"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupiterdirectorydataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterDirectoryDataProvider"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupiterenviroment.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterEnviroment"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupiterexternaldatasets.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupiterfiledataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterFileDataProvider"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupiterfiledownloader.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupiterform.lfm"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupiterformaction.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupiterformfield.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterFormField"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupiterformgenerator.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterFormGenerator"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupiterformutils.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupitergeneratorform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterGeneratorForm"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupitergeneratormenuitem.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterGeneratorMenuItem"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupiterlayoutvalidator.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupitermodule.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterModule"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupiterobject.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterObject"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupiterpanelnotifier.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="jupiterPanelNotifier"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupiterroute.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterRoute"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupiterscript.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterScript"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupiterscriptfunctions.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterScriptFunctions"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupitershortcut.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupiterstream.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterStream"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupitertasksdataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterTasksDataProvider"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupitertasktimesdataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterTaskTimesDataProvider"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupiterthread.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterThread"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupitertimecontroldataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterTimeControlDataProvider"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupitervariabledataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterVariableDataProvider"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupitervariableform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterVariableForm"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\jupiterxmldataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterXMLDataProvider"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\ucustomjupiterformpanel.lfm"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons\ucustomjupiterformpanel.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FCustomJupiterFormPanel"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uCustomJupiterFormPanel"/>
       </Unit>
     </Units>
   </ProjectOptions>
@@ -520,7 +532,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="Forms;Commons;Modules;data"/>
+      <OtherUnitFiles Value="Forms;Modules;data;forms;commons"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Linking>

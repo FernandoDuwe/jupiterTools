@@ -8,133 +8,146 @@ inherited FNewField: TFNewField
     Width = 859
   end
   inherited sbStatus: TStatusBar
-    Top = 555
+    Top = 551
     Width = 859
   end
   inherited pnHint: TPanel
-    Top = 505
+    Top = 501
     Width = 859
     ClientWidth = 859
   end
   inherited sbBody: TScrollBox
-    Height = 445
-    Top = 60
+    Height = 441
     Width = 859
-    HorzScrollBar.Page = 346
-    VertScrollBar.Page = 359
-    ClientHeight = 443
-    ClientWidth = 857
+    HorzScrollBar.Page = 307
+    VertScrollBar.Page = 355
+    ClientHeight = 437
+    ClientWidth = 855
     object edID: TEdit[0]
       Left = 8
-      Height = 34
+      Height = 23
       Top = 34
-      Width = 829
+      Width = 827
       Anchors = [akTop, akLeft, akRight]
+      OnKeyPress = FormKeyPress
+      OnKeyUp = FormKeyUp
+      OnUTF8KeyPress = FormUTF8KeyPress
       TabOrder = 0
     end
     object Label2: TLabel[1]
       Left = 8
-      Height = 17
+      Height = 15
       Top = 10
-      Width = 14
+      Width = 11
       Caption = 'ID'
+      ParentColor = False
       ParentFont = False
     end
     object edValue: TEdit[2]
       Left = 8
-      Height = 34
+      Height = 23
       Top = 104
-      Width = 829
+      Width = 827
       Anchors = [akTop, akLeft, akRight]
+      OnKeyPress = FormKeyPress
+      OnKeyUp = FormKeyUp
+      OnUTF8KeyPress = FormUTF8KeyPress
       TabOrder = 1
     end
     object Label3: TLabel[3]
       Left = 8
-      Height = 17
+      Height = 15
       Top = 80
-      Width = 36
+      Width = 26
       Caption = 'Valor'
+      ParentColor = False
       ParentFont = False
     end
     object edDescription: TEdit[4]
       Left = 8
-      Height = 34
+      Height = 23
       Top = 176
-      Width = 829
+      Width = 827
       Anchors = [akTop, akLeft, akRight]
+      OnKeyPress = FormKeyPress
+      OnKeyUp = FormKeyUp
+      OnUTF8KeyPress = FormUTF8KeyPress
       TabOrder = 2
     end
     object Label4: TLabel[5]
       Left = 8
-      Height = 17
+      Height = 15
       Top = 152
-      Width = 66
+      Width = 51
       Caption = 'Descrição'
+      ParentColor = False
       ParentFont = False
     end
     object Label6: TLabel[6]
       Left = 8
-      Height = 17
+      Height = 15
       Top = 224
-      Width = 37
+      Width = 27
       Caption = 'Flags'
       Font.Style = [fsBold]
+      ParentColor = False
       ParentFont = False
     end
     object cbRequired: TCheckBox[7]
       Left = 8
-      Height = 23
+      Height = 19
       Top = 256
-      Width = 106
+      Width = 81
       Caption = 'Obrigatório'
       TabOrder = 3
     end
     object cbReadOnly: TCheckBox[8]
       Left = 8
-      Height = 23
+      Height = 19
       Top = 296
-      Width = 136
+      Width = 106
       Caption = 'Somente Leitura'
       TabOrder = 4
     end
     object cbCleanOnShow: TCheckBox[9]
       Left = 8
-      Height = 23
+      Height = 19
       Top = 336
-      Width = 177
+      Width = 138
       Caption = 'Exibir sem informação'
       TabOrder = 5
     end
     object Label7: TLabel[10]
       Left = 176
-      Height = 17
+      Height = 15
       Top = 224
-      Width = 46
+      Width = 35
       Caption = 'Opões'
       Font.Style = [fsBold]
+      ParentColor = False
       ParentFont = False
     end
     object cbCopyButton: TCheckBox[11]
       Left = 176
-      Height = 23
+      Height = 19
       Top = 256
-      Width = 155
+      Width = 119
       Caption = 'Exibir botão copiar'
       TabOrder = 6
     end
     object cbRunButton: TCheckBox[12]
       Left = 176
-      Height = 23
+      Height = 19
       Top = 296
-      Width = 170
+      Width = 131
       Caption = 'Exibir botão executar'
       TabOrder = 7
     end
     object pcFieldType: TPageControl[13]
       Left = 384
-      Height = 187
+      Height = 181
       Top = 224
-      Width = 453
+      Width = 451
       ActivePage = tsFieldText
       Anchors = [akTop, akLeft, akRight, akBottom]
       TabIndex = 0
@@ -144,24 +157,27 @@ inherited FNewField: TFNewField
       end
       object TabSheet1: TTabSheet
         Caption = 'Campo Seleção'
-        ClientHeight = 156
+        ClientHeight = 153
         ClientWidth = 443
         object cbListField: TComboBox
           Left = 8
-          Height = 34
+          Height = 23
           Top = 32
           Width = 427
           Anchors = [akTop, akLeft, akRight]
-          ItemHeight = 0
+          ItemHeight = 15
+          OnKeyPress = FormKeyPress
+          OnKeyUp = FormKeyUp
           TabOrder = 0
           Text = 'cbListField'
         end
         object Label5: TLabel
           Left = 8
-          Height = 17
+          Height = 15
           Top = 10
-          Width = 123
+          Width = 97
           Caption = 'Origem dos dados'
+          ParentColor = False
           ParentFont = False
         end
       end

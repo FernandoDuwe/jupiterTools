@@ -5,12 +5,12 @@ inherited FScriptEditor: TFScriptEditor
   Width = 1084
   ClientHeight = 652
   ClientWidth = 1084
+  OnDestroy = FormDestroy
   OnShow = FormShow
   inherited sbActions: TScrollBox
     Width = 1084
   end
   inherited sbStatus: TStatusBar
-    Height = 23
     Top = 629
     Width = 1084
   end
@@ -18,10 +18,6 @@ inherited FScriptEditor: TFScriptEditor
     Top = 563
     Width = 1084
     ClientWidth = 1084
-    inherited lbHelp: TLabel
-      Height = 15
-      Width = 35
-    end
   end
   object pcOutput: TPageControl[3]
     Left = 0
@@ -44,6 +40,7 @@ inherited FScriptEditor: TFScriptEditor
         Width = 1076
         Align = alClient
         ReadOnly = True
+        ScrollBars = ssAutoBoth
         TabOrder = 0
       end
     end
@@ -57,6 +54,22 @@ inherited FScriptEditor: TFScriptEditor
         Top = 0
         Width = 1076
         Align = alClient
+        ScrollBars = ssAutoBoth
+        TabOrder = 0
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'Documentação'
+      ClientHeight = 111
+      ClientWidth = 1076
+      object mmDoc: TMemo
+        Left = 0
+        Height = 111
+        Top = 0
+        Width = 1076
+        Align = alClient
+        ReadOnly = True
+        ScrollBars = ssAutoBoth
         TabOrder = 0
       end
     end
@@ -84,6 +97,9 @@ inherited FScriptEditor: TFScriptEditor
     ParentFont = False
     PopupMenu = ppMenu
     TabOrder = 5
+    OnKeyPress = FormKeyPress
+    OnKeyUp = FormKeyUp
+    OnUTF8KeyPress = FormUTF8KeyPress
     Gutter.Width = 57
     Gutter.MouseActions = <>
     RightGutter.Width = 0
@@ -570,7 +586,9 @@ inherited FScriptEditor: TFScriptEditor
   end
   inherited ppMenu: TPopupMenu[6]
   end
-  object syPas: TSynPasSyn[7]
+  inherited acActionShortcuts: TActionList[7]
+  end
+  object syPas: TSynPasSyn[8]
     Enabled = False
     CompilerMode = pcmDelphi
     NestedComments = False
@@ -578,20 +596,7 @@ inherited FScriptEditor: TFScriptEditor
     Left = 416
     Top = 136
   end
-  object SynAutoComplete1: TSynAutoComplete[8]
-    AutoCompleteList.Strings = (
-      'AddConfiguration('''', '''', '''');'
-      'AddLogMessage('''', '''');'
-      'AddVariable('''', '''', '''');'
-      'Application'
-      'InputText('''');'
-      'WriteLn('''');'
-      'Readln();'
-      'RunCommandLine('''');'
-      'ShowPopup('''', '''');'
-      'VariableExists('''')'
-      'VariableValueByID('''')'
-    )
+  object SynAutoComplete1: TSynAutoComplete[9]
     EndOfTokenChr = '()[].'
     ShortCut = 8224
     ExecCommandID = ecSynAutoCompletionExecute
@@ -599,25 +604,12 @@ inherited FScriptEditor: TFScriptEditor
     Left = 520
     Top = 136
   end
-  object SynCompletion1: TSynCompletion[9]
-    ItemList.Strings = (
-      'AddConfiguration('''', '''', '''');'
-      'AddLogMessage('''', '''');'
-      'AddVariable('''', '''', '''');'
-      'Application'
-      'InputText('''');'
-      'WriteLn('''');'
-      'Readln();'
-      'RunCommandLine('''');'
-      'ShowPopup('''', '''');'
-      'VariableExists('''')'
-      'VariableValueByID('''')'
-    )
-    Position = 0
-    LinesInWindow = 6
+  object SynCompletion1: TSynCompletion[10]
+    Position = -1
+    LinesInWindow = 15
     SelectedColor = clHighlight
     CaseSensitive = False
-    Width = 262
+    Width = 400
     AutoUseSingleIdent = True
     ShortCut = 16416
     EndOfTokenChr = '()[].'

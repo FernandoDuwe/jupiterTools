@@ -13,25 +13,26 @@ uses
   athreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, JupiterConsts, JupiterObject, JupiterRoute, JupiterVariable,
-  JupiterRunnable, JupiterAction, JupiterForm, JupiterModule, JupiterApp,
-  pascalscript, tachartlazaruspkg, JupiterToolsModule, uHome, uExplorer,
-  JupiterGeneratorModule, JupiterStandardModule, uNewTask, JupiterDataProvider,
-  JupiterFileDataProvider, JupiterDirectoryDataProvider, JupiterCSVDataProvider,
-  uConfig, JupiterEnviroment, JupiterFormGenerator, JupiterFormField,
-  JupiterVariableForm, JupiterDialogForm, uCurrentTask,
-  JupiterTasksDataProvider, JupiterTaskTimesDataProvider, uEditor, uMessage,
-  JupiterSystemMessage, JupiterGeneratorForm, JupiterXMLDataProvider,
-  uNewAction, uNewField, JupiterGeneratorMenuItem, jupiterformutils, uNewParam,
-  JupiterVariableDataProvider, uNewDataSet, uMain, uGenerator, jupiterScript,
-  uScriptEditor, uCustomJupiterForm, jupiterScriptFunctions, uDynamicRecord,
-  jupiterThread, uProcessMonitor, jupiterStream, uPrompt, ulayoutbuilder,
-  jupiterclimodule, ulayoutreader, uclimanager, jupiterclicommand,
-  unewcommandcli, utimecontrol, jupiterTimeControlDataProvider,
-  uuserpreferences, jupiterformaction, udm, jupiterdatabase, usqlEditor,
-  umenuselector, uwebexplorer, jupiterexternaldatasets, jupiterlayoutvalidator,
-  jupitershortcut, jupiterautocompletesql, uCustomJupiterFormPanel,
-  uchartViewer, jupiterappmodule, jupiterPanelNotifier;
+  Forms, pascalscript, tachartlazaruspkg, JupiterToolsModule, uHome, uExplorer,
+  JupiterGeneratorModule, JupiterStandardModule, uNewTask, uConfig,
+  uCurrentTask, uEditor, uMessage, uNewAction, uNewField, uNewParam,
+  uNewDataSet, uMain, uGenerator, uScriptEditor, uDynamicRecord,
+  uProcessMonitor, uPrompt, ulayoutbuilder, jupiterclimodule, ulayoutreader,
+  uclimanager, unewcommandcli, utimecontrol, uuserpreferences, udm,
+  jupiterdatabase, usqlEditor, umenuselector, uwebexplorer, uchartViewer,
+  uCustomJupiterForm, jupiterappmodule, JupiterForm, JupiterVariable,
+  JupiterRunnable, JupiterSystemMessage, JupiterApp, uCustomJupiterFormPanel,
+  JupiterXMLDataProvider, JupiterVariableForm, JupiterVariableDataProvider,
+  jupiterTimeControlDataProvider, jupiterThread, JupiterTaskTimesDataProvider,
+  JupiterTasksDataProvider, jupiterStream, jupitershortcut,
+  jupiterScriptFunctions, jupiterScript, JupiterRoute, jupiterPanelNotifier,
+  JupiterObject, JupiterModule, jupiterlayoutvalidator,
+  JupiterGeneratorMenuItem, JupiterGeneratorForm, jupiterformutils,
+  JupiterFormGenerator, JupiterFormField, jupiterformaction,
+  jupiterfiledownloader, JupiterFileDataProvider, jupiterexternaldatasets,
+  JupiterEnviroment, JupiterDirectoryDataProvider, JupiterDialogForm,
+  JupiterDataProvider, JupiterCSVDataProvider, JupiterConsts, jupiterclicommand,
+  jupiterautoupdater, jupiterautocompletesql, JupiterAction;
 
 {$R *.res}
 
@@ -140,6 +141,9 @@ begin
 
   Application.CreateForm(TFMain, FMain);
   Application.CreateForm(TDMMain, DMMain);
+  Application.CreateForm(TFCustomJupiterForm, FCustomJupiterForm);
+  Application.CreateForm(TFJupiterForm, FJupiterForm);
+  Application.CreateForm(TFCustomJupiterFormPanel, FCustomJupiterFormPanel);
   Application.Run;
 end.
 

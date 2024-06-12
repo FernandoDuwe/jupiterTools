@@ -8,10 +8,14 @@ object FJupiterForm: TFJupiterForm
   OnActivate = FormActivate
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnKeyPress = FormKeyPress
+  OnKeyUp = FormKeyUp
+  OnResize = FormResize
   OnShow = FormShow
+  OnUTF8KeyPress = FormUTF8KeyPress
   PopupMenu = ppMenu
   Position = poScreenCenter
-  LCLVersion = '2.2.4.0'
+  LCLVersion = '3.4.0.0'
   object sbActions: TScrollBox
     Left = 0
     Height = 60
@@ -25,29 +29,28 @@ object FJupiterForm: TFJupiterForm
   end
   object sbStatus: TStatusBar
     Left = 0
-    Height = 23
-    Top = 356
+    Height = 19
+    Top = 360
     Width = 668
     Panels = <>
   end
   object pnHint: TPanel
     Left = 0
     Height = 66
-    Top = 290
+    Top = 294
     Width = 668
     Align = alBottom
     Alignment = taLeftJustify
     BevelOuter = bvNone
     ClientHeight = 66
     ClientWidth = 668
-    ParentColor = False
     TabOrder = 2
     Visible = False
     object lbHelp: TLabel
       Left = 64
-      Height = 15
+      Height = 17
       Top = 24
-      Width = 35
+      Width = 44
       Caption = 'lbHelp'
       ParentColor = False
       ParentFont = False
@@ -133,6 +136,98 @@ object FJupiterForm: TFJupiterForm
     object miViewParams: TMenuItem
       Caption = 'Parâmetros'
       OnClick = miViewParamsClick
+    end
+    object miActionShortcut: TMenuItem
+      Caption = 'Atalhos'
+      Enabled = False
+      OnClick = miActionShortcutClick
+    end
+  end
+  object acActionShortcuts: TActionList
+    Left = 240
+    Top = 136
+    object acF1: TAction
+      Caption = 'F1'
+      Enabled = False
+      Hint = 'F1'
+      OnExecute = acF1Execute
+      ShortCut = 112
+    end
+    object acF2: TAction
+      Caption = 'F2'
+      Enabled = False
+      Hint = 'F2'
+      OnExecute = acF2Execute
+      ShortCut = 113
+    end
+    object acF3: TAction
+      Caption = 'F3'
+      Enabled = False
+      Hint = 'F3'
+      OnExecute = acF3Execute
+      ShortCut = 114
+    end
+    object acF4: TAction
+      Caption = 'F4'
+      Enabled = False
+      Hint = 'F4'
+      OnExecute = acF4Execute
+      ShortCut = 115
+    end
+    object acF5: TAction
+      Caption = 'F5'
+      Enabled = False
+      Hint = 'F5'
+      OnExecute = acF5Execute
+      ShortCut = 116
+    end
+    object acF6: TAction
+      Caption = 'F6'
+      Enabled = False
+      Hint = 'F6'
+      OnExecute = acF6Execute
+      ShortCut = 117
+    end
+    object acF7: TAction
+      Caption = 'F7'
+      Enabled = False
+      Hint = 'F7'
+      OnExecute = acF7Execute
+      ShortCut = 118
+    end
+    object acF8: TAction
+      Caption = 'F8'
+      Enabled = False
+      Hint = 'F8'
+      OnExecute = acF8Execute
+      ShortCut = 119
+    end
+    object acF9: TAction
+      Caption = 'F9'
+      Enabled = False
+      Hint = 'F9'
+      OnExecute = acF9Execute
+      ShortCut = 120
+    end
+    object acF10: TAction
+      Caption = 'F10'
+      Enabled = False
+      Hint = 'F10'
+      OnExecute = acF10Execute
+      ShortCut = 121
+    end
+    object acF11: TAction
+      Caption = 'F11'
+      Enabled = False
+      Hint = 'F11'
+      OnExecute = acF11Execute
+    end
+    object acF12: TAction
+      Caption = 'F12'
+      Enabled = False
+      Hint = 'F12'
+      OnExecute = acF12Execute
+      ShortCut = 123
     end
   end
 end

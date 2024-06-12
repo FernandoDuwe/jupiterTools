@@ -6,12 +6,12 @@ inherited FNewTask: TFNewTask
   Caption = 'Criar uma nova tarefa'
   ClientHeight = 626
   ClientWidth = 622
+  OnCreate = FormCreate
   OnShow = FormShow
   inherited sbActions: TScrollBox
     Width = 622
   end
   inherited sbStatus: TStatusBar
-    Height = 23
     Top = 603
     Width = 622
   end
@@ -19,14 +19,9 @@ inherited FNewTask: TFNewTask
     Top = 553
     Width = 622
     ClientWidth = 622
-    inherited lbHelp: TLabel
-      Height = 15
-      Width = 35
-    end
   end
   inherited sbBody: TScrollBox
     Height = 493
-    Top = 60
     Width = 622
     HorzScrollBar.Page = 603
     VertScrollBar.Page = 408
@@ -58,6 +53,9 @@ inherited FNewTask: TFNewTask
         Top = 32
         Width = 591
         ItemHeight = 15
+        OnKeyPress = FormKeyPress
+        OnKeyUp = FormKeyUp
+        OnUTF8KeyPress = FormUTF8KeyPress
         Sorted = True
         TabOrder = 0
       end
@@ -75,6 +73,8 @@ inherited FNewTask: TFNewTask
         Height = 23
         Top = 96
         Width = 595
+        OnKeyPress = FormKeyPress
+        OnUTF8KeyPress = FormUTF8KeyPress
         TabOrder = 1
       end
       object Label3: TLabel
@@ -92,6 +92,9 @@ inherited FNewTask: TFNewTask
         Top = 160
         Width = 591
         ItemHeight = 0
+        OnKeyPress = FormKeyPress
+        OnKeyUp = FormKeyUp
+        OnUTF8KeyPress = FormUTF8KeyPress
         TabOrder = 2
       end
       object Label4: TLabel

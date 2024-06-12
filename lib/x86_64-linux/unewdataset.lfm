@@ -11,7 +11,6 @@ inherited FNewDataSet: TFNewDataSet
     Width = 999
   end
   inherited sbStatus: TStatusBar
-    Height = 23
     Top = 601
     Width = 999
   end
@@ -19,20 +18,15 @@ inherited FNewDataSet: TFNewDataSet
     Top = 551
     Width = 999
     ClientWidth = 999
-    inherited lbHelp: TLabel
-      Height = 15
-      Width = 35
-    end
   end
   inherited sbBody: TScrollBox
-    Left = 264
+    Left = 260
     Height = 491
-    Top = 60
-    Width = 735
+    Width = 739
     HorzScrollBar.Page = 170
     VertScrollBar.Page = 367
     ClientHeight = 487
-    ClientWidth = 731
+    ClientWidth = 735
     object Label2: TLabel[0]
       Left = 8
       Height = 15
@@ -46,8 +40,11 @@ inherited FNewDataSet: TFNewDataSet
       Left = 8
       Height = 23
       Top = 34
-      Width = 711
+      Width = 715
       Anchors = [akTop, akLeft, akRight]
+      OnKeyPress = FormKeyPress
+      OnKeyUp = FormKeyUp
+      OnUTF8KeyPress = FormUTF8KeyPress
       TabOrder = 0
       Text = 'Provider.'
     end
@@ -64,8 +61,11 @@ inherited FNewDataSet: TFNewDataSet
       Left = 8
       Height = 23
       Top = 104
-      Width = 711
+      Width = 715
       Anchors = [akTop, akLeft, akRight]
+      OnKeyPress = FormKeyPress
+      OnKeyUp = FormKeyUp
+      OnUTF8KeyPress = FormUTF8KeyPress
       TabOrder = 1
     end
     object Label5: TLabel[4]
@@ -81,17 +81,23 @@ inherited FNewDataSet: TFNewDataSet
       Left = 8
       Height = 23
       Top = 176
-      Width = 711
+      Width = 715
       Anchors = [akTop, akLeft, akRight]
       ItemHeight = 15
+      OnKeyPress = FormKeyPress
+      OnKeyUp = FormKeyUp
+      OnUTF8KeyPress = FormUTF8KeyPress
       TabOrder = 2
     end
     object edFile: TEdit[6]
       Left = 8
       Height = 23
       Top = 248
-      Width = 711
+      Width = 715
       Anchors = [akTop, akLeft, akRight]
+      OnKeyPress = FormKeyPress
+      OnKeyUp = FormKeyUp
+      OnUTF8KeyPress = FormUTF8KeyPress
       TabOrder = 3
     end
     object Label6: TLabel[7]
@@ -124,37 +130,32 @@ inherited FNewDataSet: TFNewDataSet
       Left = 8
       Height = 23
       Top = 344
-      Width = 711
+      Width = 715
       Anchors = [akTop, akLeft, akRight]
+      OnKeyPress = FormKeyPress
+      OnKeyUp = FormKeyUp
+      OnUTF8KeyPress = FormUTF8KeyPress
       TabOrder = 5
     end
   end
-  object gbProvider: TGroupBox[4]
-    Left = 0
-    Height = 491
-    Top = 60
-    Width = 259
-    Align = alLeft
-    Caption = 'DataProvider'
-    ClientHeight = 471
-    ClientWidth = 255
-    TabOrder = 4
-    object lbProviders: TListBox
-      Left = 0
-      Height = 471
-      Top = 0
-      Width = 255
-      Align = alClient
-      ItemHeight = 0
-      OnClick = lbProvidersClick
-      TabOrder = 0
-    end
-  end
-  object Splitter1: TSplitter[5]
-    Left = 259
+  object Splitter1: TSplitter[4]
+    Left = 255
     Height = 491
     Top = 60
     Width = 5
+  end
+  object lbProviders: TListBox[5]
+    Left = 0
+    Height = 491
+    Top = 60
+    Width = 255
+    Align = alLeft
+    ItemHeight = 0
+    OnClick = lbProvidersClick
+    OnKeyPress = FormKeyPress
+    OnKeyUp = FormKeyUp
+    OnUTF8KeyPress = FormUTF8KeyPress
+    TabOrder = 5
   end
   inherited ppMenu: TPopupMenu[6]
     Left = 944

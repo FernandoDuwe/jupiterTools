@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, ValEdit,
   StdCtrls, SynEdit, JupiterForm, JupiterConsts, JupiterAction, JupiterRunnable,
-  JupiterEnviroment, jupiterformutils, JupiterFileDataProvider, Windows,
+  JupiterEnviroment, jupiterformutils, JupiterFileDataProvider,
   JupiterCSVDataProvider, JupiterApp, jupiterlayoutvalidator, utimecontrol;
 
 type
