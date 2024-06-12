@@ -1,0 +1,41 @@
+inherited FCustomJupiterFormPanel: TFCustomJupiterFormPanel
+  Height = 532
+  Width = 864
+  ClientHeight = 532
+  ClientWidth = 864
+  ParentBiDiMode = False
+  ParentDoubleBuffered = False
+  inherited sbActions: TScrollBox
+    Width = 864
+    ParentColor = False
+  end
+  inherited sbStatus: TStatusBar
+    Top = 509
+    Width = 864
+  end
+  inherited pnHint: TPanel
+    Top = 459
+    Width = 864
+    ClientWidth = 864
+    ParentColor = False
+  end
+  inherited pnBody: TPanel
+    Height = 399
+    Width = 864
+    ClientHeight = 399
+    ClientWidth = 864
+    Color = 4210752
+    ParentBackground = False
+    ParentColor = False
+    inherited sbBody: TScrollBox
+      Height = 399
+      Width = 864
+      Color = 3026478
+      ParentBackground = False
+      ParentBiDiMode = False
+      ParentColor = False
+      ParentFont = False
+      ParentShowHint = False
+    end
+  end
+end

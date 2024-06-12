@@ -1,0 +1,50 @@
+inherited FCLIManager: TFCLIManager
+  Height = 507
+  Width = 1046
+  Caption = 'Comandos do CLI'
+  ClientHeight = 507
+  ClientWidth = 1046
+  OnCreate = FormCreate
+  inherited sbActions: TScrollBox
+    Width = 1046
+  end
+  inherited sbStatus: TStatusBar
+    Top = 484
+    Width = 1046
+  end
+  inherited pnHint: TPanel
+    Top = 418
+    Width = 1046
+    ClientWidth = 1046
+  end
+  object lvCommands: TListView[3]
+    Left = 0
+    Height = 358
+    Top = 60
+    Width = 1046
+    Align = alClient
+    Columns = <    
+      item
+        Caption = 'Nome do Comando'
+        Width = 200
+      end    
+      item
+        Caption = 'Comando'
+        Width = 300
+      end    
+      item
+        Caption = 'Parâmetros'
+        Width = 100
+      end>
+    GridLines = True
+    ReadOnly = True
+    SortType = stText
+    TabOrder = 3
+    ViewStyle = vsReport
+    OnSelectItem = lvCommandsSelectItem
+  end
+  inherited ppMenu: TPopupMenu[4]
+  end
+  inherited acActionShortcuts: TActionList[5]
+  end
+end

@@ -1,0 +1,99 @@
+inherited FTimeControl: TFTimeControl
+  Caption = 'Meus Tempos'
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  object lvTimes: TListView[3]
+    Left = 175
+    Height = 230
+    Hint = 'Dê um duplo clique no lançamento para mais detalhes'
+    Top = 60
+    Width = 493
+    Align = alClient
+    Columns = <    
+      item
+        Caption = 'Início'
+        Width = 100
+      end    
+      item
+        Caption = 'Final'
+        Width = 100
+      end    
+      item
+        Caption = 'Detalhes'
+        Width = 400
+      end    
+      item
+        Caption = 'Linha'
+        Visible = False
+      end>
+    GridLines = True
+    ParentShowHint = False
+    ReadOnly = True
+    RowSelect = True
+    TabOrder = 3
+    ViewStyle = vsReport
+    OnDblClick = lvTimesDblClick
+    OnSelectItem = lvTimesSelectItem
+  end
+  object pnDetails: TPanel[4]
+    Left = 0
+    Height = 230
+    Top = 60
+    Width = 170
+    Align = alLeft
+    BevelOuter = bvNone
+    ClientHeight = 230
+    ClientWidth = 170
+    TabOrder = 4
+    object lbDateDesc: TLabel
+      Left = 16
+      Height = 15
+      Top = 16
+      Width = 24
+      Caption = 'Data'
+      ParentColor = False
+    end
+    object dtCurrentDate: TDateEdit
+      Left = 16
+      Height = 23
+      Top = 40
+      Width = 146
+      CalendarDisplaySettings = [dsShowHeadings, dsShowDayNames]
+      DateOrder = doNone
+      ButtonWidth = 23
+      Anchors = [akTop, akLeft, akRight]
+      NumGlyphs = 1
+      MaxLength = 0
+      TabOrder = 0
+      Text = 'dtCurrentDate'
+    end
+    object lbDateDesc1: TLabel
+      Left = 16
+      Height = 15
+      Top = 80
+      Width = 93
+      Caption = 'Horas Executadas'
+      ParentColor = False
+    end
+    object lbTimes: TLabel
+      Left = 16
+      Height = 15
+      Top = 104
+      Width = 105
+      Caption = '4 horas 35 minutos'
+      Font.Style = [fsBold]
+      ParentColor = False
+      ParentFont = False
+    end
+  end
+  object Splitter1: TSplitter[5]
+    Left = 170
+    Height = 230
+    Top = 60
+    Width = 5
+  end
+  inherited ppMenu: TPopupMenu[6]
+  end
+  inherited acActionShortcuts: TActionList[7]
+  end
+end

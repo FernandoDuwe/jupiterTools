@@ -1,0 +1,90 @@
+inherited FMenuSelector: TFMenuSelector
+  Height = 612
+  Width = 849
+  BorderStyle = bsNone
+  ClientHeight = 612
+  ClientWidth = 849
+  OnShow = FormShow
+  inherited sbActions: TScrollBox
+    Width = 849
+  end
+  inherited sbStatus: TStatusBar
+    Top = 589
+    Width = 849
+  end
+  inherited pnHint: TPanel
+    Top = 523
+    Width = 849
+    ClientWidth = 849
+  end
+  object pnBody: TPanel[3]
+    Left = 0
+    Height = 463
+    Top = 60
+    Width = 849
+    Align = alClient
+    BorderStyle = bsSingle
+    ClientHeight = 459
+    ClientWidth = 845
+    TabOrder = 3
+    object edSearch: TEdit
+      Left = 1
+      Height = 23
+      Top = 3
+      Width = 840
+      Anchors = [akTop, akLeft, akRight]
+      BorderSpacing.Left = 152
+      BorderSpacing.Top = 3
+      OnChange = edSearchChange
+      TabOrder = 0
+      TextHint = 'Digite para pesquisar, Enter para selecionar e ESC para fechar sem selecionar nenhuma opção'
+    end
+    object tvMenu: TTreeView
+      Left = 1
+      Height = 424
+      Top = 32
+      Width = 840
+      Anchors = [akTop, akLeft, akRight, akBottom]
+      Images = FMain.ilIconFamily
+      ReadOnly = True
+      ScrollBars = ssNone
+      TabOrder = 1
+      Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
+    end
+  end
+  inherited ppMenu: TPopupMenu[4]
+    Left = 464
+    Top = 296
+  end
+  inherited acActionShortcuts: TActionList[5]
+    Left = 376
+    Top = 296
+    object acESC: TAction[12]
+      Caption = 'acESC'
+      OnExecute = acESCExecute
+      ShortCut = 27
+    end
+    object acAcima: TAction[13]
+      Caption = 'acAcima'
+      OnExecute = acAcimaExecute
+      ShortCut = 38
+    end
+    object acAbaixo: TAction[14]
+      Caption = 'acAbaixo'
+      OnExecute = acAbaixoExecute
+      ShortCut = 40
+    end
+    object acEnter: TAction[15]
+      Caption = 'acEnter'
+      OnExecute = acEnterExecute
+      ShortCut = 13
+    end
+  end
+  object tmSearch: TTimer[6]
+    Enabled = False
+    Interval = 500
+    OnTimer = tmSearchTimer
+    Left = 544
+    Top = 296
+  end
+end

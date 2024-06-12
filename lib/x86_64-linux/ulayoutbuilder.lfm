@@ -1,0 +1,58 @@
+inherited FLayoutBuilder: TFLayoutBuilder
+  Left = 578
+  Height = 461
+  Top = 232
+  Width = 1083
+  Caption = 'Layout Builder'
+  ClientHeight = 461
+  ClientWidth = 1083
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  inherited sbActions: TScrollBox
+    Width = 1083
+  end
+  inherited sbStatus: TStatusBar
+    Top = 438
+    Width = 1083
+  end
+  inherited pnHint: TPanel
+    Top = 372
+    Width = 1083
+    ClientWidth = 1083
+  end
+  object lvFields: TListView[3]
+    Left = 0
+    Height = 312
+    Top = 60
+    Width = 1083
+    Align = alClient
+    Columns = <    
+      item
+        Caption = 'Campo'
+        Width = 200
+      end    
+      item
+        Caption = 'Tipo'
+        Width = 200
+      end    
+      item
+        Caption = 'Inicio'
+        Width = 100
+      end    
+      item
+        Caption = 'Tamanho'
+        Width = 100
+      end>
+    GridLines = True
+    ReadOnly = True
+    SortType = stText
+    TabOrder = 3
+    ViewStyle = vsReport
+    OnResize = lvFieldsResize
+    OnSelectItem = lvFieldsSelectItem
+  end
+  inherited ppMenu: TPopupMenu[4]
+  end
+  inherited acActionShortcuts: TActionList[5]
+  end
+end

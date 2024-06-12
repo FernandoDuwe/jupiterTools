@@ -1,0 +1,2 @@
+inherited FDynamicRecord: TFDynamicRecord
+end

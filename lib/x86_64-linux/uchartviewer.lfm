@@ -1,0 +1,210 @@
+inherited FChartViewer: TFChartViewer
+  Height = 658
+  Width = 1101
+  Caption = 'Gerador de gráficos'
+  ClientHeight = 658
+  ClientWidth = 1101
+  OnActivate = FormActivate
+  OnClose = FormClose
+  OnDeactivate = FormDeactivate
+  OnDestroy = FormDestroy
+  OnResize = FormResize
+  inherited sbActions: TScrollBox
+    Width = 1101
+  end
+  inherited sbStatus: TStatusBar
+    Top = 635
+    Width = 1101
+  end
+  inherited pnHint: TPanel
+    Top = 569
+    Width = 1101
+    ClientWidth = 1101
+  end
+  object pcBody: TPageControl[3]
+    Left = 219
+    Height = 509
+    Top = 60
+    Width = 882
+    ActivePage = tsReport
+    Align = alClient
+    TabIndex = 0
+    TabOrder = 3
+    object tsReport: TTabSheet
+      Caption = 'Relatório'
+      ClientHeight = 481
+      ClientWidth = 874
+      object pnChart: TPanel
+        Left = 0
+        Height = 481
+        Top = 0
+        Width = 874
+        Align = alClient
+        BevelOuter = bvLowered
+        ClientHeight = 481
+        ClientWidth = 874
+        TabOrder = 0
+        object ChartNavPanel1: TChartNavPanel
+          Left = 1
+          Height = 462
+          Top = 1
+          Width = 872
+          Chart = chChart
+          Align = alClient
+        end
+        object chChart: TChart
+          Left = 1
+          Height = 462
+          Top = 1
+          Width = 872
+          AxisList = <          
+            item
+              Grid.Color = clSilver
+              Marks.LabelBrush.Style = bsClear
+              Minors = <>
+              Title.LabelFont.Orientation = 900
+              Title.Visible = True
+              Title.LabelBrush.Style = bsClear
+            end          
+            item
+              Grid.Color = clSilver
+              Alignment = calBottom
+              Marks.LabelBrush.Style = bsClear
+              Minors = <>
+              Title.LabelBrush.Style = bsClear
+            end>
+          Legend.Visible = True
+          Title.Text.Strings = (
+            'TAChart'
+          )
+          Align = alClient
+        end
+        object ChartNavScrollBar1: TChartNavScrollBar
+          Left = 1
+          Height = 17
+          Top = 463
+          Width = 872
+          Chart = chChart
+          Align = alBottom
+          PageSize = 0
+          TabOrder = 2
+        end
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'Informações'
+      ClientHeight = 481
+      ClientWidth = 874
+      object pnInfo: TPanel
+        Left = 0
+        Height = 481
+        Top = 0
+        Width = 874
+        Align = alClient
+        BevelOuter = bvLowered
+        ClientHeight = 481
+        ClientWidth = 874
+        TabOrder = 0
+        object lvInfo: TListView
+          Left = 1
+          Height = 479
+          Top = 1
+          Width = 872
+          Align = alClient
+          Columns = <          
+            item
+              Caption = 'Fonte de Dados'
+            end          
+            item
+              Caption = 'Campo X'
+            end          
+            item
+              Caption = 'Campo Y'
+            end          
+            item
+              Caption = 'Legenda'
+            end          
+            item
+              Caption = 'Cor'
+            end          
+            item
+              Caption = 'Tipo de relatório'
+            end>
+          GridLines = True
+          ReadOnly = True
+          TabOrder = 0
+          ViewStyle = vsReport
+          OnDblClick = lvInfoDblClick
+        end
+      end
+    end
+  end
+  object pcControls: TPageControl[4]
+    Left = 0
+    Height = 509
+    Top = 60
+    Width = 214
+    ActivePage = TabSheet1
+    Align = alLeft
+    TabIndex = 0
+    TabOrder = 4
+    object TabSheet1: TTabSheet
+      Caption = 'Opções'
+      ClientHeight = 481
+      ClientWidth = 206
+      object clListBox: TChartListbox
+        Left = 0
+        Height = 481
+        Top = 0
+        Width = 206
+        Chart = chChart
+        Align = alClient
+        BorderStyle = bsNone
+        TabOrder = 0
+      end
+    end
+  end
+  object spSplitter: TSplitter[5]
+    Left = 214
+    Height = 509
+    Top = 60
+    Width = 5
+  end
+  inherited ppMenu: TPopupMenu[6]
+  end
+  inherited acActionShortcuts: TActionList[7]
+  end
+  object chStyle: TChartStyles[8]
+    Styles = <>
+    Left = 328
+    Top = 208
+  end
+  object crToolset: TChartToolset[9]
+    Left = 240
+    Top = 208
+    object crToolsetLegendClickTool1: TLegendClickTool
+    end
+    object crToolsetDataPointHintTool1: TDataPointHintTool
+      UseApplicationHint = True
+    end
+    object crToolsetZoomMouseWheelTool1: TZoomMouseWheelTool
+    end
+    object crToolsetDataPointDistanceTool1: TDataPointDistanceTool
+      Marks.Format = '%0:.9g'
+    end
+    object crToolsetPanDragTool1: TPanDragTool
+    end
+    object crToolsetPanClickTool1: TPanClickTool
+    end
+    object crToolsetPanMouseWheelTool1: TPanMouseWheelTool
+    end
+    object crToolsetAxisClickTool1: TAxisClickTool
+    end
+  end
+  object tmrUpdateAutoComponents: TTimer[10]
+    Enabled = False
+    OnTimer = tmrUpdateAutoComponentsTimer
+    Left = 440
+    Top = 136
+  end
+end
