@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CONFIG>
-  <Compiler Value="C:\lazarus\fpc\3.2.2\bin\x86_64-win64\fpc.exe" Date="1420791944"/>
-  <Params Value=" -MObjFPC -Scghi -O1 -gw2 -godwarfsets -gl -WG -l -vewnhibq -FiC:\Projetos\jupiterTools\forms\lib\x86_64-win64 &quot;-FuC:\Users\ferna\Desktop\Nova pasta&quot; -FuC:\lazarus\lcl\units\x86_64-win64\win32 -FuC:\lazarus\lcl\units\x86_64-win64 -FuC:\lazarus\components\freetype\lib\x86_64-win64 -FuC:\lazarus\components\lazutils\lib\x86_64-win64 -FuC:\lazarus\packager\units\x86_64-win64 -FuC:\Projetos\jupiterTools\forms\ -FUC:\Projetos\jupiterTools\forms\lib\x86_64-win64\ -FEC:\Projetos\jupiterTools\forms\ -oC:\Projetos\jupiterTools\forms\project1.exe -dLCL -dLCLwin32 project1.lpr"/>
-</CONFIG>

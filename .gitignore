@@ -1,1 +1,4 @@
-/out/
+backup/
+lib/
+*/backup/
+*/lib/
