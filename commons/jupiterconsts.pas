@@ -111,9 +111,9 @@ const
    FORM_MARGIN_BOTTOM        : Integer = 8;
 
    {$IFDEF WINDOWS}
-     FORM_MARGIN_BOTTOM_TONEXT : Integer = 10; // Bottom to the next field
-   {$ELSE}
      FORM_MARGIN_BOTTOM_TONEXT : Integer = 20; // Bottom to the next field
+   {$ELSE}
+     FORM_MARGIN_BOTTOM_TONEXT : Integer = 30; // Bottom to the next field
    {$ENDIF}
 
    FORM_ACTION_MINWIDTH         : Integer = 120;

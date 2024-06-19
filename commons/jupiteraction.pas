@@ -65,6 +65,7 @@ type
   private
     FPopupMenu : TPopupMenu;
     FCompactMode : Boolean;
+    FSize : Integer;
   published
     property CompactMode : Boolean read FCompactMode write FCompactMode;
 
@@ -166,7 +167,7 @@ begin
   Result.Tag     := prIndex;
   Result.OnClick := @Self.Internal_OnClick;
 
-  prOwner.Height := Result.Top + Result.Height + FORM_MARGIN_BOTTOM;
+  Self.FSize := Result.Top + Result.Height + FORM_MARGIN_BOTTOM;
 
   vrPopupMenu := TMenuItem.Create(Self.PopupMenu);
   vrPopupMenu.Caption    := prAction.Title + vrShortcutButton;
@@ -260,9 +261,9 @@ begin
 
   // Se o último botão estiver mais longe que o tamanho da tela, aumenta o scrollbox
   if vrLeft > prOwner.Width then
-    prOwner.Height := 80
+    prOwner.Height := Self.FSize + 20
   else
-    prOwner.Height := 60;
+    prOwner.Height := Self.FSize;
 end;
 
 function TJupiterActionList.GetActionButton(prActionIndex: Integer; prOwner: TScrollBox): TBitBtn;
@@ -318,6 +319,8 @@ end;
 constructor TJupiterActionList.Create;
 begin
   inherited Create;
+
+  Self.FSize := 60;
 
   Self.FCompactMode := False;
 end;

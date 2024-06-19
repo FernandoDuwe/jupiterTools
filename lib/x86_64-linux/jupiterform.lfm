@@ -21,9 +21,8 @@ object FJupiterForm: TFJupiterForm
     Height = 60
     Top = 0
     Width = 668
-    HorzScrollBar.Page = 1
-    VertScrollBar.Page = 1
     Align = alTop
+    AutoScroll = False
     BorderStyle = bsNone
     TabOrder = 0
   end

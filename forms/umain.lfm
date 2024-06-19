@@ -17,6 +17,9 @@ inherited FMain: TFMain
   inherited sbActions: TScrollBox
     Top = 44
     Width = 1297
+    HorzScrollBar.Page = 1
+    VertScrollBar.Page = 1
+    AutoScroll = True
   end
   inherited sbStatus: TStatusBar
     Top = 642
