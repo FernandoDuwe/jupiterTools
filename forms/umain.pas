@@ -36,6 +36,7 @@ type
     ilTabs: TImageList;
     JupiterFormTab1: TJupiterFormTab;
     MenuItem1: TMenuItem;
+    MenuItem22: TMenuItem;
     miPomodoroStart: TMenuItem;
     miPomodoroEnd: TMenuItem;
     miChart: TMenuItem;
@@ -153,6 +154,7 @@ type
     procedure MenuItem18Click(Sender: TObject);
     procedure MenuItem19Click(Sender: TObject);
     procedure MenuItem1Click(Sender: TObject);
+    procedure MenuItem22Click(Sender: TObject);
     procedure miChartClick(Sender: TObject);
     procedure miPomodoroEndClick(Sender: TObject);
     procedure miPomodoroStartClick(Sender: TObject);
@@ -302,7 +304,7 @@ begin
 
     vrJupiterApp.AddMessage('Pomodoro finalizado', 'Usuário');
 
-    vrJupiterApp.Params.VariableById('Jupiter.Tools.Pomodoro.Time.Minutes').Value := '0';
+    vrJupiterApp.Params.VariableById('Jupiter.Tools.Pomodoro.State.Active').Value := '0';
 
     vrJupiterApp.SetMessageState(EmptyStr);
   finally
@@ -711,6 +713,20 @@ begin
 
 end;
 
+procedure TFMain.MenuItem22Click(Sender: TObject);
+begin
+  if Self.WindowState = wsFullScreen then
+  begin
+    Self.BorderStyle := bsSizeable;
+    Self.WindowState := wsMaximized;
+  end
+  else
+  begin
+    Self.BorderStyle := bsNone;
+    Self.WindowState := wsFullScreen;
+  end;
+end;
+
 procedure TFMain.miChartClick(Sender: TObject);
 begin
   vrJupiterApp.NavigateTo(TJupiterRoute.Create(CHART_VIEWER_PATH), False);
@@ -723,7 +739,7 @@ begin
 
     vrJupiterApp.SetMessageState('Pomodoro finalizado pelo usuário');
 
-    vrJupiterApp.Params.VariableById('Jupiter.Tools.Pomodoro.Time.Minutes').Value := '0';
+    vrJupiterApp.Params.VariableById('Jupiter.Tools.Pomodoro.State.Active').Value := '0';
   finally
     Self.UpdateForm(False, True, False);
   end;
@@ -743,7 +759,7 @@ begin
 
     vrJupiterApp.SetMessageState('Em pomodoro');
 
-    vrJupiterApp.Params.VariableById('Jupiter.Tools.Pomodoro.Time.Minutes').Value := '1';
+    vrJupiterApp.Params.VariableById('Jupiter.Tools.Pomodoro.State.Active').Value := '1';
   finally
     Self.UpdateForm(False, True, False);
   end;

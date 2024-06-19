@@ -1061,6 +1061,11 @@ inherited FMain: TFMain
         ImageIndex = 26
         OnClick = MenuItem10Click
       end
+      object MenuItem22: TMenuItem
+        Caption = 'Tela inteira'
+        ImageIndex = 26
+        OnClick = MenuItem22Click
+      end
       object Separator4: TMenuItem
         Caption = '-'
       end

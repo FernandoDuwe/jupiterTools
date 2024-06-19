@@ -167,6 +167,9 @@ begin
   if not Assigned(vrJupiterApp) then
     Exit;
 
+  if prComponent is TForm then
+    TForm(prComponent).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+
   for vrVez := 0 to prComponent.ComponentCount - 1 do
   begin
     if prComponent.Components[vrVez] is TLabel then
@@ -198,6 +201,9 @@ begin
 
     if prComponent.Components[vrVez] is TMemo then
       TMemo(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+
+    if prComponent.Components[vrVez] is TStatusBar then
+      TStatusBar(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
 
     if prComponent.Components[vrVez] is TScrollBox then
     begin

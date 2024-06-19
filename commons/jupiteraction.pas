@@ -166,6 +166,8 @@ begin
   Result.Tag     := prIndex;
   Result.OnClick := @Self.Internal_OnClick;
 
+  prOwner.Height := Result.Top + Result.Height + FORM_MARGIN_BOTTOM;
+
   vrPopupMenu := TMenuItem.Create(Self.PopupMenu);
   vrPopupMenu.Caption    := prAction.Title + vrShortcutButton;
   vrPopupMenu.Hint       := prAction.Hint;
