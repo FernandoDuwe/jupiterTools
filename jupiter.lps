@@ -9,8 +9,8 @@
         <Filename Value="jupiter.lpr"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="14"/>
-        <CursorPos X="4" Y="28"/>
+        <TopLine Value="110"/>
+        <CursorPos X="22" Y="119"/>
         <UsageCount Value="200"/>
       </Unit>
       <Unit>
@@ -20,8 +20,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uMain"/>
-        <TopLine Value="699"/>
-        <CursorPos X="168" Y="710"/>
+        <TopLine Value="1137"/>
+        <CursorPos X="61" Y="1148"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -120,8 +120,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uCurrentTask"/>
-        <EditorIndex Value="-1"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <CursorPos X="32" Y="11"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="forms\ueditor.pas"/>
@@ -143,8 +147,8 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uGenerator"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="1008"/>
-        <CursorPos X="71" Y="1042"/>
+        <TopLine Value="1007"/>
+        <CursorPos X="70" Y="1011"/>
         <UsageCount Value="203"/>
       </Unit>
       <Unit>
@@ -406,7 +410,7 @@
         <UnitName Value="JupiterForm"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="41"/>
-        <CursorPos X="16" Y="64"/>
+        <CursorPos X="32" Y="44"/>
         <UsageCount Value="22"/>
       </Unit>
       <Unit>
@@ -436,6 +440,8 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterApp"/>
         <EditorIndex Value="-1"/>
+        <TopLine Value="432"/>
+        <CursorPos Y="463"/>
         <UsageCount Value="22"/>
       </Unit>
       <Unit>
@@ -469,12 +475,10 @@
         <Filename Value="commons\jupiterconsts.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterConsts"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="4"/>
-        <TopLine Value="100"/>
-        <CursorPos X="45" Y="114"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="5"/>
+        <CursorPos X="24" Y="36"/>
         <UsageCount Value="22"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="commons\jupitercsvdataprovider.pas"/>
@@ -549,21 +553,19 @@
         <Filename Value="commons\jupiterformfield.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterFormField"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="83"/>
         <CursorPos X="63" Y="99"/>
         <UsageCount Value="22"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="commons\jupiterformgenerator.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterFormGenerator"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="66"/>
         <CursorPos X="36" Y="81"/>
         <UsageCount Value="22"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="commons\jupiterformutils.pas"/>
@@ -604,11 +606,10 @@
         <Filename Value="commons\jupiterobject.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterObject"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="43"/>
-        <CursorPos X="84" Y="47"/>
+        <CursorPos X="68" Y="51"/>
         <UsageCount Value="22"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="commons\jupiterpanelnotifier.pas"/>
@@ -719,6 +720,16 @@
         <UnitName Value="uCustomJupiterFormPanel"/>
         <EditorIndex Value="-1"/>
         <UsageCount Value="22"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms\codescriptedform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FCodeScriptedForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="12" Y="2"/>
+        <UsageCount Value="20"/>
       </Unit>
       <Unit>
         <Filename Value="Commons\jupiterconsts.pas"/>
@@ -1464,69 +1475,16 @@
         <CursorPos X="24" Y="479"/>
         <UsageCount Value="10"/>
       </Unit>
+      <Unit>
+        <Filename Value="forms\ugenerator.lfm"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="722"/>
+        <CursorPos X="17" Y="750"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="LFM"/>
+      </Unit>
     </Units>
-    <JumpHistory HistoryIndex="14">
-      <Position>
-        <Filename Value="forms\umain.pas"/>
-        <Caret Line="313" Column="30" TopLine="296"/>
-      </Position>
-      <Position>
-        <Filename Value="forms\umain.pas"/>
-        <Caret Line="315" Column="30" TopLine="298"/>
-      </Position>
-      <Position>
-        <Filename Value="forms\umain.pas"/>
-        <Caret Line="720" Column="34" TopLine="716"/>
-      </Position>
-      <Position>
-        <Filename Value="forms\umain.pas"/>
-        <Caret Line="718" Column="28" TopLine="699"/>
-      </Position>
-      <Position>
-        <Filename Value="forms\umain.pas"/>
-        <Caret Line="718" Column="40" TopLine="699"/>
-      </Position>
-      <Position>
-        <Filename Value="forms\umain.pas"/>
-        <Caret Line="250" Column="86" TopLine="231"/>
-      </Position>
-      <Position>
-        <Filename Value="forms\umain.pas"/>
-        <Caret Line="720" Column="27" TopLine="699"/>
-      </Position>
-      <Position>
-        <Filename Value="forms\umain.pas"/>
-        <Caret Line="714" Column="89" TopLine="699"/>
-      </Position>
-      <Position>
-        <Filename Value="forms\umain.pas"/>
-        <Caret Line="715" Column="89" TopLine="700"/>
-      </Position>
-      <Position>
-        <Filename Value="forms\umain.pas"/>
-        <Caret Line="714" Column="89" TopLine="699"/>
-      </Position>
-      <Position>
-        <Filename Value="commons\jupiterformgenerator.pas"/>
-        <Caret Line="33" Column="37"/>
-      </Position>
-      <Position>
-        <Filename Value="commons\jupiterformgenerator.pas"/>
-        <Caret Line="101" Column="3" TopLine="99"/>
-      </Position>
-      <Position>
-        <Filename Value="commons\jupiterformgenerator.pas"/>
-        <Caret Line="31" Column="15" TopLine="14"/>
-      </Position>
-      <Position>
-        <Filename Value="commons\jupiterformgenerator.pas"/>
-        <Caret Line="81" Column="36" TopLine="66"/>
-      </Position>
-      <Position>
-        <Filename Value="commons\jupiterformfield.pas"/>
-        <Caret Line="32" Column="35" TopLine="24"/>
-      </Position>
-    </JumpHistory>
+    <JumpHistory HistoryIndex="-1"/>
     <RunParams>
       <FormatVersion Value="2"/>
       <Modes ActiveMode=""/>

@@ -1,0 +1,4 @@
+inherited FCodeScriptedForm: TFCodeScriptedForm
+  Left = 783
+  Top = 252
+end

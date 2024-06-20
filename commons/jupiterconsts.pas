@@ -33,6 +33,7 @@ const
    CLI_NEWCOMMAND_PATH      : String = '/forms/cli/newCommand/';
    TIME_CONTROL_PATH        : String = '/forms/timeControl/';
    USER_PREF_PATH           : String = '/forms/config/preferences';
+   CODESCRIPT_FORM_PATH     : String = '/forms/codeScript/';
 
    MENU_FILE_PATH       : String = '/menu/file/';
    MENU_FILE_NEW_PATH   : String = '/menu/file/new/';

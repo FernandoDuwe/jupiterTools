@@ -32,7 +32,7 @@ uses
   jupiterfiledownloader, JupiterFileDataProvider, jupiterexternaldatasets,
   JupiterEnviroment, JupiterDirectoryDataProvider, JupiterDialogForm,
   JupiterDataProvider, JupiterCSVDataProvider, JupiterConsts, jupiterclicommand,
-  jupiterautoupdater, jupiterautocompletesql, JupiterAction;
+  jupiterautoupdater, jupiterautocompletesql, JupiterAction, codescriptedform;
 
 {$R *.res}
 
@@ -138,12 +138,11 @@ begin
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(TIME_CONTROL_PATH, TFTimeControl));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(USER_PREF_PATH, TFUserPreferences));
   vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(WEB_EXPLORER_FORM_PATH, TFWebExplorer));
+  vrJupiterApp.FormRoutes.Add(TJupiterFormRoute.Create(CODESCRIPT_FORM_PATH, TFCodeScriptedForm));
+
 
   Application.CreateForm(TFMain, FMain);
   Application.CreateForm(TDMMain, DMMain);
-  Application.CreateForm(TFCustomJupiterForm, FCustomJupiterForm);
-  Application.CreateForm(TFJupiterForm, FJupiterForm);
-  Application.CreateForm(TFCustomJupiterFormPanel, FCustomJupiterFormPanel);
   Application.Run;
 end.
 
