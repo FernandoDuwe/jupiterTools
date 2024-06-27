@@ -25,6 +25,12 @@
     </RunParams>
     <RequiredPackages>
       <Item>
+        <PackageName Value="SQLDBLaz"/>
+      </Item>
+      <Item>
+        <PackageName Value="jupiterCommom"/>
+      </Item>
+      <Item>
         <PackageName Value="LCL"/>
       </Item>
     </RequiredPackages>
@@ -34,21 +40,84 @@
         <IsPartOfProject Value="True"/>
       </Unit>
       <Unit>
+        <Filename Value="../forms/ujupiterform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FJupiterForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uJupiterForm"/>
+      </Unit>
+      <Unit>
         <Filename Value="forms/umain.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="Form1"/>
+        <ComponentName Value="FMain"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uMain"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../commons/jupiterobject.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterObject"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../commons/jupiterconsts.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterConsts"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../commons/jupitervariable.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterVariable"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../commons/jupiterenviroment.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterEnviroment"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../commons/jupitercsvdataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterCSVDataProvider"/>
+      </Unit>
+      <Unit>
+        <Filename Value="udmmain.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="DMMain"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="DataModule"/>
+        <UnitName Value="uDmMain"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../commons/jupitermodule.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterModule"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../commons/jupiterapp.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterApp"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../commons/jupiterdatabasewizard.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterDatabaseWizard"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../modules/jupiterstandard.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterStandard"/>
       </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
     <Version Value="11"/>
     <Target>
-      <Filename Value="jupiter"/>
+      <Filename Value="out/jupiter"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="forms"/>
+      <OtherUnitFiles Value="../forms;forms;../commons;../modules"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Linking>

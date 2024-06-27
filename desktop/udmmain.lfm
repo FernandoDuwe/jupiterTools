@@ -1,0 +1,24 @@
+object DMMain: TDMMain
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  OldCreateOrder = False
+  Height = 289
+  HorizontalOffset = 609
+  VerticalOffset = 268
+  Width = 537
+  object sqlLiteInternalDatabaseConnection: TSQLite3Connection
+    Connected = False
+    LoginPrompt = False
+    KeepConnection = False
+    Transaction = sqlLiteInternalTransaction
+    AlwaysUseBigint = False
+    Left = 152
+    Top = 16
+  end
+  object sqlLiteInternalTransaction: TSQLTransaction
+    Active = False
+    Database = sqlLiteInternalDatabaseConnection
+    Left = 152
+    Top = 104
+  end
+end

@@ -1,14 +1,21 @@
-unit umain;
+unit uMain;
 
-{$mode objfpc}{$H+}
+{$mode ObjFPC}{$H+}
 
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, Menus,
+  uJupiterForm, JupiterFormTab;
 
 type
-  TForm1 = class(TForm)
+
+  { TFMain }
+
+  TFMain = class(TFJupiterForm)
+    jtMainTab: TJupiterFormTab;
+    mmMainMenu: TMainMenu;
+    sbStatus: TStatusBar;
   private
 
   public
@@ -16,7 +23,7 @@ type
   end;
 
 var
-  Form1: TForm1;
+  FMain: TFMain;
 
 implementation
 

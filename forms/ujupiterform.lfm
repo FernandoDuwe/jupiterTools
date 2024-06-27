@@ -1,0 +1,16 @@
+object FJupiterForm: TFJupiterForm
+  Left = 588
+  Height = 457
+  Top = 360
+  Width = 879
+  Caption = 'FJupiterForm'
+  LCLVersion = '3.4.0.0'
+  object acOptions: TActionList
+    Left = 64
+    Top = 40
+  end
+  object tmrAutoUpdater: TTimer
+    Left = 176
+    Top = 40
+  end
+end

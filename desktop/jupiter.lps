@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <Version Value="12"/>
+    <BuildModes Active="Default"/>
+    <Units>
+      <Unit>
+        <Filename Value="jupiter.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="28" Y="27"/>
+        <UsageCount Value="68"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../forms/ujupiterform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FJupiterForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uJupiterForm"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="16" Y="17"/>
+        <UsageCount Value="68"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms/umain.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FMain"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uMain"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="35" Y="6"/>
+        <UsageCount Value="68"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../commons/jupiterobject.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterObject"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="19"/>
+        <UsageCount Value="67"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../commons/jupiterconsts.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterConsts"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="78"/>
+        <CursorPos X="29" Y="99"/>
+        <UsageCount Value="68"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../commons/jupitervariable.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterVariable"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="70"/>
+        <CursorPos X="29" Y="109"/>
+        <UsageCount Value="67"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../commons/jupiterenviroment.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterEnviroment"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="130"/>
+        <CursorPos X="75" Y="144"/>
+        <UsageCount Value="67"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../commons/jupitercsvdataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterCSVDataProvider"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="56" Y="8"/>
+        <UsageCount Value="66"/>
+      </Unit>
+      <Unit>
+        <Filename Value="udmmain.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="DMMain"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="DataModule"/>
+        <UnitName Value="uDmMain"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="19"/>
+        <CursorPos X="31" Y="38"/>
+        <UsageCount Value="68"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../commons/jupitermodule.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterModule"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="66"/>
+        <CursorPos X="90" Y="106"/>
+        <UsageCount Value="66"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../commons/jupiterapp.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterApp"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="10"/>
+        <CursorPos X="43" Y="28"/>
+        <UsageCount Value="66"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../commons/jupiterdatabasewizard.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterDatabaseWizard"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="81"/>
+        <CursorPos X="57" Y="96"/>
+        <UsageCount Value="22"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../modules/jupiterstandard.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterStandard"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="23"/>
+        <CursorPos X="76" Y="58"/>
+        <UsageCount Value="21"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../commons/jupiterdataprovider.pas"/>
+        <UnitName Value="JupiterDataProvider"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="52"/>
+        <CursorPos Y="85"/>
+        <UsageCount Value="16"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../commons/jupiterdirectorydataprovider.pas"/>
+        <UnitName Value="JupiterDirectoryDataProvider"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="16"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../commons/jupiterfiledataprovider.pas"/>
+        <UnitName Value="JupiterFileDataProvider"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="16"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms/unit1.pas"/>
+        <ComponentName Value="Form1"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="Unit1"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="16"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../commons/jupitertasksdataprovider.pas"/>
+        <UnitName Value="JupiterTasksDataProvider"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="80"/>
+        <CursorPos X="13" Y="100"/>
+        <UsageCount Value="6"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../commons/jupiterformutils.pas"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="33" Y="17"/>
+        <UsageCount Value="16"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../commons/jupiterroute.pas"/>
+        <UnitName Value="JupiterRoute"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="158"/>
+        <CursorPos X="44" Y="178"/>
+        <UsageCount Value="6"/>
+      </Unit>
+      <Unit>
+        <Filename Value="/usr/share/lazarus/3.4.0/lcl/include/application.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="2221"/>
+        <CursorPos X="32" Y="2233"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="/usr/share/lazarus/3.4.0/lcl/interfaces/gtk2/gtk2widgetset.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="8"/>
+        <CursorPos X="34" Y="20"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="/usr/share/fpcsrc/3.2.2/packages/fcl-db/src/sqldb/sqlite/sqlite3conn.pp"/>
+        <UnitName Value="SQLite3Conn"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="46"/>
+        <CursorPos X="3" Y="67"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="/usr/share/fpcsrc/3.2.2/packages/fcl-db/src/sqldb/sqldb.pp"/>
+        <UnitName Value="SQLDB"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="204"/>
+        <CursorPos X="15" Y="224"/>
+        <UsageCount Value="10"/>
+      </Unit>
+    </Units>
+    <JumpHistory HistoryIndex="7">
+      <Position>
+        <Filename Value="../modules/jupiterstandard.pas"/>
+        <Caret Line="27" Column="29"/>
+      </Position>
+      <Position>
+        <Filename Value="../modules/jupiterstandard.pas"/>
+        <Caret Line="34" Column="41"/>
+      </Position>
+      <Position>
+        <Filename Value="../modules/jupiterstandard.pas"/>
+        <Caret Line="31" Column="33"/>
+      </Position>
+      <Position>
+        <Filename Value="../modules/jupiterstandard.pas"/>
+        <Caret Line="18" Column="56"/>
+      </Position>
+      <Position>
+        <Filename Value="../modules/jupiterstandard.pas"/>
+        <Caret Line="43" Column="81"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupitermodule.pas"/>
+        <Caret Line="23" Column="84"/>
+      </Position>
+      <Position>
+        <Filename Value="../modules/jupiterstandard.pas"/>
+        <Caret Line="29"/>
+      </Position>
+      <Position>
+        <Filename Value="../modules/jupiterstandard.pas"/>
+        <Caret Line="42" Column="22" TopLine="16"/>
+      </Position>
+    </JumpHistory>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes ActiveMode=""/>
+    </RunParams>
+  </ProjectSession>
+</CONFIG>
