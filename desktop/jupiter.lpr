@@ -12,7 +12,8 @@ uses
   Interfaces, // this includes the LCL widgetset
   Forms, uJupiterForm, uMain, uDmMain, JupiterConsts, JupiterObject,
   JupiterEnviroment, JupiterModule, JupiterVariable, JupiterCSVDataProvider,
-  JupiterApp, jupiterDatabaseWizard, jupiterStandard;
+  JupiterApp, jupiterDatabaseWizard, jupiterformutils, jupiterStandard, 
+jupiterMainMenuGenerator, uJupiterUserExperience;
 
 {$R *.res}
 
@@ -28,6 +29,7 @@ begin
   Application.CreateForm(TFMain, FMain);
 
   vrJupiterApp.AddModule(TJupiterStandardModule.Create);
+  vrJupiterApp.AddModule(TJupiterUserExperience.Create);
 
   Application.Run;
 end.

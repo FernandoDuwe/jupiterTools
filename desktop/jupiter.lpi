@@ -108,6 +108,20 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="jupiterStandard"/>
       </Unit>
+      <Unit>
+        <Filename Value="../commons/jupiterformutils.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../commons/jupitermainmenugenerator.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterMainMenuGenerator"/>
+      </Unit>
+      <Unit>
+        <Filename Value="modules/ujupiteruserexperience.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uJupiterUserExperience"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -117,7 +131,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="../forms;forms;../commons;../modules"/>
+      <OtherUnitFiles Value="../forms;forms;../commons;../modules;modules"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Linking>

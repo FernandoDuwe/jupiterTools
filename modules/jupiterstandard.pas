@@ -48,12 +48,20 @@ begin
       vrWizard.ExecuteScript(CreateStringList('CREATE TABLE VARIABLES ( ID INTEGER PRIMARY KEY, NAME VARCHAR (100), VALUE VARCHAR(100), MODULE INTEGER, FOREIGN KEY (MODULE) REFERENCES MODULES (ID))'));
 
     if not vrWizard.TableExists('ROUTES') then
-      vrWizard.ExecuteScript(CreateStringList('CREATE TABLE ROUTES ( ID INTEGER PRIMARY KEY, TITLE VARCHAR(100), ROUTE VARCHAR (100), DESTINY BLOB)'));
+      vrWizard.ExecuteScript(CreateStringList('CREATE TABLE ROUTES ( ID INTEGER PRIMARY KEY, TITLE VARCHAR(100), ROUTE VARCHAR (100), DESTINY BLOB, ICON SMALLINT, ZINDEX SMALLINT)'));
 
     // Creating basic routes
-    Self.Internal_CreateRouteIfDontExists('Arquivo', '/menu/file/', EmptyStr);
-    Self.Internal_CreateRouteIfDontExists('Editar', '/menu/edit/', EmptyStr);
-    Self.Internal_CreateRouteIfDontExists('Editar', '/menu/edit/', EmptyStr);
+    Self.Internal_CreateRouteIfDontExists('Arquivo', '/menu/file/', EmptyStr, NULL_KEY, 100);
+    Self.Internal_CreateRouteIfDontExists('Editar', '/menu/edit/', EmptyStr, NULL_KEY, 200);
+    Self.Internal_CreateRouteIfDontExists('Ferramentas', '/menu/tools/', EmptyStr, NULL_KEY, 300);
+    Self.Internal_CreateRouteIfDontExists('Sobre', '/menu/about/', EmptyStr, NULL_KEY, 10000);
+
+    // Inside File Menu
+    Self.Internal_CreateRouteIfDontExists('Novo', '/menu/file/new/', EmptyStr, ICON_NEW, 100);
+    Self.Internal_CreateRouteIfDontExists('-', '/menu/file/separator1/', EmptyStr, NULL_KEY, 500);
+    Self.Internal_CreateRouteIfDontExists('Configurações', '/menu/file/config/', EmptyStr, ICON_CONFIG, 1000);
+    Self.Internal_CreateRouteIfDontExists('-', '/menu/file/separator2/', EmptyStr, NULL_KEY, 9000);
+    Self.Internal_CreateRouteIfDontExists('Fechar', '/menu/file/exit/', EmptyStr, ICON_EXIT, 9000);
   finally
     FreeAndNil(vrWizard);
   end;

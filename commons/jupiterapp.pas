@@ -39,6 +39,7 @@ type
     function ConsoleMode : Boolean;
 
     function NewWizard : TJupiterDatabaseWizard;
+    procedure SetInternalWizardData(prWizard : TJupiterDatabaseWizard);
 
     constructor Create(prAppID, prAppName : String);
     destructor Destroy; override;
@@ -115,6 +116,12 @@ end;
 function TJupiterApp.NewWizard: TJupiterDatabaseWizard;
 begin
   Result := TJupiterDatabaseWizard.Create(Self.InternalDatabase);
+end;
+
+procedure TJupiterApp.SetInternalWizardData(prWizard: TJupiterDatabaseWizard);
+begin
+  prWizard.Connection  := Self.InternalDatabase;
+  prWizard.Transaction := Self.InternalDatabase.Transaction;
 end;
 
 constructor TJupiterApp.Create(prAppID, prAppName: String);

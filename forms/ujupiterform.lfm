@@ -4,6 +4,8 @@ object FJupiterForm: TFJupiterForm
   Top = 360
   Width = 879
   Caption = 'FJupiterForm'
+  OnActivate = FormActivate
+  OnShow = FormShow
   LCLVersion = '3.4.0.0'
   object acOptions: TActionList
     Left = 64

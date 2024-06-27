@@ -11,6 +11,19 @@ type
 
   { TJupiterDatabaseWizard }
 
+  { TJupiterDatabaseReference }
+
+  TJupiterDatabaseReference = class(TJupiterObject)
+  private
+    FTableName : String;
+    FID : Integer;
+  published
+    property TableName : String  read FTableName write FTableName;
+    property ID        : Integer read FID        write FID;
+  public
+    constructor Create(prTableName : String; prID : Integer);
+  end;
+
   TJupiterDatabaseWizard = class(TJupiterObject)
   private
     FConnection  : TSQLConnection;
@@ -33,6 +46,15 @@ type
   end;
 
 implementation
+
+{ TJupiterDatabaseReference }
+
+constructor TJupiterDatabaseReference.Create(prTableName: String; prID: Integer
+  );
+begin
+  Self.TableName := prTableName;
+  Self.ID        := prID;
+end;
 
 { TJupiterDatabaseWizard }
 

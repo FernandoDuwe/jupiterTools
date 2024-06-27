@@ -20,7 +20,7 @@ type
     function Internal_GetModuleTitle : String; virtual;
     procedure Internal_Prepare; virtual;
 
-    procedure Internal_CreateRouteIfDontExists(prTitle, prRoute, prDestiny : String);
+    procedure Internal_CreateRouteIfDontExists(prTitle, prRoute, prDestiny : String; prIcon, prZIndex : Integer);
   published
     property ModuleID    : String               read Internal_GetModuleID;
     property ModuleTitle : String               read Internal_GetModuleTitle;
@@ -91,19 +91,31 @@ begin
   end;
 end;
 
-procedure TJupiterModule.Internal_CreateRouteIfDontExists(prTitle, prRoute, prDestiny: String);
+procedure TJupiterModule.Internal_CreateRouteIfDontExists(prTitle, prRoute, prDestiny: String; prIcon, prZIndex : Integer);
 var
   vrWizard : TJupiterDatabaseWizard;
+  vrIcon   : String;
+  vrZIndex : String;
 begin
   vrWizard := vrJupiterApp.NewWizard;
   try
     if vrWizard.Exists('ROUTES', ' ROUTE = "' + prRoute + '" ') then
       Exit;
 
-    if prDestiny = EmptyStr then
-      vrWizard.ExecuteScript(CreateStringList(' INSERT INTO ROUTES (TITLE, ROUTE) VALUES ("' + prTitle + '", "' + prRoute + '") '))
+    if prIcon = NULL_KEY then
+      vrIcon := 'NULL'
     else
-      vrWizard.ExecuteScript(CreateStringList(' INSERT INTO ROUTES (TITLE, ROUTE, DESTINY) VALUES ("' + prTitle + '", "' + prRoute + '", "' + prDestiny + '") '))
+      vrIcon := IntToStr(prIcon);
+
+    if prZIndex = NULL_KEY then
+      vrZIndex := 'NULL'
+    else
+      vrZIndex := IntToStr(prZIndex);
+
+    if prDestiny = EmptyStr then
+      vrWizard.ExecuteScript(CreateStringList(' INSERT INTO ROUTES (TITLE, ROUTE, ICON, ZINDEX) VALUES ("' + prTitle + '", "' + prRoute + '", ' + vrIcon + ', ' + vrZIndex + ') '))
+    else
+      vrWizard.ExecuteScript(CreateStringList(' INSERT INTO ROUTES (TITLE, ROUTE, ICON, ZINDEX, DESTINY) VALUES ("' + prTitle + '", "' + prRoute + '", ' + vrIcon + ', ' + vrZIndex + ', "' + prDestiny + '") '))
   finally
     FreeAndNil(vrWizard);
   end;

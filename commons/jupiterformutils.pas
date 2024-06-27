@@ -5,14 +5,10 @@ unit jupiterformutils;
 interface
 
 uses
-  Classes, ComCtrls, JupiterRoute, JupiterObject, JupiterConsts,
+  Classes, ComCtrls, JupiterObject, JupiterConsts,
   SysUtils, Forms, Graphics, EditBtn, CheckLst, StdCtrls;
 
   procedure CopyNodes(prSourceNode, prTargetNode: TTreeNode);
-
-  procedure ShowRouteOnTreeView(prTreeView : TTreeView; prRoute : TJupiterRoute; prList : TJupiterObjectList; prNode : TTreeNode);
-
-  procedure SearchOnTreeView(prTreeView : TTreeView; prSearch : String);
 
   function PercentOfScreen(prTotalSize, prPercent : Integer) : Integer;
 
@@ -28,7 +24,7 @@ uses
 
 implementation
 
-uses JupiterApp, ExtCtrls, Menus, JupiterForm, JupiterVariable, JupiterAction;
+uses JupiterApp, ExtCtrls, Menus, JupiterVariable;
 
 procedure CopyNodes(prSourceNode, prTargetNode: TTreeNode);
 
@@ -48,111 +44,6 @@ procedure CopyNodes(prSourceNode, prTargetNode: TTreeNode);
 begin
   if Assigned(prSourceNode) and Assigned(prTargetNode) then
     ClimbDownTree(prSourceNode, prTargetNode);
-end;
-
-procedure ShowRouteOnTreeView(prTreeView : TTreeView; prRoute : TJupiterRoute; prList : TJupiterObjectList; prNode : TTreeNode);
-var
-  vrVez      : Integer;
-  vrNode     : TTreeNode;
-  vrAction   : TJupiterAction;
-  vrTreeItem : TTreeNode;
-  vrOldSortType : TSortType;
-begin
-  vrOldSortType := prTreeView.SortType;
-
-  prTreeView.SortType := stNone;
-
-  for vrVez := 0 to prList.Size - 1 do
-  begin
-    vrAction := TJupiterAction(prList.GetAtIndex(vrVez));
-
-    if not Assigned(vrAction.Location) then
-      Continue;
-
-    if vrAction.Location.Path <> prRoute.Path then
-      Continue;
-
-    if Assigned(prNode) then
-      vrNode := prTreeView.Items.AddChild(prNode, vrAction.Title)
-    else
-      vrNode := prTreeView.Items.Add(nil, vrAction.Title);
-
-    vrNode.ImageIndex := vrAction.Icon;
-    vrNode.SelectedIndex := vrAction.Icon;
-    vrNode.Data := vrAction;
-
-    if Assigned(vrAction.Route) then
-      ShowRouteOnTreeView(prTreeView, vrAction.Route, prList, vrNode);
-  end;
-
-  prTreeView.FullExpand;
-
-  for vrVez := 0 to prTreeView.Items.Count - 1 do
-  begin
-    vrTreeItem := prTreeView.Items[vrVez];
-
-    if vrTreeItem.Count = 0 then
-      Continue;
-
-    if not Assigned(vrTreeItem.Data) then
-      Continue;
-
-    with TJupiterAction(vrTreeItem.Data) do
-      if Route.Params.Exists(FIELD_TREE_COLAPSE) then
-        vrTreeItem.Collapse(False);
-  end;
-end;
-
-procedure SearchOnTreeView(prTreeView: TTreeView; prSearch: String);
-var
-  vrVez : Integer;
-  vrAux : String;
-  vrDeleteList: TJupiterObjectList;
-  vrOldSortType : TSortType;
-begin
-  vrOldSortType := prTreeView.SortType;
-
-  prTreeView.SortType := stNone;
-
-  vrDeleteList := TJupiterObjectList.Create;
-  try
-    prTreeView.FullExpand;
-
-    prSearch := Trim(AnsiUpperCase(prSearch));
-
-    for vrVez := 0 to prTreeView.Items.Count -1 do
-    begin
-      vrAux := Trim(AnsiUpperCase(prTreeView.Items[vrVez].Text));
-
-      if ((prTreeView.Items[vrVez].Count = 0) and (Pos(prSearch, vrAux) = 0)) then
-        vrDeleteList.AddSimpleObject(prTreeView.Items[vrVez]);
-    end;
-
-    for vrVez := vrDeleteList.Count - 1 downto 0 do
-      prTreeView.Items.Delete(TTreeNode(vrDeleteList.GetAtIndexAsObject(vrVez)));
-
-    vrDeleteList.ClearListItens;
-
-    if prTreeView.Items.Count > 0 then
-      prTreeView.Selected := prTreeView.Items[0];
-
-    for vrVez := 0 to prTreeView.Items.Count -1 do
-    begin
-      if AnsiUpperCase(Trim(prTreeView.Items[vrVez].Text)) = AnsiUpperCase(Trim(prSearch)) then
-      begin
-        prTreeView.Selected := prTreeView.Items[vrVez];
-
-        Exit;
-      end;
-
-      if Copy(AnsiUpperCase(Trim(prTreeView.Items[vrVez].Text)), 1, Length(AnsiUpperCase(Trim(prSearch)))) = AnsiUpperCase(Trim(prSearch)) then
-        prTreeView.Selected := prTreeView.Items[vrVez];
-    end;
-  finally
-    prTreeView.SortType := vrOldSortType;
-
-    FreeAndNil(vrDeleteList);
-  end;
 end;
 
 function PercentOfScreen(prTotalSize, prPercent: Integer): Integer;
@@ -323,6 +214,7 @@ begin
     if prForm1.ClassName <> prForm2.ClassName then
       Exit;
 
+    {
     if prForm1 is TFJupiterForm then
     begin
       vrParams1.CopyValues(TFJupiterForm(prForm1).Params);
@@ -340,7 +232,7 @@ begin
       if not vrParams1.IsSame(vrParams2) then
         Exit;
     end;
-
+          }
     Result := True;
   finally
     FreeAndNil(vrParams1);
