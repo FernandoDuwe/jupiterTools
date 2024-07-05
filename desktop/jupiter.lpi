@@ -25,6 +25,15 @@
     </RunParams>
     <RequiredPackages>
       <Item>
+        <PackageName Value="pascalscriptfcl"/>
+      </Item>
+      <Item>
+        <PackageName Value="pascalscript"/>
+      </Item>
+      <Item>
+        <PackageName Value="FCL"/>
+      </Item>
+      <Item>
         <PackageName Value="SQLDBLaz"/>
       </Item>
       <Item>
@@ -122,6 +131,65 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="uJupiterUserExperience"/>
       </Unit>
+      <Unit>
+        <Filename Value="forms/uconfig.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FConfig"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uConfig"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../commons/jupiterroute.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterRoute"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../commons/jupiterscript.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterScript"/>
+      </Unit>
+      <Unit>
+        <Filename Value="modules/ujupitergenerator.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uJupiterGenerator"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons/jupiterdesktopapp.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterDesktopApp"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../scripts/ujupiterappscript.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uJupiterAppScript"/>
+      </Unit>
+      <Unit>
+        <Filename Value="scripts/ujupiterdesktopappscript.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uJupiterDesktopAppScript"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms/unewtask.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FNewTask"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uNewTask"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms/ugenerator.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FGenerator"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uGenerator"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons/ujupiteraction.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uJupiterAction"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -131,7 +199,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="../forms;forms;../commons;../modules;modules"/>
+      <OtherUnitFiles Value="../forms;forms;../commons;../modules;modules;commons;../scripts;scripts"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Linking>

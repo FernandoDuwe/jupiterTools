@@ -10,10 +10,13 @@ uses
   athreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, uJupiterForm, uMain, uDmMain, JupiterConsts, JupiterObject,
-  JupiterEnviroment, JupiterModule, JupiterVariable, JupiterCSVDataProvider,
-  JupiterApp, jupiterDatabaseWizard, jupiterformutils, jupiterStandard, 
-jupiterMainMenuGenerator, uJupiterUserExperience;
+  Forms, pascalscript, pascalscriptfcl, uJupiterForm, uMain, uDmMain,
+  JupiterConsts, JupiterObject, JupiterEnviroment, JupiterModule,
+  JupiterVariable, JupiterCSVDataProvider, JupiterApp, jupiterDatabaseWizard,
+  jupiterformutils, jupiterStandard, jupiterMainMenuGenerator, jupiterScript,
+  JupiterRoute, uJupiterUserExperience, uConfig, uJupiterGenerator,
+  jupiterDesktopApp, uJupiterAppScript, uJupiterDesktopAppScript, uNewTask,
+  uGenerator, uJupiterAction;
 
 {$R *.res}
 
@@ -23,13 +26,21 @@ begin
   Application.Scaled := True;
   Application.Initialize;
 
-  vrJupiterApp := TJupiterApp.Create('jupiter', 'Jupiter');
+  vrJupiterApp := TJupiterDesktopApp.Create('jupiter', 'Jupiter');
 
   Application.CreateForm(TDMMain, DMMain);
   Application.CreateForm(TFMain, FMain);
 
   vrJupiterApp.AddModule(TJupiterStandardModule.Create);
   vrJupiterApp.AddModule(TJupiterUserExperience.Create);
+  vrJupiterApp.AddModule(TJupiterGenerator.Create);
+
+  with TJupiterDesktopApp(vrJupiterApp) do
+  begin
+    FormRoutes.Add(TJupiterFormRoute.Create(NEWTASKMENU_PATH, TFNewTask));
+    FormRoutes.Add(TJupiterFormRoute.Create(CONFIG_PATH, TFConfig));
+    FormRoutes.Add(TJupiterFormRoute.Create(GENERATOR_PATH, TFGenerator));
+  end;
 
   Application.Run;
 end.

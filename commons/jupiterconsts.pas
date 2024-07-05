@@ -9,6 +9,9 @@ uses
 
 const
    ROOT_PATH : String = '/';
+   NEWTASKMENU_PATH : String = '/forms/newTask';
+   CONFIG_PATH : String = '/forms/config';
+   GENERATOR_PATH : String = '/forms/generator';
 
    ICON_ADD       : SmallInt = 0;
    ICON_NEW       : SmallInt = 1;

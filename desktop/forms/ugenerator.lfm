@@ -1,0 +1,64 @@
+inherited FGenerator: TFGenerator
+  Caption = 'Generator'
+  object pcOptions: TPageControl[1]
+    Left = 0
+    Height = 407
+    Top = 50
+    Width = 879
+    ActivePage = tsGenerator
+    Align = alClient
+    TabIndex = 0
+    TabOrder = 1
+    object tsGenerator: TTabSheet
+      Caption = 'Generator'
+      ClientHeight = 376
+      ClientWidth = 869
+      object mmDetails: TMemo
+        Left = 0
+        Height = 376
+        Top = 0
+        Width = 869
+        Align = alClient
+        Lines.Strings = (
+          'mmDetails'
+        )
+        ReadOnly = True
+        TabOrder = 0
+      end
+    end
+    object tsRoutes: TTabSheet
+      Caption = 'Rotas'
+      ClientHeight = 376
+      ClientWidth = 869
+      object dbGridRoutes: TDBGrid
+        Left = 0
+        Height = 376
+        Top = 0
+        Width = 869
+        Align = alClient
+        Color = clWindow
+        Columns = <>
+        TabOrder = 0
+      end
+    end
+    object tsMacros: TTabSheet
+      Caption = 'Macros'
+      ClientHeight = 376
+      ClientWidth = 869
+      object dbGridMacros: TDBGrid
+        Left = 0
+        Height = 376
+        Top = 0
+        Width = 869
+        Align = alClient
+        Color = clWindow
+        Columns = <>
+        TabOrder = 0
+      end
+    end
+  end
+  inherited acOptions: TActionList[2]
+  end
+  inherited tmrAutoUpdater: TTimer[3]
+  end
+end

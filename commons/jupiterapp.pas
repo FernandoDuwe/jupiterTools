@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, Controls, JupiterObject, JupiterModule, JupiterEnviroment,
-  JupiterVariable, jupiterDatabaseWizard, SQLite3Conn;
+  JupiterVariable, jupiterDatabaseWizard, jupiterScript, SQLite3Conn;
 
 type
 
@@ -22,7 +22,7 @@ type
 
   protected
     procedure Internal_Prepare; virtual;
-
+    procedure Internal_AddScriptLibraries(var prScript : TJupiterScript); virtual;
   published
     property AppID   : String read FAppID;
     property AppName : String read FAppName;
@@ -39,9 +39,12 @@ type
     function ConsoleMode : Boolean;
 
     function NewWizard : TJupiterDatabaseWizard;
+    function NewScript : TJupiterScript;
     procedure SetInternalWizardData(prWizard : TJupiterDatabaseWizard);
 
-    constructor Create(prAppID, prAppName : String);
+    procedure RunMacro(prId : Integer);
+
+    constructor Create(prAppID, prAppName : String); virtual;
     destructor Destroy; override;
   end;
 
@@ -50,9 +53,14 @@ var
 
 implementation
 
-uses FileInfo, SysUtils;
+uses FileInfo, SysUtils, SQLDB, uJupiterAppScript;
 
 { TJupiterApp }
+
+procedure TJupiterApp.Internal_AddScriptLibraries(var prScript : TJupiterScript);
+begin
+  prScript.LibraryList.Add(TJupiterAppScript.Create);
+end;
 
 procedure TJupiterApp.Internal_Prepare;
 var
@@ -118,10 +126,37 @@ begin
   Result := TJupiterDatabaseWizard.Create(Self.InternalDatabase);
 end;
 
+function TJupiterApp.NewScript: TJupiterScript;
+begin
+  Result := TJupiterScript.Create;
+
+  Self.Internal_AddScriptLibraries(Result);
+end;
+
 procedure TJupiterApp.SetInternalWizardData(prWizard: TJupiterDatabaseWizard);
 begin
   prWizard.Connection  := Self.InternalDatabase;
   prWizard.Transaction := Self.InternalDatabase.Transaction;
+end;
+
+procedure TJupiterApp.RunMacro(prId: Integer);
+var
+  vrScript : TJupiterScript;
+  vrQry    : TSQLQuery;
+begin
+  vrScript := Self.NewScript;
+  vrQry    := Self.NewWizard.NewQuery;
+  try
+    vrQry.SQL.Add(' SELECT ID, MACRO FROM MACROS WHERE ID = :PRID ');
+    vrQry.ParamByName('PRID').AsInteger := prId;
+    vrQry.Open;
+
+    vrScript.Script.Add(vrQry.FieldByName('MACRO').AsString);
+
+    vrScript.Execute;
+  finally
+    FreeAndNil(vrScript);
+  end;
 end;
 
 constructor TJupiterApp.Create(prAppID, prAppName: String);

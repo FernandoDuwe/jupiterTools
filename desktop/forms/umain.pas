@@ -14,18 +14,18 @@ type
   { TFMain }
 
   TFMain = class(TFJupiterForm)
-    acNewTab: TAction;
     ilIconFamily: TImageList;
     ilTabs: TImageList;
     jtMainTab: TJupiterFormTab;
-    miNewTab: TMenuItem;
     mmMainMenu: TMainMenu;
     sbStatus: TStatusBar;
-    procedure miNewTabClick(Sender: TObject);
+    procedure jtMainTabCloseTabClicked(Sender: TObject);
+    procedure jtMainTabResize(Sender: TObject);
   private
     procedure Internal_PrepareForm; override;
+    procedure Internal_UpdateComponents; override;
   public
-
+    procedure NewTab(Form : TForm);
   end;
 
 var
@@ -33,13 +33,37 @@ var
 
 implementation
 
+uses JupiterFormTabSheet;
+
 {$R *.lfm}
 
 { TFMain }
 
-procedure TFMain.miNewTabClick(Sender: TObject);
+procedure TFMain.jtMainTabCloseTabClicked(Sender: TObject);
 begin
-  jtMainTab.AddForm(TFJupiterForm.Create(Self));
+  jtMainTab.CloseTab(jtMainTab.ActivePageIndex);
+end;
+
+procedure TFMain.jtMainTabResize(Sender: TObject);
+var
+  vrVez : Integer;
+  vrForm : TForm;
+begin
+  for vrVez := 0 to jtMainTab.PageCount - 1 do
+  begin
+    if not (jtMainTab.Pages[vrVez] is TJupiterFormTabSheet) then
+      Continue;
+
+    if not Assigned(TJupiterFormTabSheet(jtMainTab.Pages[vrVez]).Form) then
+      Continue;
+
+    vrForm := TJupiterFormTabSheet(jtMainTab.Pages[vrVez]).Form;
+
+    if not (vrForm is TFJupiterForm) then
+      Continue;
+
+    TFJupiterForm(vrForm).UpdateForm(False, True, False);
+  end;
 end;
 
 procedure TFMain.Internal_PrepareForm;
@@ -55,6 +79,18 @@ begin
   finally
     FreeAndNil(vrMainMenu);
   end;
+end;
+
+procedure TFMain.Internal_UpdateComponents;
+begin
+  inherited Internal_UpdateComponents;
+
+  Self.Caption := vrJupiterApp.AppName;
+end;
+
+procedure TFMain.NewTab(Form: TForm);
+begin
+  jtMainTab.AddForm(Form);
 end;
 
 end.

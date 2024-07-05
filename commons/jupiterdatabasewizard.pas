@@ -5,7 +5,7 @@ unit jupiterDatabaseWizard;
 interface
 
 uses
-  Classes, SysUtils, JupiterObject, SQLDB;
+  Classes, SysUtils, JupiterObject, JupiterConsts, SQLDB;
 
 type
 
@@ -39,6 +39,8 @@ type
 
     function Count(prTableName, prWhere : String) : Integer;
     function Exists(prTableName, prWhere : String) : Boolean;
+    function GetLastID(prTableName : String) : Integer;
+    function GetField(prTableName, prField, prWhere : String) : Variant;
 
     procedure ExecuteScript(prScript : TStrings);
 
@@ -128,6 +130,43 @@ end;
 function TJupiterDatabaseWizard.Exists(prTableName, prWhere: String): Boolean;
 begin
   Result := Self.Count(prTableName, prWhere) > 0;
+end;
+
+function TJupiterDatabaseWizard.GetLastID(prTableName: String): Integer;
+var
+  vrQry : TSQLQuery;
+begin
+  Result := NULL_KEY;
+
+  vrQry := Self.NewQuery;
+  try
+    vrQry.SQL.Add(' SELECT MAX(ID) FROM ' + prTableName);
+    vrQry.Open;
+
+    Result := vrQry.Fields[0].AsInteger;
+  finally
+    vrQry.Close;
+    FreeAndNil(vrQry);
+  end;
+end;
+
+function TJupiterDatabaseWizard.GetField(prTableName, prField, prWhere: String): Variant;
+var
+  vrQry : TSQLQuery;
+begin
+  Result := Null;
+
+  vrQry := Self.NewQuery;
+  try
+    vrQry.SQL.Add(Format(' SELECT %0:s FROM %1:s WHERE %2:s ', [prField, prTableName, prWhere]));
+    vrQry.Open;
+    vrQry.First;
+
+    Result := vrQry.Fields[0].Value;
+  finally
+    vrQry.Close;
+    FreeAndNil(vrQry);
+  end;
 end;
 
 procedure TJupiterDatabaseWizard.ExecuteScript(prScript: TStrings);

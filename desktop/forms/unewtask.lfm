@@ -1,0 +1,30 @@
+inherited FNewTask: TFNewTask
+  Caption = 'Iniciar uma nova tarefa'
+  object tvTreeMenu: TTreeView[1]
+    Left = 0
+    Height = 407
+    Top = 50
+    Width = 248
+    Align = alLeft
+    TabOrder = 1
+  end
+  object splDivider: TSplitter[2]
+    Left = 248
+    Height = 407
+    Top = 50
+    Width = 5
+  end
+  object lvExplorer: TListView[3]
+    Left = 253
+    Height = 407
+    Top = 50
+    Width = 626
+    Align = alClient
+    Columns = <>
+    TabOrder = 3
+  end
+  inherited acOptions: TActionList[4]
+  end
+  inherited tmrAutoUpdater: TTimer[5]
+  end
+end

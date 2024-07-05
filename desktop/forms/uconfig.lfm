@@ -1,0 +1,60 @@
+inherited FConfig: TFConfig
+  Left = 451
+  Height = 497
+  Top = 298
+  Width = 1016
+  Caption = 'Configurações'
+  ClientHeight = 497
+  ClientWidth = 1016
+  inherited pnSearchBar: TPanel
+    Width = 1016
+    ClientWidth = 1016
+    inherited edSearch: TEdit
+      Width = 369
+    end
+  end
+  object gbVariables: TDBGrid[1]
+    Left = 334
+    Height = 447
+    Top = 50
+    Width = 682
+    Align = alClient
+    AlternateColor = clWhite
+    Color = clWindow
+    Columns = <>
+    DataSource = dsConfig
+    ReadOnly = True
+    TabOrder = 1
+  end
+  object tvFilter: TTreeView[2]
+    Left = 0
+    Height = 447
+    Top = 50
+    Width = 329
+    Align = alLeft
+    TabOrder = 2
+    OnSelectionChanged = tvFilterSelectionChanged
+  end
+  object spSeparator: TSplitter[3]
+    Left = 329
+    Height = 447
+    Top = 50
+    Width = 5
+  end
+  inherited acOptions: TActionList[4]
+  end
+  inherited tmrAutoUpdater: TTimer[5]
+  end
+  object dsConfig: TDataSource[6]
+    DataSet = qryConfig
+    Left = 448
+    Top = 144
+  end
+  object qryConfig: TSQLQuery[7]
+    FieldDefs = <>
+    Params = <>
+    Macros = <>
+    Left = 336
+    Top = 144
+  end
+end

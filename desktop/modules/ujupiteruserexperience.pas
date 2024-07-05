@@ -37,7 +37,7 @@ procedure TJupiterUserExperience.Internal_Prepare;
 begin
   inherited Internal_Prepare;
 
-  Self.Internal_CreateRouteIfDontExists('Preferências', '/menu/file/userPref/', EmptyStr, ICON_APPLICATION, 800);
+  Self.Internal_CreateRouteIfDontExists('Preferências', '/menu/show/userPref/', NULL_KEY, ICON_APPLICATION, 100);
 end;
 
 end.

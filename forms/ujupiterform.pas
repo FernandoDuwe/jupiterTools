@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ActnList, ExtCtrls,
-  ButtonPanel;
+  ButtonPanel, StdCtrls, Menus, ComCtrls, Buttons, JupiterConsts,
+  uJupiterAction;
 
 type
 
@@ -14,14 +15,29 @@ type
 
   TFJupiterForm = class(TForm)
     acOptions: TActionList;
+    edSearch: TEdit;
+    fpOptions: TFlowPanel;
+    pnSearchBar: TPanel;
     tmrAutoUpdater: TTimer;
     procedure FormActivate(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
+  private
+    FShowSearchBar : Boolean;
+    FActionGroup   : TJupiterActionGroup;
+
+    procedure Internal_SetSearchBar(prNewValue : Boolean);
   published
+    property ActionGroup   : TJupiterActionGroup read FActionGroup   write FActionGroup;
+    property ShowSearchBar : Boolean             read FShowSearchBar write Internal_SetSearchBar default False;
+
     procedure Internal_UpdateComponents; virtual;
     procedure Internal_UpdateDatasets; virtual;
     procedure Internal_UpdateCalcs; virtual;
     procedure Internal_PrepareForm; virtual;
+    procedure Internal_Resize; virtual;
   public
     procedure PrepareForm; virtual;
     procedure UpdateForm(prUpdateDatasets : Boolean = True; prUpdateComponentes : Boolean = True; prUpdateCalcs : Boolean = True); virtual;
@@ -32,13 +48,28 @@ var
 
 implementation
 
+uses JupiterFormTabSheet;
+
 {$R *.lfm}
 
 { TFJupiterForm }
 
 procedure TFJupiterForm.FormShow(Sender: TObject);
 begin
-  Self.PrepareForm;
+  try
+    Self.PrepareForm;
+  finally
+    Self.UpdateForm();
+  end;
+end;
+
+procedure TFJupiterForm.Internal_SetSearchBar(prNewValue: Boolean);
+begin
+  try
+    Self.FShowSearchBar := prNewValue;
+  finally
+    Self.UpdateForm(False, True, False);
+  end;
 end;
 
 procedure TFJupiterForm.FormActivate(Sender: TObject);
@@ -46,9 +77,25 @@ begin
   Self.UpdateForm();
 end;
 
+procedure TFJupiterForm.FormCreate(Sender: TObject);
+begin
+  Self.FActionGroup := TJupiterActionGroup.Create;
+  Self.FActionGroup.FlowPanel := fpOptions;
+end;
+
+procedure TFJupiterForm.FormDestroy(Sender: TObject);
+begin
+  FreeAndNil(Self.FActionGroup);
+end;
+
+procedure TFJupiterForm.FormResize(Sender: TObject);
+begin
+  Self.Internal_Resize;
+end;
+
 procedure TFJupiterForm.Internal_UpdateComponents;
 begin
-
+  pnSearchBar.Visible := Self.ShowSearchBar;
 end;
 
 procedure TFJupiterForm.Internal_UpdateDatasets;
@@ -66,13 +113,29 @@ begin
 
 end;
 
+procedure TFJupiterForm.Internal_Resize;
+begin
+  edSearch.Top   := FORM_MARGIN_TOP;
+  edSearch.Left  := FORM_MARGIN_LEFT;
+  edSearch.Width := pnSearchBar.Width - FORM_MARGIN_LEFT - FORM_MARGIN_RIGHT;
+
+  pnSearchBar.Width := FORM_MARGIN_TOP + edSearch.Height + FORM_MARGIN_BOTTOM;
+end;
+
 procedure TFJupiterForm.PrepareForm;
 begin
-  Self.Internal_PrepareForm;
+  try
+    Self.Internal_PrepareForm;
+  finally
+    Self.FActionGroup.Render;
+  end;
 end;
 
 procedure TFJupiterForm.UpdateForm(prUpdateDatasets: Boolean; prUpdateComponentes: Boolean; prUpdateCalcs: Boolean);
 begin
+  if Self.Owner is TJupiterFormTabSheet then
+    TJupiterFormTabSheet(Self.Owner).Caption := Self.Caption;
+
   if prUpdateDatasets then
     Self.Internal_UpdateDatasets;
 
@@ -81,6 +144,8 @@ begin
 
   if prUpdateCalcs then
     Self.Internal_UpdateCalcs;
+
+  Self.Internal_Resize;
 end;
 
 end.

@@ -5,8 +5,8 @@ unit jupiterMainMenuGenerator;
 interface
 
 uses
-  Classes, SysUtils, JupiterObject, jupiterDatabaseWizard, JupiterConsts, Menus,
-  SQLDB;
+  Classes, SysUtils, JupiterObject, jupiterDatabaseWizard, JupiterConsts,
+  Menus, SQLDB;
 
 type
 
@@ -15,16 +15,22 @@ type
   TJupiterMainMenuGenerator = class(TJupiterDatabaseWizard)
   private
     FMainMenu : TMainMenu;
+    FOnClick  : TNotifyEvent;
 
     procedure Internal_RenderRoute(prOwner : TMenuItem; prPrefix : String);
     function Internal_GetLevel(prRoute : String) : Integer;
+
+    procedure Internal_OnClick(Sender: TObject);
   published
-    property MainMenu : TMainMenu read FMainMenu write FMainMenu;
+    property MainMenu : TMainMenu    read FMainMenu write FMainMenu;
+    property OnClick  : TNotifyEvent read FOnClick  write FOnClick;
   public
     procedure Render;
   end;
 
 implementation
+
+uses JupiterApp;
 
 { TJupiterMainMenuGenerator }
 
@@ -67,6 +73,11 @@ begin
       if ((not vrQry.FieldByName('ICON').IsNull) and (vrQry.FieldByName('ICON').AsInteger <> NULL_KEY)) then
         vrMenuItem.ImageIndex := vrQry.FieldByName('ICON').AsInteger;
 
+      if Assigned(Self.OnClick) then
+        vrMenuItem.OnClick := Self.OnClick
+      else
+        vrMenuItem.OnClick := @Internal_OnClick;
+
       if Assigned(prOwner) then
         prOwner.Add(vrMenuItem)
       else
@@ -96,6 +107,27 @@ begin
   for vrVez := 1 to Length(prRoute) do
     if prRoute[vrVez] = '/' then
       Result := Result + 1;
+end;
+
+procedure TJupiterMainMenuGenerator.Internal_OnClick(Sender: TObject);
+var
+  vrWizard : TJupiterDatabaseWizard;
+begin
+  if not Assigned(Sender) then
+    Exit;
+
+  if not (Sender is TMenuItem) then
+    Exit;
+
+  vrWizard := vrJupiterApp.NewWizard;
+  try
+    if not vrWizard.Exists('ROUTES', Format(' ID = %0:d AND DESTINY IS NOT NULL ', [TMenuItem(Sender).Tag])) then
+      Exit;
+
+    vrJupiterApp.RunMacro(vrWizard.GetField('ROUTES', 'DESTINY', ' ID = ' + IntToStr(TMenuItem(Sender).Tag)));
+  finally
+    FreeAndNil(vrWizard);
+  end;
 end;
 
 end.

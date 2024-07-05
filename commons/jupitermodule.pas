@@ -20,7 +20,8 @@ type
     function Internal_GetModuleTitle : String; virtual;
     procedure Internal_Prepare; virtual;
 
-    procedure Internal_CreateRouteIfDontExists(prTitle, prRoute, prDestiny : String; prIcon, prZIndex : Integer);
+    function Internal_CreateRouteIfDontExists(prTitle, prRoute : String; prDestiny, prIcon, prZIndex : Integer) : Boolean;
+    function Internal_CreateMacroIfDontExists(prID, prTitle : String; prMacro : TStrings) : Boolean;
   published
     property ModuleID    : String               read Internal_GetModuleID;
     property ModuleTitle : String               read Internal_GetModuleTitle;
@@ -44,7 +45,7 @@ type
 
 implementation
 
-uses JupiterApp;
+uses JupiterApp, SQLDB;
 
 { TJupiterModuleList }
 
@@ -91,12 +92,15 @@ begin
   end;
 end;
 
-procedure TJupiterModule.Internal_CreateRouteIfDontExists(prTitle, prRoute, prDestiny: String; prIcon, prZIndex : Integer);
+function TJupiterModule.Internal_CreateRouteIfDontExists(prTitle, prRoute: String; prDestiny, prIcon, prZIndex: Integer): Boolean;
 var
-  vrWizard : TJupiterDatabaseWizard;
-  vrIcon   : String;
-  vrZIndex : String;
+  vrWizard  : TJupiterDatabaseWizard;
+  vrIcon    : String;
+  vrZIndex  : String;
+  vrDestiny : String;
 begin
+  Result := False;
+
   vrWizard := vrJupiterApp.NewWizard;
   try
     if vrWizard.Exists('ROUTES', ' ROUTE = "' + prRoute + '" ') then
@@ -112,12 +116,61 @@ begin
     else
       vrZIndex := IntToStr(prZIndex);
 
-    if prDestiny = EmptyStr then
-      vrWizard.ExecuteScript(CreateStringList(' INSERT INTO ROUTES (TITLE, ROUTE, ICON, ZINDEX) VALUES ("' + prTitle + '", "' + prRoute + '", ' + vrIcon + ', ' + vrZIndex + ') '))
+    if prDestiny = NULL_KEY then
+      vrDestiny := 'NULL'
     else
-      vrWizard.ExecuteScript(CreateStringList(' INSERT INTO ROUTES (TITLE, ROUTE, ICON, ZINDEX, DESTINY) VALUES ("' + prTitle + '", "' + prRoute + '", ' + vrIcon + ', ' + vrZIndex + ', "' + prDestiny + '") '))
+      vrDestiny := IntToStr(prDestiny);
+
+    vrWizard.ExecuteScript(CreateStringList(' INSERT INTO ROUTES (TITLE, ROUTE, ICON, ZINDEX, DESTINY) VALUES ("' + prTitle + '", "' + prRoute + '", ' + vrIcon + ', ' + vrZIndex + ', ' + vrDestiny + ') '));
+
+    Result := True;
   finally
     FreeAndNil(vrWizard);
+  end;
+end;
+
+function TJupiterModule.Internal_CreateMacroIfDontExists(prID, prTitle: String;
+  prMacro: TStrings): Boolean;
+var
+  vrWizard : TJupiterDatabaseWizard;
+  vrQry : TSQLQuery;
+begin
+  Result := False;
+
+  vrWizard := vrJupiterApp.NewWizard;
+  try
+    vrQry := vrWizard.NewQuery;
+
+    if vrWizard.Exists('MACROS', Format(' MACROID = "%0:s" ', [prID])) then
+      Exit;
+
+    vrQry.Close;
+    vrQry.SQL.Clear;
+    vrQry.SQL.Add(' SELECT * FROM MACROS WHERE 1 = 2 ');
+    vrQry.InsertSQL.Add(' INSERT INTO MACROS (MACROID, NAME, MACRO) VALUES (:MACROID, :NAME, :MACRO) ');
+    vrQry.Open;
+
+    if not vrWizard.Transaction.Active then
+      vrWizard.Transaction.StartTransaction;
+
+    try
+      vrQry.Insert;
+      vrQry.FieldByName('MACROID').AsString := prID;
+      vrQry.FieldByName('NAME').AsString    := prTitle;
+      vrQry.FieldByName('MACRO').AsString   := prMacro.Text;
+      vrQry.Post;
+      vrQry.ApplyUpdates(-1);
+
+      vrWizard.Transaction.CommitRetaining;
+
+      Result := True;
+    except
+      vrWizard.Transaction.RollbackRetaining;
+      raise;
+    end;
+  finally
+    FreeAndNil(vrWizard);
+    FreeAndNil(vrQry);
   end;
 end;
 
