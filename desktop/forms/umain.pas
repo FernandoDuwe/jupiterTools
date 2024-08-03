@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, Menus,
   ActnList, ExtCtrls, Buttons, uJupiterForm, JupiterFormTab,
-  jupiterMainMenuGenerator, JupiterApp;
+  jupiterMainMenuGenerator, JupiterApp, jupiterDesktopApp;
 
 type
 
@@ -72,6 +72,8 @@ var
 begin
   inherited Internal_PrepareForm;
 
+  TJupiterDesktopApp(vrJupiterApp).ImageList := ilIconFamily;
+
   vrMainMenu := TJupiterMainMenuGenerator.Create(vrJupiterApp.InternalDatabase);
   try
     vrMainMenu.MainMenu := mmMainMenu;
@@ -90,6 +92,7 @@ end;
 
 procedure TFMain.NewTab(Form: TForm);
 begin
+  jtMainTab.Visible := True;
   jtMainTab.AddForm(Form);
 end;
 

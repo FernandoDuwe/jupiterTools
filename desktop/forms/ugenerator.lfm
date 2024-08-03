@@ -1,21 +1,24 @@
 inherited FGenerator: TFGenerator
   Caption = 'Generator'
-  object pcOptions: TPageControl[1]
+  inherited fpOptions: TFlowPanel
+    TabOrder = 2
+  end
+  object pcOptions: TPageControl[2]
     Left = 0
-    Height = 407
-    Top = 50
+    Height = 406
+    Top = 51
     Width = 879
-    ActivePage = tsGenerator
+    ActivePage = tsRoutes
     Align = alClient
-    TabIndex = 0
+    TabIndex = 1
     TabOrder = 1
     object tsGenerator: TTabSheet
       Caption = 'Generator'
-      ClientHeight = 376
+      ClientHeight = 375
       ClientWidth = 869
       object mmDetails: TMemo
         Left = 0
-        Height = 376
+        Height = 375
         Top = 0
         Width = 869
         Align = alClient
@@ -28,37 +31,71 @@ inherited FGenerator: TFGenerator
     end
     object tsRoutes: TTabSheet
       Caption = 'Rotas'
-      ClientHeight = 376
+      ClientHeight = 375
       ClientWidth = 869
       object dbGridRoutes: TDBGrid
         Left = 0
-        Height = 376
+        Height = 375
         Top = 0
         Width = 869
         Align = alClient
         Color = clWindow
         Columns = <>
+        DataSource = dsRoutes
+        ReadOnly = True
         TabOrder = 0
+        OnDblClick = dbGridRoutesDblClick
       end
     end
     object tsMacros: TTabSheet
       Caption = 'Macros'
-      ClientHeight = 376
+      ClientHeight = 375
       ClientWidth = 869
       object dbGridMacros: TDBGrid
         Left = 0
-        Height = 376
+        Height = 375
         Top = 0
         Width = 869
         Align = alClient
         Color = clWindow
         Columns = <>
+        DataSource = dsMacro
+        ReadOnly = True
         TabOrder = 0
+        OnDblClick = dbGridMacrosDblClick
       end
     end
   end
-  inherited acOptions: TActionList[2]
+  inherited acOptions: TActionList[3]
+    Left = 344
+    Top = 128
   end
-  inherited tmrAutoUpdater: TTimer[3]
+  inherited tmrAutoUpdater: TTimer[4]
+    Left = 456
+    Top = 128
+  end
+  object qryRoutes: TSQLQuery[5]
+    FieldDefs = <>
+    Params = <>
+    Macros = <>
+    Left = 336
+    Top = 200
+  end
+  object dsRoutes: TDataSource[6]
+    DataSet = qryRoutes
+    Left = 456
+    Top = 200
+  end
+  object qryMacro: TSQLQuery[7]
+    FieldDefs = <>
+    Params = <>
+    Macros = <>
+    Left = 336
+    Top = 272
+  end
+  object dsMacro: TDataSource[8]
+    DataSet = qryMacro
+    Left = 456
+    Top = 272
   end
 end

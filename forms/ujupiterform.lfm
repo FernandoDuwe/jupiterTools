@@ -15,7 +15,7 @@ object FJupiterForm: TFJupiterForm
   object pnSearchBar: TPanel
     Left = 0
     Height = 50
-    Top = 0
+    Top = 1
     Width = 879
     Align = alTop
     BevelOuter = bvNone
@@ -35,7 +35,7 @@ object FJupiterForm: TFJupiterForm
   object fpOptions: TFlowPanel
     Left = 0
     Height = 1
-    Top = 50
+    Top = 0
     Width = 879
     Align = alTop
     AutoSize = True

@@ -25,6 +25,12 @@
     </RunParams>
     <RequiredPackages>
       <Item>
+        <PackageName Value="DateTimeCtrlsDsgn"/>
+      </Item>
+      <Item>
+        <PackageName Value="DateTimeCtrls"/>
+      </Item>
+      <Item>
         <PackageName Value="pascalscriptfcl"/>
       </Item>
       <Item>
@@ -189,6 +195,23 @@
         <Filename Value="commons/ujupiteraction.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uJupiterAction"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms/ucustomdatabaseform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FCustomDatabaseForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uCustomDatabaseForm"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons/jupiterformcomponenttils.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../commons/jupiterstringutils.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterStringUtils"/>
       </Unit>
     </Units>
   </ProjectOptions>

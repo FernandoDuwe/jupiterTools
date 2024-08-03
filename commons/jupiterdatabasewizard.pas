@@ -35,12 +35,18 @@ type
     function TableExists(prTableName : String) : Boolean;
     function FieldExists(prTableName, prFieldName : String) : Boolean;
     function NewQuery : TSQLQuery;
+    function NewQueryFromReference(prReference : TJupiterDatabaseReference) : TSQLQuery;
     function NewScript : TSQLScript;
 
     function Count(prTableName, prWhere : String) : Integer;
     function Exists(prTableName, prWhere : String) : Boolean;
     function GetLastID(prTableName : String) : Integer;
     function GetField(prTableName, prField, prWhere : String) : Variant;
+
+    procedure GenerateQuerySQL(prTableName : String; var prStrings : TStrings);
+    procedure GenerateInsertSQL(prTableName : String; var prStrings : TStrings);
+    procedure GenerateUpdateSQL(prTableName : String; var prStrings : TStrings);
+    procedure GenerateDeleteSQL(prTableName : String; var prStrings : TStrings);
 
     procedure ExecuteScript(prScript : TStrings);
 
@@ -99,6 +105,13 @@ begin
   Result.SQLTransaction := Self.Transaction;
   Result.Close;
   Result.SQL.Clear;
+end;
+
+function TJupiterDatabaseWizard.NewQueryFromReference(prReference: TJupiterDatabaseReference): TSQLQuery;
+begin
+  Result := NewQuery;
+
+  Result.SQL.Add(String.Format(' SELECT * FROM %0:s WHERE ID = %1:d ', [prReference.TableName, prReference.ID]));
 end;
 
 function TJupiterDatabaseWizard.NewScript: TSQLScript;
@@ -167,6 +180,26 @@ begin
     vrQry.Close;
     FreeAndNil(vrQry);
   end;
+end;
+
+procedure TJupiterDatabaseWizard.GenerateQuerySQL(prTableName: String; var prStrings: TStrings);
+begin
+  //
+end;
+
+procedure TJupiterDatabaseWizard.GenerateInsertSQL(prTableName: String; var prStrings: TStrings);
+begin
+
+end;
+
+procedure TJupiterDatabaseWizard.GenerateUpdateSQL(prTableName: String; var prStrings: TStrings);
+begin
+
+end;
+
+procedure TJupiterDatabaseWizard.GenerateDeleteSQL(prTableName: String; var prStrings: TStrings);
+begin
+
 end;
 
 procedure TJupiterDatabaseWizard.ExecuteScript(prScript: TStrings);

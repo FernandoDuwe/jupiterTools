@@ -1,0 +1,22 @@
+inherited FCustomDatabaseForm: TFCustomDatabaseForm
+  Top = 255
+  OnCreate = FormCreate
+  object sbBody: TScrollBox[2]
+    Left = 0
+    Height = 406
+    Top = 51
+    Width = 879
+    HorzScrollBar.Page = 1
+    VertScrollBar.Page = 1
+    Align = alClient
+    TabOrder = 2
+  end
+  inherited acOptions: TActionList[3]
+  end
+  inherited tmrAutoUpdater: TTimer[4]
+  end
+  object InternalDataSource: TDataSource[5]
+    Left = 592
+    Top = 72
+  end
+end

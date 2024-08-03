@@ -10,13 +10,14 @@ uses
   athreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, pascalscript, pascalscriptfcl, uJupiterForm, uMain, uDmMain,
-  JupiterConsts, JupiterObject, JupiterEnviroment, JupiterModule,
+  Forms, pascalscript, pascalscriptfcl, datetimectrls, uJupiterForm, uMain,
+  uDmMain, JupiterConsts, JupiterObject, JupiterEnviroment, JupiterModule,
   JupiterVariable, JupiterCSVDataProvider, JupiterApp, jupiterDatabaseWizard,
   jupiterformutils, jupiterStandard, jupiterMainMenuGenerator, jupiterScript,
   JupiterRoute, uJupiterUserExperience, uConfig, uJupiterGenerator,
   jupiterDesktopApp, uJupiterAppScript, uJupiterDesktopAppScript, uNewTask,
-  uGenerator, uJupiterAction;
+  uGenerator, uJupiterAction, uCustomDatabaseForm, jupiterformcomponenttils,
+  jupiterStringUtils;
 
 {$R *.res}
 
@@ -40,6 +41,7 @@ begin
     FormRoutes.Add(TJupiterFormRoute.Create(NEWTASKMENU_PATH, TFNewTask));
     FormRoutes.Add(TJupiterFormRoute.Create(CONFIG_PATH, TFConfig));
     FormRoutes.Add(TJupiterFormRoute.Create(GENERATOR_PATH, TFGenerator));
+    FormRoutes.Add(TJupiterFormRoute.Create(CUSTOMDATABASE_PATH, TFCustomDatabaseForm));
   end;
 
   Application.Run;

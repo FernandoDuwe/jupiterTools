@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, JupiterApp, JupiterObject, jupiterScript, JupiterRoute,
-  uJupiterForm, uJupiterDesktopAppScript, Forms;
+  Forms, Controls;
 
 type
 
@@ -15,13 +15,16 @@ type
   TJupiterDesktopApp = class(TJupiterApp)
   private
     FFormRoutes : TJupiterObjectList;
+    FImageList  : TImageList;
   protected
     procedure Internal_AddScriptLibraries(var prScript : TJupiterScript); override;
   published
     property FormRoutes : TJupiterObjectList read FFormRoutes write FFormRoutes;
+    property ImageList : TImageList read FImageList write FImageList;
   public
     function NewFormByRoute(prRoute : String) : TForm;
     procedure OpenForm(prRoute : String);
+    procedure OpenForm(prForm : TForm);
 
     constructor Create(prAppID, prAppName : String); override;
     destructor Destroy; override;
@@ -29,7 +32,7 @@ type
 
 implementation
 
-uses Controls, uMain;
+uses uJupiterForm, uMain, uJupiterDesktopAppScript;
 
 { TJupiterDesktopApp }
 
@@ -66,11 +69,16 @@ begin
   if not Assigned(vrForm) then
     vrForm := TFJupiterForm.Create(Application.MainForm);
 
-  vrForm.Align       := alClient;
-  vrForm.WindowState := wsMaximized;
+  Self.OpenForm(vrForm);
+end;
+
+procedure TJupiterDesktopApp.OpenForm(prForm: TForm);
+begin
+  prForm.Align       := alClient;
+  prForm.WindowState := wsMaximized;
 
   if Application.MainForm is TFMain then
-    TFMain(Application.MainForm).NewTab(vrForm);
+    TFMain(Application.MainForm).NewTab(prForm);
 end;
 
 constructor TJupiterDesktopApp.Create(prAppID, prAppName: String);

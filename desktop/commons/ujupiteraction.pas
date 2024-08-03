@@ -5,7 +5,8 @@ unit uJupiterAction;
 interface
 
 uses
-  Classes, SysUtils, JupiterObject, ExtCtrls;
+  Classes, SysUtils, JupiterObject, jupiterformutils, JupiterConsts, JupiterApp,
+  ExtCtrls, Controls;
 
 type
 
@@ -26,7 +27,7 @@ type
     constructor Create(prCaption, prHint : String; prIcon : Integer);
     constructor Create(prCaption, prHint : String; prIcon : Integer; prOnClick : TNotifyEvent);
 
-    procedure Render(prFlow : TFlowPanel);
+    procedure Render(prFlow : TFlowPanel; prImageList : TImageList);
   end;
 
   { TJupiterActionGroup }
@@ -34,8 +35,10 @@ type
   TJupiterActionGroup = class(TJupiterObjectList)
   private
     FFlowPanel : TFlowPanel;
+    FImageList : TImageList;
   published
     property FlowPanel : TFlowPanel read FFlowPanel write FFlowPanel;
+    property ImageList : TImageList read FImageList write FImageList;
   public
     procedure AddAction(prAction : TJupiterAction);
 
@@ -43,6 +46,8 @@ type
   end;
 
 implementation
+
+uses Buttons;
 
 { TJupiterAction }
 
@@ -61,9 +66,26 @@ begin
   Self.OnClick := prOnClick;
 end;
 
-procedure TJupiterAction.Render(prFlow: TFlowPanel);
+procedure TJupiterAction.Render(prFlow: TFlowPanel; prImageList : TImageList);
+var
+  vrSpeedButton :  TSpeedButton;
 begin
+  vrSpeedButton            := TSpeedButton.Create(prFlow);
+  vrSpeedButton.Parent     := prFlow;
+  vrSpeedButton.Caption    := Self.Caption;
+  vrSpeedButton.Hint       := Self.Hint;
+  vrSpeedButton.ShowHint   := Self.Hint <> EmptyStr;
+  vrSpeedButton.Flat       := True;
+  vrSpeedButton.Height     := GetTextHeight(vrSpeedButton.Caption, vrSpeedButton.Font) + FORM_MARGIN_TOP + FORM_MARGIN_BOTTOM;
+  vrSpeedButton.Width      := GetTextWidth(vrSpeedButton.Caption, vrSpeedButton.Font) + FORM_MARGIN_LEFT + FORM_MARGIN_RIGHT;
+  vrSpeedButton.OnClick    := OnClick;
 
+  if Assigned(prImageList) then
+  begin
+    vrSpeedButton.ImageIndex := Self.Icon;
+    vrSpeedButton.Images     := prImageList;
+    vrSpeedButton.Width      := vrSpeedButton.Width + 16;
+  end;
 end;
 
 { TJupiterActionGroup }
@@ -74,8 +96,11 @@ begin
 end;
 
 procedure TJupiterActionGroup.Render;
+var
+  vrVez : Integer;
 begin
-
+  for vrVez := 0 to Self.Count - 1 do
+    TJupiterAction(Self.GetAtIndex(vrVez)).Render(Self.FlowPanel, Self.ImageList);
 end;
 
 end.

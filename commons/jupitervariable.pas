@@ -31,12 +31,12 @@ type
     procedure Internal_SetValue(prNewValue : String); virtual;
     function  Internal_GetValue : String; virtual;
   published
-    property Value : String         read Internal_GetValue write Internal_SetValue;
+    property Value        : String         read Internal_GetValue write Internal_SetValue;
 
-    property ID    : String         read FID    write FID;
-    property Title : String         read FTitle write FTitle;
-    property Save  : Boolean        read FSave  write FSave;
-    property Owner : TJupiterObject read FOwner write FOwner;
+    property ID           : String         read FID           write FID;
+    property Title        : String         read FTitle        write FTitle;
+    property Save         : Boolean        read FSave         write FSave;
+    property Owner        : TJupiterObject read FOwner        write FOwner;
 
     property OnGetValue            : TJupiterVariableGetValue    read FOnGetValue            write FOnGetValue;
     property OnChangeValue         : TJupiterVariableChangeValue read FOnChangeValue         write FOnChangeValue;

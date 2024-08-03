@@ -20,7 +20,40 @@ uses
 
   function IsSameForm(prForm1, prForm2 : TForm; prIgnoreVariables : Array of String) : Boolean;
 
+  function GetTextHeight(prText: String; prFont: TFont): Integer;
   function GetTextWidth(prText: String; prFont: TFont): Integer;
+  function GetFontSize : Integer;
+
+type
+
+  { TJupiterPosition }
+
+  TJupiterPosition = class(TJupiterObject)
+  private
+    FTop : Integer;
+    FLeft : Integer;
+  published
+    property Top  : Integer read FTop  write FTop;
+    property Left : Integer read FLeft write FLeft;
+  public
+    constructor Create(prTop, prLeft : Integer);
+  end;
+
+  { TJupiterComponentReference }
+
+  TJupiterComponentReference = class(TJupiterPosition)
+  private
+    FComponent: TComponent;
+    FRight : Integer;
+    FBottom : Integer;
+    FCompoent : TComponent;
+  published
+    property Right     : Integer    read FRight     write FRight;
+    property Bottom    : Integer    read FBottom    write FBottom;
+    property Component : TComponent read FComponent write FComponent;
+  public
+    constructor Create(prTop, prLeft, prRight, prBottom : Integer; prComponent : TComponent);
+  end;
 
 implementation
 
@@ -56,6 +89,9 @@ var
   vrVez : Integer;
 begin
   if not Assigned(vrJupiterApp) then
+    Exit;
+
+  if not vrJupiterApp.Params.Exists(FIELD_FONT_SIZE) then
     Exit;
 
   if prComponent is TForm then
@@ -240,6 +276,21 @@ begin
   end;
 end;
 
+function GetTextHeight(prText: String; prFont: TFont): Integer;
+var
+  vrBMP : TBitmap;
+begin
+  Result := 0;
+
+  vrBMP := TBitmap.Create;
+  try
+    vrBMP.Canvas.Font.Assign(prFont);
+    Result := vrBMP.Canvas.TextHeight(prText);
+  finally
+    vrBMP.Free;
+  end;
+end;
+
 function GetTextWidth(prText: String; prFont: TFont): Integer;
 var
   vrBMP : TBitmap;
@@ -253,6 +304,30 @@ begin
   finally
     vrBMP.Free;
   end;
+end;
+
+function GetFontSize: Integer;
+begin
+  Result := 12;
+end;
+
+{ TJupiterPosition }
+
+constructor TJupiterPosition.Create(prTop, prLeft: Integer);
+begin
+  Self.Top  := prTop;
+  Self.Left := prLeft;
+end;
+
+{ TJupiterComponentReference }
+
+constructor TJupiterComponentReference.Create(prTop, prLeft, prRight, prBottom: Integer; prComponent: TComponent);
+begin
+  Self.Top       := prTop;
+  Self.Left      := prLeft;
+  Self.Right     := prRight;
+  Self.Bottom    := prBottom;
+  Self.Component := prComponent;
 end;
 
 end.

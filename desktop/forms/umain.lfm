@@ -14,38 +14,43 @@ inherited FMain: TFMain
       Width = 581
     end
   end
-  object sbStatus: TStatusBar[1]
+  inherited fpOptions: TFlowPanel
+    Width = 1228
+    TabOrder = 2
+  end
+  object sbStatus: TStatusBar[2]
     Left = 0
     Height = 19
     Top = 629
     Width = 1228
     Panels = <>
   end
-  object jtMainTab: TJupiterFormTab[2]
+  object jtMainTab: TJupiterFormTab[3]
     Left = 0
-    Height = 579
-    Top = 50
+    Height = 578
+    Top = 51
     Width = 1228
     Align = alClient
     Images = ilTabs
     MultiLine = True
     TabOrder = 1
+    Visible = False
     OnCloseTabClicked = jtMainTabCloseTabClicked
     OnResize = jtMainTabResize
     Options = [nboMultiLine]
     AlwaysHaveForm = False
   end
-  inherited acOptions: TActionList[3]
+  inherited acOptions: TActionList[4]
     Images = ilIconFamily
   end
-  inherited tmrAutoUpdater: TTimer[4]
+  inherited tmrAutoUpdater: TTimer[5]
   end
-  object mmMainMenu: TMainMenu[5]
+  object mmMainMenu: TMainMenu[6]
     Images = ilIconFamily
     Left = 176
     Top = 120
   end
-  object ilIconFamily: TImageList[6]
+  object ilIconFamily: TImageList[7]
     Left = 64
     Top = 120
     Bitmap = {
@@ -657,7 +662,7 @@ inherited FMain: TFMain
       E2550EC6BF96EE06EB0500DF7E7849
     }
   end
-  object ilTabs: TImageList[7]
+  object ilTabs: TImageList[8]
     Left = 64
     Top = 200
     Bitmap = {

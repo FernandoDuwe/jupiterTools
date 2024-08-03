@@ -38,6 +38,8 @@ begin
   inherited Internal_Prepare;
 
   Self.Internal_CreateRouteIfDontExists('Preferências', '/menu/show/userPref/', NULL_KEY, ICON_APPLICATION, 100);
+
+  Self.Internal_CreateVariablIfDontExists(FIELD_FONT_SIZE, 'Tamanho da fonte', '9');
 end;
 
 end.

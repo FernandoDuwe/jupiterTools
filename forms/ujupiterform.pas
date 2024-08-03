@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ActnList, ExtCtrls,
   ButtonPanel, StdCtrls, Menus, ComCtrls, Buttons, JupiterConsts,
-  uJupiterAction;
+  jupiterformutils, JupiterApp, uJupiterAction, jupiterDesktopApp;
 
 type
 
@@ -79,8 +79,12 @@ end;
 
 procedure TFJupiterForm.FormCreate(Sender: TObject);
 begin
+  DrawForm(Self);
+
   Self.FActionGroup := TJupiterActionGroup.Create;
   Self.FActionGroup.FlowPanel := fpOptions;
+
+  Self.FActionGroup.ImageList := TJupiterDesktopApp(vrJupiterApp).ImageList;
 end;
 
 procedure TFJupiterForm.FormDestroy(Sender: TObject);

@@ -7,7 +7,8 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, DBCtrls, ExtCtrls,
   DBGrids, Menus, ComCtrls, uJupiterForm, jupiterformutils, JupiterObject,
-  JupiterConsts, jupiterDatabaseWizard, JupiterApp, DB, SQLDB;
+  JupiterConsts, jupiterDatabaseWizard, JupiterApp, uJupiterAction,
+  uJupiterDesktopAppScript, DB, SQLDB;
 
 type
 
@@ -19,6 +20,7 @@ type
     spSeparator: TSplitter;
     qryConfig: TSQLQuery;
     tvFilter: TTreeView;
+    procedure gbVariablesDblClick(Sender: TObject);
     procedure tvFilterSelectionChanged(Sender: TObject);
   private
     procedure Internal_UpdateComponents; override;
@@ -45,6 +47,14 @@ begin
   Self.UpdateForm();
 end;
 
+procedure TFConfig.gbVariablesDblClick(Sender: TObject);
+begin
+  if qryConfig.EOF then
+    Exit;
+
+  JupiterAppDesktopOpenFormFromTableId('VARIABLES', qryConfig.FieldByName('ID').AsInteger);
+end;
+
 procedure TFConfig.Internal_UpdateComponents;
 begin
   inherited Internal_UpdateComponents;
@@ -57,23 +67,32 @@ begin
   if qryConfig.FieldCount > 1 then
   begin
     qryConfig.Fields[1].DisplayLabel := 'Nome';
-    qryConfig.Fields[1].DisplayWidth := PercentOfScreen(gbVariables.Width, 50);
+    qryConfig.Fields[1].DisplayWidth := PercentOfScreen(gbVariables.Width, 30);
   end;
 
   if qryConfig.FieldCount > 2 then
   begin
-    qryConfig.Fields[2].DisplayLabel := 'Valor';
-    qryConfig.Fields[2].DisplayWidth := PercentOfScreen(gbVariables.Width, 50);
+    qryConfig.Fields[2].DisplayLabel := 'Descrição';
+    qryConfig.Fields[2].DisplayWidth := PercentOfScreen(gbVariables.Width, 30);
   end;
 
   if qryConfig.FieldCount > 3 then
-    qryConfig.Fields[3].Visible := False;
+  begin
+    qryConfig.Fields[3].DisplayLabel := 'Valor';
+    qryConfig.Fields[3].DisplayWidth := PercentOfScreen(gbVariables.Width, 40);
+  end;
+
+  if qryConfig.FieldCount > 4 then
+    qryConfig.Fields[4].Visible := False;
 
   if gbVariables.Columns.Count > 1 then
-    gbVariables.Columns[1].Width := PercentOfScreen(gbVariables.Width, 50);
+    gbVariables.Columns[1].Width := PercentOfScreen(gbVariables.Width, 30);
 
   if gbVariables.Columns.Count > 2 then
-    gbVariables.Columns[2].Width := PercentOfScreen(gbVariables.Width, 50);
+    gbVariables.Columns[2].Width := PercentOfScreen(gbVariables.Width, 30);
+
+  if gbVariables.Columns.Count > 3 then
+    gbVariables.Columns[3].Width := PercentOfScreen(gbVariables.Width, 40);
 end;
 
 procedure TFConfig.Internal_UpdateDatasets;
@@ -82,7 +101,7 @@ begin
 
   qryConfig.Close;
   qryConfig.SQL.Clear;
-  qryConfig.SQL.Add(' SELECT V1.ID, V1.NAME, V1.VALUE, V1.MODULE FROM VARIABLES V1 ');
+  qryConfig.SQL.Add(' SELECT V1.ID, V1.NAME, V1.DESCRIPTION, V1.VALUE, V1.MODULE FROM VARIABLES V1 ');
 
   if Self.Internal_GetFilter <> EmptyStr then
     qryConfig.SQL.Add(' WHERE ' + Self.Internal_GetFilter);
@@ -99,6 +118,11 @@ var
   vrQry   : TSQLQuery;
 begin
   inherited Internal_PrepareForm;
+
+  Self.ActionGroup.AddAction(TJupiterAction.Create('Novo', 'Inserir um novo item', ICON_NEW));
+  Self.ActionGroup.AddAction(TJupiterAction.Create('Excluir', 'Excluir o item atual', ICON_DELETE));
+
+  Self.ShowSearchBar := True;
 
   tvFilter.Items.Clear;
 
@@ -148,7 +172,7 @@ begin
   if TJupiterDatabaseReference(tvFilter.Selected.Data).ID = NULL_KEY then
     Exit;
 
-  Result := Format(' ID = %0:d ', [TJupiterDatabaseReference(tvFilter.Selected.Data).ID]);
+  Result := Format(' MODULE = %0:d ', [TJupiterDatabaseReference(tvFilter.Selected.Data).ID]);
 end;
 
 end.

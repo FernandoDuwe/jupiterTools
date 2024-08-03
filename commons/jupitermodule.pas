@@ -22,6 +22,7 @@ type
 
     function Internal_CreateRouteIfDontExists(prTitle, prRoute : String; prDestiny, prIcon, prZIndex : Integer) : Boolean;
     function Internal_CreateMacroIfDontExists(prID, prTitle : String; prMacro : TStrings) : Boolean;
+    function Internal_CreateVariablIfDontExists(prId, prName, prValue : String) : Boolean;
   published
     property ModuleID    : String               read Internal_GetModuleID;
     property ModuleTitle : String               read Internal_GetModuleTitle;
@@ -29,6 +30,7 @@ type
   public
     function DefineParamName(prName : String) : String;
     procedure ExecuteCommand(prParamList : TStrings); virtual;
+    function ModuleDatabaseID : Integer;
 
     constructor Create;
     destructor Destroy; override;
@@ -129,8 +131,7 @@ begin
   end;
 end;
 
-function TJupiterModule.Internal_CreateMacroIfDontExists(prID, prTitle: String;
-  prMacro: TStrings): Boolean;
+function TJupiterModule.Internal_CreateMacroIfDontExists(prID, prTitle: String; prMacro: TStrings): Boolean;
 var
   vrWizard : TJupiterDatabaseWizard;
   vrQry : TSQLQuery;
@@ -174,6 +175,51 @@ begin
   end;
 end;
 
+function TJupiterModule.Internal_CreateVariablIfDontExists(prId, prName, prValue : String): Boolean;
+var
+  vrWizard : TJupiterDatabaseWizard;
+  vrQry : TSQLQuery;
+begin
+  Result := False;
+
+  vrWizard := vrJupiterApp.NewWizard;
+  try
+    vrQry := vrWizard.NewQuery;
+
+    if vrWizard.Exists('VARIABLES', Format(' NAME = "%0:s" ', [prID])) then
+      Exit;
+
+    vrQry.Close;
+    vrQry.SQL.Clear;
+    vrQry.SQL.Add(' SELECT * FROM VARIABLES WHERE 1 = 2 ');
+    vrQry.InsertSQL.Add(' INSERT INTO VARIABLES (NAME, DESCRIPTION, VALUE, MODULE) VALUES (:NAME, :DESCRIPTION, :VALUE, :MODULE) ');
+    vrQry.Open;
+
+    if not vrWizard.Transaction.Active then
+      vrWizard.Transaction.StartTransaction;
+
+    try
+      vrQry.Insert;
+      vrQry.FieldByName('NAME').AsString        := prId;
+      vrQry.FieldByName('DESCRIPTION').AsString := prName;
+      vrQry.FieldByName('VALUE').AsString       := prValue;
+      vrQry.FieldByName('MODULE').AsInteger     := Self.ModuleDatabaseID;
+      vrQry.Post;
+      vrQry.ApplyUpdates(-1);
+
+      vrWizard.Transaction.CommitRetaining;
+
+      Result := True;
+    except
+      vrWizard.Transaction.RollbackRetaining;
+      raise;
+    end;
+  finally
+    FreeAndNil(vrWizard);
+    FreeAndNil(vrQry);
+  end;
+end;
+
 function TJupiterModule.DefineParamName(prName: String): String;
 begin
   Result := Self.ModuleID + '.' + prName;
@@ -182,6 +228,21 @@ end;
 procedure TJupiterModule.ExecuteCommand(prParamList: TStrings);
 begin
   //
+end;
+
+function TJupiterModule.ModuleDatabaseID: Integer;
+var
+  vrWizard : TJupiterDatabaseWizard;
+  vrQry : TSQLQuery;
+begin
+  Result := NULL_KEY;
+
+  vrWizard := vrJupiterApp.NewWizard;
+  try
+    Result := vrWizard.GetField('MODULES', 'ID', ' MODULEID = "' + Self.ModuleID + '" ');
+  finally
+    FreeAndNil(vrWizard);
+  end;
 end;
 
 constructor TJupiterModule.Create;
