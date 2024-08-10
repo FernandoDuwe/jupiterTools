@@ -8,9 +8,9 @@ inherited FGenerator: TFGenerator
     Height = 406
     Top = 51
     Width = 879
-    ActivePage = tsRoutes
+    ActivePage = tsGenerator
     Align = alClient
-    TabIndex = 1
+    TabIndex = 0
     TabOrder = 1
     object tsGenerator: TTabSheet
       Caption = 'Generator'

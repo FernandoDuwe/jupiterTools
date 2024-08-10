@@ -18,14 +18,14 @@ type
   protected
     FCloseButtonRect : TRect;
     FOnClose         : TNotifyEvent;
-
-    procedure DoClose; virtual;
   published
     property Form : TForm read FForm write Internal_SetForm;
   public
     property OnClose : TNotifyEvent read FOnClose write FOnClose;
 
     procedure Update;
+
+    procedure DoClose; virtual;
 
     constructor Create(AOwner:TComponent); override;
     destructor Destroy; override;

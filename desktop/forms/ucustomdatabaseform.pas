@@ -18,6 +18,8 @@ type
     InternalDataSource: TDataSource;
     sbBody: TScrollBox;
     procedure FormCreate(Sender: TObject);
+    procedure InternalDataSourceDataChange(Sender: TObject; Field: TField);
+    procedure InternalDataSourceStateChange(Sender: TObject);
   private
     FTableName : String;
     FID        : Integer;
@@ -25,6 +27,11 @@ type
 
     procedure Internal_PrepareForm; override;
     procedure Internal_BuildForm;
+
+    procedure Internal_OnSave(Sender: TObject);
+    procedure Internal_OnCancel(Sender: TObject);
+
+    procedure Internal_UpdateComponents; override;
   published
     property QueryOrigin : TSQLQuery read FQueryOrigin write FQueryOrigin;
 
@@ -53,12 +60,22 @@ begin
   Self.FID        := NULL_KEY;
 end;
 
+procedure TFCustomDatabaseForm.InternalDataSourceDataChange(Sender: TObject; Field: TField);
+begin
+  Self.UpdateForm();
+end;
+
+procedure TFCustomDatabaseForm.InternalDataSourceStateChange(Sender: TObject);
+begin
+  Self.UpdateForm();
+end;
+
 procedure TFCustomDatabaseForm.Internal_PrepareForm;
 begin
   inherited Internal_PrepareForm;
 
-  Self.ActionGroup.AddAction(TJupiterAction.Create('Salvar', 'Clique aqui para salvar', ICON_SAVE));
-  Self.ActionGroup.AddAction(TJupiterAction.Create('Cancelar', 'Clique aqui para cancelar', ICON_CANCEL));
+  Self.ActionGroup.AddAction(TJupiterAction.Create('Salvar', 'Clique aqui para salvar', ICON_SAVE, @Internal_OnSave));
+  Self.ActionGroup.AddAction(TJupiterAction.Create('Cancelar', 'Clique aqui para cancelar', ICON_CANCEL, @Internal_OnCancel));
 
   Self.Internal_BuildForm;
 end;
@@ -68,6 +85,7 @@ var
   vrCurrentLine : Integer;
   vrVez : Integer;
   vrReference : TJupiterComponentReference;
+  vrWizard : TJupiterDatabaseWizard;
 begin
   vrCurrentLine := FORM_MARGIN_TOP;
 
@@ -76,7 +94,9 @@ begin
 
   InternalDataSource.DataSet := Self.QueryOrigin;
 
-  for vrVez := 0 to Self.QueryOrigin.Fields.Count - 1 do
+  vrWizard := vrJupiterApp.NewWizard;
+  try
+    for vrVez := 0 to Self.QueryOrigin.Fields.Count - 1 do
   begin
     if Self.QueryOrigin.Fields[vrVez].FieldName = 'ID' then
       Continue;
@@ -88,17 +108,73 @@ begin
     // Pulando linha
     vrCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM;
 
-    if ((Self.QueryOrigin.Fields[vrVez] is TDateField) or (Self.QueryOrigin.Fields[vrVez] is TDateTimeField)) then
-      vrReference := JupiterComponentsNewDBDatePicker(Self.QueryOrigin.Fields[vrVez], InternalDataSource, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody)
+    if vrWizard.IsForeignKeyField(Self.TableName, Self.QueryOrigin.Fields[vrVez].FieldName) then
+      vrReference := JupiterComponentsNewDBComboBox(Self.QueryOrigin.Fields[vrVez],
+                                                    InternalDataSource,
+                                                    TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT),
+                                                    sbBody,
+                                                    vrWizard.GetForeignKeyData(Self.TableName, Self.QueryOrigin.Fields[vrVez].FieldName))
     else
-      if Self.QueryOrigin.Fields[vrVez] is TBlobField then
-        vrReference := JupiterComponentsNewDBMemo(Self.QueryOrigin.Fields[vrVez], InternalDataSource, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody)
+      if ((Self.QueryOrigin.Fields[vrVez] is TDateField) or (Self.QueryOrigin.Fields[vrVez] is TDateTimeField)) then
+        vrReference := JupiterComponentsNewDBDatePicker(Self.QueryOrigin.Fields[vrVez], InternalDataSource, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody)
       else
-        vrReference := JupiterComponentsNewDBEdit(Self.QueryOrigin.Fields[vrVez], InternalDataSource, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody);
+        if Self.QueryOrigin.Fields[vrVez] is TBlobField then
+          vrReference := JupiterComponentsNewDBMemo(Self.QueryOrigin.Fields[vrVez], InternalDataSource, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody)
+        else
+          vrReference := JupiterComponentsNewDBEdit(Self.QueryOrigin.Fields[vrVez], InternalDataSource, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody);
 
     // Pulando linha
         vrCurrentLine := vrReference.Bottom + FORM_MARGIN_TOP + FORM_MARGIN_BOTTOM;
   end;
+  finally
+    FreeAndNil(vrWizard);
+  end;
+end;
+
+procedure TFCustomDatabaseForm.Internal_OnSave(Sender: TObject);
+var
+  vrDatabase : TJupiterDatabaseWizard;
+begin
+  vrDatabase := vrJupiterApp.NewWizard;
+  try
+    vrDatabase.StartTransaction;
+
+    try
+      Self.QueryOrigin.Post;
+      Self.QueryOrigin.ApplyUpdates(-1);
+
+      vrDatabase.Commit;
+    except
+      vrDatabase.Rollback;
+
+      raise;
+    end;
+  finally
+    FreeAndNil(vrDatabase);
+  end;
+
+  Self.DoSecureClose;
+end;
+
+procedure TFCustomDatabaseForm.Internal_OnCancel(Sender: TObject);
+begin
+  Self.QueryOrigin.Cancel;
+end;
+
+procedure TFCustomDatabaseForm.Internal_UpdateComponents;
+begin
+  inherited Internal_UpdateComponents;
+
+  if InternalDataSource.State in [dsEdit, dsInsert] then
+  begin
+    Self.ActionGroup.GetActionAtIndex(0).Enable;
+    Self.ActionGroup.GetActionAtIndex(1).Enable;
+
+    Exit;
+  end;
+
+  Self.ActionGroup.GetActionAtIndex(0).Disable;
+  Self.ActionGroup.GetActionAtIndex(1).Disable;
 end;
 
 procedure TFCustomDatabaseForm.FromReference(prReference: TJupiterDatabaseReference);

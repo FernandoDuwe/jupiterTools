@@ -91,9 +91,23 @@ begin
 end;
 
 procedure TFMain.NewTab(Form: TForm);
+var
+  vrSS : TShiftState;
 begin
+  vrSS := GetKeyShiftState;
+
+  if ssCtrl in vrSS then
+  begin
+    Form.ShowModal;
+
+    Exit;
+  end;
+
   jtMainTab.Visible := True;
   jtMainTab.AddForm(Form);
+
+  if Form is TFJupiterForm then
+    TFJupiterForm(Form).OwnerTab := jtMainTab.Pages[jtMainTab.PageCount - 1] as TJupiterFormTabSheet;
 end;
 
 end.

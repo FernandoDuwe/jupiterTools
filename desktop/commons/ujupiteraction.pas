@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, JupiterObject, jupiterformutils, JupiterConsts, JupiterApp,
-  ExtCtrls, Controls;
+  ExtCtrls, Controls, Buttons;
 
 type
 
@@ -18,6 +18,7 @@ type
     FCaption : String;
     FHint    : String;
     FOnClick : TNotifyEvent;
+    FButton  : TSpeedButton;
   published
     property Caption : String       read FCaption write FCaption;
     property Icon    : Integer      read FIcon    write FIcon;
@@ -28,6 +29,9 @@ type
     constructor Create(prCaption, prHint : String; prIcon : Integer; prOnClick : TNotifyEvent);
 
     procedure Render(prFlow : TFlowPanel; prImageList : TImageList);
+
+    procedure Disable;
+    procedure Enable;
   end;
 
   { TJupiterActionGroup }
@@ -42,12 +46,12 @@ type
   public
     procedure AddAction(prAction : TJupiterAction);
 
+    function GetActionAtIndex(prIndex : Integer) : TJupiterAction;
+
     procedure Render;
   end;
 
 implementation
-
-uses Buttons;
 
 { TJupiterAction }
 
@@ -86,6 +90,20 @@ begin
     vrSpeedButton.Images     := prImageList;
     vrSpeedButton.Width      := vrSpeedButton.Width + 16;
   end;
+
+  Self.FButton := vrSpeedButton;
+end;
+
+procedure TJupiterAction.Disable;
+begin
+  if Assigned(Self.FButton) then
+    Self.FButton.Enabled := False;
+end;
+
+procedure TJupiterAction.Enable;
+begin
+  if Assigned(Self.FButton) then
+    Self.FButton.Enabled := True;
 end;
 
 { TJupiterActionGroup }
@@ -93,6 +111,11 @@ end;
 procedure TJupiterActionGroup.AddAction(prAction: TJupiterAction);
 begin
   Self.Add(prAction);
+end;
+
+function TJupiterActionGroup.GetActionAtIndex(prIndex: Integer): TJupiterAction;
+begin
+  Result := Self.GetAtIndex(prIndex) as TJupiterAction;
 end;
 
 procedure TJupiterActionGroup.Render;

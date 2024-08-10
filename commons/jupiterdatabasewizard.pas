@@ -5,8 +5,7 @@ unit jupiterDatabaseWizard;
 interface
 
 uses
-  Classes, SysUtils, JupiterObject, JupiterConsts, SQLDB;
-
+  Classes, SysUtils, JupiterObject, JupiterConsts, SQLDB, DB;
 type
 
   { TJupiterDatabaseWizard }
@@ -24,6 +23,26 @@ type
     constructor Create(prTableName : String; prID : Integer);
   end;
 
+  { TJupiterDatabaseForeignKeyReference }
+
+  TJupiterDatabaseForeignKeyReference = class(TJupiterObject)
+  private
+    FTableName        : String;
+    FFieldName        : String;
+    FTableDestinyName : String;
+    FFieldDestinyName : String;
+    FWizard           : TJupiterObject;
+  published
+    property TableName        : String read FTableName        write FTableName;
+    property FieldName        : String read FFieldName        write FFieldName;
+    property TableDestinyName : String read FTableDestinyName write FTableDestinyName;
+    property FieldDestinyName : String read FFieldDestinyName write FFieldDestinyName;
+
+    property Wizard           : TJupiterObject read FWizard write FWizard;
+  public
+    constructor Create(prTableName, prFieldName, prTableDestinyName, prFieldDestinyName : String; prWizard : TJupiterObject);
+  end;
+
   TJupiterDatabaseWizard = class(TJupiterObject)
   private
     FConnection  : TSQLConnection;
@@ -34,14 +53,21 @@ type
   public
     function TableExists(prTableName : String) : Boolean;
     function FieldExists(prTableName, prFieldName : String) : Boolean;
+    function GetForeignKeyData(prTableName, prFieldName : String) : TJupiterDatabaseForeignKeyReference;
+    function IsForeignKeyField(prTableName, prFieldName : String) : Boolean;
     function NewQuery : TSQLQuery;
     function NewQueryFromReference(prReference : TJupiterDatabaseReference) : TSQLQuery;
     function NewScript : TSQLScript;
+    function NewDataSourceFromQuery(prQuery : TSQLQuery) : TDataSource;
 
     function Count(prTableName, prWhere : String) : Integer;
     function Exists(prTableName, prWhere : String) : Boolean;
     function GetLastID(prTableName : String) : Integer;
     function GetField(prTableName, prField, prWhere : String) : Variant;
+
+    procedure StartTransaction;
+    procedure Commit;
+    procedure Rollback;
 
     procedure GenerateQuerySQL(prTableName : String; var prStrings : TStrings);
     procedure GenerateInsertSQL(prTableName : String; var prStrings : TStrings);
@@ -62,6 +88,19 @@ constructor TJupiterDatabaseReference.Create(prTableName: String; prID: Integer
 begin
   Self.TableName := prTableName;
   Self.ID        := prID;
+end;
+
+{ TJupiterDatabaseForeignKeyReference }
+
+constructor TJupiterDatabaseForeignKeyReference.Create(prTableName, prFieldName, prTableDestinyName, prFieldDestinyName: String; prWizard : TJupiterObject);
+begin
+  Self.TableName := prTableName;
+  Self.FieldName := prFieldName;
+
+  Self.TableDestinyName  := prTableDestinyName;
+  Self.FFieldDestinyName := prFieldDestinyName;
+
+  Self.Wizard := prWizard;
 end;
 
 { TJupiterDatabaseWizard }
@@ -98,6 +137,69 @@ begin
   end;
 end;
 
+function TJupiterDatabaseWizard.GetForeignKeyData(prTableName, prFieldName: String): TJupiterDatabaseForeignKeyReference;
+var
+  vrQry : TSQLQuery;
+begin
+  Result := nil;
+
+  if not Self.IsForeignKeyField(prTableName, prFieldName) then
+    Exit;
+
+  vrQry := Self.NewQuery;
+  try
+    vrQry.SQL.Add(' SELECT * FROM PRAGMA_FOREIGN_KEY_LIST("' + prTableName + '") ');
+    vrQry.Open;
+    vrQry.First;
+
+    while not vrQry.EOF do
+    begin
+      if vrQry.FieldByName('FROM').AsString = prFieldName then
+      begin
+        Result := TJupiterDatabaseForeignKeyReference.Create(prTableName,
+                                                             prFieldName,
+                                                             vrQry.FieldByName('TABLE').AsString,
+                                                             vrQry.FieldByName('TO').AsString,
+                                                             Self);
+        Exit;
+      end;
+
+      vrQry.Next;
+    end;
+  finally
+    vrQry.Close;
+    FreeAndNil(vrQry);
+  end;
+end;
+
+function TJupiterDatabaseWizard.IsForeignKeyField(prTableName, prFieldName: String): Boolean;
+var
+  vrQry : TSQLQuery;
+begin
+  Result := False;
+
+  vrQry := Self.NewQuery;
+  try
+    vrQry.SQL.Add(' SELECT * FROM PRAGMA_FOREIGN_KEY_LIST("' + prTableName + '") ');
+    vrQry.Open;
+    vrQry.First;
+
+    while not vrQry.EOF do
+    begin
+      if vrQry.FieldByName('FROM').AsString = prFieldName then
+      begin
+        Result := True;
+        Exit;
+      end;
+
+      vrQry.Next;
+    end;
+  finally
+    vrQry.Close;
+    FreeAndNil(vrQry);
+  end;
+end;
+
 function TJupiterDatabaseWizard.NewQuery: TSQLQuery;
 begin
   Result                := TSQLQuery.Create(nil);
@@ -111,7 +213,7 @@ function TJupiterDatabaseWizard.NewQueryFromReference(prReference: TJupiterDatab
 begin
   Result := NewQuery;
 
-  Result.SQL.Add(String.Format(' SELECT * FROM %0:s WHERE ID = %1:d ', [prReference.TableName, prReference.ID]));
+  Result.SQL.Add(String.Format(' SELECT * FROM %0:s WHERE ((ID = %1:d) OR (-1 = %1:d)) ORDER BY 2', [prReference.TableName, prReference.ID]));
 end;
 
 function TJupiterDatabaseWizard.NewScript: TSQLScript;
@@ -121,6 +223,12 @@ begin
   Result.Transaction := Self.Transaction;
 
   Result.Script.Clear;
+end;
+
+function TJupiterDatabaseWizard.NewDataSourceFromQuery(prQuery: TSQLQuery): TDataSource;
+begin
+  Result := TDataSource.Create(prQuery);
+  Result.DataSet := prQuery;
 end;
 
 function TJupiterDatabaseWizard.Count(prTableName, prWhere: String): Integer;
@@ -182,6 +290,22 @@ begin
   end;
 end;
 
+procedure TJupiterDatabaseWizard.StartTransaction;
+begin
+  if not Self.Transaction.Active then
+    Self.Transaction.StartTransaction;
+end;
+
+procedure TJupiterDatabaseWizard.Commit;
+begin
+  Self.Transaction.CommitRetaining;
+end;
+
+procedure TJupiterDatabaseWizard.Rollback;
+begin
+  Self.Transaction.RollbackRetaining;
+end;
+
 procedure TJupiterDatabaseWizard.GenerateQuerySQL(prTableName: String; var prStrings: TStrings);
 begin
   //
@@ -208,16 +332,16 @@ var
 begin
   vrScript := Self.NewScript;
   try
-    if not Self.Transaction.Active then
-      Self.Transaction.StartTransaction;
+    Self.StartTransaction;
 
     try
       vrScript.Script.AddStrings(prScript);
       vrScript.Execute;
 
-      Self.Transaction.CommitRetaining;
+      Self.Commit;
     except
-      Self.Transaction.RollbackRetaining;
+      Self.Rollback;
+
       raise;
     end;
   finally

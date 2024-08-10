@@ -1,5 +1,6 @@
 inherited FCustomDatabaseForm: TFCustomDatabaseForm
-  Top = 255
+  Left = 354
+  Top = 234
   OnCreate = FormCreate
   object sbBody: TScrollBox[2]
     Left = 0
@@ -9,6 +10,7 @@ inherited FCustomDatabaseForm: TFCustomDatabaseForm
     HorzScrollBar.Page = 1
     VertScrollBar.Page = 1
     Align = alClient
+    BorderStyle = bsNone
     TabOrder = 2
   end
   inherited acOptions: TActionList[3]
@@ -16,6 +18,8 @@ inherited FCustomDatabaseForm: TFCustomDatabaseForm
   inherited tmrAutoUpdater: TTimer[4]
   end
   object InternalDataSource: TDataSource[5]
+    OnStateChange = InternalDataSourceStateChange
+    OnDataChange = InternalDataSourceDataChange
     Left = 592
     Top = 72
   end

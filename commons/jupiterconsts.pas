@@ -70,10 +70,10 @@ const
                                             'TJupiterTasksDataProvider');
 
    // Forms
-   FORM_MARGIN_TOP           : Integer = 8;
-   FORM_MARGIN_LEFT          : Integer = 8;
-   FORM_MARGIN_RIGHT         : Integer = 16;
-   FORM_MARGIN_BOTTOM        : Integer = 8;
+   FORM_MARGIN_TOP           : Integer = 10;
+   FORM_MARGIN_LEFT          : Integer = 10;
+   FORM_MARGIN_RIGHT         : Integer = 20;
+   FORM_MARGIN_BOTTOM        : Integer = 10;
 
    {$IFDEF WINDOWS}
      FORM_MARGIN_BOTTOM_TONEXT : Integer = 20; // Bottom to the next field

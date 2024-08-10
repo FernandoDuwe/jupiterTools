@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ActnList, ExtCtrls,
-  ButtonPanel, StdCtrls, Menus, ComCtrls, Buttons, JupiterConsts,
+  ButtonPanel, StdCtrls, Menus, ComCtrls, Buttons, JupiterConsts, JupiterFormTabSheet,
   jupiterformutils, JupiterApp, uJupiterAction, jupiterDesktopApp;
 
 type
@@ -24,14 +24,17 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure tmrAutoUpdaterTimer(Sender: TObject);
   private
     FShowSearchBar : Boolean;
     FActionGroup   : TJupiterActionGroup;
+    FOwnerTab      : TJupiterFormTabSheet;
 
     procedure Internal_SetSearchBar(prNewValue : Boolean);
   published
-    property ActionGroup   : TJupiterActionGroup read FActionGroup   write FActionGroup;
-    property ShowSearchBar : Boolean             read FShowSearchBar write Internal_SetSearchBar default False;
+    property ActionGroup   : TJupiterActionGroup  read FActionGroup   write FActionGroup;
+    property ShowSearchBar : Boolean              read FShowSearchBar write Internal_SetSearchBar default False;
+    property OwnerTab      : TJupiterFormTabSheet read FOwnerTab      write FOwnerTab;
 
     procedure Internal_UpdateComponents; virtual;
     procedure Internal_UpdateDatasets; virtual;
@@ -41,14 +44,14 @@ type
   public
     procedure PrepareForm; virtual;
     procedure UpdateForm(prUpdateDatasets : Boolean = True; prUpdateComponentes : Boolean = True; prUpdateCalcs : Boolean = True); virtual;
+
+    procedure DoSecureClose;
   end;
 
 var
   FJupiterForm: TFJupiterForm;
 
 implementation
-
-uses JupiterFormTabSheet;
 
 {$R *.lfm}
 
@@ -61,6 +64,15 @@ begin
   finally
     Self.UpdateForm();
   end;
+end;
+
+procedure TFJupiterForm.tmrAutoUpdaterTimer(Sender: TObject);
+begin
+  tmrAutoUpdater.Enabled := False;
+
+  Self.UpdateForm(False);
+
+  tmrAutoUpdater.Enabled := True;
 end;
 
 procedure TFJupiterForm.Internal_SetSearchBar(prNewValue: Boolean);
@@ -150,6 +162,18 @@ begin
     Self.Internal_UpdateCalcs;
 
   Self.Internal_Resize;
+end;
+
+procedure TFJupiterForm.DoSecureClose;
+begin
+  if Assigned(OwnerTab) then
+  begin
+    Self.OwnerTab.DoClose;
+
+    Exit;
+  end;
+
+  Self.Close;
 end;
 
 end.

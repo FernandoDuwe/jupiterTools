@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, Controls, SysUtils, StdCtrls, jupiterformutils, JupiterConsts,
-  DBCtrls, DB;
+  jupiterDatabaseWizard, DBCtrls, DB;
 
   function JupiterComponentsNewLabel(prText : String; prPosition : TJupiterPosition; prOwner : TWinControl) : TJupiterComponentReference;
 
@@ -16,9 +16,11 @@ uses
 
   function JupiterComponentsNewDBMemo(prField : TField; prDataSource : TDataSource; prPosition : TJupiterPosition; prOwner : TWinControl) : TJupiterComponentReference;
 
+  function JupiterComponentsNewDBComboBox(prField : TField; prDataSource : TDataSource; prPosition : TJupiterPosition; prOwner : TWinControl; prForeignKeyData : TJupiterDatabaseForeignKeyReference) : TJupiterComponentReference;
+
 implementation
 
-uses DBDateTimePicker;
+uses DBDateTimePicker, SQLDB;
 
 function JupiterComponentsNewLabel(prText: String; prPosition : TJupiterPosition; prOwner : TWinControl): TJupiterComponentReference;
 var
@@ -102,6 +104,41 @@ begin
   vrEdit.Height     := GetTextHeight('OI', vrEdit.Font) * 10;
   vrEdit.Width      := prOwner.Width - prPosition.Left - FORM_MARGIN_RIGHT;
   vrEdit.Anchors    := [akTop, akLeft, akRight];
+
+  Result := TJupiterComponentReference.Create(prPosition.Top,
+                                              prPosition.Left,
+                                              prPosition.Left + vrEdit.Width,
+                                              prPosition.Top + vrEdit.Height,
+                                              vrEdit);
+end;
+
+function JupiterComponentsNewDBComboBox(prField: TField; prDataSource: TDataSource; prPosition: TJupiterPosition; prOwner: TWinControl; prForeignKeyData : TJupiterDatabaseForeignKeyReference): TJupiterComponentReference;
+var
+  vrEdit : TDBLookupComboBox;
+  vrQry  : TSQLQuery;
+begin
+  vrQry := TJupiterDatabaseWizard(prForeignKeyData.Wizard).NewQueryFromReference(TJupiterDatabaseReference.Create(prForeignKeyData.TableDestinyName, NULL_KEY));
+
+  vrEdit := TDBLookupComboBox.Create(prOwner);
+  vrEdit.Parent     := prOwner;
+  vrEdit.AutoSize   := True;
+  vrEdit.Font.Size  := GetFontSize;
+  vrEdit.Top        := prPosition.Top;
+  vrEdit.Left       := prPosition.Left;
+  vrEdit.DataSource := prDataSource;
+  vrEdit.DataField  := prField.FieldName;
+  vrEdit.AutoSize   := False;
+  vrEdit.Width      := prOwner.Width - prPosition.Left - FORM_MARGIN_RIGHT;
+  vrEdit.Anchors    := [akTop, akLeft, akRight];
+
+  vrQry.Open;
+
+  vrEdit.ListSource     := TJupiterDatabaseWizard(prForeignKeyData.Wizard).NewDataSourceFromQuery(vrQry);
+  vrEdit.KeyField       := prForeignKeyData.FieldDestinyName;
+  vrEdit.ListFieldIndex := 1;
+  vrEdit.ListField      := vrQry.Fields[1].FieldName;
+
+  vrQry := nil;
 
   Result := TJupiterComponentReference.Create(prPosition.Top,
                                               prPosition.Left,
