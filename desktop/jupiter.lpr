@@ -17,7 +17,7 @@ uses
   JupiterRoute, uJupiterUserExperience, uConfig, uJupiterGenerator,
   jupiterDesktopApp, uJupiterAppScript, uJupiterDesktopAppScript, uNewTask,
   uGenerator, uJupiterAction, uCustomDatabaseForm, jupiterformcomponenttils,
-  jupiterStringUtils;
+  jupiterStringUtils, uJupiterDatabaseScript;
 
 {$R *.res}
 
