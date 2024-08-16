@@ -91,8 +91,6 @@ end;
 
 procedure TFJupiterForm.FormCreate(Sender: TObject);
 begin
-  DrawForm(Self);
-
   Self.FActionGroup := TJupiterActionGroup.Create;
   Self.FActionGroup.FlowPanel := fpOptions;
 
@@ -111,6 +109,8 @@ end;
 
 procedure TFJupiterForm.Internal_UpdateComponents;
 begin
+  DrawForm(Self);
+
   pnSearchBar.Visible := Self.ShowSearchBar;
 end;
 

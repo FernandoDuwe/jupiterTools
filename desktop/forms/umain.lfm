@@ -1,5 +1,5 @@
 inherited FMain: TFMain
-  Left = 485
+  Left = 212
   Height = 648
   Top = 204
   Width = 1228
@@ -7,6 +7,8 @@ inherited FMain: TFMain
   ClientHeight = 648
   ClientWidth = 1228
   Menu = mmMainMenu
+  OnClose = FormClose
+  OnDestroy = FormDestroy
   inherited pnSearchBar: TPanel
     Width = 1228
     ClientWidth = 1228

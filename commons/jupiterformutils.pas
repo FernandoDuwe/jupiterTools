@@ -57,7 +57,7 @@ type
 
 implementation
 
-uses JupiterApp, ExtCtrls, Menus, JupiterVariable;
+uses JupiterApp, ExtCtrls, Menus, JupiterVariable, DBGrids;
 
 procedure CopyNodes(prSourceNode, prTargetNode: TTreeNode);
 
@@ -151,6 +151,13 @@ begin
       TGroupBox(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
 
       DrawForm(prComponent.Components[vrVez]);
+    end;
+
+    if prComponent.Components[vrVez] is TDBGrid then
+    begin
+      TDBGrid(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+
+      TDBGrid(prComponent.Components[vrVez]).AlternateColor := clBtnFace - 10;
     end;
   end;
 end;
@@ -308,7 +315,10 @@ end;
 
 function GetFontSize: Integer;
 begin
-  Result := 12;
+  if not vrJupiterApp.Params.Exists(FIELD_FONT_SIZE) then
+    Result := 9;
+
+  Result := vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).AsInteger;
 end;
 
 { TJupiterPosition }

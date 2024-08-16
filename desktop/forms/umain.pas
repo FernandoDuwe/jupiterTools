@@ -19,6 +19,8 @@ type
     jtMainTab: TJupiterFormTab;
     mmMainMenu: TMainMenu;
     sbStatus: TStatusBar;
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure FormDestroy(Sender: TObject);
     procedure jtMainTabCloseTabClicked(Sender: TObject);
     procedure jtMainTabResize(Sender: TObject);
   private
@@ -42,6 +44,20 @@ uses JupiterFormTabSheet;
 procedure TFMain.jtMainTabCloseTabClicked(Sender: TObject);
 begin
   jtMainTab.CloseTab(jtMainTab.ActivePageIndex);
+end;
+
+procedure TFMain.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  while jtMainTab.PageCount > 0 do
+    jtMainTab.CloseTab(0);
+end;
+
+procedure TFMain.FormDestroy(Sender: TObject);
+begin
+  while jtMainTab.PageCount > 0 do
+    jtMainTab.CloseTab(0);
+
+  inherited;
 end;
 
 procedure TFMain.jtMainTabResize(Sender: TObject);

@@ -213,6 +213,11 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="jupiterStringUtils"/>
       </Unit>
+      <Unit>
+        <Filename Value="../scripts/ujupiterdatabasescript.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uJupiterDatabaseScript"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

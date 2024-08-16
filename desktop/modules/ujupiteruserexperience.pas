@@ -34,12 +34,25 @@ begin
 end;
 
 procedure TJupiterUserExperience.Internal_Prepare;
+var
+  vrWizard : TJupiterDatabaseWizard;
 begin
   inherited Internal_Prepare;
 
-  Self.Internal_CreateRouteIfDontExists('Preferências', '/menu/show/userPref/', NULL_KEY, ICON_APPLICATION, 100);
+  vrWizard := vrJupiterApp.NewWizard;
+  try
+    if Self.Internal_CreateMacroIfDontExists('menu.show.incFont.click', 'Clique do botão Incrementar fonte', CreateStringList('program macro;' + #13#10 + 'begin' + #13#10 + '  IncFont();' + #13#10 + 'end.')) then
+      Self.Internal_CreateRouteIfDontExists('Aumentar fonte', '/menu/show/incFont/', vrWizard.GetLastID('MACROS'), NULL_KEY, 70);
 
-  Self.Internal_CreateVariablIfDontExists(FIELD_FONT_SIZE, 'Tamanho da fonte', '9');
+    if Self.Internal_CreateMacroIfDontExists('menu.show.decFont.click', 'Clique do botão Decrementar fonte', CreateStringList('program macro;' + #13#10 + 'begin' + #13#10 + '  DecFont();' + #13#10 + 'end.')) then
+      Self.Internal_CreateRouteIfDontExists('Diminuir fonte', '/menu/show/decFont/', vrWizard.GetLastID('MACROS'), NULL_KEY, 70);
+
+    Self.Internal_CreateRouteIfDontExists('Preferências', '/menu/show/userPref/', NULL_KEY, ICON_APPLICATION, 100);
+
+    Self.Internal_CreateVariablIfDontExists(FIELD_FONT_SIZE, 'Tamanho da fonte', '9');
+  finally
+    FreeAndNil(vrWizard);
+  end;
 end;
 
 end.

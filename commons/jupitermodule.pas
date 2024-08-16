@@ -19,10 +19,13 @@ type
     function Internal_GetModuleID : String; virtual;
     function Internal_GetModuleTitle : String; virtual;
     procedure Internal_Prepare; virtual;
+    procedure Internal_SetVariableValue(prID, prNewValue : String);
 
     function Internal_CreateRouteIfDontExists(prTitle, prRoute : String; prDestiny, prIcon, prZIndex : Integer) : Boolean;
     function Internal_CreateMacroIfDontExists(prID, prTitle : String; prMacro : TStrings) : Boolean;
     function Internal_CreateVariablIfDontExists(prId, prName, prValue : String) : Boolean;
+
+    procedure Internal_AddConfigFromDatabase(prId : String);
   published
     property ModuleID    : String               read Internal_GetModuleID;
     property ModuleTitle : String               read Internal_GetModuleTitle;
@@ -90,6 +93,36 @@ begin
     if not vrWizard.Exists('MODULES', ' MODULEID = "' + Self.ModuleID + '" ') then
       vrWizard.ExecuteScript(CreateStringList(' INSERT INTO MODULES (NAME, MODULEID) VALUES ("' + Self.ModuleTitle + '", "' + Self.ModuleID + '") '));
   finally
+    FreeAndNil(vrWizard);
+  end;
+end;
+
+procedure TJupiterModule.Internal_SetVariableValue(prID, prNewValue: String);
+var
+  vrQry    : TSQLQuery;
+  vrWizard : TJupiterDatabaseWizard;
+begin
+  vrWizard := vrJupiterApp.NewWizard;
+  vrQry    := vrWizard.NewQuery;
+  try
+    vrQry.SQL.Add(' UPDATE VARIABLES ');
+    vrQry.SQL.Add(' SET VALUE = :PRVALUE ');
+    vrQry.SQL.Add(' WHERE NAME = :PRNAME ');
+    vrQry.ParamByName('PRNAME').AsString  := prID;
+    vrQry.ParamByName('PRVALUE').AsString := prNewValue;
+
+    vrWizard.StartTransaction;
+
+    try
+      vrQry.ExecSQL;
+
+      vrWizard.Commit;
+    except
+      vrWizard.Rollback;
+      raise;
+    end;
+  finally
+    FreeAndNil(vrQry);
     FreeAndNil(vrWizard);
   end;
 end;
@@ -187,7 +220,11 @@ begin
     vrQry := vrWizard.NewQuery;
 
     if vrWizard.Exists('VARIABLES', Format(' NAME = "%0:s" ', [prID])) then
+    begin
+      Self.Internal_AddConfigFromDatabase(prId);
+
       Exit;
+    end;
 
     vrQry.Close;
     vrQry.SQL.Clear;
@@ -209,6 +246,10 @@ begin
 
       vrWizard.Transaction.CommitRetaining;
 
+      Self.Params.AddConfig(prId, prValue, prName);
+
+      Self.Params.VariableById(vrQry.FieldByName('NAME').AsString).OnChangeValue := @Internal_SetVariableValue;
+
       Result := True;
     except
       vrWizard.Transaction.RollbackRetaining;
@@ -217,6 +258,31 @@ begin
   finally
     FreeAndNil(vrWizard);
     FreeAndNil(vrQry);
+  end;
+end;
+
+procedure TJupiterModule.Internal_AddConfigFromDatabase(prId: String);
+var
+  vrWizard : TJupiterDatabaseWizard;
+  vrQry : TSQLQuery;
+begin
+  vrWizard := vrJupiterApp.NewWizard;
+  vrQry    := vrWizard.NewQuery;
+  try
+    vrQry.SQL.Add(' SELECT * FROM VARIABLES WHERE NAME = :PRNAME ');
+    vrQry.ParamByName('PRNAME').AsString := prId;
+    vrQry.Open;
+
+    if  vrQry.EOF then
+      Exit;
+
+    Self.Params.AddConfig(vrQry.FieldByName('NAME').AsString, vrQry.FieldByName('VALUE').AsString, vrQry.FieldByName('DESCRIPTION').AsString);
+
+    Self.Params.VariableById(vrQry.FieldByName('NAME').AsString).OnChangeValue := @Internal_SetVariableValue;
+  finally
+    FreeAndNil(vrQry);
+
+    FreeAndNil(vrWizard);
   end;
 end;
 

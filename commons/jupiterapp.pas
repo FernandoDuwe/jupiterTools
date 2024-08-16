@@ -82,6 +82,8 @@ end;
 procedure TJupiterApp.AddModule(prModule: TJupiterModule);
 begin
   Self.ModulesList.Add(prModule);
+
+  Self.Params.AddChildList(prModule.Params);
 end;
 
 procedure TJupiterApp.Prepare;

@@ -97,34 +97,34 @@ begin
   vrWizard := vrJupiterApp.NewWizard;
   try
     for vrVez := 0 to Self.QueryOrigin.Fields.Count - 1 do
-  begin
-    if Self.QueryOrigin.Fields[vrVez].FieldName = 'ID' then
-      Continue;
+    begin
+      if Self.QueryOrigin.Fields[vrVez].FieldName = 'ID' then
+        Continue;
 
 
-    vrReference := JupiterComponentsNewLabel(JupiterStringUtilsNormalizeToPresent(Self.QueryOrigin.Fields[vrVez].DisplayName),
-                                             TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody);
+      vrReference := JupiterComponentsNewLabel(JupiterStringUtilsNormalizeToPresent(Self.QueryOrigin.Fields[vrVez].DisplayName),
+                                               TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody);
 
-    // Pulando linha
-    vrCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM;
+      // Pulando linha
+      vrCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM;
 
-    if vrWizard.IsForeignKeyField(Self.TableName, Self.QueryOrigin.Fields[vrVez].FieldName) then
-      vrReference := JupiterComponentsNewDBComboBox(Self.QueryOrigin.Fields[vrVez],
-                                                    InternalDataSource,
-                                                    TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT),
-                                                    sbBody,
-                                                    vrWizard.GetForeignKeyData(Self.TableName, Self.QueryOrigin.Fields[vrVez].FieldName))
-    else
-      if ((Self.QueryOrigin.Fields[vrVez] is TDateField) or (Self.QueryOrigin.Fields[vrVez] is TDateTimeField)) then
-        vrReference := JupiterComponentsNewDBDatePicker(Self.QueryOrigin.Fields[vrVez], InternalDataSource, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody)
+      if vrWizard.IsForeignKeyField(Self.TableName, Self.QueryOrigin.Fields[vrVez].FieldName) then
+        vrReference := JupiterComponentsNewDBComboBox(Self.QueryOrigin.Fields[vrVez],
+                                                      InternalDataSource,
+                                                      TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT),
+                                                      sbBody,
+                                                      vrWizard.GetForeignKeyData(Self.TableName, Self.QueryOrigin.Fields[vrVez].FieldName))
       else
-        if Self.QueryOrigin.Fields[vrVez] is TBlobField then
-          vrReference := JupiterComponentsNewDBMemo(Self.QueryOrigin.Fields[vrVez], InternalDataSource, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody)
+        if ((Self.QueryOrigin.Fields[vrVez] is TDateField) or (Self.QueryOrigin.Fields[vrVez] is TDateTimeField)) then
+          vrReference := JupiterComponentsNewDBDatePicker(Self.QueryOrigin.Fields[vrVez], InternalDataSource, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody)
         else
-          vrReference := JupiterComponentsNewDBEdit(Self.QueryOrigin.Fields[vrVez], InternalDataSource, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody);
+          if Self.QueryOrigin.Fields[vrVez] is TBlobField then
+            vrReference := JupiterComponentsNewDBMemo(Self.QueryOrigin.Fields[vrVez], InternalDataSource, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody)
+          else
+            vrReference := JupiterComponentsNewDBEdit(Self.QueryOrigin.Fields[vrVez], InternalDataSource, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody);
 
-    // Pulando linha
-        vrCurrentLine := vrReference.Bottom + FORM_MARGIN_TOP + FORM_MARGIN_BOTTOM;
+      // Pulando linha
+          vrCurrentLine := vrReference.Bottom + FORM_MARGIN_TOP + FORM_MARGIN_BOTTOM;
   end;
   finally
     FreeAndNil(vrWizard);
