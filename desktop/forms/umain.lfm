@@ -8,7 +8,9 @@ inherited FMain: TFMain
   ClientWidth = 1228
   Menu = mmMainMenu
   OnClose = FormClose
+  OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnShow = FormShow
   inherited pnSearchBar: TPanel
     Width = 1228
     ClientWidth = 1228

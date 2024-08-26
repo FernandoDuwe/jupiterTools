@@ -1,30 +1,22 @@
 inherited FNewTask: TFNewTask
+  Left = 470
+  Top = 196
   Caption = 'Iniciar uma nova tarefa'
-  object tvTreeMenu: TTreeView[1]
+  inherited fpOptions: TFlowPanel
+    TabOrder = 2
+  end
+  object tvTreeMenu: TTreeView[2]
     Left = 0
-    Height = 407
-    Top = 50
-    Width = 248
-    Align = alLeft
-    TabOrder = 1
-  end
-  object splDivider: TSplitter[2]
-    Left = 248
-    Height = 407
-    Top = 50
-    Width = 5
-  end
-  object lvExplorer: TListView[3]
-    Left = 253
-    Height = 407
-    Top = 50
-    Width = 626
+    Height = 406
+    Top = 51
+    Width = 879
     Align = alClient
-    Columns = <>
-    TabOrder = 3
+    ReadOnly = True
+    TabOrder = 1
+    Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
   end
-  inherited acOptions: TActionList[4]
+  inherited acOptions: TActionList[3]
   end
-  inherited tmrAutoUpdater: TTimer[5]
+  inherited tmrAutoUpdater: TTimer[4]
   end
 end

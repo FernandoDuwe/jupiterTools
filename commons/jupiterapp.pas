@@ -43,6 +43,7 @@ type
     procedure SetInternalWizardData(prWizard : TJupiterDatabaseWizard);
 
     procedure RunMacro(prId : Integer);
+    procedure RunMacro(prMacroId : String);
 
     constructor Create(prAppID, prAppName : String); virtual;
     destructor Destroy; override;
@@ -151,6 +152,26 @@ begin
   try
     vrQry.SQL.Add(' SELECT ID, MACRO FROM MACROS WHERE ID = :PRID ');
     vrQry.ParamByName('PRID').AsInteger := prId;
+    vrQry.Open;
+
+    vrScript.Script.Add(vrQry.FieldByName('MACRO').AsString);
+
+    vrScript.Execute;
+  finally
+    FreeAndNil(vrScript);
+  end;
+end;
+
+procedure TJupiterApp.RunMacro(prMacroId: String);
+var
+  vrScript : TJupiterScript;
+  vrQry    : TSQLQuery;
+begin
+  vrScript := Self.NewScript;
+  vrQry    := Self.NewWizard.NewQuery;
+  try
+    vrQry.SQL.Add(' SELECT ID, MACRO FROM MACROS WHERE MACROID = :PRID ');
+    vrQry.ParamByName('PRID').AsString := prMacroId;
     vrQry.Open;
 
     vrScript.Script.Add(vrQry.FieldByName('MACRO').AsString);

@@ -50,6 +50,7 @@ type
     function AsInteger : Integer;
     function AsDouble : Double;
     function IsEmpty : Boolean;
+    function AsBool : Boolean;
 
     procedure AsList(var prList : TStrings); virtual;
   end;
@@ -168,6 +169,11 @@ end;
 function TJupiterVariable.IsEmpty: Boolean;
 begin
   Result := Trim(Self.Value) = EmptyStr;
+end;
+
+function TJupiterVariable.AsBool: Boolean;
+begin
+  Result := Self.Value = BOOL_TRUE_STR;
 end;
 
 procedure TJupiterVariable.AsList(var prList: TStrings);

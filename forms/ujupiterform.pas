@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ActnList, ExtCtrls,
   ButtonPanel, StdCtrls, Menus, ComCtrls, Buttons, JupiterConsts, JupiterFormTabSheet,
-  jupiterformutils, JupiterApp, uJupiterAction, jupiterDesktopApp;
+  jupiterformutils, JupiterApp, uJupiterAction, jupiterDesktopApp, JupiterVariable;
 
 type
 
@@ -29,12 +29,14 @@ type
     FShowSearchBar : Boolean;
     FActionGroup   : TJupiterActionGroup;
     FOwnerTab      : TJupiterFormTabSheet;
+    FParams        : TJupiterVariableList;
 
     procedure Internal_SetSearchBar(prNewValue : Boolean);
   published
     property ActionGroup   : TJupiterActionGroup  read FActionGroup   write FActionGroup;
     property ShowSearchBar : Boolean              read FShowSearchBar write Internal_SetSearchBar default False;
     property OwnerTab      : TJupiterFormTabSheet read FOwnerTab      write FOwnerTab;
+    property Params        : TJupiterVariableList read FParams        write FParams;
 
     procedure Internal_UpdateComponents; virtual;
     procedure Internal_UpdateDatasets; virtual;
@@ -95,10 +97,13 @@ begin
   Self.FActionGroup.FlowPanel := fpOptions;
 
   Self.FActionGroup.ImageList := TJupiterDesktopApp(vrJupiterApp).ImageList;
+
+  Self.FParams := TJupiterVariableList.Create;
 end;
 
 procedure TFJupiterForm.FormDestroy(Sender: TObject);
 begin
+  FreeAndNil(Self.FParams);
   FreeAndNil(Self.FActionGroup);
 end;
 

@@ -47,9 +47,12 @@ begin
     if Self.Internal_CreateMacroIfDontExists('menu.show.decFont.click', 'Clique do botão Decrementar fonte', CreateStringList('program macro;' + #13#10 + 'begin' + #13#10 + '  DecFont();' + #13#10 + 'end.')) then
       Self.Internal_CreateRouteIfDontExists('Diminuir fonte', '/menu/show/decFont/', vrWizard.GetLastID('MACROS'), NULL_KEY, 70);
 
-    Self.Internal_CreateRouteIfDontExists('Preferências', '/menu/show/userPref/', NULL_KEY, ICON_APPLICATION, 100);
+    if Self.Internal_CreateMacroIfDontExists('menu.show.userPref.click', 'Clique do botão Preferências do usuário', CreateStringList('program macro;' + #13#10 + 'begin' + #13#10 + '  OpenForm(''/forms/userPreference'');' + #13#10 + 'end.')) then
+      Self.Internal_CreateRouteIfDontExists('Preferências', '/menu/show/userPref/', vrWizard.GetLastID('MACROS'), ICON_APPLICATION, 100);
 
     Self.Internal_CreateVariablIfDontExists(FIELD_FONT_SIZE, 'Tamanho da fonte', '9');
+
+    Self.Internal_CreateVariablIfDontExists(FORM_ALWAYS_MODAL, 'Formulário ao abrir sempre modal', BOOL_TRUE_STR);
   finally
     FreeAndNil(vrWizard);
   end;

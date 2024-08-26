@@ -5,11 +5,16 @@ unit jupiterformcomponenttils;
 interface
 
 uses
-  Classes, Controls, SysUtils, StdCtrls, jupiterformutils, JupiterConsts,
+  Classes, ComCtrls, Controls, SysUtils, StdCtrls, jupiterformutils, JupiterConsts,
   jupiterDatabaseWizard, DBCtrls, DB;
 
   function JupiterComponentsNewLabel(prText : String; prPosition : TJupiterPosition; prOwner : TWinControl) : TJupiterComponentReference;
 
+  function JupiterComponentsNewTrackBar(prValue, prMin, prMax : Integer; prPosition : TJupiterPosition; prOwner : TWinControl; prOnChange : TNotifyEvent) : TJupiterComponentReference;
+
+  function JupiterComponentsNewCheckBox(prCaption : String; prValue : Boolean; prPosition : TJupiterPosition; prOwner : TWinControl; prOnChange : TNotifyEvent) : TJupiterComponentReference;
+
+  // Componentes de banco de dados
   function JupiterComponentsNewDBEdit(prField : TField; prDataSource : TDataSource; prPosition : TJupiterPosition; prOwner : TWinControl) : TJupiterComponentReference;
 
   function JupiterComponentsNewDBDatePicker(prField : TField; prDataSource : TDataSource; prPosition : TJupiterPosition; prOwner : TWinControl) : TJupiterComponentReference;
@@ -39,6 +44,50 @@ begin
                                               prPosition.Left + vrLabel.Width,
                                               prPosition.Top + vrLabel.Height,
                                               vrLabel);
+end;
+
+function JupiterComponentsNewTrackBar(prValue, prMin, prMax : Integer; prPosition: TJupiterPosition; prOwner: TWinControl; prOnChange : TNotifyEvent): TJupiterComponentReference;
+var
+  vrTrackBar : TTrackBar;
+begin
+  vrTrackBar           := TTrackBar.Create(prOwner);
+  vrTrackBar.Parent    := prOwner;
+  vrTrackBar.AutoSize  := True;
+  vrTrackBar.Position  := prValue;
+  vrTrackBar.Min       := prMin;
+  vrTrackBar.Max       := prMax;
+  vrTrackBar.Font.Size := GetFontSize;
+  vrTrackBar.Top       := prPosition.Top;
+  vrTrackBar.Left      := prPosition.Left;
+  vrTrackBar.Width     := prOwner.Width - prPosition.Left - FORM_MARGIN_RIGHT;
+  vrTrackBar.Anchors   := [akTop, akLeft, akRight];
+  vrTrackBar.OnChange  := prOnChange;
+
+  Result := TJupiterComponentReference.Create(prPosition.Top,
+                                              prPosition.Left,
+                                              prPosition.Left + vrTrackBar.Width,
+                                              prPosition.Top + vrTrackBar.Height,
+                                              vrTrackBar);
+end;
+
+function JupiterComponentsNewCheckBox(prCaption : String; prValue: Boolean; prPosition: TJupiterPosition; prOwner: TWinControl; prOnChange: TNotifyEvent): TJupiterComponentReference;
+var
+  vrCheckBox : TCheckBox;
+begin
+  vrCheckBox           := TCheckBox.Create(prOwner);
+  vrCheckBox.Parent    := prOwner;
+  vrCheckBox.Checked   := prValue;
+  vrCheckBox.Caption   := prCaption;
+  vrCheckBox.Font.Size := GetFontSize;
+  vrCheckBox.Top       := prPosition.Top;
+  vrCheckBox.Left      := prPosition.Left;
+  vrCheckBox.OnChange  := prOnChange;
+
+  Result := TJupiterComponentReference.Create(prPosition.Top,
+                                              prPosition.Left,
+                                              prPosition.Left + vrCheckBox.Width,
+                                              prPosition.Top + vrCheckBox.Height,
+                                              vrCheckBox);
 end;
 
 function JupiterComponentsNewDBEdit(prField : TField; prDataSource : TDataSource; prPosition : TJupiterPosition; prOwner : TWinControl): TJupiterComponentReference;

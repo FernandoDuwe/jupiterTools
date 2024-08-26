@@ -2,6 +2,13 @@ inherited FCustomDatabaseForm: TFCustomDatabaseForm
   Left = 354
   Top = 234
   OnCreate = FormCreate
+  inherited pnSearchBar: TPanel
+    Top = 1
+  end
+  inherited fpOptions: TFlowPanel
+    Top = 0
+    Align = alTop
+  end
   object sbBody: TScrollBox[2]
     Left = 0
     Height = 406

@@ -5,8 +5,8 @@ unit uJupiterDesktopAppScript;
 interface
 
 uses
-  Classes, jupiterScript, JupiterConsts, JupiterApp,
-  uCustomDatabaseForm, SysUtils, PascalScript, uPSComponent, Forms, SQLDB;
+  Classes, jupiterScript, JupiterConsts, JupiterApp, uCustomDatabaseForm,
+  ucustomdatabasegrid, SysUtils, PascalScript, uPSComponent, Forms, SQLDB;
 
 type
 
@@ -23,6 +23,7 @@ type
   procedure JupiterAppDesktopOpenForm(prForm : String);
   procedure JupiterAppDesktopOpenFormQuery(prQuery : TSQLQuery);
   procedure JupiterAppDesktopOpenFormFromTableId(prTableName : String; prID : Integer);
+  procedure JupiterAppDesktopOpenGridFromTable(prTableName : String);
   procedure JupiterAppDesktopUpdateForms;
   procedure JupiterAppDesktopIncFont;
   procedure JupiterAppDesktopDecFont;
@@ -57,6 +58,17 @@ begin
   TFCustomDatabaseForm(vrForm).FromReference(TJupiterDatabaseReference.Create(prTableName, prID));
 
   TJupiterDesktopApp(vrJupiterApp).OpenForm(vrForm as TFCustomDatabaseForm);
+end;
+
+procedure JupiterAppDesktopOpenGridFromTable(prTableName: String);
+var
+  vrForm : TForm;
+begin
+  vrForm := TJupiterDesktopApp(vrJupiterApp).NewFormByRoute(CUSTOMGRIDDATABASE_PATH);
+
+  TFCustomDatabaseGrid(vrForm).FromReference(TJupiterDatabaseReference.Create(prTableName, NULL_KEY));
+
+  TJupiterDesktopApp(vrJupiterApp).OpenForm(vrForm as TFCustomDatabaseGrid);
 end;
 
 procedure JupiterAppDesktopUpdateForms;
@@ -100,6 +112,8 @@ end;
 procedure TJupiterDesktopAppScript.DoCompile(prSender: TPSScript);
 begin
   prSender.AddFunction(@JupiterAppDesktopOpenForm, 'procedure OpenForm(Form: String);');
+  prSender.AddFunction(@JupiterAppDesktopOpenGridFromTable, 'procedure OpenGridFromTable(prTableName : String);');
+
   prSender.AddFunction(@JupiterAppDesktopClose, 'procedure CloseApp();');
   prSender.AddFunction(@JupiterAppDesktopUpdateForms, 'procedure UpdateForms();');
   prSender.AddFunction(@JupiterAppDesktopIncFont, 'procedure IncFont();');
@@ -109,6 +123,8 @@ end;
 function TJupiterDesktopAppScript.AnalyseCode: TJupiterScriptAnalyserList;
 begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenForm(Form: String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenGridFromTable(prTableName: String);'));
+
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CloseApp();'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure UpdateForms();'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure IncFont();'));

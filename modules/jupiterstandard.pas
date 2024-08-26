@@ -56,11 +56,19 @@ begin
     if Self.Internal_CreateMacroIfDontExists('menu.newTab.click', 'Clique do botão Nova aba', CreateStringList('program macro;' + #13#10 + 'begin' + #13#10 + '  OpenForm(''/forms/newTask'');' + #13#10 + 'end.')) then
       Self.Internal_CreateRouteIfDontExists(EmptyStr, '/menu/newTab/', vrWizard.GetLastID('MACROS'), ICON_ADD, 100);
 
+    Self.Internal_CreateMacroIfDontExists(TRIGGER_ONSTART, 'Evento: Ao iniciar a aplicação', CreateStringList('program macro;' + #13#10 + 'begin' + #13#10 + '  OpenForm(''/forms/newTask'');' + #13#10 + 'end.'));
+
+    Self.Internal_CreateMacroIfDontExists(TRIGGER_ONPROMPT, 'Evento: Ao executar comando via prompt', CreateStringList('program macro;' + #13#10 + 'begin' + #13#10 + '  OpenForm(''/forms/newTask'');' + #13#10 + 'end.'));
+
     // Creating basic routes
     Self.Internal_CreateRouteIfDontExists('Arquivo', '/menu/file/', NULL_KEY, NULL_KEY, 100);
     Self.Internal_CreateRouteIfDontExists('Exibir', '/menu/show/', NULL_KEY, NULL_KEY, 200);
     Self.Internal_CreateRouteIfDontExists('Ferramentas', '/menu/tools/', NULL_KEY, NULL_KEY, 300);
     Self.Internal_CreateRouteIfDontExists('Sobre', '/menu/about/', NULL_KEY, NULL_KEY, 10000);
+
+    Self.Internal_CreateRouteIfDontExists('Cadastros', '/main/records/', NULL_KEY, ICON_RECORDS, 100);
+
+    Self.Internal_CreateRouteIfDontExists('Ferramentas', '/main/tools/', NULL_KEY, ICON_TOOLS, 200);
 
     // Inside File Menu
     Self.Internal_CreateRouteIfDontExists('Novo', '/menu/file/new/', NULL_KEY, ICON_NEW, 100);

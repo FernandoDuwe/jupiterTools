@@ -12,7 +12,9 @@ const
    NEWTASKMENU_PATH : String = '/forms/newTask';
    CONFIG_PATH : String = '/forms/config';
    GENERATOR_PATH : String = '/forms/generator';
+   USERPREFERENCE_PATH : String = '/forms/userPreference';
    CUSTOMDATABASE_PATH : String = '/forms/custom/database';
+   CUSTOMGRIDDATABASE_PATH : String = '/forms/custom/databaseGrid';
 
    ICON_ADD       : SmallInt = 0;
    ICON_NEW       : SmallInt = 1;
@@ -55,10 +57,15 @@ const
 
    NULL_KEY : SmallInt = -1;
 
+   BOOL_TRUE_STR : String = 'Y';
+   BOOL_FALSE_STR : String = 'N';
+
    EMPTY_SPACE_SEPARATOR  : String = '/JUPITERTOOLS\|/JUPITERTOOLS\';
    COLUMN_SPACE_SEPARATOR : String = '      ';
    FIELD_ID_GENERADOR     : String = 'Generator.FormId';
    FIELD_TREE_COLAPSE     : String = 'MenuTree_Colapse';
+
+   FORM_ALWAYS_MODAL      : String = 'Interface.Form.AlwaysModal';
    FIELD_FONT_SIZE        : String = 'Interface.Font.Size';
 
    CSV_SEPARATOR_REPLACER : String = '[SEMICOLON]';
@@ -95,12 +102,17 @@ const
    JPAS_FLAG_GENERATEFULLFILE : String = '@FLAG_SAVE_COMPILED_FILE';
    JPAS_FLAG_USERCOMMAND : String = '@FLAG_USER_COMMAND';
 
+   // Triggers
+   TRIGGER_ONSTART  : String = 'triggers.onStart';
+   TRIGGER_ONPROMPT : String = 'triggers.onPrompt';
+
    function GetCurrentOS : String;
    function GetDirectorySeparator : String;
    function GetRootDirectory : String;
    function GetCommandLineTool : String;
    function SearchIsPartOf(prData, prQuery : String) : Boolean;
    function CreateStringList(prContent : String) : TStrings;
+   function CreateStringListToMacro(prCommand : String) : TStrings;
 
 type
   // JupiterThreads
@@ -158,6 +170,16 @@ begin
   Result := TStringList.Create;
   Result.Clear;
   Result.Add(prContent);
+end;
+
+function CreateStringListToMacro(prCommand: String): TStrings;
+begin
+  Result := TStringList.Create;
+  Result.Clear;
+  Result.Add('program macro;');
+  Result.Add('begin');
+  Result.Add('  ' + prCommand);
+  Result.Add('end.');
 end;
 
 end.

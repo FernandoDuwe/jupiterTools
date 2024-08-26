@@ -182,7 +182,10 @@ var
   vrQry : TSQLQuery;
   vrDatabase : TJupiterDatabaseWizard;
 begin
-  Self.Caption := String.Format('%1:s #%0:d', [prReference.ID, JupiterStringUtilsNormalizeToPresent(prReference.TableName)]);
+  if prReference.ID = NULL_KEY then
+    Self.Caption := String.Format('%0:s %1:s', ['Novo', JupiterStringUtilsNormalizeToPresent(prReference.TableName)])
+  else
+    Self.Caption := String.Format('%1:s #%0:d', [prReference.ID, JupiterStringUtilsNormalizeToPresent(prReference.TableName)]);
 
   vrDatabase := vrJupiterApp.NewWizard;
   try
@@ -192,6 +195,9 @@ begin
     Self.FID        := prReference.ID;
   finally
     vrQry.Open;
+
+    if prReference.ID = NULL_KEY then
+      vrQry.Insert;
 
     Self.QueryOrigin := vrQry;
   end;

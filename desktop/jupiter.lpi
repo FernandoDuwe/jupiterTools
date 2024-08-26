@@ -218,6 +218,29 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="uJupiterDatabaseScript"/>
       </Unit>
+      <Unit>
+        <Filename Value="../commons/jupitertreeviewmenugenerator.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../modules/jupiterutilspas.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms/ucustomdatabasegrid.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FCustomDatabaseGrid"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms/uuserpreferences.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FUserPreferences"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uUserPreferences"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

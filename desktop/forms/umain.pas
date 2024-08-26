@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, Menus,
   ActnList, ExtCtrls, Buttons, uJupiterForm, JupiterFormTab,
-  jupiterMainMenuGenerator, JupiterApp, jupiterDesktopApp;
+  jupiterMainMenuGenerator, JupiterApp, JupiterConsts, jupiterDesktopApp;
 
 type
 
@@ -20,7 +20,9 @@ type
     mmMainMenu: TMainMenu;
     sbStatus: TStatusBar;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure jtMainTabCloseTabClicked(Sender: TObject);
     procedure jtMainTabResize(Sender: TObject);
   private
@@ -52,12 +54,24 @@ begin
     jtMainTab.CloseTab(0);
 end;
 
+procedure TFMain.FormCreate(Sender: TObject);
+begin
+  inherited;
+end;
+
 procedure TFMain.FormDestroy(Sender: TObject);
 begin
   while jtMainTab.PageCount > 0 do
     jtMainTab.CloseTab(0);
 
   inherited;
+end;
+
+procedure TFMain.FormShow(Sender: TObject);
+begin
+  inherited;
+
+  vrJupiterApp.RunMacro(TRIGGER_ONSTART);
 end;
 
 procedure TFMain.jtMainTabResize(Sender: TObject);

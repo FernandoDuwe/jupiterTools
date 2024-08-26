@@ -1,0 +1,41 @@
+inherited FCustomDatabaseGrid: TFCustomDatabaseGrid
+  Left = 667
+  Top = 586
+  OnCreate = FormCreate
+  inherited pnSearchBar: TPanel
+    Top = 1
+  end
+  inherited fpOptions: TFlowPanel
+    Top = 0
+    Align = alTop
+  end
+  object dbMainGrid: TDBGrid[2]
+    Left = 0
+    Height = 406
+    Top = 51
+    Width = 879
+    Align = alClient
+    Color = clWindow
+    Columns = <>
+    DataSource = InternalDataSource
+    ReadOnly = True
+    TabOrder = 2
+    OnDblClick = dbMainGridDblClick
+  end
+  inherited acOptions: TActionList[3]
+  end
+  inherited tmrAutoUpdater: TTimer[4]
+  end
+  object InternalDataSource: TDataSource[5]
+    DataSet = InternalQuery
+    Left = 574
+    Top = 72
+  end
+  object InternalQuery: TSQLQuery[6]
+    FieldDefs = <>
+    Params = <>
+    Macros = <>
+    Left = 720
+    Top = 72
+  end
+end

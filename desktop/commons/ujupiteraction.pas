@@ -80,8 +80,8 @@ begin
   vrSpeedButton.Hint       := Self.Hint;
   vrSpeedButton.ShowHint   := Self.Hint <> EmptyStr;
   vrSpeedButton.Flat       := True;
-  vrSpeedButton.Height     := GetTextHeight(vrSpeedButton.Caption, vrSpeedButton.Font) + FORM_MARGIN_TOP + FORM_MARGIN_BOTTOM;
-  vrSpeedButton.Width      := GetTextWidth(vrSpeedButton.Caption, vrSpeedButton.Font) + FORM_MARGIN_LEFT + FORM_MARGIN_RIGHT;
+  vrSpeedButton.Height     := GetTextHeight(vrSpeedButton.Caption, vrSpeedButton.Font) + FORM_MARGIN_TOP + FORM_MARGIN_BOTTOM + 10;
+  vrSpeedButton.Width      := GetTextWidth(vrSpeedButton.Caption, vrSpeedButton.Font) + FORM_MARGIN_LEFT + FORM_MARGIN_RIGHT + 30;
   vrSpeedButton.OnClick    := OnClick;
 
   if Assigned(prImageList) then
