@@ -6,8 +6,8 @@ interface
 
 uses
   Classes, SysUtils, JupiterObject, JupiterConsts, JupiterEnviroment,
-  PascalScript, uPSComponent, Forms, uPSCompiler,
-  uPSRuntime, Variants;
+  JupiterVariable, jupiterStringUtils, PascalScript, uPSComponent, Forms,
+  uPSCompiler, uPSRuntime, Variants;
 
 type
 
@@ -50,9 +50,13 @@ type
 
   TJupiterScriptLibrary = class(TJupiterObject)
   protected
+    FOwner : TJupiterObject;
+
     function Internal_GetName : String; virtual;
   published
     property Name : String read Internal_GetName;
+
+    property Owner : TJupiterObject read FOwner write FOwner;
   public
     procedure DoCompile(prSender: TPSScript); virtual;
     function AnalyseCode: TJupiterScriptAnalyserList; virtual;
@@ -60,6 +64,7 @@ type
 
   TJupiterScript = class(TJupiterObject)
   private
+    FScriptID    : String;
     FScript      : TStrings;
     FMessages    : TStrings;
     FRunMessages : TStrings;
@@ -67,6 +72,7 @@ type
     FRunned      : Boolean;
     FUserCommand : String;
     FLibraryList : TJupiterObjectList;
+    FParamList   : TJupiterVariableList;
 
     procedure Internal_OutputMessages(prPSScript : TPSScript);
 
@@ -83,12 +89,15 @@ type
   published
     property Compiled : Boolean read FCompiled;
     property Runned   : Boolean read FRunned;
-    property Messages    : TStrings            read FMessages    write FMessages;
-    property RunMessages : TStrings            read FRunMessages write FRunMessages;
-    property Script      : TStrings            read FScript;
+    property Messages    : TStrings             read FMessages    write FMessages;
+    property RunMessages : TStrings             read FRunMessages write FRunMessages;
+    property Script      : TStrings             read FScript;
+    property Params      : TJupiterVariableList read FParamList   write FParamList;
 
     property LibraryList : TJupiterObjectList read FLibraryList write FLibraryList;
     property UserCommand : String read FUserCommand write FUserCommand;
+
+    property ScriptID : String read FScriptID;
   public
     Flags : TJupiterScriptFlags;
 
@@ -112,7 +121,7 @@ implementation
 
 uses uPSR_std, uPSC_std, uPSR_stdctrls, uPSC_stdctrls, uPSR_forms, uPSC_forms,
      uPSC_graphics, uPSC_controls, uPSC_classes, uPSR_graphics, uPSR_controls,
-     uPSR_classes, uPSC_comobj, uPSR_comobj;
+     uPSR_classes, uPSC_comobj, uPSR_comobj, JupiterApp;
 
 { TJupiterScriptAnalyserList }
 
@@ -269,6 +278,7 @@ function TJupiterScript.Internal_GetFullScript: TStrings;
 var
   vrVez  : Integer;
   vrFile : String;
+  vrAux  : TStrings;
 begin
   Result := TStringList.Create;
   Result.Clear;
@@ -288,11 +298,15 @@ begin
       if AnsiUpperCase(TrimRight(TrimLeft(Self.Script[vrVez]))) = AnsiUpperCase(JPAS_FLAG_GENERATEFULLFILE) then
         Self.Flags.GenerateFullFile := True
       else
+      begin
         Result.Add(Self.Script[vrVez]);
+      end;
     end;
 
   for vrVez := 0 to Result.Count - 1 do
     Result[vrVez] := StringReplace(Result[vrVez], JPAS_FLAG_USERCOMMAND, Self.UserCommand, [rfIgnoreCase, rfReplaceAll]);
+
+  Result.Text := StringReplace(Result.Text, JPAS_FLAG_SCRIPTID, Self.ScriptID, [rfIgnoreCase, rfReplaceAll]);
 end;
 
 procedure TJupiterScript.Internal_IncludeScript(prFileName: String; var prStrings: TStrings);
@@ -370,8 +384,12 @@ function TJupiterScript.Execute: Boolean;
 var
   vrPSScript   : TPSScript;
   vrEnviroment : TJupiterEnviroment;
+  vrVez        : Integer;
 begin
   Self.FMessages.Clear;
+
+  for vrVez := 0 to Self.LibraryList.Count - 1 do
+    TJupiterScriptLibrary(Self.LibraryList.GetAtIndex(vrVez)).Owner := Self;
 
   Self.FCompiled := False;
   Self.FRunned   := False;
@@ -391,6 +409,8 @@ begin
       vrEnviroment := TJupiterEnviroment.Create;
       try
         vrPSScript.Script.SaveToFile(vrEnviroment.FullPath('/temp/compiledFile.jpas'));
+
+        Self.Script.SaveToFile(vrEnviroment.FullPath('/temp/script.jpas'));
       finally
         FreeAndNil(vrEnviroment);
       end;
@@ -432,25 +452,33 @@ end;
 
 constructor TJupiterScript.Create;
 begin
-  Self.Flags.GenerateFullFile := False;
+  try
+    Self.FScriptID := JupiterStringUtilsGenerateGUID;
 
-  Self.FScript := TStringList.Create;
-  Self.FScript.Clear;
+    Self.Flags.GenerateFullFile := False;
 
-  Self.FMessages := TStringList.Create;
-  Self.FMessages.Clear;
+    Self.FParamList := TJupiterVariableList.Create;
 
-  Self.FRunMessages := TStringList.Create;
-  Self.FRunMessages.Clear;
+    Self.FScript := TStringList.Create;
+    Self.FScript.Clear;
 
-  Self.FCompiled := False;
-  Self.FRunned   := False;
+    Self.FMessages := TStringList.Create;
+    Self.FMessages.Clear;
 
-  Self.FUserCommand := EmptyStr;
+    Self.FRunMessages := TStringList.Create;
+    Self.FRunMessages.Clear;
 
-  Self.LibraryList := TJupiterObjectList.Create;
+    Self.FCompiled := False;
+    Self.FRunned   := False;
 
-  vrJupiterScript := Self;
+    Self.FUserCommand := EmptyStr;
+
+    Self.LibraryList := TJupiterObjectList.Create;
+
+    vrJupiterScript := Self;
+  finally
+    vrJupiterApp.Scripts.Add(Self);
+  end;
 end;
 
 destructor TJupiterScript.Destroy;
@@ -458,12 +486,16 @@ begin
   Self.FScript.Clear;
   FreeAndNil(Self.FScript);
 
+  FreeAndNil(Self.FParamList);
+
   Self.FRunMessages.Clear;
   FreeAndNil(Self.FRunMessages);
 
   vrJupiterScript := nil;
 
   FreeAndNil(Self.FLibraryList);
+
+  vrJupiterApp.DeleteScriptById(Self.ScriptID);
 
   inherited Destroy;
 end;

@@ -15,6 +15,7 @@ const
    USERPREFERENCE_PATH : String = '/forms/userPreference';
    CUSTOMDATABASE_PATH : String = '/forms/custom/database';
    CUSTOMGRIDDATABASE_PATH : String = '/forms/custom/databaseGrid';
+   SCRIPTFORM_PATH : String = '/forms/script';
 
    ICON_ADD       : SmallInt = 0;
    ICON_NEW       : SmallInt = 1;
@@ -60,6 +61,8 @@ const
    BOOL_TRUE_STR : String = 'Y';
    BOOL_FALSE_STR : String = 'N';
 
+   STRING_NEWLINE : String = #13#10;
+
    EMPTY_SPACE_SEPARATOR  : String = '/JUPITERTOOLS\|/JUPITERTOOLS\';
    COLUMN_SPACE_SEPARATOR : String = '      ';
    FIELD_ID_GENERADOR     : String = 'Generator.FormId';
@@ -101,10 +104,17 @@ const
    JPAS_INCLUDE : String = '';
    JPAS_FLAG_GENERATEFULLFILE : String = '@FLAG_SAVE_COMPILED_FILE';
    JPAS_FLAG_USERCOMMAND : String = '@FLAG_USER_COMMAND';
+   JPAS_FLAG_SCRIPTID : String = '@FLAG_SCRIPTID';
 
    // Triggers
-   TRIGGER_ONSTART  : String = 'triggers.onStart';
-   TRIGGER_ONPROMPT : String = 'triggers.onPrompt';
+   TRIGGER_ONSTART   : String = 'triggers.onStart';
+   TRIGGER_ONPROMPT  : String = 'triggers.onPrompt';
+
+   // Events
+   EVENT_RECORD_ONENABLE : String = 'events.record.onEnable';
+   EVENT_TABLE_ONENABLE  : String = 'events.table.onEnable';
+   EVENT_RECORD_ONVISIBLE : String = 'events.record.onVisible';
+   EVENT_TABLE_ONVISIBLE  : String = 'events.table.onVisible';
 
    function GetCurrentOS : String;
    function GetDirectorySeparator : String;
@@ -177,6 +187,11 @@ begin
   Result := TStringList.Create;
   Result.Clear;
   Result.Add('program macro;');
+  Result.Add('const');
+  Result.Add('  SCRIPTID = ''' + JPAS_FLAG_SCRIPTID + ''';');
+  Result.Add(EmptyStr);
+  Result.Add('  // Include libraries');
+  Result.Add(EmptyStr);
   Result.Add('begin');
   Result.Add('  ' + prCommand);
   Result.Add('end.');

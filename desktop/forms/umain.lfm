@@ -19,6 +19,7 @@ inherited FMain: TFMain
     end
   end
   inherited fpOptions: TFlowPanel
+    Top = 628
     Width = 1228
     TabOrder = 2
   end
@@ -32,7 +33,7 @@ inherited FMain: TFMain
   object jtMainTab: TJupiterFormTab[3]
     Left = 0
     Height = 578
-    Top = 51
+    Top = 50
     Width = 1228
     Align = alClient
     Images = ilTabs

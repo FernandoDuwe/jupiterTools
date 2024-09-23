@@ -6,7 +6,7 @@ inherited FGenerator: TFGenerator
   object pcOptions: TPageControl[2]
     Left = 0
     Height = 406
-    Top = 51
+    Top = 50
     Width = 879
     ActivePage = tsGenerator
     Align = alClient
@@ -65,6 +65,24 @@ inherited FGenerator: TFGenerator
         OnDblClick = dbGridMacrosDblClick
       end
     end
+    object tsActions: TTabSheet
+      Caption = 'Ações'
+      ClientHeight = 375
+      ClientWidth = 869
+      object dbGridActions: TDBGrid
+        Left = 0
+        Height = 375
+        Top = 0
+        Width = 869
+        Align = alClient
+        Color = clWindow
+        Columns = <>
+        DataSource = dsActions
+        ReadOnly = True
+        TabOrder = 0
+        OnDblClick = dbGridActionsDblClick
+      end
+    end
   end
   inherited acOptions: TActionList[3]
     Left = 344
@@ -97,5 +115,17 @@ inherited FGenerator: TFGenerator
     DataSet = qryMacro
     Left = 456
     Top = 272
+  end
+  object qryActions: TSQLQuery[9]
+    FieldDefs = <>
+    Params = <>
+    Macros = <>
+    Left = 336
+    Top = 336
+  end
+  object dsActions: TDataSource[10]
+    DataSet = qryActions
+    Left = 456
+    Top = 336
   end
 end

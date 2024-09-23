@@ -20,6 +20,7 @@ inherited FCustomDatabaseGrid: TFCustomDatabaseGrid
     DataSource = InternalDataSource
     ReadOnly = True
     TabOrder = 2
+    OnColEnter = dbMainGridColEnter
     OnDblClick = dbMainGridDblClick
   end
   inherited acOptions: TActionList[3]

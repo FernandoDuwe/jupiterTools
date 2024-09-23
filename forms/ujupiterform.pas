@@ -30,6 +30,7 @@ type
     FActionGroup   : TJupiterActionGroup;
     FOwnerTab      : TJupiterFormTabSheet;
     FParams        : TJupiterVariableList;
+    FUpdateCount   : Integer;
 
     procedure Internal_SetSearchBar(prNewValue : Boolean);
   published
@@ -43,6 +44,7 @@ type
     procedure Internal_UpdateCalcs; virtual;
     procedure Internal_PrepareForm; virtual;
     procedure Internal_Resize; virtual;
+    function Internal_OnRequestData : TJupiterVariableList; virtual;
   public
     procedure PrepareForm; virtual;
     procedure UpdateForm(prUpdateDatasets : Boolean = True; prUpdateComponentes : Boolean = True; prUpdateCalcs : Boolean = True); virtual;
@@ -70,9 +72,14 @@ end;
 
 procedure TFJupiterForm.tmrAutoUpdaterTimer(Sender: TObject);
 begin
+  Self.FUpdateCount := Self.FUpdateCount + 1;
+
+  if (Self.FUpdateCount >= 3) then
+    Self.FUpdateCount := 0;
+
   tmrAutoUpdater.Enabled := False;
 
-  Self.UpdateForm(False);
+  Self.UpdateForm(Self.FUpdateCount = 0);
 
   tmrAutoUpdater.Enabled := True;
 end;
@@ -93,10 +100,14 @@ end;
 
 procedure TFJupiterForm.FormCreate(Sender: TObject);
 begin
+  Self.FUpdateCount := 1;
+
   Self.FActionGroup := TJupiterActionGroup.Create;
   Self.FActionGroup.FlowPanel := fpOptions;
 
   Self.FActionGroup.ImageList := TJupiterDesktopApp(vrJupiterApp).ImageList;
+
+  Self.FActionGroup.OnRequestData := @Internal_OnRequestData;
 
   Self.FParams := TJupiterVariableList.Create;
 end;
@@ -116,6 +127,8 @@ procedure TFJupiterForm.Internal_UpdateComponents;
 begin
   DrawForm(Self);
 
+  Self.ActionGroup.UpdateActions;
+
   pnSearchBar.Visible := Self.ShowSearchBar;
 end;
 
@@ -131,7 +144,7 @@ end;
 
 procedure TFJupiterForm.Internal_PrepareForm;
 begin
-
+//  fpOptions.Align := alBottom;
 end;
 
 procedure TFJupiterForm.Internal_Resize;
@@ -141,6 +154,11 @@ begin
   edSearch.Width := pnSearchBar.Width - FORM_MARGIN_LEFT - FORM_MARGIN_RIGHT;
 
   pnSearchBar.Width := FORM_MARGIN_TOP + edSearch.Height + FORM_MARGIN_BOTTOM;
+end;
+
+function TFJupiterForm.Internal_OnRequestData: TJupiterVariableList;
+begin
+  Result := TJupiterVariableList.Create;
 end;
 
 procedure TFJupiterForm.PrepareForm;

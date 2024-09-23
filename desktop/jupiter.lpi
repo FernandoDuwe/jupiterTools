@@ -25,6 +25,12 @@
     </RunParams>
     <RequiredPackages>
       <Item>
+        <PackageName Value="SynEditDsgn"/>
+      </Item>
+      <Item>
+        <PackageName Value="SynEdit"/>
+      </Item>
+      <Item>
         <PackageName Value="DateTimeCtrlsDsgn"/>
       </Item>
       <Item>
@@ -240,6 +246,14 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uUserPreferences"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms/uscripteditorform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FScriptEditorForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uScriptEditorForm"/>
       </Unit>
     </Units>
   </ProjectOptions>

@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, DBGrids, uJupiterForm,
   jupiterDatabaseWizard, JupiterApp, jupiterStringUtils, jupiterformutils,
-  JupiterConsts, uJupiterAction, DB, SQLDB;
+  JupiterConsts, JupiterVariable, uJupiterAction, DB, SQLDB;
 
 type
 
@@ -17,6 +17,7 @@ type
     InternalDataSource: TDataSource;
     dbMainGrid: TDBGrid;
     InternalQuery: TSQLQuery;
+    procedure dbMainGridColEnter(Sender: TObject);
     procedure dbMainGridDblClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
   private
@@ -27,6 +28,8 @@ type
     procedure Internal_UpdateDatasets; override;
 
     procedure Internal_OnNew(Sender: TObject);
+
+    function Internal_OnRequestData :  TJupiterVariableList; override;
   public
     procedure FromReference(prReference : TJupiterDatabaseReference);
   end;
@@ -65,6 +68,11 @@ begin
   JupiterAppDesktopOpenFormFromTableId(Self.FReference.TableName, InternalQuery.FieldByName('ID').AsInteger);
 end;
 
+procedure TFCustomDatabaseGrid.dbMainGridColEnter(Sender: TObject);
+begin
+  Self.UpdateForm(False);
+end;
+
 procedure TFCustomDatabaseGrid.Internal_UpdateComponents;
 var
   vrVez : Integer;
@@ -86,19 +94,46 @@ begin
   Self.ShowSearchBar := True;
 
   Self.ActionGroup.AddAction(TJupiterAction.Create('Novo', 'Clique aqui para criar um novo registro', ICON_NEW, @Internal_OnNew));
+
+  Self.ActionGroup.TableName := Self.FReference.TableName;
 end;
 
 procedure TFCustomDatabaseGrid.Internal_UpdateDatasets;
+var
+  vrId : Integer;
 begin
   inherited Internal_UpdateDatasets;
 
+  vrId := NULL_KEY;
+
+  if InternalQuery.Active then
+    if ((not InternalQuery.EOF) and (not InternalQuery.FieldByName('ID').IsNull)) then
+      vrId := InternalQuery.FieldByName('ID').AsInteger;
+
   InternalQuery.Close;
   InternalQuery.Open;
+
+  if vrId <> NULL_KEY then
+    InternalQuery.Locate('ID', vrId,[]);
 end;
 
 procedure TFCustomDatabaseGrid.Internal_OnNew(Sender: TObject);
 begin
   JupiterAppDesktopOpenFormFromTableId(Self.FReference.TableName, NULL_KEY);
+end;
+
+function TFCustomDatabaseGrid.Internal_OnRequestData: TJupiterVariableList;
+var
+  vrVez : Integer;
+begin
+  Result := inherited Internal_OnRequestData;
+
+  if not Self.InternalQuery.EOF then
+  begin
+    for vrVez := 0 to Self.InternalQuery.FieldCount - 1 do
+      if not Result.Exists(Self.InternalQuery.Fields[vrVez].FieldName) then
+        Result.AddVariable(Self.InternalQuery.Fields[vrVez].FieldName, Self.InternalQuery.Fields[vrVez].AsString, EmptyStr);
+  end;
 end;
 
 procedure TFCustomDatabaseGrid.FromReference(prReference: TJupiterDatabaseReference);

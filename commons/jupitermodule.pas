@@ -24,8 +24,12 @@ type
     function Internal_CreateRouteIfDontExists(prTitle, prRoute : String; prDestiny, prIcon, prZIndex : Integer) : Boolean;
     function Internal_CreateMacroIfDontExists(prID, prTitle : String; prMacro : TStrings) : Boolean;
     function Internal_CreateVariablIfDontExists(prId, prName, prValue : String) : Boolean;
+    function Internal_CreateActionIfDontExists(prId, prTitle, prTable : String; prIcon, prZIndex : Integer; prMacro, prMacroEnabled, prMacroVisible : TStrings) : Boolean;
+    function Internal_CreateActionIfDontExists(prId, prTitle, prTable : String; prIcon, prZIndex : Integer; prMacro, prMacroEnabled, prMacroVisible : Integer) : Boolean;
 
     procedure Internal_AddConfigFromDatabase(prId : String);
+
+    function Internal_GetMacroById(prMacroID : String): Integer;
   published
     property ModuleID    : String               read Internal_GetModuleID;
     property ModuleTitle : String               read Internal_GetModuleTitle;
@@ -261,6 +265,119 @@ begin
   end;
 end;
 
+function TJupiterModule.Internal_CreateActionIfDontExists(prId, prTitle, prTable : String; prIcon, prZIndex : Integer; prMacro, prMacroEnabled, prMacroVisible : TStrings): Boolean;
+var
+  vrWizard : TJupiterDatabaseWizard;
+  vrQry : TSQLQuery;
+  vrMacro : Integer;
+  vrMacroEnable : Integer;
+  vrMacroVisible : Integer;
+begin
+  Result := False;
+
+  vrWizard := vrJupiterApp.NewWizard;
+  try
+    vrQry := vrWizard.NewQuery;
+
+    if vrWizard.Exists('ACTIONS', Format(' TABLENAME = "%0:s" AND NAME = "%1:s" ', [prTable, prId])) then
+      Exit;
+
+    vrQry.Close;
+    vrQry.SQL.Clear;
+    vrQry.SQL.Add(' SELECT * FROM ACTIONS WHERE 1 = 2 ');
+    vrQry.InsertSQL.Add(' INSERT INTO ACTIONS (NAME, TITLE, TABLENAME, ICON, ZINDEX, MACRO, MACRO_ENABLE, MACRO_VISIBLE) VALUES (:NAME, :TITLE, :TABLENAME, :ICON, :ZINDEX, :MACRO, :MACRO_ENABLE, :MACRO_VISIBLE) ');
+    vrQry.Open;
+
+    if not vrWizard.Transaction.Active then
+      vrWizard.Transaction.StartTransaction;
+
+    Self.Internal_CreateMacroIfDontExists(prId + '.OnClick', prId + '.OnClick', prMacro);
+
+    vrMacro := vrWizard.GetLastID('MACROS');
+
+    Self.Internal_CreateMacroIfDontExists(prId + '.Enabled', prId + '.Enabled', prMacroEnabled);
+
+    vrMacroEnable := vrWizard.GetLastID('MACROS');
+
+    Self.Internal_CreateMacroIfDontExists(prId + '.Visible', prId + '.Visible', prMacroVisible);
+
+    vrMacroVisible := vrWizard.GetLastID('MACROS');
+
+    try
+      vrQry.Insert;
+      vrQry.FieldByName('NAME').AsString := prId;
+      vrQry.FieldByName('TITLE').AsString := prTitle;
+      vrQry.FieldByName('TABLENAME').AsString := prTable;
+      vrQry.FieldByName('ICON').AsInteger := prIcon;
+      vrQry.FieldByName('ZINDEX').AsInteger := prZIndex;
+      vrQry.FieldByName('MACRO').AsInteger := vrMacro;
+      vrQry.FieldByName('MACRO_ENABLE').AsInteger := vrMacroEnable;
+      vrQry.FieldByName('MACRO_VISIBLE').AsInteger := vrMacroVisible;
+      vrQry.Post;
+      vrQry.ApplyUpdates(-1);
+
+      vrWizard.Transaction.CommitRetaining;
+
+      Result := True;
+    except
+      vrWizard.Transaction.RollbackRetaining;
+      raise;
+    end;
+  finally
+    FreeAndNil(vrWizard);
+    FreeAndNil(vrQry);
+  end;
+end;
+
+function TJupiterModule.Internal_CreateActionIfDontExists(prId, prTitle, prTable: String; prIcon, prZIndex: Integer; prMacro, prMacroEnabled, prMacroVisible: Integer): Boolean;
+var
+  vrWizard : TJupiterDatabaseWizard;
+  vrQry : TSQLQuery;
+begin
+  Result := False;
+
+  vrWizard := vrJupiterApp.NewWizard;
+  try
+    vrQry := vrWizard.NewQuery;
+
+    if vrWizard.Exists('ACTIONS', Format(' TABLENAME = "%0:s" AND NAME = "%1:s" ', [prTable, prId])) then
+      Exit;
+
+    vrQry.Close;
+    vrQry.SQL.Clear;
+    vrQry.SQL.Add(' SELECT * FROM ACTIONS WHERE 1 = 2 ');
+    vrQry.InsertSQL.Add(' INSERT INTO ACTIONS (NAME, TITLE, TABLENAME, ICON, ZINDEX, MACRO, MACRO_ENABLE, MACRO_VISIBLE) VALUES (:NAME, :TITLE, :TABLENAME, :ICON, :ZINDEX, :MACRO, :MACRO_ENABLE, :MACRO_VISIBLE) ');
+    vrQry.Open;
+
+    if not vrWizard.Transaction.Active then
+      vrWizard.Transaction.StartTransaction;
+
+    try
+      vrQry.Insert;
+      vrQry.FieldByName('NAME').AsString := prId;
+      vrQry.FieldByName('TITLE').AsString := prTitle;
+      vrQry.FieldByName('TABLENAME').AsString := prTable;
+      vrQry.FieldByName('ICON').AsInteger := prIcon;
+      vrQry.FieldByName('ZINDEX').AsInteger := prZIndex;
+      vrQry.FieldByName('MACRO').AsInteger := prMacro;
+      vrQry.FieldByName('MACRO_ENABLE').AsInteger := prMacroEnabled;
+      vrQry.FieldByName('MACRO_VISIBLE').AsInteger := prMacroVisible;
+      vrQry.Post;
+      vrQry.ApplyUpdates(-1);
+
+      vrWizard.Transaction.CommitRetaining;
+
+      Result := True;
+    except
+      vrWizard.Transaction.RollbackRetaining;
+      raise;
+    end;
+  finally
+    FreeAndNil(vrWizard);
+    FreeAndNil(vrQry);
+  end;
+end;
+
 procedure TJupiterModule.Internal_AddConfigFromDatabase(prId: String);
 var
   vrWizard : TJupiterDatabaseWizard;
@@ -282,6 +399,20 @@ begin
   finally
     FreeAndNil(vrQry);
 
+    FreeAndNil(vrWizard);
+  end;
+end;
+
+function TJupiterModule.Internal_GetMacroById(prMacroID: String): Integer;
+var
+  vrWizard : TJupiterDatabaseWizard;
+begin
+  Result := NULL_KEY;
+
+  vrWizard := vrJupiterApp.NewWizard;
+  try
+    Result :=  vrWizard.GetField('MACROS', 'ID', 'MACROID = "' + prMacroID + '"');
+  finally
     FreeAndNil(vrWizard);
   end;
 end;

@@ -50,7 +50,6 @@ object FJupiterForm: TFJupiterForm
     Top = 72
   end
   object tmrAutoUpdater: TTimer
-    Interval = 5000
     OnTimer = tmrAutoUpdaterTimer
     Left = 448
     Top = 72

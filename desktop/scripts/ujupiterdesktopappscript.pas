@@ -21,6 +21,7 @@ type
   end;
 
   procedure JupiterAppDesktopOpenForm(prForm : String);
+  procedure JupiterAppDesktopShowMessage(prMessage : String);
   procedure JupiterAppDesktopOpenFormQuery(prQuery : TSQLQuery);
   procedure JupiterAppDesktopOpenFormFromTableId(prTableName : String; prID : Integer);
   procedure JupiterAppDesktopOpenGridFromTable(prTableName : String);
@@ -36,6 +37,11 @@ uses uJupiterForm, uMain, jupiterDesktopApp, jupiterDatabaseWizard;
 procedure JupiterAppDesktopOpenForm(prForm: String);
 begin
   TJupiterDesktopApp(vrJupiterApp).OpenForm(prForm);
+end;
+
+procedure JupiterAppDesktopShowMessage(prMessage: String);
+begin
+  Application.MessageBox(PAnsiChar(prMessage), 'Aviso');
 end;
 
 procedure JupiterAppDesktopOpenFormQuery(prQuery: TSQLQuery);
@@ -118,6 +124,7 @@ begin
   prSender.AddFunction(@JupiterAppDesktopUpdateForms, 'procedure UpdateForms();');
   prSender.AddFunction(@JupiterAppDesktopIncFont, 'procedure IncFont();');
   prSender.AddFunction(@JupiterAppDesktopDecFont, 'procedure DecFont();');
+  prSender.AddFunction(@JupiterAppDesktopShowMessage, 'procedure ShowMessage(prMessage: String);');
 end;
 
 function TJupiterDesktopAppScript.AnalyseCode: TJupiterScriptAnalyserList;
@@ -129,6 +136,7 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure UpdateForms();'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure IncFont();'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure DecFont();'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure ShowMessage(prMessage: String);'));
 end;
 
 end.

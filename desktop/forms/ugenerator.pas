@@ -14,17 +14,22 @@ type
   { TFGenerator }
 
   TFGenerator = class(TFJupiterForm)
+    dbGridActions: TDBGrid;
     dsMacro: TDataSource;
+    dsActions: TDataSource;
     dsRoutes: TDataSource;
     dbGridRoutes: TDBGrid;
     dbGridMacros: TDBGrid;
     mmDetails: TMemo;
     pcOptions: TPageControl;
+    qryActions: TSQLQuery;
     qryRoutes: TSQLQuery;
     qryMacro: TSQLQuery;
+    tsActions: TTabSheet;
     tsMacros: TTabSheet;
     tsRoutes: TTabSheet;
     tsGenerator: TTabSheet;
+    procedure dbGridActionsDblClick(Sender: TObject);
     procedure dbGridMacrosDblClick(Sender: TObject);
     procedure dbGridRoutesDblClick(Sender: TObject);
   private
@@ -58,6 +63,14 @@ begin
     Exit;
 
   JupiterAppDesktopOpenFormFromTableId('MACROS', qryMacro.FieldByName('ID').AsInteger);
+end;
+
+procedure TFGenerator.dbGridActionsDblClick(Sender: TObject);
+begin
+  if qryActions.EOF then
+    Exit;
+
+  JupiterAppDesktopOpenFormFromTableId('ACTIONS', qryActions.FieldByName('ID').AsInteger);
 end;
 
 procedure TFGenerator.Internal_UpdateComponents;
@@ -105,6 +118,28 @@ begin
 
   if dbGridMacros.Columns.Count >= 1 then
     dbGridMacros.Columns[1].Width := PercentOfScreen(Self.Width, 50);
+
+  if qryActions.FieldCount > 0 then
+    qryActions.Fields[0].Visible := False;
+
+  if qryActions.FieldCount > 1 then
+  begin
+    qryActions.Fields[1].DisplayLabel := 'Título';
+    qryActions.Fields[1].DisplayWidth := PercentOfScreen(Self.Width, 50);
+  end;
+
+  if qryActions.FieldCount > 2 then
+  begin
+    qryActions.Fields[2].DisplayLabel := 'Nome';
+    qryActions.Fields[2].DisplayWidth := PercentOfScreen(Self.Width, 50);
+  end;
+
+  if dbGridActions.Columns.Count > 0 then
+    dbGridActions.Columns[0].Width := PercentOfScreen(Self.Width, 50);
+
+
+    if dbGridActions.Columns.Count > 1 then
+      dbGridActions.Columns[1].Width := PercentOfScreen(Self.Width, 50);
 end;
 
 procedure TFGenerator.Internal_UpdateDatasets;
@@ -122,6 +157,12 @@ begin
   qryMacro.SQL.Add(' SELECT M1.ID, M1.NAME, M1.MACROID FROM MACROS M1 ORDER BY 2, 3 ');
   qryMacro.Open;
   qryMacro.First;
+
+  qryActions.Close;
+  qryActions.SQL.Clear;
+  qryActions.SQL.Add(' SELECT M1.ID, M1.TITLE, M1.NAME FROM ACTIONS M1 ORDER BY 2 ');
+  qryActions.Open;
+  qryActions.First;
 end;
 
 procedure TFGenerator.Internal_PrepareForm;
@@ -141,6 +182,9 @@ begin
 
     qryMacro.DataBase := Connection;
     qryRoutes.Transaction := Transaction;
+
+    qryActions.DataBase    := Connection;
+    qryActions.Transaction := Transaction;
   end;
 end;
 

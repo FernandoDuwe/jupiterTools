@@ -14,6 +14,10 @@ type
   TJupiterVariableChangeValue = procedure(prID, prNewValue : String) of object;
   TJupiterVariableGetValue = function(prID : String) : String of object;
 
+    TJupiterVariableParamExists = function(prId : String) : Boolean of object;
+    TJupiterVariableGetParam = function(prId : String) : String of object;
+    TJupiterVariableSetParam = procedure(prId, prValue : String) of object;
+
   TJupiterVariable = class(TJupiterObject)
   private
     FID            : String;

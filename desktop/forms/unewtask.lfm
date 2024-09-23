@@ -8,9 +8,12 @@ inherited FNewTask: TFNewTask
   object tvTreeMenu: TTreeView[2]
     Left = 0
     Height = 406
-    Top = 51
+    Top = 50
     Width = 879
     Align = alClient
+    BackgroundColor = clDefault
+    BorderStyle = bsNone
+    Color = clDefault
     ReadOnly = True
     TabOrder = 1
     Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]

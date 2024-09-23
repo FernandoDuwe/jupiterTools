@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, DBCtrls,
   DBDateTimePicker, SQLDB, DB, uJupiterForm, jupiterformutils,
-  jupiterStringUtils, jupiterDatabaseWizard, JupiterApp,
+  jupiterStringUtils, jupiterDatabaseWizard, JupiterApp, JupiterVariable,
   jupiterformcomponenttils;
 
 type
@@ -32,6 +32,8 @@ type
     procedure Internal_OnCancel(Sender: TObject);
 
     procedure Internal_UpdateComponents; override;
+
+    function Internal_OnRequestData : TJupiterVariableList; override;
   published
     property QueryOrigin : TSQLQuery read FQueryOrigin write FQueryOrigin;
 
@@ -76,6 +78,8 @@ begin
 
   Self.ActionGroup.AddAction(TJupiterAction.Create('Salvar', 'Clique aqui para salvar', ICON_SAVE, @Internal_OnSave));
   Self.ActionGroup.AddAction(TJupiterAction.Create('Cancelar', 'Clique aqui para cancelar', ICON_CANCEL, @Internal_OnCancel));
+
+  Self.ActionGroup.TableName := Self.TableName;
 
   Self.Internal_BuildForm;
 end;
@@ -175,6 +179,17 @@ begin
 
   Self.ActionGroup.GetActionAtIndex(0).Disable;
   Self.ActionGroup.GetActionAtIndex(1).Disable;
+end;
+
+function TFCustomDatabaseForm.Internal_OnRequestData: TJupiterVariableList;
+var
+  vrVez : Integer;
+begin
+  Result := inherited Internal_OnRequestData;
+
+  for vrVez := 0 to Self.FQueryOrigin.FieldCount - 1 do
+    if not Result.Exists(Self.FQueryOrigin.Fields[vrVez].FieldName) then
+      Result.AddVariable(Self.FQueryOrigin.Fields[vrVez].FieldName, Self.FQueryOrigin.Fields[vrVez].AsString, EmptyStr);
 end;
 
 procedure TFCustomDatabaseForm.FromReference(prReference: TJupiterDatabaseReference);
