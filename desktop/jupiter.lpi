@@ -255,6 +255,26 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uScriptEditorForm"/>
       </Unit>
+      <Unit>
+        <Filename Value="../scripts/ujupiterenviromentscript.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uJupiterEnviromentScript"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../scripts/ujupiterstringutilsscript.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uJupiterStringUtilsScript"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../scripts/ujupiterrunnablescript.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uJupiterRunnableScript"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../modules/jupitertools.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterTools"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

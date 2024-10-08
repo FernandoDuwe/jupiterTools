@@ -22,6 +22,8 @@ inherited FCustomDatabaseGrid: TFCustomDatabaseGrid
     TabOrder = 2
     OnColEnter = dbMainGridColEnter
     OnDblClick = dbMainGridDblClick
+    OnEnter = dbMainGridEnter
+    OnExit = dbMainGridExit
   end
   inherited acOptions: TActionList[3]
   end

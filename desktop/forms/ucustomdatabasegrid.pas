@@ -19,6 +19,8 @@ type
     InternalQuery: TSQLQuery;
     procedure dbMainGridColEnter(Sender: TObject);
     procedure dbMainGridDblClick(Sender: TObject);
+    procedure dbMainGridEnter(Sender: TObject);
+    procedure dbMainGridExit(Sender: TObject);
     procedure FormCreate(Sender: TObject);
   private
     FReference : TJupiterDatabaseReference;
@@ -66,6 +68,16 @@ begin
     Exit;
 
   JupiterAppDesktopOpenFormFromTableId(Self.FReference.TableName, InternalQuery.FieldByName('ID').AsInteger);
+end;
+
+procedure TFCustomDatabaseGrid.dbMainGridEnter(Sender: TObject);
+begin
+  Self.UpdateForm(False);
+end;
+
+procedure TFCustomDatabaseGrid.dbMainGridExit(Sender: TObject);
+begin
+  Self.UpdateForm(False);
 end;
 
 procedure TFCustomDatabaseGrid.dbMainGridColEnter(Sender: TObject);
@@ -127,13 +139,6 @@ var
   vrVez : Integer;
 begin
   Result := inherited Internal_OnRequestData;
-
-  if not Self.InternalQuery.EOF then
-  begin
-    for vrVez := 0 to Self.InternalQuery.FieldCount - 1 do
-      if not Result.Exists(Self.InternalQuery.Fields[vrVez].FieldName) then
-        Result.AddVariable(Self.InternalQuery.Fields[vrVez].FieldName, Self.InternalQuery.Fields[vrVez].AsString, EmptyStr);
-  end;
 end;
 
 procedure TFCustomDatabaseGrid.FromReference(prReference: TJupiterDatabaseReference);

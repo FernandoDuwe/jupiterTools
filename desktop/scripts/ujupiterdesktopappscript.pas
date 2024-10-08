@@ -129,6 +129,8 @@ end;
 
 function TJupiterDesktopAppScript.AnalyseCode: TJupiterScriptAnalyserList;
 begin
+  Result := inherited AnalyseCode;
+
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenForm(Form: String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenGridFromTable(prTableName: String);'));
 

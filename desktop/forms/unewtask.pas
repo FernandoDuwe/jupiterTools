@@ -14,6 +14,8 @@ type
   { TFNewTask }
 
   TFNewTask = class(TFJupiterForm)
+    sbShortcut: TScrollBox;
+    Splitter1: TSplitter;
     tvTreeMenu: TTreeView;
   private
     procedure Internal_UpdateComponents; override;
@@ -35,14 +37,14 @@ implementation
 procedure TFNewTask.Internal_UpdateComponents;
 begin
   inherited Internal_UpdateComponents;
+
+  tvTreeMenu.Width := PercentOfScreen(Self.Width, 50);
 end;
 
 procedure TFNewTask.Internal_PrepareForm;
 var
   vrTreeView : TJupiterTreeViewMenuGenerator;
 begin
-  tvTreeMenu.Width := PercentOfScreen(Self.Width, 30);
-
   inherited Internal_PrepareForm;
 
   tvTreeMenu.Images := TJupiterDesktopApp(vrJupiterApp).ImageList;

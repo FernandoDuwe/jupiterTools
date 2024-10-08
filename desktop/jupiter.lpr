@@ -18,7 +18,9 @@ uses
   jupiterDesktopApp, uJupiterAppScript, uJupiterDesktopAppScript, uNewTask,
   uGenerator, uJupiterAction, uCustomDatabaseForm, jupiterformcomponenttils,
   jupiterStringUtils, uJupiterDatabaseScript, jupitertreeviewmenugenerator,
-  jupiterutilspas, ucustomdatabasegrid, uUserPreferences, uScriptEditorForm;
+  jupiterutilspas, ucustomdatabasegrid, uUserPreferences, uScriptEditorForm,
+  uJupiterEnviromentScript, uJupiterStringUtilsScript, uJupiterRunnableScript,
+  jupiterTools;
 
 {$R *.res}
 
@@ -36,6 +38,7 @@ begin
   vrJupiterApp.AddModule(TJupiterStandardModule.Create);
   vrJupiterApp.AddModule(TJupiterUserExperience.Create);
   vrJupiterApp.AddModule(TJupiterGenerator.Create);
+  vrJupiterApp.AddModule(TJupiterTools.Create);
   vrJupiterApp.AddModule(TJupiterUtils.Create);
 
   with TJupiterDesktopApp(vrJupiterApp) do

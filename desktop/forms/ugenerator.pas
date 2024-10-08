@@ -6,8 +6,9 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls,
-  DBGrids, uJupiterForm, JupiterApp, jupiterformutils, uJupiterDesktopAppScript,
-  SQLDB, DB;
+  DBGrids, uJupiterForm, JupiterApp, jupiterformutils, JupiterConsts,
+  JupiterModule, JupiterRoute, uJupiterDesktopAppScript, uJupiterAction,
+  jupiterDesktopApp, SQLDB, DB;
 
 type
 
@@ -36,6 +37,10 @@ type
     procedure Internal_UpdateComponents; override;
     procedure Internal_UpdateDatasets; override;
     procedure Internal_PrepareForm; override;
+
+    procedure Internal_OnNewRoute(Sender: TObject);
+    procedure Internal_OnNewMacro(Sender: TObject);
+    procedure Internal_OnNewAction(Sender: TObject);
   public
 
   end;
@@ -166,14 +171,37 @@ begin
 end;
 
 procedure TFGenerator.Internal_PrepareForm;
+var
+  vrVez : Integer;
+  vrPrefix : String;
 begin
   inherited Internal_PrepareForm;
 
-  Self.ShowSearchBar := True;
+  Self.ShowSearchBar := False;
+
+  vrPrefix := '      ';
+
+  Self.ActionGroup.AddAction(TJupiterAction.Create('Nova Rota', 'Clique aqui para criar uma nova rota', ICON_NEW, @Internal_OnNewRoute));
+  Self.ActionGroup.AddAction(TJupiterAction.Create('Nova Macro', 'Clique aqui para criar uma nova macro', ICON_NEW, @Internal_OnNewMacro));
+  Self.ActionGroup.AddAction(TJupiterAction.Create('Nova Ação', 'Clique aqui para criar uma nova ação', ICON_NEW, @Internal_OnNewAction));
 
   mmDetails.Lines.Clear;
+  mmDetails.Lines.Add(EmptyStr);
   mmDetails.Lines.Add('Aplicação');
-  mmDetails.Lines.Add(vrJupiterApp.AppID + ' - ' + vrJupiterApp.AppName);
+  mmDetails.Lines.Add(vrPrefix + vrJupiterApp.AppID + ' - ' + vrJupiterApp.AppName);
+  mmDetails.Lines.Add(EmptyStr);
+  mmDetails.Lines.Add('Módulos:');
+
+  for vrVez := 0 to vrJupiterApp.ModulesList.Count - 1 do
+    with vrJupiterApp.ModulesList.GetModuleByIndex(vrVez) do
+      mmDetails.Lines.Add(vrPrefix + ModuleID + ' - ' + ModuleTitle);
+
+  mmDetails.Lines.Add(EmptyStr);
+  mmDetails.Lines.Add('Rotas:');
+
+  for vrVez := 0 to TJupiterDesktopApp(vrJupiterApp).FormRoutes.Count - 1 do
+    with TJupiterFormRoute(TJupiterDesktopApp(vrJupiterApp).FormRoutes.GetAtIndex(vrVez)) do
+      mmDetails.Lines.Add(vrPrefix + FormClass.ClassName + ' - ' + DestinyPath);
 
   with vrJupiterApp.NewWizard do
   begin
@@ -186,6 +214,21 @@ begin
     qryActions.DataBase    := Connection;
     qryActions.Transaction := Transaction;
   end;
+end;
+
+procedure TFGenerator.Internal_OnNewRoute(Sender: TObject);
+begin
+  JupiterAppDesktopOpenFormFromTableId('ROUTES', NULL_KEY);
+end;
+
+procedure TFGenerator.Internal_OnNewMacro(Sender: TObject);
+begin
+  JupiterAppDesktopOpenFormFromTableId('MACROS', NULL_KEY);
+end;
+
+procedure TFGenerator.Internal_OnNewAction(Sender: TObject);
+begin
+  JupiterAppDesktopOpenFormFromTableId('ACTIONS', NULL_KEY);
 end;
 
 end.

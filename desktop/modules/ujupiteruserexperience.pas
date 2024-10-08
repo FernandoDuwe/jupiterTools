@@ -50,7 +50,7 @@ begin
     if Self.Internal_CreateMacroIfDontExists('menu.show.userPref.click', 'Clique do botão Preferências do usuário', CreateStringList('program macro;' + #13#10 + 'begin' + #13#10 + '  OpenForm(''/forms/userPreference'');' + #13#10 + 'end.')) then
       Self.Internal_CreateRouteIfDontExists('Preferências', '/menu/show/userPref/', vrWizard.GetLastID('MACROS'), ICON_APPLICATION, 100);
 
-    Self.Internal_CreateVariablIfDontExists(FIELD_FONT_SIZE, 'Tamanho da fonte', '9');
+    Self.Internal_CreateVariablIfDontExists(FIELD_FONT_SIZE, 'Tamanho da fonte', '12');
 
     Self.Internal_CreateVariablIfDontExists(FORM_ALWAYS_MODAL, 'Formulário ao abrir sempre modal', BOOL_TRUE_STR);
   finally

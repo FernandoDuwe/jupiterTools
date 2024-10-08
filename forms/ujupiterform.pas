@@ -110,6 +110,9 @@ begin
   Self.FActionGroup.OnRequestData := @Internal_OnRequestData;
 
   Self.FParams := TJupiterVariableList.Create;
+
+  Self.Height := PercentOfScreen(Screen.Height, 80);
+  Self.Width  := PercentOfScreen(Screen.Width, 80);
 end;
 
 procedure TFJupiterForm.FormDestroy(Sender: TObject);
@@ -144,7 +147,7 @@ end;
 
 procedure TFJupiterForm.Internal_PrepareForm;
 begin
-//  fpOptions.Align := alBottom;
+  fpOptions.Align := alTop;
 end;
 
 procedure TFJupiterForm.Internal_Resize;

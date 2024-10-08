@@ -53,9 +53,9 @@ begin
   vrTrackBar           := TTrackBar.Create(prOwner);
   vrTrackBar.Parent    := prOwner;
   vrTrackBar.AutoSize  := True;
-  vrTrackBar.Position  := prValue;
   vrTrackBar.Min       := prMin;
   vrTrackBar.Max       := prMax;
+  vrTrackBar.Position  := prValue;
   vrTrackBar.Font.Size := GetFontSize;
   vrTrackBar.Top       := prPosition.Top;
   vrTrackBar.Left      := prPosition.Left;

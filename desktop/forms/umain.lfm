@@ -36,6 +36,7 @@ inherited FMain: TFMain
     Top = 50
     Width = 1228
     Align = alClient
+    HotTrack = True
     Images = ilTabs
     MultiLine = True
     TabOrder = 1

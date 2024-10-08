@@ -7,7 +7,8 @@ interface
 uses
   Classes, Controls, JupiterObject, JupiterModule, JupiterEnviroment,
   JupiterVariable, jupiterDatabaseWizard, jupiterScript, jupiterStringUtils,
-  JupiterConsts, SQLite3Conn;
+  JupiterConsts, uJupiterEnviromentScript, uJupiterStringUtilsScript,
+  uJupiterRunnableScript, SQLite3Conn;
 
 type
 
@@ -70,6 +71,9 @@ uses FileInfo, SysUtils, SQLDB, uJupiterAppScript, uJupiterDatabaseScript;
 procedure TJupiterApp.Internal_AddScriptLibraries(var prScript : TJupiterScript);
 begin
   prScript.LibraryList.Add(TJupiterAppScript.Create);
+  prScript.LibraryList.Add(TJupiterEnviromentcript.Create);
+  prScript.LibraryList.Add(TJupiterRunnableScript.Create);
+  prScript.LibraryList.Add(TJupiterStringUtilsScript.Create);
   prScript.LibraryList.Add(TuJupiterDatabaseScript.Create);
 end;
 

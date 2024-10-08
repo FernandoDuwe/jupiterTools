@@ -22,6 +22,7 @@ inherited FGenerator: TFGenerator
         Top = 0
         Width = 869
         Align = alClient
+        BorderStyle = bsNone
         Lines.Strings = (
           'mmDetails'
         )

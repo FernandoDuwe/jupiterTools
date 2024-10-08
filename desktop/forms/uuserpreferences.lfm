@@ -1,11 +1,11 @@
 inherited FUserPreferences: TFUserPreferences
   Left = 857
-  Top = 1049
+  Top = 586
   Caption = 'Preferências do usuário'
   object sbBody: TScrollBox[2]
     Left = 0
     Height = 406
-    Top = 51
+    Top = 50
     Width = 879
     HorzScrollBar.Page = 1
     VertScrollBar.Page = 1
