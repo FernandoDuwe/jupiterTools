@@ -16,6 +16,7 @@ const
    CUSTOMDATABASE_PATH : String = '/forms/custom/database';
    CUSTOMGRIDDATABASE_PATH : String = '/forms/custom/databaseGrid';
    SCRIPTFORM_PATH : String = '/forms/script';
+   SYSTEM_PATH : String = '/forms/system';
 
    ICON_ADD       : SmallInt = 0;
    ICON_NEW       : SmallInt = 1;
@@ -73,7 +74,11 @@ const
 
    CSV_SEPARATOR_REPLACER : String = '[SEMICOLON]';
 
+   DATAPROVIDER_TYPE_LIST_FILES : String = 'TJupiterFileDataProvider';
+   DATAPROVIDER_TYPE_LIST_PATHS : String = 'TJupiterDirectoryDataProvider';
    DATAPROVIDER_TYPE_LIST_CSV   : String = 'TJupiterCSVDataProvider';
+   DATAPROVIDER_TYPE_TASKS      : String = 'TJupiterTasksDataProvider';
+   DATAPROVIDER_TYPE_XML        : String = 'TJupiterXMLDataProvider';
 
    // Providers
    PROVIDER_LIST : Array[0..1] of String = ('TJupiterCSVDataProvider',

@@ -285,6 +285,54 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="uJupiterDataProviderScript"/>
       </Unit>
+      <Unit>
+        <Filename Value="../commons/jupiterdataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterDataProvider"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../Software/jupiterTools/commons/jupiterdirectorydataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterDirectoryDataProvider"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../Software/jupiterTools/commons/jupitervariabledataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterVariableDataProvider"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../Software/jupiterTools/commons/jupitertasksdataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterTasksDataProvider"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../Software/jupiterTools/commons/jupitertimecontroldataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterTimeControlDataProvider"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../Software/jupiterTools/commons/jupitertasktimesdataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterTaskTimesDataProvider"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../Software/jupiterTools/commons/jupiterfiledataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterFileDataProvider"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../Software/jupiterTools/commons/jupiterxmldataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="JupiterXMLDataProvider"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms/usystemmonitor.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FSystemMonitor"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uSystemMonitor"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -294,7 +342,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="../forms;forms;../commons;../modules;modules;commons;../scripts;scripts"/>
+      <OtherUnitFiles Value="../forms;forms;../commons;../modules;modules;commons;../scripts;scripts;../../../Software/jupiterTools/commons"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Linking>

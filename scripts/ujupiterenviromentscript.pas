@@ -29,6 +29,9 @@ type
   function JupiterEnviromentScript_CreateFile(prPath, prContent : String) : String;
   function JupiterEnviromentScript_CreateExternalFile(prPath, prContent : String) : String;
 
+  function JupiterEnviromentScript_LoadFromFile(prFileName : String) : String;
+  procedure JupiterEnviromentScript_SaveToFile(prFileName, prData : String);
+
 implementation
 
 function JupiterEnviromentScript_FileOrFolderExists(prPath: String): Boolean;
@@ -102,6 +105,40 @@ begin
   end;
 end;
 
+function JupiterEnviromentScript_LoadFromFile(prFileName: String): String;
+var
+  vrStr : TStrings;
+begin
+  Result := EmptyStr;
+
+  if not FileExists(prFileName) then
+    Exit;
+
+  vrStr := TStringList.Create;
+  try
+    vrStr.LoadFromFile(prFileName);
+
+    Result := vrStr.Text;
+  finally
+    FreeAndNil(vrStr);
+  end;
+end;
+
+procedure JupiterEnviromentScript_SaveToFile(prFileName, prData: String);
+var
+  vrStr : TStrings;
+begin
+  vrStr := TStringList.Create;
+  try
+    vrStr.Clear;
+    vrStr.Add(prData);
+
+    vrStr.SaveToFile(prFileName);
+  finally
+    FreeAndNil(vrStr);
+  end;
+end;
+
 { TJupiterEnviromentcript }
 
 function TJupiterEnviromentcript.Internal_GetName: String;
@@ -121,6 +158,9 @@ begin
   prSender.AddFunction(@JupiterEnviromentScript_CreatePath, 'function CreatePath(prPath : String) : String;');
   prSender.AddFunction(@JupiterEnviromentScript_CreateFile, 'function CreateFile(prPath, prContent: String): String;');
   prSender.AddFunction(@JupiterEnviromentScript_CreateExternalFile, 'function CreateExternalFile(prPath, prContent: String): String;');
+
+  prSender.AddFunction(@JupiterEnviromentScript_LoadFromFile, 'function LoadFromFile(prFileName : String): String;');
+  prSender.AddFunction(@JupiterEnviromentScript_SaveToFile, 'function SaveToFile(prFileName, prData : String): String;');
 end;
 
 function TJupiterEnviromentcript.AnalyseCode: TJupiterScriptAnalyserList;

@@ -49,18 +49,55 @@ type
 
 implementation
 
-uses JupiterCSVDataProvider, JupiterApp;
+uses JupiterCSVDataProvider, JupiterApp, JupiterFileDataProvider, JupiterDirectoryDataProvider, JupiterTasksDataProvider, JupiterXMLDataProvider;
 
 function FactoryDataProvider(prDataProviderType: String; prParam : String; prSubFolders : Boolean): TJupiterDataProvider;
 begin
-  if prDataProviderType = DATAPROVIDER_TYPE_LIST_CSV then
-  begin
-    Result := TJupiterCSVDataProvider.Create;
+  if prDataProviderType = DATAPROVIDER_TYPE_LIST_FILES then
+    begin
+      Result := TJupiterFileDataProvider.Create;
 
-    TJupiterCSVDataProvider(Result).Filename := prParam;
-    TJupiterCSVDataProvider(Result).ProvideData;
-    Exit;
-  end;
+      TJupiterFileDataProvider(Result).Path := prParam;
+      TJupiterFileDataProvider(Result).SubFolders := prSubFolders;
+      TJupiterFileDataProvider(Result).ProvideData;
+      Exit;
+    end;
+
+    if prDataProviderType = DATAPROVIDER_TYPE_LIST_PATHS then
+    begin
+      Result := TJupiterDirectoryDataProvider.Create;
+
+      TJupiterDirectoryDataProvider(Result).Path := prParam;
+      TJupiterDirectoryDataProvider(Result).SubFolders := prSubFolders;
+      TJupiterDirectoryDataProvider(Result).ProvideData;
+      Exit;
+    end;
+
+    if prDataProviderType = DATAPROVIDER_TYPE_LIST_CSV then
+    begin
+      Result := TJupiterCSVDataProvider.Create;
+
+      TJupiterCSVDataProvider(Result).Filename := prParam;
+      TJupiterCSVDataProvider(Result).ProvideData;
+      Exit;
+    end;
+
+    if prDataProviderType = DATAPROVIDER_TYPE_TASKS then
+    begin
+      Result := TJupiterTasksDataProvider.Create;
+
+      TJupiterTasksDataProvider(Result).ProvideData;
+      Exit;
+    end;
+
+    if prDataProviderType = DATAPROVIDER_TYPE_XML then
+    begin
+      Result := TJupiterXMLDataProvider.Create;
+
+      TJupiterXMLDataProvider(Result).Filename := prParam;
+      TJupiterXMLDataProvider(Result).ProvideData;
+      Exit;
+    end;
 
   Result := TJupiterDataProvider.Create;
   Result.ProvideData;

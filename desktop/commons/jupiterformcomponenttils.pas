@@ -153,6 +153,7 @@ begin
   vrEdit.Height     := GetTextHeight('OI', vrEdit.Font) * 20;
   vrEdit.Width      := prOwner.Width - prPosition.Left - FORM_MARGIN_RIGHT;
   vrEdit.Anchors    := [akTop, akLeft, akRight];
+  vrEdit.ScrollBars := ssBoth;
 
   Result := TJupiterComponentReference.Create(prPosition.Top,
                                               prPosition.Left,

@@ -1,0 +1,61 @@
+inherited FSystemMonitor: TFSystemMonitor
+  Left = 472
+  Top = 180
+  Caption = 'Monitor de Sistema'
+  object pcPages: TPageControl[2]
+    Left = 0
+    Height = 406
+    Top = 50
+    Width = 879
+    ActivePage = tsScripts
+    Align = alClient
+    TabIndex = 0
+    TabOrder = 2
+    object tsScripts: TTabSheet
+      Caption = 'Scripts'
+      ClientHeight = 375
+      ClientWidth = 869
+      object lvScripts: TListView
+        Left = 0
+        Height = 375
+        Top = 0
+        Width = 869
+        Align = alClient
+        Columns = <        
+          item
+            Caption = 'ID'
+            Width = 854
+          end>
+        GridLines = True
+        ReadOnly = True
+        TabOrder = 0
+        ViewStyle = vsReport
+      end
+    end
+    object tsDataProviders: TTabSheet
+      Caption = 'Data Providers'
+      ClientHeight = 375
+      ClientWidth = 869
+      object lvDataProviders: TListView
+        Left = 0
+        Height = 375
+        Top = 0
+        Width = 869
+        Align = alClient
+        Columns = <        
+          item
+            Caption = 'ID'
+            Width = 854
+          end>
+        GridLines = True
+        ReadOnly = True
+        TabOrder = 0
+        ViewStyle = vsReport
+      end
+    end
+  end
+  inherited acOptions: TActionList[3]
+  end
+  inherited tmrAutoUpdater: TTimer[4]
+  end
+end

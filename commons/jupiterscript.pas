@@ -396,6 +396,7 @@ var
   vrVez        : Integer;
 begin
   Self.FMessages.Clear;
+  Self.FRunMessages.Clear;
 
   for vrVez := 0 to Self.LibraryList.Count - 1 do
     TJupiterScriptLibrary(Self.LibraryList.GetAtIndex(vrVez)).Owner := Self;

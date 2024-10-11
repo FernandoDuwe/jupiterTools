@@ -18,9 +18,13 @@ uses
   jupiterDesktopApp, uJupiterAppScript, uJupiterDesktopAppScript, uNewTask,
   uGenerator, uJupiterAction, uCustomDatabaseForm, jupiterformcomponenttils,
   jupiterStringUtils, uJupiterDatabaseScript, jupitertreeviewmenugenerator,
-  jupiterutilspas, ucustomdatabasegrid, uUserPreferences, uScriptEditorForm,
-  uJupiterEnviromentScript, uJupiterStringUtilsScript, uJupiterRunnableScript,
-  jupiterTools, uJupiterDataProviderScript;
+  JupiterXMLDataProvider, JupiterFileDataProvider, JupiterTaskTimesDataProvider,
+  jupiterTimeControlDataProvider, JupiterTasksDataProvider,
+  JupiterVariableDataProvider, JupiterDirectoryDataProvider,
+  JupiterDataProvider, jupiterutilspas, ucustomdatabasegrid, uUserPreferences,
+  uScriptEditorForm, uJupiterEnviromentScript, uJupiterStringUtilsScript,
+  uJupiterRunnableScript, jupiterTools, uJupiterDataProviderScript, 
+uSystemMonitor;
 
 {$R *.res}
 
@@ -50,6 +54,7 @@ begin
     FormRoutes.Add(TJupiterFormRoute.Create(CUSTOMGRIDDATABASE_PATH, TFCustomDatabaseGrid));
     FormRoutes.Add(TJupiterFormRoute.Create(USERPREFERENCE_PATH, TFUserPreferences));
     FormRoutes.Add(TJupiterFormRoute.Create(SCRIPTFORM_PATH, TFScriptEditorForm));
+    FormRoutes.Add(TJupiterFormRoute.Create(SYSTEM_PATH, TFSystemMonitor));
   end;
 
   Application.Run;

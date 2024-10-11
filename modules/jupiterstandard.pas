@@ -94,7 +94,8 @@ begin
     if Self.Internal_CreateMacroIfDontExists('menu.tools.scriptEditor.click', 'Clique do botão Editor de Scripts JPAS', CreateStringListToMacro('OpenForm(''/forms/script'');')) then
       Self.Internal_CreateRouteIfDontExists('Editor de Scripts JPAS', '/menu/tools/scriptEditor/', vrWizard.GetLastID('MACROS'), ICON_TECHFILE, 200);
 
-    Self.Internal_CreateRouteIfDontExists('Monitor de aplicação', '/menu/tools/systemMonitor/', NULL_KEY, ICON_TOOLS, 100);
+    if Self.Internal_CreateMacroIfDontExists('menu.tools.systemMonitor.click', 'Clique do botão Monitor de aplicação', CreateStringListToMacro('OpenForm(''/forms/system'');')) then
+      Self.Internal_CreateRouteIfDontExists('Monitor de aplicação', '/menu/tools/systemMonitor/', vrWizard.GetLastID('MACROS'), ICON_TOOLS, 100);
 
     Self.Internal_CreateMacroIfDontExists('MACROS.AbrirScript.OnClick', 'Abrir script no editor', CreateStringListToMacro('   OpenFormWithParams(''/forms/script'', GetParam(SCRIPTID, ''ID''));'));
 

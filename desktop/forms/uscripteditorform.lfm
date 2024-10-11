@@ -22,6 +22,7 @@ inherited FScriptEditorForm: TFScriptEditorForm
       Align = alClient
       Images = ilIcons
       ReadOnly = True
+      SortType = stText
       TabOrder = 0
       Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
     end

@@ -13,7 +13,6 @@ inherited FNewTask: TFNewTask
     Width = 343
     Align = alLeft
     BackgroundColor = clDefault
-    BorderStyle = bsNone
     Color = clDefault
     ReadOnly = True
     TabOrder = 1
@@ -33,9 +32,8 @@ inherited FNewTask: TFNewTask
     HorzScrollBar.Page = 56
     VertScrollBar.Page = 64
     Align = alClient
-    BorderStyle = bsNone
-    ClientHeight = 406
-    ClientWidth = 531
+    ClientHeight = 404
+    ClientWidth = 529
     TabOrder = 4
     object imLogo: TImage
       Left = 8

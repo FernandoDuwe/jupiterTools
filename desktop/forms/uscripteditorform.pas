@@ -146,6 +146,7 @@ begin
   SynAutoComplete1.AutoCompleteList.Clear;
 
   tvLibrary.Items.Clear;
+  tvLibrary.SortType := stNone;
 
   vrNode := tvLibrary.Items.Add(nil, 'Rotas');
   vrNode.ImageIndex := 2;
@@ -181,6 +182,14 @@ begin
         SynAutoComplete1.AutoCompleteList.Add(TJupiterScriptAnalyserItem(vrList.GetAtIndex(vrVez2)).Text);
       end;
     end;
+
+  tvLibrary.SortType := stText;
+
+  if SynCompletion1.ItemList is TStringList then
+    TStringList(SynCompletion1.ItemList).Sorted := True;
+
+  if SynAutoComplete1.AutoCompleteList is TStringList then
+    TStringList(SynAutoComplete1.AutoCompleteList).Sorted := True;
 end;
 
 procedure TFScriptEditorForm.Internal_LoadMacroFromId();

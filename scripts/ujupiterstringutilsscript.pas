@@ -22,6 +22,7 @@ type
 
   function JupiterStringUtilsScript_GenerateGUID : String;
   function JupiterStringUtilsScript_GetCSVColumn(prLine : String; prIndex : Integer) : String;
+  function JupiterStringUtilsScript_Replace(prStr, prOldString, prNewString : String) : String;
 
 implementation
 
@@ -33,6 +34,11 @@ end;
 function JupiterStringUtilsScript_GetCSVColumn(prLine: String; prIndex: Integer): String;
 begin
   Result := JupiterStringUtilsScript_GetCSVColumn(prLine, prIndex);
+end;
+
+function JupiterStringUtilsScript_Replace(prStr, prOldString, prNewString: String): String;
+begin
+  Result := StringReplace(prStr, prOldString, prNewString, [rfIgnoreCase, rfReplaceAll]);
 end;
 
 { TJupiterStringUtilsScript }
@@ -48,6 +54,7 @@ begin
 
   prSender.AddFunction(@JupiterStringUtilsScript_GenerateGUID, 'function GenerateGUID : String;');
   prSender.AddFunction(@JupiterStringUtilsScript_GetCSVColumn, 'function GetCSVColumn(prLine: String; prIndex: Integer): String;');
+  prSender.AddFunction(@JupiterStringUtilsScript_Replace, 'function Replace(prStr, prOldString, prNewString: String): String;');
 end;
 
 function TJupiterStringUtilsScript.AnalyseCode: TJupiterScriptAnalyserList;
@@ -56,6 +63,7 @@ begin
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function GenerateGUID : String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function GetCSVColumn(prLine: String; prIndex: Integer): String;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function Replace(prStr, prOldString, prNewString: String): String;'));
 end;
 
 end.

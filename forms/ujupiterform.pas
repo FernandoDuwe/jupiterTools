@@ -133,6 +133,9 @@ begin
   Self.ActionGroup.UpdateActions;
 
   pnSearchBar.Visible := Self.ShowSearchBar;
+
+  if pnSearchBar.Visible then
+    pnSearchBar.Top := fpOptions.Top + fpOptions.Height + 1;
 end;
 
 procedure TFJupiterForm.Internal_UpdateDatasets;

@@ -158,7 +158,7 @@ begin
       TDBGrid(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
 
       {$IFDEF WINDOWS}
-      TDBGrid(prComponent.Components[vrVez]).AlternateColor := clSkyBlue;
+      TDBGrid(prComponent.Components[vrVez]).AlternateColor := clSilver;
       {$ENDIF}
     end;
   end;
