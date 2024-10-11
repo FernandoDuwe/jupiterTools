@@ -21,6 +21,7 @@ type
   end;
 
   procedure JupiterAppDesktopOpenForm(prForm : String);
+  procedure JupiterAppDesktopOpenFormWithParams(prForm, prParams : String);
   procedure JupiterAppDesktopShowMessage(prMessage : String);
   procedure JupiterAppDesktopOpenFormQuery(prQuery : TSQLQuery);
   procedure JupiterAppDesktopOpenFormFromTableId(prTableName : String; prID : Integer);
@@ -36,7 +37,12 @@ uses uJupiterForm, uMain, jupiterDesktopApp, jupiterDatabaseWizard;
 
 procedure JupiterAppDesktopOpenForm(prForm: String);
 begin
-  TJupiterDesktopApp(vrJupiterApp).OpenForm(prForm);
+  TJupiterDesktopApp(vrJupiterApp).OpenForm(prForm, EmptyStr);
+end;
+
+procedure JupiterAppDesktopOpenFormWithParams(prForm, prParams: String);
+begin
+  TJupiterDesktopApp(vrJupiterApp).OpenForm(prForm, prParams);
 end;
 
 procedure JupiterAppDesktopShowMessage(prMessage: String);
@@ -118,6 +124,7 @@ end;
 procedure TJupiterDesktopAppScript.DoCompile(prSender: TPSScript);
 begin
   prSender.AddFunction(@JupiterAppDesktopOpenForm, 'procedure OpenForm(Form: String);');
+  prSender.AddFunction(@JupiterAppDesktopOpenFormWithParams, 'procedure OpenFormWithParams(Form, Params : String);');
   prSender.AddFunction(@JupiterAppDesktopOpenGridFromTable, 'procedure OpenGridFromTable(prTableName : String);');
 
   prSender.AddFunction(@JupiterAppDesktopClose, 'procedure CloseApp();');
@@ -132,6 +139,7 @@ begin
   Result := inherited AnalyseCode;
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenForm(Form: String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenFormWithParams(Form, Params : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenGridFromTable(prTableName: String);'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CloseApp();'));

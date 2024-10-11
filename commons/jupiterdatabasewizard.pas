@@ -57,6 +57,7 @@ type
     function IsForeignKeyField(prTableName, prFieldName : String) : Boolean;
     function NewQuery : TSQLQuery;
     function NewQueryFromReference(prReference : TJupiterDatabaseReference) : TSQLQuery;
+    function NewQueryFromReferenceWithSearch(prReference : TJupiterDatabaseReference; prFieldList : TStrings; prSearch : String) : TSQLQuery;
     function NewScript : TSQLScript;
     function NewDataSourceFromQuery(prQuery : TSQLQuery) : TDataSource;
 
@@ -64,6 +65,9 @@ type
     function Exists(prTableName, prWhere : String) : Boolean;
     function GetLastID(prTableName : String) : Integer;
     function GetField(prTableName, prField, prWhere : String) : Variant;
+    function GetBLobField(prTableName, prField, prWhere : String) : TStrings;
+
+    procedure UpdateBLOBField(prTableName, prField, prWhere : String; prData : TStrings);
 
     procedure StartTransaction;
     procedure Commit;
@@ -216,6 +220,28 @@ begin
   Result.SQL.Add(String.Format(' SELECT * FROM %0:s WHERE ((ID = %1:d) OR (-1 = %1:d)) ORDER BY 2', [prReference.TableName, prReference.ID]));
 end;
 
+function TJupiterDatabaseWizard.NewQueryFromReferenceWithSearch(prReference: TJupiterDatabaseReference; prFieldList: TStrings; prSearch : String): TSQLQuery;
+var
+  vrVez : Integer;
+begin
+  Result := NewQuery;
+
+  Result.SQL.Add(' SELECT * ');
+  Result.SQL.Add(' FROM ' + prReference.TableName);
+  Result.SQL.Add(' WHERE ( ');
+
+  for vrVez := 0 to prFieldList.Count - 1 do
+  begin
+    if vrVez > 0 then
+       Result.SQL.Add(' OR ');
+
+    Result.SQL.Add(' UPPER(' + prFieldList[vrVez] + ') LIKE UPPER(''%' + prSearch + '%'') ');
+  end;
+
+  Result.SQL.Add(' ) ');
+  Result.SQL.Add(' ORDER BY 2 ');
+end;
+
 function TJupiterDatabaseWizard.NewScript: TSQLScript;
 begin
   Result             := TSQLScript.Create(nil);
@@ -288,6 +314,65 @@ begin
     vrQry.Close;
     FreeAndNil(vrQry);
   end;
+end;
+
+function TJupiterDatabaseWizard.GetBLobField(prTableName, prField, prWhere: String): TStrings;
+var
+  vrQry : TSQLQuery;
+  BlobStream: TStream;
+  StringStream: TStringStream;
+begin
+  Result := CreateStringList(EmptyStr);
+
+  vrQry := Self.NewQuery;
+  try
+    vrQry.SQL.Add(Format(' SELECT %0:s FROM %1:s WHERE %2:s ', [prField, prTableName, prWhere]));
+    vrQry.Open;
+    vrQry.First;
+
+    BlobStream := TBlobField(vrQry.Fields[0]).DataSet.CreateBlobStream(vrQry.Fields[0], bmRead);
+    try
+      StringStream := TStringStream.Create;
+      try
+        StringStream.CopyFrom(BlobStream, BlobStream.Size);
+        Result := CreateStringList(StringStream.DataString);
+      finally
+        StringStream.Free;
+      end;
+    finally
+      BlobStream.Free;
+    end;
+  finally
+    vrQry.Close;
+    FreeAndNil(vrQry);
+  end;
+end;
+
+procedure TJupiterDatabaseWizard.UpdateBLOBField(prTableName, prField, prWhere: String; prData: TStrings);
+var
+  vrQry : TSQLQuery;
+begin
+  vrQry := Self.NewQuery;
+  try
+    vrQry.SQL.Add(Format(' UPDATE %0:s SET %1:s = :PRDATA WHERE %2:s ', [prTableName, prField, prWhere]));
+    vrQry.ParamByName('PRDATA').AsString := prData.Text;
+
+    Self.StartTransaction;
+
+    try
+      vrQry.ExecSQL;
+
+      Self.Commit;
+    except
+      Self.Rollback;
+
+      raise;
+    end;
+  finally
+    vrQry.Close;
+    FreeAndNil(vrQry);
+  end;
+
 end;
 
 procedure TJupiterDatabaseWizard.StartTransaction;

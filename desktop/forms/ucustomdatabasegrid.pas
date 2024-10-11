@@ -21,6 +21,7 @@ type
     procedure dbMainGridDblClick(Sender: TObject);
     procedure dbMainGridEnter(Sender: TObject);
     procedure dbMainGridExit(Sender: TObject);
+    procedure edSearchChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
   private
     FReference : TJupiterDatabaseReference;
@@ -80,6 +81,11 @@ begin
   Self.UpdateForm(False);
 end;
 
+procedure TFCustomDatabaseGrid.edSearchChange(Sender: TObject);
+begin
+  //
+end;
+
 procedure TFCustomDatabaseGrid.dbMainGridColEnter(Sender: TObject);
 begin
   Self.UpdateForm(False);
@@ -113,20 +119,51 @@ end;
 procedure TFCustomDatabaseGrid.Internal_UpdateDatasets;
 var
   vrId : Integer;
+  vrWizard : TJupiterDatabaseWizard;
+  vrStringList : TStrings;
+  vrVez : Integer;
 begin
   inherited Internal_UpdateDatasets;
 
   vrId := NULL_KEY;
 
-  if InternalQuery.Active then
-    if ((not InternalQuery.EOF) and (not InternalQuery.FieldByName('ID').IsNull)) then
-      vrId := InternalQuery.FieldByName('ID').AsInteger;
+  vrWizard := vrJupiterApp.NewWizard;
+  try
+    if InternalQuery.Active then
+      if ((not InternalQuery.EOF) and (not InternalQuery.FieldByName('ID').IsNull)) then
+        vrId := InternalQuery.FieldByName('ID').AsInteger;
 
-  InternalQuery.Close;
-  InternalQuery.Open;
+    vrStringList := CreateStringList('');
 
-  if vrId <> NULL_KEY then
-    InternalQuery.Locate('ID', vrId,[]);
+    for vrVez := 0 to InternalQuery.Fields.Count - 1 do
+      if InternalQuery.Fields[vrVez] is TStringField then
+        vrStringList.Add(InternalQuery.Fields[vrVez].FieldName);
+
+    // Não existem campos possíveis para fazer a pesquisa
+    if vrStringList.Count = 0 then
+      Self.ShowSearchBar := False;
+
+    InternalQuery.Close;
+    InternalQuery.SQL.Clear;
+
+    if edSearch.Text = EmptyStr then
+      InternalQuery.SQL.AddStrings(vrWizard.NewQueryFromReference(Self.FReference).SQL)
+    else
+    begin
+      if vrStringList.Count > 0 then
+        InternalQuery.SQL.AddStrings(vrWizard.NewQueryFromReferenceWithSearch(Self.FReference, vrStringList, edSearch.Text).SQL)
+      else
+        InternalQuery.SQL.AddStrings(vrWizard.NewQueryFromReference(Self.FReference).SQL)
+    end;
+
+    InternalQuery.Open;
+
+    if vrId <> NULL_KEY then
+      InternalQuery.Locate('ID', vrId,[]);
+  finally
+    FreeAndNil(vrWizard);
+  //  FreeAndNil(vrStringList);
+  end;
 end;
 
 procedure TFCustomDatabaseGrid.Internal_OnNew(Sender: TObject);

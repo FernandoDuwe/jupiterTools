@@ -7,13 +7,14 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, ExtCtrls,
   uJupiterForm, jupiterformutils, jupitertreeviewmenugenerator, JupiterApp,
-  jupiterDesktopApp;
+  JupiterConsts, jupiterDesktopApp, jupiterformcomponenttils;
 
 type
 
   { TFNewTask }
 
   TFNewTask = class(TFJupiterForm)
+    imLogo: TImage;
     sbShortcut: TScrollBox;
     Splitter1: TSplitter;
     tvTreeMenu: TTreeView;
@@ -21,6 +22,8 @@ type
     procedure Internal_UpdateComponents; override;
 
     procedure Internal_PrepareForm; override;
+
+    procedure Internal_DrawForm;
   public
 
   end;
@@ -49,6 +52,8 @@ begin
 
   tvTreeMenu.Images := TJupiterDesktopApp(vrJupiterApp).ImageList;
 
+  Self.Internal_DrawForm;
+
   vrTreeView := TJupiterTreeViewMenuGenerator.Create(vrJupiterApp.InternalDatabase);
   try
     vrTreeView.TreeView := tvTreeMenu;
@@ -56,6 +61,20 @@ begin
   finally
     FreeAndNil(vrTreeView);
   end;
+end;
+
+procedure TFNewTask.Internal_DrawForm;
+var
+  vrCurrentLine : Integer;
+  vrReference : TJupiterComponentReference;
+begin
+  vrCurrentLine := imLogo.Top;
+
+  vrReference := jupiterformcomponenttils.JupiterComponentsNewLabel('Jupiter', TJupiterPosition.Create(vrCurrentLine, imLogo.Width + imLogo.Left + FORM_MARGIN_LEFT), sbShortcut);
+
+  vrCurrentLine := vrReference.Bottom + FORM_MARGIN_TOP;
+
+  vrReference := jupiterformcomponenttils.JupiterComponentsNewLabel('Versão: ' + vrJupiterApp.GetVersion, TJupiterPosition.Create(vrCurrentLine, imLogo.Width + imLogo.Left + FORM_MARGIN_LEFT), sbShortcut);
 end;
 
 end.

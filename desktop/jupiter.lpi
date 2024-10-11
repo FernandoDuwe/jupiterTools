@@ -13,6 +13,11 @@
       </XPManifest>
       <Icon Value="0"/>
     </General>
+    <VersionInfo>
+      <UseVersionInfo Value="True"/>
+      <MajorVersionNr Value="3"/>
+      <StringTable CompanyName="Jupiter" FileDescription="Jupiter interface" ProductName="Jupiter"/>
+    </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>
     </BuildModes>
@@ -274,6 +279,11 @@
         <Filename Value="../modules/jupitertools.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="jupiterTools"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../scripts/ujupiterdataproviderscript.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uJupiterDataProviderScript"/>
       </Unit>
     </Units>
   </ProjectOptions>

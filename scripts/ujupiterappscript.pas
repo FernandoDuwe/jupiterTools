@@ -23,6 +23,8 @@ type
   function JupiterAppScript_ParamExists(prScriptId, prId : String) : Boolean;
   function JupiterAppScript_GetParam(prScriptId, prId : String) : String;
   procedure JupiterAppScript_SetParam(prScriptId, prId, prValue : String);
+  procedure JupiterAppScript_WriteLn(prMessage : String);
+  procedure JupiterAppScript_WriteScriptLn(prScriptId, prMessage : String);
 
 implementation
 
@@ -44,6 +46,18 @@ begin
     vrJupiterApp.GetScriptById(prScriptId).Params.AddConfig(prId, prValue, prId);
 end;
 
+procedure JupiterAppScript_WriteLn(prMessage: String);
+begin
+  WriteLn(prMessage);
+end;
+
+procedure JupiterAppScript_WriteScriptLn(prScriptId, prMessage: String);
+begin
+  vrJupiterApp.GetScriptById(prScriptId).RunMessages.Add(prMessage);
+
+  JupiterAppScript_WriteLn(prMessage);
+end;
+
 { TJupiterAppScript }
 
 function TJupiterAppScript.Internal_GetName: String;
@@ -58,6 +72,9 @@ begin
   prSender.AddFunction(@JupiterAppScript_ParamExists, 'function ParamExists(prScriptId, prId : String) : Boolean;');
   prSender.AddFunction(@JupiterAppScript_GetParam, 'function GetParam(prScriptId, prId : String) : String;');
   prSender.AddFunction(@JupiterAppScript_SetParam, 'procedure SetParam(prScriptId, prId, prValue : String);');
+
+  prSender.AddFunction(@JupiterAppScript_WriteLn, 'procedure Writeln(prMessage: String);');
+  prSender.AddFunction(@JupiterAppScript_WriteScriptLn, 'procedure WriteScriptLn(prScriptId, prMessage: String);');
 end;
 
 function TJupiterAppScript.AnalyseCode: TJupiterScriptAnalyserList;
@@ -68,6 +85,9 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function GetParam(prScriptId, prId : String) : String;'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure SetParam(prScriptId, prId, prValue : String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure SetParam(prScriptId, prId, prValue : String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Writeln(prMessage: String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure WriteScriptLn(prScriptId, prMessage: String);'));
 end;
 
 end.

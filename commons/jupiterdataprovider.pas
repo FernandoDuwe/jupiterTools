@@ -5,7 +5,8 @@ unit JupiterDataProvider;
 interface
 
 uses
-  Classes, SysUtils, JupiterObject, JupiterVariable, JupiterConsts;
+  Classes, SysUtils, JupiterObject, JupiterVariable, JupiterConsts,
+  jupiterStringUtils;
 
 type
 
@@ -24,6 +25,10 @@ type
   end;
 
   TJupiterDataProvider = class(TJupiterObjectList)
+  private
+    FProviderID : String;
+  published
+    property ProviderID : String read FProviderID;
   public
     procedure AddRow;
     function GetLastRow : TJupiterDataProviderRow;
@@ -33,6 +38,9 @@ type
     procedure ProvideData; virtual;
 
     class procedure GetFieldsLayout(var prList : TStrings); virtual;
+
+    constructor Create; override;
+    destructor Destroy; override;
   end;
 
   function FactoryDataProvider(prDataProviderType : String; prParam : String; prSubFolders : Boolean) : TJupiterDataProvider;
@@ -41,7 +49,7 @@ type
 
 implementation
 
-uses JupiterCSVDataProvider;
+uses JupiterCSVDataProvider, JupiterApp;
 
 function FactoryDataProvider(prDataProviderType: String; prParam : String; prSubFolders : Boolean): TJupiterDataProvider;
 begin
@@ -126,6 +134,26 @@ end;
 class procedure TJupiterDataProvider.GetFieldsLayout(var prList: TStrings);
 begin
   prList.Clear;
+end;
+
+constructor TJupiterDataProvider.Create;
+begin
+  inherited Create;
+
+  Self.FProviderID := JupiterStringUtilsGenerateGUID;
+
+  if Assigned(vrJupiterApp) then
+    if vrJupiterApp.AppReady then
+      vrJupiterApp.DataProviders.Add(Self);
+end;
+
+destructor TJupiterDataProvider.Destroy;
+begin
+  if Assigned(vrJupiterApp) then
+    if vrJupiterApp.AppReady then
+      vrJupiterApp.DeleteDataProviderById(Self.ProviderID);
+
+  inherited Destroy;
 end;
 
 { TJupiterDataProviderRow }

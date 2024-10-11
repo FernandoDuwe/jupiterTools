@@ -8,7 +8,8 @@ uses
   Classes, Controls, JupiterObject, JupiterModule, JupiterEnviroment,
   JupiterVariable, jupiterDatabaseWizard, jupiterScript, jupiterStringUtils,
   JupiterConsts, uJupiterEnviromentScript, uJupiterStringUtilsScript,
-  uJupiterRunnableScript, SQLite3Conn;
+  uJupiterRunnableScript, uJupiterDataProviderScript, SQLite3Conn,
+  JupiterDataProvider;
 
 type
 
@@ -16,6 +17,7 @@ type
 
   TJupiterApp = class(TJupiterObject)
   private
+    FAppReady         : Boolean;
     FAppID            : String;
     FAppName          : String;
     FModules          : TJupiterModuleList;
@@ -27,15 +29,18 @@ type
     procedure Internal_Prepare; virtual;
     procedure Internal_AddScriptLibraries(var prScript : TJupiterScript); virtual;
   published
-    property AppID   : String read FAppID;
-    property AppName : String read FAppName;
+    property AppReady : Boolean read FAppReady;
+    property AppID    : String  read FAppID;
+    property AppName  : String  read FAppName;
 
-    property ModulesList : TJupiterModuleList   read FModules write FModules;
-    property Params      : TJupiterVariableList read FParams  write FParams;
-    property Scripts     : TJupiterVariableList read FScripts write FScripts;
+    property ModulesList   : TJupiterModuleList   read FModules       write FModules;
+    property Params        : TJupiterVariableList read FParams        write FParams;
+    property Scripts       : TJupiterVariableList read FScripts       write FScripts;
 
     property InternalDatabase : TSQLite3Connection read FInternalDatabase write FInternalDatabase;
   public
+    DataProviders : TJupiterObjectList;
+
     procedure AddModule(prModule : TJupiterModule);
     procedure Prepare;
 
@@ -54,6 +59,9 @@ type
 
     function GetScriptById(prScriptID : String) : TJupiterScript;
     procedure DeleteScriptById(prScriptID : String);
+
+    function GetDataProviderById(prDataProviderID : String) : TJupiterDataProvider;
+    procedure DeleteDataProviderById(prDataProviderID : String);
 
     constructor Create(prAppID, prAppName : String); virtual;
     destructor Destroy; override;
@@ -75,6 +83,7 @@ begin
   prScript.LibraryList.Add(TJupiterRunnableScript.Create);
   prScript.LibraryList.Add(TJupiterStringUtilsScript.Create);
   prScript.LibraryList.Add(TuJupiterDatabaseScript.Create);
+  prScript.LibraryList.Add(TJupiterDataProviderScript.Create);
 end;
 
 procedure TJupiterApp.Internal_Prepare;
@@ -89,6 +98,8 @@ begin
 
     if not Self.FParams.Exists('database.local') then
       Self.FParams.AddConfig('database.local', '/datasets/' + Self.AppID + '.db', 'Base de dados local');
+
+    Self.FAppReady := True;
   finally
     FreeAndNil(vrEnviroment);
   end;
@@ -329,14 +340,50 @@ begin
       end;
 end;
 
+function TJupiterApp.GetDataProviderById(prDataProviderID: String): TJupiterDataProvider;
+var
+  vrVez : Integer;
+begin
+  Result := nil;
+
+  if not Assigned(DataProviders) then Exit;
+
+  for vrVez := 0 to Self.DataProviders.Count - 1 do
+    with TJupiterDataProvider(Self.DataProviders.GetAtIndex(vrVez)) do
+      if ProviderID = prDataProviderID then
+      begin
+        Result := TJupiterDataProvider(Self.DataProviders.GetAtIndex(vrVez));
+        Exit;
+      end;
+end;
+
+procedure TJupiterApp.DeleteDataProviderById(prDataProviderID: String);
+var
+  vrVez : Integer;
+begin
+  if not Assigned(DataProviders) then Exit;
+
+  for vrVez := 0 to Self.DataProviders.Count - 1 do
+    with TJupiterDataProvider(Self.DataProviders.GetAtIndex(vrVez)) do
+      if ProviderID = prDataProviderID then
+      begin
+        Self.DataProviders.DeleteListItem(vrVez);
+
+        Exit;
+      end;
+end;
+
 constructor TJupiterApp.Create(prAppID, prAppName: String);
 begin
+  Self.FAppReady := False;
+
   Self.FAppID   := prAppID;
   Self.FAppName := prAppName;
 
-  Self.FParams  := TJupiterVariableList.Create;
-  Self.FModules := TJupiterModuleList.Create;
-  Self.FScripts := TJupiterVariableList.Create;
+  Self.FParams       := TJupiterVariableList.Create;
+  Self.FModules      := TJupiterModuleList.Create;
+  Self.FScripts      := TJupiterVariableList.Create;
+  Self.DataProviders := TJupiterObjectList.Create;
 
   Self.Internal_Prepare;
 end;
@@ -346,6 +393,7 @@ begin
   FreeAndNil(Self.FParams);
   FreeAndNil(Self.FModules);
   FreeAndNil(Self.FScripts);
+  FreeAndNil(Self.DataProviders);
 
   inherited Destroy;
 end;

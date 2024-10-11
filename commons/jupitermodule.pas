@@ -90,7 +90,7 @@ procedure TJupiterModule.Internal_Prepare;
 var
   vrWizard : TJupiterDatabaseWizard;
 begin
-  Self.Params.FileName := 'datasets/' + StringReplace(Self.ModuleID, '.', EmptyStr, [rfIgnoreCase, rfReplaceAll]) + '.csv';
+ // Self.Params.FileName := 'datasets/' + StringReplace(Self.ModuleID, '.', EmptyStr, [rfIgnoreCase, rfReplaceAll]) + '.csv';
 
   vrWizard := vrJupiterApp.NewWizard;
   try

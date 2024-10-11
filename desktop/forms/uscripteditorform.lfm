@@ -625,8 +625,8 @@ inherited FScriptEditorForm: TFScriptEditorForm
     Top = 72
   end
   object SynCompletion1: TSynCompletion[8]
-    Position = -1
-    LinesInWindow = 6
+    Position = 0
+    LinesInWindow = 10
     SelectedColor = clHighlight
     CaseSensitive = False
     Width = 262

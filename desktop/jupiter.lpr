@@ -20,14 +20,14 @@ uses
   jupiterStringUtils, uJupiterDatabaseScript, jupitertreeviewmenugenerator,
   jupiterutilspas, ucustomdatabasegrid, uUserPreferences, uScriptEditorForm,
   uJupiterEnviromentScript, uJupiterStringUtilsScript, uJupiterRunnableScript,
-  jupiterTools;
+  jupiterTools, uJupiterDataProviderScript;
 
 {$R *.res}
 
 begin
   RequireDerivedFormResource := True;
 
-  Application.Scaled := True;
+  Application.Scaled:=True;
   Application.Initialize;
 
   vrJupiterApp := TJupiterDesktopApp.Create('jupiter', 'Jupiter');

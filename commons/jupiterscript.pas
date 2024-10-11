@@ -86,6 +86,8 @@ type
     procedure Internal_ScriptExecute(Sender: TPSScript);
     function  Internal_GetFullScript : TStrings;
     procedure Internal_IncludeScript(prFileName : String; var prStrings : TStrings);
+
+    procedure Internal_WriteLn(prMessage : String);
   published
     property Compiled : Boolean read FCompiled;
     property Runned   : Boolean read FRunned;
@@ -344,6 +346,13 @@ begin
     vrStr.Clear;
     FreeAndNil(vrStr);
   end;
+end;
+
+procedure TJupiterScript.Internal_WriteLn(prMessage: String);
+begin
+  Self.RunMessages.Add(prMessage);
+
+  WriteLn(prMessage);
 end;
 
 function TJupiterScript.GetDateTimeMark: String;

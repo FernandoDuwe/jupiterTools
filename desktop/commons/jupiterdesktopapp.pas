@@ -23,7 +23,7 @@ type
     property ImageList : TImageList read FImageList write FImageList;
   public
     function NewFormByRoute(prRoute : String) : TForm;
-    procedure OpenForm(prRoute : String);
+    procedure OpenForm(prRoute, prParams : String);
     procedure OpenForm(prForm : TForm);
 
     constructor Create(prAppID, prAppName : String); override;
@@ -60,7 +60,7 @@ begin
     end;
 end;
 
-procedure TJupiterDesktopApp.OpenForm(prRoute: String);
+procedure TJupiterDesktopApp.OpenForm(prRoute, prParams: String);
 var
   vrForm : TForm;
 begin
@@ -68,6 +68,9 @@ begin
 
   if not Assigned(vrForm) then
     vrForm := TFJupiterForm.Create(Application.MainForm);
+
+  if ((vrForm is TFJupiterForm) and (prParams <> EmptyStr)) then
+    TFJupiterForm(vrForm).Params.AddVariable('Params', prParams);
 
   Self.OpenForm(vrForm);
 end;

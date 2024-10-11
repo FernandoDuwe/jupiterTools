@@ -92,7 +92,13 @@ begin
       Self.Internal_CreateRouteIfDontExists('Fechar', '/menu/file/exit/', vrWizard.GetLastID('MACROS'), ICON_EXIT, 9000);
 
     if Self.Internal_CreateMacroIfDontExists('menu.tools.scriptEditor.click', 'Clique do botão Editor de Scripts JPAS', CreateStringListToMacro('OpenForm(''/forms/script'');')) then
-      Self.Internal_CreateRouteIfDontExists('Editor de Scripts JPAS', '/menu/tools/scriptEditor/', vrWizard.GetLastID('MACROS'), ICON_TECHFILE, 100);
+      Self.Internal_CreateRouteIfDontExists('Editor de Scripts JPAS', '/menu/tools/scriptEditor/', vrWizard.GetLastID('MACROS'), ICON_TECHFILE, 200);
+
+    Self.Internal_CreateRouteIfDontExists('Monitor de aplicação', '/menu/tools/systemMonitor/', NULL_KEY, ICON_TOOLS, 100);
+
+    Self.Internal_CreateMacroIfDontExists('MACROS.AbrirScript.OnClick', 'Abrir script no editor', CreateStringListToMacro('   OpenFormWithParams(''/forms/script'', GetParam(SCRIPTID, ''ID''));'));
+
+    Self.Internal_CreateActionIfDontExists('MACROS.AbrirScript', 'Abrir script no editor', 'MACROS', ICON_EDIT, 100, Self.Internal_GetMacroById('MACROS.AbrirScript.OnClick'), Self.Internal_GetMacroById(EVENT_RECORD_ONENABLE), Self.Internal_GetMacroById(EVENT_RECORD_ONVISIBLE));
   finally
     FreeAndNil(vrWizard);
   end;

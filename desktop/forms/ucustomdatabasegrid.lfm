@@ -4,6 +4,9 @@ inherited FCustomDatabaseGrid: TFCustomDatabaseGrid
   OnCreate = FormCreate
   inherited pnSearchBar: TPanel
     Top = 1
+    inherited edSearch: TEdit
+      OnChange = edSearchChange
+    end
   end
   inherited fpOptions: TFlowPanel
     Top = 0

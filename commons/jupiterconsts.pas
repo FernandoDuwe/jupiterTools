@@ -178,8 +178,7 @@ end;
 function CreateStringList(prContent: String): TStrings;
 begin
   Result := TStringList.Create;
-  Result.Clear;
-  Result.Add(prContent);
+  Result.Text := prContent;
 end;
 
 function CreateStringListToMacro(prCommand: String): TStrings;
