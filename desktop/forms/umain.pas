@@ -114,10 +114,25 @@ begin
 end;
 
 procedure TFMain.Internal_UpdateComponents;
+var
+  vrVez : Integer;
 begin
   inherited Internal_UpdateComponents;
 
   Self.Caption := vrJupiterApp.AppName;
+
+  for vrVez := 0 to jtMainTab.PageCount - 1 do
+  begin
+    if not (jtMainTab.Page[vrVez] is TJupiterFormTabSheet) then
+      Continue;
+
+    jtMainTab.Page[vrVez].Caption := (jtMainTab.Page[vrVez] as TJupiterFormTabSheet).Form.Caption + '        ';
+  end;
+
+  Self.Repaint;
+  Self.Refresh;
+
+  Application.ProcessMessages;
 end;
 
 procedure TFMain.NewTab(Form: TForm);

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, JupiterApp, JupiterObject, jupiterScript, JupiterRoute,
-  Forms, Controls;
+  uJupiterFormDesktopAppScript, Forms, Controls;
 
 type
 
@@ -16,15 +16,20 @@ type
   private
     FFormRoutes : TJupiterObjectList;
     FImageList  : TImageList;
+    FFormList   : TJupiterObjectList;
   protected
     procedure Internal_AddScriptLibraries(var prScript : TJupiterScript); override;
   published
     property FormRoutes : TJupiterObjectList read FFormRoutes write FFormRoutes;
     property ImageList : TImageList read FImageList write FImageList;
+    property FormList : TJupiterObjectList read FFormList write FFormList;
   public
     function NewFormByRoute(prRoute : String) : TForm;
-    procedure OpenForm(prRoute, prParams : String);
+    function OpenForm(prRoute, prParams : String) : String;
     procedure OpenForm(prForm : TForm);
+
+    function GetFormById(prFormID : String) : TForm;
+    procedure DeleteFormById(prFormID : String);
 
     constructor Create(prAppID, prAppName : String); override;
     destructor Destroy; override;
@@ -41,6 +46,7 @@ begin
   inherited Internal_AddScriptLibraries(prScript);
 
   prScript.LibraryList.Add(TJupiterDesktopAppScript.Create);
+  prScript.LibraryList.Add(TJupiterFormDesktopAppScript.Create);
 end;
 
 function TJupiterDesktopApp.NewFormByRoute(prRoute: String): TForm;
@@ -60,7 +66,7 @@ begin
     end;
 end;
 
-procedure TJupiterDesktopApp.OpenForm(prRoute, prParams: String);
+function TJupiterDesktopApp.OpenForm(prRoute, prParams: String) : String;
 var
   vrForm : TForm;
 begin
@@ -71,6 +77,8 @@ begin
 
   if ((vrForm is TFJupiterForm) and (prParams <> EmptyStr)) then
     TFJupiterForm(vrForm).Params.AddVariable('Params', prParams);
+
+  Result := TFJupiterForm(vrForm).FormID;
 
   Self.OpenForm(vrForm);
 end;
@@ -84,16 +92,54 @@ begin
     TFMain(Application.MainForm).NewTab(prForm);
 end;
 
+function TJupiterDesktopApp.GetFormById(prFormID: String): TForm;
+var
+  vrVez : Integer;
+begin
+  Result := nil;
+
+  if not Assigned(FormList) then Exit;
+
+  for vrVez := 0 to Self.FormList.Count - 1 do
+    with TFJupiterForm(Self.FormList.GetAtIndex(vrVez)) do
+      if FormID = prFormID then
+      begin
+        Result := TFJupiterForm(Self.FormList.GetAtIndex(vrVez));
+        Exit;
+      end;
+
+end;
+
+procedure TJupiterDesktopApp.DeleteFormById(prFormID: String);
+var
+  vrVez : Integer;
+begin
+  if not Assigned(FormList) then Exit;
+
+  for vrVez := 0 to Self.FormList.Count - 1 do
+    with TFJupiterForm(Self.FormList.GetAtIndex(vrVez)) do
+      if FormID = prFormID then
+      begin
+        Self.FormList.DeleteListItem(vrVez);
+
+        Exit;
+      end;
+end;
+
 constructor TJupiterDesktopApp.Create(prAppID, prAppName: String);
 begin
   inherited Create(prAppID, prAppName);
 
   Self.FFormRoutes := TJupiterObjectList.Create;
+
+  Self.FFormList := TJupiterObjectList.Create;
 end;
 
 destructor TJupiterDesktopApp.Destroy;
 begin
   FreeAndNil(Self.FFormRoutes);
+
+  FreeAndNil(Self.FFormList);
 
   inherited Destroy;
 end;

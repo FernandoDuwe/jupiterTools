@@ -9,9 +9,13 @@ inherited FCustomDatabaseForm: TFCustomDatabaseForm
     Top = 0
     Align = alTop
   end
-  object sbBody: TScrollBox[2]
+  inherited pnBottom: TPanel
+    Top = 376
+    TabOrder = 3
+  end
+  object sbBody: TScrollBox[3]
     Left = 0
-    Height = 406
+    Height = 325
     Top = 51
     Width = 879
     HorzScrollBar.Page = 1
@@ -20,11 +24,11 @@ inherited FCustomDatabaseForm: TFCustomDatabaseForm
     BorderStyle = bsNone
     TabOrder = 2
   end
-  inherited acOptions: TActionList[3]
+  inherited acOptions: TActionList[4]
   end
-  inherited tmrAutoUpdater: TTimer[4]
+  inherited tmrAutoUpdater: TTimer[5]
   end
-  object InternalDataSource: TDataSource[5]
+  object InternalDataSource: TDataSource[6]
     OnStateChange = InternalDataSourceStateChange
     OnDataChange = InternalDataSourceDataChange
     Left = 592

@@ -12,9 +12,13 @@ inherited FCustomDatabaseGrid: TFCustomDatabaseGrid
     Top = 0
     Align = alTop
   end
-  object dbMainGrid: TDBGrid[2]
+  inherited pnBottom: TPanel
+    Top = 376
+    TabOrder = 3
+  end
+  object dbMainGrid: TDBGrid[3]
     Left = 0
-    Height = 406
+    Height = 325
     Top = 51
     Width = 879
     Align = alClient
@@ -28,16 +32,16 @@ inherited FCustomDatabaseGrid: TFCustomDatabaseGrid
     OnEnter = dbMainGridEnter
     OnExit = dbMainGridExit
   end
-  inherited acOptions: TActionList[3]
+  inherited acOptions: TActionList[4]
   end
-  inherited tmrAutoUpdater: TTimer[4]
+  inherited tmrAutoUpdater: TTimer[5]
   end
-  object InternalDataSource: TDataSource[5]
+  object InternalDataSource: TDataSource[6]
     DataSet = InternalQuery
     Left = 574
     Top = 72
   end
-  object InternalQuery: TSQLQuery[6]
+  object InternalQuery: TSQLQuery[7]
     FieldDefs = <>
     Params = <>
     Macros = <>

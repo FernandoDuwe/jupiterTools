@@ -1,10 +1,21 @@
 inherited FSystemMonitor: TFSystemMonitor
-  Left = 472
-  Top = 180
+  Left = 615
+  Top = 182
   Caption = 'Monitor de Sistema'
-  object pcPages: TPageControl[2]
+  inherited pnSearchBar: TPanel
+    inherited edSearch: TEdit
+      Left = 0
+      Height = 50
+      Top = 0
+      Width = 879
+    end
+  end
+  inherited pnBottom: TPanel
+    TabOrder = 3
+  end
+  object pcPages: TPageControl[3]
     Left = 0
-    Height = 406
+    Height = 325
     Top = 50
     Width = 879
     ActivePage = tsScripts
@@ -13,11 +24,11 @@ inherited FSystemMonitor: TFSystemMonitor
     TabOrder = 2
     object tsScripts: TTabSheet
       Caption = 'Scripts'
-      ClientHeight = 375
+      ClientHeight = 294
       ClientWidth = 869
       object lvScripts: TListView
         Left = 0
-        Height = 375
+        Height = 294
         Top = 0
         Width = 869
         Align = alClient
@@ -34,11 +45,32 @@ inherited FSystemMonitor: TFSystemMonitor
     end
     object tsDataProviders: TTabSheet
       Caption = 'Data Providers'
-      ClientHeight = 375
+      ClientHeight = 294
       ClientWidth = 869
       object lvDataProviders: TListView
         Left = 0
-        Height = 375
+        Height = 294
+        Top = 0
+        Width = 869
+        Align = alClient
+        Columns = <        
+          item
+            Caption = 'ID'
+            Width = 854
+          end>
+        GridLines = True
+        ReadOnly = True
+        TabOrder = 0
+        ViewStyle = vsReport
+      end
+    end
+    object TabSheet1: TTabSheet
+      Caption = 'Formulários'
+      ClientHeight = 294
+      ClientWidth = 869
+      object lvForms: TListView
+        Left = 0
+        Height = 294
         Top = 0
         Width = 869
         Align = alClient
@@ -54,8 +86,8 @@ inherited FSystemMonitor: TFSystemMonitor
       end
     end
   end
-  inherited acOptions: TActionList[3]
+  inherited acOptions: TActionList[4]
   end
-  inherited tmrAutoUpdater: TTimer[4]
+  inherited tmrAutoUpdater: TTimer[5]
   end
 end

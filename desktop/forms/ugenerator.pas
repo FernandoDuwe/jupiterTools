@@ -80,6 +80,8 @@ end;
 
 procedure TFGenerator.Internal_UpdateComponents;
 begin
+  Self.Hint := 'Você pode alterar todo o sistema a partir do módulo Generator. Crie novas rotas, altere as funções do sistema e adicione novas tabelas.';
+
   inherited Internal_UpdateComponents;
 
   if qryRoutes.FieldCount > 0 then

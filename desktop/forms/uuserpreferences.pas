@@ -52,6 +52,8 @@ var
   vrCurrentLine : Integer;
   vrReference : TJupiterComponentReference;
 begin
+  Self.Hint := 'Customize o sistema de acordo com suas necessidades, aumente a fonte e controle como o sistema se comportará com você';
+
   inherited Internal_PrepareForm;
 
   Self.Params.AddVariable(FORM_ALWAYS_MODAL, vrJupiterApp.Params.VariableById(FORM_ALWAYS_MODAL).Value, FORM_ALWAYS_MODAL);

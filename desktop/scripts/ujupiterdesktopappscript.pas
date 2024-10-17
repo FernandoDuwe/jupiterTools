@@ -20,7 +20,7 @@ type
     function AnalyseCode: TJupiterScriptAnalyserList; override;
   end;
 
-  procedure JupiterAppDesktopOpenForm(prForm : String);
+  function JupiterAppDesktopOpenForm(prForm : String) : String;
   procedure JupiterAppDesktopOpenFormWithParams(prForm, prParams : String);
   procedure JupiterAppDesktopShowMessage(prMessage : String);
   procedure JupiterAppDesktopOpenFormQuery(prQuery : TSQLQuery);
@@ -35,9 +35,9 @@ implementation
 
 uses uJupiterForm, uMain, jupiterDesktopApp, jupiterDatabaseWizard;
 
-procedure JupiterAppDesktopOpenForm(prForm: String);
+function JupiterAppDesktopOpenForm(prForm: String) : String;
 begin
-  TJupiterDesktopApp(vrJupiterApp).OpenForm(prForm, EmptyStr);
+  Result := TJupiterDesktopApp(vrJupiterApp).OpenForm(prForm, EmptyStr);
 end;
 
 procedure JupiterAppDesktopOpenFormWithParams(prForm, prParams: String);
@@ -123,7 +123,9 @@ end;
 
 procedure TJupiterDesktopAppScript.DoCompile(prSender: TPSScript);
 begin
-  prSender.AddFunction(@JupiterAppDesktopOpenForm, 'procedure OpenForm(Form: String);');
+  inherited DoCompile(prSender);
+
+  prSender.AddFunction(@JupiterAppDesktopOpenForm, 'function OpenForm(Form: String) : String;');
   prSender.AddFunction(@JupiterAppDesktopOpenFormWithParams, 'procedure OpenFormWithParams(Form, Params : String);');
   prSender.AddFunction(@JupiterAppDesktopOpenGridFromTable, 'procedure OpenGridFromTable(prTableName : String);');
 
@@ -138,7 +140,7 @@ function TJupiterDesktopAppScript.AnalyseCode: TJupiterScriptAnalyserList;
 begin
   Result := inherited AnalyseCode;
 
-  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenForm(Form: String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'function OpenForm(Form: String) : String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenFormWithParams(Form, Params : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenGridFromTable(prTableName: String);'));
 

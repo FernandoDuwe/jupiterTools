@@ -1,11 +1,11 @@
 inherited FGenerator: TFGenerator
   Caption = 'Generator'
   inherited fpOptions: TFlowPanel
-    TabOrder = 2
+    TabOrder = 3
   end
-  object pcOptions: TPageControl[2]
+  object pcOptions: TPageControl[3]
     Left = 0
-    Height = 406
+    Height = 325
     Top = 50
     Width = 879
     ActivePage = tsGenerator
@@ -14,11 +14,11 @@ inherited FGenerator: TFGenerator
     TabOrder = 1
     object tsGenerator: TTabSheet
       Caption = 'Generator'
-      ClientHeight = 375
+      ClientHeight = 294
       ClientWidth = 869
       object mmDetails: TMemo
         Left = 0
-        Height = 375
+        Height = 294
         Top = 0
         Width = 869
         Align = alClient
@@ -32,11 +32,11 @@ inherited FGenerator: TFGenerator
     end
     object tsRoutes: TTabSheet
       Caption = 'Rotas'
-      ClientHeight = 375
+      ClientHeight = 294
       ClientWidth = 869
       object dbGridRoutes: TDBGrid
         Left = 0
-        Height = 375
+        Height = 294
         Top = 0
         Width = 869
         Align = alClient
@@ -50,11 +50,11 @@ inherited FGenerator: TFGenerator
     end
     object tsMacros: TTabSheet
       Caption = 'Macros'
-      ClientHeight = 375
+      ClientHeight = 294
       ClientWidth = 869
       object dbGridMacros: TDBGrid
         Left = 0
-        Height = 375
+        Height = 294
         Top = 0
         Width = 869
         Align = alClient
@@ -68,11 +68,11 @@ inherited FGenerator: TFGenerator
     end
     object tsActions: TTabSheet
       Caption = 'Ações'
-      ClientHeight = 375
+      ClientHeight = 294
       ClientWidth = 869
       object dbGridActions: TDBGrid
         Left = 0
-        Height = 375
+        Height = 294
         Top = 0
         Width = 869
         Align = alClient
@@ -85,46 +85,46 @@ inherited FGenerator: TFGenerator
       end
     end
   end
-  inherited acOptions: TActionList[3]
+  inherited acOptions: TActionList[4]
     Left = 344
     Top = 128
   end
-  inherited tmrAutoUpdater: TTimer[4]
+  inherited tmrAutoUpdater: TTimer[5]
     Left = 456
     Top = 128
   end
-  object qryRoutes: TSQLQuery[5]
+  object qryRoutes: TSQLQuery[6]
     FieldDefs = <>
     Params = <>
     Macros = <>
     Left = 336
     Top = 200
   end
-  object dsRoutes: TDataSource[6]
+  object dsRoutes: TDataSource[7]
     DataSet = qryRoutes
     Left = 456
     Top = 200
   end
-  object qryMacro: TSQLQuery[7]
+  object qryMacro: TSQLQuery[8]
     FieldDefs = <>
     Params = <>
     Macros = <>
     Left = 336
     Top = 272
   end
-  object dsMacro: TDataSource[8]
+  object dsMacro: TDataSource[9]
     DataSet = qryMacro
     Left = 456
     Top = 272
   end
-  object qryActions: TSQLQuery[9]
+  object qryActions: TSQLQuery[10]
     FieldDefs = <>
     Params = <>
     Macros = <>
     Left = 336
     Top = 336
   end
-  object dsActions: TDataSource[10]
+  object dsActions: TDataSource[11]
     DataSet = qryActions
     Left = 456
     Top = 336

@@ -1,0 +1,28 @@
+inherited FCustomCodeForm: TFCustomCodeForm
+  Caption = ''
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  inherited pnSearchBar: TPanel
+    inherited edSearch: TEdit
+      Left = 0
+      Height = 50
+      Top = 0
+      Width = 879
+    end
+  end
+  object sbBody: TScrollBox[3]
+    Left = 0
+    Height = 325
+    Top = 50
+    Width = 879
+    HorzScrollBar.Page = 1
+    VertScrollBar.Page = 1
+    Align = alClient
+    BorderStyle = bsNone
+    TabOrder = 3
+  end
+  inherited acOptions: TActionList[4]
+  end
+  inherited tmrAutoUpdater: TTimer[5]
+  end
+end

@@ -162,6 +162,9 @@ begin
       InternalQuery.Locate('ID', vrId,[]);
   finally
     FreeAndNil(vrWizard);
+
+    Self.Hint := 'Tabela: ' + Self.FReference.TableName + '   Total de registros em tela: ' + IntToStr(InternalQuery.RecordCount);
+
   //  FreeAndNil(vrStringList);
   end;
 end;

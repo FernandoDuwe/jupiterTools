@@ -15,6 +15,7 @@ const
    USERPREFERENCE_PATH : String = '/forms/userPreference';
    CUSTOMDATABASE_PATH : String = '/forms/custom/database';
    CUSTOMGRIDDATABASE_PATH : String = '/forms/custom/databaseGrid';
+   CUSTOMCODEFORM_PATH : String = '/forms/custom/codable';
    SCRIPTFORM_PATH : String = '/forms/script';
    SYSTEM_PATH : String = '/forms/system';
 

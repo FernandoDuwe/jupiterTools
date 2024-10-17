@@ -171,11 +171,18 @@ begin
 
   if InternalDataSource.State in [dsEdit, dsInsert] then
   begin
+    if InternalDataSource.State in [dsInsert] then
+      Self.Hint := 'Criando um novo registro em ' + Self.FTableName
+    else
+      Self.Hint := 'Editando registro #' + FQueryOrigin.FieldByName('ID').AsString + ', da tabela ' + Self.FTableName;
+
     Self.ActionGroup.GetActionAtIndex(0).Enable;
     Self.ActionGroup.GetActionAtIndex(1).Enable;
 
     Exit;
-  end;
+  end
+  else
+    Self.Hint := 'Visualizando registro #' + FQueryOrigin.FieldByName('ID').AsString + ', da tabela ' + Self.FTableName;
 
   Self.ActionGroup.GetActionAtIndex(0).Disable;
   Self.ActionGroup.GetActionAtIndex(1).Disable;

@@ -333,6 +333,19 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uSystemMonitor"/>
       </Unit>
+      <Unit>
+        <Filename Value="forms/ucustomcodeform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FCustomCodeForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uCustomCodeForm"/>
+      </Unit>
+      <Unit>
+        <Filename Value="scripts/ujupiterformdesktopappscript.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uJupiterFormDesktopAppScript"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

@@ -2,9 +2,12 @@ inherited FUserPreferences: TFUserPreferences
   Left = 857
   Top = 586
   Caption = 'Preferências do usuário'
-  object sbBody: TScrollBox[2]
+  inherited pnBottom: TPanel
+    TabOrder = 3
+  end
+  object sbBody: TScrollBox[3]
     Left = 0
-    Height = 406
+    Height = 325
     Top = 50
     Width = 879
     HorzScrollBar.Page = 1
@@ -13,8 +16,8 @@ inherited FUserPreferences: TFUserPreferences
     BorderStyle = bsNone
     TabOrder = 2
   end
-  inherited acOptions: TActionList[3]
+  inherited acOptions: TActionList[4]
   end
-  inherited tmrAutoUpdater: TTimer[4]
+  inherited tmrAutoUpdater: TTimer[5]
   end
 end

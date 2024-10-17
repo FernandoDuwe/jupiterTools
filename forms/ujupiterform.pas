@@ -6,8 +6,10 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ActnList, ExtCtrls,
-  ButtonPanel, StdCtrls, Menus, ComCtrls, Buttons, JupiterConsts, JupiterFormTabSheet,
-  jupiterformutils, JupiterApp, uJupiterAction, jupiterDesktopApp, JupiterVariable;
+  ButtonPanel, StdCtrls, Menus, ComCtrls, Buttons, JupiterConsts,
+  JupiterFormTabSheet, jupiterformutils, JupiterApp, uJupiterAction,
+  jupiterDesktopApp, jupiterformcomponenttils, JupiterVariable,
+  jupiterStringUtils;
 
 type
 
@@ -17,6 +19,8 @@ type
     acOptions: TActionList;
     edSearch: TEdit;
     fpOptions: TFlowPanel;
+    Image1: TImage;
+    pnBottom: TPanel;
     pnSearchBar: TPanel;
     tmrAutoUpdater: TTimer;
     procedure FormActivate(Sender: TObject);
@@ -24,8 +28,12 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure pnSearchBarClick(Sender: TObject);
     procedure tmrAutoUpdaterTimer(Sender: TObject);
   private
+    FFormID : String;
+    FHint : String;
+
     FShowSearchBar : Boolean;
     FActionGroup   : TJupiterActionGroup;
     FOwnerTab      : TJupiterFormTabSheet;
@@ -38,6 +46,8 @@ type
     property ShowSearchBar : Boolean              read FShowSearchBar write Internal_SetSearchBar default False;
     property OwnerTab      : TJupiterFormTabSheet read FOwnerTab      write FOwnerTab;
     property Params        : TJupiterVariableList read FParams        write FParams;
+    property FormID        : String               read FFormID;
+    property Hint          : String               read FHint          write FHint;
 
     procedure Internal_UpdateComponents; virtual;
     procedure Internal_UpdateDatasets; virtual;
@@ -70,11 +80,16 @@ begin
   end;
 end;
 
+procedure TFJupiterForm.pnSearchBarClick(Sender: TObject);
+begin
+
+end;
+
 procedure TFJupiterForm.tmrAutoUpdaterTimer(Sender: TObject);
 begin
   Self.FUpdateCount := Self.FUpdateCount + 1;
 
-  if (Self.FUpdateCount >= 3) then
+  if (Self.FUpdateCount >= 2) then
     Self.FUpdateCount := 0;
 
   tmrAutoUpdater.Enabled := False;
@@ -100,6 +115,8 @@ end;
 
 procedure TFJupiterForm.FormCreate(Sender: TObject);
 begin
+  Self.FFormID := JupiterStringUtilsGenerateGUID;
+
   Self.FUpdateCount := 1;
 
   Self.FActionGroup := TJupiterActionGroup.Create;
@@ -130,12 +147,19 @@ procedure TFJupiterForm.Internal_UpdateComponents;
 begin
   DrawForm(Self);
 
+  pnBottom.Caption := '                              ' + Self.FHint;
+  pnBottom.Visible := Trim(Self.FHint) <> EmptyStr;
+
   Self.ActionGroup.UpdateActions;
 
   pnSearchBar.Visible := Self.ShowSearchBar;
 
   if pnSearchBar.Visible then
+  begin
     pnSearchBar.Top := fpOptions.Top + fpOptions.Height + 1;
+
+    pnSearchBar.Height := GetTextHeight('PESQUISAR', edSearch.Font) + FORM_MARGIN_TOP;
+  end;
 end;
 
 procedure TFJupiterForm.Internal_UpdateDatasets;
