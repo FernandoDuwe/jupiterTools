@@ -7,7 +7,8 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, Menus,
   ActnList, ExtCtrls, Buttons, uJupiterForm, JupiterFormTab,
-  jupiterMainMenuGenerator, JupiterApp, JupiterConsts, jupiterDesktopApp;
+  jupiterMainMenuGenerator, JupiterApp, JupiterConsts, JupiterVariable,
+  jupiterDesktopApp;
 
 type
 
@@ -18,16 +19,27 @@ type
     ilTabs: TImageList;
     jtMainTab: TJupiterFormTab;
     mmMainMenu: TMainMenu;
+    pmTabOptions: TPopupMenu;
     sbStatus: TStatusBar;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure jtMainTabChange(Sender: TObject);
+    procedure jtMainTabCloseTab(Sender: TObject);
     procedure jtMainTabCloseTabClicked(Sender: TObject);
     procedure jtMainTabResize(Sender: TObject);
+    procedure pmTabOptionsPopup(Sender: TObject);
   private
     procedure Internal_PrepareForm; override;
     procedure Internal_UpdateComponents; override;
+    procedure Internal_CreatePopMenuTab;
+
+    procedure Internal_CloseCurrentTab(Sender: TObject);
+    procedure Internal_CloseAllButCurrentTab(Sender: TObject);
+    procedure Internal_GoToNextTab(Sender: TObject);
+    procedure Internal_GoToPreviousTab(Sender: TObject);
+    procedure Internal_MenuGoToTabClick(Sender : TObject);
   public
     procedure NewTab(Form : TForm);
   end;
@@ -37,7 +49,7 @@ var
 
 implementation
 
-uses JupiterFormTabSheet;
+uses JupiterFormTabSheet, LCLProc;
 
 {$R *.lfm}
 
@@ -71,7 +83,17 @@ procedure TFMain.FormShow(Sender: TObject);
 begin
   inherited;
 
-  vrJupiterApp.RunMacro(TRIGGER_ONSTART);
+  vrJupiterApp.RunMacro(TRIGGER_ONSTART, TJupiterVariableList.Create);
+end;
+
+procedure TFMain.jtMainTabChange(Sender: TObject);
+begin
+
+end;
+
+procedure TFMain.jtMainTabCloseTab(Sender: TObject);
+begin
+
 end;
 
 procedure TFMain.jtMainTabResize(Sender: TObject);
@@ -94,6 +116,19 @@ begin
 
     TFJupiterForm(vrForm).UpdateForm(False, True, False);
   end;
+end;
+
+procedure TFMain.pmTabOptionsPopup(Sender: TObject);
+begin
+  Self.Internal_CreatePopMenuTab;
+end;
+
+procedure TFMain.Internal_MenuGoToTabClick(Sender: TObject);
+begin
+  if not (Sender is TMenuItem) then
+    Exit;
+
+  jtMainTab.PageIndex := TMenuItem(Sender).Tag;
 end;
 
 procedure TFMain.Internal_PrepareForm;
@@ -133,6 +168,103 @@ begin
   Self.Refresh;
 
   Application.ProcessMessages;
+end;
+
+procedure TFMain.Internal_CreatePopMenuTab;
+var
+  vrMenuItem : TMenuItem;
+  vrVez : Integer;
+begin
+  pmTabOptions.Items.Clear;
+
+  if jtMainTab.PageCount = 0 then
+    Exit;
+
+  for vrVez := 0 to jtMainTab.PageCount - 1 do
+  begin
+    vrMenuItem := TMenuItem.Create(pmTabOptions);
+    vrMenuItem.Caption := jtMainTab.Page[vrVez].Caption;
+    vrMenuItem.Tag := vrVez;
+    vrMenuItem.Checked := vrVez = jtMainTab.PageIndex;
+    vrMenuItem.OnClick := @Internal_MenuGoToTabClick;
+
+    pmTabOptions.Items.Add(vrMenuItem);
+  end;
+
+  vrMenuItem := TMenuItem.Create(pmTabOptions);
+  vrMenuItem.Caption := '-';
+  pmTabOptions.Items.Add(vrMenuItem);
+
+  vrMenuItem := TMenuItem.Create(pmTabOptions);
+  vrMenuItem.Caption := 'Próxima aba (Ctrl + Tab)';
+  vrMenuItem.ShortCut := TextToShortCut('Ctrl+Tab');
+  vrMenuItem.OnClick := @Internal_GoToNextTab;
+  pmTabOptions.Items.Add(vrMenuItem);
+
+  vrMenuItem := TMenuItem.Create(pmTabOptions);
+  vrMenuItem.Caption := 'Aba anterior (Ctrl + Shift + Tab)';
+  vrMenuItem.ShortCut := TextToShortCut('Ctrl+Shift+Tab');
+  vrMenuItem.OnClick := @Internal_GoToPreviousTab;
+  pmTabOptions.Items.Add(vrMenuItem);
+
+  vrMenuItem := TMenuItem.Create(pmTabOptions);
+  vrMenuItem.Caption := 'Fechar aba (Ctrl + F4)';
+  vrMenuItem.ShortCut := TextToShortCut('Ctrl+F4');
+  vrMenuItem.OnClick := @Internal_CloseCurrentTab;
+  pmTabOptions.Items.Add(vrMenuItem);
+
+  vrMenuItem := TMenuItem.Create(pmTabOptions);
+  vrMenuItem.Caption := 'Fechar todas as abas, exceto essa (Ctrl + Shift + F4)';
+  vrMenuItem.ShortCut := TextToShortCut('Ctrl+Shift+F4');
+  vrMenuItem.OnClick := @Internal_CloseAllButCurrentTab;
+  pmTabOptions.Items.Add(vrMenuItem);
+end;
+
+procedure TFMain.Internal_CloseCurrentTab(Sender: TObject);
+begin
+  jtMainTab.CloseTab(jtMainTab.PageIndex);
+end;
+
+procedure TFMain.Internal_CloseAllButCurrentTab(Sender: TObject);
+var
+  vrTab : TTabSheet;
+  vrVez : Integer;
+begin
+  tmrAutoUpdater.Enabled := False;
+
+  vrTab := jtMainTab.Pages[jtMainTab.PageIndex];
+
+  for vrVez := 0 to jtMainTab.PageCount - 1 do
+  begin
+    if jtMainTab.Pages[vrVez] = vrTab then
+      Exit;
+
+    jtMainTab.CloseTab(vrVez);
+  end;
+
+  tmrAutoUpdater.Enabled := True;
+end;
+
+procedure TFMain.Internal_GoToNextTab(Sender: TObject);
+begin
+  if (jtMainTab.PageIndex + 1) >= jtMainTab.PageCount then
+  begin
+    jtMainTab.PageIndex := 0;
+    Exit;
+  end;
+
+  jtMainTab.PageIndex := jtMainTab.PageIndex + 1;
+end;
+
+procedure TFMain.Internal_GoToPreviousTab(Sender: TObject);
+begin
+  if (jtMainTab.PageIndex - 1) <= 0 then
+  begin
+    jtMainTab.PageIndex := jtMainTab.PageCount - 1;
+    Exit;
+  end;
+
+  jtMainTab.PageIndex := jtMainTab.PageIndex + 1;
 end;
 
 procedure TFMain.NewTab(Form: TForm);

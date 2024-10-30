@@ -6,9 +6,13 @@ interface
 
 uses
   Classes, ComCtrls, Controls, SysUtils, StdCtrls, jupiterformutils, JupiterConsts,
-  jupiterDatabaseWizard, DBCtrls, DB;
+  jupiterDatabaseWizard, JupiterDataProvider, JupiterApp, DBCtrls, DB;
 
   function JupiterComponentsNewLabel(prText : String; prPosition : TJupiterPosition; prOwner : TWinControl) : TJupiterComponentReference;
+
+  function JupiterComponentsNewEdit(prInitialValue : String; prPosition : TJupiterPosition; prOwner : TWinControl) : TJupiterComponentReference;
+
+  function JupiterComponentsNewComboBox(prDataProvider, prColumn : String; prPosition : TJupiterPosition; prOwner : TWinControl) : TJupiterComponentReference;
 
   function JupiterComponentsNewTrackBar(prValue, prMin, prMax : Integer; prPosition : TJupiterPosition; prOwner : TWinControl; prOnChange : TNotifyEvent) : TJupiterComponentReference;
 
@@ -25,7 +29,7 @@ uses
 
 implementation
 
-uses DBDateTimePicker, SQLDB;
+uses DBDateTimePicker, SQLDB, DateTimePicker;
 
 function JupiterComponentsNewLabel(prText: String; prPosition : TJupiterPosition; prOwner : TWinControl): TJupiterComponentReference;
 var
@@ -44,6 +48,57 @@ begin
                                               prPosition.Left + vrLabel.Width,
                                               prPosition.Top + vrLabel.Height,
                                               vrLabel);
+end;
+
+function JupiterComponentsNewEdit(prInitialValue: String; prPosition: TJupiterPosition; prOwner: TWinControl): TJupiterComponentReference;
+var
+  vrEdit : TEdit;
+begin
+  vrEdit := TEdit.Create(prOwner);
+  vrEdit.Parent     := prOwner;
+  vrEdit.AutoSize   := True;
+  vrEdit.Font.Size  := GetFontSize;
+  vrEdit.Top        := prPosition.Top;
+  vrEdit.Left       := prPosition.Left;
+  vrEdit.AutoSize   := False;
+  vrEdit.Width      := prOwner.Width - prPosition.Left - FORM_MARGIN_RIGHT;
+  vrEdit.Anchors    := [akTop, akLeft, akRight];
+  vrEdit.Text       := prInitialValue;
+
+  Result := TJupiterComponentReference.Create(prPosition.Top,
+                                              prPosition.Left,
+                                              prPosition.Left + vrEdit.Width,
+                                              prPosition.Top + vrEdit.Height,
+                                              vrEdit);
+end;
+
+function JupiterComponentsNewComboBox(prDataProvider, prColumn: String; prPosition: TJupiterPosition; prOwner: TWinControl): TJupiterComponentReference;
+var
+  vrEdit : TComboBox;
+  vrProvider : TJupiterDataProvider;
+  vrVez : Integer;
+begin
+  vrProvider := vrJupiterApp.GetDataProviderById(prDataProvider);
+
+  vrEdit := TComboBox.Create(prOwner);
+  vrEdit.Parent     := prOwner;
+  vrEdit.AutoSize   := True;
+  vrEdit.Font.Size  := GetFontSize;
+  vrEdit.Top        := prPosition.Top;
+  vrEdit.Left       := prPosition.Left;
+  vrEdit.AutoSize   := False;
+  vrEdit.Width      := prOwner.Width - prPosition.Left - FORM_MARGIN_RIGHT;
+  vrEdit.Anchors    := [akTop, akLeft, akRight];
+
+  for vrVez := 0 to vrProvider.Count - 1 do
+    with TJupiterDataProviderRow(vrProvider.GetRowByIndex(vrVez)) do
+      vrEdit.Items.Add(Fields.VariableById(prColumn).Value);
+
+  Result := TJupiterComponentReference.Create(prPosition.Top,
+                                              prPosition.Left,
+                                              prPosition.Left + vrEdit.Width,
+                                              prPosition.Top + vrEdit.Height,
+                                              vrEdit);
 end;
 
 function JupiterComponentsNewTrackBar(prValue, prMin, prMax : Integer; prPosition: TJupiterPosition; prOwner: TWinControl; prOnChange : TNotifyEvent): TJupiterComponentReference;
@@ -129,6 +184,14 @@ begin
   vrEdit.AutoSize   := False;
   vrEdit.Width      := prOwner.Width - prPosition.Left - FORM_MARGIN_RIGHT;
   vrEdit.Anchors    := [akTop, akLeft, akRight];
+
+  if prField is TDateField then
+    vrEdit.Kind := dtkDate
+  else
+    if prField is TTimeField then
+      vrEdit.Kind := dtkTime
+    else
+      vrEdit.Kind := dtkDateTime;
 
   Result := TJupiterComponentReference.Create(prPosition.Top,
                                               prPosition.Left,

@@ -56,8 +56,8 @@ type
     function GetForeignKeyData(prTableName, prFieldName : String) : TJupiterDatabaseForeignKeyReference;
     function IsForeignKeyField(prTableName, prFieldName : String) : Boolean;
     function NewQuery : TSQLQuery;
-    function NewQueryFromReference(prReference : TJupiterDatabaseReference) : TSQLQuery;
-    function NewQueryFromReferenceWithSearch(prReference : TJupiterDatabaseReference; prFieldList : TStrings; prSearch : String) : TSQLQuery;
+    function NewQueryFromReference(prReference : TJupiterDatabaseReference; prWhere : String = ''; prOrderBy : String = '') : TSQLQuery;
+    function NewQueryFromReferenceWithSearch(prReference : TJupiterDatabaseReference; prFieldList : TStrings; prSearch : String; prWhere : String = ''; prOrderBy : String = '') : TSQLQuery;
     function NewScript : TSQLScript;
     function NewDataSourceFromQuery(prQuery : TSQLQuery) : TDataSource;
 
@@ -213,14 +213,20 @@ begin
   Result.SQL.Clear;
 end;
 
-function TJupiterDatabaseWizard.NewQueryFromReference(prReference: TJupiterDatabaseReference): TSQLQuery;
+function TJupiterDatabaseWizard.NewQueryFromReference(prReference: TJupiterDatabaseReference; prWhere : String = ''; prOrderBy : String = ''): TSQLQuery;
 begin
   Result := NewQuery;
 
-  Result.SQL.Add(String.Format(' SELECT * FROM %0:s WHERE ((ID = %1:d) OR (-1 = %1:d)) ORDER BY 2', [prReference.TableName, prReference.ID]));
+  if prOrderBy = '' then
+    prOrderBy := '2';
+
+  if prWhere  <> '' then
+    prWhere := ' AND ' + prWhere;
+
+  Result.SQL.Add(String.Format(' SELECT * FROM %0:s WHERE ((ID = %1:d) OR (-1 = %1:d)) %3:s ORDER BY %2:s ', [prReference.TableName, prReference.ID, prOrderBy, prWhere]));
 end;
 
-function TJupiterDatabaseWizard.NewQueryFromReferenceWithSearch(prReference: TJupiterDatabaseReference; prFieldList: TStrings; prSearch : String): TSQLQuery;
+function TJupiterDatabaseWizard.NewQueryFromReferenceWithSearch(prReference: TJupiterDatabaseReference; prFieldList: TStrings; prSearch : String; prWhere : String = ''; prOrderBy : String = ''): TSQLQuery;
 var
   vrVez : Integer;
 begin
@@ -239,7 +245,16 @@ begin
   end;
 
   Result.SQL.Add(' ) ');
-  Result.SQL.Add(' ORDER BY 2 ');
+
+  if prWhere  <> '' then
+    prWhere := ' AND ' + prWhere;
+
+  Result.SQL.Add(prWhere);
+
+  if prOrderBy = '' then
+    prOrderBy := '2';
+
+  Result.SQL.Add(' ORDER BY ' + prOrderBy);
 end;
 
 function TJupiterDatabaseWizard.NewScript: TSQLScript;

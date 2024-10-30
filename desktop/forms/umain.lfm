@@ -1,7 +1,7 @@
 inherited FMain: TFMain
-  Left = 212
+  Left = 584
   Height = 648
-  Top = 204
+  Top = 331
   Width = 1228
   Caption = ''
   ClientHeight = 648
@@ -15,7 +15,7 @@ inherited FMain: TFMain
     Width = 1228
     ClientWidth = 1228
     inherited edSearch: TEdit
-      Width = 581
+      Width = 1228
     end
   end
   inherited fpOptions: TFlowPanel
@@ -44,9 +44,9 @@ inherited FMain: TFMain
     HotTrack = True
     Images = ilTabs
     MultiLine = True
+    PopupMenu = pmTabOptions
     TabOrder = 1
     Visible = False
-    OnCloseTabClicked = jtMainTabCloseTabClicked
     OnResize = jtMainTabResize
     Options = [nboMultiLine]
     AlwaysHaveForm = False
@@ -56,12 +56,14 @@ inherited FMain: TFMain
   end
   inherited tmrAutoUpdater: TTimer[6]
   end
-  object mmMainMenu: TMainMenu[7]
+  inherited pmOptions: TPopupMenu[7]
+  end
+  object mmMainMenu: TMainMenu[8]
     Images = ilIconFamily
     Left = 176
     Top = 120
   end
-  object ilIconFamily: TImageList[8]
+  object ilIconFamily: TImageList[9]
     Left = 64
     Top = 120
     Bitmap = {
@@ -673,7 +675,7 @@ inherited FMain: TFMain
       E2550EC6BF96EE06EB0500DF7E7849
     }
   end
-  object ilTabs: TImageList[9]
+  object ilTabs: TImageList[10]
     Left = 64
     Top = 200
     Bitmap = {
@@ -700,5 +702,10 @@ inherited FMain: TFMain
       3CC673EC9AF367DF7B360CF7F9F7FA38FF4B8D7A8DC3161AC59C5EFF4E6BFECD
       1D2FF5F77F85DB2FEC17A22E
     }
+  end
+  object pmTabOptions: TPopupMenu[11]
+    OnPopup = pmTabOptionsPopup
+    Left = 592
+    Top = 184
   end
 end

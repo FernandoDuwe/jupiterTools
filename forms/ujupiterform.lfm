@@ -11,6 +11,7 @@ object FJupiterForm: TFJupiterForm
   OnDestroy = FormDestroy
   OnResize = FormResize
   OnShow = FormShow
+  PopupMenu = pmOptions
   LCLVersion = '3.4.0.0'
   object pnSearchBar: TPanel
     Left = 0
@@ -24,10 +25,10 @@ object FJupiterForm: TFJupiterForm
     TabOrder = 0
     OnClick = pnSearchBarClick
     object edSearch: TEdit
-      Left = 8
-      Height = 34
-      Top = 8
-      Width = 232
+      Left = 0
+      Height = 50
+      Top = 0
+      Width = 879
       Align = alClient
       TabOrder = 0
       TextHint = 'Pesquisar'
@@ -427,5 +428,17 @@ object FJupiterForm: TFJupiterForm
     OnTimer = tmrAutoUpdaterTimer
     Left = 448
     Top = 72
+  end
+  object pmOptions: TPopupMenu
+    Left = 240
+    Top = 72
+    object miUpdate: TMenuItem
+      Caption = 'Atualizar'
+      OnClick = miUpdateClick
+    end
+    object miParams: TMenuItem
+      Caption = 'Parâmetros'
+      OnClick = miParamsClick
+    end
   end
 end

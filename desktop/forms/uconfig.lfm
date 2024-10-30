@@ -10,17 +10,24 @@ inherited FConfig: TFConfig
     Width = 1016
     ClientWidth = 1016
     inherited edSearch: TEdit
-      Width = 369
+      Width = 1016
     end
   end
   inherited fpOptions: TFlowPanel
+    Top = 496
     Width = 1016
     TabOrder = 3
   end
-  object gbVariables: TDBGrid[2]
+  inherited pnBottom: TPanel
+    Top = 415
+    Width = 1016
+    ClientWidth = 1016
+    TabOrder = 4
+  end
+  object gbVariables: TDBGrid[3]
     Left = 334
-    Height = 446
-    Top = 51
+    Height = 365
+    Top = 50
     Width = 682
     Align = alClient
     AlternateColor = clDefault
@@ -31,10 +38,10 @@ inherited FConfig: TFConfig
     TabOrder = 1
     OnDblClick = gbVariablesDblClick
   end
-  object tvFilter: TTreeView[3]
+  object tvFilter: TTreeView[4]
     Left = 0
-    Height = 446
-    Top = 51
+    Height = 365
+    Top = 50
     Width = 329
     Align = alLeft
     ReadOnly = True
@@ -42,22 +49,24 @@ inherited FConfig: TFConfig
     OnSelectionChanged = tvFilterSelectionChanged
     Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
   end
-  object spSeparator: TSplitter[4]
+  object spSeparator: TSplitter[5]
     Left = 329
-    Height = 446
-    Top = 51
+    Height = 365
+    Top = 50
     Width = 5
   end
-  inherited acOptions: TActionList[5]
+  inherited acOptions: TActionList[6]
   end
-  inherited tmrAutoUpdater: TTimer[6]
+  inherited tmrAutoUpdater: TTimer[7]
   end
-  object dsConfig: TDataSource[7]
+  inherited pmOptions: TPopupMenu[8]
+  end
+  object dsConfig: TDataSource[9]
     DataSet = qryConfig
     Left = 448
     Top = 144
   end
-  object qryConfig: TSQLQuery[8]
+  object qryConfig: TSQLQuery[10]
     FieldDefs = <>
     Params = <>
     Macros = <>

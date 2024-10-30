@@ -346,6 +346,14 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="uJupiterFormDesktopAppScript"/>
       </Unit>
+      <Unit>
+        <Filename Value="forms/ufileexplorer.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FFileExplorer"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uFileExplorer"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

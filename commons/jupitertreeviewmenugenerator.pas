@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, JupiterObject, jupiterDatabaseWizard, JupiterConsts,
-  JupiterApp, SQLDB, ComCtrls;
+  JupiterApp, JupiterVariable, SQLDB, ComCtrls;
 
 type
 
@@ -98,6 +98,7 @@ procedure TJupiterTreeViewMenuGenerator.Internal_OnClick(Sender: TObject);
 var
   vrWizard : TJupiterDatabaseWizard;
   vrReference : TJupiterDatabaseReference;
+  vrDestiny : Integer;
 begin
   if not Assigned(Sender) then
     Exit;
@@ -118,7 +119,9 @@ begin
     if not vrWizard.Exists('ROUTES', Format(' ID = %0:d AND DESTINY IS NOT NULL ', [vrReference.ID])) then
       Exit;
 
-    vrJupiterApp.RunMacro(vrWizard.GetField('ROUTES', 'DESTINY', ' ID = ' + IntToStr(vrReference.ID)));
+    vrDestiny := vrWizard.GetField('ROUTES', 'DESTINY', ' ID = ' + IntToStr(vrReference.ID));
+
+    vrJupiterApp.RunMacro(vrDestiny, TJupiterVariableList.Create);
   finally
     FreeAndNil(vrWizard);
   end;

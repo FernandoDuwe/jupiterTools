@@ -51,8 +51,9 @@ type
     function NewScript : TJupiterScript;
     procedure SetInternalWizardData(prWizard : TJupiterDatabaseWizard);
 
-    procedure RunMacro(prId : Integer);
-    procedure RunMacro(prMacroId : String);
+    procedure RunMacro(prId : Integer; prParams : TJupiterVariableList);
+    procedure RunMacro(prMacroId : String; prParams : TJupiterVariableList);
+    procedure RunScript(prMacro : TStrings; prParams : TJupiterVariableList);
     procedure RunAction(prId : Integer; prParams : TJupiterVariableList);
     function RunAcitonEnabled(prId : Integer; prParams : TJupiterVariableList) : Boolean;
     function RunAcitonVisible(prId : Integer; prParams : TJupiterVariableList) : Boolean;
@@ -167,7 +168,7 @@ begin
   prWizard.Transaction := Self.InternalDatabase.Transaction;
 end;
 
-procedure TJupiterApp.RunMacro(prId: Integer);
+procedure TJupiterApp.RunMacro(prId: Integer; prParams : TJupiterVariableList);
 var
   vrScript : TJupiterScript;
   vrQry    : TSQLQuery;
@@ -180,14 +181,14 @@ begin
     vrQry.Open;
 
     vrScript.Script.AddStrings(JupiterStringUtilsStringToStringList(vrQry.FieldByName('MACRO').AsString));
-
+    vrScript.Params.CopyValues(prParams);
     vrScript.Execute;
   finally
     FreeAndNil(vrScript);
   end;
 end;
 
-procedure TJupiterApp.RunMacro(prMacroId: String);
+procedure TJupiterApp.RunMacro(prMacroId: String; prParams : TJupiterVariableList);
 var
   vrScript : TJupiterScript;
   vrQry    : TSQLQuery;
@@ -200,7 +201,21 @@ begin
     vrQry.Open;
 
     vrScript.Script.AddStrings(JupiterStringUtilsStringToStringList(vrQry.FieldByName('MACRO').AsString));
+    vrScript.Params.CopyValues(prParams);
+    vrScript.Execute;
+  finally
+    FreeAndNil(vrScript);
+  end;
+end;
 
+procedure TJupiterApp.RunScript(prMacro: TStrings; prParams: TJupiterVariableList);
+var
+  vrScript : TJupiterScript;
+begin
+  vrScript := Self.NewScript;
+  try
+    vrScript.Script.AddStrings(prMacro);
+    vrScript.Params.CopyValues(prParams);
     vrScript.Execute;
   finally
     FreeAndNil(vrScript);
@@ -229,7 +244,7 @@ begin
       Exit;
 
     vrScript.Script.AddStrings(JupiterStringUtilsStringToStringList(vrQry.FieldByName('MACRO').AsString));
-    vrScript.Params.AddChildList(prParams);
+    vrScript.Params.CopyValues(prParams);
     vrScript.Execute;
   finally
     FreeAndNil(vrScript);
@@ -263,7 +278,7 @@ begin
     vrScript.Params.AddVariable('Result', BOOL_FALSE_STR, 'Result');
 
     vrScript.Script.AddStrings(JupiterStringUtilsStringToStringList(vrQry.FieldByName('MACRO').AsString));
-    vrScript.Params.AddChildList(prParams);
+    vrScript.Params.CopyValues(prParams);
     vrScript.Execute;
 
     Result := False;
@@ -299,7 +314,7 @@ begin
       Exit;
 
     vrScript.Script.AddStrings(JupiterStringUtilsStringToStringList(vrQry.FieldByName('MACRO').AsString));
-    vrScript.Params.AddChildList(prParams);
+    vrScript.Params.CopyValues(prParams);
     vrScript.Execute;
 
     Result := False;

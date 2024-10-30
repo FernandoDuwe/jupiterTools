@@ -1,0 +1,43 @@
+inherited FFileExplorer: TFFileExplorer
+  Left = 595
+  Top = 498
+  object stvFolders: TShellTreeView[3]
+    Left = 0
+    Height = 325
+    Top = 50
+    Width = 296
+    Align = alLeft
+    FileSortType = fstFoldersFirst
+    ReadOnly = True
+    TabOrder = 3
+    Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
+    ObjectTypes = [otFolders]
+    ShellListView = slvExporer
+  end
+  object spDivider: TSplitter[4]
+    Left = 296
+    Height = 325
+    Top = 50
+    Width = 5
+  end
+  object slvExporer: TShellListView[5]
+    Left = 301
+    Height = 325
+    Top = 50
+    Width = 578
+    Align = alClient
+    Color = clDefault
+    ReadOnly = True
+    SortType = stText
+    TabOrder = 5
+    OnDblClick = slvExporerDblClick
+    ObjectTypes = [otNonFolders]
+    ShellTreeView = stvFolders
+  end
+  inherited acOptions: TActionList[6]
+  end
+  inherited tmrAutoUpdater: TTimer[7]
+  end
+  inherited pmOptions: TPopupMenu[8]
+  end
+end

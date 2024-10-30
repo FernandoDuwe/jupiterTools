@@ -114,6 +114,12 @@ begin
   Self.ActionGroup.AddAction(TJupiterAction.Create('Novo', 'Clique aqui para criar um novo registro', ICON_NEW, @Internal_OnNew));
 
   Self.ActionGroup.TableName := Self.FReference.TableName;
+
+  if not Self.Params.Exists('where') then
+    Self.Params.AddVariable('where', EmptyStr, 'Where');
+
+  if not Self.Params.Exists('orderBy') then
+    Self.Params.AddVariable('orderBy', EmptyStr, 'Order By');
 end;
 
 procedure TFCustomDatabaseGrid.Internal_UpdateDatasets;
@@ -147,13 +153,13 @@ begin
     InternalQuery.SQL.Clear;
 
     if edSearch.Text = EmptyStr then
-      InternalQuery.SQL.AddStrings(vrWizard.NewQueryFromReference(Self.FReference).SQL)
+      InternalQuery.SQL.AddStrings(vrWizard.NewQueryFromReference(Self.FReference, Self.Params.VariableById('where').Value, Self.Params.VariableById('orderBy').Value).SQL)
     else
     begin
       if vrStringList.Count > 0 then
-        InternalQuery.SQL.AddStrings(vrWizard.NewQueryFromReferenceWithSearch(Self.FReference, vrStringList, edSearch.Text).SQL)
+        InternalQuery.SQL.AddStrings(vrWizard.NewQueryFromReferenceWithSearch(Self.FReference, vrStringList, edSearch.Text, Self.Params.VariableById('where').Value, Self.Params.VariableById('orderBy').Value).SQL)
       else
-        InternalQuery.SQL.AddStrings(vrWizard.NewQueryFromReference(Self.FReference).SQL)
+        InternalQuery.SQL.AddStrings(vrWizard.NewQueryFromReference(Self.FReference, Self.Params.VariableById('where').Value, Self.Params.VariableById('orderBy').Value).SQL)
     end;
 
     InternalQuery.Open;
@@ -164,6 +170,10 @@ begin
     FreeAndNil(vrWizard);
 
     Self.Hint := 'Tabela: ' + Self.FReference.TableName + '   Total de registros em tela: ' + IntToStr(InternalQuery.RecordCount);
+
+    if ((Self.Params.Exists('where')) and (not Self.Params.VariableById('where').IsEmpty)) then
+      Self.Hint := Self.Hint + '. Existem filtros aplicados nesta consulta';
+
 
   //  FreeAndNil(vrStringList);
   end;
@@ -187,6 +197,12 @@ var
 begin
   inherited;
 
+  if not Self.Params.Exists('where') then
+    Self.Params.AddVariable('where', EmptyStr, 'Where');
+
+  if not Self.Params.Exists('orderBy') then
+    Self.Params.AddVariable('orderBy', EmptyStr, 'Order By');
+
   Self.FReference := prReference;
 
   Self.Caption := JupiterStringUtilsNormalizeToPresent(prReference.TableName);
@@ -195,7 +211,7 @@ begin
   try
     InternalQuery.Close;
     InternalQuery.SQL.Clear;
-    InternalQuery.SQL.AddStrings(vrWizard.NewQueryFromReference(prReference).SQL);
+    InternalQuery.SQL.AddStrings(vrWizard.NewQueryFromReference(prReference, Self.Params.VariableById('where').Value, Self.Params.VariableById('orderBy').Value).SQL);
     InternalQuery.Open;
     InternalQuery.First;
   finally

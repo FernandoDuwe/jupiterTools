@@ -28,7 +28,9 @@ inherited FCustomDatabaseForm: TFCustomDatabaseForm
   end
   inherited tmrAutoUpdater: TTimer[5]
   end
-  object InternalDataSource: TDataSource[6]
+  inherited pmOptions: TPopupMenu[6]
+  end
+  object InternalDataSource: TDataSource[7]
     OnStateChange = InternalDataSourceStateChange
     OnDataChange = InternalDataSourceDataChange
     Left = 592

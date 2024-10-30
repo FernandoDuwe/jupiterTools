@@ -2,6 +2,14 @@ inherited FUserPreferences: TFUserPreferences
   Left = 857
   Top = 586
   Caption = 'Preferências do usuário'
+  inherited pnSearchBar: TPanel
+    inherited edSearch: TEdit
+      Left = 0
+      Height = 50
+      Top = 0
+      Width = 879
+    end
+  end
   inherited pnBottom: TPanel
     TabOrder = 3
   end

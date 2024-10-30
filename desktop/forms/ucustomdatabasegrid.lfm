@@ -36,12 +36,14 @@ inherited FCustomDatabaseGrid: TFCustomDatabaseGrid
   end
   inherited tmrAutoUpdater: TTimer[5]
   end
-  object InternalDataSource: TDataSource[6]
+  inherited pmOptions: TPopupMenu[6]
+  end
+  object InternalDataSource: TDataSource[7]
     DataSet = InternalQuery
     Left = 574
     Top = 72
   end
-  object InternalQuery: TSQLQuery[7]
+  object InternalQuery: TSQLQuery[8]
     FieldDefs = <>
     Params = <>
     Macros = <>

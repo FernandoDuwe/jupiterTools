@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, JupiterObject, jupiterformutils, JupiterConsts, JupiterApp,
-  jupiterDatabaseWizard, JupiterVariable, ExtCtrls, Controls, Buttons;
+  jupiterDatabaseWizard, JupiterVariable, ExtCtrls, Controls, Buttons, ActnList,
+  LCLProc;
 
 type
 
@@ -19,11 +20,17 @@ type
     FIcon      : Integer;
     FCaption   : String;
     FHint      : String;
+    FMacroId   : String;
+    FMacro     : TStrings;
     FOnClick   : TNotifyEvent;
     FButton    : TSpeedButton;
     FReference : TJupiterDatabaseReference;
     FOnRequestData : TJupiterActionOnRequestData;
+    FOnAfterExecute : TNotifyEvent;
+    FAction : TAction;
 
+    procedure Internal_OnMacroClick(Sender : TObject);
+    procedure Internal_OnMacroScriptClick(Sender : TObject);
     procedure Internal_OnDatabaseClick(Sender: TObject);
   published
     property Caption : String       read FCaption write FCaption;
@@ -31,12 +38,19 @@ type
     property Hint    : String       read FHint    write FHint;
     property OnClick : TNotifyEvent read FOnClick write FOnClick;
     property Reference : TJupiterDatabaseReference read FReference write FReference;
+    property MacroId : String       read FMacroId write FMacroId;
+    property MacroScript : TStrings read FMacro;
+    property Action : TAction read FAction write FAction;
+    property Button : TSpeedButton read FButton write FButton;
 
-    property OnRequestData : TJupiterActionOnRequestData read FOnRequestData write FOnRequestData;
+    property OnRequestData  : TJupiterActionOnRequestData read FOnRequestData  write FOnRequestData;
+    property OnAfterExecute : TNotifyEvent                read FOnAfterExecute write FOnAfterExecute;
   public
     constructor Create(prCaption, prHint : String; prIcon : Integer);
     constructor Create(prCaption, prHint : String; prIcon : Integer; prOnClick : TNotifyEvent);
     constructor Create(prCaption, prHint : String; prIcon : Integer; prReference : TJupiterDatabaseReference);
+    constructor Create(prCaption, prHint : String; prIcon : Integer; prMacroId : String);
+    constructor Create(prCaption, prHint : String; prIcon : Integer; prMacro : TStrings);
 
     procedure Render(prFlow : TFlowPanel; prImageList : TImageList);
 
@@ -56,15 +70,20 @@ type
     FFlowPanel : TFlowPanel;
     FImageList : TImageList;
     FTableName : String;
+    FActionList : TActionList;
+
     FOnRequestData : TJupiterActionOnRequestData;
+    FOnAfterExecute : TNotifyEvent;
 
     procedure Internal_SetTableName(prTableName : String);
   published
-    property FlowPanel : TFlowPanel read FFlowPanel write FFlowPanel;
-    property ImageList : TImageList read FImageList write FImageList;
-    property TableName : String     read FTableName write Internal_SetTableName;
+    property FlowPanel  : TFlowPanel  read FFlowPanel  write FFlowPanel;
+    property ImageList  : TImageList  read FImageList  write FImageList;
+    property TableName  : String      read FTableName  write Internal_SetTableName;
+    property ActionList : TActionList read FActionList write FActionList;
 
-    property OnRequestData : TJupiterActionOnRequestData read FOnRequestData write FOnRequestData;
+    property OnRequestData  : TJupiterActionOnRequestData read FOnRequestData  write FOnRequestData;
+    property OnAfterExecute : TNotifyEvent                read FOnAfterExecute write FOnAfterExecute;
   public
     procedure UpdateActions;
 
@@ -83,13 +102,55 @@ uses SQLDB;
 
 procedure TJupiterAction.Internal_OnDatabaseClick(Sender: TObject);
 begin
-  if not (Sender is TSpeedButton) then
+  if Sender is TSpeedButton then
+  begin
+    if Assigned(Self.OnRequestData) then
+      vrJupiterApp.RunAction(TSpeedButton(Sender).Tag, Self.OnRequestData())
+    else
+      vrJupiterApp.RunAction(TSpeedButton(Sender).Tag, TJupiterVariableList.Create);
+
+    if Assigned(Self.OnAfterExecute) then
+       Self.OnAfterExecute(Sender);
+  end;
+
+  if Sender is TAction then
+  begin
+    if Assigned(Self.OnRequestData) then
+      vrJupiterApp.RunAction(TAction(Sender).Tag, Self.OnRequestData())
+    else
+      vrJupiterApp.RunAction(TAction(Sender).Tag, TJupiterVariableList.Create);
+
+    if Assigned(Self.OnAfterExecute) then
+       Self.OnAfterExecute(Sender);
+  end;
+end;
+
+procedure TJupiterAction.Internal_OnMacroClick(Sender : TObject);
+begin
+  if ((not (Sender is TSpeedButton)) and (not (Sender is TAction))) then
     Exit;
 
   if Assigned(Self.OnRequestData) then
-    vrJupiterApp.RunAction(TSpeedButton(Sender).Tag, Self.OnRequestData())
+    vrJupiterApp.RunMacro(Self.MacroId, Self.OnRequestData())
   else
-    vrJupiterApp.RunAction(TSpeedButton(Sender).Tag, TJupiterVariableList.Create);
+    vrJupiterApp.RunMacro(Self.MacroId, TJupiterVariableList.Create);
+
+  if Assigned(Self.OnAfterExecute) then
+     Self.OnAfterExecute(Sender);
+end;
+
+procedure TJupiterAction.Internal_OnMacroScriptClick(Sender: TObject);
+begin
+  if ((not (Sender is TSpeedButton)) and (not (Sender is TAction))) then
+    Exit;
+
+  if Assigned(Self.OnRequestData) then
+    vrJupiterApp.RunScript(Self.MacroScript, Self.OnRequestData())
+  else
+    vrJupiterApp.RunScript(Self.MacroScript, TJupiterVariableList.Create);
+
+  if Assigned(Self.OnAfterExecute) then
+     Self.OnAfterExecute(Sender);
 end;
 
 constructor TJupiterAction.Create(prCaption, prHint: String; prIcon : Integer);
@@ -97,6 +158,27 @@ begin
   Self.Caption := prCaption;
   Self.Hint    := prHint;
   Self.Icon    := prIcon;
+
+  Self.MacroId := EmptyStr;
+end;
+
+constructor TJupiterAction.Create(prCaption, prHint : String; prIcon : Integer; prMacroId : String);
+begin
+  Create(prCaption, prHint, prIcon);
+
+  Self.MacroId := prMacroId;
+  Self.OnClick := @Internal_OnMacroClick;
+end;
+
+constructor TJupiterAction.Create(prCaption, prHint: String; prIcon: Integer; prMacro: TStrings);
+begin
+  Create(prCaption, prHint, prIcon);
+
+  Self.FMacro := TStringList.Create;
+  Self.FMacro.Clear;
+  Self.FMacro.AddStrings(prMacro);
+
+  Self.OnClick := @Internal_OnMacroScriptClick;
 end;
 
 constructor TJupiterAction.Create(prCaption, prHint: String; prIcon: Integer; prOnClick: TNotifyEvent);
@@ -186,12 +268,18 @@ procedure TJupiterAction.Enable;
 begin
   if Assigned(Self.FButton) then
     Self.FButton.Enabled := True;
+
+  if Assigned(Self.Action) then
+    Self.Action.Enabled := True;
 end;
 
 procedure TJupiterAction.SetInvisibility;
 begin
   if Assigned(Self.FButton) then
     Self.FButton.Visible := False;
+
+  if Assigned(Self.Action) then
+    Self.Action.Enabled := False;
 end;
 
 procedure TJupiterAction.SetVisibility;
@@ -246,10 +334,36 @@ begin
 end;
 
 procedure TJupiterActionGroup.AddAction(prAction: TJupiterAction);
+var
+  vrShortcut : String;
 begin
   Self.Add(prAction);
 
-  TJupiterAction(Self.GetLastObject).OnRequestData := Self.OnRequestData;
+  TJupiterAction(Self.GetLastObject).OnRequestData  := Self.OnRequestData;
+  TJupiterAction(Self.GetLastObject).OnAfterExecute := Self.OnAfterExecute;
+
+  if not Assigned(Self.ActionList) then
+    Exit;
+
+  if Self.Count > 12 then
+    Exit;
+
+  vrShortcut := 'F' + IntToStr(Self.Count);
+
+  with TJupiterAction(Self.GetLastObject) do
+  begin
+    Caption := Caption + ' (' + vrShortcut + ')';
+
+    Action := TAction.Create(Self.ActionList);
+    Action.ActionList := Self.ActionList;
+    Action.Caption := Caption;
+    Action.Hint := Hint;
+    Action.OnExecute := OnClick;
+    Action.ShortCut := TextToShortCut(vrShortcut);
+
+    if Assigned(Reference) then
+      Action.Tag := Reference.ID;
+  end;
 end;
 
 function TJupiterActionGroup.GetActionAtIndex(prIndex: Integer): TJupiterAction;

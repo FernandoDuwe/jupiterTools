@@ -5,8 +5,9 @@ unit uJupiterDesktopAppScript;
 interface
 
 uses
-  Classes, jupiterScript, JupiterConsts, JupiterApp, uCustomDatabaseForm,
-  ucustomdatabasegrid, SysUtils, PascalScript, uPSComponent, Forms, SQLDB;
+  Classes, jupiterScript, JupiterConsts, JupiterApp, JupiterVariable,
+  uCustomDatabaseForm, ucustomdatabasegrid, SysUtils, PascalScript,
+  uPSComponent, Forms, SQLDB;
 
 type
 
@@ -26,6 +27,8 @@ type
   procedure JupiterAppDesktopOpenFormQuery(prQuery : TSQLQuery);
   procedure JupiterAppDesktopOpenFormFromTableId(prTableName : String; prID : Integer);
   procedure JupiterAppDesktopOpenGridFromTable(prTableName : String);
+  procedure JupiterAppDesktopOpenGridFromTableWithWhere(prTableName : String; prWhere : String; prOrderBy : String);
+  procedure JupiterAppDesktopOpenFileExplorerForm(prPath : String);
   procedure JupiterAppDesktopUpdateForms;
   procedure JupiterAppDesktopIncFont;
   procedure JupiterAppDesktopDecFont;
@@ -72,15 +75,47 @@ begin
   TJupiterDesktopApp(vrJupiterApp).OpenForm(vrForm as TFCustomDatabaseForm);
 end;
 
-procedure JupiterAppDesktopOpenGridFromTable(prTableName: String);
+procedure JupiterAppDesktopOpenGridFromTableWithWhere(prTableName: String; prWhere : String; prOrderBy : String);
 var
   vrForm : TForm;
+  vrVariables : TJupiterVariableList;
 begin
-  vrForm := TJupiterDesktopApp(vrJupiterApp).NewFormByRoute(CUSTOMGRIDDATABASE_PATH);
+  vrVariables := TJupiterVariableList.Create;
+  try
+    if prWhere <> '' then
+      vrVariables.AddVariable('where', prWhere, 'Where');
 
-  TFCustomDatabaseGrid(vrForm).FromReference(TJupiterDatabaseReference.Create(prTableName, NULL_KEY));
+    if prOrderBy <> '' then
+      vrVariables.AddVariable('orderBy', prOrderBy, 'Order By');
 
-  TJupiterDesktopApp(vrJupiterApp).OpenForm(vrForm as TFCustomDatabaseGrid);
+    vrForm := TJupiterDesktopApp(vrJupiterApp).NewFormByRoute(CUSTOMGRIDDATABASE_PATH);
+
+    TFCustomDatabaseGrid(vrForm).Params.CopyValues(vrVariables);
+    TFCustomDatabaseGrid(vrForm).FromReference(TJupiterDatabaseReference.Create(prTableName, NULL_KEY));
+
+    TJupiterDesktopApp(vrJupiterApp).OpenForm(vrForm as TFCustomDatabaseGrid);
+  finally
+    FreeAndNil(vrVariables);
+  end;
+end;
+
+procedure JupiterAppDesktopOpenGridFromTable(prTableName : String);
+begin
+  JupiterAppDesktopOpenGridFromTableWithWhere(prTableName, EmptyStr, EmptyStr);
+end;
+
+procedure JupiterAppDesktopOpenFileExplorerForm(prPath: String);
+var
+  vrVariables : TJupiterVariableList;
+begin
+  vrVariables := TJupiterVariableList.Create;
+  try
+    vrVariables.AddVariable('path', prPath, 'path');
+
+    TJupiterDesktopApp(vrJupiterApp).OpenForm(FILEEXPLORER_PATH, vrVariables);
+  finally
+    FreeAndNil(vrVariables);
+  end;
 end;
 
 procedure JupiterAppDesktopUpdateForms;
@@ -128,6 +163,8 @@ begin
   prSender.AddFunction(@JupiterAppDesktopOpenForm, 'function OpenForm(Form: String) : String;');
   prSender.AddFunction(@JupiterAppDesktopOpenFormWithParams, 'procedure OpenFormWithParams(Form, Params : String);');
   prSender.AddFunction(@JupiterAppDesktopOpenGridFromTable, 'procedure OpenGridFromTable(prTableName : String);');
+  prSender.AddFunction(@JupiterAppDesktopOpenGridFromTableWithWhere, 'procedure OpenGridFromTableWithWhere(prTableName : String; prWhere : String; prOrderBy : String);');
+  prSender.AddFunction(@JupiterAppDesktopOpenFileExplorerForm, 'procedure OpenFileExplorerForm(prPath : String);');
 
   prSender.AddFunction(@JupiterAppDesktopClose, 'procedure CloseApp();');
   prSender.AddFunction(@JupiterAppDesktopUpdateForms, 'procedure UpdateForms();');
@@ -142,7 +179,9 @@ begin
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'function OpenForm(Form: String) : String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenFormWithParams(Form, Params : String);'));
-  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenGridFromTable(prTableName: String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenGridFromTable(prTableName : String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenGridFromTableWithWhere(prTableName : String; prWhere : String; prOrderBy : String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenFileExplorerForm(prPath: String);'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CloseApp();'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure UpdateForms();'));

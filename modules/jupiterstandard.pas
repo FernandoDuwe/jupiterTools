@@ -36,8 +36,10 @@ end;
 procedure TJupiterStandardModule.Internal_Prepare;
 var
   vrWizard : TJupiterDatabaseWizard;
+  vrStr : TStrings;
 begin
   vrWizard := vrJupiterApp.NewWizard;
+  vrStr := TStringList.Create;
   try
     // Creating basic tables
     if not vrWizard.TableExists('MODULES') then
@@ -58,7 +60,29 @@ begin
     if Self.Internal_CreateMacroIfDontExists('menu.newTab.click', 'Clique do botão Nova aba', CreateStringList('program macro;' + #13#10 + 'begin' + #13#10 + '  OpenForm(''/forms/newTask'');' + #13#10 + 'end.')) then
       Self.Internal_CreateRouteIfDontExists(EmptyStr, '/menu/newTab/', vrWizard.GetLastID('MACROS'), ICON_ADD, 100);
 
+    vrStr.Clear;
+    vrStr.Add('program macro;');
+    vrStr.Add('const');
+    vrStr.Add('  SCRIPTID = ''@FLAG_SCRIPTID'';');
+    vrStr.Add('var');
+    vrStr.Add('  vrOutput : String;');
+    vrStr.Add('begin');
+    vrStr.Add('  if FileOrFolderExists(GetParam(SCRIPTID, ''PARAMS'')) then');
+    vrStr.Add('  begin');
+    vrStr.Add('    if FileExists(GetParam(SCRIPTID, ''PARAMS'')) then');
+    vrStr.Add('      OpenDocument(GetParam(SCRIPTID, ''PARAMS''))');
+    vrStr.Add('    else');
+    vrStr.Add('      OpenFolder(GetParam(SCRIPTID, ''PARAMS''))');
+    vrStr.Add('  end');
+    vrStr.Add('  else');
+    vrStr.Add('    CreateProcess(GetParam(SCRIPTID, ''PARAMS''), '''', vrOutput, False, True);');
+    vrStr.Add('end.');
+
+    Self.Internal_CreateMacroIfDontExists(TRIGGER_ONEXECUTE, 'Evento: Ao executar comando externo', vrStr);
+
     Self.Internal_CreateMacroIfDontExists(TRIGGER_ONSTART, 'Evento: Ao iniciar a aplicação', CreateStringList('program macro;' + #13#10 + 'begin' + #13#10 + '  OpenForm(''/forms/newTask'');' + #13#10 + 'end.'));
+
+    Self.Internal_CreateMacroIfDontExists(TRIGGER_ONSHOWPARAMS, 'Evento: Ao exibir os parâmetros dos formulários', CreateStringListToMacro(EmptyStr));
 
     Self.Internal_CreateMacroIfDontExists(TRIGGER_ONPROMPT, 'Evento: Ao executar comando via prompt', CreateStringList('program macro;' + #13#10 + 'begin' + #13#10 + '  OpenForm(''/forms/newTask'');' + #13#10 + 'end.'));
 
@@ -102,6 +126,7 @@ begin
     Self.Internal_CreateActionIfDontExists('MACROS.AbrirScript', 'Abrir script no editor', 'MACROS', ICON_EDIT, 100, Self.Internal_GetMacroById('MACROS.AbrirScript.OnClick'), Self.Internal_GetMacroById(EVENT_RECORD_ONENABLE), Self.Internal_GetMacroById(EVENT_RECORD_ONVISIBLE));
   finally
     FreeAndNil(vrWizard);
+    FreeAndNil(vrStr);
   end;
 
   inherited Internal_Prepare;

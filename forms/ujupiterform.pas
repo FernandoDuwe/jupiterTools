@@ -20,16 +20,22 @@ type
     edSearch: TEdit;
     fpOptions: TFlowPanel;
     Image1: TImage;
+    miParams: TMenuItem;
+    miUpdate: TMenuItem;
     pnBottom: TPanel;
     pnSearchBar: TPanel;
+    pmOptions: TPopupMenu;
     tmrAutoUpdater: TTimer;
     procedure FormActivate(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure miParamsClick(Sender: TObject);
+    procedure miUpdateClick(Sender: TObject);
     procedure pnSearchBarClick(Sender: TObject);
     procedure tmrAutoUpdaterTimer(Sender: TObject);
+    procedure Internal_OnAfterActionExecute(Sender : TObject);
   private
     FFormID : String;
     FHint : String;
@@ -71,6 +77,17 @@ implementation
 
 { TFJupiterForm }
 
+procedure TFJupiterForm.Internal_OnAfterActionExecute(Sender : TObject);
+begin
+  tmrAutoUpdater.Enabled := False;
+
+  Self.FUpdateCount := 0;
+
+  Self.UpdateForm();
+
+  tmrAutoUpdater.Enabled := True;
+end;
+
 procedure TFJupiterForm.FormShow(Sender: TObject);
 begin
   try
@@ -78,6 +95,16 @@ begin
   finally
     Self.UpdateForm();
   end;
+end;
+
+procedure TFJupiterForm.miParamsClick(Sender: TObject);
+begin
+  vrJupiterApp.RunMacro(TRIGGER_ONSHOWPARAMS, Self.Params);
+end;
+
+procedure TFJupiterForm.miUpdateClick(Sender: TObject);
+begin
+  Self.UpdateForm();
 end;
 
 procedure TFJupiterForm.pnSearchBarClick(Sender: TObject);
@@ -89,12 +116,13 @@ procedure TFJupiterForm.tmrAutoUpdaterTimer(Sender: TObject);
 begin
   Self.FUpdateCount := Self.FUpdateCount + 1;
 
-  if (Self.FUpdateCount >= 2) then
+  if (Self.FUpdateCount >= 30) then
     Self.FUpdateCount := 0;
 
   tmrAutoUpdater.Enabled := False;
 
-  Self.UpdateForm(Self.FUpdateCount = 0);
+  if Self.Showing then
+    Self.UpdateForm(Self.FUpdateCount = 0);
 
   tmrAutoUpdater.Enabled := True;
 end;
@@ -122,9 +150,11 @@ begin
   Self.FActionGroup := TJupiterActionGroup.Create;
   Self.FActionGroup.FlowPanel := fpOptions;
 
-  Self.FActionGroup.ImageList := TJupiterDesktopApp(vrJupiterApp).ImageList;
+  Self.FActionGroup.ActionList := Self.acOptions;
+  Self.FActionGroup.ImageList  := TJupiterDesktopApp(vrJupiterApp).ImageList;
 
-  Self.FActionGroup.OnRequestData := @Internal_OnRequestData;
+  Self.FActionGroup.OnRequestData  := @Internal_OnRequestData;
+  Self.FActionGroup.OnAfterExecute := @Internal_OnAfterActionExecute;
 
   Self.FParams := TJupiterVariableList.Create;
 

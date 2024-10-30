@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, JupiterApp, JupiterObject, jupiterScript, JupiterRoute,
-  uJupiterFormDesktopAppScript, Forms, Controls;
+  JupiterVariable, jupiterDatabaseWizard, uJupiterFormDesktopAppScript,
+  uJupiterAction, Forms, Controls;
 
 type
 
@@ -26,10 +27,12 @@ type
   public
     function NewFormByRoute(prRoute : String) : TForm;
     function OpenForm(prRoute, prParams : String) : String;
+    function OpenForm(prRoute : String; prParams : TJupiterVariableList) : String;
     procedure OpenForm(prForm : TForm);
 
     function GetFormById(prFormID : String) : TForm;
     procedure DeleteFormById(prFormID : String);
+    function GenerateContextMenu : TJupiterActionGroup;
 
     constructor Create(prAppID, prAppName : String); override;
     destructor Destroy; override;
@@ -83,6 +86,23 @@ begin
   Self.OpenForm(vrForm);
 end;
 
+function TJupiterDesktopApp.OpenForm(prRoute : String; prParams: TJupiterVariableList): String;
+var
+  vrForm : TForm;
+begin
+  vrForm := Self.NewFormByRoute(prRoute);
+
+  if not Assigned(vrForm) then
+    vrForm := TFJupiterForm.Create(Application.MainForm);
+
+  if (vrForm is TFJupiterForm) then
+    TFJupiterForm(vrForm).Params.CopyValues(prParams);
+
+  Result := TFJupiterForm(vrForm).FormID;
+
+  Self.OpenForm(vrForm);
+end;
+
 procedure TJupiterDesktopApp.OpenForm(prForm: TForm);
 begin
   prForm.Align       := alClient;
@@ -124,6 +144,26 @@ begin
 
         Exit;
       end;
+end;
+
+function TJupiterDesktopApp.GenerateContextMenu: TJupiterActionGroup;
+var
+  vrWizard : TJupiterDatabaseWizard;
+  vrStringList : TStrings;
+  vrVez : Integer;
+begin
+  Result   := TJupiterActionGroup.Create;
+  vrWizard := Self.NewWizard;
+  try
+    {
+    vrWizard.Connection.GetTableNames(vrStringList, False);
+
+    for vrVez := 0 vrStringList.Count - 1 do
+      Result.Add(TJupiterAction.Create());
+      }
+  finally
+    FreeAndNil(vrWizard);
+  end;
 end;
 
 constructor TJupiterDesktopApp.Create(prAppID, prAppName: String);

@@ -7,8 +7,9 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, DBCtrls, ExtCtrls,
   DBGrids, Menus, ComCtrls, uJupiterForm, jupiterformutils, JupiterObject,
-  JupiterConsts, jupiterDatabaseWizard, JupiterApp, uJupiterAction,
-  uJupiterDesktopAppScript, DB, SQLDB;
+  JupiterConsts, jupiterDatabaseWizard, JupiterApp, uJupiterAppScript,
+  uJupiterAction, uJupiterDesktopAppScript, uJupiterFormDesktopAppScript, DB,
+  SQLDB;
 
 type
 
@@ -22,6 +23,7 @@ type
     tvFilter: TTreeView;
     procedure gbVariablesDblClick(Sender: TObject);
     procedure tvFilterSelectionChanged(Sender: TObject);
+    procedure Internal_NewClick(Sender: TObject);
   private
     procedure Internal_UpdateComponents; override;
     procedure Internal_UpdateDatasets; override;
@@ -45,6 +47,11 @@ implementation
 procedure TFConfig.tvFilterSelectionChanged(Sender: TObject);
 begin
   Self.UpdateForm();
+end;
+
+procedure TFConfig.Internal_NewClick(Sender: TObject);
+begin
+  JupiterAppDesktopOpenFormFromTableId('VARIABLES', NULL_KEY);
 end;
 
 procedure TFConfig.gbVariablesDblClick(Sender: TObject);
@@ -119,10 +126,11 @@ var
 begin
   inherited Internal_PrepareForm;
 
-  Self.ActionGroup.AddAction(TJupiterAction.Create('Novo', 'Inserir um novo item', ICON_NEW));
-  Self.ActionGroup.AddAction(TJupiterAction.Create('Excluir', 'Excluir o item atual', ICON_DELETE));
+  Self.Hint := 'Ajuste aqui os parâmetros do Jupiter';
 
-  Self.ShowSearchBar := True;
+  Self.ActionGroup.AddAction(TJupiterAction.Create('Novo', 'Inserir um novo item', ICON_NEW, @Internal_NewClick));
+
+//  Self.ShowSearchBar := True;
 
   tvFilter.Items.Clear;
 
