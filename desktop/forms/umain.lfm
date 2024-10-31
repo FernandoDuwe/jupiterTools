@@ -53,6 +53,11 @@ inherited FMain: TFMain
   end
   inherited acOptions: TActionList[5]
     Images = ilIconFamily
+    object acNewTab: TAction[0]
+      Caption = 'acNewTab'
+      OnExecute = acNewTabExecute
+      ShortCut = 16462
+    end
   end
   inherited tmrAutoUpdater: TTimer[6]
   end

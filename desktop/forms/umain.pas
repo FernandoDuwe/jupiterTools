@@ -15,12 +15,14 @@ type
   { TFMain }
 
   TFMain = class(TFJupiterForm)
+    acNewTab: TAction;
     ilIconFamily: TImageList;
     ilTabs: TImageList;
     jtMainTab: TJupiterFormTab;
     mmMainMenu: TMainMenu;
     pmTabOptions: TPopupMenu;
     sbStatus: TStatusBar;
+    procedure acNewTabExecute(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -31,6 +33,8 @@ type
     procedure jtMainTabResize(Sender: TObject);
     procedure pmTabOptionsPopup(Sender: TObject);
   private
+    FNewTabClick : Boolean;
+
     procedure Internal_PrepareForm; override;
     procedure Internal_UpdateComponents; override;
     procedure Internal_CreatePopMenuTab;
@@ -64,6 +68,17 @@ procedure TFMain.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
   while jtMainTab.PageCount > 0 do
     jtMainTab.CloseTab(0);
+end;
+
+procedure TFMain.acNewTabExecute(Sender: TObject);
+begin
+  Self.FNewTabClick := True;
+
+  try
+    vrJupiterApp.RunMacro('menu.newTab.click', TJupiterVariableList.Create);
+  finally
+    Self.FNewTabClick := False;
+  end;
 end;
 
 procedure TFMain.FormCreate(Sender: TObject);
@@ -136,6 +151,8 @@ var
   vrMainMenu : TJupiterMainMenuGenerator;
 begin
   inherited Internal_PrepareForm;
+
+  Self.FNewTabClick := False;
 
   TJupiterDesktopApp(vrJupiterApp).ImageList := ilIconFamily;
 
@@ -273,7 +290,7 @@ var
 begin
   vrSS := GetKeyShiftState;
 
-  if ssCtrl in vrSS then
+  if ((ssCtrl in vrSS) and (not FNewTabClick)) then
   begin
     Form.ShowModal;
 
