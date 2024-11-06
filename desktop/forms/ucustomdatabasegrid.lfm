@@ -6,6 +6,7 @@ inherited FCustomDatabaseGrid: TFCustomDatabaseGrid
     Top = 1
     inherited edSearch: TEdit
       OnChange = edSearchChange
+      OnKeyPress = edSearchKeyPress
     end
   end
   inherited fpOptions: TFlowPanel

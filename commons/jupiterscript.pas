@@ -19,6 +19,8 @@ type
 
   TJupiterScriptAnalyserType = (jsaVariable, jsaProcedure, jsaFunction, jsaCompilerFlags);
 
+  TJupiterScriptOnExecute = procedure (prScript, prMessages, prRunMessages : TStrings; prExecuted : Boolean) of object;
+
   { TJupiterScriptAnalyserItem }
 
   TJupiterScriptAnalyserItem = class(TJupiterObject)
@@ -73,6 +75,7 @@ type
     FUserCommand : String;
     FLibraryList : TJupiterObjectList;
     FParamList   : TJupiterVariableList;
+    FOnExecute   : TJupiterScriptOnExecute;
 
     procedure Internal_OutputMessages(prPSScript : TPSScript);
 
@@ -98,6 +101,8 @@ type
 
     property LibraryList : TJupiterObjectList read FLibraryList write FLibraryList;
     property UserCommand : String read FUserCommand write FUserCommand;
+
+    property OnExecute : TJupiterScriptOnExecute read FOnExecute write FOnExecute;
 
     property ScriptID : String read FScriptID;
   public
@@ -456,6 +461,9 @@ begin
       Self.Messages.Add(Self.GetDateTimeMark + ': Compilação falhou');
     end;
   finally
+    if Assigned(Self.OnExecute) then
+      Self.OnExecute(vrPSScript.Script, Self.Messages, Self.RunMessages, Self.FRunned);
+
     FreeAndNil(vrPSScript);
   end;
 end;

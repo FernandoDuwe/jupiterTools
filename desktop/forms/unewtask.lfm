@@ -3,14 +3,8 @@ inherited FNewTask: TFNewTask
   Top = 319
   Align = alCustom
   Caption = 'Iniciar uma nova tarefa'
-  inherited pnSearchBar: TPanel
-    inherited edSearch: TEdit
-      Left = 0
-      Height = 50
-      Top = 0
-      Width = 879
-    end
-  end
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
   inherited fpOptions: TFlowPanel
     TabOrder = 3
   end
@@ -363,5 +357,7 @@ inherited FNewTask: TFNewTask
   inherited tmrAutoUpdater: TTimer[7]
     Left = 560
     Top = 232
+  end
+  inherited pmOptions: TPopupMenu[8]
   end
 end

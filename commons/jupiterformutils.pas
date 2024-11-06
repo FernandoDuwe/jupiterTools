@@ -47,12 +47,20 @@ type
     FRight : Integer;
     FBottom : Integer;
     FCompoent : TComponent;
+    FFieldName : String;
+    FMacroID : String;
+    FMacroScript : String;
   published
-    property Right     : Integer    read FRight     write FRight;
-    property Bottom    : Integer    read FBottom    write FBottom;
-    property Component : TComponent read FComponent write FComponent;
+    property Right       : Integer    read FRight       write FRight;
+    property Bottom      : Integer    read FBottom      write FBottom;
+    property Component   : TComponent read FComponent   write FComponent;
+    property FieldName   : String     read FFieldName   write FFieldName;
+    property MacroID     : String     read FMacroID     write FMacroID;
+    property MacroScript : String     read FMacroScript write FMacroScript;
   public
     constructor Create(prTop, prLeft, prRight, prBottom : Integer; prComponent : TComponent);
+
+    constructor Create(prTop, prLeft, prRight, prBottom : Integer; prComponent : TComponent; prFieldName : String);
   end;
 
 implementation
@@ -340,6 +348,16 @@ begin
   Self.Right     := prRight;
   Self.Bottom    := prBottom;
   Self.Component := prComponent;
+
+  Self.MacroID := EmptyStr;
+  Self.MacroScript := EmptyStr;
+end;
+
+constructor TJupiterComponentReference.Create(prTop, prLeft, prRight, prBottom: Integer; prComponent: TComponent; prFieldName: String);
+begin
+  Self.Create(prTop, prLeft, prRight, prBottom, prComponent);
+
+  Self.FFieldName := prFieldName;
 end;
 
 end.

@@ -22,6 +22,7 @@ type
 
   // Construtores
   function JupiterDataProviderScript_DataProviderNewCSV(prFileName : String) : String;
+  function JupiterDataProviderScript_DataProviderNewSQL(prQuery : String) : String;
   function JupiterDataProviderScript_DataProviderNewPaths(prPath : String; prSubFolders : Boolean) : String;
   function JupiterDataProviderScript_DataProviderNewFiles(prPath : String; prSubFolders : Boolean) : String;
 
@@ -40,6 +41,15 @@ var
   vrProvider : TJupiterDataProvider;
 begin
   vrProvider := FactoryDataProvider(DATAPROVIDER_TYPE_LIST_CSV, prFileName, True);
+
+  Result := vrProvider.ProviderID;
+end;
+
+function JupiterDataProviderScript_DataProviderNewSQL(prQuery: String): String;
+var
+  vrProvider : TJupiterDataProvider;
+begin
+  vrProvider := FactoryDataProvider(DATAPROVIDER_TYPE_SQL, prQuery, False);
 
   Result := vrProvider.ProviderID;
 end;
@@ -102,6 +112,7 @@ begin
   inherited DoCompile(prSender);
 
   prSender.AddFunction(@JupiterDataProviderScript_DataProviderNewCSV, 'function DataProviderNewCSV(prFileName : String) : String;');
+  prSender.AddFunction(@JupiterDataProviderScript_DataProviderNewSQL, 'function DataProviderNewSQL(prQuery : String) : String;');
   prSender.AddFunction(@JupiterDataProviderScript_DataProviderNewPaths, 'function DataProviderNewPath(prPath : String; prSubFolders : Boolean) : String;');
   prSender.AddFunction(@JupiterDataProviderScript_DataProviderNewFiles, 'function DataProviderNewFile(prPath : String; prSubFolders : Boolean) : String;');
 
@@ -118,6 +129,7 @@ begin
   Result := inherited AnalyseCode;
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function DataProviderNewCSV(prFileName : String) : String;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function DataProviderNewSQL(prQuery : String) : String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function DataProviderNewPath(prPath : String; prSubFolders : Boolean) : String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function DataProviderNewFile(prPath : String; prSubFolders : Boolean) : String;'));
 

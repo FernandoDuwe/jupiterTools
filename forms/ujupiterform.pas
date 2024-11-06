@@ -20,6 +20,9 @@ type
     edSearch: TEdit;
     fpOptions: TFlowPanel;
     Image1: TImage;
+    miAjustRatioRight: TMenuItem;
+    miAjustRatioLeft: TMenuItem;
+    Separator1: TMenuItem;
     miParams: TMenuItem;
     miUpdate: TMenuItem;
     pnBottom: TPanel;
@@ -31,6 +34,8 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure miAjustRatioLeftClick(Sender: TObject);
+    procedure miAjustRatioRightClick(Sender: TObject);
     procedure miParamsClick(Sender: TObject);
     procedure miUpdateClick(Sender: TObject);
     procedure pnSearchBarClick(Sender: TObject);
@@ -39,6 +44,7 @@ type
   private
     FFormID : String;
     FHint : String;
+    FPercentDivisor : Integer;
 
     FShowSearchBar : Boolean;
     FActionGroup   : TJupiterActionGroup;
@@ -48,12 +54,13 @@ type
 
     procedure Internal_SetSearchBar(prNewValue : Boolean);
   published
-    property ActionGroup   : TJupiterActionGroup  read FActionGroup   write FActionGroup;
-    property ShowSearchBar : Boolean              read FShowSearchBar write Internal_SetSearchBar default False;
-    property OwnerTab      : TJupiterFormTabSheet read FOwnerTab      write FOwnerTab;
-    property Params        : TJupiterVariableList read FParams        write FParams;
-    property FormID        : String               read FFormID;
-    property Hint          : String               read FHint          write FHint;
+    property ActionGroup    : TJupiterActionGroup  read FActionGroup    write FActionGroup;
+    property ShowSearchBar  : Boolean              read FShowSearchBar  write Internal_SetSearchBar default False;
+    property OwnerTab       : TJupiterFormTabSheet read FOwnerTab       write FOwnerTab;
+    property Params         : TJupiterVariableList read FParams         write FParams;
+    property FormID         : String               read FFormID;
+    property Hint           : String               read FHint           write FHint;
+    property PercentDivisor : Integer              read FPercentDivisor write FPercentDivisor;
 
     procedure Internal_UpdateComponents; virtual;
     procedure Internal_UpdateDatasets; virtual;
@@ -97,6 +104,24 @@ begin
   end;
 end;
 
+procedure TFJupiterForm.miAjustRatioLeftClick(Sender: TObject);
+begin
+  try
+    Self.PercentDivisor := Self.PercentDivisor + 10;
+  finally
+    Self.UpdateForm(False, True, False);
+  end;
+end;
+
+procedure TFJupiterForm.miAjustRatioRightClick(Sender: TObject);
+begin
+  try
+    Self.PercentDivisor := Self.PercentDivisor - 10;
+  finally
+    Self.UpdateForm(False, True, False);
+  end;
+end;
+
 procedure TFJupiterForm.miParamsClick(Sender: TObject);
 begin
   vrJupiterApp.RunMacro(TRIGGER_ONSHOWPARAMS, Self.Params);
@@ -104,7 +129,11 @@ end;
 
 procedure TFJupiterForm.miUpdateClick(Sender: TObject);
 begin
+  tmrAutoUpdater.Enabled := False;
+
   Self.UpdateForm();
+
+  tmrAutoUpdater.Enabled := True;
 end;
 
 procedure TFJupiterForm.pnSearchBarClick(Sender: TObject);
@@ -145,7 +174,8 @@ procedure TFJupiterForm.FormCreate(Sender: TObject);
 begin
   Self.FFormID := JupiterStringUtilsGenerateGUID;
 
-  Self.FUpdateCount := 1;
+  Self.FPercentDivisor := 30;
+  Self.FUpdateCount    := 1;
 
   Self.FActionGroup := TJupiterActionGroup.Create;
   Self.FActionGroup.FlowPanel := fpOptions;
@@ -181,6 +211,12 @@ begin
   pnBottom.Visible := Trim(Self.FHint) <> EmptyStr;
 
   Self.ActionGroup.UpdateActions;
+
+  miAjustRatioLeft.Caption  := 'Aumentar faixa à esquerda (' + IntToStr(Self.PercentDivisor) + '%)';
+  miAjustRatioRight.Caption := 'Aumentar faixa central (' + IntToStr(100 - Self.PercentDivisor) + '%)';
+
+  miAjustRatioRight.Enabled := Self.PercentDivisor >= 20;
+  miAjustRatioLeft.Enabled := Self.PercentDivisor <= 80;
 
   pnSearchBar.Visible := Self.ShowSearchBar;
 
@@ -219,6 +255,8 @@ end;
 function TFJupiterForm.Internal_OnRequestData: TJupiterVariableList;
 begin
   Result := TJupiterVariableList.Create;
+
+  Result.AddVariable('FORMID', Self.FormID);
 end;
 
 procedure TFJupiterForm.PrepareForm;

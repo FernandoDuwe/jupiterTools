@@ -24,7 +24,10 @@ type
     FParams           : TJupiterVariableList;
     FScripts          : TJupiterVariableList;
     FInternalDatabase : TSQLite3Connection;
+    FScriptList       : TJupiterDataProvider;
+    FMessageList      : TJupiterDataProvider;
 
+    procedure Internal_OnExecute(prScript, prMessages, prRunMessages : TStrings; prExecuted : Boolean);
   protected
     procedure Internal_Prepare; virtual;
     procedure Internal_AddScriptLibraries(var prScript : TJupiterScript); virtual;
@@ -38,10 +41,13 @@ type
     property Scripts       : TJupiterVariableList read FScripts       write FScripts;
 
     property InternalDatabase : TSQLite3Connection read FInternalDatabase write FInternalDatabase;
+    property ScriptList : TJupiterDataProvider read FScriptList write FScriptList;
+    property MessageList : TJupiterDataProvider read FMessageList write FMessageList;
   public
     DataProviders : TJupiterObjectList;
 
     procedure AddModule(prModule : TJupiterModule);
+    procedure AddMessage(prTitle, prMessage, prOrigin : String);
     procedure Prepare;
 
     function GetVersion : String;
@@ -87,6 +93,19 @@ begin
   prScript.LibraryList.Add(TJupiterDataProviderScript.Create);
 end;
 
+procedure TJupiterApp.Internal_OnExecute(prScript, prMessages, prRunMessages: TStrings; prExecuted: Boolean);
+begin
+  Self.ScriptList.AddRow;
+
+  with Self.ScriptList.GetLastRow do
+  begin
+    Fields.AddVariable('script', prScript.Text);
+    Fields.AddVariable('messages', prMessages.Text);
+    Fields.AddVariable('runMessages', prRunMessages.Text);
+    Fields.AddVariable('executed', JupiterStringUtilsBoolToStr(prExecuted));
+  end;
+end;
+
 procedure TJupiterApp.Internal_Prepare;
 var
   vrEnviroment : TJupiterEnviroment;
@@ -111,6 +130,19 @@ begin
   Self.ModulesList.Add(prModule);
 
   Self.Params.AddChildList(prModule.Params);
+end;
+
+procedure TJupiterApp.AddMessage(prTitle, prMessage, prOrigin: String);
+begin
+  Self.MessageList.AddRow;
+
+  with Self.MessageList.GetLastRow do
+  begin
+    Fields.AddVariable('title', prTitle);
+    Fields.AddVariable('message', prMessage);
+    Fields.AddVariable('origin', prOrigin);
+    Fields.AddVariable('dateTime', FormatDateTime('dd/mm/yyyy hh:nn:ss', Now));
+  end;
 end;
 
 procedure TJupiterApp.Prepare;
@@ -158,6 +190,7 @@ end;
 function TJupiterApp.NewScript: TJupiterScript;
 begin
   Result := TJupiterScript.Create;
+  Result.OnExecute := @Internal_OnExecute;
 
   Self.Internal_AddScriptLibraries(Result);
 end;
@@ -390,21 +423,30 @@ end;
 
 constructor TJupiterApp.Create(prAppID, prAppName: String);
 begin
-  Self.FAppReady := False;
+  try
+    Self.FAppReady := False;
 
-  Self.FAppID   := prAppID;
-  Self.FAppName := prAppName;
+    Self.FAppID   := prAppID;
+    Self.FAppName := prAppName;
 
-  Self.FParams       := TJupiterVariableList.Create;
-  Self.FModules      := TJupiterModuleList.Create;
-  Self.FScripts      := TJupiterVariableList.Create;
-  Self.DataProviders := TJupiterObjectList.Create;
+    Self.FParams       := TJupiterVariableList.Create;
+    Self.FModules      := TJupiterModuleList.Create;
+    Self.FScripts      := TJupiterVariableList.Create;
+    Self.DataProviders := TJupiterObjectList.Create;
 
-  Self.Internal_Prepare;
+    Self.ScriptList := TJupiterDataProvider.Create;
+    Self.MessageList := TJupiterDataProvider.Create;
+
+    Self.Internal_Prepare;
+  finally
+    Self.AddMessage('Iniciando', 'Iniciando sistema', Self.ClassName);
+  end;
 end;
 
 destructor TJupiterApp.Destroy;
 begin
+  FreeAndNil(Self.FMessageList);
+  FreeAndNil(Self.FScriptList);
   FreeAndNil(Self.FParams);
   FreeAndNil(Self.FModules);
   FreeAndNil(Self.FScripts);

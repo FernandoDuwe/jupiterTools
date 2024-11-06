@@ -81,6 +81,8 @@ end;
 
 procedure JupiterAppScript_WriteLn(prMessage: String);
 begin
+  vrJupiterApp.AddMessage('Mensagem de script', prMessage, 'WriteLn');
+
   WriteLn(prMessage);
 end;
 

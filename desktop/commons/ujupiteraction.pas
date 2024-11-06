@@ -53,6 +53,7 @@ type
     constructor Create(prCaption, prHint : String; prIcon : Integer; prMacro : TStrings);
 
     procedure Render(prFlow : TFlowPanel; prImageList : TImageList);
+    procedure Execute;
 
     procedure UpdateAction;
 
@@ -221,6 +222,29 @@ begin
     vrSpeedButton.Tag := Self.Reference.ID;
 
   Self.FButton := vrSpeedButton;
+end;
+
+procedure TJupiterAction.Execute;
+begin
+  if Assigned(Self.MacroScript) then
+  begin
+    if Assigned(Self.OnRequestData) then
+      vrJupiterApp.RunScript(Self.MacroScript, Self.OnRequestData())
+    else
+      vrJupiterApp.RunScript(Self.MacroScript, TJupiterVariableList.Create);
+
+    Exit;
+  end;
+
+  if Trim(Self.MacroId) <> EmptyStr then
+  begin
+    if Assigned(Self.OnRequestData) then
+      vrJupiterApp.RunMacro(Self.MacroId, Self.OnRequestData())
+    else
+      vrJupiterApp.RunMacro(Self.MacroId, TJupiterVariableList.Create);
+
+    Exit;
+  end;
 end;
 
 procedure TJupiterAction.UpdateAction;

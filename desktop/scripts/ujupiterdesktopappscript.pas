@@ -29,6 +29,7 @@ type
   procedure JupiterAppDesktopOpenGridFromTable(prTableName : String);
   procedure JupiterAppDesktopOpenGridFromTableWithWhere(prTableName : String; prWhere : String; prOrderBy : String);
   procedure JupiterAppDesktopOpenFileExplorerForm(prPath : String);
+  procedure JupiterAppDesktopCloseForm(prFormID : String);
   procedure JupiterAppDesktopUpdateForms;
   procedure JupiterAppDesktopIncFont;
   procedure JupiterAppDesktopDecFont;
@@ -118,6 +119,25 @@ begin
   end;
 end;
 
+procedure JupiterAppDesktopCloseForm(prFormID: String);
+var
+  vrForm : TForm;
+begin
+  vrForm := TJupiterDesktopApp(vrJupiterApp).GetFormById(prFormID);
+
+  if not Assigned(vrForm) then
+    Exit;
+
+  if (vrForm is TFJupiterForm) then
+  begin
+    TFJupiterForm(vrForm).DoSecureClose;
+
+    Exit;
+  end;
+
+  vrForm.Free;
+end;
+
 procedure JupiterAppDesktopUpdateForms;
 begin
   if Application.MainForm is TFJupiterForm then
@@ -165,6 +185,7 @@ begin
   prSender.AddFunction(@JupiterAppDesktopOpenGridFromTable, 'procedure OpenGridFromTable(prTableName : String);');
   prSender.AddFunction(@JupiterAppDesktopOpenGridFromTableWithWhere, 'procedure OpenGridFromTableWithWhere(prTableName : String; prWhere : String; prOrderBy : String);');
   prSender.AddFunction(@JupiterAppDesktopOpenFileExplorerForm, 'procedure OpenFileExplorerForm(prPath : String);');
+  prSender.AddFunction(@JupiterAppDesktopCloseForm, 'procedure CloseForm(prFormID : String)');
 
   prSender.AddFunction(@JupiterAppDesktopClose, 'procedure CloseApp();');
   prSender.AddFunction(@JupiterAppDesktopUpdateForms, 'procedure UpdateForms();');
@@ -182,6 +203,7 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenGridFromTable(prTableName : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenGridFromTableWithWhere(prTableName : String; prWhere : String; prOrderBy : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenFileExplorerForm(prPath: String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CloseForm(prFormID: String) : String;'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CloseApp();'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure UpdateForms();'));

@@ -81,6 +81,7 @@ const
    DATAPROVIDER_TYPE_LIST_CSV   : String = 'TJupiterCSVDataProvider';
    DATAPROVIDER_TYPE_TASKS      : String = 'TJupiterTasksDataProvider';
    DATAPROVIDER_TYPE_XML        : String = 'TJupiterXMLDataProvider';
+   DATAPROVIDER_TYPE_SQL        : String = 'TJupiterSQLDataProvider';
 
    // Providers
    PROVIDER_LIST : Array[0..1] of String = ('TJupiterCSVDataProvider',

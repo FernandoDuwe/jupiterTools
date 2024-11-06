@@ -93,38 +93,40 @@ inherited FGenerator: TFGenerator
     Left = 456
     Top = 128
   end
-  object qryRoutes: TSQLQuery[6]
+  inherited pmOptions: TPopupMenu[6]
+  end
+  object qryRoutes: TSQLQuery[7]
     FieldDefs = <>
     Params = <>
     Macros = <>
     Left = 336
     Top = 200
   end
-  object dsRoutes: TDataSource[7]
+  object dsRoutes: TDataSource[8]
     DataSet = qryRoutes
     Left = 456
     Top = 200
   end
-  object qryMacro: TSQLQuery[8]
+  object qryMacro: TSQLQuery[9]
     FieldDefs = <>
     Params = <>
     Macros = <>
     Left = 336
     Top = 272
   end
-  object dsMacro: TDataSource[9]
+  object dsMacro: TDataSource[10]
     DataSet = qryMacro
     Left = 456
     Top = 272
   end
-  object qryActions: TSQLQuery[10]
+  object qryActions: TSQLQuery[11]
     FieldDefs = <>
     Params = <>
     Macros = <>
     Left = 336
     Top = 336
   end
-  object dsActions: TDataSource[11]
+  object dsActions: TDataSource[12]
     DataSet = qryActions
     Left = 456
     Top = 336

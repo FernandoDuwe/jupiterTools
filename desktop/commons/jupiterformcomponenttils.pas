@@ -10,6 +10,8 @@ uses
 
   function JupiterComponentsNewLabel(prText : String; prPosition : TJupiterPosition; prOwner : TWinControl) : TJupiterComponentReference;
 
+  function JupiterComponentsNewLink(prText : String; prPosition : TJupiterPosition; prOwner : TWinControl) : TJupiterComponentReference;
+
   function JupiterComponentsNewEdit(prInitialValue : String; prPosition : TJupiterPosition; prOwner : TWinControl) : TJupiterComponentReference;
 
   function JupiterComponentsNewComboBox(prDataProvider, prColumn : String; prPosition : TJupiterPosition; prOwner : TWinControl) : TJupiterComponentReference;
@@ -29,7 +31,7 @@ uses
 
 implementation
 
-uses DBDateTimePicker, SQLDB, DateTimePicker;
+uses DBDateTimePicker, SQLDB, DateTimePicker, Graphics;
 
 function JupiterComponentsNewLabel(prText: String; prPosition : TJupiterPosition; prOwner : TWinControl): TJupiterComponentReference;
 var
@@ -42,6 +44,29 @@ begin
   vrLabel.Font.Size := GetFontSize;
   vrLabel.Top       := prPosition.Top;
   vrLabel.Left      := prPosition.Left;
+
+  Result := TJupiterComponentReference.Create(prPosition.Top,
+                                              prPosition.Left,
+                                              prPosition.Left + vrLabel.Width,
+                                              prPosition.Top + vrLabel.Height,
+                                              vrLabel);
+end;
+
+function JupiterComponentsNewLink(prText: String; prPosition: TJupiterPosition; prOwner: TWinControl): TJupiterComponentReference;
+var
+  vrLabel : TLabel;
+begin
+  vrLabel            := TLabel.Create(prOwner);
+  vrLabel.Parent     := prOwner;
+  vrLabel.AutoSize   := True;
+  vrLabel.Caption    := prText;
+  vrLabel.Font.Size  := GetFontSize;
+  vrLabel.Top        := prPosition.Top;
+  vrLabel.Left       := prPosition.Left;
+  vrLabel.Font.Color := $00FD5F5F;
+  vrLabel.Cursor     := crHandPoint;
+  vrLabel.Hint       := 'Clique aqui para executar';
+  vrLabel.ShowHint   := True;
 
   Result := TJupiterComponentReference.Create(prPosition.Top,
                                               prPosition.Left,

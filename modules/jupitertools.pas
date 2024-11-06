@@ -61,7 +61,7 @@ begin
     if Self.Internal_CreateMacroIfDontExists('menu.file.new.task.click', 'Clique do item de nova tarefa', Self.Internal_CreateNewTaskMacro) then
     begin
       Self.Internal_CreateRouteIfDontExists('Tarefa', '/menu/file/new/task/', vrWizard.GetLastID('MACROS'), ICON_ADD, 100);
-      Self.Internal_CreateRouteIfDontExists('Criar uma nova tarefa', '/home/new_task/', vrWizard.GetLastID('MACROS'), ICON_ADD, 100);
+      Self.Internal_CreateRouteIfDontExists('Criar uma nova tarefa', '/context/new_task/', vrWizard.GetLastID('MACROS'), ICON_ADD, 100);
     end;
 
     if ((Self.Params.Exists('Tools.Tasks.Current.Path')) and (Self.Params.VariableById('Tools.Tasks.Current.Path').Value <> EmptyStr)) then
@@ -100,7 +100,7 @@ begin
   Result.Add('  clientDataProvider : String;');
   Result.Add('begin');
   Result.Add('  formContext := OpenForm(''/forms/custom/codable'');');
-  Result.Add('  clientDataProvider := DataProviderNewPath(''/home/duwe/Projetos/'', False);');
+  Result.Add('  clientDataProvider := DataProviderNewPath(GetGlobalParam(''Tools.Tasks.Path''), False);');
   Result.Add('  try');
   Result.Add('    Form_AddLabel(formContext, ''Título'');');
   Result.Add('    Form_AddEdit(formContext, ''TITLE'', '''');');

@@ -6,8 +6,8 @@ interface
 
 uses
   Classes, SysUtils, JupiterApp, JupiterObject, jupiterScript, JupiterRoute,
-  JupiterVariable, jupiterDatabaseWizard, uJupiterFormDesktopAppScript,
-  uJupiterAction, Forms, Controls;
+  JupiterVariable, jupiterDatabaseWizard, JupiterConsts,
+  uJupiterFormDesktopAppScript, uJupiterAction, Forms, Controls;
 
 type
 
@@ -40,7 +40,7 @@ type
 
 implementation
 
-uses uJupiterForm, uMain, uJupiterDesktopAppScript;
+uses uJupiterForm, uMain, uJupiterDesktopAppScript, SQLDB;
 
 { TJupiterDesktopApp }
 
@@ -151,18 +151,38 @@ var
   vrWizard : TJupiterDatabaseWizard;
   vrStringList : TStrings;
   vrVez : Integer;
+  vrSQL : TSQLQuery;
 begin
   Result   := TJupiterActionGroup.Create;
   vrWizard := Self.NewWizard;
+  vrStringList := TStringList.Create;
+  vrSQL := vrWizard.NewQuery;
   try
-    {
+    vrStringList.Clear;
+
+    vrSQL.SQL.Add(' SELECT R1.TITLE, M1.NAME AS HINT, R1.ROUTE, M1.MACROID ');
+    vrSQL.SQL.Add(' FROM ROUTES R1 ');
+    vrSQL.SQL.Add('   INNER JOIN MACROS M1 ON (R1.DESTINY = M1.ID) ');
+    vrSQL.SQL.Add(' WHERE UPPER(R1.ROUTE) LIKE "/CONTEXT/%" ');
+    vrSQL.SQL.Add(' ORDER BY 1 ');
+    vrSQL.Open;
+    vrSQL.First;
+
+    while not vrSQL.EOF do
+    begin
+      Result.Add(TJupiterAction.Create(vrSQL.FieldByName('TITLE').AsString, vrSQL.FieldByName('HINT').AsString, NULL_KEY, vrSQL.FieldByName('MACROID').AsString));
+
+      vrSQL.Next;
+    end;
+
     vrWizard.Connection.GetTableNames(vrStringList, False);
 
-    for vrVez := 0 vrStringList.Count - 1 do
-      Result.Add(TJupiterAction.Create());
-      }
+    for vrVez := 0 to vrStringList.Count - 1 do
+      Result.Add(TJupiterAction.Create('Tabela: ' + vrStringList[vrVez], 'Abrir grid da tabela ' + vrStringList[vrVez], NULL_KEY, CreateStringListToMacro('  OpenGridFromTable(''' + vrStringList[vrVez] + '''); ')));
   finally
     FreeAndNil(vrWizard);
+    FreeAndNil(vrStringList);
+    FreeAndNil(vrSQL);
   end;
 end;
 

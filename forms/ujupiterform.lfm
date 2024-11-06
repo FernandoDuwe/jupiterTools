@@ -436,6 +436,19 @@ object FJupiterForm: TFJupiterForm
       Caption = 'Atualizar'
       OnClick = miUpdateClick
     end
+    object miAjustRatioLeft: TMenuItem
+      Caption = 'miAjustRatioLeft'
+      ShortCut = 16423
+      OnClick = miAjustRatioLeftClick
+    end
+    object miAjustRatioRight: TMenuItem
+      Caption = 'miAjustRatioRight'
+      ShortCut = 16421
+      OnClick = miAjustRatioRightClick
+    end
+    object Separator1: TMenuItem
+      Caption = '-'
+    end
     object miParams: TMenuItem
       Caption = 'Parâmetros'
       OnClick = miParamsClick

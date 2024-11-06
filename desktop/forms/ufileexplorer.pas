@@ -55,7 +55,7 @@ procedure TFFileExplorer.Internal_UpdateComponents;
 begin
   inherited Internal_UpdateComponents;
 
-  stvFolders.Width := PercentOfScreen(Self.Width, 30);
+  stvFolders.Width := PercentOfScreen(Self.Width, Self.PercentDivisor);
 
   Self.Caption := slvExporer.Root;
 end;

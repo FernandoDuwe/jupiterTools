@@ -86,7 +86,7 @@ begin
 
   SynCompletion1.Width := PercentOfScreen(Self.Width, 50);
 
-  pnLeft.Width := PercentOfScreen(Self.Width, 30);
+  pnLeft.Width := PercentOfScreen(Self.Width, Self.PercentDivisor);
   pnMessages.Height := PercentOfScreen(Self.Height, 30);
 
   vlVariables.DefaultColWidth := PercentOfScreen(vlVariables.Width, 40);

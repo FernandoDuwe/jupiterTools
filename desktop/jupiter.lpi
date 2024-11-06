@@ -354,6 +354,10 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uFileExplorer"/>
       </Unit>
+      <Unit>
+        <Filename Value="../commons/jupitersqldataprovider.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

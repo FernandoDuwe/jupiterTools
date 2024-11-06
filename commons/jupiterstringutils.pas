@@ -15,6 +15,8 @@ uses
 
   function JupiterStringUtilsGetCSVColumn(prLine : String; prIndex : Integer) : String;
 
+  function JupiterStringUtilsBoolToStr(prValue : Boolean) : String;
+
 implementation
 
 function JupiterStringUtilsNormalizeToPresent(prText: String): String;
@@ -86,6 +88,14 @@ begin
     vrStr.Clear;
     FreeAndNil(vrStr);
   end;
+end;
+
+function JupiterStringUtilsBoolToStr(prValue: Boolean): String;
+begin
+  Result := BOOL_FALSE_STR;
+
+  if prValue then
+    Result := BOOL_TRUE_STR;
 end;
 
 end.

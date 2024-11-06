@@ -213,25 +213,25 @@ begin
   pmTabOptions.Items.Add(vrMenuItem);
 
   vrMenuItem := TMenuItem.Create(pmTabOptions);
-  vrMenuItem.Caption := 'Próxima aba (Ctrl + Tab)';
+  vrMenuItem.Caption := 'Próxima aba';
   vrMenuItem.ShortCut := TextToShortCut('Ctrl+Tab');
   vrMenuItem.OnClick := @Internal_GoToNextTab;
   pmTabOptions.Items.Add(vrMenuItem);
 
   vrMenuItem := TMenuItem.Create(pmTabOptions);
-  vrMenuItem.Caption := 'Aba anterior (Ctrl + Shift + Tab)';
+  vrMenuItem.Caption := 'Aba anterior';
   vrMenuItem.ShortCut := TextToShortCut('Ctrl+Shift+Tab');
   vrMenuItem.OnClick := @Internal_GoToPreviousTab;
   pmTabOptions.Items.Add(vrMenuItem);
 
   vrMenuItem := TMenuItem.Create(pmTabOptions);
-  vrMenuItem.Caption := 'Fechar aba (Ctrl + F4)';
+  vrMenuItem.Caption := 'Fechar aba';
   vrMenuItem.ShortCut := TextToShortCut('Ctrl+F4');
   vrMenuItem.OnClick := @Internal_CloseCurrentTab;
   pmTabOptions.Items.Add(vrMenuItem);
 
   vrMenuItem := TMenuItem.Create(pmTabOptions);
-  vrMenuItem.Caption := 'Fechar todas as abas, exceto essa (Ctrl + Shift + F4)';
+  vrMenuItem.Caption := 'Fechar todas as abas, exceto essa';
   vrMenuItem.ShortCut := TextToShortCut('Ctrl+Shift+F4');
   vrMenuItem.OnClick := @Internal_CloseAllButCurrentTab;
   pmTabOptions.Items.Add(vrMenuItem);

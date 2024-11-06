@@ -23,8 +23,9 @@ uses
   JupiterVariableDataProvider, JupiterDirectoryDataProvider,
   JupiterDataProvider, jupiterutilspas, ucustomdatabasegrid, uUserPreferences,
   uScriptEditorForm, uJupiterEnviromentScript, uJupiterStringUtilsScript,
-  uJupiterRunnableScript, jupiterTools, uJupiterDataProviderScript, 
-uSystemMonitor, uCustomCodeForm, uJupiterFormDesktopAppScript, uFileExplorer;
+  uJupiterRunnableScript, jupiterTools, uJupiterDataProviderScript,
+  uSystemMonitor, uCustomCodeForm, uJupiterFormDesktopAppScript, uFileExplorer,
+  jupitersqldataprovider;
 
 {$R *.res}
 

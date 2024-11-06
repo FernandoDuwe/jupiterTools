@@ -1,15 +1,7 @@
 inherited FSystemMonitor: TFSystemMonitor
-  Left = 615
+  Left = 447
   Top = 182
   Caption = 'Monitor de Sistema'
-  inherited pnSearchBar: TPanel
-    inherited edSearch: TEdit
-      Left = 0
-      Height = 50
-      Top = 0
-      Width = 879
-    end
-  end
   inherited pnBottom: TPanel
     TabOrder = 3
   end
@@ -18,9 +10,9 @@ inherited FSystemMonitor: TFSystemMonitor
     Height = 325
     Top = 50
     Width = 879
-    ActivePage = tsDataProviders
+    ActivePage = tsScripts
     Align = alClient
-    TabIndex = 1
+    TabIndex = 0
     TabOrder = 2
     object tsScripts: TTabSheet
       Caption = 'Scripts'
@@ -85,9 +77,71 @@ inherited FSystemMonitor: TFSystemMonitor
         ViewStyle = vsReport
       end
     end
+    object tsScriptList: TTabSheet
+      Caption = 'Log de Scripts'
+      ClientHeight = 294
+      ClientWidth = 869
+      object lvScriptList: TListView
+        Left = 0
+        Height = 294
+        Top = 0
+        Width = 869
+        Align = alClient
+        Columns = <        
+          item
+            Caption = 'Script'
+            Width = 854
+          end        
+          item
+            Caption = 'Mensagens'
+          end        
+          item
+            Caption = 'Execução'
+          end        
+          item
+            Caption = 'Executou'
+          end>
+        GridLines = True
+        ReadOnly = True
+        TabOrder = 0
+        ViewStyle = vsReport
+      end
+    end
+    object tsMessages: TTabSheet
+      Caption = 'Mensagens'
+      ClientHeight = 294
+      ClientWidth = 869
+      object lvMessages: TListView
+        Left = 0
+        Height = 294
+        Top = 0
+        Width = 869
+        Align = alClient
+        Columns = <        
+          item
+            Caption = 'Título'
+            Width = 854
+          end        
+          item
+            Caption = 'Mensagens'
+          end        
+          item
+            Caption = 'Origem'
+          end        
+          item
+            Caption = 'Data/Hora'
+          end>
+        GridLines = True
+        ReadOnly = True
+        TabOrder = 0
+        ViewStyle = vsReport
+      end
+    end
   end
   inherited acOptions: TActionList[4]
   end
   inherited tmrAutoUpdater: TTimer[5]
+  end
+  inherited pmOptions: TPopupMenu[6]
   end
 end

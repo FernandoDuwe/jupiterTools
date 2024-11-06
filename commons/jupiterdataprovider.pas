@@ -49,7 +49,7 @@ type
 
 implementation
 
-uses JupiterCSVDataProvider, JupiterApp, JupiterFileDataProvider, JupiterDirectoryDataProvider, JupiterTasksDataProvider, JupiterXMLDataProvider;
+uses JupiterCSVDataProvider, JupiterApp, JupiterFileDataProvider, JupiterDirectoryDataProvider, JupiterTasksDataProvider, JupiterXMLDataProvider, jupitersqldataprovider;
 
 function FactoryDataProvider(prDataProviderType: String; prParam : String; prSubFolders : Boolean): TJupiterDataProvider;
 begin
@@ -96,6 +96,15 @@ begin
 
       TJupiterXMLDataProvider(Result).Filename := prParam;
       TJupiterXMLDataProvider(Result).ProvideData;
+      Exit;
+    end;
+
+    if prDataProviderType = DATAPROVIDER_TYPE_SQL then
+    begin
+      Result := TJupiterSQLDataProvider.Create;
+
+      TJupiterSQLDataProvider(Result).Query := prParam;
+      TJupiterSQLDataProvider(Result).ProvideData;
       Exit;
     end;
 

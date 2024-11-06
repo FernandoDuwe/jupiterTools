@@ -66,7 +66,7 @@ procedure TFConfig.Internal_UpdateComponents;
 begin
   inherited Internal_UpdateComponents;
 
-  tvFilter.Width := PercentOfScreen(Self.Width, 30);
+  tvFilter.Width := PercentOfScreen(Self.Width, Self.PercentDivisor);
 
   if qryConfig.FieldCount > 0 then
     qryConfig.Fields[0].Visible := False;

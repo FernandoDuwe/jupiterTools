@@ -22,6 +22,7 @@ type
     procedure dbMainGridEnter(Sender: TObject);
     procedure dbMainGridExit(Sender: TObject);
     procedure edSearchChange(Sender: TObject);
+    procedure edSearchKeyPress(Sender: TObject; var Key: char);
     procedure FormCreate(Sender: TObject);
   private
     FReference : TJupiterDatabaseReference;
@@ -86,6 +87,16 @@ begin
   //
 end;
 
+procedure TFCustomDatabaseGrid.edSearchKeyPress(Sender: TObject; var Key: char);
+begin
+  if Key = #13 then
+  begin
+    Self.UpdateForm();
+
+    Key := #0;
+  end;
+end;
+
 procedure TFCustomDatabaseGrid.dbMainGridColEnter(Sender: TObject);
 begin
   Self.UpdateForm(False);
@@ -133,6 +144,8 @@ begin
 
   vrId := NULL_KEY;
 
+  InternalQuery.DisableControls;
+
   vrWizard := vrJupiterApp.NewWizard;
   try
     if InternalQuery.Active then
@@ -164,6 +177,9 @@ begin
 
     InternalQuery.Open;
 
+    InternalQuery.Last;
+    InternalQuery.First;
+
     if vrId <> NULL_KEY then
       InternalQuery.Locate('ID', vrId,[]);
   finally
@@ -174,7 +190,7 @@ begin
     if ((Self.Params.Exists('where')) and (not Self.Params.VariableById('where').IsEmpty)) then
       Self.Hint := Self.Hint + '. Existem filtros aplicados nesta consulta';
 
-
+    InternalQuery.EnableControls;
   //  FreeAndNil(vrStringList);
   end;
 end;

@@ -4,14 +4,6 @@ inherited FScriptEditorForm: TFScriptEditorForm
   Caption = 'Editor de Script'
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  inherited pnSearchBar: TPanel
-    inherited edSearch: TEdit
-      Left = 0
-      Height = 50
-      Top = 0
-      Width = 879
-    end
-  end
   inherited pnBottom: TPanel
     TabOrder = 3
   end
@@ -627,7 +619,9 @@ inherited FScriptEditorForm: TFScriptEditorForm
   end
   inherited tmrAutoUpdater: TTimer[7]
   end
-  object SynFreePascalSyn1: TSynFreePascalSyn[8]
+  inherited pmOptions: TPopupMenu[8]
+  end
+  object SynFreePascalSyn1: TSynFreePascalSyn[9]
     Enabled = False
     CompilerMode = pcmObjFPC
     NestedComments = True
@@ -636,8 +630,8 @@ inherited FScriptEditorForm: TFScriptEditorForm
     Left = 600
     Top = 72
   end
-  object SynCompletion1: TSynCompletion[9]
-    Position = -1
+  object SynCompletion1: TSynCompletion[10]
+    Position = 0
     LinesInWindow = 10
     SelectedColor = clHighlight
     CaseSensitive = False
@@ -651,7 +645,7 @@ inherited FScriptEditorForm: TFScriptEditorForm
     Left = 336
     Top = 144
   end
-  object SynAutoComplete1: TSynAutoComplete[10]
+  object SynAutoComplete1: TSynAutoComplete[11]
     EndOfTokenChr = '()[].'
     ShortCut = 8224
     ExecCommandID = ecSynAutoCompletionExecute
@@ -659,7 +653,7 @@ inherited FScriptEditorForm: TFScriptEditorForm
     Left = 448
     Top = 143
   end
-  object ilIcons: TImageList[11]
+  object ilIcons: TImageList[12]
     Left = 600
     Top = 144
     Bitmap = {
