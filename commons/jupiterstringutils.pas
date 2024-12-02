@@ -26,6 +26,7 @@ begin
 
   prText    := AnsiLowerCase(prText);
   prText[1] := AnsiUpperCase(prText)[1];
+  prText    := StringReplace(prText, '_', ' ', [rfIgnoreCase, rfReplaceAll]);
 
   Result := prText;
 end;

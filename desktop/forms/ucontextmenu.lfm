@@ -1,0 +1,40 @@
+inherited FContextMenu: TFContextMenu
+  Caption = 'Menu de Contexto'
+  inherited pnSearchBar: TPanel
+    inherited edSearch: TEdit
+      OnKeyPress = edSearchKeyPress
+    end
+  end
+  object lvRoute: TListView[3]
+    Left = 0
+    Height = 325
+    Top = 50
+    Width = 879
+    Align = alClient
+    Columns = <    
+      item
+        Caption = 'Rota'
+        Width = 864
+      end>
+    MultiSelect = True
+    ReadOnly = True
+    TabOrder = 3
+    ViewStyle = vsReport
+  end
+  inherited acOptions: TActionList[4]
+    object acExit: TAction[0]
+      Caption = 'acExit'
+      OnExecute = acExitExecute
+      ShortCut = 27
+    end
+    object acSearch: TAction[1]
+      Caption = 'acSearch'
+      OnExecute = acSearchExecute
+      ShortCut = 13
+    end
+  end
+  inherited tmrAutoUpdater: TTimer[5]
+  end
+  inherited pmOptions: TPopupMenu[6]
+  end
+end

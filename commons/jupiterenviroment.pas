@@ -32,6 +32,7 @@ type
     function IsPictureFile(prFileName : String) : Boolean;
     function IsCheckListFile(prFileName : String) : Boolean;
     function IsExecutableFile(prFileName : String) : Boolean;
+    procedure DeleteFileOnDisk(prFileName : String);
 
     procedure CopyFileTo(prOrigin, prDestiny : String);
     procedure CopyToClipboard(prContent : String);
@@ -256,6 +257,11 @@ end;
 function TJupiterEnviroment.IsExecutableFile(prFileName: String): Boolean;
 begin
   Result := Pos(AnsiUpperCase(ExtractFileExt(prFileName)), AnsiUpperCase('.exe')) <> 0;
+end;
+
+procedure TJupiterEnviroment.DeleteFileOnDisk(prFileName: String);
+begin
+  DeleteFile(prFileName);
 end;
 
 procedure TJupiterEnviroment.CopyFileTo(prOrigin, prDestiny: String);

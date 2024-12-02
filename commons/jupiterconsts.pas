@@ -11,6 +11,7 @@ const
    ROOT_PATH : String = '/';
    NEWTASKMENU_PATH : String = '/forms/newTask';
    CONFIG_PATH : String = '/forms/config';
+   CONTEXT_PATH : String = '/forms/context';
    GENERATOR_PATH : String = '/forms/generator';
    FILEEXPLORER_PATH : String = '/forms/explorer/files';
    USERPREFERENCE_PATH : String = '/forms/userPreference';
@@ -58,6 +59,8 @@ const
    ICON_COPY        : SmallInt = 35;
    ICON_EXIT        : SmallInt = 36;
    ICON_WIZARD      : SmallInt = 37;
+   ICON_MENU        : SmallInt = 38;
+   ICON_GRID        : SmallInt = 39;
 
    NULL_KEY : SmallInt = -1;
 
@@ -65,6 +68,8 @@ const
    BOOL_FALSE_STR : String = 'N';
 
    STRING_NEWLINE : String = #13#10;
+
+   FORMAT_DATETIME : String = 'dd/mm/yyyy hh:nn:ss';
 
    EMPTY_SPACE_SEPARATOR  : String = '/JUPITERTOOLS\|/JUPITERTOOLS\';
    COLUMN_SPACE_SEPARATOR : String = '      ';

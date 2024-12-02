@@ -6,7 +6,11 @@ interface
 
 uses
   Classes, ComCtrls, Controls, SysUtils, StdCtrls, jupiterformutils, JupiterConsts,
-  jupiterDatabaseWizard, JupiterDataProvider, JupiterApp, DBCtrls, DB;
+  jupiterDatabaseWizard, JupiterDataProvider, JupiterApp, DBCtrls, DB, Menus;
+
+  function JupiterComponentsAddPopupMenuSeparator(prMenu : TPopupMenu) : TJupiterComponentReference;
+
+  function JupiterComponentsAddPopupMenuItem(prMenu : TPopupMenu; prTitle, prShortcut : String; prImageIndex : Integer) : TJupiterComponentReference;
 
   function JupiterComponentsNewLabel(prText : String; prPosition : TJupiterPosition; prOwner : TWinControl) : TJupiterComponentReference;
 
@@ -31,7 +35,35 @@ uses
 
 implementation
 
-uses DBDateTimePicker, SQLDB, DateTimePicker, Graphics;
+uses DBDateTimePicker, SQLDB, DateTimePicker, Graphics, LCLProc;
+
+function JupiterComponentsAddPopupMenuSeparator(prMenu: TPopupMenu): TJupiterComponentReference;
+var
+  vrMenuItem : TMenuItem;
+begin
+  vrMenuItem := TMenuItem.Create(prMenu);
+  vrMenuItem.Caption := '-';
+
+  prMenu.Items.Add(vrMenuItem);
+
+  Result := TJupiterComponentReference.Create(0, 0, 0, 0, vrMenuItem);
+end;
+
+function JupiterComponentsAddPopupMenuItem(prMenu: TPopupMenu; prTitle, prShortcut : String; prImageIndex : Integer): TJupiterComponentReference;
+var
+  vrMenuItem : TMenuItem;
+begin
+  vrMenuItem := TMenuItem.Create(prMenu);
+  vrMenuItem.Caption := prTitle;
+  vrMenuItem.ShortCut := TextToShortCut(prShortcut);
+
+  if prImageIndex <> NULL_KEY then
+    vrMenuItem.ImageIndex := prImageIndex;
+
+  prMenu.Items.Add(vrMenuItem);
+
+  Result := TJupiterComponentReference.Create(0, 0, 0, 0, vrMenuItem);
+end;
 
 function JupiterComponentsNewLabel(prText: String; prPosition : TJupiterPosition; prOwner : TWinControl): TJupiterComponentReference;
 var

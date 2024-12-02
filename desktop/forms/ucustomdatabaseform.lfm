@@ -2,6 +2,7 @@ inherited FCustomDatabaseForm: TFCustomDatabaseForm
   Left = 354
   Top = 234
   OnCreate = FormCreate
+  OnDestroy = FormDestroy
   inherited pnSearchBar: TPanel
     Top = 1
   end

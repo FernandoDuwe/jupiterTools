@@ -8,6 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, DBCtrls,
   DBDateTimePicker, SQLDB, DB, uJupiterForm, jupiterformutils,
   jupiterStringUtils, jupiterDatabaseWizard, JupiterApp, JupiterVariable,
+  JupiterObject, JupiterConsts, uJupiterStringUtilsScript,
   jupiterformcomponenttils;
 
 type
@@ -18,9 +19,13 @@ type
     InternalDataSource: TDataSource;
     sbBody: TScrollBox;
     procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
     procedure InternalDataSourceDataChange(Sender: TObject; Field: TField);
     procedure InternalDataSourceStateChange(Sender: TObject);
+    procedure Internal_ClickMenuClick(Sender: TObject);
   private
+    FObjectList : TJupiterObjectList;
+
     FTableName : String;
     FID        : Integer;
     FQueryOrigin : TSQLQuery;
@@ -32,6 +37,8 @@ type
     procedure Internal_OnCancel(Sender: TObject);
 
     procedure Internal_UpdateComponents; override;
+
+    procedure Internal_ListForeignTables;
 
     function Internal_OnRequestData : TJupiterVariableList; override;
   published
@@ -48,7 +55,7 @@ var
 
 implementation
 
-uses JupiterConsts, uJupiterAction;
+uses uJupiterAction, Menus;
 
 {$R *.lfm}
 
@@ -58,8 +65,17 @@ procedure TFCustomDatabaseForm.FormCreate(Sender: TObject);
 begin
   inherited;
 
+  Self.FObjectList := TJupiterObjectList.Create;
+
   Self.FTableName := EmptyStr;
   Self.FID        := NULL_KEY;
+end;
+
+procedure TFCustomDatabaseForm.FormDestroy(Sender: TObject);
+begin
+  inherited;
+
+  FreeAndNil(FObjectList);
 end;
 
 procedure TFCustomDatabaseForm.InternalDataSourceDataChange(Sender: TObject; Field: TField);
@@ -70,6 +86,24 @@ end;
 procedure TFCustomDatabaseForm.InternalDataSourceStateChange(Sender: TObject);
 begin
   Self.UpdateForm();
+end;
+
+procedure TFCustomDatabaseForm.Internal_ClickMenuClick(Sender: TObject);
+var
+  vrReference : TJupiterDatabaseForeignKeyReference;
+  vrWhere : String;
+begin
+  if not (Sender is TMenuItem) then
+    Exit;
+
+  vrReference := TJupiterDatabaseForeignKeyReference(Self.FObjectList.GetAtIndex(TMenuItem(Sender).Tag));
+
+  if Self.QueryOrigin.FieldByName(vrReference.FieldDestinyName).IsNull then
+     vrWhere := vrReference.FieldName + ' IS NULL '
+   else
+     vrWhere := vrReference.FieldName + ' = ' + IntToStr(Self.QueryOrigin.FieldByName(vrReference.FieldDestinyName).AsInteger);
+
+  vrJupiterApp.RunScript(CreateStringListToMacro(' OpenGridFromTableWithWhere(''' + vrReference.TableName + ''', ''' + vrWhere + ''', ''''); '), TJupiterVariableList.Create);
 end;
 
 procedure TFCustomDatabaseForm.Internal_PrepareForm;
@@ -188,6 +222,41 @@ begin
   Self.ActionGroup.GetActionAtIndex(1).Disable;
 end;
 
+procedure TFCustomDatabaseForm.Internal_ListForeignTables;
+var
+  vrObjectList : TJupiterObjectList;
+  vrVez : Integer;
+  vrReference : TJupiterDatabaseForeignKeyReference;
+  vrCount : Integer;
+  vrObjReference : TJupiterComponentReference;
+begin
+  vrObjectList := vrJupiterApp.NewWizard.GetForeignKeysFromTable(Self.TableName);
+
+  if vrObjectList.Count = 0 then
+    Exit;
+
+  JupiterComponentsAddPopupMenuSeparator(pmOptions);
+
+  vrCount := 0;
+
+  for vrVez := 0 to vrObjectList.Count - 1 do
+  begin
+    vrReference := TJupiterDatabaseForeignKeyReference(vrObjectList.GetAtIndex(vrVez));
+
+     if Self.QueryOrigin.FieldByName(vrReference.FieldDestinyName).IsNull then
+       vrCount := vrJupiterApp.NewWizard.Count(vrReference.TableName, vrReference.FieldName + ' IS NULL ')
+     else
+       vrCount := vrJupiterApp.NewWizard.Count(vrReference.TableName, vrReference.FieldName + ' = ' + IntToStr(Self.QueryOrigin.FieldByName(vrReference.FieldDestinyName).AsInteger));
+
+    vrObjReference := JupiterComponentsAddPopupMenuItem(pmOptions, JupiterStringUtilsNormalizeToPresent(vrReference.TableName) + ', ' + JupiterStringUtilsNormalizeToPresent(vrReference.FieldName) + ' (' + IntToStr(vrCount) + ')', EmptyStr, ICON_GRID);
+
+    Self.FObjectList.Add(vrReference);
+
+    TMenuItem(vrObjReference.Component).OnClick := @Internal_ClickMenuClick;
+    TMenuItem(vrObjReference.Component).Tag := Self.FObjectList.Count - 1;
+  end;
+end;
+
 function TFCustomDatabaseForm.Internal_OnRequestData: TJupiterVariableList;
 var
   vrVez : Integer;
@@ -218,10 +287,12 @@ begin
   finally
     vrQry.Open;
 
-    if prReference.ID = NULL_KEY then
-      vrQry.Insert;
-
     Self.QueryOrigin := vrQry;
+
+    if prReference.ID = NULL_KEY then
+      vrQry.Insert
+    else
+      Self.Internal_ListForeignTables;
   end;
 end;
 

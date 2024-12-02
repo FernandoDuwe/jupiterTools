@@ -9,7 +9,7 @@ uses
   ButtonPanel, StdCtrls, Menus, ComCtrls, Buttons, JupiterConsts,
   JupiterFormTabSheet, jupiterformutils, JupiterApp, uJupiterAction,
   jupiterDesktopApp, jupiterformcomponenttils, JupiterVariable,
-  jupiterStringUtils;
+  jupiterStringUtils, jupiterDatabaseWizard;
 
 type
 
@@ -41,6 +41,7 @@ type
     procedure pnSearchBarClick(Sender: TObject);
     procedure tmrAutoUpdaterTimer(Sender: TObject);
     procedure Internal_OnAfterActionExecute(Sender : TObject);
+    procedure Internal_OnShortCutClick(Sender : TObject);
   private
     FFormID : String;
     FHint : String;
@@ -52,6 +53,7 @@ type
     FParams        : TJupiterVariableList;
     FUpdateCount   : Integer;
 
+    procedure Internal_AddShortcutsToMenu;
     procedure Internal_SetSearchBar(prNewValue : Boolean);
   published
     property ActionGroup    : TJupiterActionGroup  read FActionGroup    write FActionGroup;
@@ -72,6 +74,8 @@ type
     procedure PrepareForm; virtual;
     procedure UpdateForm(prUpdateDatasets : Boolean = True; prUpdateComponentes : Boolean = True; prUpdateCalcs : Boolean = True); virtual;
 
+    function IsWindowForm : Boolean;
+
     procedure DoSecureClose;
   end;
 
@@ -79,6 +83,8 @@ var
   FJupiterForm: TFJupiterForm;
 
 implementation
+
+uses SQLDB;
 
 {$R *.lfm}
 
@@ -93,6 +99,47 @@ begin
   Self.UpdateForm();
 
   tmrAutoUpdater.Enabled := True;
+end;
+
+procedure TFJupiterForm.Internal_OnShortCutClick(Sender: TObject);
+begin
+  if not (Sender is TMenuItem) then
+    Exit;
+
+  vrJupiterApp.RunMacro(TMenuItem(Sender).Tag, Self.Internal_OnRequestData);
+end;
+
+procedure TFJupiterForm.Internal_AddShortcutsToMenu;
+var
+  vrWizard : TJupiterDatabaseWizard;
+  vrQry : TSQLQuery;
+  vrComponent : TJupiterComponentReference;
+begin
+  vrWizard := vrJupiterApp.NewWizard;
+  vrQry := vrWizard.NewQuery;
+  try
+    if vrWizard.Count('SHORTCUTS', ' 1 = 1 ') = 0 then
+      Exit;
+
+    vrQry.SQL.Add(' SELECT * FROM SHORTCUTS ');
+    vrQry.Open;
+    vrQry.First;
+
+    JupiterComponentsAddPopupMenuSeparator(pmOptions);
+
+    while not vrQry.EOF do
+    begin
+      vrComponent := JupiterComponentsAddPopupMenuItem(pmOptions, vrQry.FieldByName('DESCRIPTION').AsString, vrQry.FieldByName('SHORTCUT').AsString, NULL_KEY);
+
+      TMenuItem(vrComponent.Component).Tag := vrQry.FieldByName('DESTINY').AsInteger;
+      TMenuItem(vrComponent.Component).OnClick := @Internal_OnShortCutClick;
+
+      vrQry.Next;
+    end;
+  finally
+    FreeAndNil(vrWizard);
+    FreeAndNil(vrQry);
+  end;
 end;
 
 procedure TFJupiterForm.FormShow(Sender: TObject);
@@ -186,6 +233,8 @@ begin
   Self.FActionGroup.OnRequestData  := @Internal_OnRequestData;
   Self.FActionGroup.OnAfterExecute := @Internal_OnAfterActionExecute;
 
+  pmOptions.Images := TJupiterDesktopApp(vrJupiterApp).ImageList;
+
   Self.FParams := TJupiterVariableList.Create;
 
   Self.Height := PercentOfScreen(Screen.Height, 80);
@@ -263,7 +312,13 @@ procedure TFJupiterForm.PrepareForm;
 begin
   try
     Self.Internal_PrepareForm;
+
+    if Self.IsWindowForm then
+      if vrJupiterApp.Params.VariableById(FORM_ALWAYS_MODAL).AsBool then
+        Self.WindowState := wsMaximized;
   finally
+    Self.Internal_AddShortcutsToMenu;
+
     Self.FActionGroup.Render;
   end;
 end;
@@ -283,6 +338,11 @@ begin
     Self.Internal_UpdateCalcs;
 
   Self.Internal_Resize;
+end;
+
+function TFJupiterForm.IsWindowForm: Boolean;
+begin
+  Result := not Assigned(OwnerTab);
 end;
 
 procedure TFJupiterForm.DoSecureClose;

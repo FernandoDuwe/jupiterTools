@@ -1,6 +1,6 @@
 inherited FSystemMonitor: TFSystemMonitor
-  Left = 447
-  Top = 182
+  Left = 289
+  Top = 252
   Caption = 'Monitor de Sistema'
   inherited pnBottom: TPanel
     TabOrder = 3
@@ -130,6 +130,36 @@ inherited FSystemMonitor: TFSystemMonitor
           end        
           item
             Caption = 'Data/Hora'
+          end>
+        GridLines = True
+        ReadOnly = True
+        TabOrder = 0
+        ViewStyle = vsReport
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'Threads'
+      ClientHeight = 294
+      ClientWidth = 869
+      object lvThreads: TListView
+        Left = 0
+        Height = 294
+        Top = 0
+        Width = 869
+        Align = alClient
+        Columns = <        
+          item
+            Caption = 'ID'
+            Width = 854
+          end        
+          item
+            Caption = 'Título'
+          end        
+          item
+            Caption = 'Início'
+          end        
+          item
+            Caption = 'Fim'
           end>
         GridLines = True
         ReadOnly = True

@@ -20,6 +20,8 @@ type
     function AnalyseCode: TJupiterScriptAnalyserList; override;
   end;
 
+  function JupiterAppScript_GetVersion : String;
+  function JupiterAppScript_GetBasePath : String;
   function JupiterAppScript_ParamExists(prScriptId, prId : String) : Boolean;
   function JupiterAppScript_ParamCount(prScriptId : String) : Integer;
   function JupiterAppScript_GetParamNameByIndex(prScriptId : String; prIndex : Integer) : String;
@@ -30,8 +32,25 @@ type
   procedure JupiterAppScript_SetGlobalParam(prId, prValue : String);
   procedure JupiterAppScript_WriteLn(prMessage : String);
   procedure JupiterAppScript_WriteScriptLn(prScriptId, prMessage : String);
+  procedure JupiterAppScript_RunMacroById(prMacroId : String);
+  procedure JupiterAppScript_RunMacroByIdInThread(prMacroId : String);
+  procedure JupiterAppScript_RunMacroByIdInThreadWithParams(prMacroId, prParams : String);
+  procedure JupiterAppScript_RunMacroByIdWithParams(prMacroId, prParams : String);
+  procedure JupiterAppScript_RunMacroByFile(prMacroFile : String);
+  procedure JupiterAppScript_RunMacroByFileInThread(prMacroFile : String);
+
 
 implementation
+
+function JupiterAppScript_GetVersion: String;
+begin
+  Result := vrJupiterApp.GetVersion;
+end;
+
+function JupiterAppScript_GetBasePath: String;
+begin
+  Result := GetRootDirectory;
+end;
 
 function JupiterAppScript_ParamExists(prScriptId, prId: String): Boolean;
 begin
@@ -93,6 +112,46 @@ begin
   JupiterAppScript_WriteLn(prMessage);
 end;
 
+procedure JupiterAppScript_RunMacroById(prMacroId: String);
+begin
+  vrJupiterApp.RunMacro(prMacroId, TJupiterVariableList.Create);
+end;
+
+procedure JupiterAppScript_RunMacroByIdInThread(prMacroId: String);
+begin
+  vrJupiterApp.RunMacroInThread(prMacroId, TJupiterVariableList.Create);
+end;
+
+procedure JupiterAppScript_RunMacroByIdInThreadWithParams(prMacroId, prParams: String);
+var
+  vrParams : TJupiterVariableList;
+begin
+  vrParams := TJupiterVariableList.Create;
+  vrParams.AddVariable('Params', prParams);
+
+  vrJupiterApp.RunMacroInThread(prMacroId, vrParams);
+end;
+
+procedure JupiterAppScript_RunMacroByIdWithParams(prMacroId, prParams: String);
+var
+  vrParams : TJupiterVariableList;
+begin
+  vrParams := TJupiterVariableList.Create;
+  vrParams.AddVariable('Params', prParams);
+
+  vrJupiterApp.RunMacro(prMacroId, vrParams);
+end;
+
+procedure JupiterAppScript_RunMacroByFile(prMacroFile: String);
+begin
+  vrJupiterApp.RunMacroFromFile(prMacroFile, TJupiterVariableList.Create);
+end;
+
+procedure JupiterAppScript_RunMacroByFileInThread(prMacroFile: String);
+begin
+  vrJupiterApp.RunMacroFromFileInThread(prMacroFile, TJupiterVariableList.Create);
+end;
+
 { TJupiterAppScript }
 
 function TJupiterAppScript.Internal_GetName: String;
@@ -104,6 +163,8 @@ procedure TJupiterAppScript.DoCompile(prSender: TPSScript);
 begin
   inherited DoCompile(prSender);
 
+  prSender.AddFunction(@JupiterAppScript_GetVersion, 'function GetVersion : String;');
+  prSender.AddFunction(@JupiterAppScript_GetBasePath, 'function GetBasePath : String;');
   prSender.AddFunction(@JupiterAppScript_ParamExists, 'function ParamExists(prScriptId, prId : String) : Boolean;');
   prSender.AddFunction(@JupiterAppScript_GetParam, 'function GetParam(prScriptId, prId : String) : String;');
   prSender.AddFunction(@JupiterAppScript_SetParam, 'procedure SetParam(prScriptId, prId, prValue : String);');
@@ -117,12 +178,24 @@ begin
 
   prSender.AddFunction(@JupiterAppScript_WriteLn, 'procedure Writeln(prMessage: String);');
   prSender.AddFunction(@JupiterAppScript_WriteScriptLn, 'procedure WriteScriptLn(prScriptId, prMessage: String);');
+
+  prSender.AddFunction(@JupiterAppScript_RunMacroByIdInThread, 'procedure RunMacroByIdInThread(prMacroId: String);');
+  prSender.AddFunction(@JupiterAppScript_RunMacroById, 'procedure RunMacroById(prMacroId: String);');
+
+  prSender.AddFunction(@JupiterAppScript_RunMacroByIdWithParams, 'procedure RunMacroByIdWithParams(prMacroId, prParams : String);');
+  prSender.AddFunction(@JupiterAppScript_RunMacroByIdInThreadWithParams, 'procedure RunMacroByIdInThreadWithParams(prMacroId, prParams : String);');
+
+  prSender.AddFunction(@JupiterAppScript_RunMacroByFile, 'procedure RunMacroByFile(prMacroFile: String);');
+  prSender.AddFunction(@JupiterAppScript_RunMacroByFileInThread, 'procedure RunMacroByFileInThread(prMacroFile: String);');
+
 end;
 
 function TJupiterAppScript.AnalyseCode: TJupiterScriptAnalyserList;
 begin
   Result := inherited AnalyseCode;
 
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function GetVersion : String;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function GetBasePath : String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function ParamExists(prScriptId, prId : String) : Boolean;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function GetParam(prScriptId, prId : String) : String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function GlobalParamExists(prId : String) : Boolean;'));
@@ -135,6 +208,14 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure SetGlobalParam(prId, prValue : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Writeln(prMessage: String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure WriteScriptLn(prScriptId, prMessage: String);'));
+
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure RunMacroById(prMacroId: String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure RunMacroByIdWithParams(prMacroId: String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure RunMacroByIdInThread(prMacroId : String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure RunMacroByIdInThreadWithParams(prMacroId, prParams : String);'));
+
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure RunMacroByFile(prMacroFile: String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure RunMacroByFileInThread(prMacroFile: String);'));
 end;
 
 end.

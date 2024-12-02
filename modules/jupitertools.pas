@@ -49,7 +49,8 @@ begin
     if not vrWizard.TableExists('ANOTACOES') then
       vrWizard.ExecuteScript(CreateStringList('CREATE TABLE ANOTACOES ( ID INTEGER PRIMARY KEY, TITULO VARCHAR(200), DESCRICAO BLOB)'));
 
-    Self.Internal_CreateRouteIfDontExists('Tarefas', '/main/tasks/', NULL_KEY, ICON_TASKS, 1000);
+    if Self.Internal_CreateMacroIfDontExists('main.tasks.click', 'Clique do item de menu Tarefas', CreateStringListToMacro('OpenGridFromTable(''TAREFAS'');')) then
+      Self.Internal_CreateRouteIfDontExists('Tarefas', '/main/tasks/', vrWizard.GetLastID('MACROS'), ICON_TASKS, 1000);
 
     if Self.Internal_CreateMacroIfDontExists('main.tools.notes.click', 'Clique do item de menu Anotações', CreateStringListToMacro('OpenGridFromTable(''ANOTACOES'');')) then
       Self.Internal_CreateRouteIfDontExists('Anotações', '/main/tools/notes/', vrWizard.GetLastID('MACROS'), ICON_IMPORTANT_MESSAGE, 50);

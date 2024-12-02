@@ -17,6 +17,8 @@ type
     FMainMenu : TMainMenu;
     FOnClick  : TNotifyEvent;
 
+    function Internal_ExistsShortcut(prMacroID : Integer) : Boolean;
+    function Internal_GetShortcut(prMacroID : Integer) : TShortCut;
     procedure Internal_RenderRoute(prOwner : TMenuItem; prPrefix : String);
     function Internal_GetLevel(prRoute : String) : Integer;
 
@@ -30,9 +32,19 @@ type
 
 implementation
 
-uses JupiterApp;
+uses JupiterApp, LCLProc;
 
 { TJupiterMainMenuGenerator }
+
+function TJupiterMainMenuGenerator.Internal_ExistsShortcut(prMacroID: Integer): Boolean;
+begin
+  Result := Self.Exists('SHORTCUTS', ' DESTINY = ' + IntToStr(prMacroID));
+end;
+
+function TJupiterMainMenuGenerator.Internal_GetShortcut(prMacroID: Integer): TShortCut;
+begin
+  Result := TextToShortCut(Self.Resolve('SHORTCUTS', 'SHORTCUT', ' DESTINY = ' + IntToStr(prMacroID)));
+end;
 
 procedure TJupiterMainMenuGenerator.Internal_RenderRoute(prOwner: TMenuItem; prPrefix: String);
 var
@@ -41,7 +53,7 @@ var
 begin
   vrQry := Self.NewQuery;
   try
-    vrQry.SQL.Add(' SELECT R1.ID, R1.TITLE, R1.ROUTE, R1.ICON FROM ROUTES R1 WHERE ROUTE LIKE :PRROUTE ORDER BY COALESCE(R1.ZINDEX, 0) ');
+    vrQry.SQL.Add(' SELECT R1.ID, R1.TITLE, R1.ROUTE, R1.ICON, R1.DESTINY, R1.SHORTCUT FROM ROUTES R1 WHERE ROUTE LIKE :PRROUTE ORDER BY COALESCE(R1.ZINDEX, 0) ');
     vrQry.ParamByName('PRROUTE').AsString := prPrefix + '%';
     vrQry.Open;
     vrQry.First;
@@ -77,6 +89,9 @@ begin
         vrMenuItem.OnClick := Self.OnClick
       else
         vrMenuItem.OnClick := @Internal_OnClick;
+
+      if not (vrQry.FieldByName('SHORTCUT').IsNull) then
+        vrMenuItem.ShortCut := TextToShortCut(vrQry.FieldByName('SHORTCUT').AsString);
 
       if Assigned(prOwner) then
         prOwner.Add(vrMenuItem)

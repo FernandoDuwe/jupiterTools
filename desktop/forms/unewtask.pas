@@ -81,8 +81,6 @@ procedure TFNewTask.Internal_PrepareForm;
 var
   vrTreeView : TJupiterTreeViewMenuGenerator;
 begin
-  Self.PercentDivisor := 50;
-
   inherited Internal_PrepareForm;
 
   tvTreeMenu.Images := TJupiterDesktopApp(vrJupiterApp).ImageList;

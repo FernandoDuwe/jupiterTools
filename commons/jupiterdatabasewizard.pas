@@ -66,6 +66,9 @@ type
     function GetLastID(prTableName : String) : Integer;
     function GetField(prTableName, prField, prWhere : String) : Variant;
     function GetBLobField(prTableName, prField, prWhere : String) : TStrings;
+    function Resolve(prTableName, prField, prWhere : String) : String;
+
+    function GetForeignKeysFromTable(prTableName : String) : TJupiterObjectList;
 
     procedure UpdateBLOBField(prTableName, prField, prWhere : String; prData : TStrings);
 
@@ -78,7 +81,7 @@ type
     procedure GenerateUpdateSQL(prTableName : String; var prStrings : TStrings);
     procedure GenerateDeleteSQL(prTableName : String; var prStrings : TStrings);
 
-    procedure ExecuteScript(prScript : TStrings);
+    procedure ExecuteScript(prScript : TStrings; prStartTransaction : Boolean = True);
 
     constructor Create(prConnection : TSQLConnection);
   end;
@@ -363,6 +366,69 @@ begin
   end;
 end;
 
+function TJupiterDatabaseWizard.Resolve(prTableName, prField, prWhere: String): String;
+var
+  vrQry : TSQLQuery;
+begin
+  Result := EmptyStr;
+
+  vrQry := Self.NewQuery;
+  try
+    vrQry.SQL.Add(Format(' SELECT %0:s FROM %1:s WHERE %2:s ', [prField, prTableName, prWhere]));
+    vrQry.Open;
+    vrQry.First;
+
+    if not vrQry.Fields[1].IsNull then
+      Result := vrQry.Fields[1].AsString;
+  finally
+    vrQry.Close;
+    FreeAndNil(vrQry);
+  end;
+end;
+
+function TJupiterDatabaseWizard.GetForeignKeysFromTable(prTableName: String): TJupiterObjectList;
+var
+  vrTableList : TStrings;
+  vrFieldList : TStrings;
+  vrVez : Integer;
+  vrVez2 : Integer;
+  vrReference : TJupiterDatabaseForeignKeyReference;
+begin
+  Result := TJupiterObjectList.Create;
+
+  vrTableList := TStringList.Create;
+  vrFieldList := TStringList.Create;
+  try
+    Self.Connection.GetTableNames(vrTableList, False);
+
+    for vrVez := 0 to vrTableList.Count - 1 do
+    begin
+      if vrTableList[vrVez] = prTableName then
+        Continue;
+
+      vrFieldList.Clear;
+      Self.Connection.GetFieldNames(vrTableList[vrVez], vrFieldList);
+
+      for vrVez2 := 0 to vrFieldList.Count - 1 do
+      begin
+        vrReference := Self.GetForeignKeyData(vrTableList[vrVez], vrFieldList[vrVez2]);
+
+        if not Assigned(vrReference) then
+          Continue;
+
+       if vrReference.TableDestinyName = prTableName then
+          Result.Add(vrReference);
+      end;
+    end;
+  finally
+    vrFieldList.Clear;
+    vrFieldList.Free;
+
+    vrTableList.Clear;
+    vrTableList.Free;
+  end;
+end;
+
 procedure TJupiterDatabaseWizard.UpdateBLOBField(prTableName, prField, prWhere: String; prData: TStrings);
 var
   vrQry : TSQLQuery;
@@ -426,21 +492,24 @@ begin
 
 end;
 
-procedure TJupiterDatabaseWizard.ExecuteScript(prScript: TStrings);
+procedure TJupiterDatabaseWizard.ExecuteScript(prScript: TStrings; prStartTransaction : Boolean = True);
 var
   vrScript : TSQLScript;
 begin
   vrScript := Self.NewScript;
   try
-    Self.StartTransaction;
+    if prStartTransaction then
+      Self.StartTransaction;
 
     try
       vrScript.Script.AddStrings(prScript);
       vrScript.Execute;
 
-      Self.Commit;
+      if prStartTransaction then
+        Self.Commit;
     except
-      Self.Rollback;
+      if prStartTransaction then
+        Self.Rollback;
 
       raise;
     end;

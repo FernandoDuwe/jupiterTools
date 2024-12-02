@@ -16,11 +16,13 @@ type
   TFSystemMonitor = class(TFJupiterForm)
     lvForms: TListView;
     lvMessages: TListView;
+    lvThreads: TListView;
     lvScripts: TListView;
     lvDataProviders: TListView;
     lvScriptList: TListView;
     pcPages: TPageControl;
     TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
     tsMessages: TTabSheet;
     tsScriptList: TTabSheet;
     tsDataProviders: TTabSheet;
@@ -30,6 +32,7 @@ type
 
     procedure Internal_UpdateComponents; override;
     procedure Internal_UpdateDatasets; override;
+    procedure Internal_UpdateCalcs; override;
 
     procedure Internal_OnDeleteAsset(Sender: TObject);
     procedure Internal_OnCleanAsset(Sender: TObject);
@@ -74,6 +77,11 @@ begin
   lvMessages.Column[2].Width := PercentOfScreen(lvMessages.Width, 25);
   lvMessages.Column[3].Width := PercentOfScreen(lvMessages.Width, 25);
 
+  lvThreads.Column[0].Width := PercentOfScreen(lvMessages.Width, 10);
+  lvThreads.Column[1].Width := PercentOfScreen(lvMessages.Width, 30);
+  lvThreads.Column[2].Width := PercentOfScreen(lvMessages.Width, 30);
+  lvThreads.Column[3].Width := PercentOfScreen(lvMessages.Width, 30);
+
 //  Self.ActionGroup.GetActionAtIndex(0).Disable;
 end;
 
@@ -89,6 +97,7 @@ begin
   lvForms.Items.Clear;
   lvScriptList.Clear;
   lvMessages.Items.Clear;
+  lvThreads.Items.Clear;
   try
     for vrVez := 0 to vrJupiterApp.Scripts.Count - 1 do
       with TJupiterScript(vrJupiterApp.Scripts.GetAtIndex(vrVez)) do
@@ -132,8 +141,37 @@ begin
             vrItem.SubItems.Add(Fields.VariableById('origin').Value);
             vrItem.SubItems.Add(Fields.VariableById('dateTime').Value);
           end;
+
+    for vrVez := 0 to vrJupiterApp.ThreadList.Count - 1 do
+    begin
+      if not Assigned(vrJupiterApp.ThreadList.ThreadByIndex(vrVez)) then
+        Continue;
+
+      vrItem := lvThreads.Items.Add;
+      vrItem.Caption := IntToStr(vrJupiterApp.ThreadList.ThreadByIndex(vrVez).ID);
+
+      vrItem.SubItems.Add(vrJupiterApp.ThreadList.ThreadByIndex(vrVez).Title);
+      vrItem.SubItems.Add(FormatDateTime(FORMAT_DATETIME, vrJupiterApp.ThreadList.ThreadByIndex(vrVez).StartedAt));
+
+      if vrJupiterApp.ThreadList.ThreadByIndex(vrVez).EndedAt <> 0.0 then
+        vrItem.SubItems.Add(FormatDateTime(FORMAT_DATETIME, vrJupiterApp.ThreadList.ThreadByIndex(vrVez).EndedAt))
+      else
+        vrItem.SubItems.Add(EmptyStr);
+    end;
   finally
   end;
+end;
+
+procedure TFSystemMonitor.Internal_UpdateCalcs;
+begin
+  inherited Internal_UpdateCalcs;
+
+  pcPages.Pages[0].Caption := Format('Scripts (%0:d)', [lvScripts.Items.Count]);
+  pcPages.Pages[1].Caption := Format('Data Providers (%0:d)', [lvDataProviders.Items.Count]);
+  pcPages.Pages[2].Caption := Format('Formulários (%0:d)', [lvForms.Items.Count]);
+  pcPages.Pages[3].Caption := Format('Log de Scripts (%0:d)', [lvScriptList.Items.Count]);
+  pcPages.Pages[4].Caption := Format('Mensagens (%0:d)', [lvMessages.Items.Count]);
+  pcPages.Pages[5].Caption := Format('Threads (%0:d)', [lvThreads.Items.Count]);
 end;
 
 procedure TFSystemMonitor.Internal_OnDeleteAsset(Sender: TObject);

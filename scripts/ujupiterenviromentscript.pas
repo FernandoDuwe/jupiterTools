@@ -24,6 +24,7 @@ type
   function JupiterEnviromentScript_FileExists(prPath : String) : Boolean;
   function JupiterEnviromentScript_FolderExists(prPath : String) : Boolean;
   procedure JupiterEnviromentScript_CopyFileTo(prOrigin, prDestiny : String);
+  procedure JupiterEnviromentScript_DeleteFile(prFileName : String);
 
   function JupiterEnviromentScript_CreatePath(prPath : String) : String;
   function JupiterEnviromentScript_CreateFile(prPath, prContent : String) : String;
@@ -31,6 +32,8 @@ type
 
   function JupiterEnviromentScript_LoadFromFile(prFileName : String) : String;
   procedure JupiterEnviromentScript_SaveToFile(prFileName, prData : String);
+
+  function JupiterEnviromentScript_GetApplicationPath : String;
 
 implementation
 
@@ -63,6 +66,18 @@ begin
   vrEnviroment := TJupiterEnviroment.Create;
   try
     vrEnviroment.CopyFileTo(prOrigin, prDestiny);
+  finally
+    FreeAndNil(vrEnviroment);
+  end;
+end;
+
+procedure JupiterEnviromentScript_DeleteFile(prFileName: String);
+var
+  vrEnviroment : TJupiterEnviroment;
+begin
+  vrEnviroment := TJupiterEnviroment.Create;
+  try
+    vrEnviroment.DeleteFileOnDisk(prFileName);
   finally
     FreeAndNil(vrEnviroment);
   end;
@@ -139,6 +154,18 @@ begin
   end;
 end;
 
+function JupiterEnviromentScript_GetApplicationPath: String;
+var
+  vrEnviroment : TJupiterEnviroment;
+begin
+  vrEnviroment := TJupiterEnviroment.Create;
+  try
+    Result := vrEnviroment.BasePath;
+  finally
+    FreeAndNil(vrEnviroment);
+  end;
+end;
+
 { TJupiterEnviromentcript }
 
 function TJupiterEnviromentcript.Internal_GetName: String;
@@ -150,31 +177,37 @@ procedure TJupiterEnviromentcript.DoCompile(prSender: TPSScript);
 begin
   inherited DoCompile(prSender);
 
+  prSender.AddFunction(@JupiterEnviromentScript_GetApplicationPath, 'function GetApplicationPath: String;');
   prSender.AddFunction(@JupiterEnviromentScript_FileOrFolderExists, 'function FileOrFolderExists(prPath: String): Boolean;');
   prSender.AddFunction(@JupiterEnviromentScript_FileExists, 'function FileExists(prPath: String): Boolean;');
   prSender.AddFunction(@JupiterEnviromentScript_FolderExists, 'function FolderExists(prPath: String): Boolean;');
 
+  prSender.AddFunction(@JupiterEnviromentScript_DeleteFile, 'procedure DeleteFileOnDisk(prFileName : String);');
   prSender.AddFunction(@JupiterEnviromentScript_CopyFileTo, 'procedure CopyFileTo(prOrigin, prDestiny: String);');
   prSender.AddFunction(@JupiterEnviromentScript_CreatePath, 'function CreatePath(prPath : String) : String;');
   prSender.AddFunction(@JupiterEnviromentScript_CreateFile, 'function CreateFile(prPath, prContent: String): String;');
   prSender.AddFunction(@JupiterEnviromentScript_CreateExternalFile, 'function CreateExternalFile(prPath, prContent: String): String;');
 
   prSender.AddFunction(@JupiterEnviromentScript_LoadFromFile, 'function LoadFromFile(prFileName : String): String;');
-  prSender.AddFunction(@JupiterEnviromentScript_SaveToFile, 'function SaveToFile(prFileName, prData : String): String;');
+  prSender.AddFunction(@JupiterEnviromentScript_SaveToFile, 'procedure SaveToFile(prFileName, prData : String);');
 end;
 
 function TJupiterEnviromentcript.AnalyseCode: TJupiterScriptAnalyserList;
 begin
   Result := inherited AnalyseCode;
 
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function GetApplicationPath : String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function FileOrFolderExists(prPath : String) : Boolean;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function FileExists(prPath : String) : Boolean;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function FolderExists(prPath : String) : Boolean;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function CreatePath(prPath : String) : String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function CreateFile(prPath, prContent: String): String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function CreateExternalFile(prPath, prContent: String): String;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function LoadFromFile(prFileName : String): String;'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CopyFileTo(prOrigin, prDestiny: String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure DeleteFileOnDisk(prFileName : String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure SaveToFile(prFileName, prData : String);'));
 end;
 
 end.

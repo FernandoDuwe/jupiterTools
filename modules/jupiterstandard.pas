@@ -52,13 +52,23 @@ begin
       vrWizard.ExecuteScript(CreateStringList('CREATE TABLE MACROS ( ID INTEGER PRIMARY KEY, NAME VARCHAR (100), MACROID VARCHAR(100), MACRO BLOB)'));
 
     if not vrWizard.TableExists('ROUTES') then
-      vrWizard.ExecuteScript(CreateStringList('CREATE TABLE ROUTES ( ID INTEGER PRIMARY KEY, TITLE VARCHAR(100), ROUTE VARCHAR (100), DESTINY INT, ICON SMALLINT, ZINDEX SMALLINT, FOREIGN KEY (DESTINY) REFERENCES MACROS (ID))'));
+      vrWizard.ExecuteScript(CreateStringList('CREATE TABLE ROUTES ( ID INTEGER PRIMARY KEY, TITLE VARCHAR(100), ROUTE VARCHAR (100), DESTINY INT, ICON SMALLINT, ZINDEX SMALLINT, SHORTCUT VARCHAR(30), FOREIGN KEY (DESTINY) REFERENCES MACROS (ID))'));
+
+    if not vrWizard.TableExists('SHORTCUTS') then
+      vrWizard.ExecuteScript(CreateStringList('CREATE TABLE SHORTCUTS ( ID INTEGER PRIMARY KEY, DESCRIPTION VARCHAR(100), SHORTCUT VARCHAR(100), DESTINY INT, FOREIGN KEY (DESTINY) REFERENCES MACROS (ID))'));
 
     if not vrWizard.TableExists('ACTIONS') then
       vrWizard.ExecuteScript(CreateStringList('CREATE TABLE ACTIONS ( ID INTEGER PRIMARY KEY, NAME VARCHAR (100), TITLE VARCHAR (100), TABLENAME VARCHAR(100), ICON SMALLINT, ZINDEX SMALLINT, MACRO INTEGER, MACRO_ENABLE INTEGER, MACRO_VISIBLE INTEGER, FOREIGN KEY (MACRO) REFERENCES MACROS (ID), FOREIGN KEY (MACRO_ENABLE) REFERENCES MACROS (ID), FOREIGN KEY (MACRO_VISIBLE) REFERENCES MACROS (ID))'));
 
     if Self.Internal_CreateMacroIfDontExists('menu.newTab.click', 'Clique do botão Nova aba', CreateStringList('program macro;' + #13#10 + 'begin' + #13#10 + '  OpenForm(''/forms/newTask'');' + #13#10 + 'end.')) then
       Self.Internal_CreateRouteIfDontExists(EmptyStr, '/menu/newTab/', vrWizard.GetLastID('MACROS'), ICON_ADD, 100);
+
+    if Self.Internal_CreateMacroIfDontExists('menu.contextMenu.click', 'Clique do botão de contexto', CreateStringListToMacro(' OpenForm(''/forms/context''); ')) then
+    begin
+      Self.Internal_CreateRouteIfDontExists(EmptyStr, '/menu/contextMenu/', vrWizard.GetLastID('MACROS'), ICON_MENU, 200, 'Ctrl+Enter');
+
+      Self.Internal_CreateShortcutIfDontExists('Abrir o menu de contexto', 'Ctrl+Enter', vrWizard.GetLastID('MACROS'));
+    end;
 
     vrStr.Clear;
     vrStr.Add('program macro;');
@@ -94,10 +104,12 @@ begin
 
 
     // Creating basic routes
-    Self.Internal_CreateRouteIfDontExists('Arquivo', '/menu/file/', NULL_KEY, NULL_KEY, 100);
-    Self.Internal_CreateRouteIfDontExists('Exibir', '/menu/show/', NULL_KEY, NULL_KEY, 200);
-    Self.Internal_CreateRouteIfDontExists('Ferramentas', '/menu/tools/', NULL_KEY, NULL_KEY, 300);
-    Self.Internal_CreateRouteIfDontExists('Sobre', '/menu/about/', NULL_KEY, NULL_KEY, 10000);
+    Self.Internal_CreateRouteIfDontExists('Arquivo', '/menu/file/', NULL_KEY, NULL_KEY, 1000);
+    Self.Internal_CreateRouteIfDontExists('Exibir', '/menu/show/', NULL_KEY, NULL_KEY, 2000);
+    Self.Internal_CreateRouteIfDontExists('Ferramentas', '/menu/tools/', NULL_KEY, NULL_KEY, 3000);
+
+    if Self.Internal_CreateMacroIfDontExists('menu.about.click', 'Clique do botão Sobre', CreateStringListToMacro('ShowMessage(''Jupiter'' + #13#10 + #13#10 + ''Versão: '' + GetVersion);')) then
+      Self.Internal_CreateRouteIfDontExists('Sobre', '/menu/about/', vrWizard.GetLastID('MACROS'), NULL_KEY, 100000);
 
     Self.Internal_CreateRouteIfDontExists('Cadastros', '/main/records/', NULL_KEY, ICON_RECORDS, 100);
 
@@ -105,6 +117,11 @@ begin
 
     // Inside File Menu
     Self.Internal_CreateRouteIfDontExists('Novo', '/menu/file/new/', NULL_KEY, ICON_NEW, 100);
+    Self.Internal_CreateRouteIfDontExists('Abrir', '/menu/file/open/', NULL_KEY, ICON_OPEN, 200);
+
+    if Self.Internal_CreateMacroIfDontExists('menu.file.explorer', 'Clique do botão Explorar pasta', CreateStringListToMacro('   OpenFileExplorerForm(GetApplicationPath);')) then
+      Self.Internal_CreateRouteIfDontExists('Explorar pasta', '/menu/file/explorer/', vrWizard.GetLastID('MACROS'), ICON_OPEN, 300);
+
     Self.Internal_CreateRouteIfDontExists('-', '/menu/file/separator1/', NULL_KEY, NULL_KEY, 500);
 
     if Self.Internal_CreateMacroIfDontExists('menu.file.config.click', 'Clique do botão Configurações', CreateStringList('program macro;' + #13#10 + 'begin' + #13#10 + '  OpenForm(''/forms/config'');' + #13#10 + 'end.')) then
@@ -116,7 +133,7 @@ begin
       Self.Internal_CreateRouteIfDontExists('Fechar', '/menu/file/exit/', vrWizard.GetLastID('MACROS'), ICON_EXIT, 9000);
 
     if Self.Internal_CreateMacroIfDontExists('menu.tools.scriptEditor.click', 'Clique do botão Editor de Scripts JPAS', CreateStringListToMacro('OpenForm(''/forms/script'');')) then
-      Self.Internal_CreateRouteIfDontExists('Editor de Scripts JPAS', '/menu/tools/scriptEditor/', vrWizard.GetLastID('MACROS'), ICON_TECHFILE, 200);
+      Self.Internal_CreateRouteIfDontExists('Editor de Scripts JPAS', '/menu/tools/scriptEditor/', vrWizard.GetLastID('MACROS'), ICON_TECHFILE, 200, 'Shift+F9');
 
     if Self.Internal_CreateMacroIfDontExists('menu.tools.systemMonitor.click', 'Clique do botão Monitor de aplicação', CreateStringListToMacro('OpenForm(''/forms/system'');')) then
       Self.Internal_CreateRouteIfDontExists('Monitor de aplicação', '/menu/tools/systemMonitor/', vrWizard.GetLastID('MACROS'), ICON_TOOLS, 100);

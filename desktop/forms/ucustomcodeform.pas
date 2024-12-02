@@ -27,6 +27,8 @@ type
     procedure Internal_OnFieldChange(Sender : TObject);
 
     function Internal_OnRequestData : TJupiterVariableList; override;
+
+    procedure Internal_PrepareForm; override;
   published
     property References : TJupiterObjectList read FReferences write FReferences;
   public
@@ -130,6 +132,11 @@ begin
   Result := inherited Internal_OnRequestData;
 
   Result.CopyValues(Self.Params);
+end;
+
+procedure TFCustomCodeForm.Internal_PrepareForm;
+begin
+  inherited Internal_PrepareForm;
 end;
 
 procedure TFCustomCodeForm.AddLabel(prLabelCaption: String);

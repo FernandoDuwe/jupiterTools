@@ -358,6 +358,18 @@
         <Filename Value="../commons/jupitersqldataprovider.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit>
+      <Unit>
+        <Filename Value="../commons/jupiterthread.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms/ucontextmenu.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FContextMenu"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uContextMenu"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

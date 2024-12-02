@@ -21,11 +21,12 @@ type
     procedure Internal_Prepare; virtual;
     procedure Internal_SetVariableValue(prID, prNewValue : String);
 
-    function Internal_CreateRouteIfDontExists(prTitle, prRoute : String; prDestiny, prIcon, prZIndex : Integer) : Boolean;
+    function Internal_CreateRouteIfDontExists(prTitle, prRoute : String; prDestiny, prIcon, prZIndex : Integer; prShortCut : String = '') : Boolean;
     function Internal_CreateMacroIfDontExists(prID, prTitle : String; prMacro : TStrings) : Boolean;
     function Internal_CreateVariablIfDontExists(prId, prName, prValue : String) : Boolean;
     function Internal_CreateActionIfDontExists(prId, prTitle, prTable : String; prIcon, prZIndex : Integer; prMacro, prMacroEnabled, prMacroVisible : TStrings) : Boolean;
     function Internal_CreateActionIfDontExists(prId, prTitle, prTable : String; prIcon, prZIndex : Integer; prMacro, prMacroEnabled, prMacroVisible : Integer) : Boolean;
+    function Internal_CreateShortcutIfDontExists(prDescription, prShortCut : String; prDestiny : Integer) : Boolean;
 
     procedure Internal_AddConfigFromDatabase(prId : String);
 
@@ -131,7 +132,9 @@ begin
   end;
 end;
 
-function TJupiterModule.Internal_CreateRouteIfDontExists(prTitle, prRoute: String; prDestiny, prIcon, prZIndex: Integer): Boolean;
+function TJupiterModule.Internal_CreateRouteIfDontExists(prTitle,
+  prRoute: String; prDestiny, prIcon, prZIndex: Integer; prShortCut: String
+  ): Boolean;
 var
   vrWizard  : TJupiterDatabaseWizard;
   vrIcon    : String;
@@ -160,7 +163,10 @@ begin
     else
       vrDestiny := IntToStr(prDestiny);
 
-    vrWizard.ExecuteScript(CreateStringList(' INSERT INTO ROUTES (TITLE, ROUTE, ICON, ZINDEX, DESTINY) VALUES ("' + prTitle + '", "' + prRoute + '", ' + vrIcon + ', ' + vrZIndex + ', ' + vrDestiny + ') '));
+    if prShortCut = EmptyStr then
+      vrWizard.ExecuteScript(CreateStringList(' INSERT INTO ROUTES (TITLE, ROUTE, ICON, ZINDEX, DESTINY) VALUES ("' + prTitle + '", "' + prRoute + '", ' + vrIcon + ', ' + vrZIndex + ', ' + vrDestiny + ') '))
+    else
+      vrWizard.ExecuteScript(CreateStringList(' INSERT INTO ROUTES (TITLE, ROUTE, ICON, ZINDEX, DESTINY, SHORTCUT) VALUES ("' + prTitle + '", "' + prRoute + '", ' + vrIcon + ', ' + vrZIndex + ', ' + vrDestiny + ', "' + prShortCut + '") '));
 
     Result := True;
   finally
@@ -376,6 +382,51 @@ begin
     FreeAndNil(vrWizard);
     FreeAndNil(vrQry);
   end;
+end;
+
+function TJupiterModule.Internal_CreateShortcutIfDontExists(prDescription, prShortCut: String; prDestiny: Integer): Boolean;
+var
+  vrWizard : TJupiterDatabaseWizard;
+  vrQry : TSQLQuery;
+begin
+  Result := False;
+
+  vrWizard := vrJupiterApp.NewWizard;
+  try
+    vrQry := vrWizard.NewQuery;
+
+    if vrWizard.Exists('SHORTCUTS', Format(' SHORTCUT = "%0:s" ', [prShortCut])) then
+      Exit;
+
+    vrQry.Close;
+    vrQry.SQL.Clear;
+    vrQry.SQL.Add(' SELECT * FROM SHORTCUTS WHERE 1 = 2 ');
+    vrQry.InsertSQL.Add(' INSERT INTO SHORTCUTS (DESCRIPTION, SHORTCUT, DESTINY) VALUES (:DESCRIPTION, :SHORTCUT, :DESTINY) ');
+    vrQry.Open;
+
+    if not vrWizard.Transaction.Active then
+      vrWizard.Transaction.StartTransaction;
+
+    try
+      vrQry.Insert;
+      vrQry.FieldByName('DESCRIPTION').AsString := prDescription;
+      vrQry.FieldByName('SHORTCUT').AsString    := prShortCut;
+      vrQry.FieldByName('DESTINY').AsInteger    := prDestiny;
+      vrQry.Post;
+      vrQry.ApplyUpdates(-1);
+
+      vrWizard.Transaction.CommitRetaining;
+
+      Result := True;
+    except
+      vrWizard.Transaction.RollbackRetaining;
+      raise;
+    end;
+  finally
+    FreeAndNil(vrWizard);
+    FreeAndNil(vrQry);
+  end;
+
 end;
 
 procedure TJupiterModule.Internal_AddConfigFromDatabase(prId: String);

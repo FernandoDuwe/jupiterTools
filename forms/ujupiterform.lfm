@@ -12,6 +12,7 @@ object FJupiterForm: TFJupiterForm
   OnResize = FormResize
   OnShow = FormShow
   PopupMenu = pmOptions
+  Position = poScreenCenter
   LCLVersion = '3.4.0.0'
   object pnSearchBar: TPanel
     Left = 0

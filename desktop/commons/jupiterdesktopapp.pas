@@ -32,7 +32,7 @@ type
 
     function GetFormById(prFormID : String) : TForm;
     procedure DeleteFormById(prFormID : String);
-    function GenerateContextMenu : TJupiterActionGroup;
+    function GenerateContextMenu(prSearch : String = '') : TJupiterActionGroup;
 
     constructor Create(prAppID, prAppName : String); override;
     destructor Destroy; override;
@@ -146,7 +146,7 @@ begin
       end;
 end;
 
-function TJupiterDesktopApp.GenerateContextMenu: TJupiterActionGroup;
+function TJupiterDesktopApp.GenerateContextMenu(prSearch : String = '') : TJupiterActionGroup;
 var
   vrWizard : TJupiterDatabaseWizard;
   vrStringList : TStrings;
@@ -164,6 +164,10 @@ begin
     vrSQL.SQL.Add(' FROM ROUTES R1 ');
     vrSQL.SQL.Add('   INNER JOIN MACROS M1 ON (R1.DESTINY = M1.ID) ');
     vrSQL.SQL.Add(' WHERE UPPER(R1.ROUTE) LIKE "/CONTEXT/%" ');
+
+    if Trim(prSearch) <> EmptyStr then
+      vrSQL.SQL.Add(' AND UPPER(R1.TITLE) LIKE "%' + AnsiUpperCase(prSearch) + '%"  ');
+
     vrSQL.SQL.Add(' ORDER BY 1 ');
     vrSQL.Open;
     vrSQL.First;
@@ -178,7 +182,16 @@ begin
     vrWizard.Connection.GetTableNames(vrStringList, False);
 
     for vrVez := 0 to vrStringList.Count - 1 do
-      Result.Add(TJupiterAction.Create('Tabela: ' + vrStringList[vrVez], 'Abrir grid da tabela ' + vrStringList[vrVez], NULL_KEY, CreateStringListToMacro('  OpenGridFromTable(''' + vrStringList[vrVez] + '''); ')));
+    begin
+      if Trim(prSearch) = EmptyStr then
+      begin
+        Result.Add(TJupiterAction.Create('Tabela: ' + vrStringList[vrVez], 'Abrir grid da tabela ' + vrStringList[vrVez], NULL_KEY, CreateStringListToMacro('  OpenGridFromTable(''' + vrStringList[vrVez] + '''); ')));
+        Continue;
+      end;
+
+      if Pos(AnsiUpperCase(prSearch), AnsiUpperCase(vrStringList[vrVez])) > 0 then
+        Result.Add(TJupiterAction.Create('Tabela: ' + vrStringList[vrVez], 'Abrir grid da tabela ' + vrStringList[vrVez], NULL_KEY, CreateStringListToMacro('  OpenGridFromTable(''' + vrStringList[vrVez] + '''); ')));
+    end;
   finally
     FreeAndNil(vrWizard);
     FreeAndNil(vrStringList);

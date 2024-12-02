@@ -123,7 +123,10 @@ begin
       TCheckBox(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
 
     if prComponent.Components[vrVez] is TListView then
+    begin
       TListView(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+      TListView(prComponent.Components[vrVez]).GridLines := True;
+    end;
 
     if prComponent.Components[vrVez] is TCheckListBox then
       TCheckListBox(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);

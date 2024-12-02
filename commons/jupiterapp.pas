@@ -9,7 +9,7 @@ uses
   JupiterVariable, jupiterDatabaseWizard, jupiterScript, jupiterStringUtils,
   JupiterConsts, uJupiterEnviromentScript, uJupiterStringUtilsScript,
   uJupiterRunnableScript, uJupiterDataProviderScript, SQLite3Conn,
-  JupiterDataProvider;
+  JupiterDataProvider, jupiterthread;
 
 type
 
@@ -26,6 +26,7 @@ type
     FInternalDatabase : TSQLite3Connection;
     FScriptList       : TJupiterDataProvider;
     FMessageList      : TJupiterDataProvider;
+    FThreadList       : TJupiterThreadList;
 
     procedure Internal_OnExecute(prScript, prMessages, prRunMessages : TStrings; prExecuted : Boolean);
   protected
@@ -39,6 +40,7 @@ type
     property ModulesList   : TJupiterModuleList   read FModules       write FModules;
     property Params        : TJupiterVariableList read FParams        write FParams;
     property Scripts       : TJupiterVariableList read FScripts       write FScripts;
+    property ThreadList    : TJupiterThreadList   read FThreadList    write FThreadList;
 
     property InternalDatabase : TSQLite3Connection read FInternalDatabase write FInternalDatabase;
     property ScriptList : TJupiterDataProvider read FScriptList write FScriptList;
@@ -59,6 +61,9 @@ type
 
     procedure RunMacro(prId : Integer; prParams : TJupiterVariableList);
     procedure RunMacro(prMacroId : String; prParams : TJupiterVariableList);
+    procedure RunMacroFromFile(prMacroFile : String; prParams : TJupiterVariableList);
+    procedure RunMacroFromFileInThread(prMacroFile : String; prParams : TJupiterVariableList);
+    procedure RunMacroInThread(prMacroId : String; prParams : TJupiterVariableList);
     procedure RunScript(prMacro : TStrings; prParams : TJupiterVariableList);
     procedure RunAction(prId : Integer; prParams : TJupiterVariableList);
     function RunAcitonEnabled(prId : Integer; prParams : TJupiterVariableList) : Boolean;
@@ -215,6 +220,7 @@ begin
 
     vrScript.Script.AddStrings(JupiterStringUtilsStringToStringList(vrQry.FieldByName('MACRO').AsString));
     vrScript.Params.CopyValues(prParams);
+
     vrScript.Execute;
   finally
     FreeAndNil(vrScript);
@@ -235,10 +241,51 @@ begin
 
     vrScript.Script.AddStrings(JupiterStringUtilsStringToStringList(vrQry.FieldByName('MACRO').AsString));
     vrScript.Params.CopyValues(prParams);
+
     vrScript.Execute;
   finally
     FreeAndNil(vrScript);
   end;
+end;
+
+procedure TJupiterApp.RunMacroFromFile(prMacroFile: String; prParams: TJupiterVariableList);
+var
+  vrScript : TJupiterScript;
+begin
+  vrScript := Self.NewScript;
+  vrScript.LoadFromFile(prMacroFile);
+  vrScript.Params.CopyValues(prParams);
+
+  vrScript.Execute;
+end;
+
+procedure TJupiterApp.RunMacroFromFileInThread(prMacroFile: String; prParams: TJupiterVariableList);
+var
+  vrScript : TJupiterScript;
+begin
+  vrScript := Self.NewScript;
+  vrScript.LoadFromFile(prMacroFile);
+  vrScript.Params.CopyValues(prParams);
+
+  Self.ThreadList.NewThread('Macro: ' + prMacroFile, vrScript);
+end;
+
+procedure TJupiterApp.RunMacroInThread(prMacroId: String; prParams: TJupiterVariableList);
+var
+  vrScript : TJupiterScript;
+  vrQry    : TSQLQuery;
+begin
+  vrScript := Self.NewScript;
+  vrQry    := Self.NewWizard.NewQuery;
+
+  vrQry.SQL.Add(' SELECT ID, MACRO FROM MACROS WHERE MACROID = :PRID ');
+  vrQry.ParamByName('PRID').AsString := prMacroId;
+  vrQry.Open;
+
+  vrScript.Script.AddStrings(JupiterStringUtilsStringToStringList(vrQry.FieldByName('MACRO').AsString));
+  vrScript.Params.CopyValues(prParams);
+
+  Self.ThreadList.NewThread('Macro: ' + prMacroId, vrScript);
 end;
 
 procedure TJupiterApp.RunScript(prMacro: TStrings; prParams: TJupiterVariableList);
@@ -249,6 +296,7 @@ begin
   try
     vrScript.Script.AddStrings(prMacro);
     vrScript.Params.CopyValues(prParams);
+
     vrScript.Execute;
   finally
     FreeAndNil(vrScript);
@@ -278,6 +326,7 @@ begin
 
     vrScript.Script.AddStrings(JupiterStringUtilsStringToStringList(vrQry.FieldByName('MACRO').AsString));
     vrScript.Params.CopyValues(prParams);
+
     vrScript.Execute;
   finally
     FreeAndNil(vrScript);
@@ -436,6 +485,7 @@ begin
 
     Self.ScriptList := TJupiterDataProvider.Create;
     Self.MessageList := TJupiterDataProvider.Create;
+    Self.ThreadList := TJupiterThreadList.Create;
 
     Self.Internal_Prepare;
   finally
@@ -451,6 +501,7 @@ begin
   FreeAndNil(Self.FModules);
   FreeAndNil(Self.FScripts);
   FreeAndNil(Self.DataProviders);
+  FreeAndNil(Self.FThreadList);
 
   inherited Destroy;
 end;

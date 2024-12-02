@@ -25,7 +25,7 @@ uses
   uScriptEditorForm, uJupiterEnviromentScript, uJupiterStringUtilsScript,
   uJupiterRunnableScript, jupiterTools, uJupiterDataProviderScript,
   uSystemMonitor, uCustomCodeForm, uJupiterFormDesktopAppScript, uFileExplorer,
-  jupitersqldataprovider;
+  jupitersqldataprovider, jupiterthread, uContextMenu;
 
 {$R *.res}
 
@@ -58,6 +58,7 @@ begin
     FormRoutes.Add(TJupiterFormRoute.Create(SYSTEM_PATH, TFSystemMonitor));
     FormRoutes.Add(TJupiterFormRoute.Create(CUSTOMCODEFORM_PATH, TFCustomCodeForm));
     FormRoutes.Add(TJupiterFormRoute.Create(FILEEXPLORER_PATH, TFFileExplorer));
+    FormRoutes.Add(TJupiterFormRoute.Create(CONTEXT_PATH, TFContextMenu));
   end;
 
   Application.Run;
