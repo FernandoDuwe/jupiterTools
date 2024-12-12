@@ -22,6 +22,16 @@
         <HasRegisterProc Value="True"/>
         <UnitName Value="JupiterFormTabSheet"/>
       </Item>
+      <Item>
+        <Filename Value="jupiteredit.pas"/>
+        <HasRegisterProc Value="True"/>
+        <UnitName Value="JupiterEdit"/>
+      </Item>
+      <Item>
+        <Filename Value="jupiterdblookupcombobox.pas"/>
+        <HasRegisterProc Value="True"/>
+        <UnitName Value="JupiterDBLookupComboBox"/>
+      </Item>
     </Files>
     <RequiredPkgs>
       <Item>

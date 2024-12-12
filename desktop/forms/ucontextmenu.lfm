@@ -1,4 +1,5 @@
 inherited FContextMenu: TFContextMenu
+  BorderStyle = bsDialog
   Caption = 'Menu de Contexto'
   inherited pnSearchBar: TPanel
     inherited edSearch: TEdit

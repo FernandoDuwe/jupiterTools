@@ -155,6 +155,7 @@ begin
   Self.FNewTabClick := False;
 
   TJupiterDesktopApp(vrJupiterApp).ImageList := ilIconFamily;
+  TJupiterDesktopApp(vrJupiterApp).GetExternalImages;
 
   vrMainMenu := TJupiterMainMenuGenerator.Create(vrJupiterApp.InternalDatabase);
   try
@@ -183,6 +184,8 @@ begin
 
   Self.Repaint;
   Self.Refresh;
+
+  jtMainTab.Align := alClient;
 
   Application.ProcessMessages;
 end;
@@ -251,12 +254,15 @@ begin
 
   vrTab := jtMainTab.Pages[jtMainTab.PageIndex];
 
-  for vrVez := 0 to jtMainTab.PageCount - 1 do
+  vrVez := 0;
+
+  while jtMainTab.PageCount > 1 do
   begin
     if jtMainTab.Pages[vrVez] = vrTab then
-      Exit;
+      vrVez := vrVez + 1;
 
     jtMainTab.CloseTab(vrVez);
+    vrVez := 0;
   end;
 
   tmrAutoUpdater.Enabled := True;
@@ -287,10 +293,19 @@ end;
 procedure TFMain.NewTab(Form: TForm);
 var
   vrSS : TShiftState;
+  vrModal : Boolean;
 begin
   vrSS := GetKeyShiftState;
 
+  vrModal := False;
+
   if ((ssCtrl in vrSS) and (not FNewTabClick)) then
+    vrModal := True;
+
+  if Form.BorderStyle = bsDialog then
+    vrModal := True;
+
+  if vrModal then
   begin
     Form.ShowModal;
 

@@ -8,7 +8,8 @@ unit jupiterCommom;
 interface
 
 uses
-  JupiterFormTab, JupiterFormTabSheet, LazarusPackageIntf;
+  JupiterFormTab, JupiterFormTabSheet, JupiterEdit, JupiterDBLookupComboBox, 
+  LazarusPackageIntf;
 
 implementation
 
@@ -16,6 +17,8 @@ procedure Register;
 begin
   RegisterUnit('JupiterFormTab', @JupiterFormTab.Register);
   RegisterUnit('JupiterFormTabSheet', @JupiterFormTabSheet.Register);
+  RegisterUnit('JupiterEdit', @JupiterEdit.Register);
+  RegisterUnit('JupiterDBLookupComboBox', @JupiterDBLookupComboBox.Register);
 end;
 
 initialization

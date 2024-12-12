@@ -117,7 +117,10 @@ var
 begin
   vrEnviroment := TJupiterEnviroment.Create;
   try
+    vrEnviroment.CreatePath('/assets/');
     vrEnviroment.CreatePath('/datasets/');
+    vrEnviroment.CreatePath('/temp/');
+    vrEnviroment.CreatePath('/out/');
 
     Self.FParams.FileName := vrEnviroment.FullPath('/datasets/config.csv');
 

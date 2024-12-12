@@ -48,6 +48,7 @@ var
 
 implementation
 
+uses Buttons, JupiterEdit;
 
 {$R *.lfm}
 
@@ -153,6 +154,7 @@ end;
 procedure TFCustomCodeForm.AddEdit(prVariableId, prInitialValue : String);
 var
   vrReference : TJupiterComponentReference;
+  vrSpeedButton : TSpeedButton;
 begin
   try
     Self.FCurrentLine := Self.FCurrentLine + FORM_MARGIN_TOP;
@@ -163,10 +165,14 @@ begin
   finally
     Self.References.Add(vrReference);
 
+    vrSpeedButton := TSpeedButton.Create(vrReference.Component);
+    vrSpeedButton.Caption := '...';
+
     vrReference.FieldName := prVariableId;
     TEdit(vrReference.Component).Tag := Self.References.Count - 1;
     TEdit(vrReference.Component).OnChange := @Internal_OnFieldChange;
     TEdit(vrReference.Component).Text := prInitialValue;
+    TJupiterEdit(vrReference.Component).AddAction(vrSpeedButton);
 
     Self.Params.AddVariable(prVariableId, prInitialValue);
   end;

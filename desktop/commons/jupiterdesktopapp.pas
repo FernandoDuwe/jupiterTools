@@ -7,7 +7,8 @@ interface
 uses
   Classes, SysUtils, JupiterApp, JupiterObject, jupiterScript, JupiterRoute,
   JupiterVariable, jupiterDatabaseWizard, JupiterConsts,
-  uJupiterFormDesktopAppScript, uJupiterAction, Forms, Controls;
+  JupiterFileDataProvider, JupiterEnviroment, uJupiterFormDesktopAppScript,
+  uJupiterAction, Forms, Controls;
 
 type
 
@@ -20,6 +21,8 @@ type
     FFormList   : TJupiterObjectList;
   protected
     procedure Internal_AddScriptLibraries(var prScript : TJupiterScript); override;
+
+    procedure Internal_Prepare; override;
   published
     property FormRoutes : TJupiterObjectList read FFormRoutes write FFormRoutes;
     property ImageList : TImageList read FImageList write FImageList;
@@ -33,6 +36,7 @@ type
     function GetFormById(prFormID : String) : TForm;
     procedure DeleteFormById(prFormID : String);
     function GenerateContextMenu(prSearch : String = '') : TJupiterActionGroup;
+    procedure GetExternalImages;
 
     constructor Create(prAppID, prAppName : String); override;
     destructor Destroy; override;
@@ -40,7 +44,7 @@ type
 
 implementation
 
-uses uJupiterForm, uMain, uJupiterDesktopAppScript, SQLDB;
+uses uJupiterForm, uMain, uJupiterDesktopAppScript, SQLDB, Graphics;
 
 { TJupiterDesktopApp }
 
@@ -52,9 +56,14 @@ begin
   prScript.LibraryList.Add(TJupiterFormDesktopAppScript.Create);
 end;
 
+procedure TJupiterDesktopApp.Internal_Prepare;
+begin
+  inherited;
+end;
+
 function TJupiterDesktopApp.NewFormByRoute(prRoute: String): TForm;
 var
-  vrVez : Integer;
+   vrVez : Integer;
 begin
   Result := nil;
 
@@ -197,6 +206,47 @@ begin
     FreeAndNil(vrStringList);
     FreeAndNil(vrSQL);
   end;
+end;
+
+procedure TJupiterDesktopApp.GetExternalImages;
+var
+  vrProvider : TJupiterFileDataProvider;
+  vrEnviroment : TJupiterEnviroment;
+  vrVez : Integer;
+  vrBitmap  : TBitmap;
+  vrPicture : TPicture;
+begin
+  inherited Internal_Prepare;
+
+  vrProvider := TJupiterFileDataProvider.Create;
+  vrEnviroment := TJupiterEnviroment.Create;
+  try
+    vrProvider.Path := vrEnviroment.FullPath('/assets/');
+    vrProvider.ProvideData;
+
+    for vrVez := 0 to vrProvider.Count - 1 do
+      with vrProvider.GetRowByIndex(vrVez) do
+      begin
+        if not vrEnviroment.IsPictureFile(Fields.VariableById('File').Value) then
+          Continue;
+
+        vrPicture := TPicture.Create;
+        try
+          vrPicture.LoadFromFile(Fields.VariableById('File').Value);
+
+          vrBitmap := TBitmap.Create;
+          vrBitmap.Assign(vrPicture.Graphic);
+
+          Self.ImageList.Add(vrBitmap, nil);
+        finally
+          FreeAndNil(vrPicture);
+        end;
+      end;
+  finally
+    FreeAndNil(vrProvider);
+    FreeAndNil(vrEnviroment);
+  end;
+
 end;
 
 constructor TJupiterDesktopApp.Create(prAppID, prAppName: String);

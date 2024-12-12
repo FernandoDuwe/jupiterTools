@@ -21,11 +21,13 @@ type
     dsRoutes: TDataSource;
     dbGridRoutes: TDBGrid;
     dbGridMacros: TDBGrid;
+    lvIcons: TListView;
     mmDetails: TMemo;
     pcOptions: TPageControl;
     qryActions: TSQLQuery;
     qryRoutes: TSQLQuery;
     qryMacro: TSQLQuery;
+    tsIcons: TTabSheet;
     tsActions: TTabSheet;
     tsMacros: TTabSheet;
     tsRoutes: TTabSheet;
@@ -150,6 +152,9 @@ begin
 end;
 
 procedure TFGenerator.Internal_UpdateDatasets;
+var
+  vrListItem : TListItem;
+  vrVez : Integer;
 begin
   inherited Internal_UpdateDatasets;
 
@@ -170,6 +175,15 @@ begin
   qryActions.SQL.Add(' SELECT M1.ID, M1.TITLE, M1.NAME FROM ACTIONS M1 ORDER BY 2 ');
   qryActions.Open;
   qryActions.First;
+
+  lvIcons.Items.Clear;
+
+  for vrVez := 0 to TJupiterDesktopApp(vrJupiterApp).ImageList.Count - 1 do
+  begin
+    vrListItem := lvIcons.Items.Add;
+    vrListItem.Caption := IntToStr(vrVez);
+    vrListItem.ImageIndex := vrVez;
+  end;
 end;
 
 procedure TFGenerator.Internal_PrepareForm;
@@ -182,6 +196,10 @@ begin
   Self.ShowSearchBar := False;
 
   vrPrefix := '      ';
+
+  lvIcons.LargeImages := TJupiterDesktopApp(vrJupiterApp).ImageList;
+  lvIcons.SmallImages := TJupiterDesktopApp(vrJupiterApp).ImageList;
+  lvIcons.StateImages := TJupiterDesktopApp(vrJupiterApp).ImageList;
 
   Self.ActionGroup.AddAction(TJupiterAction.Create('Nova Rota', 'Clique aqui para criar uma nova rota', ICON_NEW, @Internal_OnNewRoute));
   Self.ActionGroup.AddAction(TJupiterAction.Create('Nova Macro', 'Clique aqui para criar uma nova macro', ICON_NEW, @Internal_OnNewMacro));

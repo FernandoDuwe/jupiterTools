@@ -135,6 +135,9 @@ begin
     if Self.Internal_CreateMacroIfDontExists('menu.tools.scriptEditor.click', 'Clique do botão Editor de Scripts JPAS', CreateStringListToMacro('OpenForm(''/forms/script'');')) then
       Self.Internal_CreateRouteIfDontExists('Editor de Scripts JPAS', '/menu/tools/scriptEditor/', vrWizard.GetLastID('MACROS'), ICON_TECHFILE, 200, 'Shift+F9');
 
+    if Self.Internal_CreateMacroIfDontExists('menu.tools.scriptSQL.click', 'Clique do botão Editor de Scripts JPAS', CreateStringListToMacro('OpenForm(''/forms/sqlEditor'');')) then
+      Self.Internal_CreateRouteIfDontExists('Editor de Scripts SQL', '/menu/tools/scriptSQL/', vrWizard.GetLastID('MACROS'), ICON_PLAY, 300, 'Shift+F8');
+
     if Self.Internal_CreateMacroIfDontExists('menu.tools.systemMonitor.click', 'Clique do botão Monitor de aplicação', CreateStringListToMacro('OpenForm(''/forms/system'');')) then
       Self.Internal_CreateRouteIfDontExists('Monitor de aplicação', '/menu/tools/systemMonitor/', vrWizard.GetLastID('MACROS'), ICON_TOOLS, 100);
 

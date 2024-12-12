@@ -20,6 +20,7 @@ const
    CUSTOMCODEFORM_PATH : String = '/forms/custom/codable';
    SCRIPTFORM_PATH : String = '/forms/script';
    SYSTEM_PATH : String = '/forms/system';
+   SQLEDITOR_PATH : String = '/forms/sqlEditor';
 
    ICON_ADD       : SmallInt = 0;
    ICON_NEW       : SmallInt = 1;

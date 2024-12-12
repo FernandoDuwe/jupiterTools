@@ -1,4 +1,6 @@
 inherited FGenerator: TFGenerator
+  Left = 348
+  Top = 201
   Caption = 'Generator'
   inherited fpOptions: TFlowPanel
     TabOrder = 3
@@ -82,6 +84,22 @@ inherited FGenerator: TFGenerator
         ReadOnly = True
         TabOrder = 0
         OnDblClick = dbGridActionsDblClick
+      end
+    end
+    object tsIcons: TTabSheet
+      Caption = 'Ícones'
+      ClientHeight = 294
+      ClientWidth = 869
+      object lvIcons: TListView
+        Left = 0
+        Height = 294
+        Top = 0
+        Width = 869
+        Align = alClient
+        Columns = <>
+        ReadOnly = True
+        TabOrder = 0
+        ViewStyle = vsIcon
       end
     end
   end

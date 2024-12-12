@@ -10,12 +10,16 @@
       <UseXPManifest Value="True"/>
       <XPManifest>
         <DpiAware Value="True"/>
+        <TextDesc Value="Jupiter"/>
       </XPManifest>
       <Icon Value="0"/>
     </General>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
+      <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="3"/>
+      <BuildNr Value="4"/>
+      <Language Value="0416"/>
       <StringTable CompanyName="Jupiter" FileDescription="Jupiter interface" ProductName="Jupiter"/>
     </VersionInfo>
     <BuildModes>
@@ -369,6 +373,14 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uContextMenu"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms/usqleditor.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FSQLEditor"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uSQLEditor"/>
       </Unit>
     </Units>
   </ProjectOptions>

@@ -35,7 +35,7 @@ uses
 
 implementation
 
-uses DBDateTimePicker, SQLDB, DateTimePicker, Graphics, LCLProc;
+uses DBDateTimePicker, SQLDB, DateTimePicker, Graphics, LCLProc, JupiterEdit;
 
 function JupiterComponentsAddPopupMenuSeparator(prMenu: TPopupMenu): TJupiterComponentReference;
 var
@@ -109,9 +109,9 @@ end;
 
 function JupiterComponentsNewEdit(prInitialValue: String; prPosition: TJupiterPosition; prOwner: TWinControl): TJupiterComponentReference;
 var
-  vrEdit : TEdit;
+  vrEdit : TJupiterEdit;
 begin
-  vrEdit := TEdit.Create(prOwner);
+  vrEdit := TJupiterEdit.Create(prOwner);
   vrEdit.Parent     := prOwner;
   vrEdit.AutoSize   := True;
   vrEdit.Font.Size  := GetFontSize;
