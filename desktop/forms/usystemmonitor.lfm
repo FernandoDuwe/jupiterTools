@@ -1,6 +1,6 @@
 inherited FSystemMonitor: TFSystemMonitor
-  Left = 289
-  Top = 252
+  Left = 362
+  Top = 476
   Caption = 'Monitor de Sistema'
   inherited pnBottom: TPanel
     TabOrder = 3

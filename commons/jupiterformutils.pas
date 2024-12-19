@@ -5,7 +5,7 @@ unit jupiterformutils;
 interface
 
 uses
-  Classes, ComCtrls, JupiterObject, JupiterConsts,
+  Classes, ComCtrls, JupiterObject, JupiterConsts, Controls,
   SysUtils, Forms, Graphics, EditBtn, CheckLst, StdCtrls;
 
   procedure CopyNodes(prSourceNode, prTargetNode: TTreeNode);
@@ -44,6 +44,7 @@ type
   TJupiterComponentReference = class(TJupiterPosition)
   private
     FComponent: TComponent;
+    FWinControl : TWinControl;
     FRight : Integer;
     FBottom : Integer;
     FCompoent : TComponent;
@@ -51,16 +52,21 @@ type
     FMacroID : String;
     FMacroScript : String;
   published
-    property Right       : Integer    read FRight       write FRight;
-    property Bottom      : Integer    read FBottom      write FBottom;
-    property Component   : TComponent read FComponent   write FComponent;
-    property FieldName   : String     read FFieldName   write FFieldName;
-    property MacroID     : String     read FMacroID     write FMacroID;
-    property MacroScript : String     read FMacroScript write FMacroScript;
+    property Right       : Integer     read FRight       write FRight;
+    property Bottom      : Integer     read FBottom      write FBottom;
+    property Component   : TComponent  read FComponent   write FComponent;
+    property FieldName   : String      read FFieldName   write FFieldName;
+    property MacroID     : String      read FMacroID     write FMacroID;
+    property MacroScript : String      read FMacroScript write FMacroScript;
+    property WinControl  : TWinControl read FWinControl  write FWinControl;
   public
+    function RightCalc : Integer;
+
     constructor Create(prTop, prLeft, prRight, prBottom : Integer; prComponent : TComponent);
 
     constructor Create(prTop, prLeft, prRight, prBottom : Integer; prComponent : TComponent; prFieldName : String);
+
+    constructor Create(prTop, prLeft, prRight, prBottom : Integer; prComponent : TComponent; prWinControl : TWinControl);
   end;
 
 implementation
@@ -344,6 +350,14 @@ end;
 
 { TJupiterComponentReference }
 
+function TJupiterComponentReference.RightCalc: Integer;
+begin
+  Result := Self.Right;
+
+  if Assigned(Self.WinControl) then
+    Result := Self.WinControl.Left + Self.WinControl.Width;
+end;
+
 constructor TJupiterComponentReference.Create(prTop, prLeft, prRight, prBottom: Integer; prComponent: TComponent);
 begin
   Self.Top       := prTop;
@@ -361,6 +375,13 @@ begin
   Self.Create(prTop, prLeft, prRight, prBottom, prComponent);
 
   Self.FFieldName := prFieldName;
+end;
+
+constructor TJupiterComponentReference.Create(prTop, prLeft, prRight, prBottom: Integer; prComponent: TComponent; prWinControl: TWinControl);
+begin
+  Self.Create(prTop, prLeft, prRight, prBottom, prComponent);
+
+  Self.FWinControl := prWinControl;
 end;
 
 end.

@@ -23,6 +23,7 @@ type
     procedure InternalDataSourceDataChange(Sender: TObject; Field: TField);
     procedure InternalDataSourceStateChange(Sender: TObject);
     procedure Internal_ClickMenuClick(Sender: TObject);
+    procedure Internal_OnCopyClick(Sender: TObject);
   private
     FObjectList : TJupiterObjectList;
 
@@ -55,7 +56,7 @@ var
 
 implementation
 
-uses uJupiterAction, Menus;
+uses uJupiterAction, Menus, Clipbrd, Buttons;
 
 {$R *.lfm}
 
@@ -106,6 +107,19 @@ begin
   vrJupiterApp.RunScript(CreateStringListToMacro(' OpenGridFromTableWithWhere(''' + vrReference.TableName + ''', ''' + vrWhere + ''', ''''); '), TJupiterVariableList.Create);
 end;
 
+procedure TFCustomDatabaseForm.Internal_OnCopyClick(Sender: TObject);
+var
+  vrField : Integer;
+begin
+  if (Sender is TSpeedButton) then
+  begin
+    vrField := TSpeedButton(Sender).Tag;
+
+    if not Self.QueryOrigin.Fields[vrField].IsNull then
+      Clipboard.AsText := Self.QueryOrigin.Fields[vrField].AsString;
+  end;
+end;
+
 procedure TFCustomDatabaseForm.Internal_PrepareForm;
 begin
   inherited Internal_PrepareForm;
@@ -124,6 +138,7 @@ var
   vrVez : Integer;
   vrReference : TJupiterComponentReference;
   vrWizard : TJupiterDatabaseWizard;
+  vrAction : TJupiterComponentReference;
 begin
   vrCurrentLine := FORM_MARGIN_TOP;
 
@@ -147,11 +162,17 @@ begin
       vrCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM;
 
       if vrWizard.IsForeignKeyField(Self.TableName, Self.QueryOrigin.Fields[vrVez].FieldName) then
+      begin
         vrReference := JupiterComponentsNewDBComboBox(Self.QueryOrigin.Fields[vrVez],
                                                       InternalDataSource,
                                                       TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT),
                                                       sbBody,
-                                                      vrWizard.GetForeignKeyData(Self.TableName, Self.QueryOrigin.Fields[vrVez].FieldName))
+                                                      vrWizard.GetForeignKeyData(Self.TableName, Self.QueryOrigin.Fields[vrVez].FieldName));
+
+        JupiterComponentsAddAction(vrReference, ICON_VIEW, sbBody);
+
+        JupiterComponentsAddAction(vrReference, ICON_SEARCH, sbBody);
+      end
       else
         if ((Self.QueryOrigin.Fields[vrVez] is TDateField) or (Self.QueryOrigin.Fields[vrVez] is TDateTimeField)) then
           vrReference := JupiterComponentsNewDBDatePicker(Self.QueryOrigin.Fields[vrVez], InternalDataSource, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody)
@@ -159,11 +180,19 @@ begin
           if Self.QueryOrigin.Fields[vrVez] is TBlobField then
             vrReference := JupiterComponentsNewDBMemo(Self.QueryOrigin.Fields[vrVez], InternalDataSource, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody)
           else
+          begin
             vrReference := JupiterComponentsNewDBEdit(Self.QueryOrigin.Fields[vrVez], InternalDataSource, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody);
+
+            vrAction := JupiterComponentsAddAction(vrReference, ICON_COPY, sbBody);
+            TSpeedButton(vrAction.Component).Tag := vrVez;
+            TSpeedButton(vrAction.Component).OnClick := @Internal_OnCopyClick;
+            TSpeedButton(vrAction.Component).Hint := 'Clique aqui para copiar o conteúdo do campo';
+            TSpeedButton(vrAction.Component).ShowHint := True;
+          end;
 
       // Pulando linha
           vrCurrentLine := vrReference.Bottom + FORM_MARGIN_TOP + FORM_MARGIN_BOTTOM;
-  end;
+    end;
   finally
     FreeAndNil(vrWizard);
   end;

@@ -5,8 +5,9 @@ unit jupiterformcomponenttils;
 interface
 
 uses
-  Classes, ComCtrls, Controls, SysUtils, StdCtrls, jupiterformutils, JupiterConsts,
-  jupiterDatabaseWizard, JupiterDataProvider, JupiterApp, DBCtrls, DB, Menus;
+  Classes, ComCtrls, Controls, SysUtils, StdCtrls, jupiterformutils,
+  JupiterConsts, jupiterDatabaseWizard, JupiterDataProvider, JupiterApp,
+  jupiterDesktopApp, DBCtrls, DB, Menus;
 
   function JupiterComponentsAddPopupMenuSeparator(prMenu : TPopupMenu) : TJupiterComponentReference;
 
@@ -33,9 +34,11 @@ uses
 
   function JupiterComponentsNewDBComboBox(prField : TField; prDataSource : TDataSource; prPosition : TJupiterPosition; prOwner : TWinControl; prForeignKeyData : TJupiterDatabaseForeignKeyReference) : TJupiterComponentReference;
 
+  function JupiterComponentsAddAction(prField : TJupiterComponentReference; prIcon : Integer; prOwner : TWinControl) : TJupiterComponentReference;
+
 implementation
 
-uses DBDateTimePicker, SQLDB, DateTimePicker, Graphics, LCLProc, JupiterEdit;
+uses Buttons, DBDateTimePicker, SQLDB, DateTimePicker, Graphics, LCLProc, JupiterEdit;
 
 function JupiterComponentsAddPopupMenuSeparator(prMenu: TPopupMenu): TJupiterComponentReference;
 var
@@ -126,6 +129,7 @@ begin
                                               prPosition.Left,
                                               prPosition.Left + vrEdit.Width,
                                               prPosition.Top + vrEdit.Height,
+                                              vrEdit,
                                               vrEdit);
 end;
 
@@ -155,6 +159,7 @@ begin
                                               prPosition.Left,
                                               prPosition.Left + vrEdit.Width,
                                               prPosition.Top + vrEdit.Height,
+                                              vrEdit,
                                               vrEdit);
 end;
 
@@ -222,6 +227,7 @@ begin
                                               prPosition.Left,
                                               prPosition.Left + vrEdit.Width,
                                               prPosition.Top + vrEdit.Height,
+                                              vrEdit,
                                               vrEdit);
 
 end;
@@ -254,6 +260,7 @@ begin
                                               prPosition.Left,
                                               prPosition.Left + vrEdit.Width,
                                               prPosition.Top + vrEdit.Height,
+                                              vrEdit,
                                               vrEdit);
 end;
 
@@ -279,6 +286,7 @@ begin
                                               prPosition.Left,
                                               prPosition.Left + vrEdit.Width,
                                               prPosition.Top + vrEdit.Height,
+                                              vrEdit,
                                               vrEdit);
 end;
 
@@ -314,7 +322,35 @@ begin
                                               prPosition.Left,
                                               prPosition.Left + vrEdit.Width,
                                               prPosition.Top + vrEdit.Height,
+                                              vrEdit,
                                               vrEdit);
+end;
+
+function JupiterComponentsAddAction(prField: TJupiterComponentReference;
+  prIcon: Integer; prOwner: TWinControl): TJupiterComponentReference;
+var
+  vrSpeedButton : TSpeedButton;
+begin
+  vrSpeedButton := TSpeedButton.Create(prField.Component);
+  vrSpeedButton.Parent := prOwner;
+  vrSpeedButton.Caption := EmptyStr;
+  vrSpeedButton.Top := prField.Top;
+  vrSpeedButton.Height := prField.Bottom - prField.Top;
+  vrSpeedButton.Width := vrSpeedButton.Height;
+  vrSpeedButton.Left := prField.RightCalc - vrSpeedButton.Width;
+  vrSpeedButton.Flat := False;
+  vrSpeedButton.Images := TJupiterDesktopApp(vrJupiterApp).ImageList;
+  vrSpeedButton.ImageIndex := prIcon;
+  vrSpeedButton.Anchors    := [akTop, akRight];
+
+  if Assigned(prField.WinControl) then
+    prField.WinControl.Width := prField.WinControl.Width - (vrSpeedButton.Width);
+
+  Result := TJupiterComponentReference.Create(vrSpeedButton.Top,
+                                              vrSpeedButton.Left,
+                                              vrSpeedButton.Left + vrSpeedButton.Width,
+                                              vrSpeedButton.Top + vrSpeedButton.Height,
+                                              vrSpeedButton);
 end;
 
 end.

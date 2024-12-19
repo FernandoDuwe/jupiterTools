@@ -11,7 +11,7 @@ type
 
   { TJupiterEdit }
 
-  TJupiterEdit = class(TEdit)
+  TJupiterEdit = class(TCustomEdit)
   private
     FActionList : TList;
 

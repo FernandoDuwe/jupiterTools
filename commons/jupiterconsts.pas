@@ -62,6 +62,8 @@ const
    ICON_WIZARD      : SmallInt = 37;
    ICON_MENU        : SmallInt = 38;
    ICON_GRID        : SmallInt = 39;
+   ICON_SEARCH      : SmallInt = 40;
+   ICON_VIEW        : SmallInt = 41;
 
    NULL_KEY : SmallInt = -1;
 
