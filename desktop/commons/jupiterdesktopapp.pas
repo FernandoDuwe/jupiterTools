@@ -207,7 +207,7 @@ begin
 
       if Trim(prSearch) = EmptyStr then
       begin
-        Result.Add(TJupiterAction.Create(vrStrAux, 'Abrir registro marcado como fixo', ICON_PIN, CreateStringListToMacro('')));
+        Result.Add(TJupiterAction.Create(vrStrAux, 'Abrir registro marcado como fixo', ICON_PIN, CreateStringListToMacro(' OpenFormFromTableId(''' + vrSQL.FieldByName('TABLENAME').AsString + ''', ' + vrSQL.FieldByName('RECORDKEY').AsString + '); ')));
 
         vrSQL.Next;
 
