@@ -72,6 +72,8 @@ type
 
     procedure UpdateBLOBField(prTableName, prField, prWhere : String; prData : TStrings);
 
+    function GetTableDescription(prTableName : String; prId : Integer) : String;
+
     procedure StartTransaction;
     procedure Commit;
     procedure Rollback;
@@ -454,6 +456,59 @@ begin
     FreeAndNil(vrQry);
   end;
 
+end;
+
+function TJupiterDatabaseWizard.GetTableDescription(prTableName: String; prId: Integer): String;
+var
+  vrQry : TSQLQuery;
+  vrVez : Integer;
+begin
+  Result := prTableName + ' #' + IntToStr(prId);
+
+  vrQry := Self.NewQuery;
+  try
+    vrQry.SQL.Add(Format(' SELECT * FROM %0:s WHERE ID = %1:d ', [prTableName, prId]));
+    vrQry.Open;
+
+    if vrQry.EOF then
+      Exit;
+
+    for vrVez := 0 to vrQry.FieldCount - 1 do
+    begin
+       if vrQry.Fields[vrVez].IsNull then
+         Continue;
+
+       if vrQry.Fields[vrVez] is TStringField then
+       begin
+         Result := vrQry.Fields[vrVez].AsString;
+
+         Exit;
+       end;
+
+       if vrQry.Fields[vrVez] is TDateField then
+       begin
+         Result := vrQry.Fields[vrVez].AsString;
+
+         Exit;
+       end;
+
+       if vrQry.Fields[vrVez] is TDateTimeField then
+       begin
+         Result := vrQry.Fields[vrVez].AsString;
+
+         Exit;
+       end;
+
+       if vrQry.Fields[vrVez] is TTimeField then
+       begin
+         Result := vrQry.Fields[vrVez].AsString;
+
+         Exit;
+       end;
+    end;
+  finally
+    FreeAndNil(vrQry);
+  end;
 end;
 
 procedure TJupiterDatabaseWizard.StartTransaction;

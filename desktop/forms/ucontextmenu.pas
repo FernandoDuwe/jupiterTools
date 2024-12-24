@@ -103,7 +103,8 @@ begin
   begin
     vrListItem := lvRoute.Items.Add;
     vrListItem.Caption := vrActionList.GetActionAtIndex(vrVez).Caption;
-    vrListItem.ImageIndex := ICON_NEW;
+    vrListItem.ImageIndex := vrActionList.GetActionAtIndex(vrVez).Icon;
+    vrListItem.StateIndex := NULL_KEY;
     vrListItem.Data := vrActionList.GetActionAtIndex(vrVez);
   end;
 

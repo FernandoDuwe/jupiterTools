@@ -9,7 +9,7 @@ uses
   DBDateTimePicker, SQLDB, DB, uJupiterForm, jupiterformutils,
   jupiterStringUtils, jupiterDatabaseWizard, JupiterApp, JupiterVariable,
   JupiterObject, JupiterConsts, uJupiterStringUtilsScript,
-  jupiterformcomponenttils;
+  jupiterformcomponenttils, jupiterDesktopApp;
 
 type
 
@@ -24,6 +24,10 @@ type
     procedure InternalDataSourceStateChange(Sender: TObject);
     procedure Internal_ClickMenuClick(Sender: TObject);
     procedure Internal_OnCopyClick(Sender: TObject);
+    procedure Internal_OnViewClick(Sender: TObject);
+
+    procedure Internal_OnMarkPinClick(Sender: TObject);
+    procedure Internal_OnUnMarkPinClick(Sender: TObject);
   private
     FObjectList : TJupiterObjectList;
 
@@ -56,7 +60,7 @@ var
 
 implementation
 
-uses uJupiterAction, Menus, Clipbrd, Buttons;
+uses uJupiterAction, Menus, Clipbrd, Buttons, uJupiterDesktopAppScript;
 
 {$R *.lfm}
 
@@ -120,12 +124,50 @@ begin
   end;
 end;
 
+procedure TFCustomDatabaseForm.Internal_OnViewClick(Sender: TObject);
+var
+  vrField : Integer;
+begin
+  if (Sender is TSpeedButton) then
+  begin
+    vrField := TSpeedButton(Sender).Tag;
+
+    if Self.QueryOrigin.Fields[vrField].IsNull then
+      Exit;
+
+    JupiterAppDesktopOpenFormFromTableId(TJupiterDesktopApp(vrJupiterApp).NewWizard.GetForeignKeyData(Self.TableName, Self.QueryOrigin.Fields[vrField].FieldName).TableDestinyName,
+                                         Self.QueryOrigin.Fields[vrField].AsInteger);
+  end;
+end;
+
+procedure TFCustomDatabaseForm.Internal_OnMarkPinClick(Sender: TObject);
+begin
+  try
+    TJupiterDesktopApp(vrJupiterApp).CreatePin(Self.TableName, Self.Id);
+  finally
+    Self.UpdateForm;
+  end;
+end;
+
+procedure TFCustomDatabaseForm.Internal_OnUnMarkPinClick(Sender: TObject);
+begin
+  try
+    TJupiterDesktopApp(vrJupiterApp).RemovePin(Self.TableName, Self.Id);
+  finally
+    Self.UpdateForm;
+  end;
+end;
+
 procedure TFCustomDatabaseForm.Internal_PrepareForm;
 begin
   inherited Internal_PrepareForm;
 
   Self.ActionGroup.AddAction(TJupiterAction.Create('Salvar', 'Clique aqui para salvar', ICON_SAVE, @Internal_OnSave));
   Self.ActionGroup.AddAction(TJupiterAction.Create('Cancelar', 'Clique aqui para cancelar', ICON_CANCEL, @Internal_OnCancel));
+
+  Self.ActionGroup.AddAction(TJupiterAction.Create(EmptyStr, 'Clique aqui para marcar esse registro como fixo', ICON_PIN, @Internal_OnMarkPinClick));
+  Self.ActionGroup.AddAction(TJupiterAction.Create(EmptyStr, 'Clique aqui para desmarcar esse registro como fixo', ICON_UNPIN, @Internal_OnUnMarkPinClick));
+
 
   Self.ActionGroup.TableName := Self.TableName;
 
@@ -169,9 +211,14 @@ begin
                                                       sbBody,
                                                       vrWizard.GetForeignKeyData(Self.TableName, Self.QueryOrigin.Fields[vrVez].FieldName));
 
-        JupiterComponentsAddAction(vrReference, ICON_VIEW, sbBody);
+        vrAction := JupiterComponentsAddAction(vrReference, ICON_VIEW, sbBody);
 
-        JupiterComponentsAddAction(vrReference, ICON_SEARCH, sbBody);
+        TSpeedButton(vrAction.Component).Tag := vrVez;
+        TSpeedButton(vrAction.Component).OnClick := @Internal_OnViewClick;
+        TSpeedButton(vrAction.Component).Hint := 'Clique aqui para visulizar o cadastro';
+        TSpeedButton(vrAction.Component).ShowHint := True;
+
+     //   JupiterComponentsAddAction(vrReference, ICON_SEARCH, sbBody);
       end
       else
         if ((Self.QueryOrigin.Fields[vrVez] is TDateField) or (Self.QueryOrigin.Fields[vrVez] is TDateTimeField)) then
@@ -231,6 +278,17 @@ end;
 procedure TFCustomDatabaseForm.Internal_UpdateComponents;
 begin
   inherited Internal_UpdateComponents;
+
+  Self.ActionGroup.GetActionAtIndex(2).SetInvisibility;
+  Self.ActionGroup.GetActionAtIndex(3).SetInvisibility;
+
+  if not (InternalDataSource.State in [dsInsert]) then
+  begin
+    if TJupiterDesktopApp(vrJupiterApp).PinExists(Self.TableName, Self.Id) then
+      Self.ActionGroup.GetActionAtIndex(3).SetVisibility
+    else
+      Self.ActionGroup.GetActionAtIndex(2).SetVisibility;
+  end;
 
   if InternalDataSource.State in [dsEdit, dsInsert] then
   begin
@@ -305,7 +363,7 @@ begin
   if prReference.ID = NULL_KEY then
     Self.Caption := String.Format('%0:s %1:s', ['Novo', JupiterStringUtilsNormalizeToPresent(prReference.TableName)])
   else
-    Self.Caption := String.Format('%1:s #%0:d', [prReference.ID, JupiterStringUtilsNormalizeToPresent(prReference.TableName)]);
+    Self.Caption := TJupiterDesktopApp(vrJupiterApp).NewWizard.GetTableDescription(prReference.TableName, prReference.ID);
 
   vrDatabase := vrJupiterApp.NewWizard;
   try

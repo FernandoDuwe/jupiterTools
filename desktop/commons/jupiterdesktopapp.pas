@@ -38,6 +38,11 @@ type
     function GenerateContextMenu(prSearch : String = '') : TJupiterActionGroup;
     procedure GetExternalImages;
 
+    // Pins
+    procedure CreatePin(prTableName : String; prID : Integer);
+    procedure RemovePin(prTableName : String; prID : Integer);
+    function PinExists(prTableName : String; prID : Integer) : Boolean;
+
     constructor Create(prAppID, prAppName : String); override;
     destructor Destroy; override;
   end;
@@ -161,6 +166,7 @@ var
   vrStringList : TStrings;
   vrVez : Integer;
   vrSQL : TSQLQuery;
+  vrStrAux : String;
 begin
   Result   := TJupiterActionGroup.Create;
   vrWizard := Self.NewWizard;
@@ -188,18 +194,44 @@ begin
       vrSQL.Next;
     end;
 
+    vrSQL.Close;
+    vrSQL.SQL.Clear;
+    vrSQL.SQL.Add(' SELECT TABLENAME, RECORDKEY FROM RECORDPIN ');
+    vrSQL.Open;
+
+    vrSQL.First;
+
+    while not vrSQL.EOF do
+    begin
+      vrStrAux := NewWizard.GetTableDescription(vrSQL.FieldByName('TABLENAME').AsString, vrSQL.FieldByName('RECORDKEY').AsInteger);
+
+      if Trim(prSearch) = EmptyStr then
+      begin
+        Result.Add(TJupiterAction.Create(vrStrAux, 'Abrir registro marcado como fixo', ICON_PIN, CreateStringListToMacro('')));
+
+        vrSQL.Next;
+
+        Continue;
+      end;
+
+      if Pos(AnsiUpperCase(prSearch), AnsiUpperCase(vrStrAux)) > 0 then
+        Result.Add(TJupiterAction.Create(vrStrAux, 'Abrir registro marcado como fixo', ICON_PIN, CreateStringListToMacro('')));
+
+      vrSQL.Next;
+    end;
+
     vrWizard.Connection.GetTableNames(vrStringList, False);
 
     for vrVez := 0 to vrStringList.Count - 1 do
     begin
       if Trim(prSearch) = EmptyStr then
       begin
-        Result.Add(TJupiterAction.Create('Tabela: ' + vrStringList[vrVez], 'Abrir grid da tabela ' + vrStringList[vrVez], NULL_KEY, CreateStringListToMacro('  OpenGridFromTable(''' + vrStringList[vrVez] + '''); ')));
+        Result.Add(TJupiterAction.Create('Tabela: ' + vrStringList[vrVez], 'Abrir grid da tabela ' + vrStringList[vrVez], ICON_GRID, CreateStringListToMacro('  OpenGridFromTable(''' + vrStringList[vrVez] + '''); ')));
         Continue;
       end;
 
       if Pos(AnsiUpperCase(prSearch), AnsiUpperCase(vrStringList[vrVez])) > 0 then
-        Result.Add(TJupiterAction.Create('Tabela: ' + vrStringList[vrVez], 'Abrir grid da tabela ' + vrStringList[vrVez], NULL_KEY, CreateStringListToMacro('  OpenGridFromTable(''' + vrStringList[vrVez] + '''); ')));
+        Result.Add(TJupiterAction.Create('Tabela: ' + vrStringList[vrVez], 'Abrir grid da tabela ' + vrStringList[vrVez], ICON_GRID, CreateStringListToMacro('  OpenGridFromTable(''' + vrStringList[vrVez] + '''); ')));
     end;
   finally
     FreeAndNil(vrWizard);
@@ -247,6 +279,21 @@ begin
     FreeAndNil(vrEnviroment);
   end;
 
+end;
+
+procedure TJupiterDesktopApp.CreatePin(prTableName: String; prID: Integer);
+begin
+  Self.NewWizard.ExecuteScript(CreateStringList(' INSERT INTO RECORDPIN (TABLENAME, RECORDKEY) VALUES ("' + prTableName + '", ' + IntToStr(prID) + ') '));
+end;
+
+procedure TJupiterDesktopApp.RemovePin(prTableName: String; prID: Integer);
+begin
+  Self.NewWizard.ExecuteScript(CreateStringList(' DELETE FROM RECORDPIN WHERE TABLENAME = "' + prTableName + '" AND RECORDKEY = ' + IntToStr(prID) + ' '));
+end;
+
+function TJupiterDesktopApp.PinExists(prTableName: String; prID: Integer): Boolean;
+begin
+  Result := Self.NewWizard.Exists('RECORDPIN', ' TABLENAME = "' + prTableName + '" AND RECORDKEY = ' + IntToStr(prID) + ' ');
 end;
 
 constructor TJupiterDesktopApp.Create(prAppID, prAppName: String);

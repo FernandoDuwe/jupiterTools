@@ -183,6 +183,7 @@ begin
     vrListItem := lvIcons.Items.Add;
     vrListItem.Caption := IntToStr(vrVez);
     vrListItem.ImageIndex := vrVez;
+    vrListItem.StateIndex := NULL_KEY;
   end;
 end;
 
@@ -199,7 +200,7 @@ begin
 
   lvIcons.LargeImages := TJupiterDesktopApp(vrJupiterApp).ImageList;
   lvIcons.SmallImages := TJupiterDesktopApp(vrJupiterApp).ImageList;
-  lvIcons.StateImages := TJupiterDesktopApp(vrJupiterApp).ImageList;
+ // lvIcons.StateImages := TJupiterDesktopApp(vrJupiterApp).ImageList;
 
   Self.ActionGroup.AddAction(TJupiterAction.Create('Nova Rota', 'Clique aqui para criar uma nova rota', ICON_NEW, @Internal_OnNewRoute));
   Self.ActionGroup.AddAction(TJupiterAction.Create('Nova Macro', 'Clique aqui para criar uma nova macro', ICON_NEW, @Internal_OnNewMacro));

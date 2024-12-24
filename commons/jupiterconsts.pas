@@ -64,6 +64,8 @@ const
    ICON_GRID        : SmallInt = 39;
    ICON_SEARCH      : SmallInt = 40;
    ICON_VIEW        : SmallInt = 41;
+   ICON_PIN         : SmallInt = 42;
+   ICON_UNPIN       : SmallInt = 43;
 
    NULL_KEY : SmallInt = -1;
 

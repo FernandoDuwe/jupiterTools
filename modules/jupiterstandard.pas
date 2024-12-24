@@ -60,6 +60,9 @@ begin
     if not vrWizard.TableExists('ACTIONS') then
       vrWizard.ExecuteScript(CreateStringList('CREATE TABLE ACTIONS ( ID INTEGER PRIMARY KEY, NAME VARCHAR (100), TITLE VARCHAR (100), TABLENAME VARCHAR(100), ICON SMALLINT, ZINDEX SMALLINT, MACRO INTEGER, MACRO_ENABLE INTEGER, MACRO_VISIBLE INTEGER, FOREIGN KEY (MACRO) REFERENCES MACROS (ID), FOREIGN KEY (MACRO_ENABLE) REFERENCES MACROS (ID), FOREIGN KEY (MACRO_VISIBLE) REFERENCES MACROS (ID))'));
 
+    if not vrWizard.TableExists('RECORDPIN') then
+      vrWizard.ExecuteScript(CreateStringList('CREATE TABLE RECORDPIN ( ID INTEGER PRIMARY KEY, TABLENAME VARCHAR (100), RECORDKEY INTEGER)'));
+
     if Self.Internal_CreateMacroIfDontExists('menu.newTab.click', 'Clique do botão Nova aba', CreateStringList('program macro;' + #13#10 + 'begin' + #13#10 + '  OpenForm(''/forms/newTask'');' + #13#10 + 'end.')) then
       Self.Internal_CreateRouteIfDontExists(EmptyStr, '/menu/newTab/', vrWizard.GetLastID('MACROS'), ICON_ADD, 100);
 
