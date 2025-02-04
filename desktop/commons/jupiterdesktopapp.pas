@@ -220,18 +220,21 @@ begin
       vrSQL.Next;
     end;
 
-    vrWizard.Connection.GetTableNames(vrStringList, False);
-
-    for vrVez := 0 to vrStringList.Count - 1 do
+    if Self.Params.VariableById(CONTEXTMENU_TABLE_SHOW).AsBool then
     begin
-      if Trim(prSearch) = EmptyStr then
-      begin
-        Result.Add(TJupiterAction.Create('Tabela: ' + vrStringList[vrVez], 'Abrir grid da tabela ' + vrStringList[vrVez], ICON_GRID, CreateStringListToMacro('  OpenGridFromTable(''' + vrStringList[vrVez] + '''); ')));
-        Continue;
-      end;
+      vrWizard.Connection.GetTableNames(vrStringList, False);
 
-      if Pos(AnsiUpperCase(prSearch), AnsiUpperCase(vrStringList[vrVez])) > 0 then
-        Result.Add(TJupiterAction.Create('Tabela: ' + vrStringList[vrVez], 'Abrir grid da tabela ' + vrStringList[vrVez], ICON_GRID, CreateStringListToMacro('  OpenGridFromTable(''' + vrStringList[vrVez] + '''); ')));
+      for vrVez := 0 to vrStringList.Count - 1 do
+      begin
+        if Trim(prSearch) = EmptyStr then
+        begin
+          Result.Add(TJupiterAction.Create('Tabela: ' + vrStringList[vrVez], 'Abrir grid da tabela ' + vrStringList[vrVez], ICON_GRID, CreateStringListToMacro('  OpenGridFromTable(''' + vrStringList[vrVez] + '''); ')));
+          Continue;
+        end;
+
+        if Pos(AnsiUpperCase(prSearch), AnsiUpperCase(vrStringList[vrVez])) > 0 then
+          Result.Add(TJupiterAction.Create('Tabela: ' + vrStringList[vrVez], 'Abrir grid da tabela ' + vrStringList[vrVez], ICON_GRID, CreateStringListToMacro('  OpenGridFromTable(''' + vrStringList[vrVez] + '''); ')));
+      end;
     end;
   finally
     FreeAndNil(vrWizard);

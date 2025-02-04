@@ -182,8 +182,8 @@ begin
     jtMainTab.Page[vrVez].Caption := (jtMainTab.Page[vrVez] as TJupiterFormTabSheet).Form.Caption + '        ';
   end;
 
-  Self.Repaint;
-  Self.Refresh;
+//  Self.Repaint;
+//  Self.Refresh;
 
   jtMainTab.Align := alClient;
 

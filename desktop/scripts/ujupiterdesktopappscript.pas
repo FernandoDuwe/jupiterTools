@@ -29,6 +29,8 @@ type
   procedure JupiterAppDesktopOpenGridFromTable(prTableName : String);
   procedure JupiterAppDesktopOpenGridFromTableWithWhere(prTableName : String; prWhere : String; prOrderBy : String);
   procedure JupiterAppDesktopOpenFileExplorerForm(prPath : String);
+  procedure JupiterAppDesktopOpenCheckListExplorerForm(prPath : String);
+  procedure JupiterAppDesktopOpenTextEditorForm(prPath : String);
   procedure JupiterAppDesktopCloseForm(prFormID : String);
   procedure JupiterAppDesktopUpdateForms;
   procedure JupiterAppDesktopIncFont;
@@ -119,6 +121,34 @@ begin
   end;
 end;
 
+procedure JupiterAppDesktopOpenCheckListExplorerForm(prPath: String);
+var
+  vrVariables : TJupiterVariableList;
+begin
+  vrVariables := TJupiterVariableList.Create;
+  try
+    vrVariables.AddVariable('path', prPath, 'path');
+
+    TJupiterDesktopApp(vrJupiterApp).OpenForm(CHECKLIST_PATH, vrVariables);
+  finally
+    FreeAndNil(vrVariables);
+  end;
+end;
+
+procedure JupiterAppDesktopOpenTextEditorForm(prPath: String);
+var
+  vrVariables : TJupiterVariableList;
+begin
+  vrVariables := TJupiterVariableList.Create;
+  try
+    vrVariables.AddVariable('path', prPath, 'path');
+
+    TJupiterDesktopApp(vrJupiterApp).OpenForm(TEXTEDITOR_PATH, vrVariables);
+  finally
+    FreeAndNil(vrVariables);
+  end;
+end;
+
 procedure JupiterAppDesktopCloseForm(prFormID: String);
 var
   vrForm : TForm;
@@ -186,6 +216,9 @@ begin
   prSender.AddFunction(@JupiterAppDesktopOpenFormFromTableId, 'procedure OpenFormFromTableId(prTableName: String; prID: Integer);');
   prSender.AddFunction(@JupiterAppDesktopOpenGridFromTableWithWhere, 'procedure OpenGridFromTableWithWhere(prTableName : String; prWhere : String; prOrderBy : String);');
   prSender.AddFunction(@JupiterAppDesktopOpenFileExplorerForm, 'procedure OpenFileExplorerForm(prPath : String);');
+  prSender.AddFunction(@JupiterAppDesktopOpenCheckListExplorerForm, 'procedure OpenCheckListExplorerForm(prPath : String);');
+  prSender.AddFunction(@JupiterAppDesktopOpenTextEditorForm, 'procedure OpenTextEditorForm(prPath : String);');
+
   prSender.AddFunction(@JupiterAppDesktopCloseForm, 'procedure CloseForm(prFormID : String)');
 
   prSender.AddFunction(@JupiterAppDesktopClose, 'procedure CloseApp();');
@@ -205,6 +238,8 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenFormFromTableId(prTableName: String; prID: Integer);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenGridFromTableWithWhere(prTableName : String; prWhere : String; prOrderBy : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenFileExplorerForm(prPath: String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenCheckListExplorerForm(prPath: String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenTextEditorForm(prPath: String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CloseForm(prFormID: String) : String;'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CloseApp();'));

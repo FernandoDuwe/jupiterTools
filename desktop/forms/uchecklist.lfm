@@ -1,0 +1,29 @@
+inherited FCheckList: TFCheckList
+  Left = 554
+  Top = 570
+  Caption = 'Checklist'
+  inherited fpOptions: TFlowPanel
+    Top = 375
+  end
+  inherited pnBottom: TPanel
+    Top = 376
+  end
+  object cbList: TCheckListBox[3]
+    Left = 0
+    Height = 325
+    Top = 50
+    Width = 879
+    Align = alClient
+    ItemHeight = 0
+    TabOrder = 3
+    TopIndex = -1
+    OnClickCheck = cbListClickCheck
+  end
+  inherited acOptions: TActionList[4]
+  end
+  inherited tmrAutoUpdater: TTimer[5]
+    Interval = 5000
+  end
+  inherited pmOptions: TPopupMenu[6]
+  end
+end

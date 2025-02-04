@@ -10,6 +10,7 @@ uses
 const
    ROOT_PATH : String = '/';
    NEWTASKMENU_PATH : String = '/forms/newTask';
+   CHECKLIST_PATH: String = '/forms/checkList';
    CONFIG_PATH : String = '/forms/config';
    CONTEXT_PATH : String = '/forms/context';
    GENERATOR_PATH : String = '/forms/generator';
@@ -21,6 +22,7 @@ const
    SCRIPTFORM_PATH : String = '/forms/script';
    SYSTEM_PATH : String = '/forms/system';
    SQLEDITOR_PATH : String = '/forms/sqlEditor';
+   TEXTEDITOR_PATH : String = '/forms/textEditor';
 
    ICON_ADD       : SmallInt = 0;
    ICON_NEW       : SmallInt = 1;
@@ -83,6 +85,7 @@ const
 
    FORM_ALWAYS_MODAL      : String = 'Interface.Form.AlwaysModal';
    FIELD_FONT_SIZE        : String = 'Interface.Font.Size';
+   CONTEXTMENU_TABLE_SHOW : String = 'Interface.ContextMenu.ShowTables';
 
    CSV_SEPARATOR_REPLACER : String = '[SEMICOLON]';
 

@@ -25,6 +25,7 @@ type
   function JupiterEnviromentScript_FolderExists(prPath : String) : Boolean;
   procedure JupiterEnviromentScript_CopyFileTo(prOrigin, prDestiny : String);
   procedure JupiterEnviromentScript_DeleteFile(prFileName : String);
+  function JupiterEnviromentScript_SameExtension(prFileName, prExtension : String) : Boolean;
 
   function JupiterEnviromentScript_CreatePath(prPath : String) : String;
   function JupiterEnviromentScript_CreateFile(prPath, prContent : String) : String;
@@ -81,6 +82,11 @@ begin
   finally
     FreeAndNil(vrEnviroment);
   end;
+end;
+
+function JupiterEnviromentScript_SameExtension(prFileName, prExtension: String) : Boolean;
+begin
+  Result := AnsiUpperCase(ExtractFileExt(prFileName)) = AnsiUpperCase(prExtension);
 end;
 
 function JupiterEnviromentScript_CreatePath(prPath: String): String;
@@ -190,6 +196,8 @@ begin
 
   prSender.AddFunction(@JupiterEnviromentScript_LoadFromFile, 'function LoadFromFile(prFileName : String): String;');
   prSender.AddFunction(@JupiterEnviromentScript_SaveToFile, 'procedure SaveToFile(prFileName, prData : String);');
+
+  prSender.AddFunction(@JupiterEnviromentScript_SameExtension, 'function SameExtension(prFileName, prExtension : String) : Boolean;');
 end;
 
 function TJupiterEnviromentcript.AnalyseCode: TJupiterScriptAnalyserList;
@@ -204,6 +212,7 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function CreateFile(prPath, prContent: String): String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function CreateExternalFile(prPath, prContent: String): String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function LoadFromFile(prFileName : String): String;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function SameExtension(prFileName, prExtension : String) : Boolean;'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CopyFileTo(prOrigin, prDestiny: String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure DeleteFileOnDisk(prFileName : String);'));

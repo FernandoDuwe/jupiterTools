@@ -1,7 +1,7 @@
 object FJupiterForm: TFJupiterForm
-  Left = 561
+  Left = 684
   Height = 457
-  Top = 271
+  Top = 388
   Width = 879
   Caption = 'FJupiterForm'
   ClientHeight = 457

@@ -17,6 +17,8 @@ uses
 
   function JupiterStringUtilsBoolToStr(prValue : Boolean) : String;
 
+  function JupiterStringUtilsStrToBool(prValue : String) : Boolean;
+
 implementation
 
 function JupiterStringUtilsNormalizeToPresent(prText: String): String;
@@ -97,6 +99,23 @@ begin
 
   if prValue then
     Result := BOOL_TRUE_STR;
+end;
+
+function JupiterStringUtilsStrToBool(prValue: String): Boolean;
+begin
+  Result := False;
+
+  if prValue = '1' then
+  begin
+    Result := True;
+    Exit;
+  end;
+
+  if prValue = BOOL_TRUE_STR then
+  begin
+    Result := True;
+    Exit;
+  end;
 end;
 
 end.

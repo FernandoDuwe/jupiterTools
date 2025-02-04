@@ -18,7 +18,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="3"/>
-      <BuildNr Value="6"/>
+      <BuildNr Value="7"/>
       <Language Value="0416"/>
       <StringTable CompanyName="Jupiter" FileDescription="Jupiter interface" ProductName="Jupiter"/>
     </VersionInfo>
@@ -381,6 +381,22 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uSQLEditor"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms/uchecklist.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FCheckList"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uCheckList"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms/utexteditor.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FTextEditor"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uTextEditor"/>
       </Unit>
     </Units>
   </ProjectOptions>

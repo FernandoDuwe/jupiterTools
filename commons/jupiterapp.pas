@@ -118,6 +118,7 @@ begin
   vrEnviroment := TJupiterEnviroment.Create;
   try
     vrEnviroment.CreatePath('/assets/');
+    vrEnviroment.CreatePath('/checklists/');
     vrEnviroment.CreatePath('/datasets/');
     vrEnviroment.CreatePath('/temp/');
     vrEnviroment.CreatePath('/out/');

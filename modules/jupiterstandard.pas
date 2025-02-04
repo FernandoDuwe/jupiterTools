@@ -82,6 +82,12 @@ begin
     vrStr.Add('begin');
     vrStr.Add('  if FileOrFolderExists(GetParam(SCRIPTID, ''PARAMS'')) then');
     vrStr.Add('  begin');
+    vrStr.Add('    if SameExtension(GetParam(SCRIPTID, ''PARAMS''), ''.ckl'') then ');
+    vrStr.Add('    begin ');
+    vrStr.Add('      OpenCheckListExplorerForm(GetParam(SCRIPTID, ''PARAMS'')); ');
+    vrStr.Add('      Exit; ');
+    vrStr.Add('    end;');
+    vrStr.Add('');
     vrStr.Add('    if FileExists(GetParam(SCRIPTID, ''PARAMS'')) then');
     vrStr.Add('      OpenDocument(GetParam(SCRIPTID, ''PARAMS''))');
     vrStr.Add('    else');

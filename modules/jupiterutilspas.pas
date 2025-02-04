@@ -64,7 +64,8 @@ begin
     vrStr.Add('    CreateProcess(GetParam(SCRIPTID, ''ENDERECO''), '''', vrOutput, False, True);');
     vrStr.Add('end.');
 
-    Self.Internal_CreateRouteIfDontExists('Checklists', '/main/tools/checklists/', NULL_KEY, ICON_CHECK, 100);
+    if Self.Internal_CreateMacroIfDontExists('main.tools.checklists.click', 'Clique do item de menu Checklists', CreateStringListToMacro('OpenFileExplorerForm(GetApplicationPath + ''checklists/'');')) then
+       Self.Internal_CreateRouteIfDontExists('Checklists', '/main/tools/checklists/', vrWizard.GetLastID('MACROS'), ICON_CHECK, 100);
 
     Self.Internal_CreateMacroIfDontExists('FAVORITOS.Executar.OnClick', 'Executar', vrStr);
 

@@ -73,8 +73,8 @@ begin
       if Self.Internal_CreateMacroIfDontExists('main.tasks.current.files.click', 'Clique do item de menu Tarefa: Arquivos', CreateStringListToMacro('OpenFileExplorerForm(GetGlobalParam(''Tools.Tasks.Current.Path''));')) then
         Self.Internal_CreateRouteIfDontExists('Arquivos', '/main/tasks/current/files/', vrWizard.GetLastID('MACROS'), ICON_OPEN, 1000);
 
-      if Self.Internal_CreateMacroIfDontExists('main.tasks.current.checklists.click', 'Clique do item de menu Tarefa: Checklists', CreateStringListToMacro('')) then
-        Self.Internal_CreateRouteIfDontExists('Checklists', '/main/tasks/current/checklists/', vrWizard.GetLastID('MACROS'), ICON_CHECK, 2000);
+    //  if Self.Internal_CreateMacroIfDontExists('main.tasks.current.checklists.click', 'Clique do item de menu Tarefa: Checklists', CreateStringListToMacro('')) then
+    //    Self.Internal_CreateRouteIfDontExists('Checklists', '/main/tasks/current/checklists/', vrWizard.GetLastID('MACROS'), ICON_CHECK, 2000);
 
       if Self.Internal_CreateMacroIfDontExists('main.tasks.current.times.click', 'Clique do item de menu Tarefa: Tempos', CreateStringListToMacro('  if GlobalParamExists(''Tools.Tasks.Current.ID'') then ' + #13#10 +
          '    OpenGridFromTableWithWhere(''TEMPOS'', '' TAREFA = '' + GetGlobalParam(''Tools.Tasks.Current.ID''), '''');')) then
