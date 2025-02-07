@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ShellCtrls, ExtCtrls,
   uJupiterForm, JupiterConsts, jupiterformutils, JupiterEnviroment,
-  uJupiterRunnableScript, uJupiterAction;
+  jupiterStringUtils, uJupiterRunnableScript, uJupiterAction;
 
 type
 
@@ -55,9 +55,10 @@ procedure TFFileExplorer.Internal_UpdateComponents;
 begin
   inherited Internal_UpdateComponents;
 
-  stvFolders.Width := PercentOfScreen(Self.Width, Self.PercentDivisor);
+  if miLookColumn.Checked then
+    stvFolders.Width := PercentOfScreen(Self.Width, Self.PercentDivisor);
 
-  Self.Caption := slvExporer.Root;
+  Self.Caption := 'Pasta: ' + jupiterStringUtilsGetLastPathName(slvExporer.Root);
 end;
 
 procedure TFFileExplorer.Internal_PrepareForm;
@@ -85,6 +86,8 @@ begin
     stvFolders.Root := Self.Params.VariableById('path').Value;
   finally
     FreeAndNil(vrEnviroment);
+
+    Self.Hint := Self.Params.VariableById('path').Value;
   end;
 end;
 

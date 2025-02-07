@@ -1,6 +1,6 @@
 inherited FTextEditor: TFTextEditor
-  Left = 57
-  Top = 586
+  Left = 567
+  Top = 510
   inline seEditor: TSynEdit[3]
     Left = 0
     Height = 325

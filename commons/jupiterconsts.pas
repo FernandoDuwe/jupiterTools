@@ -86,6 +86,7 @@ const
    FORM_ALWAYS_MODAL      : String = 'Interface.Form.AlwaysModal';
    FIELD_FONT_SIZE        : String = 'Interface.Font.Size';
    CONTEXTMENU_TABLE_SHOW : String = 'Interface.ContextMenu.ShowTables';
+   FORM_GRID_LIMIT        : String = 'Interface.Form.GridLimit';
 
    CSV_SEPARATOR_REPLACER : String = '[SEMICOLON]';
 

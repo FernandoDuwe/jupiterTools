@@ -74,7 +74,8 @@ procedure TFNewTask.Internal_UpdateComponents;
 begin
   inherited Internal_UpdateComponents;
 
-  tvTreeMenu.Width := PercentOfScreen(Self.Width, Self.PercentDivisor);
+  if miLookColumn.Checked then
+    tvTreeMenu.Width := PercentOfScreen(Self.Width, Self.PercentDivisor);
 end;
 
 procedure TFNewTask.Internal_PrepareForm;

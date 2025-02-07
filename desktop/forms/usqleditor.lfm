@@ -550,7 +550,7 @@ inherited FSQLEditor: TFSQLEditor
     Top = 152
   end
   object SynCompletion1: TSynCompletion[12]
-    Position = 0
+    Position = -1
     LinesInWindow = 6
     SelectedColor = clHighlight
     CaseSensitive = False

@@ -56,8 +56,8 @@ type
     function GetForeignKeyData(prTableName, prFieldName : String) : TJupiterDatabaseForeignKeyReference;
     function IsForeignKeyField(prTableName, prFieldName : String) : Boolean;
     function NewQuery : TSQLQuery;
-    function NewQueryFromReference(prReference : TJupiterDatabaseReference; prWhere : String = ''; prOrderBy : String = '') : TSQLQuery;
-    function NewQueryFromReferenceWithSearch(prReference : TJupiterDatabaseReference; prFieldList : TStrings; prSearch : String; prWhere : String = ''; prOrderBy : String = '') : TSQLQuery;
+    function NewQueryFromReference(prReference : TJupiterDatabaseReference; prWhere : String = ''; prOrderBy : String = ''; prFields : String = '*'; prLimit : String = '') : TSQLQuery;
+    function NewQueryFromReferenceWithSearch(prReference : TJupiterDatabaseReference; prFieldList : TStrings; prSearch : String; prWhere : String = ''; prOrderBy : String = ''; prFields : String = '*'; prLimit : String = '') : TSQLQuery;
     function NewScript : TSQLScript;
     function NewDataSourceFromQuery(prQuery : TSQLQuery) : TDataSource;
 
@@ -218,7 +218,9 @@ begin
   Result.SQL.Clear;
 end;
 
-function TJupiterDatabaseWizard.NewQueryFromReference(prReference: TJupiterDatabaseReference; prWhere : String = ''; prOrderBy : String = ''): TSQLQuery;
+function TJupiterDatabaseWizard.NewQueryFromReference(
+  prReference: TJupiterDatabaseReference; prWhere: String; prOrderBy: String;
+  prFields: String; prLimit: String): TSQLQuery;
 begin
   Result := NewQuery;
 
@@ -228,16 +230,19 @@ begin
   if prWhere  <> '' then
     prWhere := ' AND ' + prWhere;
 
-  Result.SQL.Add(String.Format(' SELECT * FROM %0:s WHERE ((ID = %1:d) OR (-1 = %1:d)) %3:s ORDER BY %2:s ', [prReference.TableName, prReference.ID, prOrderBy, prWhere]));
+  Result.SQL.Add(String.Format(' SELECT ' + prFields + ' FROM %0:s WHERE ((ID = %1:d) OR (-1 = %1:d)) %3:s ORDER BY %2:s %4:s', [prReference.TableName, prReference.ID, prOrderBy, prWhere, prLimit]));
 end;
 
-function TJupiterDatabaseWizard.NewQueryFromReferenceWithSearch(prReference: TJupiterDatabaseReference; prFieldList: TStrings; prSearch : String; prWhere : String = ''; prOrderBy : String = ''): TSQLQuery;
+function TJupiterDatabaseWizard.NewQueryFromReferenceWithSearch(
+  prReference: TJupiterDatabaseReference; prFieldList: TStrings;
+  prSearch: String; prWhere: String; prOrderBy: String; prFields: String;
+  prLimit: String): TSQLQuery;
 var
   vrVez : Integer;
 begin
   Result := NewQuery;
 
-  Result.SQL.Add(' SELECT * ');
+  Result.SQL.Add(' SELECT ' + prFields);
   Result.SQL.Add(' FROM ' + prReference.TableName);
   Result.SQL.Add(' WHERE ( ');
 
@@ -260,6 +265,7 @@ begin
     prOrderBy := '2';
 
   Result.SQL.Add(' ORDER BY ' + prOrderBy);
+  Result.SQL.Add(prLimit);
 end;
 
 function TJupiterDatabaseWizard.NewScript: TSQLScript;

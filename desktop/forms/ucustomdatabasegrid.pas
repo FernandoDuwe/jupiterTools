@@ -25,6 +25,8 @@ type
     procedure edSearchKeyPress(Sender: TObject; var Key: char);
     procedure FormCreate(Sender: TObject);
   private
+    FLimit : Integer;
+    FUseLimit : Boolean;
     FReference : TJupiterDatabaseReference;
 
     procedure Internal_UpdateComponents; override;
@@ -32,6 +34,8 @@ type
     procedure Internal_UpdateDatasets; override;
 
     procedure Internal_OnNew(Sender: TObject);
+    procedure Internal_OnIncLimit(Sender: TObject);
+    procedure Internal_OnShowAll(Sender: TObject);
 
     function Internal_OnRequestData :  TJupiterVariableList; override;
   public
@@ -54,6 +58,8 @@ var
   vrWizard : TJupiterDatabaseWizard;
 begin
   inherited;
+
+  Self.FUseLimit := True;
 
   vrWizard := vrJupiterApp.NewWizard;
   try
@@ -105,14 +111,33 @@ end;
 procedure TFCustomDatabaseGrid.Internal_UpdateComponents;
 var
   vrVez : Integer;
+  vrCountVisble : Integer;
 begin
   inherited Internal_UpdateComponents;
+
+  vrCountVisble := 0;
 
   for vrVez := 0 to dbMainGrid.Columns.Count - 1 do
   begin
     dbMainGrid.Columns[vrVez].Visible := dbMainGrid.Columns[vrVez].FieldName <> 'ID';
+
+    if dbMainGrid.Columns[vrVez].Visible then
+      if dbMainGrid.Columns[vrVez].Field is TBlobField then
+        dbMainGrid.Columns[vrVez].Visible := False;
+
+    if dbMainGrid.Columns[vrVez].Visible then
+      vrCountVisble := vrCountVisble + 1;
+  end;
+
+  for vrVez := 0 to dbMainGrid.Columns.Count - 1 do
+  begin
+
     dbMainGrid.Columns[vrVez].Title.Caption := JupiterStringUtilsNormalizeToPresent(dbMainGrid.Columns[vrVez].FieldName);
-    dbMainGrid.Columns[vrVez].Width := PercentOfScreen(dbMainGrid.Width, 40);
+
+    if vrCountVisble >= 4 then
+      dbMainGrid.Columns[vrVez].Width := PercentOfScreen(dbMainGrid.Width, 30)
+    else
+      dbMainGrid.Columns[vrVez].Width := PercentOfScreen(dbMainGrid.Width, 40);
   end;
 end;
 
@@ -122,7 +147,13 @@ begin
 
   Self.ShowSearchBar := True;
 
+  Self.FLimit := vrJupiterApp.Params.VariableById(FORM_GRID_LIMIT).AsInteger;
+
   Self.ActionGroup.AddAction(TJupiterAction.Create('Novo', 'Clique aqui para criar um novo registro', ICON_NEW, @Internal_OnNew));
+
+  Self.ActionGroup.AddAction(TJupiterAction.Create(IntToStr(Self.FLimit) + ' registros', 'Clique aqui exibir mais registros', ICON_ADD, @Internal_OnIncLimit));
+
+  Self.ActionGroup.AddAction(TJupiterAction.Create('Todos os registros', 'Clique aqui exibir todos os registros', ICON_VIEW, @Internal_OnShowAll));
 
   Self.ActionGroup.TableName := Self.FReference.TableName;
 
@@ -139,8 +170,16 @@ var
   vrWizard : TJupiterDatabaseWizard;
   vrStringList : TStrings;
   vrVez : Integer;
+  vrFields : String;
+  vrLimit : String;
 begin
   inherited Internal_UpdateDatasets;
+
+  vrFields := '*';
+  vrLimit := '';
+
+  if Self.FUseLimit then
+    vrLimit := Format(' limit %0:d', [Self.FLimit]);
 
   vrId := NULL_KEY;
 
@@ -166,13 +205,13 @@ begin
     InternalQuery.SQL.Clear;
 
     if edSearch.Text = EmptyStr then
-      InternalQuery.SQL.AddStrings(vrWizard.NewQueryFromReference(Self.FReference, Self.Params.VariableById('where').Value, Self.Params.VariableById('orderBy').Value).SQL)
+      InternalQuery.SQL.AddStrings(vrWizard.NewQueryFromReference(Self.FReference, Self.Params.VariableById('where').Value, Self.Params.VariableById('orderBy').Value, vrFields).SQL)
     else
     begin
       if vrStringList.Count > 0 then
-        InternalQuery.SQL.AddStrings(vrWizard.NewQueryFromReferenceWithSearch(Self.FReference, vrStringList, edSearch.Text, Self.Params.VariableById('where').Value, Self.Params.VariableById('orderBy').Value).SQL)
+        InternalQuery.SQL.AddStrings(vrWizard.NewQueryFromReferenceWithSearch(Self.FReference, vrStringList, edSearch.Text, Self.Params.VariableById('where').Value, Self.Params.VariableById('orderBy').Value, vrFields).SQL)
       else
-        InternalQuery.SQL.AddStrings(vrWizard.NewQueryFromReference(Self.FReference, Self.Params.VariableById('where').Value, Self.Params.VariableById('orderBy').Value).SQL)
+        InternalQuery.SQL.AddStrings(vrWizard.NewQueryFromReference(Self.FReference, Self.Params.VariableById('where').Value, Self.Params.VariableById('orderBy').Value, vrFields).SQL)
     end;
 
     InternalQuery.Open;
@@ -198,6 +237,24 @@ end;
 procedure TFCustomDatabaseGrid.Internal_OnNew(Sender: TObject);
 begin
   JupiterAppDesktopOpenFormFromTableId(Self.FReference.TableName, NULL_KEY);
+end;
+
+procedure TFCustomDatabaseGrid.Internal_OnIncLimit(Sender: TObject);
+begin
+  try
+    Self.FLimit := Self.FLimit + vrJupiterApp.Params.VariableById(FORM_GRID_LIMIT).AsInteger;
+  finally
+    Self.UpdateForm();
+  end;
+end;
+
+procedure TFCustomDatabaseGrid.Internal_OnShowAll(Sender: TObject);
+begin
+  try
+    Self.FUseLimit := False;
+  finally
+    Self.UpdateForm();
+  end;
 end;
 
 function TFCustomDatabaseGrid.Internal_OnRequestData: TJupiterVariableList;

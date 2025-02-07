@@ -180,12 +180,19 @@ begin
       Continue;
 
     jtMainTab.Page[vrVez].Caption := (jtMainTab.Page[vrVez] as TJupiterFormTabSheet).Form.Caption + '        ';
+
+    if (jtMainTab.Page[vrVez] as TJupiterFormTabSheet).Form.Hint <> EmptyStr then
+    begin
+      jtMainTab.Page[vrVez].Hint := (jtMainTab.Page[vrVez] as TJupiterFormTabSheet).Form.Hint;
+      jtMainTab.Page[vrVez].ShowHint := True;
+    end;
   end;
 
 //  Self.Repaint;
 //  Self.Refresh;
 
   jtMainTab.Align := alClient;
+  jtMainTab.Visible := jtMainTab.PageCount > 0;
 
   Application.ProcessMessages;
 end;

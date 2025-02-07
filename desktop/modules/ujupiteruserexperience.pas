@@ -55,6 +55,8 @@ begin
     Self.Internal_CreateVariablIfDontExists(FORM_ALWAYS_MODAL, 'Formulário ao abrir sempre modal', BOOL_TRUE_STR);
 
     Self.Internal_CreateVariablIfDontExists(CONTEXTMENU_TABLE_SHOW, 'Sempre exibir as tabelas no menu de contexto', BOOL_TRUE_STR);
+
+    Self.Internal_CreateVariablIfDontExists(FORM_GRID_LIMIT, 'Quantidade de registros por página', '50');
   finally
     FreeAndNil(vrWizard);
   end;

@@ -361,9 +361,9 @@ var
   vrDatabase : TJupiterDatabaseWizard;
 begin
   if prReference.ID = NULL_KEY then
-    Self.Caption := String.Format('%0:s %1:s', ['Novo', JupiterStringUtilsNormalizeToPresent(prReference.TableName)])
+    Self.Caption := String.Format('%0:s %1:s', ['Novo:', JupiterStringUtilsNormalizeToPresent(prReference.TableName)])
   else
-    Self.Caption := TJupiterDesktopApp(vrJupiterApp).NewWizard.GetTableDescription(prReference.TableName, prReference.ID);
+    Self.Caption := String.Format('(#%0:d) %1:s', [prReference.ID, TJupiterDesktopApp(vrJupiterApp).NewWizard.GetTableDescription(prReference.TableName, prReference.ID)]);
 
   vrDatabase := vrJupiterApp.NewWizard;
   try

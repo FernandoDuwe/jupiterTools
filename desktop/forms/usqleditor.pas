@@ -73,7 +73,8 @@ procedure TFSQLEditor.Internal_UpdateComponents;
 begin
   inherited Internal_UpdateComponents;
 
-  dbGridQueryResult.Height := PercentOfScreen(Self.Height, Self.PercentDivisor);
+  if miLookColumn.Checked then
+    dbGridQueryResult.Height := PercentOfScreen(Self.Height, Self.PercentDivisor);
 
   dbGridQueryResult.Visible := Self.FShowResults;
 

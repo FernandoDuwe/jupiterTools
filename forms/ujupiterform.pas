@@ -20,6 +20,9 @@ type
     edSearch: TEdit;
     fpOptions: TFlowPanel;
     Image1: TImage;
+    MenuItem1: TMenuItem;
+    Separator3: TMenuItem;
+    miLookColumn: TMenuItem;
     miAjustRatioRight: TMenuItem;
     miAjustRatioLeft: TMenuItem;
     Separator1: TMenuItem;
@@ -28,14 +31,18 @@ type
     pnBottom: TPanel;
     pnSearchBar: TPanel;
     pmOptions: TPopupMenu;
+    Separator2: TMenuItem;
     tmrAutoUpdater: TTimer;
     procedure FormActivate(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure Image1Click(Sender: TObject);
+    procedure MenuItem1Click(Sender: TObject);
     procedure miAjustRatioLeftClick(Sender: TObject);
     procedure miAjustRatioRightClick(Sender: TObject);
+    procedure miLookColumnClick(Sender: TObject);
     procedure miParamsClick(Sender: TObject);
     procedure miUpdateClick(Sender: TObject);
     procedure pnSearchBarClick(Sender: TObject);
@@ -70,6 +77,9 @@ type
     procedure Internal_PrepareForm; virtual;
     procedure Internal_Resize; virtual;
     function Internal_OnRequestData : TJupiterVariableList; virtual;
+
+    procedure Internal_BuildMenuParams;
+    procedure Internal_ClickMenuClick(Sender: TObject);
   public
     procedure PrepareForm; virtual;
     procedure UpdateForm(prUpdateDatasets : Boolean = True; prUpdateComponentes : Boolean = True; prUpdateCalcs : Boolean = True); virtual;
@@ -151,6 +161,16 @@ begin
   end;
 end;
 
+procedure TFJupiterForm.Image1Click(Sender: TObject);
+begin
+
+end;
+
+procedure TFJupiterForm.MenuItem1Click(Sender: TObject);
+begin
+  vrJupiterApp.RunMacro(TRIGGER_ONSHOWPARAMS, Self.Params);
+end;
+
 procedure TFJupiterForm.miAjustRatioLeftClick(Sender: TObject);
 begin
   try
@@ -169,9 +189,14 @@ begin
   end;
 end;
 
+procedure TFJupiterForm.miLookColumnClick(Sender: TObject);
+begin
+  miLookColumn.Checked := not miLookColumn.Checked;
+end;
+
 procedure TFJupiterForm.miParamsClick(Sender: TObject);
 begin
-  vrJupiterApp.RunMacro(TRIGGER_ONSHOWPARAMS, Self.Params);
+
 end;
 
 procedure TFJupiterForm.miUpdateClick(Sender: TObject);
@@ -256,6 +281,8 @@ procedure TFJupiterForm.Internal_UpdateComponents;
 begin
   DrawForm(Self);
 
+  miParams.Enabled := Self.Params.Count > 0;
+
   pnBottom.Caption := '                              ' + Self.FHint;
   pnBottom.Visible := Trim(Self.FHint) <> EmptyStr;
 
@@ -284,12 +311,14 @@ end;
 
 procedure TFJupiterForm.Internal_UpdateCalcs;
 begin
-
+  miParams.Caption := Format('Parâmetros (%0:d)', [Self.Params.Count]);
 end;
 
 procedure TFJupiterForm.Internal_PrepareForm;
 begin
   fpOptions.Align := alTop;
+
+  Self.Internal_BuildMenuParams;
 end;
 
 procedure TFJupiterForm.Internal_Resize;
@@ -306,6 +335,42 @@ begin
   Result := TJupiterVariableList.Create;
 
   Result.AddVariable('FORMID', Self.FormID);
+end;
+
+procedure TFJupiterForm.Internal_BuildMenuParams;
+var
+  vrVez : Integer;
+  vrObjReference : TJupiterComponentReference;
+begin
+  for vrVez := 0 to Self.Params.Count - 1 do
+  begin
+    if Self.Params.VariableByIndex(vrVez).Title <> EmptyStr then
+      vrObjReference := JupiterComponentsAddPopupMenuItem(nil, Self.Params.VariableByIndex(vrVez).Title, EmptyStr, NULL_KEY)
+    else
+      vrObjReference := JupiterComponentsAddPopupMenuItem(nil, Self.Params.VariableByIndex(vrVez).ID, EmptyStr, NULL_KEY);
+
+    TMenuItem(vrObjReference.Component).Tag := vrVez;
+    TMenuItem(vrObjReference.Component).OnClick := @Internal_ClickMenuClick;
+
+    miParams.Add(TMenuItem(vrObjReference.Component));
+  end;
+end;
+
+procedure TFJupiterForm.Internal_ClickMenuClick(Sender: TObject);
+var
+  vrResult : String;
+  vrVariable : TJupiterVariable;
+begin
+  vrVariable := Self.Params.VariableByIndex(TMenuItem(Sender).Tag);
+
+  try
+    vrResult := InputBox('Alterar valor do parâmetro ' + vrVariable.Title, 'Valor', vrVariable.Value);
+
+    if vrResult <> '' then
+      Self.Params.VariableById(vrVariable.ID).Value := vrResult;
+  finally
+    Self.UpdateForm();
+  end;
 end;
 
 procedure TFJupiterForm.PrepareForm;

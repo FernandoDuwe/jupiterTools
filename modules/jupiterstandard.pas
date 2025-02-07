@@ -88,6 +88,12 @@ begin
     vrStr.Add('      Exit; ');
     vrStr.Add('    end;');
     vrStr.Add('');
+    vrStr.Add('    if SameExtension(GetParam(SCRIPTID, ''PARAMS''), ''.txt'') then ');
+    vrStr.Add('    begin ');
+    vrStr.Add('      OpenTextEditorForm(GetParam(SCRIPTID, ''PARAMS'')); ');
+    vrStr.Add('      Exit; ');
+    vrStr.Add('    end;');
+    vrStr.Add('');
     vrStr.Add('    if FileExists(GetParam(SCRIPTID, ''PARAMS'')) then');
     vrStr.Add('      OpenDocument(GetParam(SCRIPTID, ''PARAMS''))');
     vrStr.Add('    else');
@@ -101,7 +107,31 @@ begin
 
     Self.Internal_CreateMacroIfDontExists(TRIGGER_ONSTART, 'Evento: Ao iniciar a aplicação', CreateStringList('program macro;' + #13#10 + 'begin' + #13#10 + '  OpenForm(''/forms/newTask'');' + #13#10 + 'end.'));
 
-    Self.Internal_CreateMacroIfDontExists(TRIGGER_ONSHOWPARAMS, 'Evento: Ao exibir os parâmetros dos formulários', CreateStringListToMacro(EmptyStr));
+    vrStr.Clear;
+    vrStr.Add('program macro;');
+    vrStr.Add('const');
+    vrStr.Add('  SCRIPTID = ''@FLAG_SCRIPTID'';');
+    vrStr.Add('');
+    vrStr.Add('  // Include libraries');
+    vrStr.Add('');
+    vrStr.Add('var');
+    vrStr.Add('  vrStr : String;');
+    vrStr.Add('  vrVez : Integer;');
+    vrStr.Add('begin');
+    vrStr.Add('  vrStr := ''Parâmetros ('' + IntToStr(ParamCount(SCRIPTID)) + ''): '' + #13#10 + #13#10;');
+    vrStr.Add('');
+    vrStr.Add('  for vrVez := 0 to ParamCount(SCRIPTID) - 1 do');
+    vrStr.Add('  begin');
+    vrStr.Add('    vrStr := vrStr + GetParamNameByIndex(SCRIPTID, vrVez) + #13#10;');
+    vrStr.Add('    vrStr := vrStr + GetParam(SCRIPTID, GetParamNameByIndex(SCRIPTID, vrVez)) + #13#10;');
+    vrStr.Add('');
+    vrStr.Add('    vrStr := vrStr + #13#10;');
+    vrStr.Add('  end;');
+    vrStr.Add('');
+    vrStr.Add('  ShowMessage(vrStr);');
+    vrStr.Add('end.');
+
+    Self.Internal_CreateMacroIfDontExists(TRIGGER_ONSHOWPARAMS, 'Evento: Ao exibir os parâmetros dos formulários', vrStr);
 
     Self.Internal_CreateMacroIfDontExists(TRIGGER_ONPROMPT, 'Evento: Ao executar comando via prompt', CreateStringList('program macro;' + #13#10 + 'begin' + #13#10 + '  OpenForm(''/forms/newTask'');' + #13#10 + 'end.'));
 

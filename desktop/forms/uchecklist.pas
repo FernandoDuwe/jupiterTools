@@ -67,6 +67,7 @@ begin
   Self.ActionGroup.AddAction(TJupiterAction.Create('Marcar todos', 'Clique aqui para criar marcar todas as caixas', ICON_CHECK, @Internal_OnMarkAllClick));
   Self.ActionGroup.AddAction(TJupiterAction.Create('Desmarcar todos', 'Clique aqui para criar desmarcar todas as caixas', NULL_KEY, @Internal_OnUnMarkAllClick));
 
+  Self.Caption := ExtractFileName(Self.Params.VariableById('path').Value);
 end;
 
 procedure TFCheckList.Internal_UpdateDatasets;

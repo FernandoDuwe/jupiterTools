@@ -63,7 +63,8 @@ begin
   if prImageIndex <> NULL_KEY then
     vrMenuItem.ImageIndex := prImageIndex;
 
-  prMenu.Items.Add(vrMenuItem);
+  if Assigned(prMenu) then
+    prMenu.Items.Add(vrMenuItem);
 
   Result := TJupiterComponentReference.Create(0, 0, 0, 0, vrMenuItem);
 end;

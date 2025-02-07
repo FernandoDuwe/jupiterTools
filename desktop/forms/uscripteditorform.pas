@@ -86,8 +86,12 @@ begin
 
   SynCompletion1.Width := PercentOfScreen(Self.Width, 50);
 
-  pnLeft.Width := PercentOfScreen(Self.Width, Self.PercentDivisor);
-  pnMessages.Height := PercentOfScreen(Self.Height, 30);
+  if miLookColumn.Checked then
+  begin
+    pnLeft.Width := PercentOfScreen(Self.Width, Self.PercentDivisor);
+
+    pnMessages.Height := PercentOfScreen(Self.Height, 30);
+  end;
 
   vlVariables.DefaultColWidth := PercentOfScreen(vlVariables.Width, 40);
 

@@ -15,9 +15,13 @@ uses
 
   function JupiterStringUtilsGetCSVColumn(prLine : String; prIndex : Integer) : String;
 
+  function JupiterStringUtilsGetCountColumns(prLine : String; prCharacterSeparator : Char) : Integer;
+
   function JupiterStringUtilsBoolToStr(prValue : Boolean) : String;
 
   function JupiterStringUtilsStrToBool(prValue : String) : Boolean;
+
+  function jupiterStringUtilsGetLastPathName(prPath : String) : String;
 
 implementation
 
@@ -93,6 +97,27 @@ begin
   end;
 end;
 
+function JupiterStringUtilsGetCountColumns(prLine: String; prCharacterSeparator: Char): Integer;
+var
+  vrStr : TStrings;
+begin
+  Result := 0;
+
+  if Trim(prLine) = EmptyStr then
+    Exit;
+
+  vrStr := TStringList.Create;
+  try
+    vrStr.Delimiter     := prCharacterSeparator;
+    vrStr.DelimitedText := StringReplace(prLine, ' ', EMPTY_SPACE_SEPARATOR, [rfIgnoreCase, rfReplaceAll]);
+
+    Result := vrStr.Count;
+  finally
+    vrStr.Clear;
+    FreeAndNil(vrStr);
+  end;
+end;
+
 function JupiterStringUtilsBoolToStr(prValue: Boolean): String;
 begin
   Result := BOOL_FALSE_STR;
@@ -116,6 +141,19 @@ begin
     Result := True;
     Exit;
   end;
+end;
+
+function jupiterStringUtilsGetLastPathName(prPath: String): String;
+var
+  vrTest : String;
+begin
+  prPath := StringReplace(prPath, '/', ';', [rfIgnoreCase, rfReplaceAll]);
+  prPath := StringReplace(prPath, '\', ';', [rfIgnoreCase, rfReplaceAll]);
+
+  if Copy(prPath, Length(prPath), 1) = ';' then
+    prPath := Copy(prPath, 1, Length(prPath) - 1);
+
+  Result := JupiterStringUtilsGetCSVColumn(prPath, JupiterStringUtilsGetCountColumns(prPath, ';') - 1);
 end;
 
 end.
