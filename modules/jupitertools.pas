@@ -19,6 +19,7 @@ type
     procedure Internal_Prepare; override;
 
     function Internal_CreateNewTaskMacro : TStrings;
+    function Internal_CreateImportTaskMacro : TStrings;
   end;
 
 implementation
@@ -80,6 +81,15 @@ begin
          '    OpenGridFromTableWithWhere(''TEMPOS'', '' TAREFA = '' + GetGlobalParam(''Tools.Tasks.Current.ID''), '''');')) then
         Self.Internal_CreateRouteIfDontExists('Tempos', '/main/tasks/current/times/', vrWizard.GetLastID('MACROS'), ICON_TIMEFILE, 3000);
     end;
+
+    Self.Internal_CreateMacroIfDontExists('utils.tasks.import', 'Utils: Importar tarefas', Self.Internal_CreateImportTaskMacro);
+
+    Self.Internal_CreateMacroIfDontExists('TAREFAS.MarcarComoAtualScript.OnClick', 'Marcar tarefa como atual', CreateStringListToMacro('   SetGlobalParam(''Tools.Tasks.Current.ID'', GetParam(SCRIPTID, ''ID''));' + #13#10 +
+                                                                                                                                       '   DBRunScript('' UPDATE VARIABLES SET VALUE = "'' + GetParam(SCRIPTID, ''ID'') + ''" WHERE NAME = "Tools.Tasks.Current.ID" ''); ' + #13#10 + #13#10 +
+                                                                                                                                       '   SetGlobalParam(''Tools.Tasks.Current.Path'', GetGlobalParam(''Tools.Tasks.Path'') + ''/'' + GetParam(SCRIPTID, ''CLIENTE'') + ''/'' + GetParam(SCRIPTID, ''NUMERO'') + ''/'');' + #13#10 +
+                                                                                                                                       '   DBRunScript('' UPDATE VARIABLES SET VALUE = "'' + GetGlobalParam(''Tools.Tasks.Path'') + ''/'' + GetParam(SCRIPTID, ''CLIENTE'') + ''/'' + GetParam(SCRIPTID, ''NUMERO'') + ''/'' + ''" WHERE NAME = "Tools.Tasks.Current.Path" ''); '));
+
+    Self.Internal_CreateActionIfDontExists('TAREFAS.MarcarComoAtualScript', 'Marcar como atual', 'TAREFAS', ICON_EDIT, 100, Self.Internal_GetMacroById('TAREFAS.MarcarComoAtualScript.OnClick'), Self.Internal_GetMacroById(EVENT_RECORD_ONENABLE), Self.Internal_GetMacroById(EVENT_RECORD_ONVISIBLE));
   finally
     FreeAndNil(vrWizard);
   end;
@@ -122,6 +132,55 @@ begin
   Result.Add('    UpdateForms();');
   Result.Add('  end;');
   Result.Add('end.');
+end;
+
+function TJupiterTools.Internal_CreateImportTaskMacro: TStrings;
+begin
+  Result := TStringList.Create;
+
+  Result.Clear;
+  Result.Add('program macro;');
+  Result.Add('const');
+  Result.Add('  SCRIPTID = ''@FLAG_SCRIPTID''; ');
+  Result.Add('');
+  Result.Add('  // Include libraries');
+  Result.Add('');
+  Result.Add('var');
+  Result.Add('  vrPathProvider : String;');
+  Result.Add('  vrTaskProvider : String;');
+  Result.Add('  vrVez : Integer;');
+  Result.Add('  vrVez2 : Integer;');
+  Result.Add('  vrClient : String;');
+  Result.Add('  vrTask : String;');
+  Result.Add('begin');
+  Result.Add('  DBStartTransaction;');
+  Result.Add('');
+  Result.Add('  vrPathProvider := DataProviderNewPath(GetGlobalParam(''Tools.Tasks.Path''), False);');
+  Result.Add('  try');
+  Result.Add('    for vrVez := 0 to DataProviderGetCount(vrPathProvider) - 1 do');
+  Result.Add('    begin');
+  Result.Add('      vrClient := DataProviderGetField(vrPathProvider, ''Folder'', vrVez);');
+  Result.Add('');
+  Result.Add('      vrTaskProvider := DataProviderNewPath(DataProviderGetField(vrPathProvider, ''Path'', vrVez), False);');
+  Result.Add('      try');
+  Result.Add('        for vrVez2 := 0 to DataProviderGetCount(vrTaskProvider) - 1 do');
+  Result.Add('        begin');
+  Result.Add('          vrTask := DataProviderGetField(vrTaskProvider, ''Folder'', vrVez2);');
+  Result.Add('');
+  Result.Add('          if not DBExists(''TAREFAS'', '' CLIENTE = "'' + vrClient + ''" AND NUMERO = "'' + vrTask + ''" '') then');
+  Result.Add('            DBRunScriptWithoutTransaction('' INSERT INTO TAREFAS (CLIENTE, NUMERO) VALUES ("'' + vrClient + ''", "'' + vrTask + ''") '');');
+  Result.Add('        end;');
+  Result.Add('      finally');
+  Result.Add('        DataProviderDestroy(vrTaskProvider);');
+  Result.Add('      end;');
+  Result.Add('    end;');
+  Result.Add('');
+  Result.Add('    DBCommitTransaction;');
+  Result.Add('  finally');
+  Result.Add('    DataProviderDestroy(vrPathProvider);');
+  Result.Add('  end;');
+  Result.Add('end.');
+  Result.Add('');
 end;
 
 end.

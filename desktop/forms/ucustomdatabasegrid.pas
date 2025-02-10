@@ -7,7 +7,8 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, DBGrids, uJupiterForm,
   jupiterDatabaseWizard, JupiterApp, jupiterStringUtils, jupiterformutils,
-  JupiterConsts, JupiterVariable, uJupiterAction, DB, SQLDB;
+  JupiterConsts, JupiterVariable, uJupiterDatabaseScript, uJupiterAction, DB,
+  SQLDB;
 
 type
 
@@ -34,6 +35,7 @@ type
     procedure Internal_UpdateDatasets; override;
 
     procedure Internal_OnNew(Sender: TObject);
+    procedure Internal_OnDelete(Sender: TObject);
     procedure Internal_OnIncLimit(Sender: TObject);
     procedure Internal_OnShowAll(Sender: TObject);
 
@@ -47,7 +49,7 @@ var
 
 implementation
 
-uses uJupiterDesktopAppScript;
+uses uJupiterDesktopAppScript, LCLType;
 
 {$R *.lfm}
 
@@ -139,6 +141,18 @@ begin
     else
       dbMainGrid.Columns[vrVez].Width := PercentOfScreen(dbMainGrid.Width, 40);
   end;
+
+  if Self.ActionGroup.Count > 1 then
+    if Self.InternalQuery.EOF then
+      Self.ActionGroup.GetActionAtIndex(1).Disable
+    else
+      Self.ActionGroup.GetActionAtIndex(1).Enable;
+
+  if Self.ActionGroup.Count > 2 then
+    if not Self.FUseLimit then
+      Self.ActionGroup.GetActionAtIndex(2).Disable
+    else
+      Self.ActionGroup.GetActionAtIndex(2).Enable;
 end;
 
 procedure TFCustomDatabaseGrid.Internal_PrepareForm;
@@ -150,6 +164,8 @@ begin
   Self.FLimit := vrJupiterApp.Params.VariableById(FORM_GRID_LIMIT).AsInteger;
 
   Self.ActionGroup.AddAction(TJupiterAction.Create('Novo', 'Clique aqui para criar um novo registro', ICON_NEW, @Internal_OnNew));
+
+  Self.ActionGroup.AddAction(TJupiterAction.Create('Excluir', 'Clique aqui para excluir o registro atual', ICON_DELETE, @Internal_OnDelete));
 
   Self.ActionGroup.AddAction(TJupiterAction.Create(IntToStr(Self.FLimit) + ' registros', 'Clique aqui exibir mais registros', ICON_ADD, @Internal_OnIncLimit));
 
@@ -237,6 +253,18 @@ end;
 procedure TFCustomDatabaseGrid.Internal_OnNew(Sender: TObject);
 begin
   JupiterAppDesktopOpenFormFromTableId(Self.FReference.TableName, NULL_KEY);
+end;
+
+procedure TFCustomDatabaseGrid.Internal_OnDelete(Sender: TObject);
+begin
+  if Application.MessageBox('Deseja realmente excluir?', 'Confirmar', MB_ICONQUESTION + MB_YESNO) = ID_YES then
+  begin
+    try
+      JupiterDatabaseScript_RunScript(' DELETE FROM  ' + Self.FReference.TableName + ' WHERE ID = ' + Self.InternalQuery.FieldByName('ID').AsString);
+    finally
+      Self.UpdateForm();
+    end;
+  end;
 end;
 
 procedure TFCustomDatabaseGrid.Internal_OnIncLimit(Sender: TObject);

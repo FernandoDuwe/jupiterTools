@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, ComCtrls, JupiterObject, JupiterConsts, Controls,
-  SysUtils, Forms, Graphics, EditBtn, CheckLst, StdCtrls;
+  SysUtils, Forms, Graphics, EditBtn, CheckLst, StdCtrls,
+  ShellCtrls;
 
   procedure CopyNodes(prSourceNode, prTargetNode: TTreeNode);
 
@@ -132,6 +133,12 @@ begin
     begin
       TListView(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
       TListView(prComponent.Components[vrVez]).GridLines := True;
+    end;
+
+    if prComponent.Components[vrVez] is TShellListView then
+    begin
+      TShellListView(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+      TShellListView(prComponent.Components[vrVez]).GridLines := True;
     end;
 
     if prComponent.Components[vrVez] is TCheckListBox then
