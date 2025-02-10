@@ -85,6 +85,7 @@ const
 
    FORM_ALWAYS_MODAL      : String = 'Interface.Form.AlwaysModal';
    FORM_UPDATE_TIME       : String = 'Interface.Form.UpdateTime';
+   FORM_EDITOR_RIGHTEDGE  : String = 'Interface.Editor.RightEdge';
    FIELD_FONT_SIZE        : String = 'Interface.Font.Size';
    CONTEXTMENU_TABLE_SHOW : String = 'Interface.ContextMenu.ShowTables';
    FORM_GRID_LIMIT        : String = 'Interface.Form.GridLimit';

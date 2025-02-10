@@ -5,10 +5,10 @@ unit ucustomdatabasegrid;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, DBGrids, uJupiterForm,
-  jupiterDatabaseWizard, JupiterApp, jupiterStringUtils, jupiterformutils,
-  JupiterConsts, JupiterVariable, uJupiterDatabaseScript, uJupiterAction, DB,
-  SQLDB;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, DBGrids, ExtCtrls,
+  Menus, uJupiterForm, jupiterDatabaseWizard, JupiterApp, jupiterStringUtils,
+  jupiterformutils, JupiterConsts, JupiterVariable, uJupiterDatabaseScript,
+  uJupiterAction, jupiterformcomponenttils, DB, SQLDB;
 
 type
 
@@ -18,6 +18,10 @@ type
     InternalDataSource: TDataSource;
     dbMainGrid: TDBGrid;
     InternalQuery: TSQLQuery;
+    miShowMiniForm: TMenuItem;
+    pnMiniForm: TPanel;
+    sbMiniForm: TScrollBox;
+    Splitter1: TSplitter;
     procedure dbMainGridColEnter(Sender: TObject);
     procedure dbMainGridDblClick(Sender: TObject);
     procedure dbMainGridEnter(Sender: TObject);
@@ -25,6 +29,8 @@ type
     procedure edSearchChange(Sender: TObject);
     procedure edSearchKeyPress(Sender: TObject; var Key: char);
     procedure FormCreate(Sender: TObject);
+    procedure InternalDataSourceDataChange(Sender: TObject; Field: TField);
+    procedure miShowMiniFormClick(Sender: TObject);
   private
     FLimit : Integer;
     FUseLimit : Boolean;
@@ -38,6 +44,9 @@ type
     procedure Internal_OnDelete(Sender: TObject);
     procedure Internal_OnIncLimit(Sender: TObject);
     procedure Internal_OnShowAll(Sender: TObject);
+    procedure Internal_RenderMiniForm;
+    procedure Internal_ClickRecord(Sender: TObject);
+    procedure Internal_ClickOwnerRecord(Sender: TObject);
 
     function Internal_OnRequestData :  TJupiterVariableList; override;
   public
@@ -49,7 +58,7 @@ var
 
 implementation
 
-uses uJupiterDesktopAppScript, LCLType;
+uses LCLType, StdCtrls, uJupiterDesktopAppScript;
 
 {$R *.lfm}
 
@@ -69,6 +78,26 @@ begin
     InternalQuery.Transaction := vrWizard.Transaction;
   finally
     FreeAndNil(vrWizard);
+  end;
+end;
+
+procedure TFCustomDatabaseGrid.InternalDataSourceDataChange(Sender: TObject; Field: TField);
+begin
+  if pnMiniForm.Visible then
+    Self.Internal_RenderMiniForm;
+end;
+
+procedure TFCustomDatabaseGrid.miShowMiniFormClick(Sender: TObject);
+begin
+  try
+    miShowMiniForm.Checked := not miShowMiniForm.Checked;
+
+    if miShowMiniForm.Checked then
+      vrJupiterApp.Params.VariableById('Interface.Grid.ShowMiniForm').Value := BOOL_TRUE_STR
+    else
+      vrJupiterApp.Params.VariableById('Interface.Grid.ShowMiniForm').Value := BOOL_FALSE_STR;
+  finally
+    Self.UpdateForm();
   end;
 end;
 
@@ -177,6 +206,8 @@ begin
 
   if not Self.Params.Exists('orderBy') then
     Self.Params.AddVariable('orderBy', EmptyStr, 'Order By');
+
+  miShowMiniForm.Checked := vrJupiterApp.Params.VariableById('Interface.Grid.ShowMiniForm').AsBool;
 end;
 
 procedure TFCustomDatabaseGrid.Internal_UpdateDatasets;
@@ -247,6 +278,14 @@ begin
     InternalQuery.EnableControls;
   //  FreeAndNil(vrStringList);
   end;
+
+  pnMiniForm.Visible := miShowMiniForm.Checked;
+
+  if miLookColumn.Checked then
+    pnMiniForm.Width := PercentOfScreen(Self.Width, Self.PercentDivisor);
+
+  if pnMiniForm.Visible then
+    Self.Internal_RenderMiniForm;
 end;
 
 procedure TFCustomDatabaseGrid.Internal_OnNew(Sender: TObject);
@@ -282,6 +321,97 @@ begin
   finally
     Self.UpdateForm();
   end;
+end;
+
+procedure TFCustomDatabaseGrid.Internal_RenderMiniForm;
+var
+  vrVez : Integer;
+  vrCurrentLine : Integer;
+  vrReference : TJupiterComponentReference;
+  vrReferenceLink : TJupiterComponentReference;
+  vrWizard : TJupiterDatabaseWizard;
+  vrForeignKey : TJupiterDatabaseForeignKeyReference;
+begin
+  pnMiniForm.Caption := 'Selecione um registro para continuar';
+
+  RemoveChildren(sbMiniForm);
+
+  if Self.InternalQuery.EOF then
+    Exit;
+
+  vrCurrentLine := FORM_MARGIN_TOP;
+
+  vrWizard := vrJupiterApp.NewWizard;
+  try
+    vrReference := JupiterComponentsNewLabel('Registro ', TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbMiniForm);
+
+    vrReferenceLink := JupiterComponentsNewLink('#' + Self.InternalQuery.FieldByName('ID').AsString, TJupiterPosition.Create(vrCurrentLine, vrReference.Right), sbMiniForm);
+
+    TLabel(vrReferenceLink.Component).OnClick := @Internal_ClickRecord;
+    TLabel(vrReferenceLink.Component).Hint := 'Visualizar o registro atual';
+
+    vrCurrentLine := vrReferenceLink.Bottom + FORM_MARGIN_BOTTOM_TONEXT;
+
+    for vrVez := 0 to dbMainGrid.Columns.Count - 1 do
+    begin
+      if not dbMainGrid.Columns[vrVez].Visible then
+        Continue;
+
+      vrReference := JupiterComponentsNewLabel(dbMainGrid.Columns[vrVez].Title.Caption, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbMiniForm);
+
+      TLabel(vrReference.Component).Font.Style := [fsBold];
+
+      vrCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM;
+
+      if not dbMainGrid.Columns[vrVez].Field.IsNull then
+      begin
+        vrReference := JupiterComponentsNewLabel(dbMainGrid.Columns[vrVez].Field.AsString + ' ', TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbMiniForm);
+
+        if vrWizard.IsForeignKeyField(Self.FReference.TableName, dbMainGrid.Columns[vrVez].Field.FieldName) then
+        begin
+          vrCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM;
+
+          vrForeignKey := vrWizard.GetForeignKeyData(Self.FReference.TableName, dbMainGrid.Columns[vrVez].Field.FieldName);
+
+          vrReferenceLink := JupiterComponentsNewLink('Ver mais', TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbMiniForm);
+
+          TLabel(vrReferenceLink.Component).OnClick := @Internal_ClickOwnerRecord;
+          TLabel(vrReferenceLink.Component).Tag := vrVez;
+          TLabel(vrReferenceLink.Component).Hint := 'Acessar o registro pai';
+
+          vrReference := vrReferenceLink;
+        end;
+      end
+      else
+      begin
+        vrReference := JupiterComponentsNewLabel('Nulo', TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbMiniForm);
+
+        TLabel(vrReference.Component).Font.Style := [fsItalic];
+      end;
+
+      vrCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM;
+
+      vrCurrentLine := vrCurrentLine + FORM_MARGIN_BOTTOM_TONEXT;
+    end;
+  finally
+    FreeAndNil(vrWizard);
+
+    pnMiniForm.Caption := EmptyStr;
+  end;
+end;
+
+procedure TFCustomDatabaseGrid.Internal_ClickRecord(Sender: TObject);
+begin
+  JupiterAppDesktopOpenFormFromTableId(Self.FReference.TableName, Self.InternalQuery.FieldByName('ID').AsInteger);
+end;
+
+procedure TFCustomDatabaseGrid.Internal_ClickOwnerRecord(Sender: TObject);
+var
+  vrForeignKey : TJupiterDatabaseForeignKeyReference;
+begin
+  vrForeignKey := vrJupiterApp.NewWizard.GetForeignKeyData(Self.FReference.TableName, dbMainGrid.Columns[TLabel(Sender).Tag].FieldName);
+
+  JupiterAppDesktopOpenFormFromTableId(vrForeignKey.TableDestinyName, dbMainGrid.Columns[TLabel(Sender).Tag].Field.AsInteger);
 end;
 
 function TFCustomDatabaseGrid.Internal_OnRequestData: TJupiterVariableList;

@@ -1,6 +1,6 @@
 inherited FCustomDatabaseGrid: TFCustomDatabaseGrid
-  Left = 667
-  Top = 586
+  Left = 585
+  Top = 331
   OnCreate = FormCreate
   inherited pnSearchBar: TPanel
     Top = 1
@@ -18,10 +18,10 @@ inherited FCustomDatabaseGrid: TFCustomDatabaseGrid
     TabOrder = 3
   end
   object dbMainGrid: TDBGrid[3]
-    Left = 0
+    Left = 175
     Height = 325
     Top = 51
-    Width = 879
+    Width = 704
     Align = alClient
     Color = clWindow
     Columns = <>
@@ -33,18 +33,54 @@ inherited FCustomDatabaseGrid: TFCustomDatabaseGrid
     OnEnter = dbMainGridEnter
     OnExit = dbMainGridExit
   end
-  inherited acOptions: TActionList[4]
+  object pnMiniForm: TPanel[4]
+    Left = 0
+    Height = 325
+    Top = 51
+    Width = 170
+    Align = alLeft
+    BevelOuter = bvNone
+    ClientHeight = 325
+    ClientWidth = 170
+    TabOrder = 4
+    object sbMiniForm: TScrollBox
+      Left = 0
+      Height = 325
+      Top = 0
+      Width = 170
+      HorzScrollBar.Page = 1
+      VertScrollBar.Page = 1
+      Align = alClient
+      TabOrder = 0
+    end
   end
-  inherited tmrAutoUpdater: TTimer[5]
+  object Splitter1: TSplitter[5]
+    Left = 170
+    Height = 325
+    Top = 51
+    Width = 5
   end
-  inherited pmOptions: TPopupMenu[6]
+  inherited acOptions: TActionList[6]
   end
-  object InternalDataSource: TDataSource[7]
+  inherited tmrAutoUpdater: TTimer[7]
+  end
+  inherited pmOptions: TPopupMenu[8]
+    object miShowMiniForm: TMenuItem[5]
+      Caption = 'Exibir resumo dos dados'
+      OnClick = miShowMiniFormClick
+    end
+    inherited Separator1: TMenuItem[6]
+    end
+    inherited miParams: TMenuItem[7]
+    end
+  end
+  object InternalDataSource: TDataSource[9]
     DataSet = InternalQuery
+    OnDataChange = InternalDataSourceDataChange
     Left = 574
     Top = 72
   end
-  object InternalQuery: TSQLQuery[8]
+  object InternalQuery: TSQLQuery[10]
     FieldDefs = <>
     Params = <>
     Macros = <>

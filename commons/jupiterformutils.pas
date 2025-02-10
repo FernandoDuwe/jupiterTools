@@ -7,7 +7,7 @@ interface
 uses
   Classes, ComCtrls, JupiterObject, JupiterConsts, Controls,
   SysUtils, Forms, Graphics, EditBtn, CheckLst, StdCtrls,
-  ShellCtrls;
+  ShellCtrls, SynEdit;
 
   procedure CopyNodes(prSourceNode, prTargetNode: TTreeNode);
 
@@ -18,6 +18,8 @@ uses
   function GetEditByTag(prComponent : TComponent; prTag : Integer) : TEdit;
 
   procedure DrawFormInSearch(prComponent : TComponent; prSearch : String; prColor : TColor);
+
+  procedure RemoveChildren(prComponent : TComponent);
 
   function IsSameForm(prForm1, prForm2 : TForm; prIgnoreVariables : Array of String) : Boolean;
 
@@ -153,6 +155,12 @@ begin
     if prComponent.Components[vrVez] is TMemo then
       TMemo(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
 
+    if prComponent.Components[vrVez] is TSynEdit then
+    begin
+      TSynEdit(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+      TSynEdit(prComponent.Components[vrVez]).RightEdge := vrJupiterApp.Params.VariableById(FORM_EDITOR_RIGHTEDGE).AsInteger;
+    end;
+
     if prComponent.Components[vrVez] is TStatusBar then
       TStatusBar(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
 
@@ -267,6 +275,14 @@ begin
     if prComponent.Components[vrVez] is TGroupBox then
       DrawFormInSearch(prComponent.Components[vrVez], prSearch, prColor);
   end;
+end;
+
+procedure RemoveChildren(prComponent: TComponent);
+var
+  vrVez : Integer;
+begin
+  for vrVez := prComponent.ComponentCount - 1 downto 0 do
+    prComponent.Components[vrVez].Free;
 end;
 
 function IsSameForm(prForm1, prForm2: TForm; prIgnoreVariables : Array of String): Boolean;

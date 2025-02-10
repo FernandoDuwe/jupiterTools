@@ -1,6 +1,6 @@
 inherited FNewTask: TFNewTask
-  Left = 599
-  Top = 319
+  Left = 794
+  Top = 430
   Align = alCustom
   Caption = 'Iniciar uma nova tarefa'
   OnCreate = FormCreate
