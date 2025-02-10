@@ -318,6 +318,8 @@ procedure TFJupiterForm.Internal_PrepareForm;
 begin
   fpOptions.Align := alTop;
 
+  tmrAutoUpdater.Interval := vrJupiterApp.Params.VariableById(FORM_UPDATE_TIME).AsInteger;
+
   Self.Internal_BuildMenuParams;
 end;
 

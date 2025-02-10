@@ -133,13 +133,12 @@ begin
 
   for vrVez := 0 to dbMainGrid.Columns.Count - 1 do
   begin
-
     dbMainGrid.Columns[vrVez].Title.Caption := JupiterStringUtilsNormalizeToPresent(dbMainGrid.Columns[vrVez].FieldName);
 
-    if vrCountVisble >= 4 then
-      dbMainGrid.Columns[vrVez].Width := PercentOfScreen(dbMainGrid.Width, 30)
+    if vrCountVisble > 5 then
+      dbMainGrid.Columns[vrVez].Width := PercentOfScreen(dbMainGrid.Width, 20)
     else
-      dbMainGrid.Columns[vrVez].Width := PercentOfScreen(dbMainGrid.Width, 40);
+      dbMainGrid.Columns[vrVez].Width := PercentOfScreen(dbMainGrid.Width, Round(100 / vrCountVisble));
   end;
 
   if Self.ActionGroup.Count > 1 then

@@ -113,14 +113,14 @@ begin
   begin
     vrAction := Self.FActionList.GetAtIndex(vrVez) as TJupiterAction;
 
-    vrReference := JupiterComponentsNewLink(vrAction.Caption, TJupiterPosition.Create(Self.FCurrentLine, FORM_MARGIN_LEFT), sbShortcut);
+    vrReference := JupiterComponentsNewLink(vrAction.Caption, TJupiterPosition.Create(Self.FCurrentLine, FORM_MARGIN_LEFT + FORM_MARGIN_LEFT), sbShortcut);
 
     TLabel(vrReference.Component).Tag := vrVez;
     TLabel(vrReference.Component).OnClick := @Internal_LinkClick;
 
     Self.FCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM;
 
-    vrReference := JupiterComponentsNewLabel(vrAction.Hint, TJupiterPosition.Create(Self.FCurrentLine, FORM_MARGIN_LEFT), sbShortcut);
+    vrReference := JupiterComponentsNewLabel(vrAction.Hint, TJupiterPosition.Create(Self.FCurrentLine, FORM_MARGIN_LEFT + FORM_MARGIN_LEFT + FORM_MARGIN_LEFT), sbShortcut);
 
     Self.FCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM_TONEXT;
   end;
