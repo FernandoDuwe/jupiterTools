@@ -105,7 +105,10 @@ var
   vrAction : TJupiterAction;
   vrReference : TJupiterComponentReference;
 begin
-  Self.FCurrentLine := (imLogo.Height + imLogo.Top) + FORM_MARGIN_BOTTOM_TONEXT;
+  if GetCurrentOS = 'Windows' then
+    Self.FCurrentLine := (imLogo.Height + imLogo.Top) + FORM_MARGIN_BOTTOM_TONEXT + FORM_MARGIN_BOTTOM_TONEXT
+  else
+    Self.FCurrentLine := (imLogo.Height + imLogo.Top) + FORM_MARGIN_BOTTOM_TONEXT;
 
   Self.FActionList := TJupiterDesktopApp(vrJupiterApp).GenerateContextMenu;
 
@@ -120,7 +123,7 @@ begin
 
     Self.FCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM;
 
-    vrReference := JupiterComponentsNewLabel(vrAction.Hint, TJupiterPosition.Create(Self.FCurrentLine, FORM_MARGIN_LEFT + FORM_MARGIN_LEFT + FORM_MARGIN_LEFT), sbShortcut);
+    vrReference := JupiterComponentsNewLabel(vrAction.Hint, TJupiterPosition.Create(Self.FCurrentLine, FORM_MARGIN_LEFT + FORM_MARGIN_LEFT), sbShortcut);
 
     Self.FCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM_TONEXT;
   end;
