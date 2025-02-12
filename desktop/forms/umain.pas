@@ -157,6 +157,8 @@ begin
   TJupiterDesktopApp(vrJupiterApp).ImageList := ilIconFamily;
   TJupiterDesktopApp(vrJupiterApp).GetExternalImages;
 
+  tmrAutoUpdater.Interval := FORM_UPDATE_TIME_MILISECONDS;
+
   vrMainMenu := TJupiterMainMenuGenerator.Create(vrJupiterApp.InternalDatabase);
   try
     vrMainMenu.MainMenu := mmMainMenu;
@@ -188,13 +190,10 @@ begin
     end;
   end;
 
-//  Self.Repaint;
-//  Self.Refresh;
+  Self.Refresh;
 
   jtMainTab.Align := alClient;
   jtMainTab.Visible := jtMainTab.PageCount > 0;
-
-  Application.ProcessMessages;
 end;
 
 procedure TFMain.Internal_CreatePopMenuTab;

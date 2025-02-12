@@ -171,16 +171,22 @@ begin
   end;
 
   if Self.ActionGroup.Count > 1 then
-    if Self.InternalQuery.EOF then
+    if (Self.InternalQuery.EOF)  then
       Self.ActionGroup.GetActionAtIndex(1).Disable
     else
       Self.ActionGroup.GetActionAtIndex(1).Enable;
 
   if Self.ActionGroup.Count > 2 then
-    if not Self.FUseLimit then
+    if ((not Self.FUseLimit)  or (Self.InternalQuery.RecordCount < vrJupiterApp.Params.VariableById(FORM_GRID_LIMIT).AsInteger)) then
       Self.ActionGroup.GetActionAtIndex(2).Disable
     else
       Self.ActionGroup.GetActionAtIndex(2).Enable;
+
+  if Self.ActionGroup.Count >= 3 then
+    if (Self.InternalQuery.RecordCount < vrJupiterApp.Params.VariableById(FORM_GRID_LIMIT).AsInteger) then
+      Self.ActionGroup.GetActionAtIndex(3).Disable
+    else
+      Self.ActionGroup.GetActionAtIndex(3).Enable;
 end;
 
 procedure TFCustomDatabaseGrid.Internal_PrepareForm;

@@ -118,6 +118,8 @@ const
    FORM_ACTION_MINWIDTH         : Integer = 120;
    FORM_ACTION_MINWIDTH_COMPACT : Integer = 80;
 
+   FORM_UPDATE_TIME_MILISECONDS : Integer = 1000;
+
    // Generator
    GENERATOR_SYSLAYER : SmallInt = 1000;
 

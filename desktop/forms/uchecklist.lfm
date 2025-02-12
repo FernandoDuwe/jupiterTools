@@ -1,6 +1,6 @@
 inherited FCheckList: TFCheckList
-  Left = 554
-  Top = 570
+  Left = 408
+  Top = 253
   Caption = 'Checklist'
   inherited fpOptions: TFlowPanel
     Top = 375

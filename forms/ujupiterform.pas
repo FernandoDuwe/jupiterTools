@@ -58,7 +58,6 @@ type
     FActionGroup   : TJupiterActionGroup;
     FOwnerTab      : TJupiterFormTabSheet;
     FParams        : TJupiterVariableList;
-    FUpdateCount   : Integer;
 
     procedure Internal_AddShortcutsToMenu;
     procedure Internal_SetSearchBar(prNewValue : Boolean);
@@ -103,8 +102,6 @@ uses SQLDB;
 procedure TFJupiterForm.Internal_OnAfterActionExecute(Sender : TObject);
 begin
   tmrAutoUpdater.Enabled := False;
-
-  Self.FUpdateCount := 0;
 
   Self.UpdateForm();
 
@@ -215,15 +212,10 @@ end;
 
 procedure TFJupiterForm.tmrAutoUpdaterTimer(Sender: TObject);
 begin
-  Self.FUpdateCount := Self.FUpdateCount + 1;
-
-  if (Self.FUpdateCount >= 30) then
-    Self.FUpdateCount := 0;
-
   tmrAutoUpdater.Enabled := False;
 
   if Self.Showing then
-    Self.UpdateForm(Self.FUpdateCount = 0);
+    Self.UpdateForm();
 
   tmrAutoUpdater.Enabled := True;
 end;
@@ -247,7 +239,6 @@ begin
   Self.FFormID := JupiterStringUtilsGenerateGUID;
 
   Self.FPercentDivisor := 30;
-  Self.FUpdateCount    := 1;
 
   Self.FActionGroup := TJupiterActionGroup.Create;
   Self.FActionGroup.FlowPanel := fpOptions;
