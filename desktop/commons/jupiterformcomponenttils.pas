@@ -34,11 +34,13 @@ uses
 
   function JupiterComponentsNewDBComboBox(prField : TField; prDataSource : TDataSource; prPosition : TJupiterPosition; prOwner : TWinControl; prForeignKeyData : TJupiterDatabaseForeignKeyReference) : TJupiterComponentReference;
 
+  function JupiterComponentsNewDBCheckBox(prField : TField; prDataSource : TDataSource; prPosition : TJupiterPosition; prOwner : TWinControl) : TJupiterComponentReference;
+
   function JupiterComponentsAddAction(prField : TJupiterComponentReference; prIcon : Integer; prOwner : TWinControl) : TJupiterComponentReference;
 
 implementation
 
-uses Buttons, DBDateTimePicker, SQLDB, DateTimePicker, Graphics, LCLProc, JupiterEdit;
+uses Buttons, DBDateTimePicker, SQLDB, DateTimePicker, Graphics, LCLProc, JupiterEdit, jupiterStringUtils;
 
 function JupiterComponentsAddPopupMenuSeparator(prMenu: TPopupMenu): TJupiterComponentReference;
 var
@@ -80,6 +82,7 @@ begin
   vrLabel.Font.Size := GetFontSize;
   vrLabel.Top       := prPosition.Top;
   vrLabel.Left      := prPosition.Left;
+  vrLabel.Transparent := True;
 
   Result := TJupiterComponentReference.Create(prPosition.Top,
                                               prPosition.Left,
@@ -103,6 +106,7 @@ begin
   vrLabel.Cursor     := crHandPoint;
   vrLabel.Hint       := 'Clique aqui para executar';
   vrLabel.ShowHint   := True;
+  vrLabel.Transparent := True;
 
   Result := TJupiterComponentReference.Create(prPosition.Top,
                                               prPosition.Left,
@@ -230,7 +234,6 @@ begin
                                               prPosition.Top + vrEdit.Height,
                                               vrEdit,
                                               vrEdit);
-
 end;
 
 function JupiterComponentsNewDBDatePicker(prField: TField; prDataSource: TDataSource; prPosition: TJupiterPosition; prOwner: TWinControl): TJupiterComponentReference;
@@ -325,6 +328,33 @@ begin
                                               prPosition.Top + vrEdit.Height,
                                               vrEdit,
                                               vrEdit);
+end;
+
+function JupiterComponentsNewDBCheckBox(prField: TField; prDataSource: TDataSource; prPosition: TJupiterPosition; prOwner: TWinControl): TJupiterComponentReference;
+var
+  vrEdit : TDBCheckBox;
+begin
+  vrEdit := TDBCheckBox.Create(prOwner);
+  vrEdit.Caption      := JupiterStringUtilsNormalizeToPresent(prField.DisplayName);
+  vrEdit.Parent       := prOwner;
+  vrEdit.AutoSize     := True;
+  vrEdit.Font.Size    := GetFontSize;
+  vrEdit.Top          := prPosition.Top;
+  vrEdit.Left         := prPosition.Left;
+  vrEdit.DataSource   := prDataSource;
+  vrEdit.DataField    := prField.FieldName;
+  vrEdit.AutoSize     := False;
+  vrEdit.Anchors      := [akTop, akLeft];
+  vrEdit.ValueChecked := '1';
+  vrEdit.ValueChecked := '0';
+
+  Result := TJupiterComponentReference.Create(prPosition.Top,
+                                              prPosition.Left,
+                                              prPosition.Left + vrEdit.Width,
+                                              prPosition.Top + vrEdit.Height,
+                                              vrEdit,
+                                              vrEdit);
+
 end;
 
 function JupiterComponentsAddAction(prField: TJupiterComponentReference;

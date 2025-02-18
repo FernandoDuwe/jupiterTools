@@ -7,13 +7,13 @@ interface
 uses
   Classes, ComCtrls, JupiterObject, JupiterConsts, Controls,
   SysUtils, Forms, Graphics, EditBtn, CheckLst, StdCtrls,
-  ShellCtrls, SynEdit;
+  ShellCtrls, SynEdit, DBCtrls;
 
   procedure CopyNodes(prSourceNode, prTargetNode: TTreeNode);
 
   function PercentOfScreen(prTotalSize, prPercent : Integer) : Integer;
 
-  procedure DrawForm(prComponent : TComponent);
+  procedure DrawForm(prComponent : TComponent; prHighContrast : Boolean = False);
 
   function GetEditByTag(prComponent : TComponent; prTag : Integer) : TEdit;
 
@@ -101,7 +101,7 @@ begin
   Result := Round((prPercent / 100) * prTotalSize);
 end;
 
-procedure DrawForm(prComponent: TComponent);
+procedure DrawForm(prComponent: TComponent; prHighContrast: Boolean);
 var
   vrVez : Integer;
 begin
@@ -112,61 +112,174 @@ begin
     Exit;
 
   if prComponent is TForm then
+  begin
     TForm(prComponent).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+    TForm(prComponent).Font.Name := vrJupiterApp.Params.VariableById(FIELD_FONT_NAME).Value;
+  end;
 
   for vrVez := 0 to prComponent.ComponentCount - 1 do
   begin
     if prComponent.Components[vrVez] is TLabel then
+    begin
       TLabel(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+      TLabel(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_FONT_NAME).Value;
+
+      if prHighContrast then
+      begin
+        TLabel(prComponent.Components[vrVez]).ParentBiDiMode := False;
+        TLabel(prComponent.Components[vrVez]).ParentColor := False;
+        TLabel(prComponent.Components[vrVez]).ParentFont := False;
+
+        if Assigned(TLabel(prComponent.Components[vrVez]).OnClick) then
+          TLabel(prComponent.Components[vrVez]).Font.Color := clAqua
+        else
+          TLabel(prComponent.Components[vrVez]).Font.Color := clYellow;
+      end;
+    end;
 
     if prComponent.Components[vrVez] is TEdit then
+    begin
       TEdit(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+      TEdit(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_FONT_NAME).Value;
+
+      if prHighContrast then
+      begin
+        TEdit(prComponent.Components[vrVez]).ParentBiDiMode := False;
+        TEdit(prComponent.Components[vrVez]).ParentColor := False;
+        TEdit(prComponent.Components[vrVez]).ParentFont := False;
+
+        TEdit(prComponent.Components[vrVez]).Color := $002E2E2E;
+        TEdit(prComponent.Components[vrVez]).Font.Color := clYellow;
+      end;
+    end;
 
     if prComponent.Components[vrVez] is TDateEdit then
+    begin
       TDateEdit(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+      TDateEdit(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_FONT_NAME).Value;
+
+      if prHighContrast then
+      begin
+        TDateEdit(prComponent.Components[vrVez]).ParentBiDiMode := False;
+        TDateEdit(prComponent.Components[vrVez]).ParentColor := False;
+        TDateEdit(prComponent.Components[vrVez]).ParentFont := False;
+
+        TDateEdit(prComponent.Components[vrVez]).Color := $002E2E2E;
+        TDateEdit(prComponent.Components[vrVez]).Font.Color := clYellow;
+      end;
+    end;
 
     if prComponent.Components[vrVez] is TComboBox then
+    begin
       TComboBox(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+      TComboBox(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_FONT_NAME).Value;
+
+      if prHighContrast then
+      begin
+        TComboBox(prComponent.Components[vrVez]).ParentBiDiMode := False;
+        TComboBox(prComponent.Components[vrVez]).ParentColor := False;
+        TComboBox(prComponent.Components[vrVez]).ParentFont := False;
+
+        TComboBox(prComponent.Components[vrVez]).Color := $002E2E2E;
+        TComboBox(prComponent.Components[vrVez]).Font.Color := clYellow;
+      end;
+    end;
 
     if prComponent.Components[vrVez] is TCheckBox then
+    begin
       TCheckBox(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+      TCheckBox(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_FONT_NAME).Value;
+
+      if prHighContrast then
+      begin
+        TCheckBox(prComponent.Components[vrVez]).ParentBiDiMode := False;
+        TCheckBox(prComponent.Components[vrVez]).ParentColor := False;
+        TCheckBox(prComponent.Components[vrVez]).ParentFont := False;
+
+        TCheckBox(prComponent.Components[vrVez]).Font.Color := clYellow;
+      end;
+    end;
+
+    if prComponent.Components[vrVez] is TDBCheckBox then
+    begin
+      TDBCheckBox(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+      TDBCheckBox(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_FONT_NAME).Value;
+
+      if prHighContrast then
+      begin
+        TDBCheckBox(prComponent.Components[vrVez]).ParentBiDiMode := False;
+        TDBCheckBox(prComponent.Components[vrVez]).ParentColor := False;
+        TDBCheckBox(prComponent.Components[vrVez]).ParentFont := False;
+
+        TDBCheckBox(prComponent.Components[vrVez]).Font.Color := clYellow;
+      end;
+    end;
 
     if prComponent.Components[vrVez] is TListView then
     begin
       TListView(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
       TListView(prComponent.Components[vrVez]).GridLines := True;
+      TListView(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_FONT_NAME).Value;
     end;
 
     if prComponent.Components[vrVez] is TShellListView then
     begin
       TShellListView(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
       TShellListView(prComponent.Components[vrVez]).GridLines := True;
+      TShellListView(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_FONT_NAME).Value;
     end;
 
     if prComponent.Components[vrVez] is TCheckListBox then
+    begin
       TCheckListBox(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+      TCheckListBox(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_FONT_NAME).Value;
+    end;
 
     if prComponent.Components[vrVez] is TTreeView then
+    begin
       TTreeView(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+      TTreeView(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_FONT_NAME).Value;
+    end;
 
     if prComponent.Components[vrVez] is TListBox then
+    begin
       TListBox(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+      TListBox(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_FONT_NAME).Value;
+    end;
 
     if prComponent.Components[vrVez] is TMemo then
+    begin
       TMemo(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+      TMemo(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_FONT_NAME).Value;
+    end;
 
     if prComponent.Components[vrVez] is TSynEdit then
     begin
       TSynEdit(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
       TSynEdit(prComponent.Components[vrVez]).RightEdge := vrJupiterApp.Params.VariableById(FORM_EDITOR_RIGHTEDGE).AsInteger;
+      TSynEdit(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_FONT_NAME).Value;
     end;
 
     if prComponent.Components[vrVez] is TStatusBar then
+    begin
       TStatusBar(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+      TStatusBar(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_FONT_NAME).Value;
+    end;
 
     if prComponent.Components[vrVez] is TScrollBox then
     begin
       TScrollBox(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+      TScrollBox(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_FONT_NAME).Value;
+
+      if prHighContrast then
+      begin
+        TScrollBox(prComponent.Components[vrVez]).BorderStyle := bsSingle;
+        TScrollBox(prComponent.Components[vrVez]).ParentBackground := False;
+        TScrollBox(prComponent.Components[vrVez]).ParentBiDiMode := False;
+        TScrollBox(prComponent.Components[vrVez]).ParentColor := False;
+        TScrollBox(prComponent.Components[vrVez]).ParentFont := False;
+        TScrollBox(prComponent.Components[vrVez]).Color := $002E2E2E;
+      end;
 
       DrawForm(prComponent.Components[vrVez]);
     end;
@@ -174,6 +287,7 @@ begin
     if prComponent.Components[vrVez] is TPanel then
     begin
       TPanel(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+      TPanel(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_FONT_NAME).Value;
 
       DrawForm(prComponent.Components[vrVez]);
     end;
@@ -181,6 +295,7 @@ begin
     if prComponent.Components[vrVez] is TGroupBox then
     begin
       TGroupBox(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+      TGroupBox(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_FONT_NAME).Value;
 
       DrawForm(prComponent.Components[vrVez]);
     end;
@@ -188,6 +303,7 @@ begin
     if prComponent.Components[vrVez] is TDBGrid then
     begin
       TDBGrid(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+      TDBGrid(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_FONT_NAME).Value;
 
       {$IFDEF WINDOWS}
       TDBGrid(prComponent.Components[vrVez]).AlternateColor := $00FFEAEA;
@@ -285,7 +401,8 @@ begin
     prComponent.Components[vrVez].Free;
 end;
 
-function IsSameForm(prForm1, prForm2: TForm; prIgnoreVariables : Array of String): Boolean;
+function IsSameForm(prForm1, prForm2: TForm; prIgnoreVariables: array of String
+  ): Boolean;
 var
   vrParams1 : TJupiterVariableList;
   vrParams2 : TJupiterVariableList;

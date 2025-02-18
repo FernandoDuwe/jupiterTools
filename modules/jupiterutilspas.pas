@@ -72,7 +72,7 @@ begin
     Self.Internal_CreateActionIfDontExists('FAVORITOS.Executar', 'Executar', 'FAVORITOS', ICON_PLAY, 1, Self.Internal_GetMacroById('FAVORITOS.Executar.OnClick'), Self.Internal_GetMacroById(EVENT_RECORD_ONENABLE), Self.Internal_GetMacroById(EVENT_RECORD_ONVISIBLE));
 
     if not vrWizard.TableExists('TEMPOS') then
-      vrWizard.ExecuteScript(CreateStringList('CREATE TABLE TEMPOS ( ID INTEGER PRIMARY KEY, DIA DATE, INICIO TIME, FIM TIME, TAREFA INT, FOREIGN KEY (TAREFA) REFERENCES TAREFAS(ID))'));
+      vrWizard.ExecuteScript(CreateStringList('CREATE TABLE TEMPOS ( ID INTEGER PRIMARY KEY, DIA DATE, INICIO TIME, FIM TIME, TAREFA INT, MARCADO BOOLEAN, FOREIGN KEY (TAREFA) REFERENCES TAREFAS(ID))'));
 
     Self.Internal_CreateMacroIfDontExists('TEMPOS.MarcarHoraInicial.OnClick', 'Marcar hora inicial', CreateStringListToMacro(' DBRunScript('' INSERT INTO TEMPOS (DIA, INICIO) VALUES (DATE("now"), TIME("now")) ''); '));
 

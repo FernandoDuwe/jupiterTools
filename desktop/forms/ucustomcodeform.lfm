@@ -1,6 +1,6 @@
 inherited FCustomCodeForm: TFCustomCodeForm
-  Left = 666
-  Top = 470
+  Left = 876
+  Top = 535
   Caption = ''
   OnCreate = FormCreate
   OnDestroy = FormDestroy

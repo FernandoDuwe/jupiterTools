@@ -52,6 +52,8 @@ begin
 
     Self.Internal_CreateVariablIfDontExists(FIELD_FONT_SIZE, 'Tamanho da fonte', '12');
 
+    Self.Internal_CreateVariablIfDontExists(FIELD_FONT_NAME, 'Nome da fonte', 'Calibri');
+
     Self.Internal_CreateVariablIfDontExists(FORM_EDITOR_RIGHTEDGE, 'Linha de limite do editor de scripts', '120');
 
     Self.Internal_CreateVariablIfDontExists(FORM_UPDATE_TIME, 'Tempo de atualização dos formulários; (em milisegundos)', '15000');
@@ -61,6 +63,8 @@ begin
     Self.Internal_CreateVariablIfDontExists(CONTEXTMENU_TABLE_SHOW, 'Sempre exibir as tabelas no menu de contexto', BOOL_TRUE_STR);
 
     Self.Internal_CreateVariablIfDontExists(FORM_GRID_LIMIT, 'Quantidade de registros por página', '50');
+
+    Self.Internal_CreateVariablIfDontExists(DEBUG_MODE, 'Debug', BOOL_FALSE_STR);
 
     Self.Internal_CreateVariablIfDontExists('Interface.Grid.ShowMiniForm', 'Exibir sempre o resumo dos dados em formulários de grid', BOOL_FALSE_STR);
   finally

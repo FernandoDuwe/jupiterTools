@@ -42,6 +42,7 @@ type
     procedure AddLinkAsScript(prCaption : String; prMacro : TStrings);
     procedure AddActionWithScript(prCaption, prHint : String; prIcon : Integer; prMacro : TStrings);
     procedure JumpLine;
+    procedure SetFormToHighFocus;
   end;
 
 var
@@ -297,6 +298,11 @@ end;
 procedure TFCustomCodeForm.JumpLine;
 begin
   Self.FCurrentLine := Self.FCurrentLine + FORM_MARGIN_TOP;
+end;
+
+procedure TFCustomCodeForm.SetFormToHighFocus;
+begin
+  DrawForm(Self, True);
 end;
 
 end.

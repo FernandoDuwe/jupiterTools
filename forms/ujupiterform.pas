@@ -51,7 +51,6 @@ type
     procedure Internal_OnShortCutClick(Sender : TObject);
   private
     FFormID : String;
-    FHint : String;
     FPercentDivisor : Integer;
 
     FShowSearchBar : Boolean;
@@ -61,6 +60,8 @@ type
 
     procedure Internal_AddShortcutsToMenu;
     procedure Internal_SetSearchBar(prNewValue : Boolean);
+  public
+    FHint : String;
   published
     property ActionGroup    : TJupiterActionGroup  read FActionGroup    write FActionGroup;
     property ShowSearchBar  : Boolean              read FShowSearchBar  write Internal_SetSearchBar default False;

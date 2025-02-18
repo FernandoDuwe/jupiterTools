@@ -347,6 +347,9 @@ begin
   vrScript := Self.NewScript;
   vrQry    := Self.NewWizard.NewQuery;
   try
+    if not Self.Params.VariableById(DEBUG_MODE).AsBool then
+      vrScript.OnExecute := nil;
+
     vrQry.SQL.Add(' SELECT A1.ID, M1.MACRO ');
     vrQry.SQL.Add(' FROM ACTIONS A1 ');
     vrQry.SQL.Add('   INNER JOIN MACROS M1 ON (A1.MACRO_ENABLE = M1.ID) ');
@@ -386,6 +389,9 @@ begin
   vrScript := Self.NewScript;
   vrQry    := Self.NewWizard.NewQuery;
   try
+    if not Self.Params.VariableById(DEBUG_MODE).AsBool then
+      vrScript.OnExecute := nil;
+
     vrQry.SQL.Add(' SELECT A1.ID, M1.MACRO ');
     vrQry.SQL.Add(' FROM ACTIONS A1 ');
     vrQry.SQL.Add('   INNER JOIN MACROS M1 ON (A1.MACRO_VISIBLE = M1.ID) ');

@@ -50,6 +50,12 @@ begin
     if not vrWizard.TableExists('ANOTACOES') then
       vrWizard.ExecuteScript(CreateStringList('CREATE TABLE ANOTACOES ( ID INTEGER PRIMARY KEY, TITULO VARCHAR(200), DESCRICAO BLOB)'));
 
+    if not vrWizard.TableExists('LAYOUT') then
+      vrWizard.ExecuteScript(CreateStringList('CREATE TABLE LAYOUT ( ID INTEGER PRIMARY KEY, TITULO VARCHAR(200))'));
+
+    if not vrWizard.TableExists('LAYOUTCAMPO') then
+      vrWizard.ExecuteScript(CreateStringList('CREATE TABLE LAYOUTCAMPO ( ID INTEGER PRIMARY KEY, CAMPO VARCHAR(50), TIPO VARCHAR(10), TAMANHO INT, LAYOUT INT NOT NULL, FOREIGN KEY (LAYOUT) REFERENCES LAYOUT (ID)) '));
+
     if Self.Internal_CreateMacroIfDontExists('main.tasks.click', 'Clique do item de menu Tarefas', CreateStringListToMacro('OpenGridFromTable(''TAREFAS'');')) then
       Self.Internal_CreateRouteIfDontExists('Tarefas', '/main/tasks/', vrWizard.GetLastID('MACROS'), ICON_TASKS, 1000);
 
@@ -78,18 +84,30 @@ begin
     //    Self.Internal_CreateRouteIfDontExists('Checklists', '/main/tasks/current/checklists/', vrWizard.GetLastID('MACROS'), ICON_CHECK, 2000);
 
       if Self.Internal_CreateMacroIfDontExists('main.tasks.current.times.click', 'Clique do item de menu Tarefa: Tempos', CreateStringListToMacro('  if GlobalParamExists(''Tools.Tasks.Current.ID'') then ' + #13#10 +
-         '    OpenGridFromTableWithWhere(''TEMPOS'', '' TAREFA = '' + GetGlobalParam(''Tools.Tasks.Current.ID''), '''');')) then
+         '    OpenGridFromTableWithWhere(''TEMPOS'', '' TAREFA = '' + GetGlobalParam(''Tools.Tasks.Current.ID'') + '' AND COALESCE(MARCADO, FALSE) = TRUE '', '''');')) then
         Self.Internal_CreateRouteIfDontExists('Tempos', '/main/tasks/current/times/', vrWizard.GetLastID('MACROS'), ICON_TIMEFILE, 3000);
     end;
 
     Self.Internal_CreateMacroIfDontExists('utils.tasks.import', 'Utils: Importar tarefas', Self.Internal_CreateImportTaskMacro);
 
     Self.Internal_CreateMacroIfDontExists('TAREFAS.MarcarComoAtualScript.OnClick', 'Marcar tarefa como atual', CreateStringListToMacro('   SetGlobalParam(''Tools.Tasks.Current.ID'', GetParam(SCRIPTID, ''ID''));' + #13#10 +
-                                                                                                                                       '   DBRunScript('' UPDATE VARIABLES SET VALUE = "'' + GetParam(SCRIPTID, ''ID'') + ''" WHERE NAME = "Tools.Tasks.Current.ID" ''); ' + #13#10 + #13#10 +
-                                                                                                                                       '   SetGlobalParam(''Tools.Tasks.Current.Path'', GetGlobalParam(''Tools.Tasks.Path'') + ''/'' + GetParam(SCRIPTID, ''CLIENTE'') + ''/'' + GetParam(SCRIPTID, ''NUMERO'') + ''/'');' + #13#10 +
-                                                                                                                                       '   DBRunScript('' UPDATE VARIABLES SET VALUE = "'' + GetGlobalParam(''Tools.Tasks.Path'') + ''/'' + GetParam(SCRIPTID, ''CLIENTE'') + ''/'' + GetParam(SCRIPTID, ''NUMERO'') + ''/'' + ''" WHERE NAME = "Tools.Tasks.Current.Path" ''); '));
+                                                                                                                                       #13#10 +
+                                                                                                                                       '   SetGlobalParam(''Tools.Tasks.Current.Path'', GetGlobalParam(''Tools.Tasks.Path'') + ''/'' + GetParam(SCRIPTID, ''CLIENTE'') + ''/'' + GetParam(SCRIPTID, ''NUMERO'') + ''/'');'));
 
-    Self.Internal_CreateActionIfDontExists('TAREFAS.MarcarComoAtualScript', 'Marcar como atual', 'TAREFAS', ICON_EDIT, 100, Self.Internal_GetMacroById('TAREFAS.MarcarComoAtualScript.OnClick'), Self.Internal_GetMacroById(EVENT_RECORD_ONENABLE), Self.Internal_GetMacroById(EVENT_RECORD_ONVISIBLE));
+   Self.Internal_CreateMacroIfDontExists('LAYOUT.CamposScript.OnClick', 'Clique do botão Campos', CreateStringListToMacro('  OpenGridFromTableWithWhere(''LAYOUTCAMPO'', '' LAYOUT = '' + GetParam(SCRIPTID, "ID"), ''''); '));
+
+    Self.Internal_CreateActionIfDontExists('TAREFAS.MarcarComoAtualScript',
+                                           'Marcar como atual', 'TAREFAS', ICON_EDIT, 100,
+                                           Self.Internal_GetMacroById('TAREFAS.MarcarComoAtualScript.OnClick'), Self.Internal_GetMacroById(EVENT_RECORD_ONENABLE), Self.Internal_GetMacroById(EVENT_RECORD_ONVISIBLE));
+
+    Self.Internal_CreateActionIfDontExists('LAYOUT.CamposScript',
+                                           'Campos', 'LAYOUT', ICON_SHEETFILE, 100,
+                                           Self.Internal_GetMacroById('LAYOUT.CamposScript.OnClick'), Self.Internal_GetMacroById(EVENT_RECORD_ONENABLE), Self.Internal_GetMacroById(EVENT_RECORD_ONVISIBLE));
+
+    if Self.Internal_CreateMacroIfDontExists('main.records.layouts.click', 'Clique do botão Layouts', CreateStringListToMacro('  OpenGridFromTable(''LAYOUT''); ')) then
+      Self.Internal_CreateRouteIfDontExists('Layouts', '/main/records/layouts/', vrWizard.GetLastID('MACROS'), ICON_SHEETFILE, 100);
+
+
   finally
     FreeAndNil(vrWizard);
   end;

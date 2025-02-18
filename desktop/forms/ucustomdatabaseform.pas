@@ -181,6 +181,7 @@ var
   vrReference : TJupiterComponentReference;
   vrWizard : TJupiterDatabaseWizard;
   vrAction : TJupiterComponentReference;
+  vrField : TField;
 begin
   vrCurrentLine := FORM_MARGIN_TOP;
 
@@ -196,12 +197,16 @@ begin
       if Self.QueryOrigin.Fields[vrVez].FieldName = 'ID' then
         Continue;
 
+      vrField := Self.QueryOrigin.Fields[vrVez];
 
-      vrReference := JupiterComponentsNewLabel(JupiterStringUtilsNormalizeToPresent(Self.QueryOrigin.Fields[vrVez].DisplayName),
-                                               TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody);
+      if not (Self.QueryOrigin.Fields[vrVez] is TBooleanField) then
+      begin
+        vrReference := JupiterComponentsNewLabel(JupiterStringUtilsNormalizeToPresent(Self.QueryOrigin.Fields[vrVez].DisplayName),
+                                                 TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody);
 
-      // Pulando linha
-      vrCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM;
+        // Pulando linha
+        vrCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM;
+      end;
 
       if vrWizard.IsForeignKeyField(Self.TableName, Self.QueryOrigin.Fields[vrVez].FieldName) then
       begin
@@ -227,15 +232,18 @@ begin
           if Self.QueryOrigin.Fields[vrVez] is TBlobField then
             vrReference := JupiterComponentsNewDBMemo(Self.QueryOrigin.Fields[vrVez], InternalDataSource, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody)
           else
-          begin
-            vrReference := JupiterComponentsNewDBEdit(Self.QueryOrigin.Fields[vrVez], InternalDataSource, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody);
+            if Self.QueryOrigin.Fields[vrVez] is TBooleanField then
+              vrReference := JupiterComponentsNewDBCheckBox(Self.QueryOrigin.Fields[vrVez], InternalDataSource, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody)
+            else
+            begin
+              vrReference := JupiterComponentsNewDBEdit(Self.QueryOrigin.Fields[vrVez], InternalDataSource, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody);
 
-            vrAction := JupiterComponentsAddAction(vrReference, ICON_COPY, sbBody);
-            TSpeedButton(vrAction.Component).Tag := vrVez;
-            TSpeedButton(vrAction.Component).OnClick := @Internal_OnCopyClick;
-            TSpeedButton(vrAction.Component).Hint := 'Clique aqui para copiar o conteúdo do campo';
-            TSpeedButton(vrAction.Component).ShowHint := True;
-          end;
+              vrAction := JupiterComponentsAddAction(vrReference, ICON_COPY, sbBody);
+              TSpeedButton(vrAction.Component).Tag := vrVez;
+              TSpeedButton(vrAction.Component).OnClick := @Internal_OnCopyClick;
+              TSpeedButton(vrAction.Component).Hint := 'Clique aqui para copiar o conteúdo do campo';
+              TSpeedButton(vrAction.Component).ShowHint := True;
+            end;
 
       // Pulando linha
           vrCurrentLine := vrReference.Bottom + FORM_MARGIN_TOP + FORM_MARGIN_BOTTOM;
