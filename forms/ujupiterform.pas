@@ -218,7 +218,7 @@ begin
   if Self.Showing then
     Self.UpdateForm();
 
-  tmrAutoUpdater.Enabled := True;
+  tmrAutoUpdater.Enabled := not Application.Terminated;
 end;
 
 procedure TFJupiterForm.Internal_SetSearchBar(prNewValue: Boolean);

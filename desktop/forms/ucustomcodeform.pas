@@ -34,6 +34,7 @@ type
     property References : TJupiterObjectList read FReferences write FReferences;
   public
     procedure AddLabel(prLabelCaption : String);
+    procedure AddLabelBold(prLabelCaption : String);
     procedure AddEdit(prVariableId, prInitialValue : String);
     procedure AddCombBox(prDataProviderID, prColumn, prVariableID : String);
     procedure AddCheckBox(prVariableId, prText : String; prValue : Boolean);
@@ -161,6 +162,19 @@ begin
   Self.FCurrentLine := Self.FCurrentLine + FORM_MARGIN_TOP;
 
   vrReference := JupiterComponentsNewLabel(prLabelCaption, TJupiterPosition.Create(Self.FCurrentLine, FORM_MARGIN_LEFT), sbBody);
+
+  Self.FCurrentLine := vrReference.Bottom;
+end;
+
+procedure TFCustomCodeForm.AddLabelBold(prLabelCaption: String);
+var
+  vrReference : TJupiterComponentReference;
+begin
+  Self.FCurrentLine := Self.FCurrentLine + FORM_MARGIN_TOP;
+
+  vrReference := JupiterComponentsNewLabel(prLabelCaption, TJupiterPosition.Create(Self.FCurrentLine, FORM_MARGIN_LEFT), sbBody);
+
+  TLabel(vrReference).Font.Style := [fsBold];
 
   Self.FCurrentLine := vrReference.Bottom;
 end;

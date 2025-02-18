@@ -133,7 +133,12 @@ begin
         if Assigned(TLabel(prComponent.Components[vrVez]).OnClick) then
           TLabel(prComponent.Components[vrVez]).Font.Color := clAqua
         else
-          TLabel(prComponent.Components[vrVez]).Font.Color := clWhite;
+        begin
+          if TLabel(prComponent.Components[vrVez]).Font.Style = [fsBold] then
+            TLabel(prComponent.Components[vrVez]).Font.Color := clYellow
+          else
+            TLabel(prComponent.Components[vrVez]).Font.Color := clWhite;
+        end;
       end;
     end;
 

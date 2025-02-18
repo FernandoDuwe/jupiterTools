@@ -1,6 +1,6 @@
 inherited FScriptEditorForm: TFScriptEditorForm
-  Left = 805
-  Top = 282
+  Left = 275
+  Top = 796
   Caption = 'Editor de Script'
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -631,7 +631,7 @@ inherited FScriptEditorForm: TFScriptEditorForm
     Top = 72
   end
   object SynCompletion1: TSynCompletion[10]
-    Position = -1
+    Position = 0
     LinesInWindow = 10
     SelectedColor = clHighlight
     CaseSensitive = False
