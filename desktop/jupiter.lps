@@ -105,11 +105,11 @@
         <Filename Value="../commons/jupiterapp.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterApp"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="4"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="16"/>
         <CursorPos X="37" Y="16"/>
         <UsageCount Value="205"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../commons/jupiterdatabasewizard.pas"/>
@@ -132,10 +132,12 @@
       <Unit>
         <Filename Value="../commons/jupiterformutils.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="103"/>
-        <CursorPos X="20" Y="106"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="244"/>
+        <CursorPos X="89" Y="273"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../commons/jupitermainmenugenerator.pas"/>
@@ -269,10 +271,11 @@
       <Unit>
         <Filename Value="commons/jupiterformcomponenttils.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="109"/>
-        <CursorPos X="80" Y="112"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="74"/>
+        <CursorPos X="37" Y="74"/>
         <UsageCount Value="220"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../commons/jupiterstringutils.pas"/>
@@ -337,10 +340,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uScriptEditorForm"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="77"/>
-        <CursorPos Y="89"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="65"/>
+        <CursorPos X="39" Y="107"/>
         <UsageCount Value="206"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../scripts/ujupiterenviromentscript.pas"/>
@@ -465,10 +470,11 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uCustomCodeForm"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="258"/>
-        <CursorPos X="32" Y="279"/>
+        <TopLine Value="260"/>
+        <CursorPos X="88" Y="279"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="scripts/ujupiterformdesktopappscript.pas"/>
@@ -556,10 +562,11 @@
       <Unit>
         <Filename Value="../commons/jupiterdirectorydataprovider.pas"/>
         <UnitName Value="JupiterDirectoryDataProvider"/>
-        <EditorIndex Value="-1"/>
+        <EditorIndex Value="2"/>
         <TopLine Value="21"/>
-        <CursorPos X="57" Y="33"/>
+        <CursorPos X="48" Y="45"/>
         <UsageCount Value="10"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="/usr/share/lazarus/3.4.0/lcl/include/application.inc"/>
@@ -916,10 +923,62 @@
         <UsageCount Value="9"/>
       </Unit>
     </Units>
-    <JumpHistory>
+    <JumpHistory HistoryIndex="13">
       <Position>
-        <Filename Value="../commons/jupiterapp.pas"/>
-        <Caret Line="387" Column="29" TopLine="381"/>
+        <Filename Value="forms/ucustomcodeform.pas"/>
+        <Caret Line="282" Column="38" TopLine="258"/>
+      </Position>
+      <Position>
+        <Filename Value="forms/ucustomcodeform.pas"/>
+        <Caret Line="36" Column="15" TopLine="18"/>
+      </Position>
+      <Position>
+        <Filename Value="forms/ucustomcodeform.pas"/>
+        <Caret Line="165" Column="3" TopLine="156"/>
+      </Position>
+      <Position>
+        <Filename Value="commons/jupiterformcomponenttils.pas"/>
+        <Caret Line="16" Column="12"/>
+      </Position>
+      <Position>
+        <Filename Value="forms/ucustomcodeform.pas"/>
+        <Caret Line="165" Column="3" TopLine="156"/>
+      </Position>
+      <Position>
+        <Filename Value="forms/ucustomcodeform.pas"/>
+        <Caret Line="41" Column="29"/>
+      </Position>
+      <Position>
+        <Filename Value="forms/ucustomcodeform.pas"/>
+        <Caret Line="307" Column="23" TopLine="260"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterformutils.pas"/>
+        <Caret Line="16" Column="13"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterformutils.pas"/>
+        <Caret Line="6" Column="144"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterformutils.pas"/>
+        <Caret Line="16" Column="22"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterformutils.pas"/>
+        <Caret Line="104" Column="20" TopLine="62"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterformutils.pas"/>
+        <Caret Line="284" Column="61" TopLine="243"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterformutils.pas"/>
+        <Caret Line="292" Column="61" TopLine="251"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterformutils.pas"/>
+        <Caret Line="300" Column="61" TopLine="259"/>
       </Position>
     </JumpHistory>
     <RunParams>
