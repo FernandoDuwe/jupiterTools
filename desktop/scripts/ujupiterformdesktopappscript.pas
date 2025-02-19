@@ -23,6 +23,7 @@ type
   procedure JupiterFormDesktopAppScriptSetCaption(prFormID, prCaption : String);
   procedure JupiterFormDesktopAppScriptSetHint(prFormID, prHint : String);
   procedure JupiterFormDesktopAppScriptAddLabel(prFormID, prCaption : String);
+  procedure JupiterFormDesktopAppScriptAddLabelResultFromMacro(prFormID, prMacroId : String);
   procedure JupiterFormDesktopAppScriptAddLabelBold(prFormID, prCaption : String);
   procedure JupiterFormDesktopAppScriptAddLink(prFormID, prCaption, prMacroId : String);
   procedure JupiterFormDesktopAppScriptAddLinkWithScript(prFormID, prCaption : String; prMacro : TStrings);
@@ -32,6 +33,9 @@ type
   procedure JupiterFormDesktopAppScriptAddAction(prFormID, prCaption, prHint : String; prIcon : Integer; prMacroID : String);
   procedure JupiterFormDesktopAppScriptAddActionWithScript(prFormID, prCaption, prHint : String; prIcon : Integer; prMacro : TStrings);
   procedure JupiterFormDesktopAppScriptJumpLine(prFormID : String);
+  procedure JupiterFormDesktopAppScriptSetCurrentMargin(prFormID : String; prMargin : Integer);
+  procedure JupiterFormDesktopAppScriptSetCurrentLine(prFormID : String; prLine : Integer);
+  procedure JupiterFormDesktopAppScriptSetCustomInterval(prFormID : String; prInterval : Integer);
   procedure JupiterFormDesktopAppScriptSetFormToHighFocus(prFormID : String);
 
 implementation
@@ -79,6 +83,21 @@ begin
     Exit;
 
   TFCustomCodeForm(vrForm).AddLabel(prCaption);
+end;
+
+procedure JupiterFormDesktopAppScriptAddLabelResultFromMacro(prFormID, prMacroId: String);
+var
+  vrForm : TForm;
+begin
+  vrForm := TJupiterDesktopApp(vrJupiterApp).GetFormById(prFormID);
+
+  if not Assigned(vrForm) then
+    Exit;
+
+  if not (vrForm is TFCustomCodeForm) then
+    Exit;
+
+  TFCustomCodeForm(vrForm).AddLabelResultFromScript(prMacroId);
 end;
 
 procedure JupiterFormDesktopAppScriptAddLabelBold(prFormID, prCaption: String);
@@ -216,6 +235,54 @@ begin
   TFCustomCodeForm(vrForm).JumpLine();
 end;
 
+procedure JupiterFormDesktopAppScriptSetCurrentMargin(prFormID: String;
+  prMargin: Integer);
+var
+  vrForm : TForm;
+begin
+  vrForm := TJupiterDesktopApp(vrJupiterApp).GetFormById(prFormID);
+
+  if not Assigned(vrForm) then
+    Exit;
+
+  if not (vrForm is TFCustomCodeForm) then
+    Exit;
+
+  TFCustomCodeForm(vrForm).SetCurrentMargin(prMargin);
+end;
+
+procedure JupiterFormDesktopAppScriptSetCurrentLine(prFormID: String;
+  prLine: Integer);
+var
+  vrForm : TForm;
+begin
+  vrForm := TJupiterDesktopApp(vrJupiterApp).GetFormById(prFormID);
+
+  if not Assigned(vrForm) then
+    Exit;
+
+  if not (vrForm is TFCustomCodeForm) then
+    Exit;
+
+  TFCustomCodeForm(vrForm).SetCurrentLine(prLine);
+end;
+
+procedure JupiterFormDesktopAppScriptSetCustomInterval(prFormID: String;
+  prInterval: Integer);
+var
+  vrForm : TForm;
+begin
+  vrForm := TJupiterDesktopApp(vrJupiterApp).GetFormById(prFormID);
+
+  if not Assigned(vrForm) then
+    Exit;
+
+  if not (vrForm is TFCustomCodeForm) then
+    Exit;
+
+  TFCustomCodeForm(vrForm).SetCustomInterval(prInterval);
+end;
+
 procedure JupiterFormDesktopAppScriptSetFormToHighFocus(prFormID: String);
 var
   vrForm : TForm;
@@ -245,11 +312,15 @@ begin
   prSender.AddFunction(@JupiterFormDesktopAppScriptSetCaption, 'procedure Form_SetCaption(prFormID, prCaption : String);');
   prSender.AddFunction(@JupiterFormDesktopAppScriptSetHint, 'procedure Form_SetHint(prFormID, prHint : String);');
   prSender.AddFunction(@JupiterFormDesktopAppScriptJumpLine, 'procedure Form_JumpLine(prFormID : String);');
+  prSender.AddFunction(@JupiterFormDesktopAppScriptSetCurrentLine, 'procedure Form_SetCurrentLine(prFormID : String; prLine : Integer);');
+  prSender.AddFunction(@JupiterFormDesktopAppScriptSetCurrentMargin, 'procedure Form_SetCurrentMargin(prFormID : String; prMargin : Integer);');
+  prSender.AddFunction(@JupiterFormDesktopAppScriptSetCustomInterval, 'procedure Form_SetCustomInterval(prFormID : String; prInterval : Integer);');
   prSender.AddFunction(@JupiterFormDesktopAppScriptSetFormToHighFocus, 'procedure Form_SetFormToHighFocus(prFormID : String);');
 
   prSender.AddFunction(@JupiterFormDesktopAppScriptAddLink, 'procedure Form_AddLink(prFormID, prCaption, prMacroId: String);');
   prSender.AddFunction(@JupiterFormDesktopAppScriptAddLinkWithScript, 'procedure Form_AddLinkWithScript(prFormID, prCaption : String; prMacro : TStrings);');
   prSender.AddFunction(@JupiterFormDesktopAppScriptAddLabel, 'procedure Form_AddLabel(prFormID, prCaption : String);');
+  prSender.AddFunction(@JupiterFormDesktopAppScriptAddLabelResultFromMacro, 'procedure Form_AddLabelResultFromMacro(prFormID, prMacroId : String);');
   prSender.AddFunction(@JupiterFormDesktopAppScriptAddLabelBold, 'procedure Form_AddLabelBold(prFormID, prCaption : String);');
   prSender.AddFunction(@JupiterFormDesktopAppScriptAddEdit, 'procedure Form_AddEdit(prFormID, prVariableId, prInitialValue : String);');
   prSender.AddFunction(@JupiterFormDesktopAppScriptAddCombo, 'procedure Form_AddCombo(prFormID, prVariableId, prDataProvider, prColumn: String);');
@@ -265,11 +336,15 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_SetCaption(prFormID, prCaption : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_SetHint(prFormID, prHint : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_JumpLine(prFormID : String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_SetCurrentMargin(prFormID : String; prMargin : Integer);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_SetCurrentLine(prFormID : String; prLine : Integer);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_SetCustomInterval(prFormID : String; prInterval : Integer);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_SetFormToHighFocus(prFormID : String);'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddLink(prFormID, prCaption, prMacroId: String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddLinkWithScript(prFormID, prCaption : String; prMacro : TStrings);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddLabel(prFormID, prCaption : String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddLabelResultFromMacro(prFormID, prMacroId : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddLabelBold(prFormID, prCaption : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddEdit(prFormID, prVariableId, prInitialValue : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddCombo(prFormID, prVariableId, prDataProvider, prColumn : String);'));

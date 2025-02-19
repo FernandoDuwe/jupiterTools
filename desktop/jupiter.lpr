@@ -26,7 +26,7 @@ uses
   uJupiterRunnableScript, jupiterTools, uJupiterDataProviderScript,
   uSystemMonitor, uCustomCodeForm, uJupiterFormDesktopAppScript, uFileExplorer,
   jupitersqldataprovider, jupiterthread, uContextMenu, uSQLEditor, uCheckList,
-  uTextEditor;
+  uTextEditor, uJupiterDateUtilsScript;
 
 {$R *.res}
 
@@ -46,6 +46,8 @@ begin
   vrJupiterApp.AddModule(TJupiterGenerator.Create);
   vrJupiterApp.AddModule(TJupiterTools.Create);
   vrJupiterApp.AddModule(TJupiterUtils.Create);
+
+  vrJupiterApp.LoadOtherVariables;
 
   with TJupiterDesktopApp(vrJupiterApp) do
   begin

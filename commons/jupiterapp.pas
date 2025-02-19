@@ -8,8 +8,8 @@ uses
   Classes, Controls, JupiterObject, JupiterModule, JupiterEnviroment,
   JupiterVariable, jupiterDatabaseWizard, jupiterScript, jupiterStringUtils,
   JupiterConsts, uJupiterEnviromentScript, uJupiterStringUtilsScript,
-  uJupiterRunnableScript, uJupiterDataProviderScript, SQLite3Conn,
-  JupiterDataProvider, jupiterthread;
+  uJupiterRunnableScript, uJupiterDataProviderScript, uJupiterDateUtilsScript,
+  SQLite3Conn, JupiterDataProvider, jupiterthread;
 
 type
 
@@ -29,6 +29,7 @@ type
     FThreadList       : TJupiterThreadList;
 
     procedure Internal_OnExecute(prScript, prMessages, prRunMessages : TStrings; prExecuted : Boolean);
+    procedure Internal_SetVariableValue(prID, prNewValue : String);
   protected
     procedure Internal_Prepare; virtual;
     procedure Internal_AddScriptLibraries(var prScript : TJupiterScript); virtual;
@@ -50,6 +51,7 @@ type
 
     procedure AddModule(prModule : TJupiterModule);
     procedure AddMessage(prTitle, prMessage, prOrigin : String);
+    procedure LoadOtherVariables;
     procedure Prepare;
 
     function GetVersion : String;
@@ -68,6 +70,7 @@ type
     procedure RunAction(prId : Integer; prParams : TJupiterVariableList);
     function RunAcitonEnabled(prId : Integer; prParams : TJupiterVariableList) : Boolean;
     function RunAcitonVisible(prId : Integer; prParams : TJupiterVariableList) : Boolean;
+    function RunMacroAsResult(prMacroId : String; prParams : TJupiterVariableList) : String;
 
     function GetScriptById(prScriptID : String) : TJupiterScript;
     procedure DeleteScriptById(prScriptID : String);
@@ -94,6 +97,7 @@ begin
   prScript.LibraryList.Add(TJupiterEnviromentcript.Create);
   prScript.LibraryList.Add(TJupiterRunnableScript.Create);
   prScript.LibraryList.Add(TJupiterStringUtilsScript.Create);
+  prScript.LibraryList.Add(TJupiterDateUtilsScript.Create);
   prScript.LibraryList.Add(TuJupiterDatabaseScript.Create);
   prScript.LibraryList.Add(TJupiterDataProviderScript.Create);
 end;
@@ -108,6 +112,36 @@ begin
     Fields.AddVariable('messages', prMessages.Text);
     Fields.AddVariable('runMessages', prRunMessages.Text);
     Fields.AddVariable('executed', JupiterStringUtilsBoolToStr(prExecuted));
+  end;
+end;
+
+procedure TJupiterApp.Internal_SetVariableValue(prID, prNewValue: String);
+var
+  vrQry    : TSQLQuery;
+  vrWizard : TJupiterDatabaseWizard;
+begin
+  vrWizard := Self.NewWizard;
+  vrQry    := vrWizard.NewQuery;
+  try
+    vrQry.SQL.Add(' UPDATE VARIABLES ');
+    vrQry.SQL.Add(' SET VALUE = :PRVALUE ');
+    vrQry.SQL.Add(' WHERE NAME = :PRNAME ');
+    vrQry.ParamByName('PRNAME').AsString  := prID;
+    vrQry.ParamByName('PRVALUE').AsString := prNewValue;
+
+    vrWizard.StartTransaction;
+
+    try
+      vrQry.ExecSQL;
+
+      vrWizard.Commit;
+    except
+      vrWizard.Rollback;
+      raise;
+    end;
+  finally
+    FreeAndNil(vrQry);
+    FreeAndNil(vrWizard);
   end;
 end;
 
@@ -151,6 +185,37 @@ begin
     Fields.AddVariable('message', prMessage);
     Fields.AddVariable('origin', prOrigin);
     Fields.AddVariable('dateTime', FormatDateTime('dd/mm/yyyy hh:nn:ss', Now));
+  end;
+end;
+
+procedure TJupiterApp.LoadOtherVariables;
+var
+  vrQry : TSQLQuery;
+begin
+  vrQry := Self.NewWizard.NewQuery;
+  try
+    vrQry.SQL.Add(' SELECT * FROM VARIABLES ');
+    vrQry.Open;
+
+    while not vrQry.EOF do
+    begin
+      if Self.Params.Exists(vrQry.FieldByName('NAME').AsString) then
+      begin
+        vrQry.Next;
+        Continue;
+      end;
+
+      Self.Params.AddVariable(vrQry.FieldByName('NAME').AsString,
+                              vrQry.FieldByName('VALUE').AsString,
+                              vrQry.FieldByName('DESCRIPTION').AsString);
+
+      Self.Params.VariableById(vrQry.FieldByName('NAME').AsString).OnChangeValue := @Internal_SetVariableValue;
+
+      vrQry.Next;
+    end;
+  finally
+    vrQry.Close;
+    FreeAndNil(vrQry);
   end;
 end;
 
@@ -413,6 +478,42 @@ begin
 
     if vrScript.Params.Exists('Result') then
       Result := vrScript.Params.VariableById('Result').AsBool;
+  finally
+    FreeAndNil(vrScript);
+  end;
+end;
+
+function TJupiterApp.RunMacroAsResult(prMacroId : String; prParams: TJupiterVariableList): String;
+var
+  vrScript : TJupiterScript;
+  vrQry    : TSQLQuery;
+begin
+  Result := EmptyStr;
+
+  vrScript := Self.NewScript;
+  vrQry    := Self.NewWizard.NewQuery;
+  try
+    if not Self.Params.VariableById(DEBUG_MODE).AsBool then
+      vrScript.OnExecute := nil;
+
+    vrQry.SQL.Add(' SELECT ID, MACRO FROM MACROS WHERE MACROID = :PRID ');
+    vrQry.ParamByName('PRID').AsString := prMacroId;
+    vrQry.Open;
+
+    if vrQry.EOF then
+      Exit;
+
+    if vrQry.Fields[1].IsNull then
+      Exit;
+
+    vrScript.Script.AddStrings(JupiterStringUtilsStringToStringList(vrQry.FieldByName('MACRO').AsString));
+    vrScript.Params.CopyValues(prParams);
+    vrScript.Execute;
+
+    Result := EmptyStr;
+
+    if vrScript.Params.Exists('Result') then
+      Result := vrScript.Params.VariableById('Result').Value;
   finally
     FreeAndNil(vrScript);
   end;

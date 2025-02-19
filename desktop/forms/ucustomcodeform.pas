@@ -18,7 +18,9 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
   private
+    FCustomInterval : Integer;
     FCurrentLine : Integer;
+    FCurrentMargin : Integer;
     FReferences : TJupiterObjectList;
 
     procedure Internal_OnCheckBoxChange(Sender: TObject);
@@ -30,10 +32,13 @@ type
     function Internal_OnRequestData : TJupiterVariableList; override;
 
     procedure Internal_PrepareForm; override;
+
+    procedure Internal_UpdateComponents; override;
   published
     property References : TJupiterObjectList read FReferences write FReferences;
   public
     procedure AddLabel(prLabelCaption : String);
+    procedure AddLabelResultFromScript(prMacroID : String);
     procedure AddLabelBold(prLabelCaption : String);
     procedure AddEdit(prVariableId, prInitialValue : String);
     procedure AddCombBox(prDataProviderID, prColumn, prVariableID : String);
@@ -43,6 +48,9 @@ type
     procedure AddLinkAsScript(prCaption : String; prMacro : TStrings);
     procedure AddActionWithScript(prCaption, prHint : String; prIcon : Integer; prMacro : TStrings);
     procedure JumpLine;
+    procedure SetCurrentMargin(prMargin : Integer);
+    procedure SetCurrentLine(prLine : Integer);
+    procedure SetCustomInterval(prInterval : Integer);
     procedure SetFormToHighFocus;
   end;
 
@@ -60,12 +68,15 @@ uses Buttons, JupiterEdit, Clipbrd;
 procedure TFCustomCodeForm.FormCreate(Sender: TObject);
 begin
   Self.FCurrentLine := 0;
+  Self.FCustomInterval := vrJupiterApp.Params.VariableById(FORM_UPDATE_TIME).AsInteger;
 
   Self.FReferences := TJupiterObjectList.Create;
 
   if Assigned(vrJupiterApp) then
     if Assigned(TJupiterDesktopApp(vrJupiterApp).FormList) then
       TJupiterDesktopApp(vrJupiterApp).FormList.AddSimpleObject(Self);
+
+  Self.FCurrentMargin := FORM_MARGIN_LEFT;
 
   inherited;
 end;
@@ -153,6 +164,21 @@ end;
 procedure TFCustomCodeForm.Internal_PrepareForm;
 begin
   inherited Internal_PrepareForm;
+
+  tmrAutoUpdater.Interval := Self.FCustomInterval;
+end;
+
+procedure TFCustomCodeForm.Internal_UpdateComponents;
+var
+  vrVez : Integer;
+begin
+  inherited Internal_UpdateComponents;
+
+  for vrVez := 0 to Self.FReferences.Count - 1 do
+  begin
+    if TJupiterComponentReference(Self.FReferences.GetAtIndex(vrVez)).Component is TLabel then
+      TLabel(TJupiterComponentReference(Self.FReferences.GetAtIndex(vrVez)).Component).Caption := vrJupiterApp.RunMacroAsResult(TJupiterComponentReference(Self.FReferences.GetAtIndex(vrVez)).MacroID, Self.Params);
+  end;
 end;
 
 procedure TFCustomCodeForm.AddLabel(prLabelCaption: String);
@@ -161,9 +187,24 @@ var
 begin
   Self.FCurrentLine := Self.FCurrentLine + FORM_MARGIN_TOP;
 
-  vrReference := JupiterComponentsNewLabel(prLabelCaption, TJupiterPosition.Create(Self.FCurrentLine, FORM_MARGIN_LEFT), sbBody);
+  vrReference := JupiterComponentsNewLabel(prLabelCaption, TJupiterPosition.Create(Self.FCurrentLine, Self.FCurrentMargin), sbBody);
 
   Self.FCurrentLine := vrReference.Bottom;
+end;
+
+procedure TFCustomCodeForm.AddLabelResultFromScript(prMacroID: String);
+var
+  vrReference : TJupiterComponentReference;
+begin
+  Self.FCurrentLine := Self.FCurrentLine + FORM_MARGIN_TOP;
+
+  vrReference := JupiterComponentsNewLabel('', TJupiterPosition.Create(Self.FCurrentLine, Self.FCurrentMargin), sbBody);
+
+  vrReference.MacroID := prMacroID;
+
+  Self.FCurrentLine := vrReference.Bottom;
+
+  Self.FReferences.Add(vrReference);
 end;
 
 procedure TFCustomCodeForm.AddLabelBold(prLabelCaption: String);
@@ -172,9 +213,9 @@ var
 begin
   Self.FCurrentLine := Self.FCurrentLine + FORM_MARGIN_TOP;
 
-  vrReference := JupiterComponentsNewLabel(prLabelCaption, TJupiterPosition.Create(Self.FCurrentLine, FORM_MARGIN_LEFT), sbBody);
+  vrReference := JupiterComponentsNewLabel(prLabelCaption, TJupiterPosition.Create(Self.FCurrentLine, Self.FCurrentMargin), sbBody);
 
-  TLabel(vrReference).Font.Style := [fsBold];
+  TLabel(vrReference.Component).Font.Style := [fsBold];
 
   Self.FCurrentLine := vrReference.Bottom;
 end;
@@ -187,7 +228,7 @@ begin
   try
     Self.FCurrentLine := Self.FCurrentLine + FORM_MARGIN_TOP;
 
-    vrReference := JupiterComponentsNewEdit(EmptyStr, TJupiterPosition.Create(Self.FCurrentLine, FORM_MARGIN_LEFT), sbBody);
+    vrReference := JupiterComponentsNewEdit(EmptyStr, TJupiterPosition.Create(Self.FCurrentLine, Self.FCurrentMargin), sbBody);
 
     Self.FCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM;
   finally
@@ -215,7 +256,7 @@ begin
   try
     Self.FCurrentLine := Self.FCurrentLine + FORM_MARGIN_TOP;
 
-    vrReference := JupiterComponentsNewComboBox(prDataProviderID, prColumn, TJupiterPosition.Create(Self.FCurrentLine, FORM_MARGIN_LEFT), sbBody);
+    vrReference := JupiterComponentsNewComboBox(prDataProviderID, prColumn, TJupiterPosition.Create(Self.FCurrentLine, Self.FCurrentMargin), sbBody);
 
     Self.FCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM;
   finally
@@ -236,7 +277,7 @@ begin
   try
     Self.FCurrentLine := Self.FCurrentLine + FORM_MARGIN_TOP;
 
-    vrReference := JupiterComponentsNewCheckBox(prText, prValue, TJupiterPosition.Create(Self.FCurrentLine, FORM_MARGIN_LEFT), sbBody, @Internal_OnCheckBoxChange);
+    vrReference := JupiterComponentsNewCheckBox(prText, prValue, TJupiterPosition.Create(Self.FCurrentLine, Self.FCurrentMargin), sbBody, @Internal_OnCheckBoxChange);
 
     Self.FCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM;
   finally
@@ -266,7 +307,7 @@ begin
   try
     Self.FCurrentLine := Self.FCurrentLine + FORM_MARGIN_TOP;
 
-    vrReference := JupiterComponentsNewLink(prCaption, TJupiterPosition.Create(Self.FCurrentLine, FORM_MARGIN_LEFT), sbBody);
+    vrReference := JupiterComponentsNewLink(prCaption, TJupiterPosition.Create(Self.FCurrentLine, Self.FCurrentMargin), sbBody);
 
     Self.FCurrentLine := vrReference.Bottom;
   finally
@@ -288,7 +329,7 @@ begin
   try
     Self.FCurrentLine := Self.FCurrentLine + FORM_MARGIN_TOP;
 
-    vrReference := JupiterComponentsNewLink(prCaption, TJupiterPosition.Create(Self.FCurrentLine, FORM_MARGIN_LEFT), sbBody);
+    vrReference := JupiterComponentsNewLink(prCaption, TJupiterPosition.Create(Self.FCurrentLine, Self.FCurrentMargin), sbBody);
 
     Self.FCurrentLine := vrReference.Bottom;
   finally
@@ -312,6 +353,21 @@ end;
 procedure TFCustomCodeForm.JumpLine;
 begin
   Self.FCurrentLine := Self.FCurrentLine + FORM_MARGIN_TOP;
+end;
+
+procedure TFCustomCodeForm.SetCurrentMargin(prMargin: Integer);
+begin
+  Self.FCurrentMargin := prMargin;
+end;
+
+procedure TFCustomCodeForm.SetCurrentLine(prLine: Integer);
+begin
+  Self.FCurrentLine := prLine;
+end;
+
+procedure TFCustomCodeForm.SetCustomInterval(prInterval: Integer);
+begin
+  Self.FCustomInterval := prInterval;
 end;
 
 procedure TFCustomCodeForm.SetFormToHighFocus;
