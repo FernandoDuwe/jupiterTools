@@ -176,6 +176,9 @@ begin
 
   for vrVez := 0 to Self.FReferences.Count - 1 do
   begin
+    if TJupiterComponentReference(Self.FReferences.GetAtIndex(vrVez)).Tag <> 1000 then
+      Continue;
+
     if TJupiterComponentReference(Self.FReferences.GetAtIndex(vrVez)).Component is TLabel then
       TLabel(TJupiterComponentReference(Self.FReferences.GetAtIndex(vrVez)).Component).Caption := vrJupiterApp.RunMacroAsResult(TJupiterComponentReference(Self.FReferences.GetAtIndex(vrVez)).MacroID, Self.Params);
   end;
@@ -201,6 +204,7 @@ begin
   vrReference := JupiterComponentsNewLabel('', TJupiterPosition.Create(Self.FCurrentLine, Self.FCurrentMargin), sbBody);
 
   vrReference.MacroID := prMacroID;
+  vrReference.Tag := 1000;
 
   Self.FCurrentLine := vrReference.Bottom;
 
@@ -231,6 +235,8 @@ begin
     vrReference := JupiterComponentsNewEdit(EmptyStr, TJupiterPosition.Create(Self.FCurrentLine, Self.FCurrentMargin), sbBody);
 
     Self.FCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM;
+
+    vrReference.Tag := 0;
   finally
     Self.References.Add(vrReference);
 
