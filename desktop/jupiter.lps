@@ -19,7 +19,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uJupiterForm"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="5"/>
         <TopLine Value="44"/>
         <CursorPos Y="76"/>
         <UsageCount Value="200"/>
@@ -32,10 +32,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uMain"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="179"/>
-        <CursorPos X="37" Y="206"/>
+        <TopLine Value="180"/>
+        <CursorPos X="47" Y="190"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -53,7 +52,7 @@
         <Filename Value="../commons/jupiterconsts.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterConsts"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="3"/>
         <TopLine Value="121"/>
         <CursorPos X="4" Y="142"/>
         <UsageCount Value="200"/>
@@ -111,7 +110,7 @@
         <Filename Value="../commons/jupiterapp.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterApp"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="4"/>
         <TopLine Value="320"/>
         <CursorPos X="40" Y="321"/>
         <UsageCount Value="205"/>
@@ -477,10 +476,12 @@
         <Filename Value="scripts/ujupiterformdesktopappscript.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uJupiterFormDesktopAppScript"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="367"/>
-        <CursorPos X="63" Y="372"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="361"/>
+        <CursorPos X="129" Y="401"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="forms/ufileexplorer.pas"/>
@@ -928,11 +929,7 @@
         <UsageCount Value="9"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="26">
-      <Position>
-        <Filename Value="../modules/jupiterstandard.pas"/>
-        <Caret Line="187" Column="90" TopLine="147"/>
-      </Position>
+    <JumpHistory HistoryIndex="28">
       <Position>
         <Filename Value="../modules/jupiterstandard.pas"/>
       </Position>
@@ -1035,6 +1032,18 @@
       <Position>
         <Filename Value="../commons/jupiterapp.pas"/>
         <Caret Line="66" Column="32" TopLine="43"/>
+      </Position>
+      <Position>
+        <Filename Value="scripts/ujupiterformdesktopappscript.pas"/>
+        <Caret Line="374" Column="72" TopLine="353"/>
+      </Position>
+      <Position>
+        <Filename Value="scripts/ujupiterformdesktopappscript.pas"/>
+        <Caret Line="29" Column="68"/>
+      </Position>
+      <Position>
+        <Filename Value="scripts/ujupiterformdesktopappscript.pas"/>
+        <Caret Line="106" Column="65" TopLine="66"/>
       </Position>
     </JumpHistory>
     <RunParams>

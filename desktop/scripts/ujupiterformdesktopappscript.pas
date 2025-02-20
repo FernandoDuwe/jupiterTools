@@ -371,6 +371,7 @@ begin
     prSender.AddFunction(@JupiterFormDesktopAppScriptAddLinkBoldWithScript, 'procedure Form_AddLinkBoldWithScript(prFormID, prCaption : String; prMacro : TStrings);');
   prSender.AddFunction(@JupiterFormDesktopAppScriptAddLabel, 'procedure Form_AddLabel(prFormID, prCaption : String);');
   prSender.AddFunction(@JupiterFormDesktopAppScriptAddLabelResultFromMacro, 'procedure Form_AddLabelResultFromMacro(prFormID, prMacroId : String);');
+  prSender.AddFunction(@JupiterFormDesktopAppScriptAddLabelBoldResultFromMacro, 'procedure Form_AddLabelBoldResultFromMacro(prFormID, prMacroId : String);');
   prSender.AddFunction(@JupiterFormDesktopAppScriptAddLabelBold, 'procedure Form_AddLabelBold(prFormID, prCaption : String);');
   prSender.AddFunction(@JupiterFormDesktopAppScriptAddEdit, 'procedure Form_AddEdit(prFormID, prVariableId, prInitialValue : String);');
   prSender.AddFunction(@JupiterFormDesktopAppScriptAddCombo, 'procedure Form_AddCombo(prFormID, prVariableId, prDataProvider, prColumn: String);');
@@ -397,6 +398,7 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddLinkBoldWithScript(prFormID, prCaption : String; prMacro : TStrings);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddLabel(prFormID, prCaption : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddLabelResultFromMacro(prFormID, prMacroId : String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddLabelBoldResultFromMacro(prFormID, prMacroId : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddLabelBold(prFormID, prCaption : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddEdit(prFormID, prVariableId, prInitialValue : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddCombo(prFormID, prVariableId, prDataProvider, prColumn : String);'));
