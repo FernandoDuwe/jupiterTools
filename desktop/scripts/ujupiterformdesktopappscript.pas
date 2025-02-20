@@ -24,9 +24,12 @@ type
   procedure JupiterFormDesktopAppScriptSetHint(prFormID, prHint : String);
   procedure JupiterFormDesktopAppScriptAddLabel(prFormID, prCaption : String);
   procedure JupiterFormDesktopAppScriptAddLabelResultFromMacro(prFormID, prMacroId : String);
+  procedure JupiterFormDesktopAppScriptAddLabelBoldResultFromMacro(prFormID, prMacroId : String);
   procedure JupiterFormDesktopAppScriptAddLabelBold(prFormID, prCaption : String);
   procedure JupiterFormDesktopAppScriptAddLink(prFormID, prCaption, prMacroId : String);
+  procedure JupiterFormDesktopAppScriptAddLinkBold(prFormID, prCaption, prMacroId : String);
   procedure JupiterFormDesktopAppScriptAddLinkWithScript(prFormID, prCaption : String; prMacro : TStrings);
+  procedure JupiterFormDesktopAppScriptAddLinkBoldWithScript(prFormID, prCaption : String; prMacro : TStrings);
   procedure JupiterFormDesktopAppScriptAddEdit(prFormID, prVariableId, prInitialValue : String);
   procedure JupiterFormDesktopAppScriptAddCombo(prFormID, prVariableId, prDataProvider, prColumn : String);
   procedure JupiterFormDesktopAppScriptAddCheckBox(prFormID, prVariableId, prText: String; prValue: Boolean);
@@ -100,6 +103,21 @@ begin
   TFCustomCodeForm(vrForm).AddLabelResultFromScript(prMacroId);
 end;
 
+procedure JupiterFormDesktopAppScriptAddLabelBoldResultFromMacro(prFormID, prMacroId: String);
+var
+  vrForm : TForm;
+begin
+  vrForm := TJupiterDesktopApp(vrJupiterApp).GetFormById(prFormID);
+
+  if not Assigned(vrForm) then
+    Exit;
+
+  if not (vrForm is TFCustomCodeForm) then
+    Exit;
+
+  TFCustomCodeForm(vrForm).AddLabelBoldResultFromScript(prMacroId);
+end;
+
 procedure JupiterFormDesktopAppScriptAddLabelBold(prFormID, prCaption: String);
 var
   vrForm : TForm;
@@ -130,6 +148,21 @@ begin
   TFCustomCodeForm(vrForm).AddLink(prCaption, prMacroId);
 end;
 
+procedure JupiterFormDesktopAppScriptAddLinkBold(prFormID, prCaption, prMacroId: String);
+var
+  vrForm : TForm;
+begin
+  vrForm := TJupiterDesktopApp(vrJupiterApp).GetFormById(prFormID);
+
+  if not Assigned(vrForm) then
+    Exit;
+
+  if not (vrForm is TFCustomCodeForm) then
+    Exit;
+
+  TFCustomCodeForm(vrForm).AddLinkBold(prCaption, prMacroId);
+end;
+
 procedure JupiterFormDesktopAppScriptAddLinkWithScript(prFormID, prCaption : String; prMacro : TStrings);
 var
   vrForm : TForm;
@@ -143,6 +176,21 @@ begin
     Exit;
 
   TFCustomCodeForm(vrForm).AddLinkAsScript(prCaption, prMacro);
+end;
+
+procedure JupiterFormDesktopAppScriptAddLinkBoldWithScript(prFormID, prCaption: String; prMacro: TStrings);
+var
+  vrForm : TForm;
+begin
+  vrForm := TJupiterDesktopApp(vrJupiterApp).GetFormById(prFormID);
+
+  if not Assigned(vrForm) then
+    Exit;
+
+  if not (vrForm is TFCustomCodeForm) then
+    Exit;
+
+  TFCustomCodeForm(vrForm).AddLinkBoldAsScript(prCaption, prMacro);
 end;
 
 procedure JupiterFormDesktopAppScriptAddEdit(prFormID, prVariableId, prInitialValue: String);
@@ -319,6 +367,8 @@ begin
 
   prSender.AddFunction(@JupiterFormDesktopAppScriptAddLink, 'procedure Form_AddLink(prFormID, prCaption, prMacroId: String);');
   prSender.AddFunction(@JupiterFormDesktopAppScriptAddLinkWithScript, 'procedure Form_AddLinkWithScript(prFormID, prCaption : String; prMacro : TStrings);');
+  prSender.AddFunction(@JupiterFormDesktopAppScriptAddLinkBold, 'procedure Form_AddLinkBold(prFormID, prCaption, prMacroId: String);');
+    prSender.AddFunction(@JupiterFormDesktopAppScriptAddLinkBoldWithScript, 'procedure Form_AddLinkBoldWithScript(prFormID, prCaption : String; prMacro : TStrings);');
   prSender.AddFunction(@JupiterFormDesktopAppScriptAddLabel, 'procedure Form_AddLabel(prFormID, prCaption : String);');
   prSender.AddFunction(@JupiterFormDesktopAppScriptAddLabelResultFromMacro, 'procedure Form_AddLabelResultFromMacro(prFormID, prMacroId : String);');
   prSender.AddFunction(@JupiterFormDesktopAppScriptAddLabelBold, 'procedure Form_AddLabelBold(prFormID, prCaption : String);');
@@ -343,6 +393,8 @@ begin
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddLink(prFormID, prCaption, prMacroId: String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddLinkWithScript(prFormID, prCaption : String; prMacro : TStrings);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddLinkBold(prFormID, prCaption, prMacroId: String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddLinkBoldWithScript(prFormID, prCaption : String; prMacro : TStrings);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddLabel(prFormID, prCaption : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddLabelResultFromMacro(prFormID, prMacroId : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddLabelBold(prFormID, prCaption : String);'));

@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, JupiterObject, jupiterformutils, JupiterConsts, JupiterApp,
   jupiterDatabaseWizard, JupiterVariable, ExtCtrls, Controls, Buttons, ActnList,
-  LCLProc;
+  LCLProc, Menus;
 
 type
 
@@ -24,8 +24,10 @@ type
     FMacro     : TStrings;
     FOnClick   : TNotifyEvent;
     FButton    : TSpeedButton;
+    FPopup     : TMenuItem;
     FReference : TJupiterDatabaseReference;
     FOnRequestData : TJupiterActionOnRequestData;
+    FOnPopupRequestData : TJupiterActionOnRequestData;
     FOnAfterExecute : TNotifyEvent;
     FAction : TAction;
 
@@ -44,6 +46,7 @@ type
     property Button : TSpeedButton read FButton write FButton;
 
     property OnRequestData  : TJupiterActionOnRequestData read FOnRequestData  write FOnRequestData;
+    property OnPopupRequestData : TJupiterActionOnRequestData read FOnPopupRequestData write FOnPopupRequestData;
     property OnAfterExecute : TNotifyEvent                read FOnAfterExecute write FOnAfterExecute;
   public
     constructor Create(prCaption, prHint : String; prIcon : Integer);
@@ -52,16 +55,20 @@ type
     constructor Create(prCaption, prHint : String; prIcon : Integer; prMacroId : String);
     constructor Create(prCaption, prHint : String; prIcon : Integer; prMacro : TStrings);
 
-    procedure Render(prFlow : TFlowPanel; prImageList : TImageList);
+    procedure Render(prFlow : TFlowPanel; prImageList : TImageList; prPopupMenu : TPopupMenu);
     procedure Execute;
 
     procedure UpdateAction;
 
     procedure Disable;
     procedure Enable;
+    procedure DisablePopup;
+    procedure EnablePopup;
 
     procedure SetInvisibility;
     procedure SetVisibility;
+    procedure SetInvisibilityPopup;
+    procedure SetVisibilityPopup;
   end;
 
   { TJupiterActionGroup }
@@ -72,19 +79,23 @@ type
     FImageList : TImageList;
     FTableName : String;
     FActionList : TActionList;
+    FPopupMenu : TPopupMenu;
 
     FOnRequestData : TJupiterActionOnRequestData;
+    FOnPopupRequestData : TJupiterActionOnRequestData;
     FOnAfterExecute : TNotifyEvent;
 
     procedure Internal_SetTableName(prTableName : String);
   published
     property FlowPanel  : TFlowPanel  read FFlowPanel  write FFlowPanel;
+    property PopupMenu  : TPopupMenu  read FPopupMenu  write FPopupMenu;
     property ImageList  : TImageList  read FImageList  write FImageList;
     property TableName  : String      read FTableName  write Internal_SetTableName;
     property ActionList : TActionList read FActionList write FActionList;
 
-    property OnRequestData  : TJupiterActionOnRequestData read FOnRequestData  write FOnRequestData;
-    property OnAfterExecute : TNotifyEvent                read FOnAfterExecute write FOnAfterExecute;
+    property OnRequestData      : TJupiterActionOnRequestData read FOnRequestData      write FOnRequestData;
+    property OnPopupRequestData : TJupiterActionOnRequestData read FOnPopupRequestData write FOnPopupRequestData;
+    property OnAfterExecute     : TNotifyEvent                read FOnAfterExecute     write FOnAfterExecute;
   public
     procedure UpdateActions;
 
@@ -120,6 +131,17 @@ begin
       vrJupiterApp.RunAction(TAction(Sender).Tag, Self.OnRequestData())
     else
       vrJupiterApp.RunAction(TAction(Sender).Tag, TJupiterVariableList.Create);
+
+    if Assigned(Self.OnAfterExecute) then
+       Self.OnAfterExecute(Sender);
+  end;
+
+  if Sender is TMenuItem then
+  begin
+    if Assigned(Self.OnPopupRequestData) then
+      vrJupiterApp.RunAction(TSpeedButton(Sender).Tag, Self.OnPopupRequestData())
+    else
+      vrJupiterApp.RunAction(TSpeedButton(Sender).Tag, TJupiterVariableList.Create);
 
     if Assigned(Self.OnAfterExecute) then
        Self.OnAfterExecute(Sender);
@@ -197,10 +219,13 @@ begin
   Self.OnClick   := @Internal_OnDatabaseClick;
 end;
 
-procedure TJupiterAction.Render(prFlow: TFlowPanel; prImageList : TImageList);
+procedure TJupiterAction.Render(prFlow: TFlowPanel; prImageList : TImageList; prPopupMenu : TPopupMenu);
 var
   vrSpeedButton :  TSpeedButton;
+  vrMenuItem : TMenuItem;
 begin
+  Self.FPopup := nil;
+
   vrSpeedButton            := TSpeedButton.Create(prFlow);
   vrSpeedButton.Parent     := prFlow;
   vrSpeedButton.Caption    := Self.Caption;
@@ -220,6 +245,28 @@ begin
 
   if Assigned(Self.Reference) then
     vrSpeedButton.Tag := Self.Reference.ID;
+
+  if Assigned(prPopupMenu) then
+  begin
+    vrMenuItem := TMenuItem.Create(prPopupMenu);
+    vrMenuItem.Caption    := Self.Caption;
+    vrMenuItem.Hint       := Self.Hint;
+    vrMenuItem.OnClick    := OnClick;
+
+    if Assigned(prImageList) then
+    begin
+      prPopupMenu.Images := prImageList;
+
+      vrMenuItem.ImageIndex := Self.Icon;
+    end;
+
+    if Assigned(Self.Reference) then
+      vrMenuItem.Tag := Self.Reference.ID;
+
+    prPopupMenu.Items.Add(vrMenuItem);
+
+    Self.FPopup := vrMenuItem;
+  end;
 
   Self.FButton := vrSpeedButton;
 end;
@@ -280,6 +327,38 @@ begin
     Self.Enable
   else
     Self.Disable;
+
+  if Assigned(Self.FPopup) then
+  begin
+    vrEnabled := True;
+
+    if not Assigned(Self.Reference) then
+      Exit;
+
+    if Assigned(Self.OnPopupRequestData) then
+      vrVisibile := vrJupiterApp.RunAcitonVisible(Self.Reference.ID, Self.OnPopupRequestData())
+    else
+      vrVisibile := vrJupiterApp.RunAcitonVisible(Self.Reference.ID, TJupiterVariableList.Create);
+
+    if vrVisibile then
+      Self.SetVisibilityPopup
+    else
+    begin
+      Self.SetInvisibilityPopup;
+
+      Exit;
+    end;
+
+    if Assigned(Self.OnPopupRequestData) then
+      vrEnabled := vrJupiterApp.RunAcitonEnabled(Self.Reference.ID, Self.OnPopupRequestData())
+    else
+      vrEnabled := vrJupiterApp.RunAcitonEnabled(Self.Reference.ID, TJupiterVariableList.Create);
+
+    if vrEnabled then
+      Self.EnablePopup
+    else
+      Self.DisablePopup;
+  end;
 end;
 
 procedure TJupiterAction.Disable;
@@ -297,6 +376,18 @@ begin
     Self.Action.Enabled := True;
 end;
 
+procedure TJupiterAction.DisablePopup;
+begin
+  if Assigned(Self.FPopup) then
+    Self.FPopup.Enabled := False;
+end;
+
+procedure TJupiterAction.EnablePopup;
+begin
+  if Assigned(Self.FPopup) then
+    Self.FPopup.Enabled := True;
+end;
+
 procedure TJupiterAction.SetInvisibility;
 begin
   if Assigned(Self.FButton) then
@@ -310,6 +401,18 @@ procedure TJupiterAction.SetVisibility;
 begin
   if Assigned(Self.FButton) then
     Self.FButton.Visible := True;
+end;
+
+procedure TJupiterAction.SetInvisibilityPopup;
+begin
+  if Assigned(Self.FPopup) then
+    Self.FPopup.Visible := False;
+end;
+
+procedure TJupiterAction.SetVisibilityPopup;
+begin
+  if Assigned(Self.FPopup) then
+    Self.FPopup.Visible := True;
 end;
 
 { TJupiterActionGroup }
@@ -365,6 +468,7 @@ begin
 
   TJupiterAction(Self.GetLastObject).OnRequestData  := Self.OnRequestData;
   TJupiterAction(Self.GetLastObject).OnAfterExecute := Self.OnAfterExecute;
+  TJupiterAction(Self.GetLastObject).OnPopupRequestData  := Self.OnPopupRequestData;
 
   if not Assigned(Self.ActionList) then
     Exit;
@@ -400,7 +504,7 @@ var
   vrVez : Integer;
 begin
   for vrVez := 0 to Self.Count - 1 do
-    TJupiterAction(Self.GetAtIndex(vrVez)).Render(Self.FlowPanel, Self.ImageList);
+    TJupiterAction(Self.GetAtIndex(vrVez)).Render(Self.FlowPanel, Self.ImageList, Self.PopupMenu);
 end;
 
 end.

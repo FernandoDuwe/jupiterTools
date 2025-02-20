@@ -63,6 +63,7 @@ type
 
     procedure RunMacro(prId : Integer; prParams : TJupiterVariableList);
     procedure RunMacro(prMacroId : String; prParams : TJupiterVariableList);
+    procedure RunMacroNoMessage(prMacroId : String; prParams : TJupiterVariableList);
     procedure RunMacroFromFile(prMacroFile : String; prParams : TJupiterVariableList);
     procedure RunMacroFromFileInThread(prMacroFile : String; prParams : TJupiterVariableList);
     procedure RunMacroInThread(prMacroId : String; prParams : TJupiterVariableList);
@@ -304,6 +305,30 @@ begin
   vrScript := Self.NewScript;
   vrQry    := Self.NewWizard.NewQuery;
   try
+    vrQry.SQL.Add(' SELECT ID, MACRO FROM MACROS WHERE MACROID = :PRID ');
+    vrQry.ParamByName('PRID').AsString := prMacroId;
+    vrQry.Open;
+
+    vrScript.Script.AddStrings(JupiterStringUtilsStringToStringList(vrQry.FieldByName('MACRO').AsString));
+    vrScript.Params.CopyValues(prParams);
+
+    vrScript.Execute;
+  finally
+    FreeAndNil(vrScript);
+  end;
+end;
+
+procedure TJupiterApp.RunMacroNoMessage(prMacroId: String; prParams: TJupiterVariableList);
+var
+  vrScript : TJupiterScript;
+  vrQry    : TSQLQuery;
+begin
+  vrScript := Self.NewScript;
+  vrQry    := Self.NewWizard.NewQuery;
+  try
+    if not Self.Params.VariableById(DEBUG_MODE).AsBool then
+      vrScript.OnExecute := nil;
+
     vrQry.SQL.Add(' SELECT ID, MACRO FROM MACROS WHERE MACROID = :PRID ');
     vrQry.ParamByName('PRID').AsString := prMacroId;
     vrQry.Open;

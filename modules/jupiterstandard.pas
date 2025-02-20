@@ -183,6 +183,8 @@ begin
     Self.Internal_CreateMacroIfDontExists('MACROS.AbrirScript.OnClick', 'Abrir script no editor', CreateStringListToMacro('   OpenFormWithParams(''/forms/script'', GetParam(SCRIPTID, ''ID''));'));
 
     Self.Internal_CreateActionIfDontExists('MACROS.AbrirScript', 'Abrir script no editor', 'MACROS', ICON_EDIT, 100, Self.Internal_GetMacroById('MACROS.AbrirScript.OnClick'), Self.Internal_GetMacroById(EVENT_RECORD_ONENABLE), Self.Internal_GetMacroById(EVENT_RECORD_ONVISIBLE));
+
+    Self.Internal_CreateVariablIfDontExists(TRIGGER_ONUPDATE, 'Nome da macro a ser executada a cada atualização de tela na página principal', '');
   finally
     FreeAndNil(vrWizard);
     FreeAndNil(vrStr);

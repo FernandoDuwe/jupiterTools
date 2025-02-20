@@ -139,6 +139,7 @@ const
    TRIGGER_ONPROMPT     : String = 'triggers.onPrompt';
    TRIGGER_ONEXECUTE    : String = 'triggers.onExecute';
    TRIGGER_ONSHOWPARAMS : String = 'triggers.onShowParams';
+   TRIGGER_ONUPDATE     : String = 'triggers.onUpdate';
 
    // Events
    EVENT_RECORD_ONENABLE : String = 'events.record.onEnable';

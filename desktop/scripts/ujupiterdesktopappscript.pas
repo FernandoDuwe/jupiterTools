@@ -24,6 +24,7 @@ type
   function JupiterAppDesktopOpenForm(prForm : String) : String;
   procedure JupiterAppDesktopOpenFormWithParams(prForm, prParams : String);
   procedure JupiterAppDesktopShowMessage(prMessage : String);
+  procedure JupiterAppDesktopSetAppMessage(prMessage : String);
   procedure JupiterAppDesktopOpenFormQuery(prQuery : TSQLQuery);
   procedure JupiterAppDesktopOpenFormFromTableId(prTableName : String; prID : Integer);
   procedure JupiterAppDesktopOpenGridFromTable(prTableName : String);
@@ -54,6 +55,12 @@ end;
 procedure JupiterAppDesktopShowMessage(prMessage: String);
 begin
   Application.MessageBox(PAnsiChar(prMessage), 'Aviso');
+end;
+
+procedure JupiterAppDesktopSetAppMessage(prMessage: String);
+begin
+  if Application.MainForm is TFMain then
+    TFMain(Application.MainForm).sbStatus.Panels[0].Text := prMessage;
 end;
 
 procedure JupiterAppDesktopOpenFormQuery(prQuery: TSQLQuery);
@@ -218,6 +225,8 @@ begin
   prSender.AddFunction(@JupiterAppDesktopOpenFileExplorerForm, 'procedure OpenFileExplorerForm(prPath : String);');
   prSender.AddFunction(@JupiterAppDesktopOpenCheckListExplorerForm, 'procedure OpenCheckListExplorerForm(prPath : String);');
   prSender.AddFunction(@JupiterAppDesktopOpenTextEditorForm, 'procedure OpenTextEditorForm(prPath : String);');
+  prSender.AddFunction(@JupiterAppDesktopCloseForm, 'procedure CloseForm(prFormID : String);');
+  prSender.AddFunction(@JupiterAppDesktopSetAppMessage, 'procedure SetAppMessage(prMessage : String);');
 
   prSender.AddFunction(@JupiterAppDesktopCloseForm, 'procedure CloseForm(prFormID : String)');
 
@@ -241,6 +250,7 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenCheckListExplorerForm(prPath: String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenTextEditorForm(prPath: String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CloseForm(prFormID: String) : String;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure SetAppMessage(prMessage: String) : String;'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CloseApp();'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure UpdateForms();'));

@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, Menus,
   ActnList, ExtCtrls, Buttons, uJupiterForm, JupiterFormTab,
   jupiterMainMenuGenerator, JupiterApp, JupiterConsts, JupiterVariable,
-  jupiterDesktopApp;
+  JupiterVariableDataProvider, jupiterDesktopApp;
 
 type
 
@@ -37,6 +37,7 @@ type
 
     procedure Internal_PrepareForm; override;
     procedure Internal_UpdateComponents; override;
+    procedure Internal_UpdateCalcs; override;
     procedure Internal_CreatePopMenuTab;
 
     procedure Internal_CloseCurrentTab(Sender: TObject);
@@ -194,6 +195,15 @@ begin
 
   jtMainTab.Align := alClient;
   jtMainTab.Visible := jtMainTab.PageCount > 0;
+end;
+
+procedure TFMain.Internal_UpdateCalcs;
+begin
+  inherited Internal_UpdateCalcs;
+
+  if vrJupiterApp.Params.Exists(TRIGGER_ONUPDATE) then
+    if vrJupiterApp.Params.VariableById(TRIGGER_ONUPDATE).Value <> '' then
+      vrJupiterApp.RunMacroNoMessage(vrJupiterApp.Params.VariableById(TRIGGER_ONUPDATE).Value, TJupiterVariableList.Create);
 end;
 
 procedure TFMain.Internal_CreatePopMenuTab;

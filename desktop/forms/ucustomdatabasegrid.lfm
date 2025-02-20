@@ -26,6 +26,7 @@ inherited FCustomDatabaseGrid: TFCustomDatabaseGrid
     Color = clWindow
     Columns = <>
     DataSource = InternalDataSource
+    PopupMenu = pmActions
     ReadOnly = True
     TabOrder = 2
     OnColEnter = dbMainGridColEnter
@@ -86,5 +87,9 @@ inherited FCustomDatabaseGrid: TFCustomDatabaseGrid
     Macros = <>
     Left = 720
     Top = 72
+  end
+  object pmActions: TPopupMenu[11]
+    Left = 240
+    Top = 144
   end
 end

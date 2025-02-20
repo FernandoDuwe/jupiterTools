@@ -92,7 +92,10 @@ begin
 
     Self.Internal_CreateMacroIfDontExists('TAREFAS.MarcarComoAtualScript.OnClick', 'Marcar tarefa como atual', CreateStringListToMacro('   SetGlobalParam(''Tools.Tasks.Current.ID'', GetParam(SCRIPTID, ''ID''));' + #13#10 +
                                                                                                                                        #13#10 +
-                                                                                                                                       '   SetGlobalParam(''Tools.Tasks.Current.Path'', GetGlobalParam(''Tools.Tasks.Path'') + ''/'' + GetParam(SCRIPTID, ''CLIENTE'') + ''/'' + GetParam(SCRIPTID, ''NUMERO'') + ''/'');'));
+                                                                                                                                       '   SetGlobalParam(''Tools.Tasks.Current.Path'', GetGlobalParam(''Tools.Tasks.Path'') + ''/'' + GetParam(SCRIPTID, ''CLIENTE'') + ''/'' + GetParam(SCRIPTID, ''NUMERO'') + ''/'');' + #13#10 +
+                                                                                                                                       #13#10 +
+                                                                                                                                       '   SetAppMessage(''Tarefa definida como atual: '' + GetParam(SCRIPTID, ''NUMERO''));'
+                                                                                                                                       ));
 
    Self.Internal_CreateMacroIfDontExists('LAYOUT.CamposScript.OnClick', 'Clique do botão Campos', CreateStringListToMacro('  OpenGridFromTableWithWhere(''LAYOUTCAMPO'', '' LAYOUT = '' + GetParam(SCRIPTID, "ID"), ''''); '));
 

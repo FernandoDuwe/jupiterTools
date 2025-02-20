@@ -34,7 +34,11 @@ inherited FMain: TFMain
     Height = 19
     Top = 629
     Width = 1228
-    Panels = <>
+    Panels = <    
+      item
+        Width = 50
+      end>
+    SimplePanel = False
   end
   object jtMainTab: TJupiterFormTab[4]
     Left = 0

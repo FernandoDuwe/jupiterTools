@@ -20,6 +20,7 @@ type
     InternalQuery: TSQLQuery;
     miShowMiniForm: TMenuItem;
     pnMiniForm: TPanel;
+    pmActions: TPopupMenu;
     sbMiniForm: TScrollBox;
     Splitter1: TSplitter;
     procedure dbMainGridColEnter(Sender: TObject);
@@ -39,6 +40,7 @@ type
     procedure Internal_UpdateComponents; override;
     procedure Internal_PrepareForm; override;
     procedure Internal_UpdateDatasets; override;
+    procedure Internal_RenderActions;
 
     procedure Internal_OnNew(Sender: TObject);
     procedure Internal_OnDelete(Sender: TObject);
@@ -49,6 +51,7 @@ type
     procedure Internal_ClickOwnerRecord(Sender: TObject);
 
     function Internal_OnRequestData :  TJupiterVariableList; override;
+    function Internal_OnPopupRequestData :  TJupiterVariableList;
   public
     procedure FromReference(prReference : TJupiterDatabaseReference);
   end;
@@ -71,6 +74,9 @@ begin
   inherited;
 
   Self.FUseLimit := True;
+
+  Self.ActionGroup.PopupMenu := pmActions;
+  Self.ActionGroup.OnPopupRequestData := @Internal_OnPopupRequestData;
 
   vrWizard := vrJupiterApp.NewWizard;
   try
@@ -171,22 +177,42 @@ begin
   end;
 
   if Self.ActionGroup.Count > 1 then
+  begin
     if (Self.InternalQuery.EOF)  then
-      Self.ActionGroup.GetActionAtIndex(1).Disable
+    begin
+      Self.ActionGroup.GetActionAtIndex(1).Disable;
+      Self.ActionGroup.GetActionAtIndex(1).DisablePopup;
+    end
     else
+    begin
       Self.ActionGroup.GetActionAtIndex(1).Enable;
+      Self.ActionGroup.GetActionAtIndex(1).EnablePopup;
+    end;
+  end;
 
   if Self.ActionGroup.Count > 2 then
     if ((not Self.FUseLimit)  or (Self.InternalQuery.RecordCount < vrJupiterApp.Params.VariableById(FORM_GRID_LIMIT).AsInteger)) then
-      Self.ActionGroup.GetActionAtIndex(2).Disable
+    begin
+      Self.ActionGroup.GetActionAtIndex(2).Disable;
+      Self.ActionGroup.GetActionAtIndex(2).DisablePopup;
+    end
     else
+    begin
       Self.ActionGroup.GetActionAtIndex(2).Enable;
+      Self.ActionGroup.GetActionAtIndex(2).EnablePopup;
+    end;
 
   if Self.ActionGroup.Count >= 3 then
     if (Self.InternalQuery.RecordCount < vrJupiterApp.Params.VariableById(FORM_GRID_LIMIT).AsInteger) then
-      Self.ActionGroup.GetActionAtIndex(3).Disable
+    begin
+      Self.ActionGroup.GetActionAtIndex(3).Disable;
+      Self.ActionGroup.GetActionAtIndex(3).DisablePopup;
+    end
     else
+    begin
       Self.ActionGroup.GetActionAtIndex(3).Enable;
+      Self.ActionGroup.GetActionAtIndex(3).EnablePopup;
+    end;
 end;
 
 procedure TFCustomDatabaseGrid.Internal_PrepareForm;
@@ -292,6 +318,11 @@ begin
 
   if pnMiniForm.Visible then
     Self.Internal_RenderMiniForm;
+end;
+
+procedure TFCustomDatabaseGrid.Internal_RenderActions;
+begin
+  //
 end;
 
 procedure TFCustomDatabaseGrid.Internal_OnNew(Sender: TObject);
@@ -421,10 +452,20 @@ begin
 end;
 
 function TFCustomDatabaseGrid.Internal_OnRequestData: TJupiterVariableList;
+begin
+  Result := inherited Internal_OnRequestData;
+end;
+
+function TFCustomDatabaseGrid.Internal_OnPopupRequestData: TJupiterVariableList;
 var
   vrVez : Integer;
 begin
   Result := inherited Internal_OnRequestData;
+
+  if not Self.InternalQuery.EOF then
+    for vrVez := 0 to Self.InternalQuery.FieldCount - 1 do
+      if not Result.Exists(Self.InternalQuery.Fields[vrVez].FieldName) then
+        Result.AddVariable(Self.InternalQuery.Fields[vrVez].FieldName, Self.InternalQuery.Fields[vrVez].AsString, EmptyStr);
 end;
 
 procedure TFCustomDatabaseGrid.FromReference(prReference: TJupiterDatabaseReference);
