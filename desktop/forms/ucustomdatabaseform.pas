@@ -78,6 +78,9 @@ end;
 
 procedure TFCustomDatabaseForm.FormDestroy(Sender: TObject);
 begin
+  if Self.FID <> NULL_KEY then
+    vrJupiterApp.RemoveReference(Self.FTableName, Self.FID);
+
   inherited;
 
   FreeAndNil(FObjectList);
@@ -371,7 +374,7 @@ begin
   if prReference.ID = NULL_KEY then
     Self.Caption := String.Format('%0:s %1:s', ['Novo:', JupiterStringUtilsNormalizeToPresent(prReference.TableName)])
   else
-    Self.Caption := String.Format('(#%0:d) %1:s', [prReference.ID, TJupiterDesktopApp(vrJupiterApp).NewWizard.GetTableDescription(prReference.TableName, prReference.ID)]);
+    Self.Caption := String.Format('%0:s', [TJupiterDesktopApp(vrJupiterApp).NewWizard.GetTableDescription(prReference.TableName, prReference.ID)]);
 
   vrDatabase := vrJupiterApp.NewWizard;
   try
@@ -387,7 +390,11 @@ begin
     if prReference.ID = NULL_KEY then
       vrQry.Insert
     else
+    begin
+      vrJupiterApp.AddGlobalReference(TJupiterDatabaseReference.Create(Self.FTableName, Self.FID));
+
       Self.Internal_ListForeignTables;
+    end;
   end;
 end;
 

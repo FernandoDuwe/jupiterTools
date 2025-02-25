@@ -35,6 +35,9 @@
     </RunParams>
     <RequiredPackages>
       <Item>
+        <PackageName Value="TAChartLazarusPkg"/>
+      </Item>
+      <Item>
         <PackageName Value="SynEditDsgn"/>
       </Item>
       <Item>
@@ -403,6 +406,19 @@
         <Filename Value="../scripts/ujupiterdateutilsscript.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uJupiterDateUtilsScript"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms/uchartviewer.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FChartViewer"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uChartViewer"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../scripts/ujupiterchecklistutilsscript.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uJupiterCheckListUtilsScript"/>
       </Unit>
     </Units>
   </ProjectOptions>

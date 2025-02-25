@@ -299,7 +299,8 @@ var
   vrEdit : TDBLookupComboBox;
   vrQry  : TSQLQuery;
 begin
-  vrQry := TJupiterDatabaseWizard(prForeignKeyData.Wizard).NewQueryFromReference(TJupiterDatabaseReference.Create(prForeignKeyData.TableDestinyName, NULL_KEY));
+  vrQry := TJupiterDatabaseWizard(prForeignKeyData.Wizard).NewQueryFromReference(TJupiterDatabaseReference.Create(prForeignKeyData.TableDestinyName, NULL_KEY), EmptyStr, ' 2 ',
+                                                                                 'ID, ' + TJupiterDatabaseWizard(prForeignKeyData.Wizard).GetDescriptionFieldFromTable(prForeignKeyData.TableDestinyName));
 
   vrEdit := TDBLookupComboBox.Create(prOwner);
   vrEdit.Parent     := prOwner;
@@ -319,6 +320,10 @@ begin
   vrEdit.KeyField       := prForeignKeyData.FieldDestinyName;
   vrEdit.ListFieldIndex := 1;
   vrEdit.ListField      := vrQry.Fields[1].FieldName;
+
+  if vrJupiterApp.GlobalReferenceExists(prForeignKeyData.TableDestinyName) then
+    if vrQry.Locate('ID', vrJupiterApp.GetGlobalReference(prForeignKeyData.TableDestinyName).ID, []) then
+      vrEdit.KeyValue := vrQry.FieldByName('ID').AsInteger;
 
   vrQry := nil;
 

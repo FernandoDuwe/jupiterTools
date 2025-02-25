@@ -38,6 +38,8 @@ var
   vrWizard : TJupiterDatabaseWizard;
   vrStr : TStrings;
 begin
+  inherited Internal_Prepare;
+
   vrWizard := vrJupiterApp.NewWizard;
   vrStr := TStringList.Create;
   try
@@ -189,8 +191,6 @@ begin
     FreeAndNil(vrWizard);
     FreeAndNil(vrStr);
   end;
-
-  inherited Internal_Prepare;
 end;
 
 end.

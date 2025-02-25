@@ -38,6 +38,8 @@ type
   procedure JupiterAppDesktopDecFont;
   procedure JupiterAppDesktopClose;
 
+  procedure JupiterAppDesktopAddReference(prTableName : String; prId : Integer);
+
 implementation
 
 uses uJupiterForm, uMain, jupiterDesktopApp, jupiterDatabaseWizard;
@@ -206,6 +208,11 @@ begin
   Application.Terminate;
 end;
 
+procedure JupiterAppDesktopAddReference(prTableName: String; prId: Integer);
+begin
+  vrJupiterApp.AddGlobalReference(TJupiterDatabaseReference.Create(prTableName, prId));
+end;
+
 { TJupiterDesktopAppScript }
 
 function TJupiterDesktopAppScript.Internal_GetName: String;
@@ -235,6 +242,8 @@ begin
   prSender.AddFunction(@JupiterAppDesktopIncFont, 'procedure IncFont();');
   prSender.AddFunction(@JupiterAppDesktopDecFont, 'procedure DecFont();');
   prSender.AddFunction(@JupiterAppDesktopShowMessage, 'procedure ShowMessage(prMessage: String);');
+
+  prSender.AddFunction(@JupiterAppDesktopAddReference, 'procedure AddGlobalReference(prTableName : String; prId : Integer);');
 end;
 
 function TJupiterDesktopAppScript.AnalyseCode: TJupiterScriptAnalyserList;
@@ -257,6 +266,8 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure IncFont();'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure DecFont();'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure ShowMessage(prMessage: String);'));
+
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure AddGlobalReference(prTableName : String; prId : Integer);'));
 end;
 
 end.

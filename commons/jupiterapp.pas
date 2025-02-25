@@ -9,7 +9,7 @@ uses
   JupiterVariable, jupiterDatabaseWizard, jupiterScript, jupiterStringUtils,
   JupiterConsts, uJupiterEnviromentScript, uJupiterStringUtilsScript,
   uJupiterRunnableScript, uJupiterDataProviderScript, uJupiterDateUtilsScript,
-  SQLite3Conn, JupiterDataProvider, jupiterthread;
+  uJupiterCheckListUtilsScript, SQLite3Conn, JupiterDataProvider, jupiterthread;
 
 type
 
@@ -48,6 +48,7 @@ type
     property MessageList : TJupiterDataProvider read FMessageList write FMessageList;
   public
     DataProviders : TJupiterObjectList;
+    GlobalReferences : TJupiterObjectList;
 
     procedure AddModule(prModule : TJupiterModule);
     procedure AddMessage(prTitle, prMessage, prOrigin : String);
@@ -79,6 +80,12 @@ type
     function GetDataProviderById(prDataProviderID : String) : TJupiterDataProvider;
     procedure DeleteDataProviderById(prDataProviderID : String);
 
+    // Global References
+    procedure AddGlobalReference(prReference : TJupiterDatabaseReference);
+    function  GlobalReferenceExists(prTableName : String) : Boolean;
+    function  GetGlobalReference(prTablename : String) : TJupiterDatabaseReference;
+    procedure RemoveReference(prTableName : String; prID : Integer);
+
     constructor Create(prAppID, prAppName : String); virtual;
     destructor Destroy; override;
   end;
@@ -101,6 +108,7 @@ begin
   prScript.LibraryList.Add(TJupiterDateUtilsScript.Create);
   prScript.LibraryList.Add(TuJupiterDatabaseScript.Create);
   prScript.LibraryList.Add(TJupiterDataProviderScript.Create);
+  prScript.LibraryList.Add(TJupiterCheckListUtilsScript.Create);
 end;
 
 procedure TJupiterApp.Internal_OnExecute(prScript, prMessages, prRunMessages: TStrings; prExecuted: Boolean);
@@ -606,6 +614,51 @@ begin
       end;
 end;
 
+procedure TJupiterApp.AddGlobalReference(prReference: TJupiterDatabaseReference);
+begin
+  Self.GlobalReferences.Add(prReference);
+end;
+
+function TJupiterApp.GlobalReferenceExists(prTableName: String): Boolean;
+var
+  vrVez : Integer;
+begin
+  Result := False;
+
+  for vrVez := 0 to Self.GlobalReferences.Count - 1 do
+    if TJupiterDatabaseReference(Self.GlobalReferences.GetAtIndex(vrVez)).TableName = prTableName then
+    begin
+      Result := True;
+      Exit;
+    end;
+end;
+
+function TJupiterApp.GetGlobalReference(prTablename: String): TJupiterDatabaseReference;
+var
+  vrVez : Integer;
+begin
+  Result := nil;
+
+  for vrVez := 0 to Self.GlobalReferences.Count - 1 do
+    if TJupiterDatabaseReference(Self.GlobalReferences.GetAtIndex(vrVez)).TableName = prTableName then
+    begin
+      Result := TJupiterDatabaseReference(Self.GlobalReferences.GetAtIndex(vrVez));
+      Exit;
+    end;
+end;
+
+procedure TJupiterApp.RemoveReference(prTableName: String; prID: Integer);
+var
+  vrVez : Integer;
+begin
+  for vrVez := 0 to Self.GlobalReferences.Count - 1 do
+    if ((TJupiterDatabaseReference(Self.GlobalReferences.GetAtIndex(vrVez)).TableName = prTableName) and (TJupiterDatabaseReference(Self.GlobalReferences.GetAtIndex(vrVez)).ID = prID)) then
+    begin
+      Self.GlobalReferences.DeleteAtIndex(vrVez);
+      Exit;
+    end;
+end;
+
 constructor TJupiterApp.Create(prAppID, prAppName: String);
 begin
   try
@@ -614,10 +667,11 @@ begin
     Self.FAppID   := prAppID;
     Self.FAppName := prAppName;
 
-    Self.FParams       := TJupiterVariableList.Create;
-    Self.FModules      := TJupiterModuleList.Create;
-    Self.FScripts      := TJupiterVariableList.Create;
-    Self.DataProviders := TJupiterObjectList.Create;
+    Self.FParams          := TJupiterVariableList.Create;
+    Self.FModules         := TJupiterModuleList.Create;
+    Self.FScripts         := TJupiterVariableList.Create;
+    Self.DataProviders    := TJupiterObjectList.Create;
+    Self.GlobalReferences := TJupiterObjectList.Create;
 
     Self.ScriptList := TJupiterDataProvider.Create;
     Self.MessageList := TJupiterDataProvider.Create;
@@ -638,6 +692,7 @@ begin
   FreeAndNil(Self.FScripts);
   FreeAndNil(Self.DataProviders);
   FreeAndNil(Self.FThreadList);
+  FreeAndNil(Self.GlobalReferences);
 
   inherited Destroy;
 end;

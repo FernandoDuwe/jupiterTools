@@ -70,6 +70,9 @@ inherited FSystemMonitor: TFSystemMonitor
           item
             Caption = 'ID'
             Width = 854
+          end        
+          item
+            Caption = 'Formulário'
           end>
         GridLines = True
         ReadOnly = True

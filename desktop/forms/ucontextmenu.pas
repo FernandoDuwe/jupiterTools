@@ -6,8 +6,8 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, ActnList,
-  uJupiterForm, jupiterformutils, JupiterApp, JupiterConsts, uJupiterAction,
-  jupiterDesktopApp;
+  StdCtrls, ExtCtrls, uJupiterForm, jupiterformutils, JupiterApp, JupiterConsts,
+  jupitertreeviewmenugenerator, uJupiterAction, jupiterDesktopApp;
 
 type
 
@@ -16,16 +16,23 @@ type
   TFContextMenu = class(TFJupiterForm)
     acExit: TAction;
     acSearch: TAction;
+    gbMain: TGroupBox;
+    gbContext: TGroupBox;
     lvRoute: TListView;
+    Splitter1: TSplitter;
+    tvTreeMenu: TTreeView;
     procedure acExitExecute(Sender: TObject);
     procedure acSearchExecute(Sender: TObject);
     procedure edSearchKeyPress(Sender: TObject; var Key: char);
+    procedure lvRouteKeyPress(Sender: TObject; var Key: char);
+    procedure tvTreeMenuEnter(Sender: TObject);
   private
     procedure Internal_PrepareForm; override;
 
+    procedure Internal_UpdateComponents; override;
     procedure Internal_UpdateDatasets; override;
   public
-
+    function IsWindowForm : Boolean; override;
   end;
 
 var
@@ -51,17 +58,23 @@ begin
     Exit;
   end;
 
-  if not Assigned(lvRoute.Selected) then
-    Exit;
+  if not tvTreeMenu.Focused then
+  begin
+    if not Assigned(lvRoute.Selected) then
+      Exit;
 
-  if not Assigned(lvRoute.Selected.Data) then
-    Exit;
+    if not Assigned(lvRoute.Selected.Data) then
+      Exit;
 
-  try
-    TJupiterAction(lvRoute.Selected.Data).Execute;
-  finally
-    Self.DoSecureClose;
+    try
+      TJupiterAction(lvRoute.Selected.Data).Execute;
+    finally
+      Self.DoSecureClose;
+    end;
   end;
+
+  if tvTreeMenu.Focused then
+    Self.DoSecureClose;
 end;
 
 procedure TFContextMenu.edSearchKeyPress(Sender: TObject; var Key: char);
@@ -69,22 +82,66 @@ begin
 
 end;
 
+procedure TFContextMenu.lvRouteKeyPress(Sender: TObject; var Key: char);
+begin
+
+end;
+
+procedure TFContextMenu.tvTreeMenuEnter(Sender: TObject);
+begin
+  Self.UpdateForm(False);
+end;
+
 procedure TFContextMenu.Internal_PrepareForm;
+var
+  vrTreeView : TJupiterTreeViewMenuGenerator;
 begin
   inherited Internal_PrepareForm;
+
+  tvTreeMenu.OnEnter := @tvTreeMenuEnter;
+
+  edSearch.OnEnter := @tvTreeMenuEnter;
+  edSearch.OnExit := @tvTreeMenuEnter;
+
+  lvRoute.OnEnter := @tvTreeMenuEnter;
+  lvRoute.OnExit := @tvTreeMenuEnter;
+
+  tvTreeMenu.Images := TJupiterDesktopApp(vrJupiterApp).ImageList;
 
   Self.ShowSearchBar := True;
 
   Width := PercentOfScreen(Screen.Width, 50);
   Height := PercentOfScreen(Screen.Height, 50);
 
-  BorderStyle := bsDialog;
-
   edSearch.SetFocus;
 
   lvRoute.LargeImages := TJupiterDesktopApp(vrJupiterApp).ImageList;
   lvRoute.SmallImages := TJupiterDesktopApp(vrJupiterApp).ImageList;
   lvRoute.StateImages := TJupiterDesktopApp(vrJupiterApp).ImageList;
+
+  vrTreeView := TJupiterTreeViewMenuGenerator.Create(vrJupiterApp.InternalDatabase);
+  try
+    vrTreeView.TreeView := tvTreeMenu;
+    vrTreeView.Render;
+  finally
+    FreeAndNil(vrTreeView);
+  end;
+end;
+
+procedure TFContextMenu.Internal_UpdateComponents;
+begin
+  inherited Internal_UpdateComponents;
+
+  gbMain.Width := PercentOfScreen(Self.Width, 50);
+
+  gbMain.Font.Color := clDefault;
+  gbContext.Font.Color := clDefault;
+
+  if tvTreeMenu.Focused then
+    gbMain.Font.Color := clRed;
+
+  if lvRoute.Focused then
+    gbContext.Font.Color := clRed;
 end;
 
 procedure TFContextMenu.Internal_UpdateDatasets;
@@ -110,6 +167,11 @@ begin
 
   if lvRoute.Items.Count > 0 then
     lvRoute.Selected := lvRoute.Items[0];
+end;
+
+function TFContextMenu.IsWindowForm: Boolean;
+begin
+  Result := False;
 end;
 
 end.

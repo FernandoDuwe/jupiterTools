@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, Menus,
   ActnList, ExtCtrls, Buttons, uJupiterForm, JupiterFormTab,
   jupiterMainMenuGenerator, JupiterApp, JupiterConsts, JupiterVariable,
-  JupiterVariableDataProvider, jupiterDesktopApp;
+  JupiterVariableDataProvider, jupiterDesktopApp, uContextMenu;
 
 type
 
@@ -318,7 +318,7 @@ begin
   if ((ssCtrl in vrSS) and (not FNewTabClick)) then
     vrModal := True;
 
-  if Form.BorderStyle = bsDialog then
+  if Form is TFContextMenu then
     vrModal := True;
 
   if vrModal then

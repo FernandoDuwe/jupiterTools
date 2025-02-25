@@ -5,9 +5,9 @@ unit uSystemMonitor;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, uJupiterForm,
-  jupiterformutils, JupiterApp, jupiterScript, JupiterDataProvider,
-  JupiterConsts, uJupiterAction, jupiterDesktopApp;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls,
+  uJupiterForm, jupiterformutils, JupiterApp, jupiterScript,
+  JupiterDataProvider, JupiterConsts, uJupiterAction, jupiterDesktopApp;
 
 type
 
@@ -82,6 +82,9 @@ begin
   lvThreads.Column[2].Width := PercentOfScreen(lvMessages.Width, 30);
   lvThreads.Column[3].Width := PercentOfScreen(lvMessages.Width, 30);
 
+  lvForms.Column[0].Width := PercentOfScreen(lvForms.Width, 50);
+  lvForms.Column[1].Width := PercentOfScreen(lvForms.Width, 50);
+
 //  Self.ActionGroup.GetActionAtIndex(0).Disable;
 end;
 
@@ -118,6 +121,7 @@ begin
       begin
         vrItem := lvForms.Items.Add;
         vrItem.Caption := TFJupiterForm(TJupiterDesktopApp(vrJupiterApp).FormList.GetAtIndex(vrVez)).FormID;
+        vrItem.SubItems.Add(TFJupiterForm(TJupiterDesktopApp(vrJupiterApp).FormList.GetAtIndex(vrVez)).Caption);
       end;
 
     for vrVez := vrJupiterApp.ScriptList.Count - 1 downto 0 do

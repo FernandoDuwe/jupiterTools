@@ -10,15 +10,16 @@ uses
   athreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, pascalscript, pascalscriptfcl, datetimectrls, uJupiterForm, uMain,
-  uDmMain, JupiterConsts, JupiterObject, JupiterEnviroment, JupiterModule,
-  JupiterVariable, JupiterCSVDataProvider, JupiterApp, jupiterDatabaseWizard,
-  jupiterformutils, jupiterStandard, jupiterMainMenuGenerator, jupiterScript,
-  JupiterRoute, uJupiterUserExperience, uConfig, uJupiterGenerator,
-  jupiterDesktopApp, uJupiterAppScript, uJupiterDesktopAppScript, uNewTask,
-  uGenerator, uJupiterAction, uCustomDatabaseForm, jupiterformcomponenttils,
-  jupiterStringUtils, uJupiterDatabaseScript, jupitertreeviewmenugenerator,
-  JupiterXMLDataProvider, JupiterFileDataProvider, JupiterTaskTimesDataProvider,
+  Forms, pascalscript, pascalscriptfcl, datetimectrls, tachartlazaruspkg,
+  uJupiterForm, uMain, uDmMain, JupiterConsts, JupiterObject, JupiterEnviroment,
+  JupiterModule, JupiterVariable, JupiterCSVDataProvider, JupiterApp,
+  jupiterDatabaseWizard, jupiterformutils, jupiterStandard,
+  jupiterMainMenuGenerator, jupiterScript, JupiterRoute, uJupiterUserExperience,
+  uConfig, uJupiterGenerator, jupiterDesktopApp, uJupiterAppScript,
+  uJupiterDesktopAppScript, uNewTask, uGenerator, uJupiterAction,
+  uCustomDatabaseForm, jupiterformcomponenttils, jupiterStringUtils,
+  uJupiterDatabaseScript, jupitertreeviewmenugenerator, JupiterXMLDataProvider,
+  JupiterFileDataProvider, JupiterTaskTimesDataProvider,
   jupiterTimeControlDataProvider, JupiterTasksDataProvider,
   JupiterVariableDataProvider, JupiterDirectoryDataProvider,
   JupiterDataProvider, jupiterutilspas, ucustomdatabasegrid, uUserPreferences,
@@ -26,7 +27,8 @@ uses
   uJupiterRunnableScript, jupiterTools, uJupiterDataProviderScript,
   uSystemMonitor, uCustomCodeForm, uJupiterFormDesktopAppScript, uFileExplorer,
   jupitersqldataprovider, jupiterthread, uContextMenu, uSQLEditor, uCheckList,
-  uTextEditor, uJupiterDateUtilsScript;
+  uTextEditor, uJupiterDateUtilsScript, uChartViewer, 
+uJupiterCheckListUtilsScript;
 
 {$R *.res}
 
@@ -65,6 +67,7 @@ begin
     FormRoutes.Add(TJupiterFormRoute.Create(SQLEDITOR_PATH, TFSQLEditor));
     FormRoutes.Add(TJupiterFormRoute.Create(CHECKLIST_PATH, TFCheckList));
     FormRoutes.Add(TJupiterFormRoute.Create(TEXTEDITOR_PATH, TFTextEditor));
+    FormRoutes.Add(TJupiterFormRoute.Create(CHARTVIEWER_PATH, TFChartViewer));
   end;
 
   Application.Run;

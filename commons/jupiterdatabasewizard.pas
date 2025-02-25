@@ -57,9 +57,11 @@ type
     function IsForeignKeyField(prTableName, prFieldName : String) : Boolean;
     function NewQuery : TSQLQuery;
     function NewQueryFromReference(prReference : TJupiterDatabaseReference; prWhere : String = ''; prOrderBy : String = ''; prFields : String = '*'; prLimit : String = '') : TSQLQuery;
+    function NewQueryFromReferenceToComboBox(prReference : TJupiterDatabaseReference; prWhere : String = ''; prOrderBy : String = ''; prFields : String = '*'; prLimit : String = '') : TSQLQuery;
     function NewQueryFromReferenceWithSearch(prReference : TJupiterDatabaseReference; prFieldList : TStrings; prSearch : String; prWhere : String = ''; prOrderBy : String = ''; prFields : String = '*'; prLimit : String = '') : TSQLQuery;
     function NewScript : TSQLScript;
     function NewDataSourceFromQuery(prQuery : TSQLQuery) : TDataSource;
+    function GetDescriptionFieldFromTable(prTableName : String) : String;
 
     function Count(prTableName, prWhere : String) : Integer;
     function Exists(prTableName, prWhere : String) : Boolean;
@@ -89,6 +91,8 @@ type
   end;
 
 implementation
+
+uses JupiterApp;
 
 { TJupiterDatabaseReference }
 
@@ -233,6 +237,11 @@ begin
   Result.SQL.Add(String.Format(' SELECT ' + prFields + ' FROM %0:s WHERE ((ID = %1:d) OR (-1 = %1:d)) %3:s ORDER BY %2:s %4:s', [prReference.TableName, prReference.ID, prOrderBy, prWhere, prLimit]));
 end;
 
+function TJupiterDatabaseWizard.NewQueryFromReferenceToComboBox(prReference: TJupiterDatabaseReference; prWhere: String; prOrderBy: String; prFields: String; prLimit: String): TSQLQuery;
+begin
+  //
+end;
+
 function TJupiterDatabaseWizard.NewQueryFromReferenceWithSearch(
   prReference: TJupiterDatabaseReference; prFieldList: TStrings;
   prSearch: String; prWhere: String; prOrderBy: String; prFields: String;
@@ -281,6 +290,53 @@ function TJupiterDatabaseWizard.NewDataSourceFromQuery(prQuery: TSQLQuery): TDat
 begin
   Result := TDataSource.Create(prQuery);
   Result.DataSet := prQuery;
+end;
+
+function TJupiterDatabaseWizard.GetDescriptionFieldFromTable(prTableName: String): String;
+var
+  vrQry : TSQLQuery;
+  vrVez : Integer;
+begin
+  Result := '"#" || ID';
+
+  vrQry := NewQuery;
+  try
+    vrQry.SQL.Add(' SELECT * FROM ' + prTableName + ' WHERE ID = -1 ');
+    vrQry.Open;
+
+    for vrVez := 0 to vrQry.Fields.Count - 1 do
+    begin
+      if vrQry.Fields[vrVez].FieldName = 'ID' then
+        Continue;
+
+      if vrQry.Fields[vrVez] is TFloatField then
+        Continue;
+
+      if vrQry.Fields[vrVez] is TBlobField then
+        Continue;
+
+      if vrQry.Fields[vrVez] is TIntegerField then
+        Continue;
+
+      if vrQry.Fields[vrVez] is TBooleanField then
+        Continue;
+
+      if vrQry.Fields[vrVez] is TFloatField then
+        Continue;
+
+      if Result <> EmptyStr then
+        Result := Result + ' || ';
+
+      Result := Result + Format(' (CASE WHEN %0:s IS NULL THEN "" ELSE " - " || %0:s END) ', [vrQry.Fields[vrVez].FieldName]);
+    end;
+
+    if Result = EmptyStr then
+      Result := 'ID';
+  finally
+    Result := Result + ' AS DESCRIPTION';
+
+    FreeAndNil(vrQry);
+  end;
 end;
 
 function TJupiterDatabaseWizard.Count(prTableName, prWhere: String): Integer;
@@ -469,7 +525,7 @@ var
   vrQry : TSQLQuery;
   vrVez : Integer;
 begin
-  Result := prTableName + ' #' + IntToStr(prId);
+  Result := prTableName + ' (#' + IntToStr(prId) + ')';
 
   vrQry := Self.NewQuery;
   try
@@ -486,33 +542,40 @@ begin
 
        if vrQry.Fields[vrVez] is TStringField then
        begin
-         Result := vrQry.Fields[vrVez].AsString;
+         if Result <> EmptyStr then
+           Result := Result + ' - ';
 
-         Exit;
+         Result := Result + vrQry.Fields[vrVez].AsString;
        end;
 
        if vrQry.Fields[vrVez] is TDateField then
        begin
-         Result := vrQry.Fields[vrVez].AsString;
+         if Result <> EmptyStr then
+           Result := Result + ' - ';
 
-         Exit;
+         Result := Result + vrQry.Fields[vrVez].AsString;
        end;
 
        if vrQry.Fields[vrVez] is TDateTimeField then
        begin
-         Result := vrQry.Fields[vrVez].AsString;
+         if Result <> EmptyStr then
+           Result := Result + ' - ';
 
-         Exit;
+         Result := Result + vrQry.Fields[vrVez].AsString;
        end;
 
        if vrQry.Fields[vrVez] is TTimeField then
        begin
-         Result := vrQry.Fields[vrVez].AsString;
+         if Result <> EmptyStr then
+           Result := Result + ' - ';
 
-         Exit;
+         Result := Result + vrQry.Fields[vrVez].AsString;
        end;
     end;
   finally
+    if Length(Result) > vrJupiterApp.Params.VariableById(FORM_DESCRIPTION_MAXSIZE).AsInteger then
+      Result := Copy(Result, 1, vrJupiterApp.Params.VariableById(FORM_DESCRIPTION_MAXSIZE).AsInteger) + '...';
+
     FreeAndNil(vrQry);
   end;
 end;

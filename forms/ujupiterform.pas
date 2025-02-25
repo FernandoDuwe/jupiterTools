@@ -84,7 +84,7 @@ type
     procedure PrepareForm; virtual;
     procedure UpdateForm(prUpdateDatasets : Boolean = True; prUpdateComponentes : Boolean = True; prUpdateCalcs : Boolean = True); virtual;
 
-    function IsWindowForm : Boolean;
+    function IsWindowForm : Boolean; virtual;
 
     procedure DoSecureClose;
   end;

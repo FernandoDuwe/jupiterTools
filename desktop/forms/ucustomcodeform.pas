@@ -46,6 +46,7 @@ type
     procedure AddCheckBox(prVariableId, prText : String; prValue : Boolean);
     procedure AddAction(prCaption, prHint : String; prIcon : Integer; prMacroID : String);
     procedure AddLink(prCaption : String; prMacroID : String);
+    procedure AddLinkWithParams(prCaption : String; prMacroID, prParam : String);
     procedure AddLinkBold(prCaption : String; prMacroID : String);
     procedure AddLinkAsScript(prCaption : String; prMacro : TStrings);
     procedure AddLinkBoldAsScript(prCaption : String; prMacro : TStrings);
@@ -109,10 +110,10 @@ begin
     vrReference := (Self.References.GetAtIndex(TLabel(Sender).Tag)) as TJupiterComponentReference;
 
     if Trim(vrReference.MacroID) <> '' then
-      vrJupiterApp.RunMacro(vrReference.MacroID, Self.Internal_OnRequestData);
+      vrJupiterApp.RunMacro(vrReference.MacroID, CreateVariableListOfParam(vrReference.Param));
 
     if Trim(vrReference.MacroScript) <> '' then
-      vrJupiterApp.RunScript(CreateStringList(vrReference.MacroScript), Self.Internal_OnRequestData);
+      vrJupiterApp.RunScript(CreateStringList(vrReference.MacroScript), CreateVariableListOfParam(vrReference.Param));
   end;
 end;
 
@@ -340,6 +341,29 @@ begin
   finally
     vrReference.MacroID := prMacroID;
     vrReference.FieldName := EmptyStr;
+
+    Self.References.Add(vrReference);
+
+    TLabel(vrReference.Component).Tag := Self.References.Count - 1;
+
+    TLabel(vrReference.Component).OnClick := @Internal_OnLinkClick;
+  end;
+end;
+
+procedure TFCustomCodeForm.AddLinkWithParams(prCaption: String; prMacroID, prParam: String);
+var
+  vrReference : TJupiterComponentReference;
+begin
+  try
+    Self.FCurrentLine := Self.FCurrentLine + FORM_MARGIN_TOP;
+
+    vrReference := JupiterComponentsNewLink(prCaption, TJupiterPosition.Create(Self.FCurrentLine, Self.FCurrentMargin), sbBody);
+
+    Self.FCurrentLine := vrReference.Bottom;
+  finally
+    vrReference.MacroID := prMacroID;
+    vrReference.FieldName := EmptyStr;
+    vrReference.Param := prParam;
 
     Self.References.Add(vrReference);
 

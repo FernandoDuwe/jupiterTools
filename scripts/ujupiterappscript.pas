@@ -30,6 +30,8 @@ type
   function JupiterAppScript_GlobalParamExists(prId : String) : Boolean;
   function JupiterAppScript_GetGlobalParam(prId : String) : String;
   procedure JupiterAppScript_SetGlobalParam(prId, prValue : String);
+  function JupiterAppScript_ResolveGlobal(prValue : String) : String;
+  function JupiterAppScript_Resolve(prScriptId, prValue : String) : String;
   procedure JupiterAppScript_WriteLn(prMessage : String);
   procedure JupiterAppScript_WriteScriptLn(prScriptId, prMessage : String);
   procedure JupiterAppScript_RunMacroById(prMacroId : String);
@@ -96,6 +98,16 @@ begin
     vrJupiterApp.Params.VariableById(prId).Value := prValue
   else
     vrJupiterApp.Params.AddConfig(prId, prValue, prId);
+end;
+
+function JupiterAppScript_ResolveGlobal(prValue: String): String;
+begin
+  Result := vrJupiterApp.Params.ResolveString(prValue);
+end;
+
+function JupiterAppScript_Resolve(prScriptId, prValue: String): String;
+begin
+  Result := vrJupiterApp.GetScriptById(prScriptId).Params.ResolveString(prValue);
 end;
 
 procedure JupiterAppScript_WriteLn(prMessage: String);
@@ -176,6 +188,9 @@ begin
   prSender.AddFunction(@JupiterAppScript_GetGlobalParam, 'function GetGlobalParam(prId : String) : String;');
   prSender.AddFunction(@JupiterAppScript_SetGlobalParam, 'procedure SetGlobalParam(prId, prValue : String);');
 
+  prSender.AddFunction(@JupiterAppScript_ResolveGlobal, 'function ResolveGlobal(prValue : String) : String;');
+  prSender.AddFunction(@JupiterAppScript_Resolve, 'function Resolve(prScriptId, prValue : String) : String;');
+
   prSender.AddFunction(@JupiterAppScript_WriteLn, 'procedure Writeln(prMessage: String);');
   prSender.AddFunction(@JupiterAppScript_WriteScriptLn, 'procedure WriteScriptLn(prScriptId, prMessage: String);');
 
@@ -203,6 +218,9 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function ParamCount(prScriptId : String) : Integer;'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function GetParamNameByIndex(prScriptId : String; prIndex : Integer): String;'));
+
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function ResolveGlobal(prValue : String) : String;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function Resolve(prScriptId, prValue : String) : String;'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure SetParam(prScriptId, prId, prValue : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure SetGlobalParam(prId, prValue : String);'));

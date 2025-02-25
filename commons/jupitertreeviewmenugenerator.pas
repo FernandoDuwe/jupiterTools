@@ -21,6 +21,7 @@ type
     function Internal_GetLevel(prRoute : String) : Integer;
 
     procedure Internal_OnClick(Sender: TObject);
+    procedure Internal_OnKeyPress(Sender: TObject; var Key: char);
   published
     property TreeView : TTreeView    read FTreeView write FTreeView;
     property OnClick  : TNotifyEvent read FOnClick  write FOnClick;
@@ -128,12 +129,19 @@ begin
 
 end;
 
+procedure TJupiterTreeViewMenuGenerator.Internal_OnKeyPress(Sender: TObject; var Key: char);
+begin
+  if Key = #13 then
+    Self.Internal_OnClick(Sender);
+end;
+
 procedure TJupiterTreeViewMenuGenerator.Render;
 begin
   try
     Self.Internal_RenderRoute(nil, '/main/');
 
     Self.TreeView.OnDblClick := @Internal_OnClick;
+    Self.TreeView.OnKeyPress := @Internal_OnKeyPress;
   finally
     Self.TreeView.FullExpand;
   end;

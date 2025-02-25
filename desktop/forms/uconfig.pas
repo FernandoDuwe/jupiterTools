@@ -21,6 +21,7 @@ type
     spSeparator: TSplitter;
     qryConfig: TSQLQuery;
     tvFilter: TTreeView;
+    procedure FormDestroy(Sender: TObject);
     procedure gbVariablesDblClick(Sender: TObject);
     procedure tvFilterSelectionChanged(Sender: TObject);
     procedure Internal_NewClick(Sender: TObject);
@@ -60,6 +61,20 @@ begin
     Exit;
 
   JupiterAppDesktopOpenFormFromTableId('VARIABLES', qryConfig.FieldByName('ID').AsInteger);
+end;
+
+procedure TFConfig.FormDestroy(Sender: TObject);
+var
+  vrReference : TJupiterDatabaseReference;
+begin
+  inherited;
+
+  while vrJupiterApp.GlobalReferenceExists('MODULES') do
+  begin
+    vrReference := vrJupiterApp.GetGlobalReference('MODULES');
+
+    vrJupiterApp.RemoveReference('MODULES', vrReference.ID);
+  end;
 end;
 
 procedure TFConfig.Internal_UpdateComponents;
@@ -147,7 +162,7 @@ begin
 
     vrQry := NewQuery;
     try
-      vrQry.SQL.Add(' SELECT M1.ID, M1.NAME FROM MODULES M1 ');
+      vrQry.SQL.Add(' SELECT M1.ID, M1.NAME FROM MODULES M1 ORDER BY 2 ');
       vrQry.Open;
 
       while not vrQry.EOF do
@@ -169,6 +184,8 @@ begin
 end;
 
 function TFConfig.Internal_GetFilter: String;
+var
+  vrReference : TJupiterDatabaseReference;
 begin
   Result := EmptyStr;
 
@@ -180,6 +197,15 @@ begin
 
   if TJupiterDatabaseReference(tvFilter.Selected.Data).ID = NULL_KEY then
     Exit;
+
+  while vrJupiterApp.GlobalReferenceExists('MODULES') do
+  begin
+    vrReference := vrJupiterApp.GetGlobalReference('MODULES');
+
+    vrJupiterApp.RemoveReference('MODULES', vrReference.ID);
+  end;
+
+  vrJupiterApp.AddGlobalReference(TJupiterDatabaseReference.Create('MODULES', TJupiterDatabaseReference(tvFilter.Selected.Data).ID));
 
   Result := Format(' MODULE = %0:d ', [TJupiterDatabaseReference(tvFilter.Selected.Data).ID]);
 end;

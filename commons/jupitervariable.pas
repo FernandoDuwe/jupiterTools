@@ -109,9 +109,17 @@ type
     destructor Destroy; override;
   end;
 
+  function CreateVariableListOfParam(prParamValue : String) : TJupiterVariableList;
+
 implementation
 
 uses JupiterCSVDataProvider;
+
+function CreateVariableListOfParam(prParamValue: String): TJupiterVariableList;
+begin
+  Result := TJupiterVariableList.Create;
+  Result.AddVariable('PARAMS', prParamValue, 'PARAMS');
+end;
 
 { TJupiterVariable }
 

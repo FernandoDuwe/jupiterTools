@@ -10,6 +10,7 @@ uses
 const
    ROOT_PATH : String = '/';
    NEWTASKMENU_PATH : String = '/forms/newTask';
+   CHARTVIEWER_PATH: String = '/forms/chartViewer';
    CHECKLIST_PATH: String = '/forms/checkList';
    CONFIG_PATH : String = '/forms/config';
    CONTEXT_PATH : String = '/forms/context';
@@ -78,19 +79,20 @@ const
 
    FORMAT_DATETIME : String = 'dd/mm/yyyy hh:nn:ss';
 
-   EMPTY_SPACE_SEPARATOR  : String = '/JUPITERTOOLS\|/JUPITERTOOLS\';
-   COLUMN_SPACE_SEPARATOR : String = '      ';
-   FIELD_ID_GENERADOR     : String = 'Generator.FormId';
-   FIELD_TREE_COLAPSE     : String = 'MenuTree_Colapse';
+   EMPTY_SPACE_SEPARATOR    : String = '/JUPITERTOOLS\|/JUPITERTOOLS\';
+   COLUMN_SPACE_SEPARATOR   : String = '      ';
+   FIELD_ID_GENERADOR       : String = 'Generator.FormId';
+   FIELD_TREE_COLAPSE       : String = 'MenuTree_Colapse';
 
-   FORM_ALWAYS_MODAL      : String = 'Interface.Form.AlwaysModal';
-   FORM_UPDATE_TIME       : String = 'Interface.Form.UpdateTime';
-   FORM_EDITOR_RIGHTEDGE  : String = 'Interface.Editor.RightEdge';
-   FIELD_FONT_NAME        : String = 'Interface.Font.Name';
-   FIELD_FONT_SIZE        : String = 'Interface.Font.Size';
-   CONTEXTMENU_TABLE_SHOW : String = 'Interface.ContextMenu.ShowTables';
-   FORM_GRID_LIMIT        : String = 'Interface.Form.GridLimit';
-   DEBUG_MODE             : String = 'Developer.Debug';
+   FORM_ALWAYS_MODAL        : String = 'Interface.Form.AlwaysModal';
+   FORM_UPDATE_TIME         : String = 'Interface.Form.UpdateTime';
+   FORM_DESCRIPTION_MAXSIZE : String = 'Interface.Form.Description.MaxSize';
+   FORM_EDITOR_RIGHTEDGE    : String = 'Interface.Editor.RightEdge';
+   FIELD_FONT_NAME          : String = 'Interface.Font.Name';
+   FIELD_FONT_SIZE          : String = 'Interface.Font.Size';
+   CONTEXTMENU_TABLE_SHOW   : String = 'Interface.ContextMenu.ShowTables';
+   FORM_GRID_LIMIT          : String = 'Interface.Form.GridLimit';
+   DEBUG_MODE               : String = 'Developer.Debug';
 
    CSV_SEPARATOR_REPLACER : String = '[SEMICOLON]';
 

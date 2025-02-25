@@ -54,6 +54,7 @@ type
     FFieldName : String;
     FMacroID : String;
     FMacroScript : String;
+    FParam : String;
   published
     property Right       : Integer     read FRight       write FRight;
     property Bottom      : Integer     read FBottom      write FBottom;
@@ -61,6 +62,7 @@ type
     property FieldName   : String      read FFieldName   write FFieldName;
     property MacroID     : String      read FMacroID     write FMacroID;
     property MacroScript : String      read FMacroScript write FMacroScript;
+    property Param       : String      read FParam       write FParam;
     property WinControl  : TWinControl read FWinControl  write FWinControl;
   public
     function RightCalc : Integer;
@@ -511,8 +513,9 @@ begin
   Self.Bottom    := prBottom;
   Self.Component := prComponent;
 
-  Self.MacroID := EmptyStr;
+  Self.MacroID     := EmptyStr;
   Self.MacroScript := EmptyStr;
+  Self.Param       := EmptyStr;
 end;
 
 constructor TJupiterComponentReference.Create(prTop, prLeft, prRight, prBottom: Integer; prComponent: TComponent; prFieldName: String);

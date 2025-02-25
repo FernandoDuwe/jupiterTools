@@ -1,28 +1,89 @@
 inherited FContextMenu: TFContextMenu
-  BorderStyle = bsDialog
+  Left = 595
+  Height = 789
+  Top = 191
+  Width = 1204
   Caption = 'Menu de Contexto'
+  ClientHeight = 789
+  ClientWidth = 1204
   inherited pnSearchBar: TPanel
+    Width = 1204
+    ClientWidth = 1204
     inherited edSearch: TEdit
+      Width = 1204
       OnKeyPress = edSearchKeyPress
     end
   end
-  object lvRoute: TListView[3]
-    Left = 0
-    Height = 325
-    Top = 50
-    Width = 879
-    Align = alClient
-    Columns = <    
-      item
-        Caption = 'Rota'
-        Width = 864
-      end>
-    MultiSelect = True
-    ReadOnly = True
+  inherited fpOptions: TFlowPanel
+    Top = 788
+    Width = 1204
     TabOrder = 3
-    ViewStyle = vsReport
   end
-  inherited acOptions: TActionList[4]
+  inherited pnBottom: TPanel
+    Top = 707
+    Width = 1204
+    ClientWidth = 1204
+    TabOrder = 4
+  end
+  object gbMain: TGroupBox[3]
+    Left = 0
+    Height = 657
+    Top = 50
+    Width = 537
+    Align = alLeft
+    Caption = 'Menu principal'
+    ClientHeight = 639
+    ClientWidth = 535
+    TabOrder = 1
+    object tvTreeMenu: TTreeView
+      Left = 0
+      Height = 639
+      Top = 0
+      Width = 535
+      Align = alClient
+      BackgroundColor = clDefault
+      Color = clDefault
+      ReadOnly = True
+      TabOrder = 0
+      OnEnter = tvTreeMenuEnter
+      Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
+    end
+  end
+  object gbContext: TGroupBox[4]
+    Left = 542
+    Height = 657
+    Top = 50
+    Width = 662
+    Align = alClient
+    Caption = 'Menu de contexto'
+    ClientHeight = 639
+    ClientWidth = 660
+    TabOrder = 2
+    object lvRoute: TListView
+      Left = 0
+      Height = 639
+      Top = 0
+      Width = 660
+      Align = alClient
+      Columns = <      
+        item
+          Caption = 'Rota'
+          Width = 864
+        end>
+      MultiSelect = True
+      ParentFont = False
+      ReadOnly = True
+      TabOrder = 0
+      OnKeyPress = lvRouteKeyPress
+    end
+  end
+  object Splitter1: TSplitter[5]
+    Left = 537
+    Height = 657
+    Top = 50
+    Width = 5
+  end
+  inherited acOptions: TActionList[6]
     object acExit: TAction[0]
       Caption = 'acExit'
       OnExecute = acExitExecute
@@ -34,8 +95,8 @@ inherited FContextMenu: TFContextMenu
       ShortCut = 13
     end
   end
-  inherited tmrAutoUpdater: TTimer[5]
+  inherited tmrAutoUpdater: TTimer[7]
   end
-  inherited pmOptions: TPopupMenu[6]
+  inherited pmOptions: TPopupMenu[8]
   end
 end

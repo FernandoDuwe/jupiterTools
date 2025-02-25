@@ -6,6 +6,7 @@ inherited FConfig: TFConfig
   Caption = 'Configurações'
   ClientHeight = 497
   ClientWidth = 1016
+  OnDestroy = FormDestroy
   inherited pnSearchBar: TPanel
     Width = 1016
     ClientWidth = 1016
