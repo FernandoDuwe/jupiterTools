@@ -29,17 +29,17 @@ inherited FContextMenu: TFContextMenu
     Left = 0
     Height = 657
     Top = 50
-    Width = 537
+    Width = 89
     Align = alLeft
     Caption = 'Menu principal'
     ClientHeight = 639
-    ClientWidth = 535
+    ClientWidth = 87
     TabOrder = 1
     object tvTreeMenu: TTreeView
       Left = 0
       Height = 639
       Top = 0
-      Width = 535
+      Width = 87
       Align = alClient
       BackgroundColor = clDefault
       Color = clDefault
@@ -50,25 +50,25 @@ inherited FContextMenu: TFContextMenu
     end
   end
   object gbContext: TGroupBox[4]
-    Left = 542
+    Left = 94
     Height = 657
     Top = 50
-    Width = 662
+    Width = 1110
     Align = alClient
     Caption = 'Menu de contexto'
     ClientHeight = 639
-    ClientWidth = 660
+    ClientWidth = 1108
     TabOrder = 2
     object lvRoute: TListView
       Left = 0
       Height = 639
       Top = 0
-      Width = 660
+      Width = 1108
       Align = alClient
       Columns = <      
         item
           Caption = 'Rota'
-          Width = 864
+          Width = 1093
         end>
       MultiSelect = True
       ParentFont = False
@@ -78,7 +78,7 @@ inherited FContextMenu: TFContextMenu
     end
   end
   object Splitter1: TSplitter[5]
-    Left = 537
+    Left = 89
     Height = 657
     Top = 50
     Width = 5

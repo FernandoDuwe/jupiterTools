@@ -113,6 +113,7 @@ begin
   Width := PercentOfScreen(Screen.Width, 50);
   Height := PercentOfScreen(Screen.Height, 50);
 
+  gbMain.Width := PercentOfScreen(Self.Width, 50);
   edSearch.SetFocus;
 
   lvRoute.LargeImages := TJupiterDesktopApp(vrJupiterApp).ImageList;

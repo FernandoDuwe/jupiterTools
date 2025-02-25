@@ -95,8 +95,9 @@ begin
 
   vrWizard := vrJupiterApp.NewWizard;
   try
-    if not vrWizard.Exists('MODULES', ' MODULEID = "' + Self.ModuleID + '" ') then
-      vrWizard.ExecuteScript(CreateStringList(' INSERT INTO MODULES (NAME, MODULEID) VALUES ("' + Self.ModuleTitle + '", "' + Self.ModuleID + '") '));
+    if vrWizard.TableExists('MODULES') then
+      if not vrWizard.Exists('MODULES', ' MODULEID = "' + Self.ModuleID + '" ') then
+        vrWizard.ExecuteScript(CreateStringList(' INSERT INTO MODULES (NAME, MODULEID) VALUES ("' + Self.ModuleTitle + '", "' + Self.ModuleID + '") '));
   finally
     FreeAndNil(vrWizard);
   end;
