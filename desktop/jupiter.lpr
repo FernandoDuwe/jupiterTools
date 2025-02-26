@@ -28,7 +28,7 @@ uses
   uSystemMonitor, uCustomCodeForm, uJupiterFormDesktopAppScript, uFileExplorer,
   jupitersqldataprovider, jupiterthread, uContextMenu, uSQLEditor, uCheckList,
   uTextEditor, uJupiterDateUtilsScript, uChartViewer, 
-uJupiterCheckListUtilsScript;
+uJupiterCheckListUtilsScript, uWaitForm;
 
 {$R *.res}
 

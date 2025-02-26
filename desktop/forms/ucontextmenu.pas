@@ -24,6 +24,7 @@ type
     procedure acExitExecute(Sender: TObject);
     procedure acSearchExecute(Sender: TObject);
     procedure edSearchKeyPress(Sender: TObject; var Key: char);
+    procedure FormResize(Sender: TObject);
     procedure lvRouteKeyPress(Sender: TObject; var Key: char);
     procedure tvTreeMenuEnter(Sender: TObject);
   private
@@ -50,6 +51,8 @@ begin
 end;
 
 procedure TFContextMenu.acSearchExecute(Sender: TObject);
+var
+  vrTreeView : TJupiterTreeViewMenuGenerator;
 begin
   if edSearch.Focused then
   begin
@@ -74,12 +77,30 @@ begin
   end;
 
   if tvTreeMenu.Focused then
+  begin
+    vrTreeView := TJupiterTreeViewMenuGenerator.Create(vrJupiterApp.InternalDatabase);
+    try
+      vrTreeView.TreeView := tvTreeMenu;
+      vrTreeView.DoClick(tvTreeMenu);
+    finally
+      FreeAndNil(vrTreeView);
+    end;
+
     Self.DoSecureClose;
+  end;
 end;
 
 procedure TFContextMenu.edSearchKeyPress(Sender: TObject; var Key: char);
 begin
 
+end;
+
+procedure TFContextMenu.FormResize(Sender: TObject);
+begin
+  inherited;
+
+  if Self.Showing then
+    Self.UpdateForm(False);
 end;
 
 procedure TFContextMenu.lvRouteKeyPress(Sender: TObject; var Key: char);
@@ -113,7 +134,6 @@ begin
   Width := PercentOfScreen(Screen.Width, 50);
   Height := PercentOfScreen(Screen.Height, 50);
 
-  gbMain.Width := PercentOfScreen(Self.Width, 50);
   edSearch.SetFocus;
 
   lvRoute.LargeImages := TJupiterDesktopApp(vrJupiterApp).ImageList;

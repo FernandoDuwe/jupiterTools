@@ -24,6 +24,8 @@ type
   function JupiterAppDesktopOpenForm(prForm : String) : String;
   procedure JupiterAppDesktopOpenFormWithParams(prForm, prParams : String);
   procedure JupiterAppDesktopShowMessage(prMessage : String);
+  procedure JupiterAppDesktopCursorToWait;
+  procedure JupiterAppDesktopCursorToIdle;
   procedure JupiterAppDesktopSetAppMessage(prMessage : String);
   procedure JupiterAppDesktopOpenFormQuery(prQuery : TSQLQuery);
   procedure JupiterAppDesktopOpenFormFromTableId(prTableName : String; prID : Integer);
@@ -42,7 +44,7 @@ type
 
 implementation
 
-uses uJupiterForm, uMain, jupiterDesktopApp, jupiterDatabaseWizard;
+uses Controls, uJupiterForm, uMain, jupiterDesktopApp, jupiterDatabaseWizard;
 
 function JupiterAppDesktopOpenForm(prForm: String) : String;
 begin
@@ -57,6 +59,16 @@ end;
 procedure JupiterAppDesktopShowMessage(prMessage: String);
 begin
   Application.MessageBox(PAnsiChar(prMessage), 'Aviso');
+end;
+
+procedure JupiterAppDesktopCursorToWait;
+begin
+  Application.MainForm.Cursor := crHourGlass;
+end;
+
+procedure JupiterAppDesktopCursorToIdle;
+begin
+  Application.MainForm.Cursor := crDefault;
 end;
 
 procedure JupiterAppDesktopSetAppMessage(prMessage: String);
@@ -235,7 +247,10 @@ begin
   prSender.AddFunction(@JupiterAppDesktopCloseForm, 'procedure CloseForm(prFormID : String);');
   prSender.AddFunction(@JupiterAppDesktopSetAppMessage, 'procedure SetAppMessage(prMessage : String);');
 
-  prSender.AddFunction(@JupiterAppDesktopCloseForm, 'procedure CloseForm(prFormID : String)');
+  prSender.AddFunction(@JupiterAppDesktopCloseForm, 'procedure CloseForm(prFormID : String);');
+
+  prSender.AddFunction(@JupiterAppDesktopCursorToWait, 'procedure CursorToWait;');
+  prSender.AddFunction(@JupiterAppDesktopCursorToIdle, 'procedure CursorToIdle;');
 
   prSender.AddFunction(@JupiterAppDesktopClose, 'procedure CloseApp();');
   prSender.AddFunction(@JupiterAppDesktopUpdateForms, 'procedure UpdateForms();');
@@ -260,6 +275,9 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenTextEditorForm(prPath: String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CloseForm(prFormID: String) : String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure SetAppMessage(prMessage: String) : String;'));
+
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CursorToWait();'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CursorToIdle();'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CloseApp();'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure UpdateForms();'));

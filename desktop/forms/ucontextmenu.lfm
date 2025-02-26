@@ -1,11 +1,12 @@
 inherited FContextMenu: TFContextMenu
-  Left = 595
+  Left = 512
   Height = 789
-  Top = 191
+  Top = 250
   Width = 1204
   Caption = 'Menu de Contexto'
   ClientHeight = 789
   ClientWidth = 1204
+  OnResize = FormResize
   inherited pnSearchBar: TPanel
     Width = 1204
     ClientWidth = 1204

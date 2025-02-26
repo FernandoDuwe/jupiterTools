@@ -1,0 +1,12 @@
+inherited FJupiterForm1: TFJupiterForm1
+  Left = 678
+  Height = 190
+  Top = 328
+  ClientHeight = 190
+  inherited fpOptions: TFlowPanel
+    Top = 189
+  end
+  inherited pnBottom: TPanel
+    Top = 108
+  end
+end

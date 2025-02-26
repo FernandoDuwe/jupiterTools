@@ -27,6 +27,8 @@ type
     property OnClick  : TNotifyEvent read FOnClick  write FOnClick;
   public
     procedure Render;
+
+    procedure DoClick(Sender : TObject);
   end;
 
 implementation
@@ -141,10 +143,15 @@ begin
     Self.Internal_RenderRoute(nil, '/main/');
 
     Self.TreeView.OnDblClick := @Internal_OnClick;
-    Self.TreeView.OnKeyPress := @Internal_OnKeyPress;
+//    Self.TreeView.OnKeyPress := @Internal_OnKeyPress;
   finally
     Self.TreeView.FullExpand;
   end;
+end;
+
+procedure TJupiterTreeViewMenuGenerator.DoClick(Sender: TObject);
+begin
+  Self.Internal_OnClick(Sender);
 end;
 
 end.
