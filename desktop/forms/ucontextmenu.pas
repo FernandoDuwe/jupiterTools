@@ -158,6 +158,8 @@ begin
   gbMain.Font.Color := clDefault;
   gbContext.Font.Color := clDefault;
 
+  lvRoute.Column[0].Width := lvRoute.Width;
+
   if tvTreeMenu.Focused then
     gbMain.Font.Color := clRed;
 

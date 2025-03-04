@@ -21,6 +21,8 @@ type
 
   TJupiterScriptOnExecute = procedure (prScript, prMessages, prRunMessages : TStrings; prExecuted : Boolean) of object;
 
+  TJupiterScriptOnAddMessage = procedure (prMessage : String) of object;
+
   { TJupiterScriptAnalyserItem }
 
   TJupiterScriptAnalyserItem = class(TJupiterObject)
@@ -66,16 +68,17 @@ type
 
   TJupiterScript = class(TJupiterObject)
   private
-    FScriptID    : String;
-    FScript      : TStrings;
-    FMessages    : TStrings;
-    FRunMessages : TStrings;
-    FCompiled    : Boolean;
-    FRunned      : Boolean;
-    FUserCommand : String;
-    FLibraryList : TJupiterObjectList;
-    FParamList   : TJupiterVariableList;
-    FOnExecute   : TJupiterScriptOnExecute;
+    FScriptID     : String;
+    FScript       : TStrings;
+    FMessages     : TStrings;
+    FRunMessages  : TStrings;
+    FCompiled     : Boolean;
+    FRunned       : Boolean;
+    FUserCommand  : String;
+    FLibraryList  : TJupiterObjectList;
+    FParamList    : TJupiterVariableList;
+    FOnExecute    : TJupiterScriptOnExecute;
+    FOnAddMessage : TJupiterScriptOnAddMessage;
 
     procedure Internal_OutputMessages(prPSScript : TPSScript);
 
@@ -102,6 +105,7 @@ type
     property LibraryList : TJupiterObjectList read FLibraryList write FLibraryList;
     property UserCommand : String read FUserCommand write FUserCommand;
 
+    property OnAddMessage : TJupiterScriptOnAddMessage read FOnAddMessage write FOnAddMessage;
     property OnExecute : TJupiterScriptOnExecute read FOnExecute write FOnExecute;
 
     property ScriptID : String read FScriptID;
@@ -114,6 +118,8 @@ type
 
     function AnalyseCode : TJupiterScriptAnalyserList;
     function Execute : Boolean;
+
+    procedure AddMessage(prMessage : String);
 
     constructor Create;
     destructor Destroy; override;
@@ -355,7 +361,7 @@ end;
 
 procedure TJupiterScript.Internal_WriteLn(prMessage: String);
 begin
-  Self.RunMessages.Add(prMessage);
+  Self.AddMessage(prMessage);
 
   WriteLn(prMessage);
 end;
@@ -437,13 +443,13 @@ begin
 
       Self.Messages.Add(Self.GetDateTimeMark + ': Compilação completa');
 
-      Self.RunMessages.Add(Self.GetDateTimeMark + ': Iniciando execução');
-      Self.RunMessages.Add(EmptyStr);
+      Self.AddMessage(Self.GetDateTimeMark + ': Iniciando execução');
+      Self.AddMessage(EmptyStr);
 
       if vrPSScript.Execute then
       begin
-        Self.RunMessages.Add(EmptyStr);
-        Self.RunMessages.Add(Self.GetDateTimeMark + ': Execução finalizada');
+        Self.AddMessage(EmptyStr);
+        Self.AddMessage(Self.GetDateTimeMark + ': Execução finalizada');
 
         Self.Messages.Add(Self.GetDateTimeMark + ': Execução completa');
 
@@ -466,6 +472,17 @@ begin
 
     FreeAndNil(vrPSScript);
   end;
+end;
+
+procedure TJupiterScript.AddMessage(prMessage: String);
+begin
+  if Assigned(Self.OnAddMessage) then
+  begin
+    Self.OnAddMessage(prMessage);
+    Exit;
+  end;
+
+  Self.RunMessages.Add(prMessage);
 end;
 
 constructor TJupiterScript.Create;

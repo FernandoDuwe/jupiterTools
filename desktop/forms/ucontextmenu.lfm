@@ -1,7 +1,7 @@
 inherited FContextMenu: TFContextMenu
-  Left = 512
+  Left = 360
   Height = 789
-  Top = 250
+  Top = 254
   Width = 1204
   Caption = 'Menu de Contexto'
   ClientHeight = 789

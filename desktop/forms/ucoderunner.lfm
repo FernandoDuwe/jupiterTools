@@ -1,0 +1,29 @@
+inherited FCodeRunner: TFCodeRunner
+  Left = 753
+  Top = 292
+  Caption = 'Executor de código'
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  object lbOutput: TListBox[3]
+    Left = 0
+    Height = 325
+    Top = 50
+    Width = 879
+    Align = alClient
+    ItemHeight = 0
+    TabOrder = 3
+    TopIndex = -1
+  end
+  inherited acOptions: TActionList[4]
+  end
+  inherited tmrAutoUpdater: TTimer[5]
+  end
+  inherited pmOptions: TPopupMenu[6]
+  end
+  object tmrExecute: TTimer[7]
+    Enabled = False
+    OnTimer = tmrExecuteTimer
+    Left = 568
+    Top = 72
+  end
+end

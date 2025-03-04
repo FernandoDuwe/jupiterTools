@@ -119,7 +119,7 @@ end;
 
 procedure JupiterAppScript_WriteScriptLn(prScriptId, prMessage: String);
 begin
-  vrJupiterApp.GetScriptById(prScriptId).RunMessages.Add(prMessage);
+  vrJupiterApp.GetScriptById(prScriptId).AddMessage(prMessage);
 
   JupiterAppScript_WriteLn(prMessage);
 end;

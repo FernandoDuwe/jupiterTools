@@ -24,6 +24,7 @@ const
    SYSTEM_PATH : String = '/forms/system';
    SQLEDITOR_PATH : String = '/forms/sqlEditor';
    TEXTEDITOR_PATH : String = '/forms/textEditor';
+   CODERUNNER_PATH : String = '/forms/codeRunner';
 
    ICON_ADD       : SmallInt = 0;
    ICON_NEW       : SmallInt = 1;

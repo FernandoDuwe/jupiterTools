@@ -256,6 +256,9 @@ begin
 
   Self.Height := PercentOfScreen(Screen.Height, 80);
   Self.Width  := PercentOfScreen(Screen.Width, 80);
+
+  Self.WindowState := wsNormal;
+  Self.Position := poScreenCenter;
 end;
 
 procedure TFJupiterForm.FormDestroy(Sender: TObject);

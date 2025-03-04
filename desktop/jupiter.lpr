@@ -28,7 +28,7 @@ uses
   uSystemMonitor, uCustomCodeForm, uJupiterFormDesktopAppScript, uFileExplorer,
   jupitersqldataprovider, jupiterthread, uContextMenu, uSQLEditor, uCheckList,
   uTextEditor, uJupiterDateUtilsScript, uChartViewer, 
-uJupiterCheckListUtilsScript, uWaitForm;
+uJupiterCheckListUtilsScript, uWaitForm, uCodeRunner;
 
 {$R *.res}
 
@@ -68,6 +68,7 @@ begin
     FormRoutes.Add(TJupiterFormRoute.Create(CHECKLIST_PATH, TFCheckList));
     FormRoutes.Add(TJupiterFormRoute.Create(TEXTEDITOR_PATH, TFTextEditor));
     FormRoutes.Add(TJupiterFormRoute.Create(CHARTVIEWER_PATH, TFChartViewer));
+    FormRoutes.Add(TJupiterFormRoute.Create(CODERUNNER_PATH, TFCodeRunner));
   end;
 
   Application.Run;

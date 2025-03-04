@@ -423,10 +423,18 @@
       <Unit>
         <Filename Value="forms/uwaitform.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="FJupiterForm1"/>
+        <ComponentName Value="FWaitForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uWaitForm"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms/ucoderunner.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FCodeRunner"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uCodeRunner"/>
       </Unit>
     </Units>
   </ProjectOptions>

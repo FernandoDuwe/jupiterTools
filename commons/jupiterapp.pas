@@ -5,7 +5,7 @@ unit JupiterApp;
 interface
 
 uses
-  Classes, Controls, JupiterObject, JupiterModule, JupiterEnviroment,
+  Classes, JupiterObject, JupiterModule, JupiterEnviroment,
   JupiterVariable, jupiterDatabaseWizard, jupiterScript, jupiterStringUtils,
   JupiterConsts, uJupiterEnviromentScript, uJupiterStringUtilsScript,
   uJupiterRunnableScript, uJupiterDataProviderScript, uJupiterDateUtilsScript,

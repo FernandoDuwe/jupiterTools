@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, jupiterScript, JupiterConsts, JupiterApp, JupiterVariable,
-  uCustomDatabaseForm, ucustomdatabasegrid, SysUtils, PascalScript,
+  uCustomDatabaseForm, ucustomdatabasegrid, uCodeRunner, SysUtils, PascalScript,
   uPSComponent, Forms, SQLDB;
 
 type
@@ -22,6 +22,7 @@ type
   end;
 
   function JupiterAppDesktopOpenForm(prForm : String) : String;
+  procedure JupiterAppDesktopOpenCodeRunner(prMacroId : String);
   procedure JupiterAppDesktopOpenFormWithParams(prForm, prParams : String);
   procedure JupiterAppDesktopShowMessage(prMessage : String);
   procedure JupiterAppDesktopCursorToWait;
@@ -49,6 +50,17 @@ uses Controls, uJupiterForm, uMain, jupiterDesktopApp, jupiterDatabaseWizard;
 function JupiterAppDesktopOpenForm(prForm: String) : String;
 begin
   Result := TJupiterDesktopApp(vrJupiterApp).OpenForm(prForm, EmptyStr);
+end;
+
+procedure JupiterAppDesktopOpenCodeRunner(prMacroId: String);
+var
+  vrForm : TForm;
+begin
+  vrForm := TJupiterDesktopApp(vrJupiterApp).NewFormByRoute(CODERUNNER_PATH);
+
+  TJupiterDesktopApp(vrJupiterApp).OpenForm(vrForm as TFCodeRunner);
+
+  TFCodeRunner(vrForm).FromScriptID(prMacroId);
 end;
 
 procedure JupiterAppDesktopOpenFormWithParams(prForm, prParams: String);
@@ -237,6 +249,7 @@ begin
   inherited DoCompile(prSender);
 
   prSender.AddFunction(@JupiterAppDesktopOpenForm, 'function OpenForm(Form: String) : String;');
+  prSender.AddFunction(@JupiterAppDesktopOpenCodeRunner, 'procedure OpenCodeRunner(prMacroId: String);');
   prSender.AddFunction(@JupiterAppDesktopOpenFormWithParams, 'procedure OpenFormWithParams(Form, Params : String);');
   prSender.AddFunction(@JupiterAppDesktopOpenGridFromTable, 'procedure OpenGridFromTable(prTableName : String);');
   prSender.AddFunction(@JupiterAppDesktopOpenFormFromTableId, 'procedure OpenFormFromTableId(prTableName: String; prID: Integer);');
@@ -265,7 +278,8 @@ function TJupiterDesktopAppScript.AnalyseCode: TJupiterScriptAnalyserList;
 begin
   Result := inherited AnalyseCode;
 
-  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'function OpenForm(Form: String) : String;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function OpenForm(Form: String) : String;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenCodeRunner(prMacroId: String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenFormWithParams(Form, Params : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenGridFromTable(prTableName : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenFormFromTableId(prTableName: String; prID: Integer);'));

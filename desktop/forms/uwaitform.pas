@@ -5,10 +5,15 @@ unit uWaitForm;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, uJupiterForm;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, uJupiterForm;
 
 type
-  TFJupiterForm1 = class(TFJupiterForm)
+
+  { TFWaitForm }
+
+  TFWaitForm = class(TFJupiterForm)
+    Image2: TImage;
+    pnBottom1: TPanel;
   private
 
   public
@@ -16,7 +21,7 @@ type
   end;
 
 var
-  FJupiterForm1: TFJupiterForm1;
+  FWaitForm: TFWaitForm;
 
 implementation
 

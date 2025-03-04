@@ -24,11 +24,12 @@ type
   procedure JupiterRunnableScript_OpenDocument(prDocument: String);
   procedure JupiterRunnableScript_ShellExecute(prExecuteIn, prFile : String);
   procedure JupiterRunnableScript_CreateProcess(prFileName : String; prParams : String; var prOutput : String; prWaitUntilEnd : Boolean = True; prSilent : Boolean = False);
+  procedure JupiterRunnableScript_ExecuteBat(prFile : String);
   procedure JupiterRunnableScript_RunCommand(prParams : String);
 
 implementation
 
-uses LCLIntf, Process {$IFDEF WINDOWS} , ShellApi {$ENDIF}, JupiterApp;
+uses LCLIntf, Process {$IFDEF WINDOWS} , Windows, ShellApi {$ENDIF}, JupiterApp;
 
 procedure JupiterRunnableScript_OpenFolder(prFolder: String);
 begin
@@ -66,10 +67,10 @@ begin
     if prSilent then
       vrProcess.Options := vrProcess.Options + [poNoConsole];
 
-    vrProcess.Executable := prFileName;
+    vrProcess.Executable := PAnsiChar(prFileName);
 
     if prParams <> EmptyStr then
-      vrProcess.Parameters.Add(prParams);
+      vrProcess.Parameters.Add(PAnsiChar(prParams));
 
     vrProcess.Execute;
 
@@ -83,6 +84,32 @@ begin
     vrProcess.Free;
     FreeAndNil(vrOutput);
   end;
+end;
+
+procedure JupiterRunnableScript_ExecuteBat(prFile: String);
+{$IFDEF WINDOWS}
+var
+  SI: TStartupInfo;
+  PI: TProcessInformation;
+  Cmd: String;
+  {$ENDIF}
+begin
+  {$IFDEF WINDOWS}
+  FillChar(SI, SizeOf(TStartupInfo), 0);
+  FillChar(PI, SizeOf(TProcessInformation), 0);
+  SI.cb := SizeOf(TStartupInfo);
+  SI.dwFlags := STARTF_USESHOWWINDOW;
+  SI.wShowWindow := SW_HIDE; // Oculta a janela
+
+  Cmd := 'cmd.exe /c "' + prFile + '"';
+
+  if CreateProcess(nil, PChar(Cmd), nil, nil, False, CREATE_NO_WINDOW, nil, nil, SI, PI) then
+  begin
+    WaitForSingleObject(PI.hProcess, INFINITE);
+    CloseHandle(PI.hProcess);
+    CloseHandle(PI.hThread);
+  end;
+  {$ENDIF}
 end;
 
 procedure JupiterRunnableScript_RunCommand(prParams: String);
@@ -113,6 +140,7 @@ begin
 
   {$IFDEF WINDOWS}
     prSender.AddFunction(@JupiterRunnableScript_ShellExecute, 'procedure ShellExecute(prExecuteIn, prFile: String);');
+    prSender.AddFunction(@JupiterRunnableScript_ExecuteBat, 'procedure ExecuteBat(prFile: String);');
   {$ENDIF}
 end;
 
@@ -127,6 +155,7 @@ begin
 
   {$IFDEF WINDOWS}
     Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure ShellExecute(prExecuteIn, prFile: String);'));
+    Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure ExecuteBat(prFile: String);'));
   {$ENDIF}
 end;
 
