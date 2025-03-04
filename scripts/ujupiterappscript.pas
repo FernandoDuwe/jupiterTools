@@ -119,9 +119,8 @@ end;
 
 procedure JupiterAppScript_WriteScriptLn(prScriptId, prMessage: String);
 begin
-  vrJupiterApp.GetScriptById(prScriptId).AddMessage(prMessage);
-
-  JupiterAppScript_WriteLn(prMessage);
+  if vrJupiterApp.GetScriptById(prScriptId) <> nil then
+    vrJupiterApp.GetScriptById(prScriptId).AddMessage(prMessage);
 end;
 
 procedure JupiterAppScript_RunMacroById(prMacroId: String);
