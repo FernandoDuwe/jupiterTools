@@ -136,6 +136,8 @@ begin
 
     try
       InternalQuery.Open;
+
+      Self.UpdateForm();
     except
       Application.MessageBox(PAnsiChar('Erro ao executar query: ' + Exception(ExceptObject).Message), PAnsiChar(Self.Caption), MB_ICONERROR + MB_OK);
     end;
@@ -195,7 +197,7 @@ begin
 
     vrFile.SaveToFile(vrEnviroment.FullPath('/temp/DataExtract.csv'));
 
-    JupiterRunnableScript_RunCommand(vrEnviroment.FullPath('/temp/DataExtract.csv'));
+    JupiterRunnableScript_RunCommandOnJupiter(vrEnviroment.FullPath('/temp/DataExtract.csv'));
   finally
     vrFile.Clear;
     FreeAndNil(vrFile);

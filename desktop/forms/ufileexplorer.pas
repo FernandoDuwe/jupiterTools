@@ -48,7 +48,7 @@ begin
   if not Assigned(slvExporer.Selected) then
     Exit;
 
-  JupiterRunnableScript_RunCommand(slvExporer.Root + slvExporer.Selected.Caption);
+  JupiterRunnableScript_RunCommandOnJupiter(slvExporer.Root + slvExporer.Selected.Caption);
 end;
 
 procedure TFFileExplorer.Internal_UpdateComponents;
@@ -93,7 +93,7 @@ end;
 
 procedure TFFileExplorer.Internal_OnOpenFolder(Sender: TObject);
 begin
-  JupiterRunnableScript_RunCommand(Self.Params.VariableById('path').Value);
+  JupiterRunnableScript_RunCommandOnJupiter(Self.Params.VariableById('path').Value);
 end;
 
 procedure TFFileExplorer.Internal_OnAsReport(Sender: TObject);
