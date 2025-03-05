@@ -163,8 +163,8 @@ begin
   prSender.AddFunction(@JupiterRunnableScript_RunCommandOnJupiter, 'procedure RunCommandOnJupiter(prParams: String);');
 
   prSender.AddFunction(@JupiterRunnableScript_RunCommand, 'procedure RunCommand(prFile : String; var vrOutPut : String);');
-  prSender.AddFunction(@JupiterRunnableScript_RunCommandOnShell, 'procedure RunCommandOnShell(prFile : String; var vrOutPut : String);');
-  prSender.AddFunction(@JupiterRunnableScript_RunCommandAndWait, 'procedure RunCommandAndWait(prShell, prFile : String; var vrOutPut : String);');
+  prSender.AddFunction(@JupiterRunnableScript_RunCommandOnShell, 'procedure RunCommandOnShell(prShell, prFile : String; var vrOutPut : String);');
+  prSender.AddFunction(@JupiterRunnableScript_RunCommandAndWait, 'procedure RunCommandAndWait(prFile : String; var vrOutPut : String);');
   prSender.AddFunction(@JupiterRunnableScript_RunCommandOnShellAndWait, 'procedure RunCommandOnShellAndWait(prShell, prFile : String; var vrOutPut : String);');
 
   {$IFDEF WINDOWS}
@@ -183,8 +183,8 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure RunCommandOnJupiter(prParams: String);'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure RunCommand(prFile : String; var vrOutPut : String);'));
-  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure RunCommandOnShell(prFile : String; var vrOutPut : String);'));
-  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure RunCommandAndWait(prShell, prFile : String; var vrOutPut : String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure RunCommandOnShell(prShell, prFile : String; var vrOutPut : String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure RunCommandAndWait(prFile : String; var vrOutPut : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure RunCommandOnShellAndWait(prShell, prFile : String; var vrOutPut : String);'));
 
   {$IFDEF WINDOWS}

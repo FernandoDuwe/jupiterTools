@@ -96,21 +96,19 @@
         <Filename Value="../commons/jupitermodule.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterModule"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="230"/>
         <CursorPos X="76" Y="242"/>
         <UsageCount Value="205"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../commons/jupiterapp.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterApp"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="58"/>
         <CursorPos X="14" Y="77"/>
         <UsageCount Value="205"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../commons/jupiterdatabasewizard.pas"/>
@@ -207,19 +205,21 @@
         <Filename Value="../scripts/ujupiterappscript.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uJupiterAppScript"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="110"/>
         <CursorPos X="28" Y="125"/>
         <UsageCount Value="201"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="scripts/ujupiterdesktopappscript.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uJupiterDesktopAppScript"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="249"/>
-        <CursorPos X="102" Y="252"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="244"/>
+        <CursorPos Y="254"/>
         <UsageCount Value="201"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="forms/unewtask.pas"/>
@@ -366,9 +366,8 @@
         <Filename Value="../scripts/ujupiterrunnablescript.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uJupiterRunnableScript"/>
-        <EditorIndex Value="2"/>
-        <TopLine Value="151"/>
-        <CursorPos X="25" Y="159"/>
+        <TopLine Value="148"/>
+        <CursorPos X="115" Y="183"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit>
@@ -489,11 +488,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uFileExplorer"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="75"/>
         <CursorPos X="44" Y="96"/>
         <UsageCount Value="200"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../commons/jupitersqldataprovider.pas"/>
@@ -529,13 +527,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uSQLEditor"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="122"/>
-        <CursorPos X="23" Y="141"/>
+        <CursorPos X="20" Y="134"/>
         <UsageCount Value="140"/>
-        <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="forms/uchecklist.pas"/>
@@ -607,11 +602,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uCodeRunner"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="89"/>
         <CursorPos X="22" Y="109"/>
         <UsageCount Value="25"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../commons/jupiterdirectorydataprovider.pas"/>
@@ -1018,30 +1012,20 @@
       </Unit>
       <Unit>
         <Filename Value="/usr/share/fpcsrc/3.2.2/packages/fcl-process/src/processbody.inc"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="164"/>
         <CursorPos X="135" Y="183"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="/usr/share/fpcsrc/3.2.2/packages/fcl-process/src/process.pp"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="2"/>
         <CursorPos X="45" Y="31"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="../scripts/ujupiterrunnablescript.pas"/>
-        <Caret Line="28" Column="35" TopLine="7"/>
-      </Position>
-      <Position>
-        <Filename Value="../scripts/ujupiterrunnablescript.pas"/>
-        <Caret Line="139" Column="66" TopLine="115"/>
-      </Position>
+    <JumpHistory HistoryIndex="24">
       <Position>
         <Filename Value="../scripts/ujupiterrunnablescript.pas"/>
         <Caret Line="29" Column="39"/>
@@ -1061,14 +1045,6 @@
       <Position>
         <Filename Value="../scripts/ujupiterrunnablescript.pas"/>
         <Caret Line="128" Column="3" TopLine="107"/>
-      </Position>
-      <Position>
-        <Filename Value="forms/ufileexplorer.pas"/>
-        <Caret Line="51" Column="44" TopLine="30"/>
-      </Position>
-      <Position>
-        <Filename Value="forms/ufileexplorer.pas"/>
-        <Caret Line="96" Column="44" TopLine="75"/>
       </Position>
       <Position>
         <Filename Value="../scripts/ujupiterrunnablescript.pas"/>
@@ -1097,10 +1073,6 @@
       <Position>
         <Filename Value="../scripts/ujupiterrunnablescript.pas"/>
         <Caret Line="133" Column="66" TopLine="127"/>
-      </Position>
-      <Position>
-        <Filename Value="/usr/share/fpcsrc/3.2.2/packages/fcl-process/src/processbody.inc"/>
-        <Caret Line="183" Column="135" TopLine="164"/>
       </Position>
       <Position>
         <Filename Value="../scripts/ujupiterrunnablescript.pas"/>
@@ -1147,12 +1119,12 @@
         <Caret Line="29" Column="3"/>
       </Position>
       <Position>
-        <Filename Value="forms/usqleditor.pas"/>
-        <Caret Line="173" Column="15" TopLine="166"/>
+        <Filename Value="scripts/ujupiterdesktopappscript.pas"/>
+        <Caret Line="252" Column="102" TopLine="249"/>
       </Position>
       <Position>
-        <Filename Value="forms/usqleditor.pas"/>
-        <Caret Line="37" Column="31" TopLine="19"/>
+        <Filename Value="scripts/ujupiterdesktopappscript.pas"/>
+        <Caret Line="2"/>
       </Position>
     </JumpHistory>
     <RunParams>
