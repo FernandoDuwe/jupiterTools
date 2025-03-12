@@ -32,8 +32,6 @@ type
 
     procedure Internal_UpdateComponents; override;
     procedure Internal_UpdateDatasets; override;
-  public
-    function IsWindowForm : Boolean; override;
   end;
 
 var
@@ -190,11 +188,6 @@ begin
 
   if lvRoute.Items.Count > 0 then
     lvRoute.Selected := lvRoute.Items[0];
-end;
-
-function TFContextMenu.IsWindowForm: Boolean;
-begin
-  Result := False;
 end;
 
 end.

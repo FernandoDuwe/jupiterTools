@@ -102,6 +102,7 @@ var
   vrWizard : TJupiterDatabaseWizard;
   vrReference : TJupiterDatabaseReference;
   vrDestiny : Integer;
+  vrParam : String;
 begin
   if not Assigned(Sender) then
     Exit;
@@ -122,9 +123,14 @@ begin
     if not vrWizard.Exists('ROUTES', Format(' ID = %0:d AND DESTINY IS NOT NULL ', [vrReference.ID])) then
       Exit;
 
+    vrParam := EmptyStr;
+
     vrDestiny := vrWizard.GetField('ROUTES', 'DESTINY', ' ID = ' + IntToStr(vrReference.ID));
 
-    vrJupiterApp.RunMacro(vrDestiny, TJupiterVariableList.Create);
+    if vrWizard.GetField('ROUTES', 'PARAMS', ' ID = ' + IntToStr(vrReference.ID)) <> Null then
+      vrParam := vrWizard.GetField('ROUTES', 'PARAMS', ' ID = ' + IntToStr(vrReference.ID));
+
+    vrJupiterApp.RunMacro(vrDestiny, CreateVariableListOfParam(vrParam));
   finally
     FreeAndNil(vrWizard);
   end;

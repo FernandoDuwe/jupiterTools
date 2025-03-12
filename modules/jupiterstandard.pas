@@ -56,6 +56,9 @@ begin
     if not vrWizard.TableExists('ROUTES') then
       vrWizard.ExecuteScript(CreateStringList('CREATE TABLE ROUTES ( ID INTEGER PRIMARY KEY, TITLE VARCHAR(100), ROUTE VARCHAR (100), DESTINY INT, ICON SMALLINT, ZINDEX SMALLINT, SHORTCUT VARCHAR(30), FOREIGN KEY (DESTINY) REFERENCES MACROS (ID))'));
 
+    if not vrWizard.FieldExists('ROUTES', 'PARAMS') then
+        vrWizard.ExecuteScript(CreateStringList(' ALTER TABLE ROUTES ADD PARAMS VARCHAR(100) '));
+
     if not vrWizard.TableExists('SHORTCUTS') then
       vrWizard.ExecuteScript(CreateStringList('CREATE TABLE SHORTCUTS ( ID INTEGER PRIMARY KEY, DESCRIPTION VARCHAR(100), SHORTCUT VARCHAR(100), DESTINY INT, FOREIGN KEY (DESTINY) REFERENCES MACROS (ID))'));
 

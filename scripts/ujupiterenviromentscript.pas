@@ -33,10 +33,13 @@ type
 
   function JupiterEnviromentScript_LoadFromFile(prFileName : String) : String;
   procedure JupiterEnviromentScript_SaveToFile(prFileName, prData : String);
+  procedure JupiterEnviromentScript_CopyTextToClipboard(prText : String);
 
   function JupiterEnviromentScript_GetApplicationPath : String;
 
 implementation
+
+uses Clipbrd;
 
 function JupiterEnviromentScript_FileOrFolderExists(prPath: String): Boolean;
 var
@@ -160,6 +163,11 @@ begin
   end;
 end;
 
+procedure JupiterEnviromentScript_CopyTextToClipboard(prText: String);
+begin
+  Clipboard.AsText := prText;
+end;
+
 function JupiterEnviromentScript_GetApplicationPath: String;
 var
   vrEnviroment : TJupiterEnviroment;
@@ -197,6 +205,8 @@ begin
   prSender.AddFunction(@JupiterEnviromentScript_LoadFromFile, 'function LoadFromFile(prFileName : String): String;');
   prSender.AddFunction(@JupiterEnviromentScript_SaveToFile, 'procedure SaveToFile(prFileName, prData : String);');
 
+  prSender.AddFunction(@JupiterEnviromentScript_CopyTextToClipboard, 'procedure CopyTextToClipboard(prText: String);');
+
   prSender.AddFunction(@JupiterEnviromentScript_SameExtension, 'function SameExtension(prFileName, prExtension : String) : Boolean;');
 end;
 
@@ -217,6 +227,7 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CopyFileTo(prOrigin, prDestiny: String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure DeleteFileOnDisk(prFileName : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure SaveToFile(prFileName, prData : String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CopyTextToClipboard(prText: String);'));
 end;
 
 end.

@@ -40,6 +40,8 @@ type
     procedure AddLabel(prLabelCaption : String);
     procedure AddLabelResultFromScript(prMacroID : String);
     procedure AddLabelBoldResultFromScript(prMacroID : String);
+    procedure AddLabelResultFromScriptWithParams(prMacroID, prParam : String);
+    procedure AddLabelBoldResultFromScriptWithParams(prMacroID, prParam : String);
     procedure AddLabelBold(prLabelCaption : String);
     procedure AddEdit(prVariableId, prInitialValue : String);
     procedure AddCombBox(prDataProviderID, prColumn, prVariableID : String);
@@ -47,6 +49,7 @@ type
     procedure AddAction(prCaption, prHint : String; prIcon : Integer; prMacroID : String);
     procedure AddLink(prCaption : String; prMacroID : String);
     procedure AddLinkWithParams(prCaption : String; prMacroID, prParam : String);
+    procedure AddLinkBoldWithParams(prCaption : String; prMacroID, prParam : String);
     procedure AddLinkBold(prCaption : String; prMacroID : String);
     procedure AddLinkAsScript(prCaption : String; prMacro : TStrings);
     procedure AddLinkBoldAsScript(prCaption : String; prMacro : TStrings);
@@ -184,7 +187,12 @@ begin
       Continue;
 
     if TJupiterComponentReference(Self.FReferences.GetAtIndex(vrVez)).Component is TLabel then
-      TLabel(TJupiterComponentReference(Self.FReferences.GetAtIndex(vrVez)).Component).Caption := vrJupiterApp.RunMacroAsResult(TJupiterComponentReference(Self.FReferences.GetAtIndex(vrVez)).MacroID, Self.Params);
+    begin
+      if TJupiterComponentReference(Self.FReferences.GetAtIndex(vrVez)).Param <> EmptyStr then
+        TLabel(TJupiterComponentReference(Self.FReferences.GetAtIndex(vrVez)).Component).Caption := vrJupiterApp.RunMacroAsResult(TJupiterComponentReference(Self.FReferences.GetAtIndex(vrVez)).MacroID, CreateVariableListOfParam(TJupiterComponentReference(Self.FReferences.GetAtIndex(vrVez)).Param))
+      else
+        TLabel(TJupiterComponentReference(Self.FReferences.GetAtIndex(vrVez)).Component).Caption := vrJupiterApp.RunMacroAsResult(TJupiterComponentReference(Self.FReferences.GetAtIndex(vrVez)).MacroID, Self.Params);
+    end;
   end;
 end;
 
@@ -224,6 +232,43 @@ begin
   vrReference := JupiterComponentsNewLabel('', TJupiterPosition.Create(Self.FCurrentLine, Self.FCurrentMargin), sbBody);
 
   vrReference.MacroID := prMacroID;
+  vrReference.Tag := 1000;
+
+  TLabel(vrReference.Component).Font.Style := [fsBold];
+
+  Self.FCurrentLine := vrReference.Bottom;
+
+  Self.FReferences.Add(vrReference);
+end;
+
+procedure TFCustomCodeForm.AddLabelResultFromScriptWithParams(prMacroID, prParam: String);
+var
+  vrReference : TJupiterComponentReference;
+begin
+  Self.FCurrentLine := Self.FCurrentLine + FORM_MARGIN_TOP;
+
+  vrReference := JupiterComponentsNewLabel('', TJupiterPosition.Create(Self.FCurrentLine, Self.FCurrentMargin), sbBody);
+
+  vrReference.MacroID := prMacroID;
+  vrReference.Param := prParam;
+  vrReference.Tag := 1000;
+
+  Self.FCurrentLine := vrReference.Bottom;
+
+  Self.FReferences.Add(vrReference);
+end;
+
+procedure TFCustomCodeForm.AddLabelBoldResultFromScriptWithParams(prMacroID, prParam: String);
+var
+  vrReference : TJupiterComponentReference;
+begin
+  Self.FCurrentLine := Self.FCurrentLine + FORM_MARGIN_TOP;
+
+  vrReference := JupiterComponentsNewLabel('', TJupiterPosition.Create(Self.FCurrentLine, Self.FCurrentMargin), sbBody);
+
+  vrReference.MacroID := prMacroID;
+  vrReference.Param   := prParam;
+
   vrReference.Tag := 1000;
 
   TLabel(vrReference.Component).Font.Style := [fsBold];
@@ -366,6 +411,31 @@ begin
     vrReference.Param := prParam;
 
     Self.References.Add(vrReference);
+
+    TLabel(vrReference.Component).Tag := Self.References.Count - 1;
+
+    TLabel(vrReference.Component).OnClick := @Internal_OnLinkClick;
+  end;
+end;
+
+procedure TFCustomCodeForm.AddLinkBoldWithParams(prCaption: String; prMacroID, prParam: String);
+var
+  vrReference : TJupiterComponentReference;
+begin
+  try
+    Self.FCurrentLine := Self.FCurrentLine + FORM_MARGIN_TOP;
+
+    vrReference := JupiterComponentsNewLink(prCaption, TJupiterPosition.Create(Self.FCurrentLine, Self.FCurrentMargin), sbBody);
+
+    Self.FCurrentLine := vrReference.Bottom;
+  finally
+    vrReference.MacroID := prMacroID;
+    vrReference.FieldName := EmptyStr;
+    vrReference.Param := prParam;
+
+    Self.References.Add(vrReference);
+
+    TLabel(vrReference.Component).Font.Style := [fsBold];
 
     TLabel(vrReference.Component).Tag := Self.References.Count - 1;
 
