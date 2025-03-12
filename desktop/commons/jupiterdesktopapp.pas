@@ -6,9 +6,10 @@ interface
 
 uses
   Classes, SysUtils, JupiterApp, JupiterObject, jupiterScript, JupiterRoute,
-  JupiterVariable, jupiterDatabaseWizard, JupiterConsts,
-  JupiterFileDataProvider, JupiterEnviroment, uJupiterFormDesktopAppScript,
-  uJupiterAction, Forms, Controls;
+  JupiterVariable, jupiterDatabaseWizard, JupiterConsts, ActnList,
+  JupiterFileDataProvider, JupiterEnviroment, jupiterStringUtils,
+  JupiterVariableDataProvider, uJupiterFormDesktopAppScript, uJupiterAction,
+  Forms, Controls;
 
 type
 
@@ -23,6 +24,7 @@ type
     procedure Internal_AddScriptLibraries(var prScript : TJupiterScript); override;
 
     procedure Internal_Prepare; override;
+    procedure Internal_ShortcutClick(Sender: TObject);
   published
     property FormRoutes : TJupiterObjectList read FFormRoutes write FFormRoutes;
     property ImageList : TImageList read FImageList write FImageList;
@@ -37,6 +39,7 @@ type
     procedure DeleteFormById(prFormID : String);
     function GenerateContextMenu(prSearch : String = '') : TJupiterActionGroup;
     procedure GetExternalImages;
+    procedure SetShortCutList(var prActionGroup : TActionList);
 
     // Pins
     procedure CreatePin(prTableName : String; prID : Integer);
@@ -49,7 +52,7 @@ type
 
 implementation
 
-uses uJupiterForm, uMain, uJupiterDesktopAppScript, SQLDB, Graphics;
+uses uJupiterForm, uMain, uJupiterDesktopAppScript, SQLDB, Graphics, LCLProc;
 
 { TJupiterDesktopApp }
 
@@ -64,6 +67,12 @@ end;
 procedure TJupiterDesktopApp.Internal_Prepare;
 begin
   inherited;
+end;
+
+procedure TJupiterDesktopApp.Internal_ShortcutClick(Sender: TObject);
+begin
+  if Sender is TAction then
+    Self.RunMacro(TAction(Sender).Tag, CreateVariableListOfParam(EmptyStr));
 end;
 
 function TJupiterDesktopApp.NewFormByRoute(prRoute: String): TForm;
@@ -282,6 +291,37 @@ begin
     FreeAndNil(vrEnviroment);
   end;
 
+end;
+
+procedure TJupiterDesktopApp.SetShortCutList(var prActionGroup: TActionList);
+var
+  vrQry    : TSQLQuery;
+  vrAction : TAction;
+begin
+  vrQry := Self.NewWizard.NewQuery;
+  try
+    vrQry.Close;
+    vrQry.SQL.Add(' SELECT ID, DESCRIPTION, SHORTCUT, DESTINY FROM SHORTCUTS ORDER BY 1 ');
+    vrQry.Open;
+    vrQry.First;
+
+    while not vrQry.EOF do
+    begin
+      vrAction            := TAction.Create(prActionGroup);
+      vrAction.ActionList := prActionGroup;
+      vrAction.Enabled    := True;
+      vrAction.Caption    := vrQry.FieldByName('DESCRIPTION').AsString;
+      vrAction.Hint       := vrQry.FieldByName('DESCRIPTION').AsString;
+      vrAction.OnExecute  := @Internal_ShortcutClick;
+      vrAction.ShortCut   := TextToShortCut(vrQry.FieldByName('SHORTCUT').AsString);
+      vrAction.Tag        := vrQry.FieldByName('DESTINY').AsInteger;
+
+      vrQry.Next;
+    end;
+  finally
+    vrQry.Close;
+    FreeAndNil(vrQry);
+  end;
 end;
 
 procedure TJupiterDesktopApp.CreatePin(prTableName: String; prID: Integer);
