@@ -27,6 +27,10 @@ type
   procedure JupiterEnviromentScript_DeleteFile(prFileName : String);
   function JupiterEnviromentScript_SameExtension(prFileName, prExtension : String) : Boolean;
 
+  function JupiterEnviromentScript_ExtractFileName(prFileName : String) : String;
+  function JupiterEnviromentScript_ExtractFileDir(prFileName : String) : String;
+  function JupiterEnviromentScript_ExtractFileExt(prFileName : String) : String;
+
   function JupiterEnviromentScript_CreatePath(prPath : String) : String;
   function JupiterEnviromentScript_CreateFile(prPath, prContent : String) : String;
   function JupiterEnviromentScript_CreateExternalFile(prPath, prContent : String) : String;
@@ -90,6 +94,21 @@ end;
 function JupiterEnviromentScript_SameExtension(prFileName, prExtension: String) : Boolean;
 begin
   Result := AnsiUpperCase(ExtractFileExt(prFileName)) = AnsiUpperCase(prExtension);
+end;
+
+function JupiterEnviromentScript_ExtractFileName(prFileName: String): String;
+begin
+  Result := ExtractFileName(prFileName);
+end;
+
+function JupiterEnviromentScript_ExtractFileDir(prFileName: String): String;
+begin
+  Result := ExtractFileDir(prFileName);
+end;
+
+function JupiterEnviromentScript_ExtractFileExt(prFileName: String): String;
+begin
+  Result := ExtractFileExt(prFileName);
 end;
 
 function JupiterEnviromentScript_CreatePath(prPath: String): String;
@@ -196,6 +215,10 @@ begin
   prSender.AddFunction(@JupiterEnviromentScript_FileExists, 'function FileExists(prPath: String): Boolean;');
   prSender.AddFunction(@JupiterEnviromentScript_FolderExists, 'function FolderExists(prPath: String): Boolean;');
 
+  prSender.AddFunction(@JupiterEnviromentScript_ExtractFileName, 'function ExtractFileName(prFileName: String): String;');
+  prSender.AddFunction(@JupiterEnviromentScript_ExtractFileDir, 'function ExtractFileDir(prFileName: String): String;');
+  prSender.AddFunction(@JupiterEnviromentScript_ExtractFileExt, 'function ExtractFileExt(prFileName: String): String;');
+
   prSender.AddFunction(@JupiterEnviromentScript_DeleteFile, 'procedure DeleteFileOnDisk(prFileName : String);');
   prSender.AddFunction(@JupiterEnviromentScript_CopyFileTo, 'procedure CopyFileTo(prOrigin, prDestiny: String);');
   prSender.AddFunction(@JupiterEnviromentScript_CreatePath, 'function CreatePath(prPath : String) : String;');
@@ -223,6 +246,10 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function CreateExternalFile(prPath, prContent: String): String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function LoadFromFile(prFileName : String): String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function SameExtension(prFileName, prExtension : String) : Boolean;'));
+
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function ExtractFileName(prFileName : String) : Boolean;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function ExtractFileDir(prFileName : String) : Boolean;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function ExtractFileExt(prFileName : String) : Boolean;'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CopyFileTo(prOrigin, prDestiny: String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure DeleteFileOnDisk(prFileName : String);'));

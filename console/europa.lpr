@@ -6,7 +6,7 @@ uses
   {$IFDEF UNIX}
   cthreads,
   {$ENDIF}
-  Classes, SysUtils, JupiterApp, CustApp
+  Classes, SysUtils, JupiterApp, uJupiterEnviromentScript, pascalscript, CustApp
   { you can add units after this };
 
 type
@@ -57,7 +57,7 @@ begin
 
   StopOnException := True;
 
-  vrJupiterApp := TJupiterApp.Create();
+  vrJupiterApp := TJupiterApp.Create('europa.cli', 'Europa');
 end;
 
 destructor TEuropa.Destroy;

@@ -19,6 +19,7 @@ type
     procedure Internal_Prepare; override;
 
     function Internal_CreateNewTaskMacro : TStrings;
+    function Internal_CreateNewTaskMacroExecute : TStrings;
     function Internal_CreateImportTaskMacro : TStrings;
   end;
 
@@ -90,6 +91,8 @@ begin
 
     Self.Internal_CreateMacroIfDontExists('utils.tasks.import', 'Utils: Importar tarefas', Self.Internal_CreateImportTaskMacro);
 
+    Self.Internal_CreateMacroIfDontExists('menu.file.new.task.Execute.Click', 'Clique do item de execução de nova tarefa', Self.Internal_CreateNewTaskMacroExecute);
+
     Self.Internal_CreateMacroIfDontExists('TAREFAS.MarcarComoAtualScript.OnClick', 'Marcar tarefa como atual', CreateStringListToMacro('   SetGlobalParam(''Tools.Tasks.Current.ID'', GetParam(SCRIPTID, ''ID''));' + #13#10 +
                                                                                                                                        #13#10 +
                                                                                                                                        '   SetGlobalParam(''Tools.Tasks.Current.Path'', GetGlobalParam(''Tools.Tasks.Path'') + ''/'' + GetParam(SCRIPTID, ''CLIENTE'') + ''/'' + GetParam(SCRIPTID, ''NUMERO'') + ''/'');' + #13#10 +
@@ -146,12 +149,28 @@ begin
   Result.Add('    Form_AddLabel(formContext, ''Opções'');');
   Result.Add('    Form_AddCheckBox(formContext, ''CHECK_CURRENTTASK'', ''Marcar como tarefa atual'', True);');
   Result.Add('    Form_AddCheckBox(formContext, ''CHECK_MARKSTARTTIME'', ''Marcar tempo inicial'', True);');
-  Result.Add('    Form_AddAction(formContext, ''Criar tarefa'', ''Clique aqui para criar a tarefa'', 3, ''menu.file.new.task.execute'');');
+  Result.Add('    Form_AddAction(formContext, ''Criar tarefa'', ''Clique aqui para criar a tarefa'', 3, ''menu.file.new.task.Execute.Click'');');
   Result.Add('  finally');
   Result.Add('    Form_SetCaption(formContext, ''Criar uma nova tarefa'');');
   Result.Add('    Form_SetHint(formContext, ''Neste tela você criará novas tarefas'');');
   Result.Add('    UpdateForms();');
   Result.Add('  end;');
+  Result.Add('end.');
+end;
+
+function TJupiterTools.Internal_CreateNewTaskMacroExecute: TStrings;
+begin
+  Result := TStringList.Create;
+
+  Result.Clear;
+  Result.Add('program macro;');
+  Result.Add('const');
+  Result.Add('  SCRIPTID = ''' + JPAS_FLAG_SCRIPTID + ''';');
+  Result.Add(EmptyStr);
+  Result.Add('  // Include libraries');
+  Result.Add(EmptyStr);
+  Result.Add('begin');
+  Result.Add('  ShowMessage(''Tarefa criada com sucesso''); ');
   Result.Add('end.');
 end;
 

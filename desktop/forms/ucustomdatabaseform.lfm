@@ -22,7 +22,6 @@ inherited FCustomDatabaseForm: TFCustomDatabaseForm
     HorzScrollBar.Page = 1
     VertScrollBar.Page = 1
     Align = alClient
-    BorderStyle = bsNone
     TabOrder = 2
   end
   inherited acOptions: TActionList[4]

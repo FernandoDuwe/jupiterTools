@@ -28,6 +28,7 @@ type
   procedure JupiterRunnableScript_RunCommandOnJupiter(prParams : String);
   procedure JupiterRunnableScript_RunCommand(prFile : String; var vrOutPut : String);
   procedure JupiterRunnableScript_RunCommandOnShell(prShell, prFile : String; var vrOutPut : String);
+  procedure JupiterRunnableScript_RunFileOnShell(prFile : String);
   procedure JupiterRunnableScript_RunCommandAndWait(prFile : String; var vrOutPut : String);
   procedure JupiterRunnableScript_RunCommandOnShellAndWait(prShell, prFile : String; var vrOutPut : String);
 
@@ -136,6 +137,22 @@ begin
   RunCommand(prShell, [prFile], vrOutPut, [poRunIdle]);
 end;
 
+procedure JupiterRunnableScript_RunFileOnShell(prFile: String);
+var
+  AProcess: TProcess;
+begin
+  AProcess := TProcess.Create(nil);
+  try
+    AProcess.Executable := '/bin/bash';  // Executa o shell Bash
+    AProcess.Parameters.Add('-c');  // Permite passar comandos como string
+    AProcess.Parameters.Add(prFile);  // Modifique para o caminho correto
+    AProcess.Options := [poWaitOnExit, poUsePipes];  // Espera o script terminar
+    AProcess.Execute;
+  finally
+    AProcess.Free;
+  end;
+end;
+
 procedure JupiterRunnableScript_RunCommandAndWait(prFile: String; var vrOutPut: String);
 begin
   RunCommand(prFile, [], vrOutPut, [poNoConsole, poWaitOnExit]);
@@ -162,6 +179,8 @@ begin
   prSender.AddFunction(@JupiterRunnableScript_CreateProcess, 'procedure CreateProcess(prFileName: String; prParams: String; var prOutput: String; prWaitUntilEnd: Boolean; prSilent: Boolean);');
   prSender.AddFunction(@JupiterRunnableScript_RunCommandOnJupiter, 'procedure RunCommandOnJupiter(prParams: String);');
 
+  prSender.AddFunction(@JupiterRunnableScript_RunFileOnShell, 'procedure RunFileOnShell(prFile : String);');
+
   prSender.AddFunction(@JupiterRunnableScript_RunCommand, 'procedure RunCommand(prFile : String; var vrOutPut : String);');
   prSender.AddFunction(@JupiterRunnableScript_RunCommandOnShell, 'procedure RunCommandOnShell(prShell, prFile : String; var vrOutPut : String);');
   prSender.AddFunction(@JupiterRunnableScript_RunCommandAndWait, 'procedure RunCommandAndWait(prFile : String; var vrOutPut : String);');
@@ -181,6 +200,8 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenDocument(prDocument: String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CreateProcess(prFileName: String; prParams: String; var prOutput: String; prWaitUntilEnd: Boolean; prSilent: Boolean);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure RunCommandOnJupiter(prParams: String);'));
+
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure RunFileOnShell(prFile : String);'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure RunCommand(prFile : String; var vrOutPut : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure RunCommandOnShell(prShell, prFile : String; var vrOutPut : String);'));

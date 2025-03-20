@@ -181,6 +181,7 @@ procedure TFCustomDatabaseForm.Internal_BuildForm;
 var
   vrCurrentLine : Integer;
   vrVez : Integer;
+  vrHeight : Integer;
   vrReference : TJupiterComponentReference;
   vrWizard : TJupiterDatabaseWizard;
   vrAction : TJupiterComponentReference;
@@ -233,7 +234,19 @@ begin
           vrReference := JupiterComponentsNewDBDatePicker(Self.QueryOrigin.Fields[vrVez], InternalDataSource, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody)
         else
           if Self.QueryOrigin.Fields[vrVez] is TBlobField then
-            vrReference := JupiterComponentsNewDBMemo(Self.QueryOrigin.Fields[vrVez], InternalDataSource, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody)
+          begin
+            vrReference := JupiterComponentsNewDBMemo(Self.QueryOrigin.Fields[vrVez], InternalDataSource, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody);
+
+            // Se é o último componente
+            if (vrVez = (Self.QueryOrigin.Fields.Count - 1)) then
+            begin
+              vrHeight := sbBody.Height;
+              vrHeight := vrHeight - TDBMemo(vrReference.Component).Top - TDBMemo(vrReference.Component).Height;
+
+              if vrHeight > 0 then
+                TDBMemo(vrReference.Component).Height := (TDBMemo(vrReference.Component).Height + vrHeight) - FORM_MARGIN_BOTTOM_TONEXT - FORM_MARGIN_BOTTOM_TONEXT;
+            end;
+          end
           else
             if Self.QueryOrigin.Fields[vrVez] is TBooleanField then
               vrReference := JupiterComponentsNewDBCheckBox(Self.QueryOrigin.Fields[vrVez], InternalDataSource, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody)

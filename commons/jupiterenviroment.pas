@@ -43,7 +43,7 @@ type
 
 implementation
 
-uses Dialogs, FileUtil, Clipbrd;
+uses Dialogs {$IFNDEF JUPITERCLI}, FileUtil, Clipbrd{$ENDIF};
 
 { TJupiterEnviroment }
 
@@ -266,12 +266,16 @@ end;
 
 procedure TJupiterEnviroment.CopyFileTo(prOrigin, prDestiny: String);
 begin
+  {$IFNDEF JUPITERCLI}
   CopyFile(prOrigin, prDestiny);
+  {$ENDIF}
 end;
 
 procedure TJupiterEnviroment.CopyToClipboard(prContent: String);
 begin
+  {$IFNDEF JUPITERCLI}
   Clipboard.AsText := prContent;
+  {$ENDIF}
 end;
 
 function TJupiterEnviroment.IsOfExtension(prFileName, prGroupOfExtensions: String): Boolean;
@@ -280,8 +284,10 @@ begin
 end;
 
 function TJupiterEnviroment.OpenFile(prDefaultExtensions: String): String;
+{$IFNDEF JUPITERCLI}
 var
   vrDialog : TOpenDialog;
+{$ENDIF}
 begin
   Result := EmptyStr;
 
@@ -309,8 +315,10 @@ begin
 end;
 
 function TJupiterEnviroment.SaveToFile(prDefaultExtensions: String): String;
+{$IFNDEF JUPITERCLI}
 var
   vrDialog : TSaveDialog;
+  {$ENDIF}
 begin
   Result := EmptyStr;
 

@@ -7,32 +7,70 @@
       <Unit>
         <Filename Value="europa.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="42"/>
-        <CursorPos X="11" Y="79"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="50"/>
+        <CursorPos X="27" Y="77"/>
         <UsageCount Value="21"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../commons/jupiterapp.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterApp"/>
         <EditorIndex Value="-1"/>
-        <CursorPos X="12" Y="8"/>
+        <TopLine Value="66"/>
+        <CursorPos Y="88"/>
         <UsageCount Value="21"/>
       </Unit>
       <Unit>
         <Filename Value="../commons/jupiterenviroment.pas"/>
         <UnitName Value="JupiterEnviroment"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="-1"/>
-        <CursorPos X="51" Y="9"/>
+        <TopLine Value="295"/>
+        <CursorPos X="11" Y="321"/>
         <UsageCount Value="10"/>
       </Unit>
+      <Unit>
+        <Filename Value="../commons/jupiterscript.pas"/>
+        <UnitName Value="jupiterScript"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos Y="2"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../scripts/ujupiterenviromentscript.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uJupiterEnviromentScript"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="20"/>
+      </Unit>
     </Units>
-    <General>
-      <ActiveWindowIndexAtStart Value="-1"/>
-    </General>
-    <JumpHistory HistoryIndex="-1"/>
+    <JumpHistory HistoryIndex="5">
+      <Position>
+        <Filename Value="europa.lpr"/>
+        <Caret Line="59" Column="34" TopLine="41"/>
+      </Position>
+      <Position>
+        <Filename Value="europa.lpr"/>
+        <Caret Line="60" Column="60" TopLine="41"/>
+      </Position>
+      <Position>
+        <Filename Value="europa.lpr"/>
+        <Caret Line="86" TopLine="50"/>
+      </Position>
+      <Position>
+        <Filename Value="europa.lpr"/>
+        <Caret Line="78" TopLine="50"/>
+      </Position>
+      <Position>
+        <Filename Value="europa.lpr"/>
+        <Caret Line="83" Column="18" TopLine="23"/>
+      </Position>
+      <Position>
+        <Filename Value="europa.lpr"/>
+        <Caret Line="86" TopLine="50"/>
+      </Position>
+    </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>
       <Modes ActiveMode=""/>

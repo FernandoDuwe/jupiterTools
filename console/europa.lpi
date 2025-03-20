@@ -28,6 +28,11 @@
     <RunParams>
       <FormatVersion Value="2"/>
     </RunParams>
+    <RequiredPackages>
+      <Item>
+        <PackageName Value="pascalscript"/>
+      </Item>
+    </RequiredPackages>
     <Units>
       <Unit>
         <Filename Value="europa.lpr"/>
@@ -38,20 +43,30 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterApp"/>
       </Unit>
+      <Unit>
+        <Filename Value="../scripts/ujupiterenviromentscript.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uJupiterEnviromentScript"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
     <Version Value="11"/>
     <Target>
-      <Filename Value="../desktop/out/europa"/>
+      <Filename Value="europa"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="../commons"/>
+      <OtherUnitFiles Value="../commons;../scripts"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
+    <Linking>
+      <Debugging>
+        <DebugInfoType Value="dsDwarf3"/>
+      </Debugging>
+    </Linking>
     <Other>
-      <CustomOptions Value="JUPITERCLI"/>
+      <CustomOptions Value="-dJUPITERCLI"/>
     </Other>
   </CompilerOptions>
   <Debugging>

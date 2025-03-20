@@ -425,7 +425,7 @@ begin
     vrPSScript.Script.Clear;
     vrPSScript.Script.AddStrings(Self.Internal_GetFullScript);
 
-    if Self.Flags.GenerateFullFile then
+    if True then // if Self.Flags.GenerateFullFile then
     begin
       vrEnviroment := TJupiterEnviroment.Create;
       try
