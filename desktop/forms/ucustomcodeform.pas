@@ -35,6 +35,8 @@ type
 
     procedure Internal_UpdateComponents; override;
   published
+    property CurrentLine : Integer read FCurrentLine;
+
     property References : TJupiterObjectList read FReferences write FReferences;
   public
     procedure AddLabel(prLabelCaption : String);
@@ -117,6 +119,8 @@ begin
 
     if Trim(vrReference.MacroScript) <> '' then
       vrJupiterApp.RunScript(CreateStringList(vrReference.MacroScript), CreateVariableListOfParam(vrReference.Param));
+
+    Self.UpdateForm();
   end;
 end;
 

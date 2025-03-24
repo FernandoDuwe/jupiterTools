@@ -80,6 +80,7 @@ type
 
     procedure Internal_BuildMenuParams;
     procedure Internal_ClickMenuClick(Sender: TObject);
+    procedure Internal_CreateShortcutList;
   public
     procedure PrepareForm; virtual;
     procedure UpdateForm(prUpdateDatasets : Boolean = True; prUpdateComponentes : Boolean = True; prUpdateCalcs : Boolean = True); virtual;
@@ -370,10 +371,17 @@ begin
   end;
 end;
 
+procedure TFJupiterForm.Internal_CreateShortcutList;
+begin
+  TJupiterDesktopApp(vrJupiterApp).SetShortCutList(acOptions);
+end;
+
 procedure TFJupiterForm.PrepareForm;
 begin
   try
     Self.Internal_PrepareForm;
+
+    Self.Internal_CreateShortcutList;
 
     if Self.IsWindowForm then
       if vrJupiterApp.Params.VariableById(FORM_ALWAYS_MODAL).AsBool then

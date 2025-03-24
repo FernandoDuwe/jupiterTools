@@ -8,7 +8,7 @@
         <Filename Value="europa.lpr"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="50"/>
+        <TopLine Value="49"/>
         <CursorPos X="27" Y="77"/>
         <UsageCount Value="21"/>
         <Loaded Value="True"/>
@@ -21,6 +21,13 @@
         <TopLine Value="66"/>
         <CursorPos Y="88"/>
         <UsageCount Value="21"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../scripts/ujupiterenviromentscript.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uJupiterEnviromentScript"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="20"/>
       </Unit>
       <Unit>
         <Filename Value="../commons/jupiterenviroment.pas"/>
@@ -36,13 +43,6 @@
         <EditorIndex Value="-1"/>
         <CursorPos Y="2"/>
         <UsageCount Value="10"/>
-      </Unit>
-      <Unit>
-        <Filename Value="../scripts/ujupiterenviromentscript.pas"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="uJupiterEnviromentScript"/>
-        <EditorIndex Value="-1"/>
-        <UsageCount Value="20"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="5">

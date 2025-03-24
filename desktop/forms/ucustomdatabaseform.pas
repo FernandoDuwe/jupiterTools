@@ -241,7 +241,7 @@ begin
             if (vrVez = (Self.QueryOrigin.Fields.Count - 1)) then
             begin
               vrHeight := sbBody.Height;
-              vrHeight := vrHeight - TDBMemo(vrReference.Component).Top - TDBMemo(vrReference.Component).Height;
+              vrHeight := vrHeight - (TDBMemo(vrReference.Component).Top - TDBMemo(vrReference.Component).Height);
 
               if vrHeight > 0 then
                 TDBMemo(vrReference.Component).Height := (TDBMemo(vrReference.Component).Height + vrHeight) - FORM_MARGIN_BOTTOM_TONEXT - FORM_MARGIN_BOTTOM_TONEXT;

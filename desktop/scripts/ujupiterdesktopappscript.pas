@@ -26,6 +26,7 @@ type
   procedure JupiterAppDesktopOpenFormWithParams(prForm, prParams : String);
   procedure JupiterAppDesktopShowMessage(prMessage : String);
   procedure JupiterAppDesktopCursorToWait;
+  procedure JupiterAppDesktopProcessMessages;
   procedure JupiterAppDesktopCursorToIdle;
   procedure JupiterAppDesktopSetAppMessage(prMessage : String);
   procedure JupiterAppDesktopOpenFormQuery(prQuery : TSQLQuery);
@@ -78,6 +79,11 @@ begin
   Application.MainForm.Cursor := crHourGlass;
 end;
 
+procedure JupiterAppDesktopProcessMessages;
+begin
+  Application.ProcessMessages;
+end;
+
 procedure JupiterAppDesktopCursorToIdle;
 begin
   Application.MainForm.Cursor := crDefault;
@@ -86,7 +92,10 @@ end;
 procedure JupiterAppDesktopSetAppMessage(prMessage: String);
 begin
   if Application.MainForm is TFMain then
+  begin
     TFMain(Application.MainForm).sbStatus.Panels[0].Text := prMessage;
+    Application.ProcessMessages;
+  end;
 end;
 
 procedure JupiterAppDesktopOpenFormQuery(prQuery: TSQLQuery);
@@ -265,6 +274,8 @@ begin
   prSender.AddFunction(@JupiterAppDesktopCursorToWait, 'procedure CursorToWait;');
   prSender.AddFunction(@JupiterAppDesktopCursorToIdle, 'procedure CursorToIdle;');
 
+  prSender.AddFunction(@JupiterAppDesktopProcessMessages, 'procedure ProcessMessages;');
+
   prSender.AddFunction(@JupiterAppDesktopClose, 'procedure CloseApp();');
   prSender.AddFunction(@JupiterAppDesktopUpdateForms, 'procedure UpdateForms();');
   prSender.AddFunction(@JupiterAppDesktopIncFont, 'procedure IncFont();');
@@ -292,6 +303,8 @@ begin
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CursorToWait();'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CursorToIdle();'));
+
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure ProcessMessages();'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CloseApp();'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure UpdateForms();'));

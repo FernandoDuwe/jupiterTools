@@ -39,7 +39,6 @@ type
     procedure Internal_UpdateComponents; override;
     procedure Internal_UpdateCalcs; override;
     procedure Internal_CreatePopMenuTab;
-    procedure Internal_CreateShortcutList;
 
     procedure Internal_CloseCurrentTab(Sender: TObject);
     procedure Internal_CloseAllButCurrentTab(Sender: TObject);
@@ -257,11 +256,6 @@ begin
   vrMenuItem.ShortCut := TextToShortCut('Ctrl+Shift+F4');
   vrMenuItem.OnClick := @Internal_CloseAllButCurrentTab;
   pmTabOptions.Items.Add(vrMenuItem);
-end;
-
-procedure TFMain.Internal_CreateShortcutList;
-begin
-  TJupiterDesktopApp(vrJupiterApp).SetShortCutList(acOptions);
 end;
 
 procedure TFMain.Internal_CloseCurrentTab(Sender: TObject);

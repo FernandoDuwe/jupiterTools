@@ -44,6 +44,8 @@ type
   procedure JupiterFormDesktopAppScriptSetCurrentLine(prFormID : String; prLine : Integer);
   procedure JupiterFormDesktopAppScriptSetCustomInterval(prFormID : String; prInterval : Integer);
   procedure JupiterFormDesktopAppScriptSetFormToHighFocus(prFormID : String);
+  function  JupiterFormDesktopAppScriptGetCurrentLine(prFormID : String) : Integer;
+  function  JupiterFormDesktopAppScriptGetWidth(prFormID : String) : Integer;
 
 implementation
 
@@ -410,6 +412,36 @@ begin
   TFCustomCodeForm(vrForm).SetFormToHighFocus();
 end;
 
+function JupiterFormDesktopAppScriptGetCurrentLine(prFormID: String): Integer;
+var
+  vrForm : TForm;
+begin
+  vrForm := TJupiterDesktopApp(vrJupiterApp).GetFormById(prFormID);
+
+  if not Assigned(vrForm) then
+    Exit;
+
+  if not (vrForm is TFCustomCodeForm) then
+    Exit;
+
+  Result := TFCustomCodeForm(vrForm).CurrentLine;
+end;
+
+function JupiterFormDesktopAppScriptGetWidth(prFormID: String): Integer;
+var
+  vrForm : TForm;
+begin
+  vrForm := TJupiterDesktopApp(vrJupiterApp).GetFormById(prFormID);
+
+  if not Assigned(vrForm) then
+    Exit;
+
+  if not (vrForm is TFCustomCodeForm) then
+    Exit;
+
+  Result := TFCustomCodeForm(vrForm).sbBody.Width;
+end;
+
 { TJupiterFormDesktopAppScript }
 
 function TJupiterFormDesktopAppScript.Internal_GetName: String;
@@ -428,6 +460,9 @@ begin
   prSender.AddFunction(@JupiterFormDesktopAppScriptSetCurrentMargin, 'procedure Form_SetCurrentMargin(prFormID : String; prMargin : Integer);');
   prSender.AddFunction(@JupiterFormDesktopAppScriptSetCustomInterval, 'procedure Form_SetCustomInterval(prFormID : String; prInterval : Integer);');
   prSender.AddFunction(@JupiterFormDesktopAppScriptSetFormToHighFocus, 'procedure Form_SetFormToHighFocus(prFormID : String);');
+
+  prSender.AddFunction(@JupiterFormDesktopAppScriptGetCurrentLine, 'function Form_GetCurrentLine(prFormID: String): Integer;');
+  prSender.AddFunction(@JupiterFormDesktopAppScriptGetWidth, 'function Form_GetWidth(prFormID: String): Integer;');
 
   prSender.AddFunction(@JupiterFormDesktopAppScriptAddLink, 'procedure Form_AddLink(prFormID, prCaption, prMacroId: String);');
   prSender.AddFunction(@JupiterFormDesktopAppScriptAddLinkWithParams, 'procedure Form_AddLinkWithParams(prFormID, prCaption, prMacroId, prParam : String);');
@@ -478,6 +513,9 @@ begin
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddAction(prFormID, prCaption, prHint: String; prIcon: Integer; prMacroID: String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddActionWithScript(prFormID, prCaption, prHint: String; prIcon: Integer; prMacro: TStrings);'));
+
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function Form_GetCurrentLine(prFormID: String): Integer;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function Form_GetWidth(prFormID: String): Integer;'));
 end;
 
 end.

@@ -33,7 +33,7 @@ end;
 
 function JupiterStringUtilsScript_GetCSVColumn(prLine: String; prIndex: Integer): String;
 begin
-  Result := JupiterStringUtilsScript_GetCSVColumn(prLine, prIndex);
+  Result := JupiterStringUtilsGetCSVColumn(prLine, prIndex);
 end;
 
 function JupiterStringUtilsScript_Replace(prStr, prOldString, prNewString: String): String;
