@@ -185,6 +185,8 @@ begin
         SynCompletion1.ItemList.Add(TJupiterScriptAnalyserItem(vrList.GetAtIndex(vrVez2)).Text);
         SynAutoComplete1.AutoCompleteList.Add(TJupiterScriptAnalyserItem(vrList.GetAtIndex(vrVez2)).Text);
       end;
+
+      vrNode.Text := vrNode.Text + ' (' + IntToStr(vrList.Count) + ')';
     end;
 
   tvLibrary.SortType := stText;

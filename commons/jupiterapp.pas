@@ -296,6 +296,9 @@ begin
     vrQry.ParamByName('PRID').AsInteger := prId;
     vrQry.Open;
 
+    if vrQry.EOF then
+      raise Exception.Create('A macro com ID ' + IntToStr(prId) + ' não foi encontrada.');
+
     vrScript.Script.AddStrings(JupiterStringUtilsStringToStringList(vrQry.FieldByName('MACRO').AsString));
     vrScript.Params.CopyValues(prParams);
 
@@ -316,6 +319,9 @@ begin
     vrQry.SQL.Add(' SELECT ID, MACRO FROM MACROS WHERE MACROID = :PRID ');
     vrQry.ParamByName('PRID').AsString := prMacroId;
     vrQry.Open;
+
+    if vrQry.EOF then
+      raise Exception.Create('A macro ' + prMacroId + ' não foi encontrada.');
 
     vrScript.Script.AddStrings(JupiterStringUtilsStringToStringList(vrQry.FieldByName('MACRO').AsString));
     vrScript.Params.CopyValues(prParams);
@@ -340,6 +346,9 @@ begin
     vrQry.SQL.Add(' SELECT ID, MACRO FROM MACROS WHERE MACROID = :PRID ');
     vrQry.ParamByName('PRID').AsString := prMacroId;
     vrQry.Open;
+
+    if vrQry.EOF then
+      raise Exception.Create('A macro ' + prMacroId + ' não foi encontrada.');
 
     vrScript.Script.AddStrings(JupiterStringUtilsStringToStringList(vrQry.FieldByName('MACRO').AsString));
     vrScript.Params.CopyValues(prParams);
@@ -383,6 +392,9 @@ begin
   vrQry.SQL.Add(' SELECT ID, MACRO FROM MACROS WHERE MACROID = :PRID ');
   vrQry.ParamByName('PRID').AsString := prMacroId;
   vrQry.Open;
+
+  if vrQry.EOF then
+    raise Exception.Create('A macro ' + prMacroId + ' não foi encontrada.');
 
   vrScript.Script.AddStrings(JupiterStringUtilsStringToStringList(vrQry.FieldByName('MACRO').AsString));
   vrScript.Params.CopyValues(prParams);

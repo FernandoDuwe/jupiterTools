@@ -129,8 +129,8 @@ begin
 
   Self.ShowSearchBar := True;
 
-  Width := PercentOfScreen(Screen.Width, 50);
-  Height := PercentOfScreen(Screen.Height, 50);
+//  Width := PercentOfScreen(Screen.Width, 50);
+//  Height := PercentOfScreen(Screen.Height, 50);
 
   edSearch.SetFocus;
 

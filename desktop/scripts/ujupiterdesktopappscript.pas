@@ -44,6 +44,9 @@ type
 
   procedure JupiterAppDesktopAddReference(prTableName : String; prId : Integer);
 
+  procedure JupiterAppDesktopAddRoute(prTitle, prRoute, prShortcut, prParams : String; prDestiny, prIcon, prZIndex : Integer);
+  procedure JupiterAppDesktopAddShortcut(prDescription, prShortcut : String; prDestiny : Integer);
+
 implementation
 
 uses Controls, uJupiterForm, uMain, jupiterDesktopApp, jupiterDatabaseWizard;
@@ -246,6 +249,16 @@ begin
   vrJupiterApp.AddGlobalReference(TJupiterDatabaseReference.Create(prTableName, prId));
 end;
 
+procedure JupiterAppDesktopAddRoute(prTitle, prRoute, prShortcut, prParams: String; prDestiny, prIcon, prZIndex: Integer);
+begin
+  TJupiterDesktopApp(vrJupiterApp).AddDynamicRoute(prTitle, prRoute, prShortcut, prParams, prDestiny, prIcon, prZIndex);
+end;
+
+procedure JupiterAppDesktopAddShortcut(prDescription, prShortcut: String; prDestiny: Integer);
+begin
+  TJupiterDesktopApp(vrJupiterApp).AddDynamicShortcut(prDescription, prShortcut, prDestiny);
+end;
+
 { TJupiterDesktopAppScript }
 
 function TJupiterDesktopAppScript.Internal_GetName: String;
@@ -268,6 +281,9 @@ begin
   prSender.AddFunction(@JupiterAppDesktopOpenTextEditorForm, 'procedure OpenTextEditorForm(prPath : String);');
   prSender.AddFunction(@JupiterAppDesktopCloseForm, 'procedure CloseForm(prFormID : String);');
   prSender.AddFunction(@JupiterAppDesktopSetAppMessage, 'procedure SetAppMessage(prMessage : String);');
+
+  prSender.AddFunction(@JupiterAppDesktopAddRoute, 'procedure AddRoute(prTitle, prRoute, prShortcut, prParams: String; prDestiny, prIcon, prZIndex: Integer);');
+  prSender.AddFunction(@JupiterAppDesktopAddShortcut, 'procedure AddShortcut(prDescription, prShortcut: String; prDestiny: Integer);');
 
   prSender.AddFunction(@JupiterAppDesktopCloseForm, 'procedure CloseForm(prFormID : String);');
 
@@ -305,6 +321,11 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CursorToIdle();'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure ProcessMessages();'));
+
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CloseApp();'));
+
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure AddRoute(prTitle, prRoute, prShortcut, prParams: String; prDestiny, prIcon, prZIndex: Integer);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure AddShortcut(prDescription, prShortcut: String; prDestiny: Integer);'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CloseApp();'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure UpdateForms();'));

@@ -275,8 +275,6 @@ end;
 
 procedure TFJupiterForm.Internal_UpdateComponents;
 begin
-  DrawForm(Self);
-
   miParams.Enabled := Self.Params.Count > 0;
 
   pnBottom.Caption := '                              ' + Self.FHint;
@@ -386,6 +384,8 @@ begin
     if Self.IsWindowForm then
       if vrJupiterApp.Params.VariableById(FORM_ALWAYS_MODAL).AsBool then
         Self.WindowState := wsMaximized;
+
+    DrawForm(Self);
   finally
     Self.Internal_AddShortcutsToMenu;
 

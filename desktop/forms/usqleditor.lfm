@@ -1,32 +1,27 @@
 inherited FSQLEditor: TFSQLEditor
-  Left = 690
-  Top = 369
+  Left = 982
+  Top = 139
   Caption = 'Editor SQL'
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  object dbGridQueryResult: TDBGrid[3]
-    Left = 0
-    Height = 100
-    Top = 275
-    Width = 879
-    Align = alBottom
-    Color = clWindow
-    Columns = <>
-    DataSource = dsQuery
-    TabOrder = 3
+  inherited fpOptions: TFlowPanel
+    Top = 175
   end
-  object spDivisor: TSplitter[4]
+  inherited pnBottom: TPanel
+    Top = 376
+  end
+  object spDivisor: TSplitter[3]
     Cursor = crVSplit
     Left = 0
     Height = 5
-    Top = 270
+    Top = 170
     Width = 879
     Align = alBottom
     ResizeAnchor = akBottom
   end
-  inline SynEdit1: TSynEdit[5]
+  inline SynEdit1: TSynEdit[4]
     Left = 0
-    Height = 220
+    Height = 120
     Top = 50
     Width = 879
     Align = alClient
@@ -36,7 +31,7 @@ inherited FSQLEditor: TFSQLEditor
     Font.Quality = fqNonAntialiased
     ParentColor = False
     ParentFont = False
-    TabOrder = 5
+    TabOrder = 4
     Gutter.Width = 57
     Gutter.MouseActions = <>
     RightGutter.Width = 0
@@ -524,6 +519,50 @@ inherited FSQLEditor: TFSQLEditor
       end
     end
   end
+  object pcBottom: TPageControl[5]
+    Left = 0
+    Height = 200
+    Top = 176
+    Width = 879
+    ActivePage = tsBottom
+    Align = alBottom
+    TabIndex = 0
+    TabOrder = 5
+    object tsBottom: TTabSheet
+      Caption = 'Registros'
+      ClientHeight = 169
+      ClientWidth = 869
+      object dbGridQueryResult: TDBGrid
+        Left = 0
+        Height = 169
+        Top = 0
+        Width = 869
+        Align = alClient
+        Color = clWindow
+        Columns = <>
+        DataSource = dsQuery
+        TabOrder = 0
+      end
+    end
+    object tsColumns: TTabSheet
+      Caption = 'Colunas'
+      ClientHeight = 169
+      ClientWidth = 869
+      object mmColumns: TMemo
+        Left = 0
+        Height = 169
+        Top = 0
+        Width = 869
+        Align = alClient
+        Lines.Strings = (
+          'mmColumns'
+        )
+        ReadOnly = True
+        ScrollBars = ssBoth
+        TabOrder = 0
+      end
+    end
+  end
   inherited acOptions: TActionList[6]
   end
   inherited tmrAutoUpdater: TTimer[7]
@@ -550,7 +589,7 @@ inherited FSQLEditor: TFSQLEditor
     Top = 152
   end
   object SynCompletion1: TSynCompletion[12]
-    Position = 0
+    Position = -1
     LinesInWindow = 6
     SelectedColor = clHighlight
     CaseSensitive = False

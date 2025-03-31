@@ -6,9 +6,10 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, DBGrids, ExtCtrls,
-  SynEdit, SynHighlighterSQL, SynCompletion, uJupiterForm, jupiterformutils,
-  JupiterConsts, JupiterEnviroment, jupiterDatabaseWizard, JupiterApp,
-  uJupiterRunnableScript, uJupiterAction, SQLDB, DB;
+  ComCtrls, StdCtrls, SynEdit, SynHighlighterSQL, SynCompletion, uJupiterForm,
+  jupiterformutils, JupiterConsts, JupiterEnviroment, jupiterDatabaseWizard,
+  JupiterApp, JupiterVariable, uJupiterRunnableScript, uJupiterAppScript,
+  uJupiterAction, SQLDB, DB;
 
 type
 
@@ -18,11 +19,15 @@ type
     dbGridQueryResult: TDBGrid;
     dsQuery: TDataSource;
     InternalQuery: TSQLQuery;
+    mmColumns: TMemo;
+    pcBottom: TPageControl;
     spDivisor: TSplitter;
     SynAutoComplete1: TSynAutoComplete;
     SynCompletion1: TSynCompletion;
     SynEdit1: TSynEdit;
     SynSQLSyn1: TSynSQLSyn;
+    tsColumns: TTabSheet;
+    tsBottom: TTabSheet;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
   private
@@ -37,6 +42,8 @@ type
     procedure Internal_OnRunQuery(Sender: TObject);
     procedure Internal_OnRunScript(Sender: TObject);
     procedure Internal_OnCSVExport(Sender: TObject);
+
+    function Internal_GetText : String;
   public
 
   end;
@@ -70,21 +77,31 @@ begin
 end;
 
 procedure TFSQLEditor.Internal_UpdateComponents;
+var
+  vrVez : Integer;
 begin
   inherited Internal_UpdateComponents;
 
   if miLookColumn.Checked then
-    dbGridQueryResult.Height := PercentOfScreen(Self.Height, Self.PercentDivisor);
+    pcBottom.Height := PercentOfScreen(Self.Height, Self.PercentDivisor);
 
-  dbGridQueryResult.Visible := Self.FShowResults;
+  pcBottom.Visible := Self.FShowResults;
 
   if Self.FShowResults then
     Self.ActionGroup.GetActionAtIndex(1).Enable
   else
     Self.ActionGroup.GetActionAtIndex(1).Disable;
+
+    if pcBottom.Visible then
+      for vrVez := 0 to dbGridQueryResult.Columns.Count - 1 do
+        dbGridQueryResult.Columns[vrVez].Width := PercentOfScreen(Self.Width, 20);
 end;
 
 procedure TFSQLEditor.Internal_UpdateDatasets;
+var
+  vrVez :  Integer;
+  vrVez2 : Integer;
+  vrStr : String;
 begin
   inherited Internal_UpdateDatasets;
 
@@ -93,6 +110,26 @@ begin
 
   Self.FWizard.Connection.GetTableNames(SynAutoComplete1.AutoCompleteList);
   Self.FWizard.Connection.GetTableNames(SynCompletion1.ItemList);
+
+  for vrVez := 0 to vrJupiterApp.Params.Count - 1 do
+  begin
+    SynAutoComplete1.AutoCompleteList.Add('{' + vrJupiterApp.Params.VariableByIndex(vrVez).ID + '}');
+    SynCompletion1.ItemList.Add('{' + vrJupiterApp.Params.VariableByIndex(vrVez).ID + '}');
+  end;
+
+  for vrVez := 0 to vrJupiterApp.Params.ChildList.Count - 1 do
+    for vrVez2 := 0 to TJupiterVariableList(vrJupiterApp.Params.ChildList.GetAtIndex(vrVez)).Count - 1 do
+    begin
+      vrStr := TJupiterVariableList(vrJupiterApp.Params.ChildList.GetAtIndex(vrVez)).VariableByIndex(vrVez2).ID;
+
+      SynAutoComplete1.AutoCompleteList.Add('{' + vrStr + '}');
+      SynCompletion1.ItemList.Add('{' + vrStr + '}');
+    end;
+
+  mmColumns.Lines.Clear;
+
+  for vrVez := 0 to dbGridQueryResult.Columns.Count - 1 do
+    mmColumns.Lines.Add(dbGridQueryResult.Columns[vrVez].FieldName);
 end;
 
 procedure TFSQLEditor.Internal_PrepareForm;
@@ -130,7 +167,7 @@ begin
   try
     InternalQuery.Close;
     InternalQuery.SQL.Clear;
-    InternalQuery.SQL.Text := SynEdit1.Lines.Text;
+    InternalQuery.SQL.Text := JupiterAppScript_ResolveGlobal(Self.Internal_GetText);
 
     SynEdit1.Lines.SaveToFile(vrEnviroment.FullPath('/temp/sql.sql')); ;
 
@@ -151,7 +188,7 @@ begin
   Self.FShowResults := False;
 
   try
-    Self.FWizard.ExecuteScript(SynEdit1.Lines);
+    Self.FWizard.ExecuteScript(CreateStringList(JupiterAppScript_ResolveGlobal(Self.Internal_GetText)));
   except
     Application.MessageBox(PAnsiChar('Erro ao executar script: ' + Exception(ExceptObject).Message), PAnsiChar(Self.Caption), MB_ICONERROR + MB_OK);
   end;
@@ -203,6 +240,14 @@ begin
     FreeAndNil(vrFile);
     FreeAndNil(vrEnviroment);
   end;
+end;
+
+function TFSQLEditor.Internal_GetText: String;
+begin
+  Result := SynEdit1.Lines.Text;
+
+  if Trim(SynEdit1.SelText) <> EmptyStr then
+    Result := SynEdit1.SelText;
 end;
 
 end.

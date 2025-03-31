@@ -311,6 +311,7 @@ begin
     begin
       TDBGrid(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
       TDBGrid(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_FONT_NAME).Value;
+      TDBGrid(prComponent.Components[vrVez]).Flat      := True;
 
       {$IFDEF WINDOWS}
       TDBGrid(prComponent.Components[vrVez]).AlternateColor := $00FFEAEA;

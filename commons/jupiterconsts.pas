@@ -138,11 +138,12 @@ const
    JPAS_FLAG_SCRIPTID : String = '@FLAG_SCRIPTID';
 
    // Triggers
-   TRIGGER_ONSTART      : String = 'triggers.onStart';
-   TRIGGER_ONPROMPT     : String = 'triggers.onPrompt';
-   TRIGGER_ONEXECUTE    : String = 'triggers.onExecute';
-   TRIGGER_ONSHOWPARAMS : String = 'triggers.onShowParams';
-   TRIGGER_ONUPDATE     : String = 'triggers.onUpdate';
+   TRIGGER_ONSTART           : String = 'triggers.onStart';
+   TRIGGER_ONPROMPT          : String = 'triggers.onPrompt';
+   TRIGGER_ONEXECUTE         : String = 'triggers.onExecute';
+   TRIGGER_ONSHOWPARAMS      : String = 'triggers.onShowParams';
+   TRIGGER_ONUPDATE          : String = 'triggers.onUpdate';
+   TRIGGER_ONLOADDYNAMICDATA : String = 'triggers.onGetLoadDynamicData';
 
    // Events
    EVENT_RECORD_ONENABLE : String = 'events.record.onEnable';

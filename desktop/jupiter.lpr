@@ -41,7 +41,6 @@ begin
   vrJupiterApp := TJupiterDesktopApp.Create('jupiter', 'Jupiter');
 
   Application.CreateForm(TDMMain, DMMain);
-  Application.CreateForm(TFMain, FMain);
 
   vrJupiterApp.AddModule(TJupiterStandardModule.Create);
   vrJupiterApp.AddModule(TJupiterUserExperience.Create);
@@ -50,6 +49,10 @@ begin
   vrJupiterApp.AddModule(TJupiterUtils.Create);
 
   vrJupiterApp.LoadOtherVariables;
+
+  TJupiterDesktopApp(vrJupiterApp).GenerateDynamicData;
+
+  Application.CreateForm(TFMain, FMain);
 
   with TJupiterDesktopApp(vrJupiterApp) do
   begin

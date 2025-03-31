@@ -46,6 +46,11 @@ type
     procedure RemovePin(prTableName : String; prID : Integer);
     function PinExists(prTableName : String; prID : Integer) : Boolean;
 
+    procedure AddDynamicRoute(prTitle, prRoute, prShortcut, prParams : String; prDestiny, prIcon, prZIndex : Integer);
+    procedure AddDynamicShortcut(prDescription, prShortcut : String; prDestiny : Integer);
+
+    procedure GenerateDynamicData;
+
     constructor Create(prAppID, prAppName : String); override;
     destructor Destroy; override;
   end;
@@ -337,6 +342,21 @@ end;
 function TJupiterDesktopApp.PinExists(prTableName: String; prID: Integer): Boolean;
 begin
   Result := Self.NewWizard.Exists('RECORDPIN', ' TABLENAME = "' + prTableName + '" AND RECORDKEY = ' + IntToStr(prID) + ' ');
+end;
+
+procedure TJupiterDesktopApp.AddDynamicRoute(prTitle, prRoute, prShortcut, prParams: String; prDestiny, prIcon, prZIndex: Integer);
+begin
+  //
+end;
+
+procedure TJupiterDesktopApp.AddDynamicShortcut(prDescription, prShortcut: String; prDestiny: Integer);
+begin
+
+end;
+
+procedure TJupiterDesktopApp.GenerateDynamicData;
+begin
+  Self.RunMacro(TRIGGER_ONLOADDYNAMICDATA, TJupiterVariableList.Create);
 end;
 
 constructor TJupiterDesktopApp.Create(prAppID, prAppName: String);
