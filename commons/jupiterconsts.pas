@@ -145,6 +145,9 @@ const
    TRIGGER_ONUPDATE          : String = 'triggers.onUpdate';
    TRIGGER_ONLOADDYNAMICDATA : String = 'triggers.onGetLoadDynamicData';
 
+   // Database Triggers
+   TRIGGER_DATABASE_AFTERPOST : String = 'triggers.{0}.OnAfterPost';
+
    // Events
    EVENT_RECORD_ONENABLE : String = 'events.record.onEnable';
    EVENT_TABLE_ONENABLE  : String = 'events.table.onEnable';

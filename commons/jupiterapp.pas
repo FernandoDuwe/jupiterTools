@@ -62,6 +62,8 @@ type
     function NewScript : TJupiterScript;
     procedure SetInternalWizardData(prWizard : TJupiterDatabaseWizard);
 
+    function ExistsMacro(prMacroId : String) : Boolean;
+
     procedure RunMacro(prId : Integer; prParams : TJupiterVariableList);
     procedure RunMacro(prMacroId : String; prParams : TJupiterVariableList);
     procedure RunMacroNoMessage(prMacroId : String; prParams : TJupiterVariableList);
@@ -282,6 +284,11 @@ procedure TJupiterApp.SetInternalWizardData(prWizard: TJupiterDatabaseWizard);
 begin
   prWizard.Connection  := Self.InternalDatabase;
   prWizard.Transaction := Self.InternalDatabase.Transaction;
+end;
+
+function TJupiterApp.ExistsMacro(prMacroId: String): Boolean;
+begin
+  Result := Self.NewWizard.Exists('MACROS', '  MACROID = "' + prMacroId + '" ');
 end;
 
 procedure TJupiterApp.RunMacro(prId: Integer; prParams : TJupiterVariableList);

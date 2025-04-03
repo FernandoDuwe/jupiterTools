@@ -281,6 +281,9 @@ begin
       Self.QueryOrigin.Post;
       Self.QueryOrigin.ApplyUpdates(-1);
 
+      if vrJupiterApp.ExistsMacro(jupiterStringUtilsGetDatabaseTriggerName(TRIGGER_DATABASE_AFTERPOST, Self.FTableName)) then
+        vrJupiterApp.RunMacro(jupiterStringUtilsGetDatabaseTriggerName(TRIGGER_DATABASE_AFTERPOST, Self.FTableName), Self.Internal_OnRequestData);
+
       vrDatabase.Commit;
     except
       vrDatabase.Rollback;

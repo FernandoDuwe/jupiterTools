@@ -13,11 +13,6 @@
       <UseAppBundle Value="False"/>
       <ResourceType Value="res"/>
     </General>
-    <VersionInfo>
-      <UseVersionInfo Value="True"/>
-      <MajorVersionNr Value="3"/>
-      <Language Value="0416"/>
-    </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>
     </BuildModes>

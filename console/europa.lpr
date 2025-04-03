@@ -6,7 +6,7 @@ uses
   {$IFDEF UNIX}
   cthreads,
   {$ENDIF}
-  Classes, SysUtils, JupiterApp, uJupiterEnviromentScript, pascalscript, CustApp
+  Classes, SysUtils, JupiterApp, uJupiterEnviromentScript, CustApp
   { you can add units after this };
 
 type
@@ -19,6 +19,7 @@ type
   public
     constructor Create(TheOwner: TComponent); override;
     destructor Destroy; override;
+
     procedure WriteHelp; virtual;
   end;
 
@@ -26,28 +27,31 @@ type
 
 procedure TEuropa.DoRun;
 var
-  vrErrorMsg : String;
+  ErrorMsg: String;
 begin
-  vrErrorMsg := CheckOptions('h', 'help');
+  vrJupiterApp := TJupiterApp.Create('Europa', 'Europa');
+  try
+    ErrorMsg := CheckOptions('h', 'help');
 
-  if vrErrorMsg <> EmptyStr then
-  begin
-    ShowException(Exception.Create(vrErrorMsg));
-    Terminate;
-    Exit;
+    if ErrorMsg <> '' then
+    begin
+      ShowException(Exception.Create(ErrorMsg));
+      Terminate;
+      Exit;
+    end;
+
+    // parse parameters
+    if HasOption('h', 'help') then
+    begin
+      WriteHelp;
+      Terminate;
+      Exit;
+    end;
+
+  finally
+    FreeAndNil(vrJupiterApp);
   end;
 
-  // parse parameters
-  if HasOption('h', 'help') then
-  begin
-    WriteHelp;
-    Terminate;
-    Exit;
-  end;
-
-  { add your program here }
-
-  // stop program loop
   Terminate;
 end;
 
@@ -56,28 +60,20 @@ begin
   inherited Create(TheOwner);
 
   StopOnException := True;
-
-  vrJupiterApp := TJupiterApp.Create('europa.cli', 'Europa');
 end;
 
 destructor TEuropa.Destroy;
 begin
-  FreeAndNil(vrJupiterApp);
-
   inherited Destroy;
 end;
 
 procedure TEuropa.WriteHelp;
 begin
-  { add your help code here }
   WriteLn('Usage: ', ExeName, ' -h');
 end;
 
 var
   Application: TEuropa;
-
-{$R *.res}
-
 begin
   Application := TEuropa.Create(nil);
   Application.Title := 'Europa';

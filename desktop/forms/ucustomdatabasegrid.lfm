@@ -92,4 +92,10 @@ inherited FCustomDatabaseGrid: TFCustomDatabaseGrid
     Left = 240
     Top = 144
   end
+  object tmrExecution: TTimer[12]
+    Interval = 100
+    OnTimer = tmrExecutionTimer
+    Left = 336
+    Top = 144
+  end
 end

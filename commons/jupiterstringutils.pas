@@ -23,6 +23,8 @@ uses
 
   function jupiterStringUtilsGetLastPathName(prPath : String) : String;
 
+  function jupiterStringUtilsGetDatabaseTriggerName(prTrigger, prTable : String) : String;
+
 implementation
 
 function JupiterStringUtilsNormalizeToPresent(prText: String): String;
@@ -154,6 +156,11 @@ begin
     prPath := Copy(prPath, 1, Length(prPath) - 1);
 
   Result := JupiterStringUtilsGetCSVColumn(prPath, JupiterStringUtilsGetCountColumns(prPath, ';') - 1);
+end;
+
+function jupiterStringUtilsGetDatabaseTriggerName(prTrigger, prTable: String): String;
+begin
+  Result := StringReplace(prTrigger, '{0}', prTable, [rfIgnoreCase, rfReplaceAll]);
 end;
 
 end.

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, JupiterObject, JupiterConsts, JupiterEnviroment,
-  JupiterVariable, jupiterStringUtils, PascalScript, uPSComponent, Forms,
+  JupiterVariable, jupiterStringUtils, PascalScript, uPSComponent, {$IFNDEF JUPITERCLI} Forms,  {$ENDIF}
   uPSCompiler, uPSRuntime, Variants;
 
 type
@@ -282,7 +282,9 @@ end;
 
 procedure TJupiterScript.Internal_ScriptExecute(Sender: TPSScript);
 begin
+  {$IFNDEF JUPITERCLI}
   Sender.SetVarToInstance('APPLICATION', Application);
+  {$ENDIF}
 
   PPSVariantVariant(Sender.GetVariable('VARS'))^.Data := VarArrayCreate([0, 1], varShortInt)
 end;
@@ -425,7 +427,7 @@ begin
     vrPSScript.Script.Clear;
     vrPSScript.Script.AddStrings(Self.Internal_GetFullScript);
 
-    if True then // if Self.Flags.GenerateFullFile then
+    if Self.Flags.GenerateFullFile then
     begin
       vrEnviroment := TJupiterEnviroment.Create;
       try

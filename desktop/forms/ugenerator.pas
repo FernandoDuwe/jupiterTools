@@ -18,7 +18,11 @@ type
     lvTables: TListView;
     lvIcons: TListView;
     mmDetails: TMemo;
+    mmProviderDetails: TMemo;
+    mmTriggerDetails: TMemo;
     pcOptions: TPageControl;
+    tsTriggers: TTabSheet;
+    tsProviders: TTabSheet;
     tbTables: TTabSheet;
     tsGenerator: TTabSheet;
     tsIcons: TTabSheet;
@@ -136,6 +140,25 @@ begin
   for vrVez := 0 to TJupiterDesktopApp(vrJupiterApp).FormRoutes.Count - 1 do
     with TJupiterFormRoute(TJupiterDesktopApp(vrJupiterApp).FormRoutes.GetAtIndex(vrVez)) do
       mmDetails.Lines.Add(vrPrefix + FormClass.ClassName + ' - ' + DestinyPath);
+
+  mmProviderDetails.Lines.Clear;
+  mmProviderDetails.Lines.Add(EmptyStr);
+  mmProviderDetails.Lines.Add('Providers');
+  mmProviderDetails.Lines.Add(vrPrefix + 'Os providers são utilizados para buscar informações, desde informações relativas a estrutura de arquivos e pastas, ou informações oríundas da base de dados interna.');
+
+  mmTriggerDetails.Lines.Clear;
+  mmTriggerDetails.Lines.Add(EmptyStr);
+  mmTriggerDetails.Lines.Add('Triggers de sistema');
+  mmTriggerDetails.Lines.Add(vrPrefix + TRIGGER_ONEXECUTE);
+  mmTriggerDetails.Lines.Add(vrPrefix + TRIGGER_ONLOADDYNAMICDATA);
+  mmTriggerDetails.Lines.Add(vrPrefix + TRIGGER_ONPROMPT);
+  mmTriggerDetails.Lines.Add(vrPrefix + TRIGGER_ONSHOWPARAMS);
+  mmTriggerDetails.Lines.Add(vrPrefix + TRIGGER_ONSTART);
+  mmTriggerDetails.Lines.Add(vrPrefix + TRIGGER_ONUPDATE + ' (Informar o nome da macro a ser executada nas configurações do sistema)');
+
+  mmTriggerDetails.Lines.Add(EmptyStr);
+  mmTriggerDetails.Lines.Add('Triggers de tabela');
+  mmTriggerDetails.Lines.Add(vrPrefix + TRIGGER_DATABASE_AFTERPOST + ', onde {0} é o nome da tabela');
 end;
 
 end.

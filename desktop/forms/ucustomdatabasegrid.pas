@@ -23,6 +23,7 @@ type
     pmActions: TPopupMenu;
     sbMiniForm: TScrollBox;
     Splitter1: TSplitter;
+    tmrExecution: TTimer;
     procedure dbMainGridColEnter(Sender: TObject);
     procedure dbMainGridDblClick(Sender: TObject);
     procedure dbMainGridEnter(Sender: TObject);
@@ -32,6 +33,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure InternalDataSourceDataChange(Sender: TObject; Field: TField);
     procedure miShowMiniFormClick(Sender: TObject);
+    procedure tmrExecutionTimer(Sender: TObject);
   private
     FLimit : Integer;
     FUseLimit : Boolean;
@@ -49,6 +51,7 @@ type
     procedure Internal_RenderMiniForm;
     procedure Internal_ClickRecord(Sender: TObject);
     procedure Internal_ClickOwnerRecord(Sender: TObject);
+    procedure Internal_OnLinkClick(Sender : TObject);
 
     function Internal_OnRequestData :  TJupiterVariableList; override;
     function Internal_OnPopupRequestData :  TJupiterVariableList;
@@ -105,6 +108,13 @@ begin
   finally
     Self.UpdateForm();
   end;
+end;
+
+procedure TFCustomDatabaseGrid.tmrExecutionTimer(Sender: TObject);
+begin
+  vrJupiterApp.RunAction(tmrExecution.Tag, Self.Internal_OnPopupRequestData);
+
+  tmrExecution.Enabled := False;
 end;
 
 procedure TFCustomDatabaseGrid.dbMainGridDblClick(Sender: TObject);
@@ -368,7 +378,10 @@ var
   vrReferenceLink : TJupiterComponentReference;
   vrWizard : TJupiterDatabaseWizard;
   vrForeignKey : TJupiterDatabaseForeignKeyReference;
+  vrActionCount : Integer;
 begin
+  vrActionCount := 0;
+
   pnMiniForm.Caption := 'Selecione um registro para continuar';
 
   RemoveChildren(sbMiniForm);
@@ -389,12 +402,53 @@ begin
 
     vrCurrentLine := vrReferenceLink.Bottom + FORM_MARGIN_BOTTOM_TONEXT;
 
+    vrReference := JupiterComponentsNewLabel('Ações de registro', TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbMiniForm);
+
+    TLabel(vrReference.Component).Font.Style := [fsBold];
+
+    vrCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM;
+
+    for vrVez := 0 to pmActions.Items.Count - 1 do
+    begin
+      if pmActions.Items[vrVez].Tag = 0 then
+        Continue;
+
+      vrActionCount := vrActionCount + 1;
+
+      if pmActions.Items[vrVez].Enabled then
+      begin
+        vrReference := JupiterComponentsNewLink(pmActions.Items[vrVez].Caption , TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT + FORM_MARGIN_LEFT), sbMiniForm);
+
+        TLabel(vrReference.Component).Tag := pmActions.Items[vrVez].Tag;
+        TLabel(vrReference.Component).OnClick := @Internal_OnLinkClick;
+      end
+      else
+        vrReference := JupiterComponentsNewLabel(pmActions.Items[vrVez].Caption , TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT + FORM_MARGIN_LEFT), sbMiniForm);
+
+      vrCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM_TONEXT;
+    end;
+
+    if vrActionCount = 0 then
+    begin
+      vrReference := JupiterComponentsNewLabel('Nenhuma ação cadastrada', TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT + FORM_MARGIN_LEFT), sbMiniForm);
+
+      TLabel(vrReference.Component).Font.Style := [fsItalic];
+    end;
+
+    vrCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM_TONEXT;
+
+    vrReference := JupiterComponentsNewLabel('Campos', TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbMiniForm);
+
+    TLabel(vrReference.Component).Font.Style := [fsBold];
+
+    vrCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM;
+
     for vrVez := 0 to dbMainGrid.Columns.Count - 1 do
     begin
       if not dbMainGrid.Columns[vrVez].Visible then
         Continue;
 
-      vrReference := JupiterComponentsNewLabel(dbMainGrid.Columns[vrVez].Title.Caption, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbMiniForm);
+      vrReference := JupiterComponentsNewLabel(dbMainGrid.Columns[vrVez].Title.Caption, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT + FORM_MARGIN_LEFT), sbMiniForm);
 
       TLabel(vrReference.Component).Font.Style := [fsBold];
 
@@ -402,7 +456,7 @@ begin
 
       if not dbMainGrid.Columns[vrVez].Field.IsNull then
       begin
-        vrReference := JupiterComponentsNewLabel(dbMainGrid.Columns[vrVez].Field.AsString + ' ', TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbMiniForm);
+        vrReference := JupiterComponentsNewLabel(dbMainGrid.Columns[vrVez].Field.AsString + ' ', TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT + FORM_MARGIN_LEFT), sbMiniForm);
 
         if vrWizard.IsForeignKeyField(Self.FReference.TableName, dbMainGrid.Columns[vrVez].Field.FieldName) then
         begin
@@ -410,7 +464,7 @@ begin
 
           vrForeignKey := vrWizard.GetForeignKeyData(Self.FReference.TableName, dbMainGrid.Columns[vrVez].Field.FieldName);
 
-          vrReferenceLink := JupiterComponentsNewLink('Ver mais', TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbMiniForm);
+          vrReferenceLink := JupiterComponentsNewLink('Ver mais', TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT + FORM_MARGIN_LEFT), sbMiniForm);
 
           TLabel(vrReferenceLink.Component).OnClick := @Internal_ClickOwnerRecord;
           TLabel(vrReferenceLink.Component).Tag := vrVez;
@@ -421,7 +475,7 @@ begin
       end
       else
       begin
-        vrReference := JupiterComponentsNewLabel('Nulo', TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbMiniForm);
+        vrReference := JupiterComponentsNewLabel('Nulo', TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT + FORM_MARGIN_LEFT), sbMiniForm);
 
         TLabel(vrReference.Component).Font.Style := [fsItalic];
       end;
@@ -449,6 +503,21 @@ begin
   vrForeignKey := vrJupiterApp.NewWizard.GetForeignKeyData(Self.FReference.TableName, dbMainGrid.Columns[TLabel(Sender).Tag].FieldName);
 
   JupiterAppDesktopOpenFormFromTableId(vrForeignKey.TableDestinyName, dbMainGrid.Columns[TLabel(Sender).Tag].Field.AsInteger);
+end;
+
+procedure TFCustomDatabaseGrid.Internal_OnLinkClick(Sender: TObject);
+var
+  vrVez : Integer;
+begin
+  for vrVez := 0 to pmActions.Items.Count - 1 do
+    if TLabel(Sender).Tag = pmActions.Items[vrVez].Tag then
+    begin
+      tmrExecution.Enabled := False;
+      tmrExecution.Tag     := TLabel(Sender).Tag;
+      tmrExecution.Enabled := True;
+
+      Exit;
+    end;
 end;
 
 function TFCustomDatabaseGrid.Internal_OnRequestData: TJupiterVariableList;

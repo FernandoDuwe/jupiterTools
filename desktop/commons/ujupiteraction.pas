@@ -108,7 +108,7 @@ type
 
 implementation
 
-uses SQLDB;
+uses StdCtrls, SQLDB;
 
 { TJupiterAction }
 

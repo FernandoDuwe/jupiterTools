@@ -7,68 +7,94 @@
       <Unit>
         <Filename Value="europa.lpr"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="49"/>
-        <CursorPos X="27" Y="77"/>
-        <UsageCount Value="21"/>
-        <Loaded Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="52"/>
+        <CursorPos Y="82"/>
+        <UsageCount Value="20"/>
       </Unit>
       <Unit>
         <Filename Value="../commons/jupiterapp.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterApp"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="66"/>
-        <CursorPos Y="88"/>
-        <UsageCount Value="21"/>
+        <CursorPos X="35" Y="12"/>
+        <UsageCount Value="20"/>
       </Unit>
       <Unit>
         <Filename Value="../scripts/ujupiterenviromentscript.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uJupiterEnviromentScript"/>
         <EditorIndex Value="-1"/>
+        <TopLine Value="19"/>
+        <CursorPos X="47" Y="27"/>
         <UsageCount Value="20"/>
       </Unit>
       <Unit>
         <Filename Value="../commons/jupiterenviroment.pas"/>
         <UnitName Value="JupiterEnviroment"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="295"/>
-        <CursorPos X="11" Y="321"/>
+        <CursorPos X="48" Y="8"/>
         <UsageCount Value="10"/>
       </Unit>
       <Unit>
         <Filename Value="../commons/jupiterscript.pas"/>
         <UnitName Value="jupiterScript"/>
+        <IsVisibleTab Value="True"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../commons/jupiterdatabasewizard.pas"/>
+        <UnitName Value="jupiterDatabaseWizard"/>
         <EditorIndex Value="-1"/>
-        <CursorPos Y="2"/>
+        <TopLine Value="68"/>
+        <CursorPos X="32" Y="83"/>
         <UsageCount Value="10"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="5">
+    <JumpHistory HistoryIndex="10">
       <Position>
-        <Filename Value="europa.lpr"/>
-        <Caret Line="59" Column="34" TopLine="41"/>
+        <Filename Value="../commons/jupiterscript.pas"/>
+        <Caret Line="17" Column="68"/>
       </Position>
       <Position>
-        <Filename Value="europa.lpr"/>
-        <Caret Line="60" Column="60" TopLine="41"/>
+        <Filename Value="../commons/jupiterscript.pas"/>
+        <Caret Line="9" Column="40"/>
       </Position>
       <Position>
-        <Filename Value="europa.lpr"/>
-        <Caret Line="86" TopLine="50"/>
+        <Filename Value="../commons/jupiterscript.pas"/>
+        <Caret Line="68" Column="46" TopLine="49"/>
       </Position>
       <Position>
-        <Filename Value="europa.lpr"/>
-        <Caret Line="78" TopLine="50"/>
+        <Filename Value="../commons/jupiterscript.pas"/>
+        <Caret Line="9" Column="67"/>
       </Position>
       <Position>
-        <Filename Value="europa.lpr"/>
-        <Caret Line="83" Column="18" TopLine="23"/>
+        <Filename Value="../commons/jupiterscript.pas"/>
+        <Caret Line="284" Column="50" TopLine="269"/>
       </Position>
       <Position>
-        <Filename Value="europa.lpr"/>
-        <Caret Line="86" TopLine="50"/>
+        <Filename Value="../commons/jupiterscript.pas"/>
+        <Caret Line="9" Column="105"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterscript.pas"/>
+        <Caret Line="285" Column="24" TopLine="269"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterscript.pas"/>
+        <Caret Line="420" Column="46" TopLine="404"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterscript.pas"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterscript.pas"/>
+        <Caret Line="476" Column="17" TopLine="458"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterscript.pas"/>
+        <Caret Line="419" Column="34" TopLine="395"/>
       </Position>
     </JumpHistory>
     <RunParams>

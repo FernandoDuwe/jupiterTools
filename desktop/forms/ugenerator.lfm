@@ -32,6 +32,42 @@ inherited FGenerator: TFGenerator
         TabOrder = 0
       end
     end
+    object tsProviders: TTabSheet
+      Caption = 'Data Providers'
+      ClientHeight = 294
+      ClientWidth = 869
+      object mmProviderDetails: TMemo
+        Left = 0
+        Height = 294
+        Top = 0
+        Width = 869
+        Align = alClient
+        BorderStyle = bsNone
+        Lines.Strings = (
+          'mmDetails'
+        )
+        ReadOnly = True
+        TabOrder = 0
+      end
+    end
+    object tsTriggers: TTabSheet
+      Caption = 'Triggers'
+      ClientHeight = 294
+      ClientWidth = 869
+      object mmTriggerDetails: TMemo
+        Left = 0
+        Height = 294
+        Top = 0
+        Width = 869
+        Align = alClient
+        BorderStyle = bsNone
+        Lines.Strings = (
+          'mmDetails'
+        )
+        ReadOnly = True
+        TabOrder = 0
+      end
+    end
     object tbTables: TTabSheet
       Caption = 'Tabelas'
       ClientHeight = 294
