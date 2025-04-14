@@ -1,7 +1,7 @@
 object FJupiterForm: TFJupiterForm
-  Left = 728
+  Left = 539
   Height = 457
-  Top = 279
+  Top = 308
   Width = 879
   Caption = 'FJupiterForm'
   ClientHeight = 457
@@ -16,21 +16,23 @@ object FJupiterForm: TFJupiterForm
   LCLVersion = '3.4.0.0'
   object pnSearchBar: TPanel
     Left = 0
-    Height = 50
+    Height = 45
     Top = 0
     Width = 879
     Align = alTop
     BevelOuter = bvNone
-    ClientHeight = 50
-    ClientWidth = 879
+    BorderStyle = bsSingle
+    ClientHeight = 43
+    ClientWidth = 877
     TabOrder = 0
     OnClick = pnSearchBarClick
     object edSearch: TEdit
-      Left = 0
-      Height = 50
-      Top = 0
-      Width = 879
-      Align = alClient
+      Left = 4
+      Height = 34
+      Top = 5
+      Width = 80
+      Align = alCustom
+      AutoSize = False
       TabOrder = 0
       TextHint = 'Pesquisar'
     end
@@ -43,6 +45,7 @@ object FJupiterForm: TFJupiterForm
     Align = alBottom
     AutoSize = True
     BevelOuter = bvNone
+    BorderStyle = bsSingle
     ControlList = <>
     FlowLayout = tlTop
     FlowStyle = fsLeftRightTopBottom

@@ -17,15 +17,19 @@ type
 
   TJupiterDesktopApp = class(TJupiterApp)
   private
-    FFormRoutes : TJupiterObjectList;
-    FImageList  : TImageList;
-    FFormList   : TJupiterObjectList;
+    FFormRoutes   : TJupiterObjectList;
+    FImageList    : TImageList;
+    FFormList     : TJupiterObjectList;
+    FShortcutList : TJupiterObjectList;
+    FRouteList    : TJupiterObjectList;
   protected
     procedure Internal_AddScriptLibraries(var prScript : TJupiterScript); override;
 
     procedure Internal_Prepare; override;
     procedure Internal_ShortcutClick(Sender: TObject);
   published
+    property DynamicRouteList : TJupiterObjectList read FRouteList write FRouteList;
+    property DynamicShortcutList : TJupiterObjectList read FShortcutList write FShortcutList;
     property FormRoutes : TJupiterObjectList read FFormRoutes write FFormRoutes;
     property ImageList : TImageList read FImageList write FImageList;
     property FormList : TJupiterObjectList read FFormList write FFormList;
@@ -302,6 +306,7 @@ procedure TJupiterDesktopApp.SetShortCutList(var prActionGroup: TActionList);
 var
   vrQry    : TSQLQuery;
   vrAction : TAction;
+  vrVez    : Integer;
 begin
   vrQry := Self.NewWizard.NewQuery;
   try
@@ -323,6 +328,19 @@ begin
 
       vrQry.Next;
     end;
+
+    for vrVez := 0 to Self.DynamicShortcutList.Count - 1 do
+      with TJupiterVariableList(Self.DynamicShortcutList.GetAtIndex(vrVez)) do
+      begin
+        vrAction            := TAction.Create(prActionGroup);
+        vrAction.ActionList := prActionGroup;
+        vrAction.Enabled    := True;
+        vrAction.Caption    := VariableById('Description').Value;
+        vrAction.Hint       := VariableById('Description').Value;
+        vrAction.OnExecute  := @Internal_ShortcutClick;
+        vrAction.ShortCut   := TextToShortCut(VariableById('Shortcut').Value);
+        vrAction.Tag        := VariableById('Destiny').AsInteger;
+      end;
   finally
     vrQry.Close;
     FreeAndNil(vrQry);
@@ -345,13 +363,31 @@ begin
 end;
 
 procedure TJupiterDesktopApp.AddDynamicRoute(prTitle, prRoute, prShortcut, prParams: String; prDestiny, prIcon, prZIndex: Integer);
+var
+  vrRoute : TJupiterVariableList;
 begin
-  //
+  vrRoute := TJupiterVariableList.Create;
+  vrRoute.AddVariable('Title', prTitle);
+  vrRoute.AddVariable('Route', prRoute);
+  vrRoute.AddVariable('Shortcut', prShortcut);
+  vrRoute.AddVariable('Params', prParams);
+  vrRoute.AddVariable('Destiny', IntToStr(prDestiny));
+  vrRoute.AddVariable('Icon', IntToStr(prIcon));
+  vrRoute.AddVariable('ZIndex', IntToStr(prZIndex));
+
+  Self.FRouteList.Add(vrRoute);
 end;
 
 procedure TJupiterDesktopApp.AddDynamicShortcut(prDescription, prShortcut: String; prDestiny: Integer);
+var
+  vrShortCut : TJupiterVariableList;
 begin
+  vrShortCut := TJupiterVariableList.Create;
+  vrShortCut.AddVariable('Description', prDescription);
+  vrShortCut.AddVariable('Shortcut', prShortcut);
+  vrShortCut.AddVariable('Destiny', IntToStr(prDestiny));
 
+  Self.FShortcutList.Add(vrShortCut);
 end;
 
 procedure TJupiterDesktopApp.GenerateDynamicData;
@@ -366,13 +402,17 @@ begin
   Self.FFormRoutes := TJupiterObjectList.Create;
 
   Self.FFormList := TJupiterObjectList.Create;
+
+  Self.FShortcutList := TJupiterObjectList.Create;
+  Self.FRouteList := TJupiterObjectList.Create;
 end;
 
 destructor TJupiterDesktopApp.Destroy;
 begin
   FreeAndNil(Self.FFormRoutes);
-
   FreeAndNil(Self.FFormList);
+  FreeAndNil(Self.FShortcutList);
+  FreeAndNil(Self.FRouteList);
 
   inherited Destroy;
 end;

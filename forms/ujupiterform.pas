@@ -60,7 +60,8 @@ type
 
     procedure Internal_AddShortcutsToMenu;
     procedure Internal_SetSearchBar(prNewValue : Boolean);
-  public
+  protected
+    FPrepared : Boolean;
     FHint : String;
   published
     property ActionGroup    : TJupiterActionGroup  read FActionGroup    write FActionGroup;
@@ -70,6 +71,7 @@ type
     property FormID         : String               read FFormID;
     property Hint           : String               read FHint           write FHint;
     property PercentDivisor : Integer              read FPercentDivisor write FPercentDivisor;
+    property Prepared       : Boolean              read FPrepared       write FPrepared;
 
     procedure Internal_UpdateComponents; virtual;
     procedure Internal_UpdateDatasets; virtual;
@@ -123,6 +125,7 @@ var
   vrWizard : TJupiterDatabaseWizard;
   vrQry : TSQLQuery;
   vrComponent : TJupiterComponentReference;
+  vrVez : Integer;
 begin
   vrWizard := vrJupiterApp.NewWizard;
   vrQry := vrWizard.NewQuery;
@@ -145,6 +148,15 @@ begin
 
       vrQry.Next;
     end;
+
+    for vrVez := 0 to TJupiterDesktopApp(vrJupiterApp).DynamicShortcutList.Count - 1 do
+      with TJupiterVariableList(TJupiterDesktopApp(vrJupiterApp).DynamicShortcutList.GetAtIndex(vrVez)) do
+      begin
+        vrComponent := JupiterComponentsAddPopupMenuItem(pmOptions, VariableById('Description').Value, VariableById('Shortcut').Value, NULL_KEY);
+
+        TMenuItem(vrComponent.Component).Tag := VariableById('Destiny').AsInteger;
+        TMenuItem(vrComponent.Component).OnClick := @Internal_OnShortCutClick;
+      end;
   finally
     FreeAndNil(vrWizard);
     FreeAndNil(vrQry);
@@ -238,6 +250,8 @@ end;
 
 procedure TFJupiterForm.FormCreate(Sender: TObject);
 begin
+  Self.FPrepared := False;
+
   Self.FFormID := JupiterStringUtilsGenerateGUID;
 
   Self.FPercentDivisor := 30;
@@ -294,7 +308,12 @@ begin
   begin
     pnSearchBar.Top := fpOptions.Top + fpOptions.Height + 1;
 
-    pnSearchBar.Height := GetTextHeight('PESQUISAR', edSearch.Font) + FORM_MARGIN_TOP;
+    edSearch.Top    := FORM_MARGIN_TOP;
+    edSearch.Left   := FORM_MARGIN_LEFT;
+    edSearch.Width  := pnSearchBar.Width - (FORM_MARGIN_LEFT + FORM_MARGIN_RIGHT);
+    edSearch.Height := GetTextHeight('PESQUISAR', edSearch.Font) + FORM_MARGIN_TOP + FORM_MARGIN_BOTTOM;
+
+    pnSearchBar.Height := edSearch.Top + edSearch.Height + FORM_MARGIN_BOTTOM;
   end;
 end;
 
@@ -319,11 +338,8 @@ end;
 
 procedure TFJupiterForm.Internal_Resize;
 begin
-  edSearch.Top   := FORM_MARGIN_TOP;
-  edSearch.Left  := FORM_MARGIN_LEFT;
-  edSearch.Width := pnSearchBar.Width - FORM_MARGIN_LEFT - FORM_MARGIN_RIGHT;
-
-  pnSearchBar.Width := FORM_MARGIN_TOP + edSearch.Height + FORM_MARGIN_BOTTOM;
+  if Self.Prepared and Self.Showing then
+    Self.Internal_UpdateComponents;
 end;
 
 function TFJupiterForm.Internal_OnRequestData: TJupiterVariableList;
@@ -390,6 +406,8 @@ begin
     Self.Internal_AddShortcutsToMenu;
 
     Self.FActionGroup.Render;
+
+    Self.Prepared := True;
   end;
 end;
 

@@ -1,14 +1,18 @@
 inherited FGenerator: TFGenerator
-  Left = 672
+  Left = 573
   Top = 214
   Caption = 'Generator'
+  inherited pnSearchBar: TPanel
+    ClientHeight = 43
+    ClientWidth = 877
+  end
   inherited fpOptions: TFlowPanel
     TabOrder = 3
   end
   object pcOptions: TPageControl[3]
     Left = 0
-    Height = 325
-    Top = 50
+    Height = 330
+    Top = 45
     Width = 879
     ActivePage = tsGenerator
     Align = alClient
@@ -16,11 +20,11 @@ inherited FGenerator: TFGenerator
     TabOrder = 1
     object tsGenerator: TTabSheet
       Caption = 'Generator'
-      ClientHeight = 294
+      ClientHeight = 299
       ClientWidth = 869
       object mmDetails: TMemo
         Left = 0
-        Height = 294
+        Height = 299
         Top = 0
         Width = 869
         Align = alClient
@@ -34,11 +38,11 @@ inherited FGenerator: TFGenerator
     end
     object tsProviders: TTabSheet
       Caption = 'Data Providers'
-      ClientHeight = 294
+      ClientHeight = 299
       ClientWidth = 869
       object mmProviderDetails: TMemo
         Left = 0
-        Height = 294
+        Height = 299
         Top = 0
         Width = 869
         Align = alClient
@@ -52,11 +56,11 @@ inherited FGenerator: TFGenerator
     end
     object tsTriggers: TTabSheet
       Caption = 'Triggers'
-      ClientHeight = 294
+      ClientHeight = 299
       ClientWidth = 869
       object mmTriggerDetails: TMemo
         Left = 0
-        Height = 294
+        Height = 299
         Top = 0
         Width = 869
         Align = alClient
@@ -70,15 +74,19 @@ inherited FGenerator: TFGenerator
     end
     object tbTables: TTabSheet
       Caption = 'Tabelas'
-      ClientHeight = 294
+      ClientHeight = 299
       ClientWidth = 869
       object lvTables: TListView
         Left = 0
-        Height = 294
+        Height = 299
         Top = 0
         Width = 869
         Align = alClient
-        Columns = <>
+        Columns = <        
+          item
+            AutoSize = True
+            Caption = 'Tabela'
+          end>
         ReadOnly = True
         TabOrder = 0
         OnDblClick = lvTablesDblClick
@@ -86,11 +94,11 @@ inherited FGenerator: TFGenerator
     end
     object tsIcons: TTabSheet
       Caption = 'Ícones'
-      ClientHeight = 294
+      ClientHeight = 299
       ClientWidth = 869
       object lvIcons: TListView
         Left = 0
-        Height = 294
+        Height = 299
         Top = 0
         Width = 869
         Align = alClient

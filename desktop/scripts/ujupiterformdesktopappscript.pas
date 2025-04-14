@@ -76,7 +76,6 @@ begin
     Exit;
 
   TFJupiterForm(vrForm).Hint := prHint;
-  TFJupiterForm(vrForm).FHint := prHint;
 end;
 
 procedure JupiterFormDesktopAppScriptAddLabel(prFormID, prCaption: String);

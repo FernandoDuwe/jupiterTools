@@ -5,7 +5,7 @@ unit uCustomDatabaseForm;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, DBCtrls,
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, DBCtrls, StdCtrls,
   DBDateTimePicker, SQLDB, DB, uJupiterForm, jupiterformutils,
   jupiterStringUtils, jupiterDatabaseWizard, JupiterApp, JupiterVariable,
   JupiterObject, JupiterConsts, uJupiterStringUtilsScript,
