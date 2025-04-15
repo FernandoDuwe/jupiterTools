@@ -2,10 +2,6 @@ inherited FGenerator: TFGenerator
   Left = 573
   Top = 214
   Caption = 'Generator'
-  inherited pnSearchBar: TPanel
-    ClientHeight = 43
-    ClientWidth = 877
-  end
   inherited fpOptions: TFlowPanel
     TabOrder = 3
   end
@@ -86,6 +82,7 @@ inherited FGenerator: TFGenerator
           item
             AutoSize = True
             Caption = 'Tabela'
+            Width = 854
           end>
         ReadOnly = True
         TabOrder = 0

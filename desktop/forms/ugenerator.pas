@@ -145,6 +145,25 @@ begin
   mmProviderDetails.Lines.Add(EmptyStr);
   mmProviderDetails.Lines.Add('Providers');
   mmProviderDetails.Lines.Add(vrPrefix + 'Os providers são utilizados para buscar informações, desde informações relativas a estrutura de arquivos e pastas, ou informações oríundas da base de dados interna.');
+  mmProviderDetails.Lines.Add(EmptyStr);
+  mmProviderDetails.Lines.Add(vrPrefix + 'JupiterCSVDataProvider: Provider para leitura de arquivos CSV');
+  mmProviderDetails.Lines.Add(vrPrefix + vrPrefix + 'Os campos disponíveis são os mesmos campos presentes no arquivo');
+  mmProviderDetails.Lines.Add(EmptyStr);
+  mmProviderDetails.Lines.Add(vrPrefix + 'JupiterSQLDataProvider: Provider para consultas em banco de dados');
+  mmProviderDetails.Lines.Add(vrPrefix + vrPrefix + 'Os campos disponíveis são os mesmos campos presentes na consulta');
+  mmProviderDetails.Lines.Add(EmptyStr);
+  mmProviderDetails.Lines.Add(vrPrefix + 'JupiterFileDataProvider: Provider para leitura de arquivos nas pastas do sistema operacional');
+  mmProviderDetails.Lines.Add(vrPrefix + vrPrefix + 'Campos: FieldName, File, Extension');
+  mmProviderDetails.Lines.Add(EmptyStr);
+  mmProviderDetails.Lines.Add(vrPrefix + 'JupiterDirectoryDataProvider: Provider para leitura de pastas do sistema operacional');
+  mmProviderDetails.Lines.Add(vrPrefix + vrPrefix + 'Campos: Folder, Path');
+  mmProviderDetails.Lines.Add(EmptyStr);
+  mmProviderDetails.Lines.Add(vrPrefix + 'JupiterTasksDataProvider: Provider para leitura das tarefas cadastradas na pasta de tarefas');
+  mmProviderDetails.Lines.Add(vrPrefix + vrPrefix + 'Campos: Client, Task, Path');
+  mmProviderDetails.Lines.Add(EmptyStr);
+  mmProviderDetails.Lines.Add(vrPrefix + 'JupiterXMLDataProvider: Provider para leitura de arquivos XML');
+  mmProviderDetails.Lines.Add(vrPrefix + vrPrefix + 'Os campos disponíveis são os mesmos campos presentes no arquivo');
+  mmProviderDetails.Lines.Add(EmptyStr);
 
   mmTriggerDetails.Lines.Clear;
   mmTriggerDetails.Lines.Add(EmptyStr);
