@@ -1,5 +1,4 @@
 unit uMain;
-
 {$mode ObjFPC}{$H+}
 
 interface
@@ -108,6 +107,9 @@ begin
 
   if ((ParamCount > 1) and (AnsiUpperCase(ParamStr(1)) = '-SCRIPT')) then
     JupiterAppDesktopOpenCodeRunner(ParamStr(2));
+
+  for vrVez := 0 to ParamCount do
+    vrJupiterApp.Params.AddVariable('Param' + IntToStr(vrVez), ParamStr(vrVez));
 end;
 
 procedure TFMain.jtMainTabChange(Sender: TObject);

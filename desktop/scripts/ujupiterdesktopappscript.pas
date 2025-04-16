@@ -41,6 +41,7 @@ type
   procedure JupiterAppDesktopIncFont;
   procedure JupiterAppDesktopDecFont;
   procedure JupiterAppDesktopClose;
+  function  JupiterAppDesktopInLineMode : Boolean;
 
   procedure JupiterAppDesktopAddReference(prTableName : String; prId : Integer);
 
@@ -244,6 +245,11 @@ begin
   Application.Terminate;
 end;
 
+function JupiterAppDesktopInLineMode: Boolean;
+begin
+  Result := ParamCount > 1;
+end;
+
 procedure JupiterAppDesktopAddReference(prTableName: String; prId: Integer);
 begin
   vrJupiterApp.AddGlobalReference(TJupiterDatabaseReference.Create(prTableName, prId));
@@ -299,6 +305,8 @@ begin
   prSender.AddFunction(@JupiterAppDesktopShowMessage, 'procedure ShowMessage(prMessage: String);');
 
   prSender.AddFunction(@JupiterAppDesktopAddReference, 'procedure AddGlobalReference(prTableName : String; prId : Integer);');
+
+  prSender.AddFunction(@JupiterAppDesktopInLineMode, 'function InLineMode : Boolean;');
 end;
 
 function TJupiterDesktopAppScript.AnalyseCode: TJupiterScriptAnalyserList;
@@ -334,6 +342,8 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure ShowMessage(prMessage: String);'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure AddGlobalReference(prTableName : String; prId : Integer);'));
+
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function InLineMode : Boolean;'));
 end;
 
 end.

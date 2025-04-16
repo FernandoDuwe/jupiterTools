@@ -16,31 +16,32 @@ inherited FContextMenu: TFContextMenu
     end
   end
   inherited fpOptions: TFlowPanel
-    Top = 788
+    Height = 0
+    Top = 789
     Width = 1204
     TabOrder = 3
   end
   inherited pnBottom: TPanel
-    Top = 707
+    Top = 708
     Width = 1204
     ClientWidth = 1204
     TabOrder = 4
   end
   object gbMain: TGroupBox[3]
     Left = 0
-    Height = 657
-    Top = 50
+    Height = 663
+    Top = 45
     Width = 89
     Align = alLeft
     Caption = 'Menu principal'
-    ClientHeight = 639
-    ClientWidth = 87
+    ClientHeight = 643
+    ClientWidth = 85
     TabOrder = 1
     object tvTreeMenu: TTreeView
       Left = 0
-      Height = 639
+      Height = 643
       Top = 0
-      Width = 87
+      Width = 85
       Align = alClient
       BackgroundColor = clDefault
       Color = clDefault
@@ -52,36 +53,38 @@ inherited FContextMenu: TFContextMenu
   end
   object gbContext: TGroupBox[4]
     Left = 94
-    Height = 657
-    Top = 50
+    Height = 663
+    Top = 45
     Width = 1110
     Align = alClient
     Caption = 'Menu de contexto'
-    ClientHeight = 639
-    ClientWidth = 1108
+    ClientHeight = 643
+    ClientWidth = 1106
     TabOrder = 2
     object lvRoute: TListView
       Left = 0
-      Height = 639
+      Height = 643
       Top = 0
-      Width = 1108
+      Width = 1106
       Align = alClient
       Columns = <      
         item
+          AutoSize = True
           Caption = 'Rota'
-          Width = 1093
+          Width = 10
         end>
       MultiSelect = True
       ParentFont = False
       ReadOnly = True
       TabOrder = 0
+      ViewStyle = vsReport
       OnKeyPress = lvRouteKeyPress
     end
   end
   object Splitter1: TSplitter[5]
     Left = 89
-    Height = 657
-    Top = 50
+    Height = 663
+    Top = 45
     Width = 5
   end
   inherited acOptions: TActionList[6]

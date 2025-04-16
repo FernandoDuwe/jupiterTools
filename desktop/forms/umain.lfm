@@ -20,19 +20,20 @@ inherited FMain: TFMain
     end
   end
   inherited fpOptions: TFlowPanel
-    Top = 628
+    Height = 0
+    Top = 544
     Width = 1228
     TabOrder = 3
   end
   inherited pnBottom: TPanel
-    Top = 547
+    Top = 544
     Width = 1228
     ClientWidth = 1228
   end
   object sbStatus: TStatusBar[3]
     Left = 0
-    Height = 19
-    Top = 629
+    Height = 23
+    Top = 625
     Width = 1228
     Panels = <    
       item
@@ -42,7 +43,7 @@ inherited FMain: TFMain
   end
   object jtMainTab: TJupiterFormTab[4]
     Left = 0
-    Height = 502
+    Height = 499
     Top = 45
     Width = 1228
     Align = alClient
