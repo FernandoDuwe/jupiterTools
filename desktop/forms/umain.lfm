@@ -42,8 +42,8 @@ inherited FMain: TFMain
   end
   object jtMainTab: TJupiterFormTab[4]
     Left = 0
-    Height = 497
-    Top = 50
+    Height = 502
+    Top = 45
     Width = 1228
     Align = alClient
     HotTrack = True

@@ -21,9 +21,8 @@ object FJupiterForm: TFJupiterForm
     Width = 879
     Align = alTop
     BevelOuter = bvNone
-    BorderStyle = bsSingle
-    ClientHeight = 43
-    ClientWidth = 877
+    ClientHeight = 45
+    ClientWidth = 879
     TabOrder = 0
     OnClick = pnSearchBarClick
     object edSearch: TEdit
@@ -45,7 +44,6 @@ object FJupiterForm: TFJupiterForm
     Align = alBottom
     AutoSize = True
     BevelOuter = bvNone
-    BorderStyle = bsSingle
     ControlList = <>
     FlowLayout = tlTop
     FlowStyle = fsLeftRightTopBottom

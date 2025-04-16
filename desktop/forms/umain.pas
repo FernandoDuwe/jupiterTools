@@ -54,7 +54,7 @@ var
 
 implementation
 
-uses JupiterFormTabSheet, LCLProc;
+uses JupiterFormTabSheet, LCLProc, uJupiterDesktopAppScript;
 
 {$R *.lfm}
 
@@ -96,10 +96,18 @@ begin
 end;
 
 procedure TFMain.FormShow(Sender: TObject);
+var
+  vrVez : Integer;
 begin
   inherited;
 
   vrJupiterApp.RunMacro(TRIGGER_ONSTART, TJupiterVariableList.Create);
+
+  if ((ParamCount > 1) and (AnsiUpperCase(ParamStr(1)) = '-MACRO')) then
+    JupiterAppDesktopOpenCodeRunner(ParamStr(2));
+
+  if ((ParamCount > 1) and (AnsiUpperCase(ParamStr(1)) = '-SCRIPT')) then
+    JupiterAppDesktopOpenCodeRunner(ParamStr(2));
 end;
 
 procedure TFMain.jtMainTabChange(Sender: TObject);
