@@ -20,7 +20,6 @@ inherited FMain: TFMain
     end
   end
   inherited fpOptions: TFlowPanel
-    Height = 0
     Top = 544
     Width = 1228
     TabOrder = 3

@@ -13,7 +13,7 @@ object FJupiterForm: TFJupiterForm
   OnShow = FormShow
   PopupMenu = pmOptions
   Position = poScreenCenter
-  LCLVersion = '3.4.0.0'
+  LCLVersion = '3.8.0.0'
   object pnSearchBar: TPanel
     Left = 0
     Height = 45
@@ -38,8 +38,8 @@ object FJupiterForm: TFJupiterForm
   end
   object fpOptions: TFlowPanel
     Left = 0
-    Height = 1
-    Top = 456
+    Height = 0
+    Top = 376
     Width = 879
     Align = alBottom
     AutoSize = True
@@ -52,7 +52,7 @@ object FJupiterForm: TFJupiterForm
   object pnBottom: TPanel
     Left = 0
     Height = 81
-    Top = 375
+    Top = 376
     Width = 879
     Align = alBottom
     Alignment = taLeftJustify
@@ -249,6 +249,7 @@ object FJupiterForm: TFJupiterForm
     Top = 72
   end
   object tmrAutoUpdater: TTimer
+    Enabled = False
     OnTimer = tmrAutoUpdaterTimer
     Left = 448
     Top = 72

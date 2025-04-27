@@ -9,7 +9,7 @@ uses
   ButtonPanel, StdCtrls, Menus, ComCtrls, Buttons, JupiterConsts,
   JupiterFormTabSheet, jupiterformutils, JupiterApp, uJupiterAction,
   jupiterDesktopApp, jupiterformcomponenttils, JupiterVariable,
-  jupiterStringUtils, jupiterDatabaseWizard;
+  jupiterStringUtils, jupiterDatabaseWizard, uJupiterAppScript;
 
 type
 
@@ -62,6 +62,7 @@ type
     procedure Internal_SetSearchBar(prNewValue : Boolean);
   protected
     FPrepared : Boolean;
+    FResizing : Boolean;
     FHint : String;
   published
     property ActionGroup    : TJupiterActionGroup  read FActionGroup    write FActionGroup;
@@ -250,6 +251,7 @@ end;
 
 procedure TFJupiterForm.FormCreate(Sender: TObject);
 begin
+  Self.FResizing := False;
   Self.FPrepared := False;
 
   Self.FFormID := JupiterStringUtilsGenerateGUID;
@@ -339,7 +341,28 @@ end;
 procedure TFJupiterForm.Internal_Resize;
 begin
   if Self.Prepared and Self.Showing then
+  begin                       {
+    if not Self.IsWindowForm then
+    begin
+      Self.FResizing := True;
+
+      Self.Visible := False;
+      try
+//        Self.WindowState := wsNormal;
+
+        Self.Height := 100;
+        Self.Width  := 100;
+      finally
+        Self.Visible     := True;
+        Self.WindowState := wsMaximized;
+        Self.FResizing   := False;
+      end;
+    end;                       }
+
     Self.Internal_UpdateComponents;
+    Self.Refresh;
+    Self.Repaint;
+  end;
 end;
 
 function TFJupiterForm.Internal_OnRequestData: TJupiterVariableList;
@@ -408,11 +431,19 @@ begin
     Self.FActionGroup.Render;
 
     Self.Prepared := True;
+
+    tmrAutoUpdater.Enabled := True;
   end;
 end;
 
 procedure TFJupiterForm.UpdateForm(prUpdateDatasets: Boolean; prUpdateComponentes: Boolean; prUpdateCalcs: Boolean);
 begin
+  if not Self.Prepared then
+    Exit;
+
+  tmrAutoUpdater.Enabled := False;
+  tmrAutoUpdater.Enabled := Self.Prepared;
+
   if Self.Owner is TJupiterFormTabSheet then
     TJupiterFormTabSheet(Self.Owner).Caption := Self.Caption;
 
@@ -424,8 +455,6 @@ begin
 
   if prUpdateCalcs then
     Self.Internal_UpdateCalcs;
-
-  Self.Internal_Resize;
 end;
 
 function TFJupiterForm.IsWindowForm: Boolean;

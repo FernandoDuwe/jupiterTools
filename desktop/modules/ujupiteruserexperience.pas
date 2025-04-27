@@ -54,6 +54,12 @@ begin
 
     Self.Internal_CreateVariablIfDontExists(FIELD_FONT_NAME, 'Nome da fonte', 'Calibri');
 
+    Self.Internal_CreateVariablIfDontExists(FIELD_EDITABLES_FONT_NAME, 'Nome da fonte: Para componentes editáveis', 'Calibri');
+
+    Self.Internal_CreateVariablIfDontExists(FIELD_MEMO_FONT_NAME, 'Nome da fonte: Para componentes Memo', 'Calibri');
+
+    Self.Internal_CreateVariablIfDontExists(FIELD_SYNEDIT_FONT_NAME, 'Nome da fonte: Para componentes SynEdit', 'DejaVu Sans Mono');
+
     Self.Internal_CreateVariablIfDontExists(FORM_EDITOR_RIGHTEDGE, 'Linha de limite do editor de scripts', '120');
 
     Self.Internal_CreateVariablIfDontExists(FORM_UPDATE_TIME, 'Tempo de atualização dos formulários; (em milisegundos)', '15000');

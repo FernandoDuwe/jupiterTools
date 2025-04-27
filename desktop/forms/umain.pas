@@ -203,8 +203,6 @@ begin
     end;
   end;
 
-  Self.Refresh;
-
   jtMainTab.Align := alClient;
   jtMainTab.Visible := jtMainTab.PageCount > 0;
 end;

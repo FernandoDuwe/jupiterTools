@@ -85,15 +85,18 @@ const
    FIELD_ID_GENERADOR       : String = 'Generator.FormId';
    FIELD_TREE_COLAPSE       : String = 'MenuTree_Colapse';
 
-   FORM_ALWAYS_MODAL        : String = 'Interface.Form.AlwaysModal';
-   FORM_UPDATE_TIME         : String = 'Interface.Form.UpdateTime';
-   FORM_DESCRIPTION_MAXSIZE : String = 'Interface.Form.Description.MaxSize';
-   FORM_EDITOR_RIGHTEDGE    : String = 'Interface.Editor.RightEdge';
-   FIELD_FONT_NAME          : String = 'Interface.Font.Name';
-   FIELD_FONT_SIZE          : String = 'Interface.Font.Size';
-   CONTEXTMENU_TABLE_SHOW   : String = 'Interface.ContextMenu.ShowTables';
-   FORM_GRID_LIMIT          : String = 'Interface.Form.GridLimit';
-   DEBUG_MODE               : String = 'Developer.Debug';
+   FORM_ALWAYS_MODAL         : String = 'Interface.Form.AlwaysModal';
+   FORM_UPDATE_TIME          : String = 'Interface.Form.UpdateTime';
+   FORM_DESCRIPTION_MAXSIZE  : String = 'Interface.Form.Description.MaxSize';
+   FORM_EDITOR_RIGHTEDGE     : String = 'Interface.Editor.RightEdge';
+   FIELD_FONT_NAME           : String = 'Interface.Font.Name';
+   FIELD_FONT_SIZE           : String = 'Interface.Font.Size';
+   FIELD_EDITABLES_FONT_NAME : String = 'Interface.Editables.Font.Size';
+   FIELD_MEMO_FONT_NAME      : String = 'Interface.Memo.Font.Size';
+   FIELD_SYNEDIT_FONT_NAME   : String = 'Interface.SynEdit.Font.Size';
+   CONTEXTMENU_TABLE_SHOW    : String = 'Interface.ContextMenu.ShowTables';
+   FORM_GRID_LIMIT           : String = 'Interface.Form.GridLimit';
+   DEBUG_MODE                : String = 'Developer.Debug';
 
    CSV_SEPARATOR_REPLACER : String = '[SEMICOLON]';
 
@@ -123,7 +126,7 @@ const
    FORM_ACTION_MINWIDTH         : Integer = 120;
    FORM_ACTION_MINWIDTH_COMPACT : Integer = 80;
 
-   FORM_UPDATE_TIME_MILISECONDS : Integer = 1000;
+   FORM_UPDATE_TIME_MILISECONDS : Integer = 1500;
 
    // Generator
    GENERATOR_SYSLAYER : SmallInt = 1000;

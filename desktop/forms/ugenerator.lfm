@@ -3,12 +3,8 @@ inherited FGenerator: TFGenerator
   Top = 214
   Caption = 'Generator'
   inherited fpOptions: TFlowPanel
-    Height = 0
     Top = 376
     TabOrder = 3
-  end
-  inherited pnBottom: TPanel
-    Top = 376
   end
   object pcOptions: TPageControl[3]
     Left = 0
