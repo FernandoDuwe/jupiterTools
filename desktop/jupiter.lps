@@ -555,7 +555,7 @@
         <UnitName Value="uTextEditor"/>
         <IsVisibleTab Value="True"/>
         <TopLine Value="57"/>
-        <CursorPos X="146" Y="85"/>
+        <CursorPos X="95" Y="67"/>
         <UsageCount Value="167"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
