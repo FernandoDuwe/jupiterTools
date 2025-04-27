@@ -1,10 +1,14 @@
 inherited FFileExplorer: TFFileExplorer
   Left = 595
   Top = 498
+  inherited fpOptions: TFlowPanel
+    Height = 1
+    Top = 375
+  end
   object stvFolders: TShellTreeView[3]
     Left = 0
-    Height = 325
-    Top = 50
+    Height = 330
+    Top = 45
     Width = 296
     Align = alLeft
     FileSortType = fstFoldersFirst
@@ -16,14 +20,14 @@ inherited FFileExplorer: TFFileExplorer
   end
   object spDivider: TSplitter[4]
     Left = 296
-    Height = 325
-    Top = 50
+    Height = 330
+    Top = 45
     Width = 5
   end
   object slvExporer: TShellListView[5]
     Left = 301
-    Height = 325
-    Top = 50
+    Height = 330
+    Top = 45
     Width = 578
     Align = alClient
     Color = clDefault

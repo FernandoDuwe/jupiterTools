@@ -25,6 +25,8 @@ const
    SQLEDITOR_PATH : String = '/forms/sqlEditor';
    TEXTEDITOR_PATH : String = '/forms/textEditor';
    CODERUNNER_PATH : String = '/forms/codeRunner';
+   FILEFINDER_PATH : String = '/forms/finder/file';
+   FILEREADERFINDER_PATH : String = '/forms/finder/fileReader';
 
    ICON_ADD       : SmallInt = 0;
    ICON_NEW       : SmallInt = 1;

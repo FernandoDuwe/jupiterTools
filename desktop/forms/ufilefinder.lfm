@@ -1,0 +1,22 @@
+inherited FFileFinder: TFFileFinder
+  Left = 803
+  Top = 303
+  inherited fpOptions: TFlowPanel
+    Height = 1
+    Top = 375
+  end
+  object tvFileTree: TTreeView[3]
+    Left = 0
+    Height = 330
+    Top = 45
+    Width = 879
+    Align = alClient
+    TabOrder = 3
+  end
+  inherited acOptions: TActionList[4]
+  end
+  inherited tmrAutoUpdater: TTimer[5]
+  end
+  inherited pmOptions: TPopupMenu[6]
+  end
+end

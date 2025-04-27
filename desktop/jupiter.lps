@@ -8,8 +8,8 @@
         <Filename Value="jupiter.lpr"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="45"/>
-        <CursorPos X="51" Y="53"/>
+        <TopLine Value="32"/>
+        <CursorPos X="63" Y="67"/>
         <UsageCount Value="200"/>
       </Unit>
       <Unit>
@@ -20,8 +20,8 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uJupiterForm"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="59"/>
-        <CursorPos Y="77"/>
+        <TopLine Value="53"/>
+        <CursorPos Y="81"/>
         <UsageCount Value="200"/>
       </Unit>
       <Unit>
@@ -50,8 +50,8 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterConsts"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="31"/>
-        <CursorPos X="16" Y="47"/>
+        <TopLine Value="24"/>
+        <CursorPos X="14" Y="48"/>
         <UsageCount Value="200"/>
       </Unit>
       <Unit>
@@ -163,8 +163,7 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uConfig"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="66"/>
-        <CursorPos X="103" Y="79"/>
+        <CursorPos X="81" Y="16"/>
         <UsageCount Value="202"/>
       </Unit>
       <Unit>
@@ -216,8 +215,8 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="uJupiterDesktopAppScript"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="21"/>
-        <CursorPos X="16" Y="6"/>
+        <TopLine Value="334"/>
+        <CursorPos X="72" Y="348"/>
         <UsageCount Value="201"/>
       </Unit>
       <Unit>
@@ -489,10 +488,11 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uFileExplorer"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="75"/>
-        <CursorPos X="44" Y="96"/>
+        <TopLine Value="62"/>
+        <CursorPos X="17" Y="65"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../commons/jupitersqldataprovider.pas"/>
@@ -544,7 +544,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="6"/>
         <CursorPos X="33" Y="10"/>
-        <UsageCount Value="171"/>
+        <UsageCount Value="172"/>
       </Unit>
       <Unit>
         <Filename Value="forms/utexteditor.pas"/>
@@ -553,12 +553,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uTextEditor"/>
-        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="57"/>
-        <CursorPos X="95" Y="67"/>
-        <UsageCount Value="167"/>
-        <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
+        <CursorPos X="68" Y="62"/>
+        <UsageCount Value="168"/>
       </Unit>
       <Unit>
         <Filename Value="../scripts/ujupiterdateutilsscript.pas"/>
@@ -567,7 +565,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="79"/>
         <CursorPos Y="92"/>
-        <UsageCount Value="117"/>
+        <UsageCount Value="118"/>
       </Unit>
       <Unit>
         <Filename Value="forms/uchartviewer.pas"/>
@@ -578,7 +576,7 @@
         <UnitName Value="uChartViewer"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="34" Y="3"/>
-        <UsageCount Value="112"/>
+        <UsageCount Value="113"/>
       </Unit>
       <Unit>
         <Filename Value="../scripts/ujupiterchecklistutilsscript.pas"/>
@@ -587,7 +585,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="22"/>
         <CursorPos X="22" Y="32"/>
-        <UsageCount Value="108"/>
+        <UsageCount Value="109"/>
       </Unit>
       <Unit>
         <Filename Value="forms/uwaitform.pas"/>
@@ -598,7 +596,7 @@
         <UnitName Value="uWaitForm"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="35" Y="15"/>
-        <UsageCount Value="104"/>
+        <UsageCount Value="105"/>
       </Unit>
       <Unit>
         <Filename Value="forms/ucoderunner.pas"/>
@@ -610,7 +608,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="89"/>
         <CursorPos X="22" Y="109"/>
-        <UsageCount Value="96"/>
+        <UsageCount Value="97"/>
       </Unit>
       <Unit>
         <Filename Value="../commons/jupiterdirectorydataprovider.pas"/>
@@ -972,47 +970,88 @@
         <CursorPos X="13" Y="31"/>
         <UsageCount Value="10"/>
       </Unit>
+      <Unit>
+        <Filename Value="forms/ufilefinder.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FFileFinder"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uFileFinder"/>
+        <EditorIndex Value="1"/>
+        <CursorPos X="29" Y="38"/>
+        <UsageCount Value="21"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms/ufilereaderfinder.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FFileReaderFinder"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uFileReaderFinder"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
+        <CursorPos X="40" Y="37"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit>
     </Units>
-    <JumpHistory HistoryIndex="9">
+    <JumpHistory HistoryIndex="13">
       <Position>
-        <Filename Value="forms/utexteditor.pas"/>
-        <Caret Line="22" Column="34" TopLine="7"/>
+        <Filename Value="forms/ufileexplorer.pas"/>
+        <Caret Line="100" Column="33" TopLine="70"/>
       </Position>
       <Position>
-        <Filename Value="forms/utexteditor.pas"/>
-        <Caret Line="71" Column="38" TopLine="62"/>
+        <Filename Value="forms/ufileexplorer.pas"/>
+        <Caret Line="24" Column="18" TopLine="2"/>
       </Position>
       <Position>
-        <Filename Value="forms/utexteditor.pas"/>
-        <Caret Line="20" Column="24" TopLine="5"/>
+        <Filename Value="forms/ufileexplorer.pas"/>
+        <Caret Line="56" Column="30" TopLine="46"/>
       </Position>
       <Position>
-        <Filename Value="forms/utexteditor.pas"/>
-        <Caret Line="14" Column="29" TopLine="11"/>
+        <Filename Value="forms/ufileexplorer.pas"/>
+        <Caret Line="22" Column="4"/>
       </Position>
       <Position>
-        <Filename Value="forms/utexteditor.pas"/>
-        <Caret Line="20" Column="50" TopLine="11"/>
+        <Filename Value="forms/ufileexplorer.pas"/>
+        <Caret Line="83" Column="64" TopLine="54"/>
       </Position>
       <Position>
-        <Filename Value="forms/utexteditor.pas"/>
-        <Caret Line="34" Column="43" TopLine="20"/>
+        <Filename Value="forms/ufileexplorer.pas"/>
+        <Caret Line="31" Column="39" TopLine="4"/>
       </Position>
       <Position>
-        <Filename Value="forms/utexteditor.pas"/>
-        <Caret Line="48" Column="32" TopLine="14"/>
+        <Filename Value="forms/ufileexplorer.pas"/>
+        <Caret Line="74" Column="50" TopLine="61"/>
       </Position>
       <Position>
-        <Filename Value="forms/utexteditor.pas"/>
-        <Caret Line="61" Column="26" TopLine="57"/>
+        <Filename Value="forms/ufileexplorer.pas"/>
+        <Caret Line="32" Column="34" TopLine="4"/>
       </Position>
       <Position>
-        <Filename Value="forms/utexteditor.pas"/>
-        <Caret Line="61" Column="22" TopLine="43"/>
+        <Filename Value="forms/ufileexplorer.pas"/>
+        <Caret Line="74" Column="145" TopLine="62"/>
       </Position>
       <Position>
-        <Filename Value="forms/utexteditor.pas"/>
-        <Caret Line="25" Column="15" TopLine="8"/>
+        <Filename Value="forms/ufileexplorer.pas"/>
+        <Caret Line="84" Column="158" TopLine="62"/>
+      </Position>
+      <Position>
+        <Filename Value="forms/ufileexplorer.pas"/>
+        <Caret Line="33" Column="39"/>
+      </Position>
+      <Position>
+        <Filename Value="forms/ufileexplorer.pas"/>
+        <Caret Line="133" Column="3" TopLine="88"/>
+      </Position>
+      <Position>
+        <Filename Value="forms/ufilereaderfinder.pas"/>
+        <Caret Line="18" Column="46"/>
+      </Position>
+      <Position>
+        <Filename Value="forms/ufilereaderfinder.pas"/>
+        <Caret Line="45" Column="56"/>
       </Position>
     </JumpHistory>
     <RunParams>

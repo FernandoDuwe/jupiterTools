@@ -1,0 +1,6 @@
+inherited FFileReaderFinder: TFFileReaderFinder
+  inherited fpOptions: TFlowPanel
+    Height = 1
+    Top = 375
+  end
+end

@@ -438,6 +438,22 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uCodeRunner"/>
       </Unit>
+      <Unit>
+        <Filename Value="forms/ufilefinder.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FFileFinder"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uFileFinder"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms/ufilereaderfinder.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FFileReaderFinder"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uFileReaderFinder"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

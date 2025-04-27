@@ -7,7 +7,8 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ShellCtrls, ExtCtrls,
   uJupiterForm, JupiterConsts, jupiterformutils, JupiterEnviroment,
-  jupiterStringUtils, uJupiterRunnableScript, uJupiterAction;
+  jupiterStringUtils, uJupiterRunnableScript, uJupiterAction,
+  uJupiterDesktopAppScript;
 
 type
 
@@ -28,6 +29,8 @@ type
     procedure Internal_OnAsList(Sender: TObject);
     procedure Internal_OnAsIcons(Sender: TObject);
     procedure Internal_OnAsSmallIcons(Sender: TObject);
+    procedure Internal_OnSearchInFiles(Sender: TObject);
+    procedure Internal_OnSearchContentInFiles(Sender: TObject);
   public
 
   end;
@@ -77,6 +80,10 @@ begin
 
   Self.ActionGroup.AddAction(TJupiterAction.Create('Ícones pequenos', 'Exibir itens como ícones pequenos', NULL_KEY, @Internal_OnAsSmallIcons));
 
+  Self.ActionGroup.AddAction(TJupiterAction.Create('Pesquisar arquivos', 'Pesquisar arquivos no diretório atual', ICON_SEARCH, @Internal_OnSearchInFiles));
+
+  Self.ActionGroup.AddAction(TJupiterAction.Create('Pesquisar em arquivos', 'Pesquisar conteúdo nos arquivos do diretório atual', ICON_TASKS, @Internal_OnSearchContentInFiles));
+
   vrEnviroment := TJupiterEnviroment.Create;
   try
     if not Self.Params.Exists('path') then
@@ -114,6 +121,16 @@ end;
 procedure TFFileExplorer.Internal_OnAsSmallIcons(Sender: TObject);
 begin
   slvExporer.ViewStyle := vsSmallIcon;
+end;
+
+procedure TFFileExplorer.Internal_OnSearchInFiles(Sender: TObject);
+begin
+  JupiterAppDesktopOpenFileFinderForm(slvExporer.Root);
+end;
+
+procedure TFFileExplorer.Internal_OnSearchContentInFiles(Sender: TObject);
+begin
+  JupiterAppDesktopOpenFileReaderFinderForm(slvExporer.Root);
 end;
 
 end.
