@@ -5,7 +5,7 @@ unit jupiterStringUtils;
 interface
 
 uses
-  Classes, SysUtils, JupiterConsts;
+  Classes, SysUtils, JupiterConsts, JupiterObject;
 
   function JupiterStringUtilsNormalizeToPresent(prText : String) : String;
 
@@ -24,6 +24,21 @@ uses
   function jupiterStringUtilsGetLastPathName(prPath : String) : String;
 
   function jupiterStringUtilsGetDatabaseTriggerName(prTrigger, prTable : String) : String;
+
+  function jupiterStringUtilsIsValidSearch(prText, prSearchText : String) : Boolean;
+
+type
+
+  { TJupiterStringReference }
+
+  TJupiterStringReference = class(TJupiterObject)
+  private
+    FReference : String;
+  published
+    property Reference : String  read FReference write FReference;
+  public
+    constructor Create(prReference : String);
+  end;
 
 implementation
 
@@ -161,6 +176,18 @@ end;
 function jupiterStringUtilsGetDatabaseTriggerName(prTrigger, prTable: String): String;
 begin
   Result := StringReplace(prTrigger, '{0}', prTable, [rfIgnoreCase, rfReplaceAll]);
+end;
+
+function jupiterStringUtilsIsValidSearch(prText, prSearchText: String): Boolean;
+begin
+  Result := Pos(AnsiUpperCase(prSearchText), AnsiUpperCase(prText)) > 0;
+end;
+
+{ TJupiterStringReference }
+
+constructor TJupiterStringReference.Create(prReference: String);
+begin
+  Self.Reference := prReference;
 end;
 
 end.

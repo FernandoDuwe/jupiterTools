@@ -1,6 +1,35 @@
 inherited FFileReaderFinder: TFFileReaderFinder
-  inherited fpOptions: TFlowPanel
-    Height = 1
-    Top = 375
+  Left = 452
+  Top = 181
+  object pnLeft: TPanel[3]
+    Left = 0
+    Height = 330
+    Top = 45
+    Width = 170
+    Align = alLeft
+    BevelOuter = bvNone
+    TabOrder = 3
+  end
+  object Splitter1: TSplitter[4]
+    Left = 170
+    Height = 330
+    Top = 45
+    Width = 5
+  end
+  object tvFile: TTreeView[5]
+    Left = 175
+    Height = 330
+    Top = 45
+    Width = 704
+    Align = alClient
+    ReadOnly = True
+    TabOrder = 5
+    Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
+  end
+  inherited acOptions: TActionList[6]
+  end
+  inherited tmrAutoUpdater: TTimer[7]
+  end
+  inherited pmOptions: TPopupMenu[8]
   end
 end

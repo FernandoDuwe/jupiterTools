@@ -313,7 +313,7 @@ begin
     edSearch.Top    := FORM_MARGIN_TOP;
     edSearch.Left   := FORM_MARGIN_LEFT;
     edSearch.Width  := pnSearchBar.Width - (FORM_MARGIN_LEFT + FORM_MARGIN_RIGHT);
-    edSearch.Height := GetTextHeight('PESQUISAR', edSearch.Font) + FORM_MARGIN_TOP + FORM_MARGIN_BOTTOM;
+    edSearch.Height := GetTextHeight('PESQUISAR', edSearch.Font) + FORM_MARGIN_TOP;
 
     pnSearchBar.Height := edSearch.Top + edSearch.Height + FORM_MARGIN_BOTTOM;
   end;

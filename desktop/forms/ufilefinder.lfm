@@ -1,6 +1,11 @@
 inherited FFileFinder: TFFileFinder
   Left = 803
   Top = 303
+  inherited pnSearchBar: TPanel
+    inherited edSearch: TEdit
+      OnKeyPress = edSearchKeyPress
+    end
+  end
   inherited fpOptions: TFlowPanel
     Height = 1
     Top = 375
@@ -11,7 +16,11 @@ inherited FFileFinder: TFFileFinder
     Top = 45
     Width = 879
     Align = alClient
+    ReadOnly = True
     TabOrder = 3
+    OnDblClick = tvFileTreeDblClick
+    OnKeyPress = tvFileTreeKeyPress
+    Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
   end
   inherited acOptions: TActionList[4]
   end
