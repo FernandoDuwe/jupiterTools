@@ -180,7 +180,7 @@ begin
   for vrVez := 0 to vrActionList.Count - 1 do
   begin
     vrListItem := lvRoute.Items.Add;
-    vrListItem.Caption := vrActionList.GetActionAtIndex(vrVez).Caption;
+    vrListItem.Caption := vrActionList.GetActionAtIndex(vrVez).Caption + '   ';
     vrListItem.ImageIndex := vrActionList.GetActionAtIndex(vrVez).Icon;
     vrListItem.StateIndex := NULL_KEY;
     vrListItem.Data := vrActionList.GetActionAtIndex(vrVez);

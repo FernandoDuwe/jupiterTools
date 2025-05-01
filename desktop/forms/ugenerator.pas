@@ -94,7 +94,7 @@ begin
       for vrVez := 0 to vrTables.Count - 1 do
       begin
         vrListItem := lvTables.Items.Add;
-        vrListItem.Caption := vrTables[vrVez];
+        vrListItem.Caption := vrTables[vrVez] + '   ';
         vrListItem.ImageIndex := ICON_GRID;
         vrListItem.StateIndex := ICON_GRID;
       end;

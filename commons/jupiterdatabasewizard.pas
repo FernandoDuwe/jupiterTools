@@ -573,8 +573,8 @@ begin
        end;
     end;
   finally
-    if Length(Result) > vrJupiterApp.Params.VariableById(FORM_DESCRIPTION_MAXSIZE).AsInteger then
-      Result := Copy(Result, 1, vrJupiterApp.Params.VariableById(FORM_DESCRIPTION_MAXSIZE).AsInteger) + '...';
+  //  if Length(Result) > vrJupiterApp.Params.VariableById(FORM_DESCRIPTION_MAXSIZE).AsInteger then
+  //    Result := Copy(Result, 1, vrJupiterApp.Params.VariableById(FORM_DESCRIPTION_MAXSIZE).AsInteger) + '...';
 
     FreeAndNil(vrQry);
   end;

@@ -392,6 +392,9 @@ begin
   else
     Self.Caption := String.Format('%0:s', [TJupiterDesktopApp(vrJupiterApp).NewWizard.GetTableDescription(prReference.TableName, prReference.ID)]);
 
+  if Length(Self.Caption) > vrJupiterApp.Params.VariableById(FORM_DESCRIPTION_MAXSIZE).AsInteger then
+    Self.Caption := Copy(Self.Caption, 1, vrJupiterApp.Params.VariableById(FORM_DESCRIPTION_MAXSIZE).AsInteger) + '...';
+
   vrDatabase := vrJupiterApp.NewWizard;
   try
     vrQry := vrDatabase.NewQueryFromReference(prReference);

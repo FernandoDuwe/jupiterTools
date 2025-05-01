@@ -23,6 +23,8 @@ uses
 
   function JupiterComponentsNewTrackBar(prValue, prMin, prMax : Integer; prPosition : TJupiterPosition; prOwner : TWinControl; prOnChange : TNotifyEvent) : TJupiterComponentReference;
 
+  function JupiterComponentsNewProgressBar(prValue, prMin, prMax : Integer; prPosition : TJupiterPosition; prOwner : TWinControl) : TJupiterComponentReference;
+
   function JupiterComponentsNewCheckBox(prCaption : String; prValue : Boolean; prPosition : TJupiterPosition; prOwner : TWinControl; prOnChange : TNotifyEvent) : TJupiterComponentReference;
 
   // Componentes de banco de dados
@@ -190,6 +192,29 @@ begin
                                               prPosition.Left + vrTrackBar.Width,
                                               prPosition.Top + vrTrackBar.Height,
                                               vrTrackBar);
+end;
+
+function JupiterComponentsNewProgressBar(prValue, prMin, prMax: Integer; prPosition: TJupiterPosition; prOwner: TWinControl): TJupiterComponentReference;
+var
+  vrProgressBar : TProgressBar;
+begin
+  vrProgressBar           := TProgressBar.Create(prOwner);
+  vrProgressBar.Parent    := prOwner;
+  vrProgressBar.AutoSize  := True;
+  vrProgressBar.Min       := prMin;
+  vrProgressBar.Max       := prMax;
+  vrProgressBar.Position  := prValue;
+  vrProgressBar.Font.Size := GetFontSize;
+  vrProgressBar.Top       := prPosition.Top;
+  vrProgressBar.Left      := prPosition.Left;
+  vrProgressBar.Width     := prOwner.Width - prPosition.Left - FORM_MARGIN_RIGHT;
+  vrProgressBar.Anchors   := [akTop, akLeft, akRight];
+
+  Result := TJupiterComponentReference.Create(prPosition.Top,
+                                              prPosition.Left,
+                                              prPosition.Left + vrProgressBar.Width,
+                                              prPosition.Top + vrProgressBar.Height,
+                                              vrProgressBar);
 end;
 
 function JupiterComponentsNewCheckBox(prCaption : String; prValue: Boolean; prPosition: TJupiterPosition; prOwner: TWinControl; prOnChange: TNotifyEvent): TJupiterComponentReference;

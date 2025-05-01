@@ -428,6 +428,8 @@ begin
   finally
     Self.Internal_AddShortcutsToMenu;
 
+    PopupMenuShortcutsToActionShortcut(acOptions, pmOptions);
+
     Self.FActionGroup.Render;
 
     Self.Prepared := True;

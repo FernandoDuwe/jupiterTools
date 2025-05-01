@@ -7,12 +7,12 @@ inherited FFileFinder: TFFileFinder
     end
   end
   inherited fpOptions: TFlowPanel
-    Height = 1
-    Top = 375
+    Height = 0
+    Top = 376
   end
   object tvFileTree: TTreeView[3]
     Left = 0
-    Height = 330
+    Height = 331
     Top = 45
     Width = 879
     Align = alClient

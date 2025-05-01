@@ -1,7 +1,7 @@
 inherited FMain: TFMain
-  Left = 632
+  Left = 924
   Height = 648
-  Top = 385
+  Top = 404
   Width = 1228
   Caption = ''
   ClientHeight = 648
@@ -20,6 +20,7 @@ inherited FMain: TFMain
     end
   end
   inherited fpOptions: TFlowPanel
+    Height = 0
     Top = 544
     Width = 1228
     TabOrder = 3
@@ -63,6 +64,26 @@ inherited FMain: TFMain
       Caption = 'acNewTab'
       OnExecute = acNewTabExecute
       ShortCut = 16462
+    end
+    object acNextTab: TAction[1]
+      Caption = 'Próxima aba'
+      OnExecute = acNextTabExecute
+      ShortCut = 16393
+    end
+    object acPreviousTab: TAction[2]
+      Caption = 'acPreviousTab'
+      OnExecute = acPreviousTabExecute
+      ShortCut = 24585
+    end
+    object acCloseTab: TAction[3]
+      Caption = 'acCloseTab'
+      OnExecute = acCloseTabExecute
+      ShortCut = 16499
+    end
+    object acCloseAllButThis: TAction[4]
+      Caption = 'acCloseAllButThis'
+      OnExecute = acCloseAllButThisExecute
+      ShortCut = 24691
     end
   end
   inherited tmrAutoUpdater: TTimer[6]

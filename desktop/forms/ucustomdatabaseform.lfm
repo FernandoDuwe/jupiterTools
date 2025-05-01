@@ -4,6 +4,7 @@ inherited FCustomDatabaseForm: TFCustomDatabaseForm
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   inherited fpOptions: TFlowPanel
+    Height = 0
     Top = 0
     Align = alTop
   end

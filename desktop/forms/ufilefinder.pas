@@ -170,8 +170,11 @@ begin
     for vrVez := 0 to vrFileProvider.Count - 1 do
     begin
       if Trim(edSearch.Text) <> EmptyStr then
-        if not jupiterStringUtilsIsValidSearch(vrFileProvider.GetRowByIndex(vrVez).Fields.VariableById('FieldName').Value, edSearch.Text) then
-          Continue;
+      begin
+        if not jupiterStringUtilsIsValidSearch(prPath, edSearch.Text) then
+          if not jupiterStringUtilsIsValidSearch(vrFileProvider.GetRowByIndex(vrVez).Fields.VariableById('FieldName').Value, edSearch.Text) then
+            Continue;
+      end;
 
       if prOwner <> nil then
         vrNodeFile := tvFileTree.Items.AddChild(prOwner, vrFileProvider.GetRowByIndex(vrVez).Fields.VariableById('FieldName').Value)

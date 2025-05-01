@@ -7,7 +7,8 @@ interface
 uses
   Classes, ComCtrls, JupiterObject, JupiterConsts, Controls,
   SysUtils, Forms, Graphics, EditBtn, CheckLst, StdCtrls,
-  ShellCtrls, SynEdit, DBCtrls, DBDateTimePicker;
+  ShellCtrls, SynEdit, DBCtrls, DBDateTimePicker, ActnList,
+  Menus;
 
   procedure CopyNodes(prSourceNode, prTargetNode: TTreeNode);
 
@@ -26,6 +27,8 @@ uses
   function GetTextHeight(prText: String; prFont: TFont): Integer;
   function GetTextWidth(prText: String; prFont: TFont): Integer;
   function GetFontSize : Integer;
+
+  procedure PopupMenuShortcutsToActionShortcut(prActions : TActionList; prPopupMenu : TPopupMenu);
 
 type
 
@@ -76,7 +79,7 @@ type
 
 implementation
 
-uses JupiterApp, ExtCtrls, Menus, JupiterVariable, DBGrids;
+uses JupiterApp, ExtCtrls, JupiterVariable, DBGrids;
 
 procedure CopyNodes(prSourceNode, prTargetNode: TTreeNode);
 
@@ -556,6 +559,25 @@ begin
     Result := 9;
 
   Result := vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).AsInteger;
+end;
+
+procedure PopupMenuShortcutsToActionShortcut(prActions: TActionList; prPopupMenu: TPopupMenu);
+var
+  vrVez : Integer;
+  vrAction : TAction;
+begin
+  for vrVez := 0 to prPopupMenu.Items.Count -1  do
+  begin
+    if prPopupMenu.Items[vrVez].ShortCut = 0 then
+      Continue;
+
+    vrAction := TAction.Create(prActions);
+    vrAction.ActionList := prActions;
+    vrAction.Caption := prPopupMenu.Items[vrVez].Caption;
+    vrAction.Hint := prPopupMenu.Items[vrVez].Hint;
+    vrAction.OnExecute := prPopupMenu.Items[vrVez].OnClick;
+    vrAction.ShortCut := prPopupMenu.Items[vrVez].ShortCut;
+  end;
 end;
 
 { TJupiterPosition }

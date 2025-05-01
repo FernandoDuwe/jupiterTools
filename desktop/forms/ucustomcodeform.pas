@@ -46,6 +46,7 @@ type
     procedure AddLabelBoldResultFromScriptWithParams(prMacroID, prParam : String);
     procedure AddLabelBold(prLabelCaption : String);
     procedure AddEdit(prVariableId, prInitialValue : String);
+    procedure AddProgressBar(prValue, prMin, prMax : Integer);
     procedure AddCombBox(prDataProviderID, prColumn, prVariableID : String);
     procedure AddCheckBox(prVariableId, prText : String; prValue : Boolean);
     procedure AddAction(prCaption, prHint : String; prIcon : Integer; prMacroID : String);
@@ -324,6 +325,17 @@ begin
     TSpeedButton(vrAction.Component).Hint := 'Clique aqui para copiar o conteúdo do campo';
     TSpeedButton(vrAction.Component).ShowHint := True;
   end;
+end;
+
+procedure TFCustomCodeForm.AddProgressBar(prValue, prMin, prMax : Integer);
+var
+  vrReference : TJupiterComponentReference;
+begin
+  Self.FCurrentLine := Self.FCurrentLine + FORM_MARGIN_TOP;
+
+  vrReference := JupiterComponentsNewProgressBar(prValue, prMin, prMax, TJupiterPosition.Create(Self.FCurrentLine, Self.FCurrentMargin), sbBody);
+
+  Self.FCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM;
 end;
 
 procedure TFCustomCodeForm.AddCombBox(prDataProviderID, prColumn, prVariableID: String);

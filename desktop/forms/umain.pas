@@ -15,13 +15,21 @@ type
 
   TFMain = class(TFJupiterForm)
     acNewTab: TAction;
+    acNextTab: TAction;
+    acPreviousTab: TAction;
+    acCloseTab: TAction;
+    acCloseAllButThis: TAction;
     ilIconFamily: TImageList;
     ilTabs: TImageList;
     jtMainTab: TJupiterFormTab;
     mmMainMenu: TMainMenu;
     pmTabOptions: TPopupMenu;
     sbStatus: TStatusBar;
+    procedure acCloseAllButThisExecute(Sender: TObject);
+    procedure acCloseTabExecute(Sender: TObject);
     procedure acNewTabExecute(Sender: TObject);
+    procedure acNextTabExecute(Sender: TObject);
+    procedure acPreviousTabExecute(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -79,6 +87,26 @@ begin
   finally
     Self.FNewTabClick := False;
   end;
+end;
+
+procedure TFMain.acCloseTabExecute(Sender: TObject);
+begin
+  Self.Internal_CloseCurrentTab(Sender);
+end;
+
+procedure TFMain.acCloseAllButThisExecute(Sender: TObject);
+begin
+  Self.Internal_CloseAllButCurrentTab(Sender);
+end;
+
+procedure TFMain.acNextTabExecute(Sender: TObject);
+begin
+  Self.Internal_GoToNextTab(Sender);
+end;
+
+procedure TFMain.acPreviousTabExecute(Sender: TObject);
+begin
+  Self.Internal_GoToPreviousTab(Sender);
 end;
 
 procedure TFMain.FormCreate(Sender: TObject);
@@ -194,7 +222,10 @@ begin
     if not (jtMainTab.Page[vrVez] is TJupiterFormTabSheet) then
       Continue;
 
-    jtMainTab.Page[vrVez].Caption := (jtMainTab.Page[vrVez] as TJupiterFormTabSheet).Form.Caption + '        ';
+    if Length((jtMainTab.Page[vrVez] as TJupiterFormTabSheet).Form.Caption) > vrJupiterApp.Params.VariableById(FORM_DESCRIPTION_MAXSIZE).AsInteger then
+      jtMainTab.Page[vrVez].Caption := Copy((jtMainTab.Page[vrVez] as TJupiterFormTabSheet).Form.Caption, 1, vrJupiterApp.Params.VariableById(FORM_DESCRIPTION_MAXSIZE).AsInteger) + '...        '
+    else
+      jtMainTab.Page[vrVez].Caption := (jtMainTab.Page[vrVez] as TJupiterFormTabSheet).Form.Caption + '        ';
 
     if (jtMainTab.Page[vrVez] as TJupiterFormTabSheet).Form.Hint <> EmptyStr then
     begin
