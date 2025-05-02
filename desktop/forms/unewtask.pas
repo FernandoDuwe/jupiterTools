@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, ExtCtrls,
   uJupiterForm, jupiterformutils, jupitertreeviewmenugenerator, JupiterApp,
   JupiterConsts, JupiterObject, jupiterDesktopApp, jupiterformcomponenttils,
-  uJupiterAction, StdCtrls;
+  uJupiterAction, StdCtrls, Types;
 
 type
 
@@ -21,6 +21,9 @@ type
     tvTreeMenu: TTreeView;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure Splitter1MouseWheelUp(Sender: TObject; Shift: TShiftState;
+      MousePos: TPoint; var Handled: Boolean);
+    procedure Splitter1Moved(Sender: TObject);
   private
     FReferences : TJupiterObjectList;
     FCurrentLine : Integer;
@@ -60,6 +63,17 @@ begin
   FreeAndNil(Self.FReferences);
 
   inherited;
+end;
+
+procedure TFNewTask.Splitter1MouseWheelUp(Sender: TObject; Shift: TShiftState;
+  MousePos: TPoint; var Handled: Boolean);
+begin
+
+end;
+
+procedure TFNewTask.Splitter1Moved(Sender: TObject);
+begin
+  miLookColumn.Checked := False;
 end;
 
 procedure TFNewTask.Internal_LinkClick(Sender: TObject);

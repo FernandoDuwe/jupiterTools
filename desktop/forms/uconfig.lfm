@@ -15,20 +15,20 @@ inherited FConfig: TFConfig
     end
   end
   inherited fpOptions: TFlowPanel
-    Top = 496
+    Top = 416
     Width = 1016
     TabOrder = 3
   end
   inherited pnBottom: TPanel
-    Top = 415
+    Top = 416
     Width = 1016
     ClientWidth = 1016
     TabOrder = 4
   end
   object gbVariables: TDBGrid[3]
     Left = 334
-    Height = 365
-    Top = 50
+    Height = 371
+    Top = 45
     Width = 682
     Align = alClient
     AlternateColor = clDefault
@@ -41,8 +41,8 @@ inherited FConfig: TFConfig
   end
   object tvFilter: TTreeView[4]
     Left = 0
-    Height = 365
-    Top = 50
+    Height = 371
+    Top = 45
     Width = 329
     Align = alLeft
     ReadOnly = True
@@ -52,9 +52,10 @@ inherited FConfig: TFConfig
   end
   object spSeparator: TSplitter[5]
     Left = 329
-    Height = 365
-    Top = 50
+    Height = 371
+    Top = 45
     Width = 5
+    OnMoved = spSeparatorMoved
   end
   inherited acOptions: TActionList[6]
   end

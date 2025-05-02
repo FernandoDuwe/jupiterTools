@@ -10,8 +10,8 @@ inherited FNewTask: TFNewTask
   end
   object tvTreeMenu: TTreeView[3]
     Left = 0
-    Height = 325
-    Top = 50
+    Height = 331
+    Top = 45
     Width = 343
     Align = alLeft
     BackgroundColor = clDefault
@@ -22,20 +22,22 @@ inherited FNewTask: TFNewTask
   end
   object Splitter1: TSplitter[4]
     Left = 343
-    Height = 325
-    Top = 50
+    Height = 331
+    Top = 45
     Width = 5
+    OnMoved = Splitter1Moved
+    OnMouseWheelUp = Splitter1MouseWheelUp
   end
   object sbShortcut: TScrollBox[5]
     Left = 348
-    Height = 325
-    Top = 50
+    Height = 331
+    Top = 45
     Width = 531
     HorzScrollBar.Page = 56
     VertScrollBar.Page = 64
     Align = alClient
-    ClientHeight = 323
-    ClientWidth = 529
+    ClientHeight = 327
+    ClientWidth = 527
     TabOrder = 4
     object imLogo: TImage
       Left = 8

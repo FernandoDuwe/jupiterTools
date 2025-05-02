@@ -247,6 +247,16 @@ object FJupiterForm: TFJupiterForm
   object acOptions: TActionList
     Left = 336
     Top = 72
+    object acIncreaseLefPanel: TAction
+      Caption = 'acIncreaseLefPanel'
+      OnExecute = acIncreaseLefPanelExecute
+      ShortCut = 39
+    end
+    object acIncreaseCenterPanel: TAction
+      Caption = 'acIncreaseCenterPanel'
+      OnExecute = acIncreaseCenterPanelExecute
+      ShortCut = 37
+    end
   end
   object tmrAutoUpdater: TTimer
     Enabled = False

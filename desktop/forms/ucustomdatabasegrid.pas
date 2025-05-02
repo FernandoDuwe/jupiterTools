@@ -33,6 +33,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure InternalDataSourceDataChange(Sender: TObject; Field: TField);
     procedure miShowMiniFormClick(Sender: TObject);
+    procedure Splitter1Moved(Sender: TObject);
     procedure tmrExecutionTimer(Sender: TObject);
   private
     FLimit : Integer;
@@ -108,6 +109,11 @@ begin
   finally
     Self.UpdateForm();
   end;
+end;
+
+procedure TFCustomDatabaseGrid.Splitter1Moved(Sender: TObject);
+begin
+  miLookColumn.Checked := False;
 end;
 
 procedure TFCustomDatabaseGrid.tmrExecutionTimer(Sender: TObject);

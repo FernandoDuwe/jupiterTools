@@ -26,6 +26,7 @@ type
     procedure edSearchKeyPress(Sender: TObject; var Key: char);
     procedure FormResize(Sender: TObject);
     procedure lvRouteKeyPress(Sender: TObject; var Key: char);
+    procedure Splitter1Moved(Sender: TObject);
     procedure tvTreeMenuEnter(Sender: TObject);
   private
     procedure Internal_PrepareForm; override;
@@ -104,6 +105,11 @@ end;
 procedure TFContextMenu.lvRouteKeyPress(Sender: TObject; var Key: char);
 begin
 
+end;
+
+procedure TFContextMenu.Splitter1Moved(Sender: TObject);
+begin
+  miLookColumn.Checked := False;
 end;
 
 procedure TFContextMenu.tvTreeMenuEnter(Sender: TObject);

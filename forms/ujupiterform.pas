@@ -17,6 +17,8 @@ type
 
   TFJupiterForm = class(TForm)
     acOptions: TActionList;
+    acIncreaseLefPanel: TAction;
+    acIncreaseCenterPanel: TAction;
     edSearch: TEdit;
     fpOptions: TFlowPanel;
     Image1: TImage;
@@ -33,6 +35,8 @@ type
     pmOptions: TPopupMenu;
     Separator2: TMenuItem;
     tmrAutoUpdater: TTimer;
+    procedure acIncreaseCenterPanelExecute(Sender: TObject);
+    procedure acIncreaseLefPanelExecute(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -247,6 +251,16 @@ end;
 procedure TFJupiterForm.FormActivate(Sender: TObject);
 begin
   Self.UpdateForm();
+end;
+
+procedure TFJupiterForm.acIncreaseLefPanelExecute(Sender: TObject);
+begin
+  miAjustRatioLeftClick(Sender);
+end;
+
+procedure TFJupiterForm.acIncreaseCenterPanelExecute(Sender: TObject);
+begin
+  miAjustRatioRightClick(Sender);
 end;
 
 procedure TFJupiterForm.FormCreate(Sender: TObject);

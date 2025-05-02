@@ -59,6 +59,7 @@ inherited FCustomDatabaseGrid: TFCustomDatabaseGrid
     Height = 331
     Top = 45
     Width = 5
+    OnMoved = Splitter1Moved
   end
   inherited acOptions: TActionList[6]
   end

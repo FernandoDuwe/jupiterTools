@@ -19,6 +19,7 @@ type
     spDivider: TSplitter;
     stvFolders: TShellTreeView;
     procedure slvExporerDblClick(Sender: TObject);
+    procedure spDividerMoved(Sender: TObject);
   private
     procedure Internal_UpdateComponents; override;
 
@@ -52,6 +53,11 @@ begin
     Exit;
 
   JupiterRunnableScript_RunCommandOnJupiter(slvExporer.Root + slvExporer.Selected.Caption);
+end;
+
+procedure TFFileExplorer.spDividerMoved(Sender: TObject);
+begin
+  miLookColumn.Checked := False;
 end;
 
 procedure TFFileExplorer.Internal_UpdateComponents;

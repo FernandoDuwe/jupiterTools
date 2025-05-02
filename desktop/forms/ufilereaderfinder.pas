@@ -17,6 +17,7 @@ type
     pnLeft: TPanel;
     Splitter1: TSplitter;
     tvFile: TTreeView;
+    procedure Splitter1Moved(Sender: TObject);
   private
     procedure Internal_OnCheckBoxClick(Sender: TObject);
 
@@ -36,6 +37,11 @@ implementation
 {$R *.lfm}
 
 { TFFileReaderFinder }
+
+procedure TFFileReaderFinder.Splitter1Moved(Sender: TObject);
+begin
+  miLookColumn.Checked := False;
+end;
 
 procedure TFFileReaderFinder.Internal_OnCheckBoxClick(Sender: TObject);
 begin

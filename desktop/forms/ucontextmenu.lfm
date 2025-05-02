@@ -16,7 +16,6 @@ inherited FContextMenu: TFContextMenu
     end
   end
   inherited fpOptions: TFlowPanel
-    Height = 0
     Top = 708
     Width = 1204
     TabOrder = 3
@@ -86,6 +85,7 @@ inherited FContextMenu: TFContextMenu
     Height = 663
     Top = 45
     Width = 5
+    OnMoved = Splitter1Moved
   end
   inherited acOptions: TActionList[6]
     object acExit: TAction[0]

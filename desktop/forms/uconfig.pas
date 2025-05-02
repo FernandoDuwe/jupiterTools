@@ -23,6 +23,7 @@ type
     tvFilter: TTreeView;
     procedure FormDestroy(Sender: TObject);
     procedure gbVariablesDblClick(Sender: TObject);
+    procedure spSeparatorMoved(Sender: TObject);
     procedure tvFilterSelectionChanged(Sender: TObject);
     procedure Internal_NewClick(Sender: TObject);
   private
@@ -61,6 +62,11 @@ begin
     Exit;
 
   JupiterAppDesktopOpenFormFromTableId('VARIABLES', qryConfig.FieldByName('ID').AsInteger);
+end;
+
+procedure TFConfig.spSeparatorMoved(Sender: TObject);
+begin
+  miLookColumn.Checked := False;
 end;
 
 procedure TFConfig.FormDestroy(Sender: TObject);

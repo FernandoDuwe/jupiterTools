@@ -3,7 +3,7 @@ inherited FFileReaderFinder: TFFileReaderFinder
   Top = 181
   object pnLeft: TPanel[3]
     Left = 0
-    Height = 330
+    Height = 331
     Top = 45
     Width = 170
     Align = alLeft
@@ -12,13 +12,14 @@ inherited FFileReaderFinder: TFFileReaderFinder
   end
   object Splitter1: TSplitter[4]
     Left = 170
-    Height = 330
+    Height = 331
     Top = 45
     Width = 5
+    OnMoved = Splitter1Moved
   end
   object tvFile: TTreeView[5]
     Left = 175
-    Height = 330
+    Height = 331
     Top = 45
     Width = 704
     Align = alClient

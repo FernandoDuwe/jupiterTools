@@ -5,15 +5,17 @@ unit uCheckList;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, CheckLst, uJupiterForm,
-  jupiterStringUtils, JupiterConsts, uJupiterAction;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, CheckLst, ActnList,
+  uJupiterForm, jupiterStringUtils, JupiterConsts, uJupiterAction, Clipbrd;
 
 type
 
   { TFCheckList }
 
   TFCheckList = class(TFJupiterForm)
+    acCopyCurrentItem: TAction;
     cbList: TCheckListBox;
+    procedure acCopyCurrentItemExecute(Sender: TObject);
     procedure cbListClickCheck(Sender: TObject);
   private
      procedure Internal_PrepareForm; override;
@@ -58,6 +60,17 @@ begin
     vrStr.Clear;
     FreeAndNil(vrStr);
   end;
+end;
+
+procedure TFCheckList.acCopyCurrentItemExecute(Sender: TObject);
+begin
+  if cbList.ItemIndex = NULL_KEY then
+    Exit;
+
+  if cbList.Count = 0 then
+    Exit;
+
+  Clipboard.AsText := cbList.Items[cbList.ItemIndex];
 end;
 
 procedure TFCheckList.Internal_PrepareForm;

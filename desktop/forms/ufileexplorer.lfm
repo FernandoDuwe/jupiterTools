@@ -1,13 +1,9 @@
 inherited FFileExplorer: TFFileExplorer
   Left = 595
   Top = 498
-  inherited fpOptions: TFlowPanel
-    Height = 1
-    Top = 375
-  end
   object stvFolders: TShellTreeView[3]
     Left = 0
-    Height = 330
+    Height = 331
     Top = 45
     Width = 296
     Align = alLeft
@@ -20,13 +16,14 @@ inherited FFileExplorer: TFFileExplorer
   end
   object spDivider: TSplitter[4]
     Left = 296
-    Height = 330
+    Height = 331
     Top = 45
     Width = 5
+    OnMoved = spDividerMoved
   end
   object slvExporer: TShellListView[5]
     Left = 301
-    Height = 330
+    Height = 331
     Top = 45
     Width = 578
     Align = alClient

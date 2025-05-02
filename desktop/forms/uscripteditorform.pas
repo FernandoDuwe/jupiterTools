@@ -35,6 +35,7 @@ type
     vlVariables: TValueListEditor;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure Splitter1Moved(Sender: TObject);
   private
     FFilePath : String;
     FMacroID : Integer;
@@ -78,6 +79,11 @@ begin
   FreeAndNil(Self.FScript);
 
   inherited;
+end;
+
+procedure TFScriptEditorForm.Splitter1Moved(Sender: TObject);
+begin
+  miLookColumn.Checked := False;
 end;
 
 procedure TFScriptEditorForm.Internal_UpdateComponents;
