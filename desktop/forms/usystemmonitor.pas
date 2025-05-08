@@ -7,7 +7,8 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls,
   uJupiterForm, jupiterformutils, JupiterApp, jupiterScript,
-  JupiterDataProvider, JupiterConsts, uJupiterAction, jupiterDesktopApp;
+  JupiterDataProvider, JupiterConsts, jupiterScriptList, uJupiterAction,
+  jupiterDesktopApp;
 
 type
 
@@ -20,9 +21,11 @@ type
     lvScripts: TListView;
     lvDataProviders: TListView;
     lvScriptList: TListView;
+    lvLineScriptList: TListView;
     pcPages: TPageControl;
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
+    tsProcessamento: TTabSheet;
     tsMessages: TTabSheet;
     tsScriptList: TTabSheet;
     tsDataProviders: TTabSheet;
@@ -85,6 +88,8 @@ begin
   lvForms.Column[0].Width := PercentOfScreen(lvForms.Width, 50);
   lvForms.Column[1].Width := PercentOfScreen(lvForms.Width, 50);
 
+  lvLineScriptList.Column[0].Width := PercentOfScreen(lvForms.Width, 50);
+
 //  Self.ActionGroup.GetActionAtIndex(0).Disable;
 end;
 
@@ -101,6 +106,7 @@ begin
   lvScriptList.Clear;
   lvMessages.Items.Clear;
   lvThreads.Items.Clear;
+  lvLineScriptList.Items.Clear;
   try
     for vrVez := 0 to vrJupiterApp.Scripts.Count - 1 do
       with TJupiterScript(vrJupiterApp.Scripts.GetAtIndex(vrVez)) do
@@ -162,6 +168,12 @@ begin
       else
         vrItem.SubItems.Add(EmptyStr);
     end;
+
+    for vrVez := 0 to vrJupiterApp.ScriptLineList.Count - 1 do
+    begin
+      vrItem := lvLineScriptList.Items.Add;
+      vrItem.Caption := TJupiterScriptInstruction(vrJupiterApp.ScriptLineList.GetAtIndex(vrVez)).Comand;
+    end;
   finally
   end;
 end;
@@ -176,6 +188,7 @@ begin
   pcPages.Pages[3].Caption := Format('Log de Scripts (%0:d)', [lvScriptList.Items.Count]);
   pcPages.Pages[4].Caption := Format('Mensagens (%0:d)', [lvMessages.Items.Count]);
   pcPages.Pages[5].Caption := Format('Threads (%0:d)', [lvThreads.Items.Count]);
+  pcPages.Pages[6].Caption := Format('Fila de processamento (%0:d)', [lvLineScriptList.Items.Count]);
 end;
 
 procedure TFSystemMonitor.Internal_OnDeleteAsset(Sender: TObject);

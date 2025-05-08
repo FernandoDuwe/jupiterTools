@@ -20,7 +20,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="3"/>
       <RevisionNr Value="1"/>
-      <BuildNr Value="67"/>
+      <BuildNr Value="89"/>
       <Language Value="0416"/>
       <CharSet Value="04E2"/>
       <StringTable CompanyName="Jupiter" FileDescription="Jupiter interface" ProductName="Jupiter"/>
@@ -454,6 +454,11 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uFileReaderFinder"/>
       </Unit>
+      <Unit>
+        <Filename Value="../commons/jupiterscriptlist.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterScriptList"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -466,12 +471,19 @@
       <OtherUnitFiles Value="../forms;forms;../commons;../modules;modules;commons;../scripts;scripts;../../../Software/jupiterTools/commons"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
+    <CodeGeneration>
+      <SmartLinkUnit Value="True"/>
+      <Optimizations>
+        <OptimizationLevel Value="3"/>
+      </Optimizations>
+    </CodeGeneration>
     <Linking>
       <Debugging>
         <GenerateDebugInfo Value="False"/>
         <RunWithoutDebug Value="True"/>
         <DebugInfoType Value="dsDwarf3"/>
       </Debugging>
+      <LinkSmart Value="True"/>
       <Options>
         <Win32>
           <GraphicApplication Value="True"/>

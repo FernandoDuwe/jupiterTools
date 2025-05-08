@@ -5,7 +5,7 @@ unit JupiterApp;
 interface
 
 uses
-  Classes, JupiterObject, JupiterModule, JupiterEnviroment,
+  Classes, JupiterObject, JupiterModule, JupiterEnviroment, jupiterScriptList,
   JupiterVariable, jupiterDatabaseWizard, jupiterScript, jupiterStringUtils,
   JupiterConsts, uJupiterEnviromentScript, uJupiterStringUtilsScript,
   uJupiterRunnableScript, uJupiterDataProviderScript, uJupiterDateUtilsScript,
@@ -27,6 +27,7 @@ type
     FScriptList       : TJupiterDataProvider;
     FMessageList      : TJupiterDataProvider;
     FThreadList       : TJupiterThreadList;
+    FScriptLineList   : TJupiterScriptList;
 
     procedure Internal_OnExecute(prScript, prMessages, prRunMessages : TStrings; prExecuted : Boolean);
     procedure Internal_SetVariableValue(prID, prNewValue : String);
@@ -38,10 +39,11 @@ type
     property AppID    : String  read FAppID;
     property AppName  : String  read FAppName;
 
-    property ModulesList   : TJupiterModuleList   read FModules       write FModules;
-    property Params        : TJupiterVariableList read FParams        write FParams;
-    property Scripts       : TJupiterVariableList read FScripts       write FScripts;
-    property ThreadList    : TJupiterThreadList   read FThreadList    write FThreadList;
+    property ModulesList    : TJupiterModuleList   read FModules        write FModules;
+    property Params         : TJupiterVariableList read FParams         write FParams;
+    property Scripts        : TJupiterVariableList read FScripts        write FScripts;
+    property ScriptLineList : TJupiterScriptList   read FScriptLineList write FScriptLineList;
+    property ThreadList     : TJupiterThreadList   read FThreadList     write FThreadList;
 
     property InternalDatabase : TSQLite3Connection read FInternalDatabase write FInternalDatabase;
     property ScriptList : TJupiterDataProvider read FScriptList write FScriptList;
@@ -696,6 +698,8 @@ begin
     Self.MessageList := TJupiterDataProvider.Create;
     Self.ThreadList := TJupiterThreadList.Create;
 
+    Self.ScriptLineList := TJupiterScriptList.Create;
+
     Self.Internal_Prepare;
   finally
     Self.AddMessage('Iniciando', 'Iniciando sistema', Self.ClassName);
@@ -712,6 +716,7 @@ begin
   FreeAndNil(Self.DataProviders);
   FreeAndNil(Self.FThreadList);
   FreeAndNil(Self.GlobalReferences);
+  FreeAndNil(Self.FScriptLineList);
 
   inherited Destroy;
 end;

@@ -235,6 +235,7 @@ var
 begin
   vrEnviroment := TJupiterEnviroment.Create;
   try
+    vrEnviroment.BasePath := vrJupiterApp.Params.VariableById(PATH_WORKDIR).Value;
     vrFilePath := vrEnviroment.OpenFile('*.jpas');
 
     if vrFilePath <> EmptyStr then

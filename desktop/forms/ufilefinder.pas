@@ -7,8 +7,8 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, uJupiterForm,
   jupiterStringUtils, JupiterDirectoryDataProvider, JupiterFileDataProvider,
-  JupiterConsts, uJupiterStringUtilsScript, uJupiterRunnableScript, uMain,
-  uJupiterAction, LCLType;
+  JupiterConsts, JupiterApp, uJupiterStringUtilsScript, uJupiterRunnableScript,
+  uMain, uJupiterAction, uJupiterDesktopAppScript, LCLType;
 
 type
 
@@ -20,6 +20,8 @@ type
     procedure tvFileTreeDblClick(Sender: TObject);
     procedure tvFileTreeKeyPress(Sender: TObject; var Key: char);
   private
+    FSearch : String;
+
     procedure Internal_OnDelete(Sender: TObject);
 
     procedure Internal_UpdateComponents; override;
@@ -107,6 +109,15 @@ begin
   tvFileTree.Items.Clear;
   tvFileTree.SortType := stNone;
 
+  if not vrJupiterApp.Params.VariableById('Interface.Finder.AlwaysSearchEmptyQuery').AsBool then
+    if Trim(edSearch.Text) = EmptyStr then
+      Exit;
+
+  if Trim(edSearch.Text) <> EmptyStr then
+    if edSearch.Text = Self.FSearch then
+      Exit;
+
+  JupiterAppDesktopCursorToWait;
   try
     Self.Internal_ReadDirectory(Self.Params.VariableById('path').Value, nil);
   finally
@@ -114,11 +125,17 @@ begin
 
     if Trim(edSearch.Text) <> EmptyStr then
       tvFileTree.FullExpand;
+
+    Self.FSearch := edSearch.Text;
+
+    JupiterAppDesktopCursorToIdle;
   end;
 end;
 
 procedure TFFileFinder.Internal_PrepareForm;
 begin
+  Self.FSearch := EmptyStr;
+
   inherited Internal_PrepareForm;
 
   Self.ShowSearchBar := True;

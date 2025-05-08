@@ -609,7 +609,7 @@ inherited FScriptEditorForm: TFScriptEditorForm
             TabOrder = 0
             ColWidths = (
               64
-              628
+              611
             )
           end
         end
@@ -632,7 +632,7 @@ inherited FScriptEditorForm: TFScriptEditorForm
     Top = 72
   end
   object SynCompletion1: TSynCompletion[10]
-    Position = 0
+    Position = -1
     LinesInWindow = 10
     SelectedColor = clHighlight
     CaseSensitive = False

@@ -88,6 +88,7 @@ const
    FIELD_TREE_COLAPSE       : String = 'MenuTree_Colapse';
 
    FORM_ALWAYS_MODAL         : String = 'Interface.Form.AlwaysModal';
+   FORM_ALWAYS_MODAL_CHILD   : String = 'Interface.Form.Child.AlwaysModal';
    FORM_UPDATE_TIME          : String = 'Interface.Form.UpdateTime';
    FORM_DESCRIPTION_MAXSIZE  : String = 'Interface.Form.Description.MaxSize';
    FORM_EDITOR_RIGHTEDGE     : String = 'Interface.Editor.RightEdge';
@@ -99,6 +100,8 @@ const
    CONTEXTMENU_TABLE_SHOW    : String = 'Interface.ContextMenu.ShowTables';
    FORM_GRID_LIMIT           : String = 'Interface.Form.GridLimit';
    DEBUG_MODE                : String = 'Developer.Debug';
+
+   PATH_WORKDIR : String = 'Enviroment.Path.WorkDir';
 
    CSV_SEPARATOR_REPLACER : String = '[SEMICOLON]';
 
@@ -128,7 +131,8 @@ const
    FORM_ACTION_MINWIDTH         : Integer = 120;
    FORM_ACTION_MINWIDTH_COMPACT : Integer = 80;
 
-   FORM_UPDATE_TIME_MILISECONDS : Integer = 1500;
+   FORM_UPDATE_TIME_MILISECONDS     : Integer = 1000;
+   FORM_UPDATE_TIME_MILISECONDS_LOW : Integer = 5000;
 
    // Generator
    GENERATOR_SYSLAYER : SmallInt = 1000;

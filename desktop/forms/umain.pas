@@ -19,6 +19,8 @@ type
     acPreviousTab: TAction;
     acCloseTab: TAction;
     acCloseAllButThis: TAction;
+    acUpdateAndResize: TAction;
+    ApplicationProperties1: TApplicationProperties;
     ilIconFamily: TImageList;
     ilTabs: TImageList;
     jtMainTab: TJupiterFormTab;
@@ -30,6 +32,7 @@ type
     procedure acNewTabExecute(Sender: TObject);
     procedure acNextTabExecute(Sender: TObject);
     procedure acPreviousTabExecute(Sender: TObject);
+    procedure acUpdateAndResizeExecute(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -46,6 +49,7 @@ type
     procedure Internal_UpdateComponents; override;
     procedure Internal_UpdateCalcs; override;
     procedure Internal_CreatePopMenuTab;
+    function Internal_IsMainPage : Boolean; override;
 
     procedure Internal_CloseCurrentTab(Sender: TObject);
     procedure Internal_CloseAllButCurrentTab(Sender: TObject);
@@ -109,6 +113,11 @@ begin
   Self.Internal_GoToPreviousTab(Sender);
 end;
 
+procedure TFMain.acUpdateAndResizeExecute(Sender: TObject);
+begin
+  Self.Internal_Resize;
+end;
+
 procedure TFMain.FormCreate(Sender: TObject);
 begin
   inherited;
@@ -141,8 +150,28 @@ begin
 end;
 
 procedure TFMain.jtMainTabChange(Sender: TObject);
+var
+  vrVez : Integer;
+  vrForm : TForm;
 begin
+  for vrVez := 0 to jtMainTab.PageCount - 1 do
+  begin
+    if not (jtMainTab.Pages[vrVez] is TJupiterFormTabSheet) then
+      Continue;
 
+    if not Assigned(TJupiterFormTabSheet(jtMainTab.Pages[vrVez]).Form) then
+      Continue;
+
+    vrForm := TJupiterFormTabSheet(jtMainTab.Pages[vrVez]).Form;
+
+    if not (vrForm is TFJupiterForm) then
+      Continue;
+
+    if jtMainTab.ActivePageIndex = vrVez then
+      TFJupiterForm(vrForm).Resume
+    else
+      TFJupiterForm(vrForm).Pause;
+  end;
 end;
 
 procedure TFMain.jtMainTabCloseTab(Sender: TObject);
@@ -183,6 +212,7 @@ begin
     Exit;
 
   jtMainTab.PageIndex := TMenuItem(Sender).Tag;
+  jtMainTabChange(Sender);
 end;
 
 procedure TFMain.Internal_PrepareForm;
@@ -197,6 +227,9 @@ begin
   TJupiterDesktopApp(vrJupiterApp).GetExternalImages;
 
   tmrAutoUpdater.Interval := FORM_UPDATE_TIME_MILISECONDS;
+
+  if vrJupiterApp.Params. VariableById('Interface.PerformanceMode').AsBool then
+    tmrAutoUpdater.Interval := FORM_UPDATE_TIME_MILISECONDS_LOW;
 
   Self.Internal_CreateShortcutList;
 
@@ -236,6 +269,8 @@ begin
 
   jtMainTab.Align := alClient;
   jtMainTab.Visible := jtMainTab.PageCount > 0;
+
+  vrJupiterApp.ScriptLineList.ExecuteNext;
 end;
 
 procedure TFMain.Internal_UpdateCalcs;
@@ -297,6 +332,11 @@ begin
   pmTabOptions.Items.Add(vrMenuItem);
 end;
 
+function TFMain.Internal_IsMainPage: Boolean;
+begin
+  Result := True;
+end;
+
 procedure TFMain.Internal_CloseCurrentTab(Sender: TObject);
 begin
   jtMainTab.CloseTab(jtMainTab.PageIndex);
@@ -322,6 +362,8 @@ begin
     vrVez := 0;
   end;
 
+  jtMainTabChange(Sender);
+
   tmrAutoUpdater.Enabled := True;
 end;
 
@@ -330,10 +372,13 @@ begin
   if (jtMainTab.PageIndex + 1) >= jtMainTab.PageCount then
   begin
     jtMainTab.PageIndex := 0;
+    jtMainTabChange(Sender);
+
     Exit;
   end;
 
   jtMainTab.PageIndex := jtMainTab.PageIndex + 1;
+  jtMainTabChange(Sender);
 end;
 
 procedure TFMain.Internal_GoToPreviousTab(Sender: TObject);
@@ -341,10 +386,13 @@ begin
   if (jtMainTab.PageIndex - 1) <= 0 then
   begin
     jtMainTab.PageIndex := jtMainTab.PageCount - 1;
+    jtMainTabChange(Sender);
+
     Exit;
   end;
 
   jtMainTab.PageIndex := jtMainTab.PageIndex + 1;
+  jtMainTabChange(Sender);
 end;
 
 procedure TFMain.NewTab(Form: TForm);
@@ -369,11 +417,16 @@ begin
     Exit;
   end;
 
+  Form.Align       := alClient;
+  Form.WindowState := wsMaximized;
+
   jtMainTab.Visible := True;
   jtMainTab.AddForm(Form);
 
   if Form is TFJupiterForm then
     TFJupiterForm(Form).OwnerTab := jtMainTab.Pages[jtMainTab.PageCount - 1] as TJupiterFormTabSheet;
+
+  jtMainTabChange(Self);
 end;
 
 end.

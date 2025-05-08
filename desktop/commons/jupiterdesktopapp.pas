@@ -137,9 +137,6 @@ end;
 
 procedure TJupiterDesktopApp.OpenForm(prForm: TForm);
 begin
-  prForm.Align       := alClient;
-  prForm.WindowState := wsMaximized;
-
   if Application.MainForm is TFMain then
     TFMain(Application.MainForm).NewTab(prForm);
 end;

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ShellCtrls, ExtCtrls,
-  uJupiterForm, JupiterConsts, jupiterformutils, JupiterEnviroment,
+  ActnList, uJupiterForm, JupiterConsts, jupiterformutils, JupiterEnviroment,
   jupiterStringUtils, uJupiterRunnableScript, uJupiterAction,
   uJupiterDesktopAppScript;
 
@@ -15,9 +15,11 @@ type
   { TFFileExplorer }
 
   TFFileExplorer = class(TFJupiterForm)
+    acCopy: TAction;
     slvExporer: TShellListView;
     spDivider: TSplitter;
     stvFolders: TShellTreeView;
+    procedure acCopyExecute(Sender: TObject);
     procedure slvExporerDblClick(Sender: TObject);
     procedure spDividerMoved(Sender: TObject);
   private
@@ -41,7 +43,7 @@ var
 
 implementation
 
-uses ComCtrls;
+uses Clipbrd, ComCtrls;
 
 {$R *.lfm}
 
@@ -53,6 +55,16 @@ begin
     Exit;
 
   JupiterRunnableScript_RunCommandOnJupiter(slvExporer.Root + slvExporer.Selected.Caption);
+end;
+
+procedure TFFileExplorer.acCopyExecute(Sender: TObject);
+begin
+  if stvFolders.Focused then
+    Clipboard.AsText := stvFolders.Path;
+
+  if slvExporer.Focused then
+    if Assigned(slvExporer.Selected) then
+      Clipboard.AsText := slvExporer.Selected.Caption;
 end;
 
 procedure TFFileExplorer.spDividerMoved(Sender: TObject);

@@ -66,6 +66,8 @@ begin
 
     Self.Internal_CreateVariablIfDontExists(FORM_ALWAYS_MODAL, 'Formulário ao abrir sempre modal', BOOL_TRUE_STR);
 
+    Self.Internal_CreateVariablIfDontExists(FORM_ALWAYS_MODAL_CHILD, 'Formulários filhos ao abrir sempre modal', BOOL_TRUE_STR);
+
     Self.Internal_CreateVariablIfDontExists(CONTEXTMENU_TABLE_SHOW, 'Sempre exibir as tabelas no menu de contexto', BOOL_TRUE_STR);
 
     Self.Internal_CreateVariablIfDontExists(FORM_GRID_LIMIT, 'Quantidade de registros por página', '50');
@@ -75,6 +77,10 @@ begin
     Self.Internal_CreateVariablIfDontExists(FORM_DESCRIPTION_MAXSIZE, 'Tamanho máximo das descrições de registro', '50');
 
     Self.Internal_CreateVariablIfDontExists('Interface.Grid.ShowMiniForm', 'Exibir sempre o resumo dos dados em formulários de grid', BOOL_FALSE_STR);
+
+    Self.Internal_CreateVariablIfDontExists('Interface.Finder.AlwaysSearchEmptyQuery', 'Sempre exibir pesquisa, mesmo sem nenhuma pesquisa informada', BOOL_TRUE_STR);
+
+    Self.Internal_CreateVariablIfDontExists('Interface.PerformanceMode', 'Modo performance', BOOL_FALSE_STR);
   finally
     FreeAndNil(vrWizard);
   end;

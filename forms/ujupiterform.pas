@@ -65,9 +65,10 @@ type
     procedure Internal_AddShortcutsToMenu;
     procedure Internal_SetSearchBar(prNewValue : Boolean);
   protected
-    FPrepared : Boolean;
-    FResizing : Boolean;
+    FPrepared  : Boolean;
+    FResizing  : Boolean;
     FHint : String;
+
   published
     property ActionGroup    : TJupiterActionGroup  read FActionGroup    write FActionGroup;
     property ShowSearchBar  : Boolean              read FShowSearchBar  write Internal_SetSearchBar default False;
@@ -83,12 +84,17 @@ type
     procedure Internal_UpdateCalcs; virtual;
     procedure Internal_PrepareForm; virtual;
     procedure Internal_Resize; virtual;
-    function Internal_OnRequestData : TJupiterVariableList; virtual;
+    function  Internal_OnRequestData : TJupiterVariableList; virtual;
 
     procedure Internal_BuildMenuParams;
     procedure Internal_ClickMenuClick(Sender: TObject);
     procedure Internal_CreateShortcutList;
+
+    function Internal_IsMainPage : Boolean; virtual;
   public
+    procedure Pause; virtual;
+    procedure Resume; virtual;
+
     procedure PrepareForm; virtual;
     procedure UpdateForm(prUpdateDatasets : Boolean = True; prUpdateComponentes : Boolean = True; prUpdateCalcs : Boolean = True); virtual;
 
@@ -285,11 +291,11 @@ begin
 
   Self.FParams := TJupiterVariableList.Create;
 
-  Self.Height := PercentOfScreen(Screen.Height, 80);
-  Self.Width  := PercentOfScreen(Screen.Width, 80);
+  Self.Height      := PercentOfScreen(Screen.Height, 80);
+  Self.Width       := PercentOfScreen(Screen.Width, 80);
 
   Self.WindowState := wsNormal;
-  Self.Position := poScreenCenter;
+  Self.Position    := poScreenCenter;
 end;
 
 procedure TFJupiterForm.FormDestroy(Sender: TObject);
@@ -427,18 +433,52 @@ begin
   TJupiterDesktopApp(vrJupiterApp).SetShortCutList(acOptions);
 end;
 
-procedure TFJupiterForm.PrepareForm;
+function TFJupiterForm.Internal_IsMainPage: Boolean;
 begin
+  Result := False;
+end;
+
+procedure TFJupiterForm.Pause;
+begin
+  tmrAutoUpdater.Enabled := False;
+end;
+
+procedure TFJupiterForm.Resume;
+begin
+  tmrAutoUpdaterTimer(Self);
+
+  tmrAutoUpdater.Enabled := True;
+end;
+
+procedure TFJupiterForm.PrepareForm;
+var
+  vrWaitPanel : TPanel;
+  vrModalConfig : String;
+begin
+  vrWaitPanel := TPanel.Create(Self);
+  vrWaitPanel.Parent := Self;
+  vrWaitPanel.Align := alClient;
+  vrWaitPanel.Caption := 'Aguarde...';
+  vrWaitPanel.BringToFront;
+
+  Application.ProcessMessages;
+
   try
     Self.Internal_PrepareForm;
 
     Self.Internal_CreateShortcutList;
 
+    vrModalConfig := FORM_ALWAYS_MODAL;
+
+    if not Self.Internal_IsMainPage then
+      vrModalConfig := FORM_ALWAYS_MODAL_CHILD;
+
     if Self.IsWindowForm then
-      if vrJupiterApp.Params.VariableById(FORM_ALWAYS_MODAL).AsBool then
+      if vrJupiterApp.Params.VariableById(vrModalConfig).AsBool then
         Self.WindowState := wsMaximized;
 
-    DrawForm(Self);
+    if not vrJupiterApp.Params. VariableById('Interface.PerformanceMode').AsBool then
+      DrawForm(Self);
   finally
     Self.Internal_AddShortcutsToMenu;
 
@@ -447,6 +487,9 @@ begin
     Self.FActionGroup.Render;
 
     Self.Prepared := True;
+
+    Application.ProcessMessages;
+    FreeAndNil(vrWaitPanel);
 
     tmrAutoUpdater.Enabled := True;
   end;
@@ -491,4 +534,3 @@ begin
 end;
 
 end.
-

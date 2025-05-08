@@ -6,10 +6,6 @@ inherited FFileFinder: TFFileFinder
       OnKeyPress = edSearchKeyPress
     end
   end
-  inherited fpOptions: TFlowPanel
-    Height = 0
-    Top = 376
-  end
   object tvFileTree: TTreeView[3]
     Left = 0
     Height = 331

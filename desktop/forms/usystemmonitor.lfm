@@ -7,8 +7,8 @@ inherited FSystemMonitor: TFSystemMonitor
   end
   object pcPages: TPageControl[3]
     Left = 0
-    Height = 325
-    Top = 50
+    Height = 331
+    Top = 45
     Width = 879
     ActivePage = tsScripts
     Align = alClient
@@ -16,13 +16,13 @@ inherited FSystemMonitor: TFSystemMonitor
     TabOrder = 2
     object tsScripts: TTabSheet
       Caption = 'Scripts'
-      ClientHeight = 294
-      ClientWidth = 869
+      ClientHeight = 303
+      ClientWidth = 871
       object lvScripts: TListView
         Left = 0
-        Height = 294
+        Height = 303
         Top = 0
-        Width = 869
+        Width = 871
         Align = alClient
         Columns = <        
           item
@@ -37,13 +37,13 @@ inherited FSystemMonitor: TFSystemMonitor
     end
     object tsDataProviders: TTabSheet
       Caption = 'Data Providers'
-      ClientHeight = 294
-      ClientWidth = 869
+      ClientHeight = 303
+      ClientWidth = 871
       object lvDataProviders: TListView
         Left = 0
-        Height = 294
+        Height = 303
         Top = 0
-        Width = 869
+        Width = 871
         Align = alClient
         Columns = <        
           item
@@ -58,13 +58,13 @@ inherited FSystemMonitor: TFSystemMonitor
     end
     object TabSheet1: TTabSheet
       Caption = 'Formulários'
-      ClientHeight = 294
-      ClientWidth = 869
+      ClientHeight = 303
+      ClientWidth = 871
       object lvForms: TListView
         Left = 0
-        Height = 294
+        Height = 303
         Top = 0
-        Width = 869
+        Width = 871
         Align = alClient
         Columns = <        
           item
@@ -82,13 +82,13 @@ inherited FSystemMonitor: TFSystemMonitor
     end
     object tsScriptList: TTabSheet
       Caption = 'Log de Scripts'
-      ClientHeight = 294
-      ClientWidth = 869
+      ClientHeight = 303
+      ClientWidth = 871
       object lvScriptList: TListView
         Left = 0
-        Height = 294
+        Height = 303
         Top = 0
-        Width = 869
+        Width = 871
         Align = alClient
         Columns = <        
           item
@@ -112,13 +112,13 @@ inherited FSystemMonitor: TFSystemMonitor
     end
     object tsMessages: TTabSheet
       Caption = 'Mensagens'
-      ClientHeight = 294
-      ClientWidth = 869
+      ClientHeight = 303
+      ClientWidth = 871
       object lvMessages: TListView
         Left = 0
-        Height = 294
+        Height = 303
         Top = 0
-        Width = 869
+        Width = 871
         Align = alClient
         Columns = <        
           item
@@ -142,13 +142,13 @@ inherited FSystemMonitor: TFSystemMonitor
     end
     object TabSheet2: TTabSheet
       Caption = 'Threads'
-      ClientHeight = 294
-      ClientWidth = 869
+      ClientHeight = 303
+      ClientWidth = 871
       object lvThreads: TListView
         Left = 0
-        Height = 294
+        Height = 303
         Top = 0
-        Width = 869
+        Width = 871
         Align = alClient
         Columns = <        
           item
@@ -163,6 +163,28 @@ inherited FSystemMonitor: TFSystemMonitor
           end        
           item
             Caption = 'Fim'
+          end>
+        GridLines = True
+        ReadOnly = True
+        TabOrder = 0
+        ViewStyle = vsReport
+      end
+    end
+    object tsProcessamento: TTabSheet
+      Caption = 'Fila de processamento'
+      ClientHeight = 303
+      ClientWidth = 871
+      object lvLineScriptList: TListView
+        Left = 0
+        Height = 303
+        Top = 0
+        Width = 871
+        Align = alClient
+        Columns = <        
+          item
+            AutoSize = True
+            Caption = 'Script'
+            Width = 45
           end>
         GridLines = True
         ReadOnly = True

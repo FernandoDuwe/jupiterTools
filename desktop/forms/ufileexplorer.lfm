@@ -36,6 +36,11 @@ inherited FFileExplorer: TFFileExplorer
     ShellTreeView = stvFolders
   end
   inherited acOptions: TActionList[6]
+    object acCopy: TAction[2]
+      Caption = 'acCopy'
+      OnExecute = acCopyExecute
+      ShortCut = 16451
+    end
   end
   inherited tmrAutoUpdater: TTimer[7]
   end
