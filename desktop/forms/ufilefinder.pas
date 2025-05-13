@@ -106,9 +106,6 @@ procedure TFFileFinder.Internal_UpdateDatasets;
 begin
   inherited Internal_UpdateDatasets;
 
-  tvFileTree.Items.Clear;
-  tvFileTree.SortType := stNone;
-
   if not vrJupiterApp.Params.VariableById('Interface.Finder.AlwaysSearchEmptyQuery').AsBool then
     if Trim(edSearch.Text) = EmptyStr then
       Exit;
@@ -116,6 +113,9 @@ begin
   if Trim(edSearch.Text) <> EmptyStr then
     if edSearch.Text = Self.FSearch then
       Exit;
+
+  tvFileTree.Items.Clear;
+  tvFileTree.SortType := stNone;
 
   JupiterAppDesktopCursorToWait;
   try
