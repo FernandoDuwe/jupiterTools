@@ -105,10 +105,10 @@
         <Filename Value="../commons/jupiterapp.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterApp"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="692"/>
-        <CursorPos X="52" Y="705"/>
+        <TopLine Value="587"/>
+        <CursorPos X="26" Y="606"/>
         <UsageCount Value="205"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../commons/jupiterdatabasewizard.pas"/>
@@ -196,19 +196,20 @@
         <Filename Value="commons/jupiterdesktopapp.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="jupiterDesktopApp"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="7"/>
-        <CursorPos X="36" Y="19"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="20"/>
+        <CursorPos X="36" Y="20"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../scripts/ujupiterappscript.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uJupiterAppScript"/>
-        <TopLine Value="212"/>
-        <CursorPos X="135" Y="242"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="14" Y="20"/>
         <UsageCount Value="201"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="scripts/ujupiterdesktopappscript.pas"/>
@@ -614,13 +615,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uFileFinder"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="104"/>
-        <CursorPos X="33" Y="119"/>
+        <CursorPos X="21" Y="112"/>
         <UsageCount Value="40"/>
-        <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="forms/ufilereaderfinder.pas"/>
@@ -1026,26 +1024,46 @@
         <UsageCount Value="10"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="4">
+    <JumpHistory HistoryIndex="9">
       <Position>
-        <Filename Value="../scripts/ujupiterappscript.pas"/>
-        <Caret Line="133" Column="3" TopLine="129"/>
+        <Filename Value="../commons/jupiterapp.pas"/>
+        <Caret Line="694" Column="39" TopLine="674"/>
       </Position>
       <Position>
-        <Filename Value="../scripts/ujupiterappscript.pas"/>
-        <Caret Line="43" Column="57" TopLine="22"/>
+        <Filename Value="../commons/jupiterapp.pas"/>
+        <Caret Line="69" Column="21" TopLine="58"/>
       </Position>
       <Position>
-        <Filename Value="../scripts/ujupiterappscript.pas"/>
-        <Caret Line="167" Column="54" TopLine="165"/>
+        <Filename Value="../commons/jupiterapp.pas"/>
+        <Caret Line="302" Column="50" TopLine="282"/>
       </Position>
       <Position>
-        <Filename Value="../scripts/ujupiterappscript.pas"/>
-        <Caret Line="208" Column="124" TopLine="180"/>
+        <Filename Value="../commons/jupiterapp.pas"/>
+        <Caret Line="69" Column="15" TopLine="45"/>
       </Position>
       <Position>
-        <Filename Value="../scripts/ujupiterappscript.pas"/>
-        <Caret Line="43" Column="68" TopLine="13"/>
+        <Filename Value="../commons/jupiterapp.pas"/>
+        <Caret Line="319" TopLine="295"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterapp.pas"/>
+        <Caret Line="70" Column="15" TopLine="45"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterapp.pas"/>
+        <Caret Line="344" Column="26" TopLine="321"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterapp.pas"/>
+        <Caret Line="71" Column="15" TopLine="46"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterapp.pas"/>
+        <Caret Line="373" Column="26" TopLine="347"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterapp.pas"/>
+        <Caret Line="72" Column="15" TopLine="47"/>
       </Position>
     </JumpHistory>
     <RunParams>

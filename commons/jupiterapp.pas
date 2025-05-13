@@ -314,6 +314,8 @@ begin
     vrScript.Execute;
   finally
     FreeAndNil(vrScript);
+
+    FreeAndNil(prParams);
   end;
 end;
 
@@ -338,6 +340,8 @@ begin
     vrScript.Execute;
   finally
     FreeAndNil(vrScript);
+
+    FreeAndNil(prParams);
   end;
 end;
 
@@ -365,6 +369,8 @@ begin
     vrScript.Execute;
   finally
     FreeAndNil(vrScript);
+
+    FreeAndNil(prParams);
   end;
 end;
 
@@ -373,10 +379,15 @@ var
   vrScript : TJupiterScript;
 begin
   vrScript := Self.NewScript;
-  vrScript.LoadFromFile(prMacroFile);
-  vrScript.Params.CopyValues(prParams);
+  try
+    vrScript.LoadFromFile(prMacroFile);
+    vrScript.Params.CopyValues(prParams);
 
-  vrScript.Execute;
+    vrScript.Execute;
+  finally
+    FreeAndNil(vrScript);
+    FreeAndNil(prParams);
+  end;
 end;
 
 procedure TJupiterApp.RunMacroFromFileInThread(prMacroFile: String; prParams: TJupiterVariableList);
@@ -423,6 +434,7 @@ begin
     vrScript.Execute;
   finally
     FreeAndNil(vrScript);
+    FreeAndNil(prParams);
   end;
 end;
 
@@ -453,6 +465,7 @@ begin
     vrScript.Execute;
   finally
     FreeAndNil(vrScript);
+    FreeAndNil(prParams);
   end;
 end;
 
@@ -495,6 +508,7 @@ begin
       Result := vrScript.Params.VariableById('Result').AsBool;
   finally
     FreeAndNil(vrScript);
+    FreeAndNil(prParams);
   end;
 end;
 
@@ -534,6 +548,7 @@ begin
       Result := vrScript.Params.VariableById('Result').AsBool;
   finally
     FreeAndNil(vrScript);
+    FreeAndNil(prParams);
   end;
 end;
 
@@ -570,6 +585,7 @@ begin
       Result := vrScript.Params.VariableById('Result').Value;
   finally
     FreeAndNil(vrScript);
+    FreeAndNil(prParams);
   end;
 end;
 
