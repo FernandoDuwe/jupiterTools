@@ -257,6 +257,11 @@ object FJupiterForm: TFJupiterForm
       OnExecute = acIncreaseCenterPanelExecute
       ShortCut = 37
     end
+    object acExitIfModal: TAction
+      Caption = 'acExitIfModal'
+      OnExecute = acExitIfModalExecute
+      ShortCut = 27
+    end
   end
   object tmrAutoUpdater: TTimer
     Enabled = False

@@ -314,6 +314,7 @@ begin
     vrScript.Execute;
   finally
     FreeAndNil(vrScript);
+    FreeAndNil(vrQry);
 
     FreeAndNil(prParams);
   end;
@@ -340,7 +341,7 @@ begin
     vrScript.Execute;
   finally
     FreeAndNil(vrScript);
-
+    FreeAndNil(vrQry);
     FreeAndNil(prParams);
   end;
 end;
@@ -369,7 +370,7 @@ begin
     vrScript.Execute;
   finally
     FreeAndNil(vrScript);
-
+    FreeAndNil(vrQry);
     FreeAndNil(prParams);
   end;
 end;
@@ -464,6 +465,7 @@ begin
 
     vrScript.Execute;
   finally
+    FreeAndNil(vrQry);
     FreeAndNil(vrScript);
     FreeAndNil(prParams);
   end;

@@ -19,6 +19,7 @@ type
     acOptions: TActionList;
     acIncreaseLefPanel: TAction;
     acIncreaseCenterPanel: TAction;
+    acExitIfModal: TAction;
     edSearch: TEdit;
     fpOptions: TFlowPanel;
     Image1: TImage;
@@ -35,6 +36,7 @@ type
     pmOptions: TPopupMenu;
     Separator2: TMenuItem;
     tmrAutoUpdater: TTimer;
+    procedure acExitIfModalExecute(Sender: TObject);
     procedure acIncreaseCenterPanelExecute(Sender: TObject);
     procedure acIncreaseLefPanelExecute(Sender: TObject);
     procedure FormActivate(Sender: TObject);
@@ -85,6 +87,7 @@ type
     procedure Internal_PrepareForm; virtual;
     procedure Internal_Resize; virtual;
     function  Internal_OnRequestData : TJupiterVariableList; virtual;
+    procedure Internal_OnCloseIfModal; virtual;
 
     procedure Internal_BuildMenuParams;
     procedure Internal_ClickMenuClick(Sender: TObject);
@@ -269,6 +272,13 @@ begin
   miAjustRatioRightClick(Sender);
 end;
 
+procedure TFJupiterForm.acExitIfModalExecute(Sender: TObject);
+begin
+  if not Self.Internal_IsMainPage then
+    if Self.IsWindowForm then
+      Self.Internal_OnCloseIfModal;
+end;
+
 procedure TFJupiterForm.FormCreate(Sender: TObject);
 begin
   Self.FResizing := False;
@@ -390,6 +400,11 @@ begin
   Result := TJupiterVariableList.Create;
 
   Result.AddVariable('FORMID', Self.FormID);
+end;
+
+procedure TFJupiterForm.Internal_OnCloseIfModal;
+begin
+  Self.Close;
 end;
 
 procedure TFJupiterForm.Internal_BuildMenuParams;

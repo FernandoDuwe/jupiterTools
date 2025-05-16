@@ -43,6 +43,8 @@ type
 
     procedure Internal_UpdateComponents; override;
 
+    procedure Internal_OnCloseIfModal; override;
+
     procedure Internal_ListForeignTables;
 
     function Internal_OnRequestData : TJupiterVariableList; override;
@@ -334,6 +336,18 @@ begin
 
   Self.ActionGroup.GetActionAtIndex(0).Disable;
   Self.ActionGroup.GetActionAtIndex(1).Disable;
+end;
+
+procedure TFCustomDatabaseForm.Internal_OnCloseIfModal;
+begin
+  if InternalDataSource.State = dsInsert then
+  begin
+    Self.Internal_OnCancel(Self);
+
+    inherited Internal_OnCloseIfModal;
+  end;
+
+  Self.Internal_OnCancel(Self);
 end;
 
 procedure TFCustomDatabaseForm.Internal_ListForeignTables;

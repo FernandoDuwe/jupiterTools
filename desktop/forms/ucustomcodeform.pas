@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, uJupiterForm,
   JupiterApp, JupiterObject, jupiterformutils, JupiterConsts, JupiterVariable,
-  jupiterDesktopApp, jupiterformcomponenttils, uJupiterAction;
+  jupiterDesktopApp, jupiterformcomponenttils, uJupiterAction, ComCtrls;
 
 type
 
@@ -47,6 +47,7 @@ type
     procedure AddLabelBold(prLabelCaption : String);
     procedure AddEdit(prVariableId, prInitialValue : String);
     procedure AddProgressBar(prValue, prMin, prMax : Integer);
+    procedure AddAnimatedProgressBar(prValue, prMin, prMax : Integer);
     procedure AddCombBox(prDataProviderID, prColumn, prVariableID : String);
     procedure AddCheckBox(prVariableId, prText : String; prValue : Boolean);
     procedure AddAction(prCaption, prHint : String; prIcon : Integer; prMacroID : String);
@@ -183,6 +184,7 @@ end;
 procedure TFCustomCodeForm.Internal_UpdateComponents;
 var
   vrVez : Integer;
+  vrParams : TJupiterVariableList;
 begin
   inherited Internal_UpdateComponents;
 
@@ -196,7 +198,12 @@ begin
       if TJupiterComponentReference(Self.FReferences.GetAtIndex(vrVez)).Param <> EmptyStr then
         TLabel(TJupiterComponentReference(Self.FReferences.GetAtIndex(vrVez)).Component).Caption := vrJupiterApp.RunMacroAsResult(TJupiterComponentReference(Self.FReferences.GetAtIndex(vrVez)).MacroID, CreateVariableListOfParam(TJupiterComponentReference(Self.FReferences.GetAtIndex(vrVez)).Param))
       else
-        TLabel(TJupiterComponentReference(Self.FReferences.GetAtIndex(vrVez)).Component).Caption := vrJupiterApp.RunMacroAsResult(TJupiterComponentReference(Self.FReferences.GetAtIndex(vrVez)).MacroID, Self.Params);
+      begin
+        vrParams := TJupiterVariableList.Create;
+        vrParams.CopyValues(Self.Params);
+
+        TLabel(TJupiterComponentReference(Self.FReferences.GetAtIndex(vrVez)).Component).Caption := vrJupiterApp.RunMacroAsResult(TJupiterComponentReference(Self.FReferences.GetAtIndex(vrVez)).MacroID, vrParams);
+      end;
     end;
   end;
 end;
@@ -334,6 +341,19 @@ begin
   Self.FCurrentLine := Self.FCurrentLine + FORM_MARGIN_TOP;
 
   vrReference := JupiterComponentsNewProgressBar(prValue, prMin, prMax, TJupiterPosition.Create(Self.FCurrentLine, Self.FCurrentMargin), sbBody);
+
+  Self.FCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM;
+end;
+
+procedure TFCustomCodeForm.AddAnimatedProgressBar(prValue, prMin, prMax: Integer);
+var
+  vrReference : TJupiterComponentReference;
+begin
+  Self.FCurrentLine := Self.FCurrentLine + FORM_MARGIN_TOP;
+
+  vrReference := JupiterComponentsNewProgressBar(prValue, prMin, prMax, TJupiterPosition.Create(Self.FCurrentLine, Self.FCurrentMargin), sbBody);
+
+  TProgressBar(vrReference.Component).Style := pbstMarquee;
 
   Self.FCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM;
 end;

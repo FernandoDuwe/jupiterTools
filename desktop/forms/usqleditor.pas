@@ -30,6 +30,7 @@ type
     tsBottom: TTabSheet;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure spDivisorMoved(Sender: TObject);
   private
     FWizard : TJupiterDatabaseWizard;
 
@@ -74,6 +75,15 @@ begin
   inherited;
 
   FreeAndNil(Self.FWizard);
+end;
+
+procedure TFSQLEditor.spDivisorMoved(Sender: TObject);
+begin
+  try
+    miLookColumn.Checked := False;
+  finally
+    Self.UpdateForm();
+  end;
 end;
 
 procedure TFSQLEditor.Internal_UpdateComponents;

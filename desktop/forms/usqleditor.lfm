@@ -5,24 +5,22 @@ inherited FSQLEditor: TFSQLEditor
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   inherited fpOptions: TFlowPanel
-    Top = 175
-  end
-  inherited pnBottom: TPanel
-    Top = 376
+    Top = 171
   end
   object spDivisor: TSplitter[3]
     Cursor = crVSplit
     Left = 0
     Height = 5
-    Top = 170
+    Top = 171
     Width = 879
     Align = alBottom
+    OnMoved = spDivisorMoved
     ResizeAnchor = akBottom
   end
   inline SynEdit1: TSynEdit[4]
     Left = 0
-    Height = 120
-    Top = 50
+    Height = 126
+    Top = 45
     Width = 879
     Align = alClient
     Font.Height = 13
@@ -32,7 +30,7 @@ inherited FSQLEditor: TFSQLEditor
     ParentColor = False
     ParentFont = False
     TabOrder = 4
-    Gutter.Width = 57
+    Gutter.Width = 53
     Gutter.MouseActions = <>
     RightGutter.Width = 0
     RightGutter.MouseActions = <>
@@ -489,7 +487,7 @@ inherited FSQLEditor: TFSQLEditor
         MouseActions = <>
       end
       object SynGutterLineNumber1: TSynGutterLineNumber
-        Width = 17
+        Width = 13
         MouseActions = <>
         MarkupInfo.Background = clBtnFace
         MarkupInfo.Foreground = clNone
@@ -530,13 +528,13 @@ inherited FSQLEditor: TFSQLEditor
     TabOrder = 5
     object tsBottom: TTabSheet
       Caption = 'Registros'
-      ClientHeight = 169
-      ClientWidth = 869
+      ClientHeight = 172
+      ClientWidth = 871
       object dbGridQueryResult: TDBGrid
         Left = 0
-        Height = 169
+        Height = 172
         Top = 0
-        Width = 869
+        Width = 871
         Align = alClient
         Color = clWindow
         Columns = <>
@@ -546,13 +544,13 @@ inherited FSQLEditor: TFSQLEditor
     end
     object tsColumns: TTabSheet
       Caption = 'Colunas'
-      ClientHeight = 169
-      ClientWidth = 869
+      ClientHeight = 172
+      ClientWidth = 871
       object mmColumns: TMemo
         Left = 0
-        Height = 169
+        Height = 172
         Top = 0
-        Width = 869
+        Width = 871
         Align = alClient
         Lines.Strings = (
           'mmColumns'
@@ -589,7 +587,7 @@ inherited FSQLEditor: TFSQLEditor
     Top = 152
   end
   object SynCompletion1: TSynCompletion[12]
-    Position = -1
+    Position = 0
     LinesInWindow = 6
     SelectedColor = clHighlight
     CaseSensitive = False

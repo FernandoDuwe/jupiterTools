@@ -6,8 +6,8 @@ inherited FCustomCodeForm: TFCustomCodeForm
   OnDestroy = FormDestroy
   object sbBody: TScrollBox[3]
     Left = 0
-    Height = 325
-    Top = 50
+    Height = 331
+    Top = 45
     Width = 879
     HorzScrollBar.Page = 1
     VertScrollBar.Page = 1
