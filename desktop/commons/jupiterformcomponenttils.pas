@@ -7,7 +7,7 @@ interface
 uses
   Classes, ComCtrls, Controls, SysUtils, StdCtrls, jupiterformutils,
   JupiterConsts, jupiterDatabaseWizard, JupiterDataProvider, JupiterApp,
-  jupiterDesktopApp, DBCtrls, DB, Menus;
+  jupiterDesktopApp, DBCtrls, DB, Menus, ExtCtrls;
 
   function JupiterComponentsAddPopupMenuSeparator(prMenu : TPopupMenu) : TJupiterComponentReference;
 
@@ -39,6 +39,8 @@ uses
   function JupiterComponentsNewDBCheckBox(prField : TField; prDataSource : TDataSource; prPosition : TJupiterPosition; prOwner : TWinControl) : TJupiterComponentReference;
 
   function JupiterComponentsAddAction(prField : TJupiterComponentReference; prIcon : Integer; prOwner : TWinControl) : TJupiterComponentReference;
+
+  function JupiterComponentsAddLine(prPosition : TJupiterPosition; prHeight, prWidth: Integer; prOwner : TWinControl) : TJupiterComponentReference;
 
 implementation
 
@@ -412,6 +414,25 @@ begin
                                               vrSpeedButton.Left + vrSpeedButton.Width,
                                               vrSpeedButton.Top + vrSpeedButton.Height,
                                               vrSpeedButton);
+end;
+
+function JupiterComponentsAddLine(prPosition : TJupiterPosition; prHeight, prWidth: Integer; prOwner : TWinControl): TJupiterComponentReference;
+var
+  vrShape : TShape;
+begin
+  vrShape             := TShape.Create(prOwner);
+  vrShape.Parent      := prOwner;
+  vrShape.AutoSize    := True;
+  vrShape.Top         := prPosition.Top;
+  vrShape.Left        := prPosition.Left;
+  vrShape.Height      := prHeight;
+  vrShape.Width       := prWidth;
+
+  Result := TJupiterComponentReference.Create(vrShape.Top,
+                                              vrShape.Left,
+                                              vrShape.Left + vrShape.Width,
+                                              vrShape.Top + vrShape.Height,
+                                              vrShape);
 end;
 
 end.
