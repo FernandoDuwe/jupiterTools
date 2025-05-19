@@ -53,6 +53,9 @@ begin
     if not vrWizard.TableExists('MACROS') then
       vrWizard.ExecuteScript(CreateStringList('CREATE TABLE MACROS ( ID INTEGER PRIMARY KEY, NAME VARCHAR (100), MACROID VARCHAR(100), MACRO BLOB)'));
 
+    if not vrWizard.TableExists('MACRO_LIBRARIES') then
+      vrWizard.ExecuteScript(CreateStringList('CREATE TABLE MACRO_LIBRARIES ( ID INTEGER PRIMARY KEY, NAME VARCHAR (100), LIBRARYID VARCHAR(100), MACRO BLOB)'));
+
     if not vrWizard.TableExists('ROUTES') then
       vrWizard.ExecuteScript(CreateStringList('CREATE TABLE ROUTES ( ID INTEGER PRIMARY KEY, TITLE VARCHAR(100), ROUTE VARCHAR (100), DESTINY INT, ICON SMALLINT, ZINDEX SMALLINT, SHORTCUT VARCHAR(30), FOREIGN KEY (DESTINY) REFERENCES MACROS (ID))'));
 

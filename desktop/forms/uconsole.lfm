@@ -1,0 +1,2 @@
+inherited FConsole: TFConsole
+end

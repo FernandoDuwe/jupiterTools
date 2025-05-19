@@ -20,7 +20,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="3"/>
       <RevisionNr Value="1"/>
-      <BuildNr Value="100"/>
+      <BuildNr Value="101"/>
       <Language Value="0416"/>
       <CharSet Value="04E2"/>
       <StringTable CompanyName="Jupiter" FileDescription="Jupiter interface" ProductName="Jupiter"/>
@@ -458,6 +458,13 @@
         <Filename Value="../commons/jupiterscriptlist.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="jupiterScriptList"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms/uconsole.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FConsole"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
       </Unit>
     </Units>
   </ProjectOptions>

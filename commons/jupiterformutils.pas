@@ -327,6 +327,9 @@ begin
       TMemo(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_MEMO_FONT_NAME).Value;
     end;
 
+    if ((prComponent.Components[vrVez] is TShape) and (prHighContrast)) then
+      TShape(prComponent.Components[vrVez]).Pen.Color := clWhite;
+
     if prComponent.Components[vrVez] is TDBMemo then
     begin
       TDBMemo(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);

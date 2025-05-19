@@ -7,7 +7,8 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, uJupiterForm,
   JupiterApp, JupiterObject, jupiterformutils, JupiterConsts, JupiterVariable,
-  jupiterDesktopApp, jupiterformcomponenttils, uJupiterAction, ComCtrls;
+  jupiterDesktopApp, jupiterformcomponenttils, uJupiterAction, ComCtrls,
+  ExtCtrls;
 
 type
 
@@ -58,6 +59,7 @@ type
     procedure AddLinkAsScript(prCaption : String; prMacro : TStrings);
     procedure AddLinkBoldAsScript(prCaption : String; prMacro : TStrings);
     procedure AddActionWithScript(prCaption, prHint : String; prIcon : Integer; prMacro : TStrings);
+    procedure AddLine(prTop, prLeft, prHeight, prWidth: Integer);
     procedure JumpLine;
     procedure SetCurrentMargin(prMargin : Integer);
     procedure SetCurrentLine(prLine : Integer);
@@ -554,6 +556,17 @@ end;
 procedure TFCustomCodeForm.AddActionWithScript(prCaption, prHint: String; prIcon: Integer; prMacro: TStrings);
 begin
   Self.ActionGroup.AddAction(TJupiterAction.Create(prCaption, prHint, prIcon, prMacro));
+end;
+
+procedure TFCustomCodeForm.AddLine(prTop, prLeft, prHeight, prWidth: Integer);
+var
+  vrReference : TJupiterComponentReference;
+begin
+  Self.FCurrentLine := Self.FCurrentLine + FORM_MARGIN_TOP;
+
+  vrReference := JupiterComponentsAddLine(TJupiterPosition.Create(prTop, prLeft), prHeight, prWidth, sbBody);
+
+  Self.FCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM;
 end;
 
 procedure TFCustomCodeForm.JumpLine;

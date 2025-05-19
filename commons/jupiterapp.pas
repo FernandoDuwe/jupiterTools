@@ -409,18 +409,21 @@ var
 begin
   vrScript := Self.NewScript;
   vrQry    := Self.NewWizard.NewQuery;
+  try
+    vrQry.SQL.Add(' SELECT ID, MACRO FROM MACROS WHERE MACROID = :PRID ');
+    vrQry.ParamByName('PRID').AsString := prMacroId;
+    vrQry.Open;
 
-  vrQry.SQL.Add(' SELECT ID, MACRO FROM MACROS WHERE MACROID = :PRID ');
-  vrQry.ParamByName('PRID').AsString := prMacroId;
-  vrQry.Open;
+    if vrQry.EOF then
+      raise Exception.Create('A macro ' + prMacroId + ' não foi encontrada.');
 
-  if vrQry.EOF then
-    raise Exception.Create('A macro ' + prMacroId + ' não foi encontrada.');
+    vrScript.Script.AddStrings(JupiterStringUtilsStringToStringList(vrQry.FieldByName('MACRO').AsString));
+    vrScript.Params.CopyValues(prParams);
 
-  vrScript.Script.AddStrings(JupiterStringUtilsStringToStringList(vrQry.FieldByName('MACRO').AsString));
-  vrScript.Params.CopyValues(prParams);
-
-  Self.ThreadList.NewThread('Macro: ' + prMacroId, vrScript);
+    Self.ThreadList.NewThread('Macro: ' + prMacroId, vrScript);
+  finally
+    FreeAndNil(vrQry);
+  end;
 end;
 
 procedure TJupiterApp.RunScript(prMacro: TStrings; prParams: TJupiterVariableList);
@@ -511,6 +514,7 @@ begin
   finally
     FreeAndNil(vrScript);
     FreeAndNil(prParams);
+    FreeAndNil(vrQry);
   end;
 end;
 
@@ -550,6 +554,7 @@ begin
       Result := vrScript.Params.VariableById('Result').AsBool;
   finally
     FreeAndNil(vrScript);
+    FreeAndNil(vrQry);
     FreeAndNil(prParams);
   end;
 end;
@@ -588,6 +593,7 @@ begin
   finally
     FreeAndNil(vrScript);
     FreeAndNil(prParams);
+    FreeAndNil(vrQry);
   end;
 end;
 

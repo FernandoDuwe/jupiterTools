@@ -29,7 +29,7 @@ uses
   jupitersqldataprovider, jupiterthread, uContextMenu, uSQLEditor, uCheckList,
   uTextEditor, uJupiterDateUtilsScript, uChartViewer, 
 uJupiterCheckListUtilsScript, uWaitForm, uCodeRunner, uFileFinder, 
-uFileReaderFinder, jupiterScriptList;
+uFileReaderFinder, jupiterScriptList, uconsole;
 
 {$R *.res}
 
