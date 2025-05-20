@@ -9,7 +9,7 @@ uses
   ComCtrls, StdCtrls, SynEdit, SynHighlighterSQL, SynCompletion, uJupiterForm,
   jupiterformutils, JupiterConsts, JupiterEnviroment, jupiterDatabaseWizard,
   JupiterApp, JupiterVariable, uJupiterRunnableScript, uJupiterAppScript,
-  uJupiterAction, SQLDB, DB;
+  uJupiterAction, uMain, SQLDB, DB;
 
 type
 
@@ -21,16 +21,21 @@ type
     InternalQuery: TSQLQuery;
     mmColumns: TMemo;
     pcBottom: TPageControl;
-    spDivisor: TSplitter;
+    pnBody: TPanel;
+    pnLeft: TPanel;
+    Splitter1: TSplitter;
+    Splitter2: TSplitter;
     SynAutoComplete1: TSynAutoComplete;
     SynCompletion1: TSynCompletion;
     SynEdit1: TSynEdit;
     SynSQLSyn1: TSynSQLSyn;
-    tsColumns: TTabSheet;
     tsBottom: TTabSheet;
+    tsColumns: TTabSheet;
+    tvLibrary: TTreeView;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure spDivisorMoved(Sender: TObject);
+    procedure Splitter2Moved(Sender: TObject);
   private
     FWizard : TJupiterDatabaseWizard;
 
@@ -45,6 +50,11 @@ type
     procedure Internal_OnCSVExport(Sender: TObject);
 
     function Internal_GetText : String;
+
+    procedure Internal_GetFieldFromTable(prTable : String; prTreeOwner : TTreeNode);
+  protected
+    function Internal_GetConnection  : TSQLConnection; virtual;
+    function Internal_GetTransaction : TSQLTransaction; virtual;
   public
 
   end;
@@ -86,14 +96,24 @@ begin
   end;
 end;
 
+procedure TFSQLEditor.Splitter2Moved(Sender: TObject);
+begin
+
+end;
+
 procedure TFSQLEditor.Internal_UpdateComponents;
 var
   vrVez : Integer;
 begin
   inherited Internal_UpdateComponents;
 
+  tvLibrary.Images := FMain.ilIconFamily;
+
   if miLookColumn.Checked then
+  begin
+    pnLeft.Width    := PercentOfScreen(Self.Width, Self.PercentDivisor);;
     pcBottom.Height := PercentOfScreen(Self.Height, Self.PercentDivisor);
+  end;
 
   pcBottom.Visible := Self.FShowResults;
 
@@ -112,34 +132,62 @@ var
   vrVez :  Integer;
   vrVez2 : Integer;
   vrStr : String;
+  vrTreeNode : TTreeNode;
+  vrTableList : TStrings;
 begin
   inherited Internal_UpdateDatasets;
 
-  SynAutoComplete1.AutoCompleteList.Clear;
-  SynCompletion1.ItemList.Clear;
+  Self.FWizard.Connection  := Self.Internal_GetConnection;
+  Self.FWizard.Transaction := Self.Internal_GetTransaction;
 
-  Self.FWizard.Connection.GetTableNames(SynAutoComplete1.AutoCompleteList);
-  Self.FWizard.Connection.GetTableNames(SynCompletion1.ItemList);
+  vrTableList := TStringList.Create;
+  try
+    vrTableList.Clear;
 
-  for vrVez := 0 to vrJupiterApp.Params.Count - 1 do
-  begin
-    SynAutoComplete1.AutoCompleteList.Add('{' + vrJupiterApp.Params.VariableByIndex(vrVez).ID + '}');
-    SynCompletion1.ItemList.Add('{' + vrJupiterApp.Params.VariableByIndex(vrVez).ID + '}');
-  end;
+    SynAutoComplete1.AutoCompleteList.Clear;
+    SynCompletion1.ItemList.Clear;
 
-  for vrVez := 0 to vrJupiterApp.Params.ChildList.Count - 1 do
-    for vrVez2 := 0 to TJupiterVariableList(vrJupiterApp.Params.ChildList.GetAtIndex(vrVez)).Count - 1 do
+    Self.FWizard.Connection.GetTableNames(SynAutoComplete1.AutoCompleteList);
+    Self.FWizard.Connection.GetTableNames(SynCompletion1.ItemList);
+    Self.FWizard.Connection.GetTableNames(vrTableList);
+
+    for vrVez := 0 to vrJupiterApp.Params.Count - 1 do
     begin
-      vrStr := TJupiterVariableList(vrJupiterApp.Params.ChildList.GetAtIndex(vrVez)).VariableByIndex(vrVez2).ID;
-
-      SynAutoComplete1.AutoCompleteList.Add('{' + vrStr + '}');
-      SynCompletion1.ItemList.Add('{' + vrStr + '}');
+      SynAutoComplete1.AutoCompleteList.Add('{' + vrJupiterApp.Params.VariableByIndex(vrVez).ID + '}');
+      SynCompletion1.ItemList.Add('{' + vrJupiterApp.Params.VariableByIndex(vrVez).ID + '}');
     end;
 
-  mmColumns.Lines.Clear;
+    for vrVez := 0 to vrJupiterApp.Params.ChildList.Count - 1 do
+      for vrVez2 := 0 to TJupiterVariableList(vrJupiterApp.Params.ChildList.GetAtIndex(vrVez)).Count - 1 do
+      begin
+        vrStr := TJupiterVariableList(vrJupiterApp.Params.ChildList.GetAtIndex(vrVez)).VariableByIndex(vrVez2).ID;
 
-  for vrVez := 0 to dbGridQueryResult.Columns.Count - 1 do
-    mmColumns.Lines.Add(dbGridQueryResult.Columns[vrVez].FieldName);
+        SynAutoComplete1.AutoCompleteList.Add('{' + vrStr + '}');
+        SynCompletion1.ItemList.Add('{' + vrStr + '}');
+      end;
+
+    mmColumns.Lines.Clear;
+
+    for vrVez := 0 to dbGridQueryResult.Columns.Count - 1 do
+      mmColumns.Lines.Add(dbGridQueryResult.Columns[vrVez].FieldName);
+
+    if tvLibrary.Items.Count = 0 then
+    begin
+      for vrVez := 0 to vrTableList.Count - 1 do
+      begin
+        if Trim(vrTableList[vrVez]) = EmptyStr then
+          Continue;
+
+        vrTreeNode := tvLibrary.Items.Add(nil, vrTableList[vrVez]);
+        vrTreeNode.ImageIndex := ICON_GRID;
+        vrTreeNode.SelectedIndex := ICON_GRID;
+
+        Self.Internal_GetFieldFromTable(vrTableList[vrVez], vrTreeNode);
+      end;
+    end;
+  finally
+    FreeAndNil(vrTableList);
+  end;
 end;
 
 procedure TFSQLEditor.Internal_PrepareForm;
@@ -258,6 +306,39 @@ begin
 
   if Trim(SynEdit1.SelText) <> EmptyStr then
     Result := SynEdit1.SelText;
+end;
+
+procedure TFSQLEditor.Internal_GetFieldFromTable(prTable: String; prTreeOwner: TTreeNode);
+var
+  vrFieldList : TStrings;
+  vrVez : Integer;
+  vrTreeNode : TTreeNode;
+begin
+  vrFieldList := TStringList.Create;
+  try
+    vrFieldList.Clear;
+
+    Self.FWizard.Connection.GetFieldNames(prTable, vrFieldList);
+
+    for vrVez := 0 to vrFieldList.Count - 1 do
+    begin
+      vrTreeNode := tvLibrary.Items.AddChild(prTreeOwner, vrFieldList[vrVez]);
+      vrTreeNode.ImageIndex := NULL_KEY;
+      vrTreeNode.SelectedIndex := NULL_KEY;
+    end;
+  finally
+    FreeAndNil(vrFieldList);
+  end;
+end;
+
+function TFSQLEditor.Internal_GetConnection: TSQLConnection;
+begin
+  Result := vrJupiterApp.InternalDatabase;
+end;
+
+function TFSQLEditor.Internal_GetTransaction: TSQLTransaction;
+begin
+  Result := vrJupiterApp.InternalDatabase.Transaction;
 end;
 
 end.

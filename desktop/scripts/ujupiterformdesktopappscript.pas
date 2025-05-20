@@ -49,6 +49,7 @@ type
   procedure JupiterFormDesktopAppScriptSetFormToHighFocus(prFormID : String);
   function  JupiterFormDesktopAppScriptGetCurrentLine(prFormID : String) : Integer;
   function  JupiterFormDesktopAppScriptGetWidth(prFormID : String) : Integer;
+  function  JupiterFormDesktopAppScriptGetHeigth(prFormID : String) : Integer;
 
 implementation
 
@@ -489,6 +490,21 @@ begin
   Result := TFCustomCodeForm(vrForm).sbBody.Width;
 end;
 
+function JupiterFormDesktopAppScriptGetHeigth(prFormID: String): Integer;
+var
+  vrForm : TForm;
+begin
+  vrForm := TJupiterDesktopApp(vrJupiterApp).GetFormById(prFormID);
+
+  if not Assigned(vrForm) then
+    Exit;
+
+  if not (vrForm is TFCustomCodeForm) then
+    Exit;
+
+  Result := TFCustomCodeForm(vrForm).sbBody.Height;
+end;
+
 { TJupiterFormDesktopAppScript }
 
 function TJupiterFormDesktopAppScript.Internal_GetName: String;
@@ -509,6 +525,7 @@ begin
   prSender.AddFunction(@JupiterFormDesktopAppScriptSetFormToHighFocus, 'procedure Form_SetFormToHighFocus(prFormID : String);');
 
   prSender.AddFunction(@JupiterFormDesktopAppScriptGetCurrentLine, 'function Form_GetCurrentLine(prFormID: String): Integer;');
+  prSender.AddFunction(@JupiterFormDesktopAppScriptGetHeigth, 'function Form_GetHeigth(prFormID: String): Integer;');
   prSender.AddFunction(@JupiterFormDesktopAppScriptGetWidth, 'function Form_GetWidth(prFormID: String): Integer;');
 
   prSender.AddFunction(@JupiterFormDesktopAppScriptAddLink, 'procedure Form_AddLink(prFormID, prCaption, prMacroId: String);');
@@ -569,6 +586,7 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddLine(prFormID : String; prTop, prLeft, prHeight, prWidth : Integer);'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function Form_GetCurrentLine(prFormID: String): Integer;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function Form_GetHeigth(prFormID: String): Integer;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function Form_GetWidth(prFormID: String): Integer;'));
 end;
 

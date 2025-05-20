@@ -6,8 +6,8 @@ interface
 
 uses
   Classes, jupiterScript, JupiterConsts, JupiterApp, JupiterVariable,
-  uCustomDatabaseForm, ucustomdatabasegrid, uCodeRunner, SysUtils, PascalScript,
-  uPSComponent, Forms, SQLDB;
+  uCustomDatabaseForm, ucustomdatabasegrid, uCodeRunner, uExternalSQLEditor,
+  SysUtils, PascalScript, uPSComponent, Forms, SQLDB;
 
 type
 
@@ -38,6 +38,7 @@ type
   procedure JupiterAppDesktopOpenFileExplorerForm(prPath : String);
   procedure JupiterAppDesktopOpenCheckListExplorerForm(prPath : String);
   procedure JupiterAppDesktopOpenTextEditorForm(prPath : String);
+  procedure JupiterAppDesktopOpenSQLExternalEditor(prConnectionType, prDatabase, prHostName, prUserName, prPassword : String);
   procedure JupiterAppDesktopCloseForm(prFormID : String);
   procedure JupiterAppDesktopUpdateForms;
   procedure JupiterAppDesktopIncFont;
@@ -225,6 +226,26 @@ begin
   end;
 end;
 
+procedure JupiterAppDesktopOpenSQLExternalEditor(prConnectionType, prDatabase, prHostName, prUserName, prPassword: String);
+var
+  vrForm : TForm;
+begin
+  vrForm := TJupiterDesktopApp(vrJupiterApp).NewFormByRoute(SQLEXTEDITOR_PATH);
+
+  with (vrForm as TFExternalSQLEditor) do
+  begin
+    sqlConector.Connected     := False;
+    sqlConector.ConnectorType := prConnectionType;
+    sqlConector.DatabaseName  := prDatabase;
+    sqlConector.HostName      := prHostName;
+    sqlConector.UserName      := prUserName;
+    sqlConector.Password      := prPassword;
+    sqlConector.Connected     := True;
+  end;
+
+  TJupiterDesktopApp(vrJupiterApp).OpenForm(vrForm as TFExternalSQLEditor);
+end;
+
 procedure JupiterAppDesktopCloseForm(prFormID: String);
 var
   vrForm : TForm;
@@ -319,6 +340,7 @@ begin
   prSender.AddFunction(@JupiterAppDesktopOpenTextEditorForm, 'procedure OpenTextEditorForm(prPath : String);');
   prSender.AddFunction(@JupiterAppDesktopCloseForm, 'procedure CloseForm(prFormID : String);');
   prSender.AddFunction(@JupiterAppDesktopSetAppMessage, 'procedure SetAppMessage(prMessage : String);');
+  prSender.AddFunction(@JupiterAppDesktopOpenSQLExternalEditor, 'procedure OpenFormSQLExternalEditor(prConnectionType, prDatabase, prHostName, prUserName, prPassword : String);');
 
   prSender.AddFunction(@JupiterAppDesktopAddRoute, 'procedure AddRoute(prTitle, prRoute, prShortcut, prParams: String; prDestiny, prIcon, prZIndex: Integer);');
   prSender.AddFunction(@JupiterAppDesktopAddShortcut, 'procedure AddShortcut(prDescription, prShortcut: String; prDestiny: Integer);');
@@ -358,6 +380,7 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenTextEditorForm(prPath: String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CloseForm(prFormID: String) : String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure SetAppMessage(prMessage: String) : String;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenFormSQLExternalEditor(prConnectionType, prDatabase, prHostName, prUserName, prPassword : String);'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CursorToWait();'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CursorToIdle();'));

@@ -1,0 +1,21 @@
+inherited FExternalSQLEditor: TFExternalSQLEditor
+  Left = 437
+  Top = 206
+  inherited SynCompletion1: TSynCompletion
+    Position = -1
+  end
+  object sqlLiteInternalTransaction: TSQLTransaction[14]
+    Active = False
+    Database = sqlConector
+    Left = 736
+    Top = 152
+  end
+  object sqlConector: TSQLConnector[15]
+    Connected = False
+    LoginPrompt = False
+    KeepConnection = False
+    Transaction = sqlLiteInternalTransaction
+    Left = 736
+    Top = 72
+  end
+end

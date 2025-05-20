@@ -16,7 +16,7 @@ inherited FContextMenu: TFContextMenu
     end
   end
   inherited fpOptions: TFlowPanel
-    Top = 708
+    Top = 707
     Width = 1204
     TabOrder = 3
   end
@@ -28,19 +28,19 @@ inherited FContextMenu: TFContextMenu
   end
   object gbMain: TGroupBox[3]
     Left = 0
-    Height = 663
+    Height = 662
     Top = 45
     Width = 89
     Align = alLeft
     Caption = 'Menu principal'
-    ClientHeight = 643
-    ClientWidth = 85
+    ClientHeight = 644
+    ClientWidth = 87
     TabOrder = 1
     object tvTreeMenu: TTreeView
       Left = 0
-      Height = 643
+      Height = 644
       Top = 0
-      Width = 85
+      Width = 87
       Align = alClient
       BackgroundColor = clDefault
       Color = clDefault
@@ -52,25 +52,25 @@ inherited FContextMenu: TFContextMenu
   end
   object gbContext: TGroupBox[4]
     Left = 94
-    Height = 663
+    Height = 662
     Top = 45
     Width = 1110
     Align = alClient
     Caption = 'Menu de contexto'
-    ClientHeight = 643
-    ClientWidth = 1106
+    ClientHeight = 644
+    ClientWidth = 1108
     TabOrder = 2
     object lvRoute: TListView
       Left = 0
-      Height = 643
+      Height = 644
       Top = 0
-      Width = 1106
+      Width = 1108
       Align = alClient
       Columns = <      
         item
           AutoSize = True
           Caption = 'Rota'
-          Width = 39
+          Width = 1093
         end>
       MultiSelect = True
       ParentFont = False
@@ -82,7 +82,7 @@ inherited FContextMenu: TFContextMenu
   end
   object Splitter1: TSplitter[5]
     Left = 89
-    Height = 663
+    Height = 662
     Top = 45
     Width = 5
     OnMoved = Splitter1Moved
@@ -97,6 +97,12 @@ inherited FContextMenu: TFContextMenu
       Caption = 'acSearch'
       OnExecute = acSearchExecute
       ShortCut = 13
+    end
+    inherited acIncreaseLefPanel: TAction[2]
+    end
+    inherited acIncreaseCenterPanel: TAction[3]
+    end
+    inherited acExitIfModal: TAction[4]
     end
   end
   inherited tmrAutoUpdater: TTimer[7]

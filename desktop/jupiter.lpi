@@ -20,7 +20,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="3"/>
       <RevisionNr Value="1"/>
-      <BuildNr Value="101"/>
+      <BuildNr Value="105"/>
       <Language Value="0416"/>
       <CharSet Value="04E2"/>
       <StringTable CompanyName="Jupiter" FileDescription="Jupiter interface" ProductName="Jupiter"/>
@@ -465,6 +465,14 @@
         <ComponentName Value="FConsole"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms/uexternalsqleditor.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FExternalSQLEditor"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uExternalSQLEditor"/>
       </Unit>
     </Units>
   </ProjectOptions>
