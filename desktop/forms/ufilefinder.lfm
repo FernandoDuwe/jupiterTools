@@ -1,10 +1,16 @@
 inherited FFileFinder: TFFileFinder
   Left = 803
   Top = 303
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
   inherited pnSearchBar: TPanel
     inherited edSearch: TEdit
       OnKeyPress = edSearchKeyPress
     end
+  end
+  inherited fpOptions: TFlowPanel
+    Height = 0
+    Top = 376
   end
   object tvFileTree: TTreeView[3]
     Left = 0

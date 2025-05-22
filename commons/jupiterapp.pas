@@ -478,11 +478,13 @@ function TJupiterApp.RunAcitonEnabled(prId: Integer; prParams: TJupiterVariableL
 var
   vrScript : TJupiterScript;
   vrQry    : TSQLQuery;
+  vrWizard : TJupiterDatabaseWizard;
 begin
   Result := True;
 
   vrScript := Self.NewScript;
-  vrQry    := Self.NewWizard.NewQuery;
+  vrWizard := Self.NewWizard;
+  vrQry    := vrWizard.NewQuery;
   try
     if not Self.Params.VariableById(DEBUG_MODE).AsBool then
       vrScript.OnExecute := nil;
@@ -512,6 +514,7 @@ begin
     if vrScript.Params.Exists('Result') then
       Result := vrScript.Params.VariableById('Result').AsBool;
   finally
+    FreeAndNil(vrWizard);
     FreeAndNil(vrScript);
     FreeAndNil(prParams);
     FreeAndNil(vrQry);
@@ -522,11 +525,13 @@ function TJupiterApp.RunAcitonVisible(prId: Integer; prParams: TJupiterVariableL
 var
   vrScript : TJupiterScript;
   vrQry    : TSQLQuery;
+  vrWizard : TJupiterDatabaseWizard;
 begin
   Result := True;
 
   vrScript := Self.NewScript;
-  vrQry    := Self.NewWizard.NewQuery;
+  vrWizard := Self.NewWizard;
+  vrQry    := vrWizard.NewQuery;
   try
     if not Self.Params.VariableById(DEBUG_MODE).AsBool then
       vrScript.OnExecute := nil;
@@ -553,6 +558,7 @@ begin
     if vrScript.Params.Exists('Result') then
       Result := vrScript.Params.VariableById('Result').AsBool;
   finally
+    FreeAndNil(vrWizard);
     FreeAndNil(vrScript);
     FreeAndNil(vrQry);
     FreeAndNil(prParams);
@@ -563,11 +569,13 @@ function TJupiterApp.RunMacroAsResult(prMacroId : String; prParams: TJupiterVari
 var
   vrScript : TJupiterScript;
   vrQry    : TSQLQuery;
+  vrWizard : TJupiterDatabaseWizard;
 begin
   Result := EmptyStr;
 
   vrScript := Self.NewScript;
-  vrQry    := Self.NewWizard.NewQuery;
+  vrWizard := Self.NewWizard;
+  vrQry    := vrWizard.NewQuery;
   try
     if not Self.Params.VariableById(DEBUG_MODE).AsBool then
       vrScript.OnExecute := nil;
@@ -591,6 +599,7 @@ begin
     if vrScript.Params.Exists('Result') then
       Result := vrScript.Params.VariableById('Result').Value;
   finally
+    FreeAndNil(vrWizard);
     FreeAndNil(vrScript);
     FreeAndNil(prParams);
     FreeAndNil(vrQry);

@@ -428,6 +428,9 @@ begin
   vrShape.Height      := prHeight;
   vrShape.Width       := prWidth;
 
+  if prHeight <= 1 then
+    vrShape.Anchors := [akTop, akLeft, akRight];
+
   Result := TJupiterComponentReference.Create(vrShape.Top,
                                               vrShape.Left,
                                               vrShape.Left + vrShape.Width,

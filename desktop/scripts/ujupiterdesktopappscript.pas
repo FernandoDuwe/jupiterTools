@@ -53,7 +53,7 @@ type
 
 implementation
 
-uses Controls, uJupiterForm, uMain, jupiterDesktopApp, jupiterDatabaseWizard;
+uses Controls, uJupiterForm, uMain, jupiterDesktopApp, jupiterDatabaseWizard, LCLType;
 
 function JupiterAppDesktopOpenForm(prForm: String) : String;
 begin
@@ -240,7 +240,13 @@ begin
     sqlConector.HostName      := prHostName;
     sqlConector.UserName      := prUserName;
     sqlConector.Password      := prPassword;
-    sqlConector.Connected     := True;
+    try
+      sqlConector.Connected     := True;
+    except
+      JupiterAppDesktopShowMessage('Erro ao conectar: ' + PAnsiChar(Exception(ExceptObject).Message));
+
+      Exit;
+    end;
   end;
 
   TJupiterDesktopApp(vrJupiterApp).OpenForm(vrForm as TFExternalSQLEditor);

@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, uJupiterForm,
   jupiterStringUtils, JupiterDirectoryDataProvider, JupiterFileDataProvider,
   JupiterConsts, JupiterApp, uJupiterStringUtilsScript, uJupiterRunnableScript,
-  uMain, uJupiterAction, uJupiterDesktopAppScript, LCLType;
+  uMain, uJupiterAction, uJupiterDesktopAppScript, LCLType, jupiterthread;
 
 type
 
@@ -17,18 +17,24 @@ type
   TFFileFinder = class(TFJupiterForm)
     tvFileTree: TTreeView;
     procedure edSearchKeyPress(Sender: TObject; var Key: char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
     procedure tvFileTreeDblClick(Sender: TObject);
     procedure tvFileTreeKeyPress(Sender: TObject; var Key: char);
   private
     FSearch : String;
+    FThreadList : TJupiterThreadList;
 
     procedure Internal_OnDelete(Sender: TObject);
 
     procedure Internal_UpdateComponents; override;
     procedure Internal_UpdateDatasets; override;
 
+    procedure Internal_ProcessThread(prThreadId : Integer; prParams : String);
+
     procedure Internal_PrepareForm; override;
     procedure Internal_ReadDirectory(prPath : String; prOwner : TTreeNode);
+    procedure Internal_ReadWithThread(prPath : String);
   public
 
   end;
@@ -50,6 +56,20 @@ begin
 
     Key := #0;
   end;
+end;
+
+procedure TFFileFinder.FormCreate(Sender: TObject);
+begin
+  inherited;
+
+  Self.FThreadList := TJupiterThreadList.Create;
+end;
+
+procedure TFFileFinder.FormDestroy(Sender: TObject);
+begin
+  Self.FThreadList.Free;
+
+  inherited;
 end;
 
 procedure TFFileFinder.tvFileTreeDblClick(Sender: TObject);
@@ -104,7 +124,7 @@ end;
 
 procedure TFFileFinder.Internal_UpdateDatasets;
 begin
-  inherited Internal_UpdateDatasets;
+  Internal_UpdateDatasets;
 
   if not vrJupiterApp.Params.VariableById('Interface.Finder.AlwaysSearchEmptyQuery').AsBool then
     if Trim(edSearch.Text) = EmptyStr then
@@ -130,6 +150,11 @@ begin
 
     JupiterAppDesktopCursorToIdle;
   end;
+end;
+
+procedure TFFileFinder.Internal_ProcessThread(prThreadId: Integer; prParams: String);
+begin
+
 end;
 
 procedure TFFileFinder.Internal_PrepareForm;
@@ -173,7 +198,10 @@ begin
       vrNode.SelectedIndex := ICON_OPEN;
       vrNode.Data := TJupiterStringReference.Create(vrDirectoryProvider.GetRowByIndex(vrVez).Fields.VariableById('Path').Value);
 
-      Self.Internal_ReadDirectory(vrDirectoryProvider.GetRowByIndex(vrVez).Fields.VariableById('Path').Value, vrNode);
+      if prOwner = nil then
+        Self.FThreadList.NewThread()
+      else
+        Self.Internal_ReadDirectory(vrDirectoryProvider.GetRowByIndex(vrVez).Fields.VariableById('Path').Value, vrNode);
 
       if Trim(edSearch.Text) <> EmptyStr then
         if vrNode.Count = 0 then
@@ -207,6 +235,11 @@ begin
     FreeAndNil(vrDirectoryProvider);
     FreeAndNil(vrFileProvider);
   end;
+end;
+
+procedure TFFileFinder.Internal_ReadWithThread(prPath: String);
+begin
+
 end;
 
 end.

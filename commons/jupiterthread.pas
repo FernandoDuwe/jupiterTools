@@ -8,6 +8,7 @@ uses
   Classes, SysUtils, JupiterObject, JupiterConsts, jupiterScript;
 
 type
+  TJupiterThreadOnExecute = procedure(prThreadId : Integer; prParams : String) of object;
   TJupiterThreadOnUpdateMonitor = procedure of object;
 
   { TJupiterThread }
@@ -21,13 +22,18 @@ type
     FStartedAt         : TDateTime;
     FEndedAt           : TDateTime;
     FJupiterThreadList : TJupiterObject;
+    FOnExecute         : TJupiterThreadOnExecute;
+    FParams            : String;
   protected
     procedure Execute; override;
   published
-    property ID        : Integer   read FID    write FID;
-    property Title     : String    read FTitle write FTitle;
-    property StartedAt : TDateTime read FStartedAt;
-    property EndedAt   : TDateTime read FEndedAt;
+    property ID        : Integer                 read FID        write FID;
+    property Title     : String                  read FTitle     write FTitle;
+    property StartedAt : TDateTime               read FStartedAt;
+    property EndedAt   : TDateTime               read FEndedAt;
+    property Params    : String                  read FParams    write FParams;
+
+    property OnExecute : TJupiterThreadOnExecute read FOnExecute write FOnExecute;
 
     property Script            : TJupiterScript        read FScript            write FScript;
     property JupiterThreadList : TJupiterObject        read FJupiterThreadList write FJupiterThreadList;
@@ -52,6 +58,12 @@ type
     function ThreadByIndex(prIndex : Integer) : TJupiterThread;
     function ThreadByD(prID : Integer) : TJupiterThread;
     procedure NewThread(prTitle : String; prScript : TJupiterScript);
+    procedure NewThread(prTitle, prParams : String; prOnExecute : TJupiterThreadOnExecute);
+
+    procedure DeleteAtIndex(prIndex : Integer);
+    procedure DeleteListItem(prIndex : Integer);
+
+    procedure StopAll;
 
     constructor Create;
     destructor Destroy; override;
@@ -71,6 +83,9 @@ begin
     if Assigned(Self.FScript) then
        if Assigned(Self.FScript.RunMessages) then
          Self.FScript.Execute;
+
+    if Assigned(Self.OnExecute) then
+      Self.OnExecute(Self.ThreadID, Self.Params);
   finally
     Self.FStatus := jtsFinished;
 
@@ -144,6 +159,58 @@ begin
     vrThread.Resume;
   finally
 
+  end;
+end;
+
+procedure TJupiterThreadList.NewThread(prTitle, prParams: String; prOnExecute: TJupiterThreadOnExecute);
+var
+  vrThread : TJupiterThread;
+begin
+  Self.FInternal_ID := Self.FInternal_ID + 1;
+
+  try
+    vrThread       := TJupiterThread.Create(True);
+    vrThread.ID    := Self.FInternal_ID;
+    vrThread.Title := prTitle;
+    vrThread.JupiterThreadList := Self;
+    vrThread.Params := prParams;
+    vrThread.OnExecute := prOnExecute;
+
+    Self.FList.Add(vrThread);
+
+    vrThread.Resume;
+  finally
+
+  end;
+end;
+
+procedure TJupiterThreadList.DeleteAtIndex(prIndex: Integer);
+var
+  vrObj : TThread;
+begin
+  vrObj := Self.ThreadByIndex(prIndex);
+
+  FreeAndNil(vrObj);
+
+  Self.DeleteListItem(prIndex);
+
+end;
+
+procedure TJupiterThreadList.DeleteListItem(prIndex: Integer);
+begin
+  Self.FList.Delete(prIndex);
+end;
+
+procedure TJupiterThreadList.StopAll;
+var
+  vrVez : Integer;
+begin
+  for vrVez := Self.Count - 1 downto 0 do
+  begin
+    if not Self.ThreadByIndex(vrVez).Suspended then
+      Self.ThreadByIndex(vrVez).Suspend;
+
+    Self.DeleteAtIndex(vrVez);
   end;
 end;
 

@@ -13,7 +13,8 @@ inherited FSQLEditor: TFSQLEditor
     ClientWidth = 1200
   end
   inherited fpOptions: TFlowPanel
-    Top = 718
+    Height = 0
+    Top = 719
     Width = 1200
   end
   inherited pnBottom: TPanel
@@ -23,17 +24,17 @@ inherited FSQLEditor: TFSQLEditor
   end
   object pnLeft: TPanel[3]
     Left = 0
-    Height = 673
+    Height = 674
     Top = 45
     Width = 170
     Align = alLeft
     BevelOuter = bvNone
-    ClientHeight = 673
+    ClientHeight = 674
     ClientWidth = 170
     TabOrder = 3
     object tvLibrary: TTreeView
       Left = 0
-      Height = 673
+      Height = 674
       Top = 0
       Width = 170
       Align = alClient
@@ -45,24 +46,24 @@ inherited FSQLEditor: TFSQLEditor
   end
   object Splitter1: TSplitter[4]
     Left = 170
-    Height = 673
+    Height = 674
     Top = 45
     Width = 5
     OnMoved = spDivisorMoved
   end
   object pnBody: TPanel[5]
     Left = 175
-    Height = 673
+    Height = 674
     Top = 45
     Width = 1025
     Align = alClient
     BevelOuter = bvNone
-    ClientHeight = 673
+    ClientHeight = 674
     ClientWidth = 1025
     TabOrder = 5
     inline SynEdit1: TSynEdit
       Left = 0
-      Height = 468
+      Height = 469
       Top = 0
       Width = 1025
       Align = alClient
@@ -73,7 +74,7 @@ inherited FSQLEditor: TFSQLEditor
       ParentColor = False
       ParentFont = False
       TabOrder = 0
-      Gutter.Width = 57
+      Gutter.Width = 53
       Gutter.MouseActions = <>
       RightGutter.Width = 0
       RightGutter.MouseActions = <>
@@ -530,7 +531,7 @@ inherited FSQLEditor: TFSQLEditor
           MouseActions = <>
         end
         object SynGutterLineNumber1: TSynGutterLineNumber
-          Width = 17
+          Width = 13
           MouseActions = <>
           MarkupInfo.Background = clBtnFace
           MarkupInfo.Foreground = clNone
@@ -563,7 +564,7 @@ inherited FSQLEditor: TFSQLEditor
     object pcBottom: TPageControl
       Left = 0
       Height = 200
-      Top = 473
+      Top = 474
       Width = 1025
       ActivePage = tsBottom
       Align = alBottom
@@ -571,13 +572,13 @@ inherited FSQLEditor: TFSQLEditor
       TabOrder = 1
       object tsBottom: TTabSheet
         Caption = 'Registros'
-        ClientHeight = 169
-        ClientWidth = 1015
+        ClientHeight = 172
+        ClientWidth = 1017
         object dbGridQueryResult: TDBGrid
           Left = 0
-          Height = 169
+          Height = 172
           Top = 0
-          Width = 1015
+          Width = 1017
           Align = alClient
           Color = clWindow
           Columns = <>
@@ -587,13 +588,13 @@ inherited FSQLEditor: TFSQLEditor
       end
       object tsColumns: TTabSheet
         Caption = 'Colunas'
-        ClientHeight = 169
-        ClientWidth = 1015
+        ClientHeight = 172
+        ClientWidth = 1017
         object mmColumns: TMemo
           Left = 0
-          Height = 169
+          Height = 172
           Top = 0
-          Width = 1015
+          Width = 1017
           Align = alClient
           Lines.Strings = (
             'mmColumns'
@@ -608,7 +609,7 @@ inherited FSQLEditor: TFSQLEditor
       Cursor = crVSplit
       Left = 0
       Height = 5
-      Top = 468
+      Top = 469
       Width = 1025
       Align = alBottom
       OnMoved = spDivisorMoved
@@ -641,7 +642,7 @@ inherited FSQLEditor: TFSQLEditor
     Top = 152
   end
   object SynCompletion1: TSynCompletion[12]
-    Position = -1
+    Position = 0
     LinesInWindow = 6
     SelectedColor = clHighlight
     CaseSensitive = False
