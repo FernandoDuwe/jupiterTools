@@ -7,7 +7,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, Menus,
   ActnList, ExtCtrls, Buttons, uJupiterForm, JupiterFormTab,
   jupiterMainMenuGenerator, JupiterApp, JupiterConsts, JupiterVariable,
-  JupiterVariableDataProvider, jupiterDesktopApp, uContextMenu;
+  JupiterVariableDataProvider, uPSComponent, jupiterDesktopApp, uContextMenu;
 
 type
 
@@ -56,6 +56,7 @@ type
     procedure Internal_GoToNextTab(Sender: TObject);
     procedure Internal_GoToPreviousTab(Sender: TObject);
     procedure Internal_MenuGoToTabClick(Sender : TObject);
+    Procedure Internal_OnGlobalException(Sender : TObject; E : Exception);
   public
     procedure NewTab(Form : TForm);
   end;
@@ -65,7 +66,7 @@ var
 
 implementation
 
-uses JupiterFormTabSheet, LCLProc, uJupiterDesktopAppScript;
+uses JupiterFormTabSheet, LCLType, LCLProc, uJupiterDesktopAppScript;
 
 {$R *.lfm}
 
@@ -215,11 +216,18 @@ begin
   jtMainTabChange(Sender);
 end;
 
+procedure TFMain.Internal_OnGlobalException(Sender: TObject; E: Exception);
+begin
+  ShowMessage('Erro: ' + E.Message + #13#10 + 'Origem: ' + Sender.ClassName);
+end;
+
 procedure TFMain.Internal_PrepareForm;
 var
   vrMainMenu : TJupiterMainMenuGenerator;
 begin
   inherited Internal_PrepareForm;
+
+  Application.OnException := @Self.Internal_OnGlobalException;
 
   Self.FNewTabClick := False;
 

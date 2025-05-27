@@ -20,7 +20,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="3"/>
       <RevisionNr Value="1"/>
-      <BuildNr Value="110"/>
+      <BuildNr Value="135"/>
       <Language Value="0416"/>
       <CharSet Value="04E2"/>
       <StringTable CompanyName="Jupiter" FileDescription="Jupiter interface" ProductName="Jupiter"/>

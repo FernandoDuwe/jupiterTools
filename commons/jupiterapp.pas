@@ -350,9 +350,11 @@ procedure TJupiterApp.RunMacroNoMessage(prMacroId: String; prParams: TJupiterVar
 var
   vrScript : TJupiterScript;
   vrQry    : TSQLQuery;
+  vrWizard : TJupiterDatabaseWizard;
 begin
   vrScript := Self.NewScript;
-  vrQry    := Self.NewWizard.NewQuery;
+  vrWizard := Self.NewWizard;
+  vrQry    := vrWizard.NewQuery;
   try
     if not Self.Params.VariableById(DEBUG_MODE).AsBool then
       vrScript.OnExecute := nil;
@@ -369,6 +371,7 @@ begin
 
     vrScript.Execute;
   finally
+    FreeAndNil(vrWizard);
     FreeAndNil(vrScript);
     FreeAndNil(vrQry);
     FreeAndNil(prParams);

@@ -23,6 +23,7 @@ type
     FEndedAt           : TDateTime;
     FJupiterThreadList : TJupiterObject;
     FOnExecute         : TJupiterThreadOnExecute;
+    FOnExecuted        : TJupiterThreadOnExecute;
     FParams            : String;
   protected
     procedure Execute; override;
@@ -33,7 +34,8 @@ type
     property EndedAt   : TDateTime               read FEndedAt;
     property Params    : String                  read FParams    write FParams;
 
-    property OnExecute : TJupiterThreadOnExecute read FOnExecute write FOnExecute;
+    property OnExecute  : TJupiterThreadOnExecute read FOnExecute  write FOnExecute;
+    property OnExecuted : TJupiterThreadOnExecute read FOnExecuted write FOnExecuted;
 
     property Script            : TJupiterScript        read FScript            write FScript;
     property JupiterThreadList : TJupiterObject        read FJupiterThreadList write FJupiterThreadList;
@@ -51,9 +53,11 @@ type
     FList            : TList;
 
     function Internal_GetSize : Integer;
+    function Internal_IsRunning : Boolean;
   published
-    property Count : Integer read Internal_GetSize;
-    property Size  : Integer read Internal_GetSize;
+    property Count   : Integer read Internal_GetSize;
+    property Running : Boolean read Internal_IsRunning;
+    property Size    : Integer read Internal_GetSize;
   public
     function ThreadByIndex(prIndex : Integer) : TJupiterThread;
     function ThreadByD(prID : Integer) : TJupiterThread;
@@ -90,6 +94,10 @@ begin
     Self.FStatus := jtsFinished;
 
     Self.FEndedAt := Now;
+    Self.Suspend;
+
+    if Assigned(Self.OnExecuted) then
+      Self.OnExecuted(Self.ThreadID, Self.Params);
   end;
 end;
 
@@ -121,6 +129,23 @@ end;
 function TJupiterThreadList.Internal_GetSize: Integer;
 begin
   Result := Self.FList.Count;
+end;
+
+function TJupiterThreadList.Internal_IsRunning: Boolean;
+var
+  vrVez : Integer;
+begin
+  Result := False;
+
+  if Self.Size = 0 then
+    Exit;
+
+  for vrVez := 0 to Self.Size - 1 do
+    if (not Self.ThreadByIndex(vrVez).Suspended) then
+    begin
+      Result := True;
+      Exit;
+    end;
 end;
 
 function TJupiterThreadList.ThreadByIndex(prIndex: Integer): TJupiterThread;

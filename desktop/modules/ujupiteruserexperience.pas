@@ -74,6 +74,8 @@ begin
 
     Self.Internal_CreateVariablIfDontExists(DEBUG_MODE, 'Debug', BOOL_FALSE_STR);
 
+    Self.Internal_CreateVariablIfDontExists(USE_THREADS_LOG_TASKS, 'Utilziar threads para tarefas mais longas', BOOL_FALSE_STR);
+
     Self.Internal_CreateVariablIfDontExists(FORM_DESCRIPTION_MAXSIZE, 'Tamanho máximo das descrições de registro', '50');
 
     Self.Internal_CreateVariablIfDontExists('Interface.Grid.ShowMiniForm', 'Exibir sempre o resumo dos dados em formulários de grid', BOOL_FALSE_STR);

@@ -102,6 +102,7 @@ const
    CONTEXTMENU_TABLE_SHOW    : String = 'Interface.ContextMenu.ShowTables';
    FORM_GRID_LIMIT           : String = 'Interface.Form.GridLimit';
    DEBUG_MODE                : String = 'Developer.Debug';
+   USE_THREADS_LOG_TASKS     : String = 'Threads.LongTasks';
 
    PATH_WORKDIR : String = 'Enviroment.Path.WorkDir';
 

@@ -439,34 +439,38 @@ begin
       end;
     end;
 
-    if vrPSScript.Compile then
-    begin
-      Self.FCompiled := True;
-
-      Self.Messages.Add(Self.GetDateTimeMark + ': Compilação completa');
-
-      Self.AddMessage(Self.GetDateTimeMark + ': Iniciando execução');
-      Self.AddMessage(EmptyStr);
-
-      if vrPSScript.Execute then
+    try
+      if vrPSScript.Compile then
       begin
+        Self.FCompiled := True;
+
+        Self.Messages.Add(Self.GetDateTimeMark + ': Compilação completa');
+
+        Self.AddMessage(Self.GetDateTimeMark + ': Iniciando execução');
         Self.AddMessage(EmptyStr);
-        Self.AddMessage(Self.GetDateTimeMark + ': Execução finalizada');
 
-        Self.Messages.Add(Self.GetDateTimeMark + ': Execução completa');
+        if vrPSScript.Execute then
+        begin
+          Self.AddMessage(EmptyStr);
+          Self.AddMessage(Self.GetDateTimeMark + ': Execução finalizada');
 
-        Self.FRunned := True;
+          Self.Messages.Add(Self.GetDateTimeMark + ': Execução completa');
+
+          Self.FRunned := True;
+        end
+        else
+          Self.Messages.Add(Self.GetDateTimeMark + ': ' + vrPSScript.ExecErrorToString + ' em ' + IntToStr(vrPSScript.ExecErrorProcNo) + '.' + IntToStr(vrPSScript.ExecErrorByteCodePosition));
       end
       else
-        Self.Messages.Add(Self.GetDateTimeMark + ': ' + vrPSScript.ExecErrorToString + ' em ' + IntToStr(vrPSScript.ExecErrorProcNo) + '.' + IntToStr(vrPSScript.ExecErrorByteCodePosition));
-    end
-    else
-    begin
-      Self.FCompiled := False;
+      begin
+        Self.FCompiled := False;
 
-      Self.Internal_OutputMessages(vrPSScript);
-      Self.Messages.Add(EmptyStr);
-      Self.Messages.Add(Self.GetDateTimeMark + ': Compilação falhou');
+        Self.Internal_OutputMessages(vrPSScript);
+        Self.Messages.Add(EmptyStr);
+        Self.Messages.Add(Self.GetDateTimeMark + ': Compilação falhou');
+      end;
+    except
+      Self.Messages.Add(Self.GetDateTimeMark + ': ' + Exception(ExceptObject).Message);
     end;
   finally
     if Assigned(Self.OnExecute) then
@@ -527,6 +531,9 @@ begin
 
   Self.FRunMessages.Clear;
   FreeAndNil(Self.FRunMessages);
+
+  Self.FMessages.Clear;
+  FreeAndNil(Self.FMessages);
 
   vrJupiterScript := nil;
 
