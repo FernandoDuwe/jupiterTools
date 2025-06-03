@@ -138,7 +138,8 @@ var
 begin
   inherited;
 
-  vrJupiterApp.RunMacro(TRIGGER_ONSTART, TJupiterVariableList.Create);
+  if not vrJupiterApp.SecureMode then
+    vrJupiterApp.RunMacro(TRIGGER_ONSTART, TJupiterVariableList.Create);
 
   if ((ParamCount > 1) and (AnsiUpperCase(ParamStr(1)) = '-MACRO')) then
     JupiterAppDesktopOpenCodeRunner(ParamStr(2));
@@ -278,16 +279,18 @@ begin
   jtMainTab.Align := alClient;
   jtMainTab.Visible := jtMainTab.PageCount > 0;
 
-  vrJupiterApp.ScriptLineList.ExecuteNext;
+  if not vrJupiterApp.SecureMode then
+    vrJupiterApp.ScriptLineList.ExecuteNext;
 end;
 
 procedure TFMain.Internal_UpdateCalcs;
 begin
   inherited Internal_UpdateCalcs;
 
-  if vrJupiterApp.Params.Exists(TRIGGER_ONUPDATE) then
-    if vrJupiterApp.Params.VariableById(TRIGGER_ONUPDATE).Value <> '' then
-      vrJupiterApp.RunMacroNoMessage(vrJupiterApp.Params.VariableById(TRIGGER_ONUPDATE).Value, TJupiterVariableList.Create);
+  if not vrJupiterApp.SecureMode then
+    if vrJupiterApp.Params.Exists(TRIGGER_ONUPDATE) then
+      if vrJupiterApp.Params.VariableById(TRIGGER_ONUPDATE).Value <> '' then
+        vrJupiterApp.RunMacroNoMessage(vrJupiterApp.Params.VariableById(TRIGGER_ONUPDATE).Value, TJupiterVariableList.Create);
 end;
 
 procedure TFMain.Internal_CreatePopMenuTab;

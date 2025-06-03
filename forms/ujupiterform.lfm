@@ -3,7 +3,7 @@ object FJupiterForm: TFJupiterForm
   Height = 457
   Top = 308
   Width = 879
-  Caption = 'FJupiterForm'
+  Caption = 'Threads'
   ClientHeight = 457
   ClientWidth = 879
   OnActivate = FormActivate
@@ -307,6 +307,13 @@ object FJupiterForm: TFJupiterForm
       end
       object Separator3: TMenuItem
         Caption = '-'
+      end
+    end
+    object miThreads: TMenuItem
+      Caption = 'Threads'
+      object MenuItem2: TMenuItem
+        Caption = 'Parar todas'
+        OnClick = MenuItem2Click
       end
     end
   end

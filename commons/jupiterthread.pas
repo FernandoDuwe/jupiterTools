@@ -26,6 +26,8 @@ type
     FOnExecuted        : TJupiterThreadOnExecute;
     FParams            : String;
   protected
+    procedure Internal_Execute; virtual;
+
     procedure Execute; override;
   published
     property ID        : Integer                 read FID        write FID;
@@ -61,6 +63,7 @@ type
   public
     function ThreadByIndex(prIndex : Integer) : TJupiterThread;
     function ThreadByD(prID : Integer) : TJupiterThread;
+    procedure AddThread(prThread : TJupiterThread);
     procedure NewThread(prTitle : String; prScript : TJupiterScript);
     procedure NewThread(prTitle, prParams : String; prOnExecute : TJupiterThreadOnExecute);
 
@@ -78,6 +81,11 @@ implementation
 
 { TJupiterThread }
 
+procedure TJupiterThread.Internal_Execute;
+begin
+
+end;
+
 procedure TJupiterThread.Execute;
 begin
   Self.FStatus := jtsRunning;
@@ -87,6 +95,8 @@ begin
     if Assigned(Self.FScript) then
        if Assigned(Self.FScript.RunMessages) then
          Self.FScript.Execute;
+
+    Self.Internal_Execute;
 
     if Assigned(Self.OnExecute) then
       Self.OnExecute(Self.ThreadID, Self.Params);
@@ -165,6 +175,17 @@ begin
       Result := Self.ThreadByIndex(vrVez);
       Exit;
     end;
+end;
+
+procedure TJupiterThreadList.AddThread(prThread: TJupiterThread);
+begin
+  Self.FInternal_ID := Self.FInternal_ID + 1;
+
+  prThread.ID := Self.FInternal_ID;
+
+  Self.FList.Add(prThread);
+
+  prThread.Resume;
 end;
 
 procedure TJupiterThreadList.NewThread(prTitle: String; prScript : TJupiterScript);

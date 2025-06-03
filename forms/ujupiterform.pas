@@ -9,7 +9,8 @@ uses
   ButtonPanel, StdCtrls, Menus, ComCtrls, Buttons, JupiterConsts,
   JupiterFormTabSheet, jupiterformutils, JupiterApp, uJupiterAction,
   jupiterDesktopApp, jupiterformcomponenttils, JupiterVariable,
-  jupiterStringUtils, jupiterDatabaseWizard, uJupiterAppScript;
+  jupiterStringUtils, jupiterDatabaseWizard, uJupiterAppScript,
+  jupiterthread;
 
 type
 
@@ -24,6 +25,8 @@ type
     fpOptions: TFlowPanel;
     Image1: TImage;
     MenuItem1: TMenuItem;
+    MenuItem2: TMenuItem;
+    miThreads: TMenuItem;
     Separator3: TMenuItem;
     miLookColumn: TMenuItem;
     miAjustRatioRight: TMenuItem;
@@ -46,6 +49,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure Image1Click(Sender: TObject);
     procedure MenuItem1Click(Sender: TObject);
+    procedure MenuItem2Click(Sender: TObject);
     procedure miAjustRatioLeftClick(Sender: TObject);
     procedure miAjustRatioRightClick(Sender: TObject);
     procedure miLookColumnClick(Sender: TObject);
@@ -58,6 +62,7 @@ type
   private
     FFormID : String;
     FPercentDivisor : Integer;
+    FThreadController : TJupiterThreadList;
 
     FShowSearchBar : Boolean;
     FActionGroup   : TJupiterActionGroup;
@@ -72,14 +77,15 @@ type
     FHint : String;
 
   published
-    property ActionGroup    : TJupiterActionGroup  read FActionGroup    write FActionGroup;
-    property ShowSearchBar  : Boolean              read FShowSearchBar  write Internal_SetSearchBar default False;
-    property OwnerTab       : TJupiterFormTabSheet read FOwnerTab       write FOwnerTab;
-    property Params         : TJupiterVariableList read FParams         write FParams;
-    property FormID         : String               read FFormID;
-    property Hint           : String               read FHint           write FHint;
-    property PercentDivisor : Integer              read FPercentDivisor write FPercentDivisor;
-    property Prepared       : Boolean              read FPrepared       write FPrepared;
+    property ActionGroup      : TJupiterActionGroup  read FActionGroup      write FActionGroup;
+    property ShowSearchBar    : Boolean              read FShowSearchBar    write Internal_SetSearchBar default False;
+    property OwnerTab         : TJupiterFormTabSheet read FOwnerTab         write FOwnerTab;
+    property Params           : TJupiterVariableList read FParams           write FParams;
+    property FormID           : String               read FFormID;
+    property Hint             : String               read FHint             write FHint;
+    property PercentDivisor   : Integer              read FPercentDivisor   write FPercentDivisor;
+    property Prepared         : Boolean              read FPrepared         write FPrepared;
+    property ThreadController : TJupiterThreadList   read FThreadController write FThreadController;
 
     procedure Internal_UpdateComponents; virtual;
     procedure Internal_UpdateDatasets; virtual;
@@ -196,6 +202,11 @@ begin
   vrJupiterApp.RunMacro(TRIGGER_ONSHOWPARAMS, Self.Params);
 end;
 
+procedure TFJupiterForm.MenuItem2Click(Sender: TObject);
+begin
+  Self.ThreadController.StopAll;
+end;
+
 procedure TFJupiterForm.miAjustRatioLeftClick(Sender: TObject);
 begin
   try
@@ -306,10 +317,13 @@ begin
 
   Self.WindowState := wsNormal;
   Self.Position    := poScreenCenter;
+
+  Self.FThreadController := TJupiterThreadList.Create;
 end;
 
 procedure TFJupiterForm.FormDestroy(Sender: TObject);
 begin
+  FreeAndNil(FThreadController);
   FreeAndNil(Self.FParams);
   FreeAndNil(Self.FActionGroup);
 end;
@@ -322,6 +336,7 @@ end;
 procedure TFJupiterForm.Internal_UpdateComponents;
 begin
   miParams.Enabled := Self.Params.Count > 0;
+  miThreads.Enabled := Self.ThreadController.Count > 0;
 
   pnBottom.Caption := '                              ' + Self.FHint;
   pnBottom.Visible := Trim(Self.FHint) <> EmptyStr;

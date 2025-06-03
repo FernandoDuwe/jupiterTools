@@ -90,6 +90,8 @@ type
     function  GetGlobalReference(prTablename : String) : TJupiterDatabaseReference;
     procedure RemoveReference(prTableName : String; prID : Integer);
 
+    function SecureMode : Boolean;
+
     constructor Create(prAppID, prAppName : String); virtual;
     destructor Destroy; override;
   end;
@@ -714,6 +716,20 @@ begin
       Self.GlobalReferences.DeleteAtIndex(vrVez);
       Exit;
     end;
+end;
+
+function TJupiterApp.SecureMode: Boolean;
+var
+  vrVez : Integer;
+begin
+  for vrVez := 0 to ParamCount - 1 do
+    if AnsiUpperCase(ParamStr(vrVez)) = '-SECUREMODE' then
+    begin
+      Result := True;
+      Exit;
+    end;
+
+  Result := False;
 end;
 
 constructor TJupiterApp.Create(prAppID, prAppName: String);
