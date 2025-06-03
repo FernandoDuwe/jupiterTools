@@ -351,8 +351,11 @@ begin
   if vrJupiterApp.GlobalReferenceExists(prForeignKeyData.TableDestinyName) then
     if vrQry.Locate('ID', vrJupiterApp.GetGlobalReference(prForeignKeyData.TableDestinyName).ID, []) then
     begin
-      prField.AsInteger := vrQry.FieldByName('ID').AsInteger;
-      vrEdit.KeyValue   := vrQry.FieldByName('ID').AsInteger;
+      if prDataSource.State in [dsInsert, dsEdit] then
+      begin
+        prField.AsInteger := vrQry.FieldByName('ID').AsInteger;
+        vrEdit.KeyValue   := vrQry.FieldByName('ID').AsInteger;
+      end;
     end;
 
   vrQry := nil;

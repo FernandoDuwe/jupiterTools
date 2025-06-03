@@ -14,19 +14,6 @@ type
 
   { TJupiterFinderThread }
 
-  TJupiterFinderThread = class (TJupiterThread)
-  private
-    FNode: TTreeNode;
-    FPath  : String;
-    FNdode : TTreeNode;
-  protected
-    procedure Internal_Execute; override;
-  published
-    property Path : String    read FPath write FPath;
-    property Node : TTreeNode read FNode write FNode;
-  end;
-
-
   { TFFileFinder }
 
   TFFileFinder = class(TFJupiterForm)
@@ -34,11 +21,13 @@ type
     procedure edSearchKeyPress(Sender: TObject; var Key: char);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure MenuItem2Click(Sender: TObject);
     procedure tvFileTreeDblClick(Sender: TObject);
     procedure tvFileTreeKeyPress(Sender: TObject; var Key: char);
   private
     FSearch : String;
 
+    procedure Internal_OnOpenFolder(Sender: TObject);
     procedure Internal_OnStop(Sender: TObject);
     procedure Internal_OnDelete(Sender: TObject);
 
@@ -47,11 +36,27 @@ type
 
     procedure Internal_ProcessThread(prThreadId : Integer; prParams : String);
 
+    procedure Internal_ProcessedThead(prThreadId : Integer; prParams : String);
+
     procedure Internal_PrepareForm; override;
     procedure Internal_ReadDirectory(prPath : String; prOwner : TTreeNode);
     procedure Internal_ReadWithThread(prPath : String);
   public
+    procedure ReadDirectory(prPath : String; prOwner : TTreeNode);
+  end;
 
+  TJupiterFinderThread = class (TJupiterThread)
+  private
+    FNode       : TTreeNode;
+    FPath       : String;
+    FNdode      : TTreeNode;
+    FFileFinder : TFFileFinder;
+  protected
+    procedure Internal_Execute; override;
+  published
+    property FileFinder : TFFileFinder read FFileFinder write FFileFinder;
+    property Path       : String       read FPath       write FPath;
+    property Node       : TTreeNode    read FNode       write FNode;
   end;
 
 var
@@ -68,13 +73,13 @@ begin
   inherited Internal_Execute;
 
   try
-    Self.Internal_ReadDirectory(Self.Path, Self.Node);
+    Self.FileFinder.ReadDirectory(Self.Path, Self.Node);
   finally
-    if Trim(edSearch.Text) <> EmptyStr then
+    if Trim(Self.FileFinder.edSearch.Text) <> EmptyStr then
       if Self.Node.Count = 0 then
-        tvFileTree.Items.Delete(Self.Node)
+        Self.FileFinder.tvFileTree.Items.Delete(Self.Node)
       else
-        tvFileTree.FullExpand;
+        Self.FileFinder.tvFileTree.FullExpand;
   end;
 end;
 
@@ -100,6 +105,17 @@ begin
   inherited;
 end;
 
+procedure TFFileFinder.MenuItem2Click(Sender: TObject);
+begin
+  inherited;
+
+  try
+    Self.ThreadController.StopAll;
+  finally
+    Self.UpdateForm();
+  end;
+end;
+
 procedure TFFileFinder.tvFileTreeDblClick(Sender: TObject);
 begin
   if not Assigned(tvFileTree.Selected) then
@@ -119,6 +135,11 @@ begin
 
     Key := #0;
   end;
+end;
+
+procedure TFFileFinder.Internal_OnOpenFolder(Sender: TObject);
+begin
+  JupiterRunnableScript_RunCommandOnJupiter(Self.Params.VariableById('path').Value);
 end;
 
 procedure TFFileFinder.Internal_OnStop(Sender: TObject);
@@ -156,20 +177,20 @@ begin
 
   edSearch.Enabled := not Self.ThreadController.Running;
 
-  if Self.ActionGroup.Count > 0 then
-  begin
-    if Self.ThreadController.Running then
-      Self.ActionGroup.GetActionAtIndex(0).Enable
-    else
-      Self.ActionGroup.GetActionAtIndex(0).Disable;
-  end;
-
   if Self.ActionGroup.Count > 1 then
   begin
-    if tvFileTree.Items.Count > 0 then
+    if Self.ThreadController.Running then
       Self.ActionGroup.GetActionAtIndex(1).Enable
     else
       Self.ActionGroup.GetActionAtIndex(1).Disable;
+  end;
+
+  if Self.ActionGroup.Count > 2 then
+  begin
+    if tvFileTree.Items.Count > 1 then
+      Self.ActionGroup.GetActionAtIndex(2).Enable
+    else
+      Self.ActionGroup.GetActionAtIndex(2).Disable;
   end;
 end;
 
@@ -209,6 +230,7 @@ end;
 
 procedure TFFileFinder.Internal_ProcessThread(prThreadId: Integer; prParams: String);
 begin
+  {
   try
     Self.Internal_ReadDirectory(prParams, vrNode);
   finally
@@ -216,8 +238,14 @@ begin
       if vrNode.Count = 0 then
         tvFileTree.Items.Delete(vrNode)
       else
-         tvFileTree.FullExpand;
+        tvFileTree.rFullExpand;
   end;
+  }
+end;
+
+procedure TFFileFinder.Internal_ProcessedThead(prThreadId: Integer; prParams: String);
+begin
+  Self.UpdateForm(False, True, False);
 end;
 
 procedure TFFileFinder.Internal_PrepareForm;
@@ -232,6 +260,7 @@ begin
 
   tvFileTree.Images := FMain.ilIconFamily;
 
+  Self.ActionGroup.AddAction(TJupiterAction.Create('Abrir pasta', 'Clique aqui para abrir a pasta atual externamente', ICON_OPEN, @Internal_OnOpenFolder));
   Self.ActionGroup.AddAction(TJupiterAction.Create('Parar', 'Clique aqui para parar a pesquisa', ICON_CANCEL, @Internal_OnStop));
   Self.ActionGroup.AddAction(TJupiterAction.Create('Excluir', 'Clique aqui para abrir a pasta atual externamente', ICON_DELETE, @Internal_OnDelete));
 end;
@@ -243,6 +272,7 @@ var
   vrVez : Integer;
   vrNode : TTreeNode;
   vrNodeFile : TTreeNode;
+  vrThread : TJupiterFinderThread;
 begin
   vrDirectoryProvider := TJupiterDirectoryDataProvider.Create;
   vrFileProvider := TJupiterFileDataProvider.Create;
@@ -262,10 +292,16 @@ begin
       vrNode.SelectedIndex := ICON_OPEN;
       vrNode.Data := TJupiterStringReference.Create(vrDirectoryProvider.GetRowByIndex(vrVez).Fields.VariableById('Path').Value);
 
-     if ((vrJupiterApp.Params.VariableById(USE_THREADS_LOG_TASKS).AsBool) and (prOwner = nil)) then
-        Self.ThreadController.NewThread(vrDirectoryProvider.GetRowByIndex(vrVez).Fields.VariableById('Path').Value,
-                                   vrDirectoryProvider.GetRowByIndex(vrVez).Fields.VariableById('Path').Value,
-                                   @Internal_ProcessThread)
+      if ((vrJupiterApp.Params.VariableById(USE_THREADS_LOG_TASKS).AsBool) and (prOwner = nil)) then
+      begin
+        vrThread            := TJupiterFinderThread.Create(True);
+        vrThread.Node       := vrNode;
+        vrThread.FileFinder := Self;
+        vrThread.Path       := vrDirectoryProvider.GetRowByIndex(vrVez).Fields.VariableById('Path').Value;
+        vrThread.OnExecuted := @Internal_ProcessedThead;
+
+        Self.ThreadController.AddThread(vrThread);
+      end
       else
       begin
         Self.Internal_ReadDirectory(vrDirectoryProvider.GetRowByIndex(vrVez).Fields.VariableById('Path').Value, vrNode);
@@ -308,6 +344,11 @@ end;
 procedure TFFileFinder.Internal_ReadWithThread(prPath: String);
 begin
 
+end;
+
+procedure TFFileFinder.ReadDirectory(prPath: String; prOwner: TTreeNode);
+begin
+  Self.Internal_ReadDirectory(prPath, prOwner);
 end;
 
 end.

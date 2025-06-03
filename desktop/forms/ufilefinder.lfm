@@ -8,9 +8,13 @@ inherited FFileFinder: TFFileFinder
       OnKeyPress = edSearchKeyPress
     end
   end
+  inherited fpOptions: TFlowPanel
+    Height = 0
+    Top = 376
+  end
   object tvFileTree: TTreeView[3]
     Left = 0
-    Height = 330
+    Height = 331
     Top = 45
     Width = 879
     Align = alClient
@@ -25,5 +29,10 @@ inherited FFileFinder: TFFileFinder
   inherited tmrAutoUpdater: TTimer[5]
   end
   inherited pmOptions: TPopupMenu[6]
+    inherited miThreads: TMenuItem
+      inherited MenuItem2: TMenuItem
+        OnClick = MenuItem2Click
+      end
+    end
   end
 end

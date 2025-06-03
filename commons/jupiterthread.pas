@@ -104,10 +104,11 @@ begin
     Self.FStatus := jtsFinished;
 
     Self.FEndedAt := Now;
-    Self.Suspend;
 
     if Assigned(Self.OnExecuted) then
       Self.OnExecuted(Self.ThreadID, Self.Params);
+
+    Self.Suspend;
   end;
 end;
 
@@ -151,7 +152,7 @@ begin
     Exit;
 
   for vrVez := 0 to Self.Size - 1 do
-    if (not Self.ThreadByIndex(vrVez).Suspended) then
+    if ((not Self.ThreadByIndex(vrVez).Suspended) and (Self.ThreadByIndex(vrVez).Status <> jtsFinished)) then
     begin
       Result := True;
       Exit;

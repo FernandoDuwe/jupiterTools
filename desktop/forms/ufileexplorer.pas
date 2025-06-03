@@ -100,7 +100,7 @@ begin
 
   Self.ActionGroup.AddAction(TJupiterAction.Create('Pesquisar arquivos', 'Pesquisar arquivos no diretório atual', ICON_SEARCH, @Internal_OnSearchInFiles));
 
-  Self.ActionGroup.AddAction(TJupiterAction.Create('Pesquisar em arquivos', 'Pesquisar conteúdo nos arquivos do diretório atual', ICON_TASKS, @Internal_OnSearchContentInFiles));
+//  Self.ActionGroup.AddAction(TJupiterAction.Create('Pesquisar em arquivos', 'Pesquisar conteúdo nos arquivos do diretório atual', ICON_TASKS, @Internal_OnSearchContentInFiles));
 
   vrEnviroment := TJupiterEnviroment.Create;
   try

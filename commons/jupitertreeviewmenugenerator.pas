@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, JupiterObject, jupiterDatabaseWizard, JupiterConsts,
-  JupiterApp, JupiterVariable, SQLDB, ComCtrls;
+  JupiterApp, JupiterVariable, SQLDB, ComCtrls, jupiterDesktopApp;
 
 type
 
@@ -18,6 +18,7 @@ type
     FOnClick  : TNotifyEvent;
 
     procedure Internal_RenderRoute(prOwner : TTreeNode; prPrefix : String);
+    procedure Internal_CheckRender(prOwner : TTreeNode; prPrefix : String);
     function Internal_GetLevel(prRoute : String) : Integer;
 
     procedure Internal_OnClick(Sender: TObject);
@@ -39,6 +40,7 @@ procedure TJupiterTreeViewMenuGenerator.Internal_RenderRoute(prOwner: TTreeNode;
 var
   vrQry      : TSQLQuery;
   vrNodeItem : TTreeNode;
+  vrVez      : Integer;
 begin
   vrQry := Self.NewQuery;
   try
@@ -79,6 +81,11 @@ begin
       Self.Internal_RenderRoute(vrNodeItem, vrQry.FieldByName('ROUTE').AsString);
 
       vrQry.Next;
+    end;
+
+    for vrVez := 0 to TJupiterDesktopApp(vrJupiterApp).DynamicRouteList.Count - 1 do
+    begin
+
     end;
   finally
     vrQry.Close;
@@ -149,7 +156,7 @@ begin
     Self.Internal_RenderRoute(nil, '/main/');
 
     Self.TreeView.OnDblClick := @Internal_OnClick;
-//    Self.TreeView.OnKeyPress := @Internal_OnKeyPress;
+
   finally
     Self.TreeView.FullExpand;
   end;
