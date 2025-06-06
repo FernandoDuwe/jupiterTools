@@ -28,6 +28,7 @@ type
   procedure JupiterDatabaseScript_RollbackTransaction;
   function JupiterDatabaseScript_Resolve(prTable, prField, prWhere : String) : String;
   function JupiterDatabaseScript_Count(prTable, prWhere : String) : Integer;
+  procedure JupiterDatabaseScript_GenerateDatabaseStats;
 
 implementation
 
@@ -129,6 +130,18 @@ begin
   end;
 end;
 
+procedure JupiterDatabaseScript_GenerateDatabaseStats;
+var
+  vrWizard : TJupiterDatabaseWizard;
+begin
+  vrWizard := vrJupiterApp.NewWizard;
+  try
+    vrWizard.GenerateDatabasStats;
+  finally
+    FreeAndNil(vrWizard);
+  end;
+end;
+
 { TuJupiterDatabaseScript }
 
 function TuJupiterDatabaseScript.Internal_GetName: String;
@@ -142,6 +155,7 @@ begin
 
   prSender.AddFunction(@JupiterDatabaseScript_Resolve, 'function DBResolve(prTable, prField, prWhere : String) : String;');
   prSender.AddFunction(@JupiterDatabaseScript_Count, 'function DBCount(prTable, prWhere: String): Integer;');
+  prSender.AddFunction(@JupiterDatabaseScript_GenerateDatabaseStats, 'procedure GenerateDatabaseStats;');
 
   prSender.AddFunction(@JupiterDatabaseScript_Exists, 'function DBExists(prTable, prWhere : String) : Boolean;');
 
@@ -166,6 +180,7 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure DBStartTransaction;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure DBCommitTransaction;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure DBRollbackTransaction;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure GenerateDatabaseStats;'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function DBResolve(prTable, prField, prWhere : String) : String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function DBCount(prTable, prWhere: String): Integer;'));

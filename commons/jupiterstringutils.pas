@@ -27,6 +27,8 @@ uses
 
   function jupiterStringUtilsIsValidSearch(prText, prSearchText : String) : Boolean;
 
+  function jupiterStringUtilsIsSameRootRoute(prRoot, prRoute : String) : Boolean;
+
 type
 
   { TJupiterStringReference }
@@ -181,6 +183,17 @@ end;
 function jupiterStringUtilsIsValidSearch(prText, prSearchText: String): Boolean;
 begin
   Result := Pos(AnsiUpperCase(prSearchText), AnsiUpperCase(prText)) > 0;
+end;
+
+function jupiterStringUtilsIsSameRootRoute(prRoot, prRoute: String): Boolean;
+begin
+  if Length(prRoot) > Length(prRoute) then
+  begin
+    Result := False;
+    Exit;
+  end;
+
+  Result := (prRoot = Copy(prRoute, 1, Length(prRoot)));
 end;
 
 { TJupiterStringReference }

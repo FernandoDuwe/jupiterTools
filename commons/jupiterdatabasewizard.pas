@@ -47,6 +47,8 @@ type
   private
     FConnection  : TSQLConnection;
     FTransaction : TSQLTransaction;
+
+    procedure Internal_GenerateDataOfTable(prTable : String);
   published
     property Connection  : TSQLConnection  read FConnection  write FConnection;
     property Transaction : TSQLTransaction read FTransaction write FTransaction;
@@ -84,6 +86,7 @@ type
     procedure GenerateInsertSQL(prTableName : String; var prStrings : TStrings);
     procedure GenerateUpdateSQL(prTableName : String; var prStrings : TStrings);
     procedure GenerateDeleteSQL(prTableName : String; var prStrings : TStrings);
+    procedure GenerateDatabasStats;
 
     procedure ExecuteScript(prScript : TStrings; prStartTransaction : Boolean = True);
 
@@ -117,6 +120,33 @@ begin
 end;
 
 { TJupiterDatabaseWizard }
+
+procedure TJupiterDatabaseWizard.Internal_GenerateDataOfTable(prTable: String);
+var
+  vrVez : Integer;
+  vrStr : TStrings;
+begin
+  if Self.Count('DATABASE_TABLETITLE', ' TABLENAME = "' + prTable + '" ') = 0 then
+    Self.ExecuteScript(CreateStringList(' INSERT INTO DATABASE_TABLETITLE (TABLENAME, EXPRESSION) VALUES ("' + prTable + '", "{ID}") '), False);
+
+  vrStr := TStringList.Create;
+  try
+    vrStr.Clear;
+
+    Self.Connection.GetFieldNames(prTable, vrStr);
+
+    if Self.Count('DATABASE_DICTIONARY', ' TABLENAME = "' + prTable + '" AND FIELDNAME IS NULL ') = 0 then
+      Self.ExecuteScript(CreateStringList(' INSERT INTO DATABASE_DICTIONARY (TABLENAME, TITLE) VALUES ("' + prTable + '", "' + prTable + '") '), False);
+
+    for vrVez := 0 to vrStr.Count - 1 do
+    begin
+      if Self.Count('DATABASE_DICTIONARY', ' TABLENAME = "' + prTable + '" AND FIELDNAME = "' + vrStr[vrVez] + '" ') = 0 then
+        Self.ExecuteScript(CreateStringList(' INSERT INTO DATABASE_DICTIONARY (TABLENAME, FIELDNAME, TITLE) VALUES ("' + prTable + '", "' + vrStr[vrVez] + '", "' + vrStr[vrVez] + '") '), False);
+    end;
+  finally
+    FreeAndNil(vrStr);
+  end;
+end;
 
 function TJupiterDatabaseWizard.TableExists(prTableName: String): Boolean;
 var
@@ -614,6 +644,38 @@ end;
 procedure TJupiterDatabaseWizard.GenerateDeleteSQL(prTableName: String; var prStrings: TStrings);
 begin
 
+end;
+
+procedure TJupiterDatabaseWizard.GenerateDatabasStats;
+var
+  vrVez : Integer;
+  vrTableList : TStrings;
+begin
+  vrTableList := TStringList.Create;
+  try
+    vrTableList.Clear;
+    Self.Connection.GetTableNames(vrTableList, False);
+
+    if not Self.Transaction.Active then
+      Self.Transaction.StartTransaction;
+
+    try
+      for vrVez := 0 to vrTableList.Count - 1 do
+      begin
+        if Trim(vrTableList[vrVez]) = EmptyStr then
+          Continue;
+
+        Self.Internal_GenerateDataOfTable(vrTableList[vrVez]);
+      end;
+
+      Self.Transaction.CommitRetaining;
+    except
+      Self.Transaction.RollbackRetaining;
+      raise;
+    end;
+  finally
+    FreeAndNil(vrTableList);
+  end;
 end;
 
 procedure TJupiterDatabaseWizard.ExecuteScript(prScript: TStrings; prStartTransaction : Boolean = True);

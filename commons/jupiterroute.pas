@@ -10,6 +10,29 @@ uses
 
 type
 
+  TJupiterRouteData = class(TJupiterObject)
+  private
+    FID       : Integer;
+    FTitle    : String;
+    FRoute    : String;
+    FIcon     : Integer;
+    FShortcut : String;
+    FParams   : String;
+    FDestiny  : Integer;
+    FZIndex   : Integer;
+  published
+    property ID       : Integer read FID       write FID;
+    property Title    : String  read FTitle    write FTitle;
+    property Route    : String  read FRoute    write FRoute;
+    property Icon     : Integer read FIcon     write FIcon;
+    property Shortcut : String  read FShortcut write FShortcut;
+    property Params   : String  read FParams   write FParams;
+    property Destiny  : Integer read FDestiny  write FDestiny;
+    property ZIndex   : Integer read FZIndex   write FZIndex;
+  public
+
+  end;
+
   { TJupiterRoute }
 
   TJupiterRoute = class(TJupiterObject)

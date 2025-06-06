@@ -71,6 +71,14 @@ begin
     if not vrWizard.TableExists('RECORDPIN') then
       vrWizard.ExecuteScript(CreateStringList('CREATE TABLE RECORDPIN ( ID INTEGER PRIMARY KEY, TABLENAME VARCHAR (100), RECORDKEY INTEGER)'));
 
+    // Database
+    if not vrWizard.TableExists('DATABASE_DICTIONARY') then
+      vrWizard.ExecuteScript(CreateStringList('CREATE TABLE DATABASE_DICTIONARY ( ID INTEGER PRIMARY KEY, TABLENAME VARCHAR(100), FIELDNAME VARCHAR(100), TITLE VARCHAR(100), HINT VARCHAR(200))'));
+
+    if not vrWizard.TableExists('DATABASE_TABLETITLE') then
+      vrWizard.ExecuteScript(CreateStringList('CREATE TABLE DATABASE_TABLETITLE ( ID INTEGER PRIMARY KEY, TABLENAME VARCHAR(100), EXPRESSION VARCHAR(200))'));
+
+
     if Self.Internal_CreateMacroIfDontExists('menu.newTab.click', 'Clique do botão Nova aba', CreateStringList('program macro;' + #13#10 + 'begin' + #13#10 + '  OpenForm(''/forms/newTask'');' + #13#10 + 'end.')) then
       Self.Internal_CreateRouteIfDontExists(EmptyStr, '/menu/newTab/', vrWizard.GetLastID('MACROS'), ICON_ADD, 100);
 
