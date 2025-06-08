@@ -29,8 +29,11 @@ type
   function JupiterDatabaseScript_Resolve(prTable, prField, prWhere : String) : String;
   function JupiterDatabaseScript_Count(prTable, prWhere : String) : Integer;
   procedure JupiterDatabaseScript_GenerateDatabaseStats;
+  function JupiterDatabaseScript_ResolveRecordTable(prTableName : String; prID : Integer) : String;
 
 implementation
+
+uses JupiterDataProvider, jupitersqldataprovider;
 
 function JupiterDatabaseScript_Exists(prTable, prWhere: String): Boolean;
 var
@@ -139,6 +142,29 @@ begin
     vrWizard.GenerateDatabasStats;
   finally
     FreeAndNil(vrWizard);
+  end;
+end;
+
+function JupiterDatabaseScript_ResolveRecordTable(prTableName: String; prID: Integer): String;
+var
+  vrProvider : TJupiterDataProvider;
+  vrSolver : TJupiterDataProvider;
+begin
+  Result := IntToStr(prID);
+
+  vrProvider := FactoryDataProvider(DATAPROVIDER_TYPE_SQL, Format('SELECT * FROM %0:s WHERE ID = %0:d ', [prTableName, prID]), False);
+  vrSolver   := FactoryDataProvider(DATAPROVIDER_TYPE_SQL, Format('SELECT * FROM DATABASE_TABLETITLE WHERE TABLENAME = "%0:s" ', [prTableName, prID]), False);
+  try
+    if vrProvider.Count = 0 then
+      Exit;
+
+    if vrSolver.Count = 0 then
+      Exit;
+
+    Result := vrProvider.GetRowByIndex(0).Fields.ResolveString(vrSolver.GetRowByIndex(0).Fields.VariableById('EXPRESSION').Value);
+  finally
+    FreeAndNil(vrProvider);
+    FreeAndNil(vrSolver);
   end;
 end;
 
