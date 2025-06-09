@@ -6,6 +6,7 @@ interface
 
 uses
   Classes, SysUtils, JupiterObject, JupiterConsts, SQLDB, DB;
+
 type
 
   { TJupiterDatabaseWizard }
@@ -58,6 +59,7 @@ type
     function GetForeignKeyData(prTableName, prFieldName : String) : TJupiterDatabaseForeignKeyReference;
     function IsForeignKeyField(prTableName, prFieldName : String) : Boolean;
     function NewQuery : TSQLQuery;
+    function GetSelectGridFields(prTable : String) : String;
     function NewQueryFromReference(prReference : TJupiterDatabaseReference; prWhere : String = ''; prOrderBy : String = ''; prFields : String = '*'; prLimit : String = '') : TSQLQuery;
     function NewQueryFromReferenceToComboBox(prReference : TJupiterDatabaseReference; prWhere : String = ''; prOrderBy : String = ''; prFields : String = '*'; prLimit : String = '') : TSQLQuery;
     function NewQueryFromReferenceWithSearch(prReference : TJupiterDatabaseReference; prFieldList : TStrings; prSearch : String; prWhere : String = ''; prOrderBy : String = ''; prFields : String = '*'; prLimit : String = '') : TSQLQuery;
@@ -95,7 +97,7 @@ type
 
 implementation
 
-uses JupiterApp;
+uses JupiterApp, jupiterStringUtils;
 
 { TJupiterDatabaseReference }
 
@@ -136,12 +138,12 @@ begin
     Self.Connection.GetFieldNames(prTable, vrStr);
 
     if Self.Count('DATABASE_DICTIONARY', ' TABLENAME = "' + prTable + '" AND FIELDNAME IS NULL ') = 0 then
-      Self.ExecuteScript(CreateStringList(' INSERT INTO DATABASE_DICTIONARY (TABLENAME, TITLE) VALUES ("' + prTable + '", "' + prTable + '") '), False);
+      Self.ExecuteScript(CreateStringList(' INSERT INTO DATABASE_DICTIONARY (TABLENAME, TITLE) VALUES ("' + prTable + '", "' + JupiterStringUtilsNormalizeToPresent(prTable) + '") '), False);
 
     for vrVez := 0 to vrStr.Count - 1 do
     begin
       if Self.Count('DATABASE_DICTIONARY', ' TABLENAME = "' + prTable + '" AND FIELDNAME = "' + vrStr[vrVez] + '" ') = 0 then
-        Self.ExecuteScript(CreateStringList(' INSERT INTO DATABASE_DICTIONARY (TABLENAME, FIELDNAME, TITLE) VALUES ("' + prTable + '", "' + vrStr[vrVez] + '", "' + vrStr[vrVez] + '") '), False);
+        Self.ExecuteScript(CreateStringList(' INSERT INTO DATABASE_DICTIONARY (TABLENAME, FIELDNAME, TITLE) VALUES ("' + prTable + '", "' + vrStr[vrVez] + '", "' + JupiterStringUtilsNormalizeToPresent(vrStr[vrVez]) + '") '), False);
     end;
   finally
     FreeAndNil(vrStr);
@@ -250,6 +252,40 @@ begin
   Result.SQLTransaction := Self.Transaction;
   Result.Close;
   Result.SQL.Clear;
+end;
+
+function TJupiterDatabaseWizard.GetSelectGridFields(prTable: String): String;
+var
+  vrFields : TStrings;
+  vrVez    : Integer;
+begin
+  Result := EmptyStr;
+
+  vrFields := TStringList.Create;
+  try
+    vrFields.Clear;
+
+    Self.Connection.GetFieldNames(prTable, vrFields);
+
+    for vrVez := 0 to vrFields.Count - 1 do
+    begin
+      if vrVez > 0 then
+        Result := Result + ', ';
+
+      if Self.IsForeignKeyField(prTable, vrFields[vrVez]) then
+      begin
+        Result := Result + vrFields[vrVez] + ' AS ' + vrFields[vrVez] + '_ID';
+
+        Result := Result + ', CAST("" AS VARCHAR(100))  AS ' + vrFields[vrVez];
+
+        Continue;
+      end;
+
+      Result := Result + vrFields[vrVez];
+    end;
+  finally
+    FreeAndNil(vrFields);
+  end;
 end;
 
 function TJupiterDatabaseWizard.NewQueryFromReference(

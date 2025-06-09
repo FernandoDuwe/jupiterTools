@@ -62,7 +62,7 @@ var
 
 implementation
 
-uses uJupiterAction, Menus, Clipbrd, Buttons, uJupiterDesktopAppScript;
+uses uJupiterAction, Menus, Clipbrd, Buttons, uJupiterDesktopAppScript, uJupiterDatabaseScript;
 
 {$R *.lfm}
 
@@ -207,7 +207,7 @@ begin
 
       if not (Self.QueryOrigin.Fields[vrVez] is TBooleanField) then
       begin
-        vrReference := JupiterComponentsNewLabel(JupiterStringUtilsNormalizeToPresent(Self.QueryOrigin.Fields[vrVez].DisplayName),
+        vrReference := JupiterComponentsNewLabel(JupiterDatabaseScript_GetDescription(Self.FTableName, Self.QueryOrigin.Fields[vrVez].FieldName),
                                                  TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody);
 
         // Pulando linha

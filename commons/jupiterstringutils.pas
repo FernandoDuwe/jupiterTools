@@ -29,6 +29,8 @@ uses
 
   function jupiterStringUtilsIsSameRootRoute(prRoot, prRoute : String) : Boolean;
 
+  function jupiterStringUtilsStringListToString(prStringList : TStrings; prSeparator : String = ', ') : String;
+
 type
 
   { TJupiterStringReference }
@@ -194,6 +196,21 @@ begin
   end;
 
   Result := (prRoot = Copy(prRoute, 1, Length(prRoot)));
+end;
+
+function jupiterStringUtilsStringListToString(prStringList: TStrings; prSeparator: String): String;
+var
+  vrVez : Integer;
+begin
+  Result := EmptyStr;
+
+  for vrVez := 0 to prStringList.Count - 1 do
+  begin
+    if vrVez > 0 then
+      Result := Result + ', ';
+
+    Result := Result + prStringList[vrVez];
+  end;
 end;
 
 { TJupiterStringReference }

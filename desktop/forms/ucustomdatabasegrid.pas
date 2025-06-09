@@ -32,6 +32,7 @@ type
     procedure edSearchKeyPress(Sender: TObject; var Key: char);
     procedure FormCreate(Sender: TObject);
     procedure InternalDataSourceDataChange(Sender: TObject; Field: TField);
+    procedure InternalQueryCalcFields(DataSet: TDataSet);
     procedure miShowMiniFormClick(Sender: TObject);
     procedure Splitter1Moved(Sender: TObject);
     procedure tmrExecutionTimer(Sender: TObject);
@@ -44,6 +45,8 @@ type
     procedure Internal_PrepareForm; override;
     procedure Internal_UpdateDatasets; override;
     procedure Internal_RenderActions;
+    procedure Internal_SetCalculatedFields;
+    procedure Internal_OnGetText(Sender: TField; var aText: string; DisplayText: Boolean);
 
     procedure Internal_OnNew(Sender: TObject);
     procedure Internal_OnDelete(Sender: TObject);
@@ -95,6 +98,28 @@ procedure TFCustomDatabaseGrid.InternalDataSourceDataChange(Sender: TObject; Fie
 begin
   if pnMiniForm.Visible then
     Self.Internal_RenderMiniForm;
+end;
+
+procedure TFCustomDatabaseGrid.InternalQueryCalcFields(DataSet: TDataSet);
+var
+  vrVez : Integer;
+  vrWizard : TJupiterDatabaseWizard;
+begin
+  vrWizard := vrJupiterApp.NewWizard;
+  try
+    for vrVez := 0 to InternalQuery.Fields.Count - 1 do
+    begin
+      if InternalQuery.Fields[vrVez].FieldKind <> fkCalculated then
+        Continue;
+
+      if InternalQuery.FieldByName(InternalQuery.Fields[vrVez].FieldName + '_ID').IsNull then
+        Continue;
+
+      InternalQuery.Fields[vrVez].AsString := JupiterDatabaseScript_ResolveRecordTable(vrWizard.GetForeignKeyData(Self.FReference.TableName, InternalQuery.Fields[vrVez].FieldName).TableDestinyName, InternalQuery.FieldByName(InternalQuery.Fields[vrVez].FieldName + '_ID').AsInteger);
+    end;
+  finally
+    FreeAndNil(vrWizard);
+  end;
 end;
 
 procedure TFCustomDatabaseGrid.miShowMiniFormClick(Sender: TObject);
@@ -184,7 +209,8 @@ begin
 
   for vrVez := 0 to dbMainGrid.Columns.Count - 1 do
   begin
-    dbMainGrid.Columns[vrVez].Title.Caption := JupiterStringUtilsNormalizeToPresent(dbMainGrid.Columns[vrVez].FieldName);
+    if dbMainGrid.Columns[vrVez].Visible then
+      dbMainGrid.Columns[vrVez].Title.Caption := JupiterDatabaseScript_GetDescription(Self.FReference.TableName, dbMainGrid.Columns[vrVez].FieldName);
 
     if vrCountVisble > 5 then
       dbMainGrid.Columns[vrVez].Width := PercentOfScreen(dbMainGrid.Width, 20)
@@ -281,6 +307,8 @@ begin
 
   vrWizard := vrJupiterApp.NewWizard;
   try
+    vrFields := vrWizard.GetSelectGridFields(Self.FReference.TableName);
+
     if InternalQuery.Active then
       if ((not InternalQuery.EOF) and (not InternalQuery.FieldByName('ID').IsNull)) then
         vrId := InternalQuery.FieldByName('ID').AsInteger;
@@ -309,6 +337,8 @@ begin
     end;
 
     InternalQuery.Open;
+
+    Self.Internal_SetCalculatedFields;
 
     InternalQuery.Last;
     InternalQuery.First;
@@ -339,6 +369,42 @@ end;
 procedure TFCustomDatabaseGrid.Internal_RenderActions;
 begin
   //
+end;
+
+procedure TFCustomDatabaseGrid.Internal_SetCalculatedFields;
+var
+  vrVez : Integer;
+  vrWizard : TJupiterDatabaseWizard;
+begin
+  vrWizard := vrJupiterApp.NewWizard;
+  try
+    for vrVez := 0 to InternalQuery.Fields.Count - 1 do
+      if vrWizard.IsForeignKeyField(Self.FReference.TableName, InternalQuery.Fields[vrVez].FieldName) then
+        InternalQuery.Fields[vrVez].OnGetText := @Internal_OnGetText;
+
+  finally
+    FreeAndNil(vrWizard);
+  end;
+end;
+
+procedure TFCustomDatabaseGrid.Internal_OnGetText(Sender: TField; var aText: string; DisplayText: Boolean);
+var
+  vrWizard : TJupiterDatabaseWizard;
+begin
+  DisplayText := True;
+
+  vrWizard := vrJupiterApp.NewWizard;
+  try
+    if InternalQuery.FieldByName(Sender.FieldName + '_ID').IsNull then
+    begin
+      DisplayText := False;
+      Exit;
+    end;
+
+    aText := JupiterDatabaseScript_ResolveRecordTable(vrWizard.GetForeignKeyData(Self.FReference.TableName, Sender.FieldName).TableDestinyName, InternalQuery.FieldByName(Sender.FieldName + '_ID').AsInteger);
+  finally
+    FreeAndNil(vrWizard);
+  end;
 end;
 
 procedure TFCustomDatabaseGrid.Internal_OnNew(Sender: TObject);
@@ -469,14 +535,14 @@ begin
           vrCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM;
 
           vrForeignKey := vrWizard.GetForeignKeyData(Self.FReference.TableName, dbMainGrid.Columns[vrVez].Field.FieldName);
-
+                                            {
           vrReferenceLink := JupiterComponentsNewLink('Ver mais', TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT + FORM_MARGIN_LEFT), sbMiniForm);
 
           TLabel(vrReferenceLink.Component).OnClick := @Internal_ClickOwnerRecord;
           TLabel(vrReferenceLink.Component).Tag := vrVez;
           TLabel(vrReferenceLink.Component).Hint := 'Acessar o registro pai';
 
-          vrReference := vrReferenceLink;
+          vrReference := vrReferenceLink;    }
         end;
       end
       else

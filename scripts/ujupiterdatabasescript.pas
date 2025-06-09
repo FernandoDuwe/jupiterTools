@@ -30,10 +30,11 @@ type
   function JupiterDatabaseScript_Count(prTable, prWhere : String) : Integer;
   procedure JupiterDatabaseScript_GenerateDatabaseStats;
   function JupiterDatabaseScript_ResolveRecordTable(prTableName : String; prID : Integer) : String;
+  function JupiterDatabaseScript_GetDescription(prTableName, prFieldName : String) : String;
 
 implementation
 
-uses JupiterDataProvider, jupitersqldataprovider;
+uses JupiterDataProvider, jupitersqldataprovider, jupiterStringUtils;
 
 function JupiterDatabaseScript_Exists(prTable, prWhere: String): Boolean;
 var
@@ -152,8 +153,8 @@ var
 begin
   Result := IntToStr(prID);
 
-  vrProvider := FactoryDataProvider(DATAPROVIDER_TYPE_SQL, Format('SELECT * FROM %0:s WHERE ID = %0:d ', [prTableName, prID]), False);
-  vrSolver   := FactoryDataProvider(DATAPROVIDER_TYPE_SQL, Format('SELECT * FROM DATABASE_TABLETITLE WHERE TABLENAME = "%0:s" ', [prTableName, prID]), False);
+  vrProvider := FactoryDataProvider(DATAPROVIDER_TYPE_SQL, Format('SELECT * FROM %0:s WHERE ID = %1:d ', [prTableName, prID]), False);
+  vrSolver   := FactoryDataProvider(DATAPROVIDER_TYPE_SQL, Format('SELECT * FROM DATABASE_TABLETITLE WHERE TABLENAME = "%0:s" ', [prTableName]), False);
   try
     if vrProvider.Count = 0 then
       Exit;
@@ -164,6 +165,23 @@ begin
     Result := vrProvider.GetRowByIndex(0).Fields.ResolveString(vrSolver.GetRowByIndex(0).Fields.VariableById('EXPRESSION').Value);
   finally
     FreeAndNil(vrProvider);
+    FreeAndNil(vrSolver);
+  end;
+end;
+
+function JupiterDatabaseScript_GetDescription(prTableName, prFieldName: String): String;
+var
+  vrSolver : TJupiterDataProvider;
+begin
+  Result := JupiterStringUtilsNormalizeToPresent(prFieldName);
+
+  vrSolver := FactoryDataProvider(DATAPROVIDER_TYPE_SQL, Format('SELECT * FROM DATABASE_DICTIONARY WHERE TABLENAME = "%0:s" AND FIELDNAME = "%1:s" ', [prTableName, prFieldName]), False);
+  try
+    if vrSolver.Count = 0 then
+      Exit;
+
+    Result := vrSolver.GetRowByIndex(0).Fields.ResolveString(vrSolver.GetRowByIndex(0).Fields.VariableById('TITLE').Value);
+  finally
     FreeAndNil(vrSolver);
   end;
 end;
