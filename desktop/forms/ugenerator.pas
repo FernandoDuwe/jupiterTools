@@ -50,7 +50,7 @@ begin
   if not Assigned(lvTables.Selected) then
     Exit;
 
-  JupiterAppDesktopOpenGridFromTable(lvTables.Selected.Caption);
+  JupiterAppDesktopOpenGridFromTable(TrimRight(lvTables.Selected.Caption));
 end;
 
 procedure TFGenerator.Internal_OnAboutClick(Sender: TObject);

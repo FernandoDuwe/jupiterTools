@@ -139,7 +139,7 @@ begin
 
     vrReference := JupiterComponentsNewLabel(vrAction.Hint, TJupiterPosition.Create(Self.FCurrentLine, FORM_MARGIN_LEFT + FORM_MARGIN_LEFT), sbShortcut);
 
-    Self.FCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM_TONEXT;
+    Self.FCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM_TONEXT + 10;
   end;
 end;
 

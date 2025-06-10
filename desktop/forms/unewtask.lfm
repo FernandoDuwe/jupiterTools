@@ -6,6 +6,8 @@ inherited FNewTask: TFNewTask
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   inherited fpOptions: TFlowPanel
+    Height = 0
+    Top = 376
     TabOrder = 3
   end
   object tvTreeMenu: TTreeView[3]
