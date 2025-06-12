@@ -78,6 +78,9 @@ begin
     if not vrWizard.TableExists('DATABASE_TABLETITLE') then
       vrWizard.ExecuteScript(CreateStringList('CREATE TABLE DATABASE_TABLETITLE ( ID INTEGER PRIMARY KEY, TABLENAME VARCHAR(100), EXPRESSION VARCHAR(200))'));
 
+    // Tarefas
+    if not vrWizard.TableExists('PERIODIC_TASK') then
+      vrWizard.ExecuteScript(CreateStringList('CREATE TABLE PERIODIC_TASK ( ID INTEGER PRIMARY KEY, MACRO INTEGER, PARAMS VARCHAR(100), MINUTE INT, FOREIGN KEY (MACRO) REFERENCES MACROS (ID))'));
 
     if Self.Internal_CreateMacroIfDontExists('menu.newTab.click', 'Clique do botão Nova aba', CreateStringList('program macro;' + #13#10 + 'begin' + #13#10 + '  OpenForm(''/forms/newTask'');' + #13#10 + 'end.')) then
       Self.Internal_CreateRouteIfDontExists(EmptyStr, '/menu/newTab/', vrWizard.GetLastID('MACROS'), ICON_ADD, 100);
@@ -197,6 +200,9 @@ begin
 
     if Self.Internal_CreateMacroIfDontExists('menu.tools.systemMonitor.click', 'Clique do botão Monitor de aplicação', CreateStringListToMacro('OpenForm(''/forms/system'');')) then
       Self.Internal_CreateRouteIfDontExists('Monitor de aplicação', '/menu/tools/systemMonitor/', vrWizard.GetLastID('MACROS'), ICON_TOOLS, 100);
+
+    if Self.Internal_CreateMacroIfDontExists('menu.tools.periodicTasks.click', 'Clique do botão Tarefas periódicas', CreateStringListToMacro('OpenGridFromTable(''PERIODIC_TASK'');')) then
+      Self.Internal_CreateRouteIfDontExists('Tarefas periódicas', '/menu/tools/periodicTasks/', vrWizard.GetLastID('MACROS'), ICON_ENDTIME, 10000);
 
     Self.Internal_CreateMacroIfDontExists('MACROS.AbrirScript.OnClick', 'Abrir script no editor', CreateStringListToMacro('   OpenFormWithParams(''/forms/script'', GetParam(SCRIPTID, ''ID''));'));
 

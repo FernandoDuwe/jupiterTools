@@ -17,11 +17,12 @@ type
 
   TJupiterDesktopApp = class(TJupiterApp)
   private
-    FFormRoutes   : TJupiterObjectList;
-    FImageList    : TImageList;
-    FFormList     : TJupiterObjectList;
-    FShortcutList : TJupiterObjectList;
-    FRouteList    : TJupiterObjectList;
+    FFormRoutes    : TJupiterObjectList;
+    FImageList     : TImageList;
+    FFormList      : TJupiterObjectList;
+    FShortcutList  : TJupiterObjectList;
+    FRouteList     : TJupiterObjectList;
+    FPeriodicTasks : TJupiterObjectList;
   protected
     procedure Internal_AddScriptLibraries(var prScript : TJupiterScript); override;
 
@@ -55,13 +56,17 @@ type
 
     procedure GenerateDynamicData;
 
+    // Periodic tasks
+    procedure CreatePeriodicTasksList;
+    procedure ExecutePeriodicTasks;
+
     constructor Create(prAppID, prAppName : String); override;
     destructor Destroy; override;
   end;
 
 implementation
 
-uses uJupiterForm, uMain, uJupiterDesktopAppScript, SQLDB, Graphics, LCLProc;
+uses uJupiterForm, uMain, uJupiterDesktopAppScript, SQLDB, Graphics, LCLProc, DateUtils;
 
 { TJupiterDesktopApp }
 
@@ -392,16 +397,69 @@ begin
   Self.RunMacro(TRIGGER_ONLOADDYNAMICDATA, TJupiterVariableList.Create);
 end;
 
+procedure TJupiterDesktopApp.CreatePeriodicTasksList;
+var
+  vrQry : TSQLQuery;
+  vrWizard : TJupiterDatabaseWizard;
+  vrVariables : TJupiterVariableList;
+begin
+  vrWizard := Self.NewWizard;
+  vrQry    := vrWizard.NewQuery;
+  try
+    vrQry.SQL.Add(' SELECT ID, MACRO, PARAMS, MINUTE FROM PERIODIC_TASK ORDER BY MINUTE ');
+    vrQry.Open;
+    vrQry.First;
+
+    while not vrQry.EOF do
+    begin
+      vrVariables := TJupiterVariableList.Create;
+      vrVariables.AddVariable('MACRO', vrQry.FieldByName('MACRO').AsString);
+      vrVariables.AddVariable('PARAMS', vrQry.FieldByName('PARAMS').AsString);
+      vrVariables.AddVariable('MINUTE', vrQry.FieldByName('MINUTE').AsString);
+
+      Self.FPeriodicTasks.Add(vrVariables);
+
+      vrQry.Next;
+    end;
+  finally
+    FreeAndNil(vrWizard);
+    FreeAndNil(vrQry);
+  end;
+end;
+
+procedure TJupiterDesktopApp.ExecutePeriodicTasks;
+var
+  vrVez  : Integer;
+begin
+  if Self.FPeriodicTasks.IsEmpty then
+    Self.CreatePeriodicTasksList;
+
+  for vrVez := 0 to Self.FPeriodicTasks.Count - 1 do
+    with TJupiterVariableList(Self.FPeriodicTasks.GetAtIndex(vrVez)) do
+    begin
+      if Exists('LAST_EXECUTION') then
+      begin
+        if MinutesBetween(VariableById('LAST_EXECUTION').AsDateTIme, Now) < VariableById('MINUTE').AsInteger then
+          Continue;
+      end
+      else
+        AddVariable('LAST_EXECUTION', EmptyStr);
+
+      Self.RunMacro(VariableById('MACRO').AsInteger, CreateVariableListOfParam(VariableById('PARAMS').Value));
+
+      VariableById('LAST_EXECUTION').Value := FormatDateTime(FORMAT_DATETIME, Now);
+    end;
+end;
+
 constructor TJupiterDesktopApp.Create(prAppID, prAppName: String);
 begin
   inherited Create(prAppID, prAppName);
 
-  Self.FFormRoutes := TJupiterObjectList.Create;
-
-  Self.FFormList := TJupiterObjectList.Create;
-
-  Self.FShortcutList := TJupiterObjectList.Create;
-  Self.FRouteList := TJupiterObjectList.Create;
+  Self.FFormRoutes    := TJupiterObjectList.Create;
+  Self.FFormList      := TJupiterObjectList.Create;
+  Self.FShortcutList  := TJupiterObjectList.Create;
+  Self.FRouteList     := TJupiterObjectList.Create;
+  Self.FPeriodicTasks := TJupiterObjectList.Create;
 end;
 
 destructor TJupiterDesktopApp.Destroy;
@@ -410,6 +468,7 @@ begin
   FreeAndNil(Self.FFormList);
   FreeAndNil(Self.FShortcutList);
   FreeAndNil(Self.FRouteList);
+  FreeAndNil(Self.FPeriodicTasks);
 
   inherited Destroy;
 end;

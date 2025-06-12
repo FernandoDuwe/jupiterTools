@@ -291,6 +291,9 @@ begin
     if vrJupiterApp.Params.Exists(TRIGGER_ONUPDATE) then
       if vrJupiterApp.Params.VariableById(TRIGGER_ONUPDATE).Value <> '' then
         vrJupiterApp.RunMacroNoMessage(vrJupiterApp.Params.VariableById(TRIGGER_ONUPDATE).Value, TJupiterVariableList.Create);
+
+  if not vrJupiterApp.SecureMode then
+    TJupiterDesktopApp(vrJupiterApp).ExecutePeriodicTasks;
 end;
 
 procedure TFMain.Internal_CreatePopMenuTab;

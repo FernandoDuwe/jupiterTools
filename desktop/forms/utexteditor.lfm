@@ -1,10 +1,10 @@
 inherited FTextEditor: TFTextEditor
-  Left = 567
-  Top = 510
+  Left = 610
+  Top = 316
   OnClose = FormClose
   inline seEditor: TSynEdit[3]
     Left = 0
-    Height = 331
+    Height = 330
     Top = 45
     Width = 879
     Align = alClient
@@ -15,7 +15,7 @@ inherited FTextEditor: TFTextEditor
     ParentColor = False
     ParentFont = False
     TabOrder = 3
-    Gutter.Width = 53
+    Gutter.Width = 57
     Gutter.MouseActions = <>
     RightGutter.Width = 0
     RightGutter.MouseActions = <>
@@ -472,7 +472,7 @@ inherited FTextEditor: TFTextEditor
         MouseActions = <>
       end
       object SynGutterLineNumber1: TSynGutterLineNumber
-        Width = 13
+        Width = 17
         MouseActions = <>
         MarkupInfo.Background = clBtnFace
         MarkupInfo.Foreground = clNone

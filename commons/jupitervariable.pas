@@ -55,6 +55,7 @@ type
     function AsDouble : Double;
     function IsEmpty : Boolean;
     function AsBool : Boolean;
+    function AsDateTIme : TDateTime;
 
     procedure AsList(var prList : TStrings); virtual;
   end;
@@ -186,6 +187,19 @@ end;
 function TJupiterVariable.AsBool: Boolean;
 begin
   Result := Self.Value = BOOL_TRUE_STR;
+end;
+
+function TJupiterVariable.AsDateTIme: TDateTime;
+var
+  vrFS: TFormatSettings;
+begin
+  vrFS := DefaultFormatSettings;
+  vrFS.DateSeparator := '/';
+  vrFS.TimeSeparator := ':';
+  vrFS.ShortDateFormat := 'dd/mm/yyyy';
+  vrFS.LongTimeFormat := 'hh:nn:ss';
+
+  Result := StrToDateTime(Self.Value, vrFS);
 end;
 
 procedure TJupiterVariable.AsList(var prList: TStrings);
