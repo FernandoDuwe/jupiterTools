@@ -9,6 +9,8 @@ inherited FMultiLevelTextEditor: TFMultiLevelTextEditor
     ClientWidth = 664
   end
   inherited fpOptions: TFlowPanel
+    Height = 0
+    Top = 376
     Width = 664
   end
   inherited pnBottom: TPanel
@@ -17,7 +19,7 @@ inherited FMultiLevelTextEditor: TFMultiLevelTextEditor
   end
   object tvText: TTreeView[3]
     Left = 0
-    Height = 330
+    Height = 331
     Top = 45
     Width = 664
     Align = alClient

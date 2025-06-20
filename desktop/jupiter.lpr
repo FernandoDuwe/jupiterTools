@@ -27,9 +27,10 @@ uses
   uJupiterRunnableScript, jupiterTools, uJupiterDataProviderScript,
   uSystemMonitor, uCustomCodeForm, uJupiterFormDesktopAppScript, uFileExplorer,
   jupitersqldataprovider, jupiterthread, uContextMenu, uSQLEditor, uCheckList,
-  uTextEditor, uJupiterDateUtilsScript, uChartViewer, 
-uJupiterCheckListUtilsScript, uWaitForm, uCodeRunner, uFileFinder, 
-uFileReaderFinder, jupiterScriptList, uconsole, uExternalSQLEditor;
+  uTextEditor, uJupiterDateUtilsScript, uChartViewer,
+  uJupiterCheckListUtilsScript, uWaitForm, uCodeRunner, uFileFinder,
+  uFileReaderFinder, jupiterScriptList, uconsole, uExternalSQLEditor,
+  uMultiLevelTextEditor;
 
 {$R *.res}
 
@@ -72,6 +73,7 @@ begin
     FormRoutes.Add(TJupiterFormRoute.Create(SQLEXTEDITOR_PATH, TFExternalSQLEditor));
     FormRoutes.Add(TJupiterFormRoute.Create(CHECKLIST_PATH, TFCheckList));
     FormRoutes.Add(TJupiterFormRoute.Create(TEXTEDITOR_PATH, TFTextEditor));
+    FormRoutes.Add(TJupiterFormRoute.Create(MULTILEVELTEXTEDITOR_PATH, TFMultiLevelTextEditor));
     FormRoutes.Add(TJupiterFormRoute.Create(CHARTVIEWER_PATH, TFChartViewer));
     FormRoutes.Add(TJupiterFormRoute.Create(CODERUNNER_PATH, TFCodeRunner));
     FormRoutes.Add(TJupiterFormRoute.Create(FILEFINDER_PATH, TFFileFinder));

@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, ActnList,
   StdCtrls, ExtCtrls, uJupiterForm, JupiterConsts, JupiterObject,
-  jupiterStringUtils, uJupiterAction, Clipbrd;
+  jupiterStringUtils, uJupiterAction, uMain, Clipbrd;
 
 type
 
@@ -201,6 +201,12 @@ begin
 
       vrNode.Data := TJupiterObject.Create;
       TJupiterObject(vrNode.Data).Tag := StrToInt(JupiterStringUtilsGetCSVColumn(vrStr[vrVez], 0));
+
+      if JupiterStringUtilsGetCSVColumn(vrStr[vrVez], 3) <> EmptyStr then
+      begin
+        vrNode.ImageIndex := StrToInt(JupiterStringUtilsGetCSVColumn(vrStr[vrVez], 3));
+        vrNode.SelectedIndex := StrToInt(JupiterStringUtilsGetCSVColumn(vrStr[vrVez], 3));
+      end;
     end;
   finally
     FreeAndNil(vrStr);
@@ -210,6 +216,8 @@ end;
 procedure TFMultiLevelTextEditor.Internal_PrepareForm;
 begin
   inherited Internal_PrepareForm;
+
+  tvText.Images := FMain.ilIconFamily;
 
   Self.ActionGroup.AddAction(TJupiterAction.Create('Salvar', 'Clique aqui para abrir salvar o arquivo', ICON_SAVE, @Internal_OnSave));
   Self.ActionGroup.AddAction(TJupiterAction.Create('Aumentar fonte', 'Clique aqui para aumentar a fonte', ICON_CURTASK, @Internal_OnAumentarFonte));
@@ -253,7 +261,10 @@ begin
       else
         vrLine := vrLine + ';';
 
-      vrLine := vrLine + tvText.Items[vrVez].Text + ';;';
+      if tvText.Items[vrVez].ImageIndex = NULL_KEY then
+        vrLine := vrLine + tvText.Items[vrVez].Text + ';;'
+      else
+        vrLine := vrLine + tvText.Items[vrVez].Text + ';' + IntToStr(tvText.Items[vrVez].ImageIndex) + ';';
 
       vrStr.Add(vrLine);
     end;

@@ -20,7 +20,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="3"/>
       <RevisionNr Value="1"/>
-      <BuildNr Value="151"/>
+      <BuildNr Value="154"/>
       <Language Value="0416"/>
       <CharSet Value="04E2"/>
       <StringTable CompanyName="Jupiter" FileDescription="Jupiter interface" ProductName="Jupiter"/>
@@ -473,6 +473,14 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uExternalSQLEditor"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms/umultileveltexteditor.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FMultiLevelTextEditor"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uMultiLevelTextEditor"/>
       </Unit>
     </Units>
   </ProjectOptions>
