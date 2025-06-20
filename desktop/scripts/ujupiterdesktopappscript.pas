@@ -38,6 +38,7 @@ type
   procedure JupiterAppDesktopOpenFileExplorerForm(prPath : String);
   procedure JupiterAppDesktopOpenCheckListExplorerForm(prPath : String);
   procedure JupiterAppDesktopOpenTextEditorForm(prPath : String);
+  procedure JupiterAppDesktopOpenMultiLevelTextEditorForm(prPath : String);
   procedure JupiterAppDesktopOpenSQLExternalEditor(prConnectionType, prDatabase, prHostName, prUserName, prPassword : String);
   procedure JupiterAppDesktopCloseForm(prFormID : String);
   procedure JupiterAppDesktopUpdateForms;
@@ -226,6 +227,20 @@ begin
   end;
 end;
 
+procedure JupiterAppDesktopOpenMultiLevelTextEditorForm(prPath: String);
+var
+  vrVariables : TJupiterVariableList;
+begin
+  vrVariables := TJupiterVariableList.Create;
+  try
+    vrVariables.AddVariable('path', prPath, 'path');
+
+    TJupiterDesktopApp(vrJupiterApp).OpenForm(MULTILEVELTEXTEDITOR_PATH, vrVariables);
+  finally
+    FreeAndNil(vrVariables);
+  end;
+end;
+
 procedure JupiterAppDesktopOpenSQLExternalEditor(prConnectionType, prDatabase, prHostName, prUserName, prPassword: String);
 var
   vrForm : TForm;
@@ -344,6 +359,7 @@ begin
   prSender.AddFunction(@JupiterAppDesktopOpenFileReaderFinderForm, 'procedure OpenFileReaderFinderForm(prPath : String);');
   prSender.AddFunction(@JupiterAppDesktopOpenCheckListExplorerForm, 'procedure OpenCheckListExplorerForm(prPath : String);');
   prSender.AddFunction(@JupiterAppDesktopOpenTextEditorForm, 'procedure OpenTextEditorForm(prPath : String);');
+  prSender.AddFunction(@JupiterAppDesktopOpenMultiLevelTextEditorForm, 'procedure OpenMultiLevelTextEditorForm(prPath : String);');
   prSender.AddFunction(@JupiterAppDesktopCloseForm, 'procedure CloseForm(prFormID : String);');
   prSender.AddFunction(@JupiterAppDesktopSetAppMessage, 'procedure SetAppMessage(prMessage : String);');
   prSender.AddFunction(@JupiterAppDesktopOpenSQLExternalEditor, 'procedure OpenFormSQLExternalEditor(prConnectionType, prDatabase, prHostName, prUserName, prPassword : String);');
@@ -384,6 +400,7 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenFileReaderFinderForm(prPath: String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenCheckListExplorerForm(prPath: String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenTextEditorForm(prPath: String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenMultiLevelTextEditorForm(prPath: String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CloseForm(prFormID: String) : String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure SetAppMessage(prMessage: String) : String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenFormSQLExternalEditor(prConnectionType, prDatabase, prHostName, prUserName, prPassword : String);'));

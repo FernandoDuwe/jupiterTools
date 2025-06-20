@@ -25,6 +25,7 @@ const
    SQLEDITOR_PATH : String = '/forms/sqlEditor';
    SQLEXTEDITOR_PATH : String = '/forms/sqlEditor/external';
    TEXTEDITOR_PATH : String = '/forms/textEditor';
+   MULTILEVELTEXTEDITOR_PATH : String = '/forms/multiLevelEditor/';
    TEXTSOLVER_PATH : String = '/forms/textSolver';
    CODERUNNER_PATH : String = '/forms/codeRunner';
    CONSOLE_PATH : String = '/forms/console';

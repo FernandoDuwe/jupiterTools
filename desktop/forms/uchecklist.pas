@@ -25,6 +25,8 @@ type
 
      procedure Internal_OnMarkAllClick(Sender: TObject);
      procedure Internal_OnUnMarkAllClick(Sender: TObject);
+     procedure Internal_OnAumentarFonte(Sender: TObject);
+     procedure Internal_OnDiminuirFonte(Sender: TObject);
   public
 
   end;
@@ -76,6 +78,9 @@ end;
 procedure TFCheckList.Internal_PrepareForm;
 begin
   inherited Internal_PrepareForm;
+
+  Self.ActionGroup.AddAction(TJupiterAction.Create('Aumentar fonte', 'Clique aqui para aumentar a fonte', ICON_CURTASK, @Internal_OnAumentarFonte));
+  Self.ActionGroup.AddAction(TJupiterAction.Create('Diminuir fonte', 'Clique aqui para diminuir a fonte', ICON_CURTASK, @Internal_OnDiminuirFonte));
 
   Self.ActionGroup.AddAction(TJupiterAction.Create('Marcar todos', 'Clique aqui para criar marcar todas as caixas', ICON_CHECK, @Internal_OnMarkAllClick));
   Self.ActionGroup.AddAction(TJupiterAction.Create('Desmarcar todos', 'Clique aqui para criar desmarcar todas as caixas', NULL_KEY, @Internal_OnUnMarkAllClick));
@@ -150,6 +155,16 @@ begin
     cbList.Checked[vrVez] := False;
 
   cbListClickCheck(Sender);
+end;
+
+procedure TFCheckList.Internal_OnAumentarFonte(Sender: TObject);
+begin
+  cbList.Font.Size := cbList.Font.Size + 1;
+end;
+
+procedure TFCheckList.Internal_OnDiminuirFonte(Sender: TObject);
+begin
+  cbList.Font.Size := cbList.Font.Size - 1;
 end;
 
 end.

@@ -3,7 +3,6 @@ object FJupiterForm: TFJupiterForm
   Height = 457
   Top = 308
   Width = 879
-  Caption = 'Threads'
   ClientHeight = 457
   ClientWidth = 879
   OnActivate = FormActivate

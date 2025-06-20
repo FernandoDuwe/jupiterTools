@@ -1,6 +1,7 @@
 inherited FCustomDatabaseGrid: TFCustomDatabaseGrid
   Left = 585
   Top = 331
+  Caption = ''
   OnCreate = FormCreate
   inherited pnSearchBar: TPanel
     Top = 1

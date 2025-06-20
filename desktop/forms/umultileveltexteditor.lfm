@@ -1,0 +1,57 @@
+inherited FMultiLevelTextEditor: TFMultiLevelTextEditor
+  Left = 951
+  Top = 414
+  Width = 664
+  Caption = 'Threads'
+  ClientWidth = 664
+  inherited pnSearchBar: TPanel
+    Width = 664
+    ClientWidth = 664
+  end
+  inherited fpOptions: TFlowPanel
+    Width = 664
+  end
+  inherited pnBottom: TPanel
+    Width = 664
+    ClientWidth = 664
+  end
+  object tvText: TTreeView[3]
+    Left = 0
+    Height = 330
+    Top = 45
+    Width = 664
+    Align = alClient
+    DragMode = dmAutomatic
+    TabOrder = 3
+    OnChange = tvTextChange
+    OnDragDrop = tvTextDragDrop
+    OnDragOver = tvTextDragOver
+    OnStartDrag = tvTextStartDrag
+  end
+  inherited acOptions: TActionList[4]
+    object acNewLine: TAction[3]
+      Caption = 'acNewLine'
+      OnExecute = acNewLineExecute
+      ShortCut = 13
+    end
+    object acNewChildLine: TAction[4]
+      Caption = 'acNewChildLine'
+      OnExecute = acNewChildLineExecute
+      ShortCut = 16397
+    end
+    object acDelete: TAction[5]
+      Caption = 'acDelete'
+      OnExecute = acDeleteExecute
+      ShortCut = 46
+    end
+    object acCtrlC: TAction[6]
+      Caption = 'acCtrlC'
+      OnExecute = acCtrlCExecute
+      ShortCut = 16451
+    end
+  end
+  inherited tmrAutoUpdater: TTimer[5]
+  end
+  inherited pmOptions: TPopupMenu[6]
+  end
+end
