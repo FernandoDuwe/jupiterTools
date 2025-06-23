@@ -1,36 +1,92 @@
 inherited FMultiLevelTextEditor: TFMultiLevelTextEditor
-  Left = 951
-  Top = 414
-  Width = 664
+  Left = 528
+  Height = 727
+  Top = 258
+  Width = 1285
   Caption = 'Threads'
-  ClientWidth = 664
+  ClientHeight = 727
+  ClientWidth = 1285
   inherited pnSearchBar: TPanel
-    Width = 664
-    ClientWidth = 664
+    Width = 1285
+    ClientWidth = 1285
   end
   inherited fpOptions: TFlowPanel
-    Height = 0
-    Top = 376
-    Width = 664
+    Top = 645
+    Width = 1285
   end
   inherited pnBottom: TPanel
-    Width = 664
-    ClientWidth = 664
+    Top = 646
+    Width = 1285
+    ClientWidth = 1285
   end
-  object tvText: TTreeView[3]
+  object pcLeft: TPageControl[3]
     Left = 0
-    Height = 331
+    Height = 600
     Top = 45
-    Width = 664
-    Align = alClient
-    DragMode = dmAutomatic
+    Width = 648
+    ActivePage = tsFile
+    Align = alLeft
+    TabIndex = 0
     TabOrder = 3
-    OnChange = tvTextChange
-    OnDragDrop = tvTextDragDrop
-    OnDragOver = tvTextDragOver
-    OnStartDrag = tvTextStartDrag
+    object tsFile: TTabSheet
+      Caption = 'Arquivo'
+      ClientHeight = 569
+      ClientWidth = 638
+      object tvText: TTreeView
+        Left = 0
+        Height = 569
+        Top = 0
+        Width = 638
+        Align = alClient
+        DragMode = dmAutomatic
+        TabOrder = 0
+        OnChange = tvTextChange
+        OnDragDrop = tvTextDragDrop
+        OnDragOver = tvTextDragOver
+        OnSelectionChanged = tvTextSelectionChanged
+        OnStartDrag = tvTextStartDrag
+      end
+    end
   end
-  inherited acOptions: TActionList[4]
+  object Splitter1: TSplitter[4]
+    Left = 648
+    Height = 600
+    Top = 45
+    Width = 5
+    OnMoved = Splitter1Moved
+  end
+  object pcBody: TPageControl[5]
+    Left = 653
+    Height = 600
+    Top = 45
+    Width = 632
+    ActivePage = tsExplorer
+    Align = alClient
+    TabIndex = 0
+    TabOrder = 5
+    object tsExplorer: TTabSheet
+      Caption = 'Explorer'
+      ClientHeight = 569
+      ClientWidth = 622
+      object lvReport: TListView
+        Left = 0
+        Height = 569
+        Top = 0
+        Width = 622
+        Align = alClient
+        Columns = <        
+          item
+            AutoSize = True
+            Caption = 'Item'
+            Width = 607
+          end>
+        ReadOnly = True
+        TabOrder = 0
+        ViewStyle = vsReport
+      end
+    end
+  end
+  inherited acOptions: TActionList[6]
     object acNewLine: TAction[3]
       Caption = 'acNewLine'
       OnExecute = acNewLineExecute
@@ -52,8 +108,8 @@ inherited FMultiLevelTextEditor: TFMultiLevelTextEditor
       ShortCut = 16451
     end
   end
-  inherited tmrAutoUpdater: TTimer[5]
+  inherited tmrAutoUpdater: TTimer[7]
   end
-  inherited pmOptions: TPopupMenu[6]
+  inherited pmOptions: TPopupMenu[8]
   end
 end
