@@ -11,7 +11,8 @@ inherited FMultiLevelTextEditor: TFMultiLevelTextEditor
     ClientWidth = 1285
   end
   inherited fpOptions: TFlowPanel
-    Top = 645
+    Height = 0
+    Top = 646
     Width = 1285
   end
   inherited pnBottom: TPanel
@@ -19,72 +20,103 @@ inherited FMultiLevelTextEditor: TFMultiLevelTextEditor
     Width = 1285
     ClientWidth = 1285
   end
-  object pcLeft: TPageControl[3]
+  object pcBody: TPageControl[3]
     Left = 0
-    Height = 600
+    Height = 601
     Top = 45
-    Width = 648
-    ActivePage = tsFile
+    Width = 632
+    ActivePage = tsDetails
     Align = alLeft
     TabIndex = 0
     TabOrder = 3
-    object tsFile: TTabSheet
-      Caption = 'Arquivo'
-      ClientHeight = 569
-      ClientWidth = 638
-      object tvText: TTreeView
+    object tsDetails: TTabSheet
+      Caption = 'Totais'
+      ClientHeight = 573
+      ClientWidth = 624
+      object vlParams: TValueListEditor
         Left = 0
-        Height = 569
+        Height = 573
         Top = 0
-        Width = 638
+        Width = 624
         Align = alClient
-        DragMode = dmAutomatic
+        FixedCols = 0
+        RowCount = 4
         TabOrder = 0
-        OnChange = tvTextChange
-        OnDragDrop = tvTextDragDrop
-        OnDragOver = tvTextDragOver
-        OnSelectionChanged = tvTextSelectionChanged
-        OnStartDrag = tvTextStartDrag
+        TitleStyle = tsNative
+        Strings.Strings = (
+          'Itens='
+          'Itens com subitens='
+          'Subitens='
+        )
+        TitleCaptions.Strings = (
+          'Descrição'
+          'Valor'
+        )
+        ColWidths = (
+          64
+          556
+        )
       end
     end
-  end
-  object Splitter1: TSplitter[4]
-    Left = 648
-    Height = 600
-    Top = 45
-    Width = 5
-    OnMoved = Splitter1Moved
-  end
-  object pcBody: TPageControl[5]
-    Left = 653
-    Height = 600
-    Top = 45
-    Width = 632
-    ActivePage = tsExplorer
-    Align = alClient
-    TabIndex = 0
-    TabOrder = 5
     object tsExplorer: TTabSheet
-      Caption = 'Explorer'
-      ClientHeight = 569
-      ClientWidth = 622
+      Caption = 'Itens'
+      ClientHeight = 573
+      ClientWidth = 624
       object lvReport: TListView
         Left = 0
-        Height = 569
+        Height = 573
         Top = 0
-        Width = 622
+        Width = 624
         Align = alClient
         Columns = <        
           item
             AutoSize = True
             Caption = 'Item'
-            Width = 607
+            Width = 39
           end>
         ReadOnly = True
         TabOrder = 0
         ViewStyle = vsReport
       end
     end
+    object tsText: TTabSheet
+      Caption = 'Texto'
+      ClientHeight = 573
+      ClientWidth = 624
+      object mmText: TMemo
+        Left = 0
+        Height = 573
+        Top = 0
+        Width = 624
+        Align = alClient
+        Lines.Strings = (
+          'mmText'
+        )
+        ReadOnly = True
+        TabOrder = 0
+      end
+    end
+  end
+  object Splitter1: TSplitter[4]
+    Left = 632
+    Height = 601
+    Top = 45
+    Width = 5
+    OnMoved = Splitter1Moved
+  end
+  object tvText: TTreeView[5]
+    Left = 637
+    Height = 601
+    Top = 45
+    Width = 648
+    Align = alClient
+    DragMode = dmAutomatic
+    TabOrder = 5
+    OnChange = tvTextChange
+    OnDragDrop = tvTextDragDrop
+    OnDragOver = tvTextDragOver
+    OnSelectionChanged = tvTextSelectionChanged
+    OnStartDrag = tvTextStartDrag
   end
   inherited acOptions: TActionList[6]
     object acNewLine: TAction[3]

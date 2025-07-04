@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, ActnList,
   StdCtrls, ExtCtrls, uJupiterForm, JupiterConsts, JupiterObject,
   jupiterStringUtils, jupiterformutils, JupiterApp, uJupiterAction,
-  jupiterDesktopApp, uMain, Clipbrd;
+  jupiterDesktopApp, uMain, Clipbrd, ValEdit, jupiterformcomponenttils;
 
 type
 
@@ -20,12 +20,14 @@ type
     acDelete: TAction;
     acCtrlC: TAction;
     lvReport: TListView;
+    mmText: TMemo;
     pcBody: TPageControl;
-    pcLeft: TPageControl;
     Splitter1: TSplitter;
-    tsFile: TTabSheet;
+    tsText: TTabSheet;
+    tsDetails: TTabSheet;
     tsExplorer: TTabSheet;
     tvText: TTreeView;
+    vlParams: TValueListEditor;
     procedure acCtrlCExecute(Sender: TObject);
     procedure acDeleteExecute(Sender: TObject);
     procedure acNewChildLineExecute(Sender: TObject);
@@ -254,22 +256,57 @@ procedure TFMultiLevelTextEditor.Internal_BuildDetails;
 var
   vrItem : TListItem;
   vrVez  : Integer;
+  vrReference : TJupiterComponentReference;
+  vrSubItens : Integer;
+  vrItensSubItens : Integer;
 begin
+  vrSubItens := 0;
+  vrItensSubItens := 0;
+
+  mmText.Lines.Clear;
+
+  mmText.Lines.Add('Selecionado:');
+  mmText.Lines.Add(tvText.Selected.Text);
+
+  mmText.Lines.Add(EmptyStr);
+  mmText.Lines.Add('Itens:');
+
   for vrVez := 0 to tvText.Selected.Count - 1 do
   begin
     vrItem         := lvReport.Items.Add;
     vrItem.Caption := tvText.Selected.Items[vrVez].Text;
 
+    if tvText.Selected.Items[vrVez].Count > 0 then
+    begin
+      vrSubItens := vrSubItens + tvText.Selected.Items[vrVez].Count;
+      vrItensSubItens := vrItensSubItens + 1;
+
+      vrItem.Caption := vrItem.Caption + ' (' + IntToStr(tvText.Selected.Items[vrVez].Count) + ')';
+
+      if tvText.Selected.Items[vrVez].Count > 1 then
+        mmText.Lines.Add('   ' + tvText.Selected.Items[vrVez].Text + ' (' + IntToStr(tvText.Selected.Items[vrVez].Count) + ' itens)')
+      else
+        mmText.Lines.Add('   ' + tvText.Selected.Items[vrVez].Text + ' (' + IntToStr(tvText.Selected.Items[vrVez].Count) + ' item)');
+    end
+    else
+      mmText.Lines.Add('   ' + tvText.Selected.Items[vrVez].Text);
+
     if tvText.Selected.Items[vrVez].ImageIndex > NULL_KEY then
       vrItem.ImageIndex := tvText.Selected.Items[vrVez].ImageIndex;
   end;
+
+  vlParams.Values['Itens'] := IntToStr(tvText.Selected.Count);
+  vlParams.Values['Itens com subitens'] := IntToStr(vrItensSubItens);
+  vlParams.Values['Subitens'] := IntToStr(vrSubItens);
 end;
 
 procedure TFMultiLevelTextEditor.Internal_UpdateComponents;
 begin
   inherited Internal_UpdateComponents;
 
-  pcLeft.Width := PercentOfScreen(Self.Width, Self.PercentDivisor);
+  pcBody.Width := PercentOfScreen(Self.Width, Self.PercentDivisor);
+
+  vlParams.DefaultColWidth := PercentOfScreen(vlParams.Width, 50);
 end;
 
 procedure TFMultiLevelTextEditor.Internal_UpdateCalcs;
@@ -278,14 +315,10 @@ var
 begin
   inherited Internal_UpdateCalcs;
 
-  tsExplorer.Caption := EmptyStr;
-
   lvReport.Items.Clear;
 
   if not Assigned(tvText.Selected) then
     Exit;
-
-  tsExplorer.Caption := tvText.Selected.Text + ' (' + IntToStr(tvText.Selected.Count) + ')';
 
   Self.Internal_BuildDetails;
 end;
@@ -293,8 +326,6 @@ end;
 procedure TFMultiLevelTextEditor.Internal_PrepareForm;
 begin
   inherited Internal_PrepareForm;
-
-  Self.PercentDivisor := 50;
 
   tvText.Images       := TJupiterDesktopApp(vrJupiterApp).ImageList;
   lvReport.LargeImages := TJupiterDesktopApp(vrJupiterApp).ImageList;
@@ -307,8 +338,6 @@ begin
   Self.Hint := 'Para pular linhas, pressione Enter. Para criar um subitem, pressione Ctrl + Enter. Para apagar uma linha, pressione delete';
 
   Self.Caption := ExtractFileName(Self.Params.VariableById('path').Value);
-
-  tsFile.Caption := Self.Caption;
 
   Self.Internal_BuildTree;
 
