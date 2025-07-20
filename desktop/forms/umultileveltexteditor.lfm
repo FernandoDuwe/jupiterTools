@@ -1,7 +1,7 @@
 inherited FMultiLevelTextEditor: TFMultiLevelTextEditor
-  Left = 528
+  Left = 576
   Height = 727
-  Top = 258
+  Top = 237
   Width = 1285
   Caption = 'Threads'
   ClientHeight = 727
@@ -11,8 +11,7 @@ inherited FMultiLevelTextEditor: TFMultiLevelTextEditor
     ClientWidth = 1285
   end
   inherited fpOptions: TFlowPanel
-    Height = 0
-    Top = 646
+    Top = 645
     Width = 1285
   end
   inherited pnBottom: TPanel
@@ -22,7 +21,7 @@ inherited FMultiLevelTextEditor: TFMultiLevelTextEditor
   end
   object pcBody: TPageControl[3]
     Left = 0
-    Height = 601
+    Height = 600
     Top = 45
     Width = 632
     ActivePage = tsDetails
@@ -31,13 +30,13 @@ inherited FMultiLevelTextEditor: TFMultiLevelTextEditor
     TabOrder = 3
     object tsDetails: TTabSheet
       Caption = 'Totais'
-      ClientHeight = 573
-      ClientWidth = 624
+      ClientHeight = 569
+      ClientWidth = 622
       object vlParams: TValueListEditor
         Left = 0
-        Height = 573
+        Height = 569
         Top = 0
-        Width = 624
+        Width = 622
         Align = alClient
         FixedCols = 0
         RowCount = 4
@@ -60,19 +59,19 @@ inherited FMultiLevelTextEditor: TFMultiLevelTextEditor
     end
     object tsExplorer: TTabSheet
       Caption = 'Itens'
-      ClientHeight = 573
-      ClientWidth = 624
+      ClientHeight = 569
+      ClientWidth = 622
       object lvReport: TListView
         Left = 0
-        Height = 573
+        Height = 569
         Top = 0
-        Width = 624
+        Width = 622
         Align = alClient
         Columns = <        
           item
             AutoSize = True
             Caption = 'Item'
-            Width = 39
+            Width = 607
           end>
         ReadOnly = True
         TabOrder = 0
@@ -81,36 +80,38 @@ inherited FMultiLevelTextEditor: TFMultiLevelTextEditor
     end
     object tsText: TTabSheet
       Caption = 'Texto'
-      ClientHeight = 573
-      ClientWidth = 624
+      ClientHeight = 569
+      ClientWidth = 622
       object mmText: TMemo
         Left = 0
-        Height = 573
+        Height = 569
         Top = 0
-        Width = 624
+        Width = 622
         Align = alClient
         Lines.Strings = (
           'mmText'
         )
         ReadOnly = True
+        ScrollBars = ssAutoBoth
         TabOrder = 0
       end
     end
   end
   object Splitter1: TSplitter[4]
     Left = 632
-    Height = 601
+    Height = 600
     Top = 45
     Width = 5
     OnMoved = Splitter1Moved
   end
   object tvText: TTreeView[5]
     Left = 637
-    Height = 601
+    Height = 600
     Top = 45
     Width = 648
     Align = alClient
     DragMode = dmAutomatic
+    PopupMenu = ppEditor
     TabOrder = 5
     OnChange = tvTextChange
     OnDragDrop = tvTextDragDrop
@@ -143,5 +144,24 @@ inherited FMultiLevelTextEditor: TFMultiLevelTextEditor
   inherited tmrAutoUpdater: TTimer[7]
   end
   inherited pmOptions: TPopupMenu[8]
+  end
+  object ppEditor: TPopupMenu[9]
+    Left = 144
+    Top = 72
+    object miAlterarIcone: TMenuItem
+      Caption = 'Alterar ícone'
+      OnClick = miAlterarIconeClick
+    end
+    object Separator4: TMenuItem
+      Caption = '-'
+    end
+    object miMoverCima: TMenuItem
+      Caption = 'Mover para cima'
+      OnClick = miMoverCimaClick
+    end
+    object miMoverBaixo: TMenuItem
+      Caption = 'Move para baixo'
+      OnClick = miMoverBaixoClick
+    end
   end
 end

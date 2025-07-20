@@ -22,10 +22,12 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure MenuItem2Click(Sender: TObject);
+    procedure miUpdateClick(Sender: TObject);
     procedure tvFileTreeDblClick(Sender: TObject);
     procedure tvFileTreeKeyPress(Sender: TObject; var Key: char);
   private
     FSearch : String;
+    FForceUpdate : Boolean;
 
     procedure Internal_OnOpenFolder(Sender: TObject);
     procedure Internal_OnStop(Sender: TObject);
@@ -98,6 +100,8 @@ end;
 procedure TFFileFinder.FormCreate(Sender: TObject);
 begin
   inherited;
+
+  Self.FForceUpdate := False;
 end;
 
 procedure TFFileFinder.FormDestroy(Sender: TObject);
@@ -114,6 +118,13 @@ begin
   finally
     Self.UpdateForm();
   end;
+end;
+
+procedure TFFileFinder.miUpdateClick(Sender: TObject);
+begin
+  Self.FForceUpdate := True;
+
+  inherited;
 end;
 
 procedure TFFileFinder.tvFileTreeDblClick(Sender: TObject);
@@ -202,9 +213,12 @@ begin
     if Trim(edSearch.Text) = EmptyStr then
       Exit;
 
-  if Trim(edSearch.Text) <> EmptyStr then
-    if edSearch.Text = Self.FSearch then
-      Exit;
+  if not Self.FForceUpdate then
+    if Trim(edSearch.Text) <> EmptyStr then
+      if edSearch.Text = Self.FSearch then
+        Exit;
+
+  Self.FForceUpdate := False;
 
   Self.ThreadController.StopAll;
 
@@ -263,6 +277,7 @@ begin
   Self.ActionGroup.AddAction(TJupiterAction.Create('Abrir pasta', 'Clique aqui para abrir a pasta atual externamente', ICON_OPEN, @Internal_OnOpenFolder));
   Self.ActionGroup.AddAction(TJupiterAction.Create('Parar', 'Clique aqui para parar a pesquisa', ICON_CANCEL, @Internal_OnStop));
   Self.ActionGroup.AddAction(TJupiterAction.Create('Excluir', 'Clique aqui para abrir a pasta atual externamente', ICON_DELETE, @Internal_OnDelete));
+  Self.ActionGroup.AddAction(TJupiterAction.Create('Pesquisar', 'Clique aqui para efetuar a pesquisa', ICON_SEARCH, @Internal_OnOpenFolder));
 end;
 
 procedure TFFileFinder.Internal_ReadDirectory(prPath: String; prOwner: TTreeNode);

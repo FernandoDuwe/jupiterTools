@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, jupiterScript, JupiterConsts, JupiterVariable, JupiterApp, SysUtils,
-  PascalScript, uPSComponent;
+  PascalScript, uPSComponent, Dialogs;
 
 type
 
@@ -34,6 +34,7 @@ type
   function JupiterAppScript_Resolve(prScriptId, prValue : String) : String;
   procedure JupiterAppScript_WriteLn(prMessage : String);
   procedure JupiterAppScript_WriteScriptLn(prScriptId, prMessage : String);
+  function JupiterAppScript_ReadLn(prMessage : String) : String;
   procedure JupiterAppScript_RunMacroById(prMacroId : String);
   procedure JupiterAppScript_RunMacroByIdInThread(prMacroId : String);
   procedure JupiterAppScript_RunMacroByIdInThreadWithParams(prMacroId, prParams : String);
@@ -122,6 +123,11 @@ begin
     vrJupiterApp.GetScriptById(prScriptId).AddMessage(prMessage);
 end;
 
+function JupiterAppScript_ReadLn(prMessage: String): String;
+begin
+  Result := InputBox(prMessage, prMessage, EmptyStr);
+end;
+
 procedure JupiterAppScript_RunMacroById(prMacroId: String);
 begin
   vrJupiterApp.RunMacro(prMacroId, TJupiterVariableList.Create);
@@ -197,6 +203,8 @@ begin
   prSender.AddFunction(@JupiterAppScript_WriteLn, 'procedure Writeln(prMessage: String);');
   prSender.AddFunction(@JupiterAppScript_WriteScriptLn, 'procedure WriteScriptLn(prScriptId, prMessage: String);');
 
+  prSender.AddFunction(@JupiterAppScript_ReadLn, 'function ReadLn(prMessage: String): String;');
+
   prSender.AddFunction(@JupiterAppScript_RunMacroByIdInThread, 'procedure RunMacroByIdInThread(prMacroId: String);');
   prSender.AddFunction(@JupiterAppScript_RunMacroById, 'procedure RunMacroById(prMacroId: String);');
 
@@ -230,6 +238,7 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure SetGlobalParam(prId, prValue : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Writeln(prMessage: String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure WriteScriptLn(prScriptId, prMessage: String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction,  'function ReadLn(prMessage: String): String;'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure RunMacroById(prMacroId: String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure RunMacroByIdWithParams(prMacroId: String);'));

@@ -3,7 +3,7 @@ inherited FFileExplorer: TFFileExplorer
   Top = 498
   object stvFolders: TShellTreeView[3]
     Left = 0
-    Height = 331
+    Height = 330
     Top = 45
     Width = 296
     Align = alLeft
@@ -16,14 +16,14 @@ inherited FFileExplorer: TFFileExplorer
   end
   object spDivider: TSplitter[4]
     Left = 296
-    Height = 331
+    Height = 330
     Top = 45
     Width = 5
     OnMoved = spDividerMoved
   end
   object slvExporer: TShellListView[5]
     Left = 301
-    Height = 331
+    Height = 330
     Top = 45
     Width = 578
     Align = alClient
@@ -40,6 +40,8 @@ inherited FFileExplorer: TFFileExplorer
       Caption = 'acCopy'
       OnExecute = acCopyExecute
       ShortCut = 16451
+    end
+    inherited acExitIfModal: TAction[3]
     end
   end
   inherited tmrAutoUpdater: TTimer[7]

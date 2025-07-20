@@ -6,9 +6,10 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, ActnList,
-  StdCtrls, ExtCtrls, uJupiterForm, JupiterConsts, JupiterObject,
-  jupiterStringUtils, jupiterformutils, JupiterApp, uJupiterAction,
-  jupiterDesktopApp, uMain, Clipbrd, ValEdit, jupiterformcomponenttils;
+  StdCtrls, ExtCtrls, uJupiterForm, JupiterConsts, JupiterObject, StrUtils,
+  jupiterStringUtils, jupiterformutils, JupiterApp, JupiterEnviroment,
+  uJupiterRunnableScript, uJupiterAction, jupiterDesktopApp, uMain, Clipbrd,
+  ValEdit, Menus, jupiterformcomponenttils;
 
 type
 
@@ -20,8 +21,13 @@ type
     acDelete: TAction;
     acCtrlC: TAction;
     lvReport: TListView;
+    miMoverCima: TMenuItem;
+    miMoverBaixo: TMenuItem;
+    Separator4: TMenuItem;
+    miAlterarIcone: TMenuItem;
     mmText: TMemo;
     pcBody: TPageControl;
+    ppEditor: TPopupMenu;
     Splitter1: TSplitter;
     tsText: TTabSheet;
     tsDetails: TTabSheet;
@@ -32,6 +38,9 @@ type
     procedure acDeleteExecute(Sender: TObject);
     procedure acNewChildLineExecute(Sender: TObject);
     procedure acNewLineExecute(Sender: TObject);
+    procedure miAlterarIconeClick(Sender: TObject);
+    procedure miMoverBaixoClick(Sender: TObject);
+    procedure miMoverCimaClick(Sender: TObject);
     procedure Splitter1Moved(Sender: TObject);
     procedure tvTextChange(Sender: TObject; Node: TTreeNode);
     procedure tvTextDragDrop(Sender, Source: TObject; X, Y: Integer);
@@ -56,6 +65,10 @@ type
 
     procedure Internal_OnAumentarFonte(Sender: TObject);
     procedure Internal_OnDiminuirFonte(Sender: TObject);
+    procedure Internal_OnMDExport(Sender: TObject);
+
+    function Internal_CompleteLevel(prLevel : Integer) : String;
+    function Internal_GetLevel(prItem : TTreeNode) : Integer;
 
     procedure CopyNode(SourceNode, TargetNode: TTreeNode; TreeView: TTreeView);
   public
@@ -67,6 +80,8 @@ var
 
 implementation
 
+uses uJupiterAppScript;
+
 {$R *.lfm}
 
 { TFMultiLevelTextEditor }
@@ -77,6 +92,41 @@ begin
     tvText.Selected := tvText.Items.AddChild(Self.FCurrentOwner, 'Nova linha')
   else
     tvText.Selected := tvText.Items.Add(nil, 'Nova linha');
+end;
+
+procedure TFMultiLevelTextEditor.miAlterarIconeClick(Sender: TObject);
+var
+  vrResult : String;
+begin
+  vrResult := JupiterAppScript_ReadLn('Informe o índice ícone do item');
+
+  if StrToIntDef(vrResult, 5000) <> 5000 then
+  begin
+    tvText.Selected.ImageIndex := StrToInt(vrResult);
+    tvText.Selected.SelectedIndex := StrToInt(vrResult);
+  end;
+end;
+
+procedure TFMultiLevelTextEditor.miMoverBaixoClick(Sender: TObject);
+begin
+  if not Assigned(tvText.Selected) then
+    Exit;
+
+  if not Assigned(tvText.Selected.GetNextSibling) then
+    Exit;
+
+  tvText.Selected.MoveTo(tvText.Selected.GetNextSibling, naInsert);
+end;
+
+procedure TFMultiLevelTextEditor.miMoverCimaClick(Sender: TObject);
+begin
+  if not Assigned(tvText.Selected) then
+    Exit;
+
+  if not Assigned(tvText.Selected.GetPrevSibling) then
+    Exit;
+
+  tvText.Selected.MoveTo(tvText.Selected.GetPrevSibling, naInsert);
 end;
 
 procedure TFMultiLevelTextEditor.Splitter1Moved(Sender: TObject);
@@ -120,6 +170,9 @@ begin
   if tvText.Focused then
   begin
     if not Assigned(tvText.Selected) then
+      Exit;
+
+    if tvText.IsEditing then
       Exit;
 
     Clipboard.AsText := tvText.Selected.Text;
@@ -304,6 +357,11 @@ procedure TFMultiLevelTextEditor.Internal_UpdateComponents;
 begin
   inherited Internal_UpdateComponents;
 
+  miAlterarIcone.Enabled := Assigned(tvText.Selected);
+ // miMoveTo.Enabled := Assigned(tvText.Selected);
+  miMoverCima.Enabled := Assigned(tvText.Selected);
+  miMoverBaixo.Enabled := Assigned(tvText.Selected);
+
   pcBody.Width := PercentOfScreen(Self.Width, Self.PercentDivisor);
 
   vlParams.DefaultColWidth := PercentOfScreen(vlParams.Width, 50);
@@ -334,6 +392,7 @@ begin
   Self.ActionGroup.AddAction(TJupiterAction.Create('Salvar', 'Clique aqui para abrir salvar o arquivo', ICON_SAVE, @Internal_OnSave));
   Self.ActionGroup.AddAction(TJupiterAction.Create('Aumentar fonte', 'Clique aqui para aumentar a fonte', ICON_CURTASK, @Internal_OnAumentarFonte));
   Self.ActionGroup.AddAction(TJupiterAction.Create('Diminuir fonte', 'Clique aqui para diminuir a fonte', ICON_CURTASK, @Internal_OnDiminuirFonte));
+  Self.ActionGroup.AddAction(TJupiterAction.Create('Para .md', 'Clique aqui para exportar os dados atuais para .MD', ICON_DOWN, @Internal_OnMDExport));
 
   Self.Hint := 'Para pular linhas, pressione Enter. Para criar um subitem, pressione Ctrl + Enter. Para apagar uma linha, pressione delete';
 
@@ -399,6 +458,65 @@ procedure TFMultiLevelTextEditor.Internal_OnDiminuirFonte(Sender: TObject);
 begin
   tvText.Font.Size   := tvText.Font.Size - 1;
   lvReport.Font.Size := lvReport.Font.Size - 1;
+end;
+
+procedure TFMultiLevelTextEditor.Internal_OnMDExport(Sender: TObject);
+var
+  vrFile : TStrings;
+  vrEnviroment : TJupiterEnviroment;
+  vrVez : Integer;
+  vrLine : String;
+begin
+  vrEnviroment := TJupiterEnviroment.Create;
+  vrFile := TStringList.Create;
+  try
+    vrFile.Clear;
+
+    for vrVez := 0 to tvText.Items.Count - 1 do
+    begin
+      if vrVez <> 0 then
+        if not Assigned(tvText.Items[vrVez].Parent) then
+         vrFile.Add(EmptyStr);
+
+      vrLine := tvText.Items[vrVez].Text;
+
+      if tvText.Items[vrVez].Count > 0 then
+        vrLine := '## ' + vrLine + ' (' + IntToStr(tvText.Items[vrVez].Count) + ')';
+
+      vrLine := Internal_CompleteLevel(Internal_GetLevel(tvText.Items[vrVez])) + vrLine;
+
+      vrFile.Add(vrLine);
+    end;
+
+    vrFile.SaveToFile(vrEnviroment.FullPath('/temp/DataExtract.md'));
+
+    JupiterRunnableScript_RunCommandOnJupiter(vrEnviroment.FullPath('/temp/DataExtract.md'));
+  finally
+    vrFile.Clear;
+    FreeAndNil(vrFile);
+    FreeAndNil(vrEnviroment);
+  end;
+end;
+
+function TFMultiLevelTextEditor.Internal_CompleteLevel(prLevel: Integer): String;
+var
+  vrVez : Integer;
+begin
+  Result := '';
+
+  for vrVez := 0 to prLevel do
+    Result := Result + '   ';
+end;
+
+function TFMultiLevelTextEditor.Internal_GetLevel(prItem: TTreeNode): Integer;
+begin
+  Result := 0;
+
+  while Assigned(prItem.Parent) do
+  begin
+    prItem := prItem.Parent;
+    Result := Result + 1;
+  end;
 end;
 
 procedure TFMultiLevelTextEditor.CopyNode(SourceNode, TargetNode: TTreeNode; TreeView: TTreeView);
