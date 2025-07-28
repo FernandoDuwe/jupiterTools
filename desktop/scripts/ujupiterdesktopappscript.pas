@@ -129,7 +129,7 @@ procedure JupiterAppDesktopSetAppMessage(prMessage: String);
 begin
   if Application.MainForm is TFMain then
   begin
-    TFMain(Application.MainForm).sbStatus.Panels[0].Text := prMessage;
+    TFMain(Application.MainForm).sbStatus.Panels[1].Text := prMessage;
     Application.ProcessMessages;
   end;
 end;

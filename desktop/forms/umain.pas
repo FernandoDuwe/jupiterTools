@@ -5,9 +5,10 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, Menus,
-  ActnList, ExtCtrls, Buttons, uJupiterForm, JupiterFormTab,
+  ActnList, ExtCtrls, Buttons, uJupiterForm, JupiterFormTab, StdCtrls,
   jupiterMainMenuGenerator, JupiterApp, JupiterConsts, JupiterVariable,
-  JupiterVariableDataProvider, uPSComponent, jupiterDesktopApp, uContextMenu;
+  JupiterVariableDataProvider, jupiterformutils, uPSComponent,
+  jupiterDesktopApp, uContextMenu;
 
 type
 
@@ -42,8 +43,11 @@ type
     procedure jtMainTabCloseTabClicked(Sender: TObject);
     procedure jtMainTabResize(Sender: TObject);
     procedure pmTabOptionsPopup(Sender: TObject);
+    procedure sbStatusDrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel;
+      const Rect: TRect);
   private
     FNewTabClick : Boolean;
+    FComboBox : TComboBox;
 
     procedure Internal_PrepareForm; override;
     procedure Internal_UpdateComponents; override;
@@ -51,6 +55,7 @@ type
     procedure Internal_CreatePopMenuTab;
     function Internal_IsMainPage : Boolean; override;
 
+    procedure Internal_CreateComboBox;
     procedure Internal_CloseCurrentTab(Sender: TObject);
     procedure Internal_CloseAllButCurrentTab(Sender: TObject);
     procedure Internal_GoToNextTab(Sender: TObject);
@@ -122,6 +127,8 @@ end;
 procedure TFMain.FormCreate(Sender: TObject);
 begin
   inherited;
+
+  Self.Internal_CreateComboBox;
 end;
 
 procedure TFMain.FormDestroy(Sender: TObject);
@@ -208,6 +215,12 @@ begin
   Self.Internal_CreatePopMenuTab;
 end;
 
+procedure TFMain.sbStatusDrawPanel(StatusBar: TStatusBar; Panel: TStatusPanel; const Rect: TRect);
+begin
+  if Panel = sbStatus.Panels[0] then
+    Self.FComboBox.SetBounds(Rect.Left + 2, Rect.Top + 2, Rect.Right - Rect.Left - 4, Rect.Bottom - Rect.Top - 4);
+end;
+
 procedure TFMain.Internal_MenuGoToTabClick(Sender: TObject);
 begin
   if not (Sender is TMenuItem) then
@@ -258,6 +271,9 @@ begin
   inherited Internal_UpdateComponents;
 
   Self.Caption := vrJupiterApp.AppName;
+
+  sbStatus.Font.Size := 9;
+  sbStatus.Panels[0].Width := PercentOfScreen(Self.Width, 30);
 
   for vrVez := 0 to jtMainTab.PageCount - 1 do
   begin
@@ -349,6 +365,15 @@ end;
 function TFMain.Internal_IsMainPage: Boolean;
 begin
   Result := True;
+end;
+
+procedure TFMain.Internal_CreateComboBox;
+begin
+  Self.FComboBox := TComboBox.Create(Self);
+  Self.FComboBox.Parent := sbStatus;
+  Self.FComboBox.Style := csDropDownList;
+
+  jtMainTab.ComboBox := Self.FComboBox;
 end;
 
 procedure TFMain.Internal_CloseCurrentTab(Sender: TObject);

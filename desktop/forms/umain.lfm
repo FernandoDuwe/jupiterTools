@@ -3,7 +3,6 @@ inherited FMain: TFMain
   Height = 648
   Top = 280
   Width = 1228
-  Caption = ''
   ClientHeight = 648
   ClientWidth = 1228
   Menu = mmMainMenu
@@ -21,30 +20,35 @@ inherited FMain: TFMain
   end
   inherited fpOptions: TFlowPanel
     Height = 0
-    Top = 544
+    Top = 518
     Width = 1228
     TabOrder = 3
   end
   inherited pnBottom: TPanel
-    Top = 544
+    Top = 518
     Width = 1228
     ClientWidth = 1228
   end
   object sbStatus: TStatusBar[3]
     Left = 0
-    Height = 23
-    Top = 625
+    Height = 29
+    Top = 619
     Width = 1228
     Panels = <    
+      item
+        Style = psOwnerDraw
+        Width = 50
+      end    
       item
         Width = 50
       end>
     SimplePanel = False
+    OnDrawPanel = sbStatusDrawPanel
   end
   object jtMainTab: TJupiterFormTab[4]
     Left = 0
-    Height = 499
-    Top = 45
+    Height = 462
+    Top = 56
     Width = 1228
     Align = alClient
     HotTrack = True

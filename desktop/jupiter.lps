@@ -31,10 +31,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uMain"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="253"/>
-        <CursorPos X="28" Y="283"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="266"/>
+        <CursorPos X="26" Y="275"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../commons/jupiterobject.pas"/>
@@ -206,7 +208,8 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="uJupiterAppScript"/>
         <EditorIndex Value="-1"/>
-        <CursorPos X="23"/>
+        <TopLine Value="19"/>
+        <CursorPos X="37" Y="29"/>
         <UsageCount Value="201"/>
       </Unit>
       <Unit>
@@ -214,8 +217,8 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="uJupiterDesktopAppScript"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="229"/>
-        <CursorPos X="34" Y="236"/>
+        <TopLine Value="128"/>
+        <CursorPos Y="128"/>
         <UsageCount Value="201"/>
       </Unit>
       <Unit>
@@ -558,7 +561,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="79"/>
         <CursorPos Y="92"/>
-        <UsageCount Value="177"/>
+        <UsageCount Value="178"/>
       </Unit>
       <Unit>
         <Filename Value="forms/uchartviewer.pas"/>
@@ -569,7 +572,7 @@
         <UnitName Value="uChartViewer"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="34" Y="3"/>
-        <UsageCount Value="172"/>
+        <UsageCount Value="173"/>
       </Unit>
       <Unit>
         <Filename Value="../scripts/ujupiterchecklistutilsscript.pas"/>
@@ -578,7 +581,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="22"/>
         <CursorPos X="22" Y="32"/>
-        <UsageCount Value="168"/>
+        <UsageCount Value="169"/>
       </Unit>
       <Unit>
         <Filename Value="forms/uwaitform.pas"/>
@@ -589,7 +592,7 @@
         <UnitName Value="uWaitForm"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="35" Y="15"/>
-        <UsageCount Value="164"/>
+        <UsageCount Value="165"/>
       </Unit>
       <Unit>
         <Filename Value="forms/ucoderunner.pas"/>
@@ -601,7 +604,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="63"/>
         <CursorPos X="3" Y="80"/>
-        <UsageCount Value="156"/>
+        <UsageCount Value="157"/>
       </Unit>
       <Unit>
         <Filename Value="forms/ufilefinder.pas"/>
@@ -613,7 +616,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="123"/>
         <CursorPos X="19" Y="124"/>
-        <UsageCount Value="80"/>
+        <UsageCount Value="81"/>
       </Unit>
       <Unit>
         <Filename Value="forms/ufilereaderfinder.pas"/>
@@ -625,7 +628,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="11"/>
         <CursorPos X="15" Y="26"/>
-        <UsageCount Value="79"/>
+        <UsageCount Value="80"/>
       </Unit>
       <Unit>
         <Filename Value="../commons/jupiterscriptlist.pas"/>
@@ -634,7 +637,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="27"/>
         <CursorPos X="3" Y="56"/>
-        <UsageCount Value="61"/>
+        <UsageCount Value="62"/>
       </Unit>
       <Unit>
         <Filename Value="forms/uconsole.pas"/>
@@ -644,7 +647,7 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="20" Y="9"/>
-        <UsageCount Value="58"/>
+        <UsageCount Value="59"/>
       </Unit>
       <Unit>
         <Filename Value="forms/uexternalsqleditor.pas"/>
@@ -655,7 +658,7 @@
         <UnitName Value="uExternalSQLEditor"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="48" Y="11"/>
-        <UsageCount Value="57"/>
+        <UsageCount Value="58"/>
       </Unit>
       <Unit>
         <Filename Value="forms/umultileveltexteditor.pas"/>
@@ -664,12 +667,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uMultiLevelTextEditor"/>
-        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="49"/>
-        <CursorPos X="11" Y="67"/>
-        <UsageCount Value="35"/>
-        <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
+        <CursorPos X="19" Y="49"/>
+        <UsageCount Value="36"/>
       </Unit>
       <Unit>
         <Filename Value="../commons/jupiterdirectorydataprovider.pas"/>
@@ -1079,98 +1080,110 @@
         <UsageCount Value="8"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="22">
+    <JumpHistory HistoryIndex="25">
       <Position>
-        <Filename Value="forms/umultileveltexteditor.pas"/>
-        <Caret Line="99" Column="8" TopLine="90"/>
+        <Filename Value="forms/umain.pas"/>
+        <Caret Line="263" Column="38" TopLine="252"/>
       </Position>
       <Position>
-        <Filename Value="forms/umultileveltexteditor.pas"/>
-        <Caret Line="273" Column="29" TopLine="170"/>
+        <Filename Value="forms/umain.pas"/>
+        <Caret Line="49" Column="16" TopLine="29"/>
       </Position>
       <Position>
-        <Filename Value="forms/umultileveltexteditor.pas"/>
-        <Caret Line="106" TopLine="82"/>
+        <Filename Value="forms/umain.pas"/>
+        <Caret Line="259" Column="28" TopLine="254"/>
       </Position>
       <Position>
-        <Filename Value="forms/umultileveltexteditor.pas"/>
-        <Caret Line="43" Column="15" TopLine="22"/>
+        <Filename Value="forms/umain.pas"/>
+        <Caret Line="55" Column="39" TopLine="37"/>
       </Position>
       <Position>
-        <Filename Value="forms/umultileveltexteditor.pas"/>
-        <Caret Line="118" Column="52" TopLine="104"/>
+        <Filename Value="forms/umain.pas"/>
+        <Caret Line="360" Column="3" TopLine="357"/>
       </Position>
       <Position>
-        <Filename Value="forms/umultileveltexteditor.pas"/>
-        <Caret Line="390" Column="154" TopLine="367"/>
+        <Filename Value="forms/umain.pas"/>
+        <Caret Line="48" Column="22" TopLine="42"/>
       </Position>
       <Position>
-        <Filename Value="forms/umultileveltexteditor.pas"/>
-        <Caret Line="67" Column="28" TopLine="42"/>
+        <Filename Value="forms/umain.pas"/>
+        <Caret Line="38" Column="27" TopLine="26"/>
       </Position>
       <Position>
-        <Filename Value="forms/umultileveltexteditor.pas"/>
-        <Caret Line="391" Column="149" TopLine="378"/>
+        <Filename Value="forms/umain.pas"/>
+        <Caret Line="129" Column="32" TopLine="115"/>
       </Position>
       <Position>
-        <Filename Value="forms/umultileveltexteditor.pas"/>
-        <Caret Line="67" Column="15" TopLine="42"/>
+        <Filename Value="forms/umain.pas"/>
+        <Caret Line="56" Column="15" TopLine="36"/>
       </Position>
       <Position>
-        <Filename Value="forms/umultileveltexteditor.pas"/>
-        <Caret Line="467" TopLine="456"/>
+        <Filename Value="forms/umain.pas"/>
+        <Caret Line="367" Column="41" TopLine="360"/>
       </Position>
       <Position>
-        <Filename Value="forms/umultileveltexteditor.pas"/>
-        <Caret Line="464" Column="29" TopLine="443"/>
+        <Filename Value="forms/umain.pas"/>
+        <Caret Line="63" Column="15" TopLine="43"/>
       </Position>
       <Position>
-        <Filename Value="forms/umultileveltexteditor.pas"/>
-        <Caret Line="474" Column="36" TopLine="452"/>
+        <Filename Value="forms/umain.pas"/>
+        <Caret Line="58" Column="35" TopLine="54"/>
       </Position>
       <Position>
-        <Filename Value="forms/umultileveltexteditor.pas"/>
-        <Caret Line="457" Column="34" TopLine="438"/>
+        <Filename Value="forms/umain.pas"/>
+        <Caret Line="371" Column="3" TopLine="367"/>
       </Position>
       <Position>
-        <Filename Value="forms/umultileveltexteditor.pas"/>
-        <Caret Line="340" Column="24" TopLine="320"/>
+        <Filename Value="forms/umain.pas"/>
+        <Caret Line="53" Column="15" TopLine="45"/>
       </Position>
       <Position>
-        <Filename Value="forms/umultileveltexteditor.pas"/>
-        <Caret Line="68" Column="15" TopLine="37"/>
+        <Filename Value="forms/umain.pas"/>
+        <Caret Line="8" Column="96"/>
       </Position>
       <Position>
-        <Filename Value="forms/umultileveltexteditor.pas"/>
-        <Caret Line="488" Column="37" TopLine="459"/>
+        <Filename Value="forms/umain.pas"/>
+        <Caret Line="219" Column="45" TopLine="200"/>
       </Position>
       <Position>
-        <Filename Value="forms/umultileveltexteditor.pas"/>
-        <Caret Line="13" Column="36"/>
+        <Filename Value="forms/umain.pas"/>
+        <Caret Line="220" Column="30" TopLine="200"/>
       </Position>
       <Position>
-        <Filename Value="forms/umultileveltexteditor.pas"/>
-        <Caret Line="70" Column="50" TopLine="38"/>
+        <Filename Value="forms/umain.pas"/>
+        <Caret Line="265" Column="27" TopLine="262"/>
       </Position>
       <Position>
-        <Filename Value="forms/umultileveltexteditor.pas"/>
-        <Caret Line="481" Column="78" TopLine="467"/>
+        <Filename Value="forms/umain.pas"/>
+        <Caret Line="46" Column="27" TopLine="39"/>
       </Position>
       <Position>
-        <Filename Value="forms/umultileveltexteditor.pas"/>
-        <Caret Line="502" Column="27" TopLine="481"/>
+        <Filename Value="forms/umain.pas"/>
+        <Caret Line="4" Column="116"/>
       </Position>
       <Position>
-        <Filename Value="forms/umultileveltexteditor.pas"/>
-        <Caret Line="482" Column="29" TopLine="468"/>
+        <Filename Value="forms/umain.pas"/>
+        <Caret Line="220" Column="31" TopLine="197"/>
       </Position>
       <Position>
-        <Filename Value="forms/umultileveltexteditor.pas"/>
-        <Caret Line="70" Column="65" TopLine="48"/>
+        <Filename Value="forms/umain.pas"/>
+        <Caret Line="275" Column="20" TopLine="252"/>
       </Position>
       <Position>
-        <Filename Value="forms/umultileveltexteditor.pas"/>
-        <Caret Line="484" Column="38" TopLine="462"/>
+        <Filename Value="forms/umain.pas"/>
+        <Caret Line="276" Column="20" TopLine="253"/>
+      </Position>
+      <Position>
+        <Filename Value="forms/umain.pas"/>
+        <Caret Line="275" Column="20" TopLine="252"/>
+      </Position>
+      <Position>
+        <Filename Value="forms/umain.pas"/>
+        <Caret Line="261" Column="34" TopLine="253"/>
+      </Position>
+      <Position>
+        <Filename Value="forms/umain.pas"/>
+        <Caret Line="53" Column="16" TopLine="39"/>
       </Position>
     </JumpHistory>
     <RunParams>
