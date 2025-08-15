@@ -482,6 +482,13 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uMultiLevelTextEditor"/>
       </Unit>
+      <Unit>
+        <Filename Value="forms/umenunavigator.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FMenuNavigator"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uMenuNavigator"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

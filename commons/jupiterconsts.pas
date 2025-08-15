@@ -16,6 +16,7 @@ const
    CONTEXT_PATH : String = '/forms/context';
    GENERATOR_PATH : String = '/forms/generator';
    FILEEXPLORER_PATH : String = '/forms/explorer/files';
+   MENUEXPLORER_PATH : String = '/forms/explorer/menus';
    USERPREFERENCE_PATH : String = '/forms/userPreference';
    CUSTOMDATABASE_PATH : String = '/forms/custom/database';
    CUSTOMGRIDDATABASE_PATH : String = '/forms/custom/databaseGrid';
@@ -167,6 +168,10 @@ const
    EVENT_TABLE_ONENABLE  : String = 'events.table.onEnable';
    EVENT_RECORD_ONVISIBLE : String = 'events.record.onVisible';
    EVENT_TABLE_ONVISIBLE  : String = 'events.table.onVisible';
+
+   // Params
+   PARAM_PARAMS : String = 'Params';
+   PARAM_FORM_CALLER : String = 'FormCaller';
 
    function GetCurrentOS : String;
    function GetDirectorySeparator : String;

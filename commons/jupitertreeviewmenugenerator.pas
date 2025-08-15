@@ -17,8 +17,12 @@ type
 
   TJupiterTreeViewMenuGenerator = class(TJupiterDatabaseWizard)
   private
-    FTreeView : TTreeView;
-    FOnClick  : TNotifyEvent;
+    FTreeView         : TTreeView;
+    FOnClick          : TNotifyEvent;
+    FOnClickExecuting : TNotifyEvent;
+    FMenuRoute        : String;
+    FFormSender       : String;
+    FSingleClick      : Boolean;
 
     procedure Internal_RenderRoute(prOwner : TTreeNode; prPrefix : String);
     procedure Internal_CheckRender(prOwner : TTreeNode; prPrefix : String; prRouteData : TJupiterRouteData);
@@ -27,12 +31,19 @@ type
     procedure Internal_OnClick(Sender: TObject);
     procedure Internal_OnKeyPress(Sender: TObject; var Key: char);
   published
-    property TreeView : TTreeView    read FTreeView write FTreeView;
-    property OnClick  : TNotifyEvent read FOnClick  write FOnClick;
+    property FormSender  : String  read FFormSender  write FFormSender;
+    property MenuRoute   : String  read FMenuRoute   write FMenuRoute;
+    property SingleClick : Boolean read FSingleClick write FSingleClick;
+
+    property TreeView         : TTreeView    read FTreeView         write FTreeView;
+    property OnClick          : TNotifyEvent read FOnClick          write FOnClick;
+    property OnClickExecuting : TNotifyEvent read FOnClickExecuting write FOnClickExecuting;
   public
     procedure Render;
 
     procedure DoClick(Sender : TObject);
+
+    constructor Create(prConnection : TSQLConnection); override;
   end;
 
 implementation
@@ -145,6 +156,7 @@ var
   vrDestiny : Integer;
   vrParam : String;
   vrRouteData : TJupiterRouteData;
+  vrVariableList : TJupiterVariableList;
 begin
   if not Assigned(Sender) then
     Exit;
@@ -158,36 +170,43 @@ begin
   if not Assigned(TTreeView(Sender).Selected.Data) then
     Exit;
 
-  if TJupiterObject(TTreeView(Sender).Selected.Data) is TJupiterDatabaseReference then
-  begin
-    vrReference := TJupiterDatabaseReference(TTreeView(Sender).Selected.Data);
+  vrVariableList := TJupiterVariableList.Create;
+  try
+    if TJupiterObject(TTreeView(Sender).Selected.Data) is TJupiterDatabaseReference then
+    begin
+      vrReference := TJupiterDatabaseReference(TTreeView(Sender).Selected.Data);
 
-    vrWizard := vrJupiterApp.NewWizard;
-    try
-      if not vrWizard.Exists('ROUTES', Format(' ID = %0:d AND DESTINY IS NOT NULL ', [vrReference.ID])) then
-        Exit;
+      vrWizard := vrJupiterApp.NewWizard;
+      try
+        if not vrWizard.Exists('ROUTES', Format(' ID = %0:d AND DESTINY IS NOT NULL ', [vrReference.ID])) then
+          Exit;
 
-      vrParam := EmptyStr;
+        vrParam := EmptyStr;
 
-      vrDestiny := vrWizard.GetField('ROUTES', 'DESTINY', ' ID = ' + IntToStr(vrReference.ID));
+        vrDestiny := vrWizard.GetField('ROUTES', 'DESTINY', ' ID = ' + IntToStr(vrReference.ID));
 
-      if vrWizard.GetField('ROUTES', 'PARAMS', ' ID = ' + IntToStr(vrReference.ID)) <> Null then
-        vrParam := vrWizard.GetField('ROUTES', 'PARAMS', ' ID = ' + IntToStr(vrReference.ID));
+        if vrWizard.GetField('ROUTES', 'PARAMS', ' ID = ' + IntToStr(vrReference.ID)) <> Null then
+          vrParam := vrWizard.GetField('ROUTES', 'PARAMS', ' ID = ' + IntToStr(vrReference.ID));
 
-      vrJupiterApp.RunMacro(vrDestiny, CreateVariableListOfParam(vrParam));
-    finally
-      FreeAndNil(vrWizard);
+        vrVariableList.AddVariable(PARAM_PARAMS, vrParam);
+
+        vrJupiterApp.RunMacro(vrDestiny, vrVariableList);
+      finally
+        FreeAndNil(vrWizard);
+      end;
     end;
-  end;
 
-  if TJupiterObject(TTreeView(Sender).Selected.Data) is TJupiterRouteData then
-  begin
-    vrRouteData := TJupiterRouteData(TTreeView(Sender).Selected.Data);
+    if TJupiterObject(TTreeView(Sender).Selected.Data) is TJupiterRouteData then
+    begin
+      vrRouteData := TJupiterRouteData(TTreeView(Sender).Selected.Data);
 
-    if vrRouteData.Params <> '' then
-      vrJupiterApp.RunMacro(vrRouteData.Destiny, CreateVariableListOfParam(vrRouteData.Params))
-    else
-      vrJupiterApp.RunMacro(vrRouteData.Destiny, TJupiterVariableList.Create);
+      if vrRouteData.Params <> '' then
+        vrVariableList.AddVariable(PARAM_PARAMS, vrRouteData.Params);
+
+      vrJupiterApp.RunMacro(vrRouteData.Destiny, vrVariableList);
+    end;
+  finally
+  //  FreeAndNil(vrVariableList);
   end;
 end;
 
@@ -200,9 +219,12 @@ end;
 procedure TJupiterTreeViewMenuGenerator.Render;
 begin
   try
-    Self.Internal_RenderRoute(nil, '/main/');
+    Self.Internal_RenderRoute(nil, Self.FMenuRoute);
 
-    Self.TreeView.OnDblClick := @Internal_OnClick;
+    if Self.SingleClick then
+      Self.TreeView.OnClick := @Internal_OnClick
+    else
+      Self.TreeView.OnDblClick := @Internal_OnClick;
 
   finally
     Self.TreeView.FullExpand;
@@ -212,6 +234,17 @@ end;
 procedure TJupiterTreeViewMenuGenerator.DoClick(Sender: TObject);
 begin
   Self.Internal_OnClick(Sender);
+end;
+
+constructor TJupiterTreeViewMenuGenerator.Create(prConnection: TSQLConnection);
+begin
+  inherited Create(prConnection);
+
+  Self.FSingleClick := False;
+
+  Self.FFormSender := EmptyStr;
+
+  Self.FMenuRoute := '/main/';
 end;
 
 end.

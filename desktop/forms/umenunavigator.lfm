@@ -1,0 +1,39 @@
+inherited FMenuNavigator: TFMenuNavigator
+  Left = 810
+  Top = 351
+  Caption = 'Navegador de Menu'
+  object tvTreeMenu: TTreeView[3]
+    Left = 0
+    Height = 330
+    Top = 45
+    Width = 343
+    Align = alLeft
+    BackgroundColor = clDefault
+    Color = clDefault
+    ReadOnly = True
+    TabOrder = 3
+    Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
+  end
+  object Splitter1: TSplitter[4]
+    Left = 343
+    Height = 330
+    Top = 45
+    Width = 5
+  end
+  object pnBody: TPanel[5]
+    Left = 348
+    Height = 330
+    Top = 45
+    Width = 531
+    Align = alClient
+    BevelInner = bvSpace
+    BevelOuter = bvSpace
+    TabOrder = 5
+  end
+  inherited acOptions: TActionList[6]
+  end
+  inherited tmrAutoUpdater: TTimer[7]
+  end
+  inherited pmOptions: TPopupMenu[8]
+  end
+end

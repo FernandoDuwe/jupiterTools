@@ -7,8 +7,8 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, Menus,
   ActnList, ExtCtrls, Buttons, uJupiterForm, JupiterFormTab, StdCtrls,
   jupiterMainMenuGenerator, JupiterApp, JupiterConsts, JupiterVariable,
-  JupiterVariableDataProvider, jupiterformutils, uPSComponent,
-  jupiterDesktopApp, uContextMenu;
+  JupiterVariableDataProvider, jupiterformutils, jupitertreeviewmenugenerator,
+  uPSComponent, jupiterDesktopApp, uContextMenu, uMenuNavigator;
 
 type
 
@@ -62,6 +62,7 @@ type
     procedure Internal_GoToPreviousTab(Sender: TObject);
     procedure Internal_MenuGoToTabClick(Sender : TObject);
     Procedure Internal_OnGlobalException(Sender : TObject; E : Exception);
+    function CurrentForm : TForm;
   public
     procedure NewTab(Form : TForm);
   end;
@@ -233,6 +234,16 @@ end;
 procedure TFMain.Internal_OnGlobalException(Sender: TObject; E: Exception);
 begin
   ShowMessage('Erro: ' + E.Message + #13#10 + 'Origem: ' + Sender.ClassName);
+end;
+
+function TFMain.CurrentForm: TForm;
+begin
+  Result := nil;
+
+  if jtMainTab.PageCount = 0 then
+    Exit;
+
+  Result := TJupiterFormTabSheet(jtMainTab.Pages[jtMainTab.PageIndex]).Form;
 end;
 
 procedure TFMain.Internal_PrepareForm;
@@ -458,6 +469,14 @@ begin
 
   Form.Align       := alClient;
   Form.WindowState := wsMaximized;
+
+  if Assigned(Self.CurrentForm) then
+    if ((Self.CurrentForm is TFMenuNavigator) and (TFMenuNavigator(Self.CurrentForm).ClickItem)) then
+    begin
+      TFMenuNavigator(Self.CurrentForm).AddForm(Form);
+
+      Exit;
+    end;
 
   jtMainTab.Visible := True;
   jtMainTab.AddForm(Form);

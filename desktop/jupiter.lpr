@@ -30,7 +30,7 @@ uses
   uTextEditor, uJupiterDateUtilsScript, uChartViewer,
   uJupiterCheckListUtilsScript, uWaitForm, uCodeRunner, uFileFinder,
   uFileReaderFinder, jupiterScriptList, uconsole, uExternalSQLEditor,
-  uMultiLevelTextEditor;
+  uMultiLevelTextEditor, uMenuNavigator;
 
 {$R *.res}
 
@@ -79,6 +79,7 @@ begin
     FormRoutes.Add(TJupiterFormRoute.Create(FILEFINDER_PATH, TFFileFinder));
     FormRoutes.Add(TJupiterFormRoute.Create(FILEREADERFINDER_PATH, TFFileReaderFinder));
     FormRoutes.Add(TJupiterFormRoute.Create(CONSOLE_PATH, TFConsole));
+    FormRoutes.Add(TJupiterFormRoute.Create(MENUEXPLORER_PATH, TFMenuNavigator));
   end;
 
   Application.Run;

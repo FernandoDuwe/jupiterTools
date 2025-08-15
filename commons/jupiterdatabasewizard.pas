@@ -92,7 +92,7 @@ type
 
     procedure ExecuteScript(prScript : TStrings; prStartTransaction : Boolean = True);
 
-    constructor Create(prConnection : TSQLConnection);
+    constructor Create(prConnection : TSQLConnection); virtual;
   end;
 
 implementation
