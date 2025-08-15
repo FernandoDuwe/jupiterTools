@@ -17,6 +17,7 @@ type
     pnBody: TPanel;
     Splitter1: TSplitter;
     tvTreeMenu: TTreeView;
+    procedure FormDestroy(Sender: TObject);
   private
     FForm : TForm;
     FClickItem : Boolean;
@@ -39,6 +40,14 @@ implementation
 {$R *.lfm}
 
 { TFMenuNavigator }
+
+procedure TFMenuNavigator.FormDestroy(Sender: TObject);
+begin
+  if Assigned(FForm) then
+    FForm.Destroy;
+
+  inherited;
+end;
 
 procedure TFMenuNavigator.Internal_UpdateComponents;
 begin
@@ -63,6 +72,8 @@ begin
     if Self.Params.Exists(PARAM_PARAMS) then
       vrTreeView.MenuRoute := Self.Params.VariableById(PARAM_PARAMS).Value;
 
+    Self.Caption := 'Menu: ' + vrTreeView.MenuRoute;
+
     vrTreeView.OnClickExecuting := @Internal_TreeClicked;
     vrTreeView.SingleClick := True;
     vrTreeView.FormSender := Self.FormID;
@@ -72,6 +83,12 @@ begin
     Self.FClicKComponent := tvTreeMenu.OnClick;
 
     tvTreeMenu.OnClick := @Internal_TreeClicked;
+
+    if tvTreeMenu.Items.Count > 0 then
+    begin
+      tvTreeMenu.Selected := tvTreeMenu.Items[0];
+      Internal_TreeClicked(tvTreeMenu);
+    end;
   finally
     FreeAndNil(vrTreeView);
   end;

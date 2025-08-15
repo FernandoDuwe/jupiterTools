@@ -20,7 +20,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="3"/>
       <RevisionNr Value="2"/>
-      <BuildNr Value="23"/>
+      <BuildNr Value="30"/>
       <Language Value="0416"/>
       <CharSet Value="04E2"/>
       <StringTable CompanyName="Jupiter" FileDescription="Jupiter interface" ProductName="Jupiter"/>
@@ -486,6 +486,7 @@
         <Filename Value="forms/umenunavigator.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FMenuNavigator"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uMenuNavigator"/>
       </Unit>
