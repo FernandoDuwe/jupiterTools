@@ -313,7 +313,7 @@ begin
   vrQry := Self.NewWizard.NewQuery;
   try
     vrQry.Close;
-    vrQry.SQL.Add(' SELECT ID, DESCRIPTION, SHORTCUT, DESTINY FROM SHORTCUTS ORDER BY 1 ');
+    vrQry.SQL.Add(' SELECT ID, DESCRIPTION, SHORTCUT, DESTINY FROM SHORTCUTS ORDER BY ZINDEX, ID ');
     vrQry.Open;
     vrQry.First;
 

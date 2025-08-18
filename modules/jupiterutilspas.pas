@@ -90,6 +90,11 @@ begin
 
     if Self.Internal_CreateMacroIfDontExists('main.tools.times.click', 'Clique do item de menu Meus tempos', CreateStringListToMacro('OpenGridFromTable(''TEMPOS'');')) then
       Self.Internal_CreateRouteIfDontExists('Meus tempos', '/main/tools/times/', vrWizard.GetLastID('MACROS'), ICON_STARTTIME, 300);
+
+    Self.Internal_CreateVariablIfDontExists('Menus.Work.Route', 'Menu padrão para rotas de trabalho', '/workdir/');
+
+    if Self.Internal_CreateVariablIfDontExists('Menus.Work.Route.Records', 'Menu padrão para rotas de trabalho para registros', '/workdir/records/') then
+      Self.Internal_CreateRouteIfDontExists('Cadastros', '/workdir/records/', NULL_KEY, ICON_RECORDS, 1000);
   finally
     FreeAndNil(vrStr);
     FreeAndNil(vrWizard);

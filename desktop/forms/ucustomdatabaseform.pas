@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, DBCtrls, StdCtrls,
   DBDateTimePicker, SQLDB, DB, uJupiterForm, jupiterformutils,
   jupiterStringUtils, jupiterDatabaseWizard, JupiterApp, JupiterVariable,
-  JupiterObject, JupiterConsts, uJupiterStringUtilsScript,
+  JupiterObject, JupiterConsts, JupiterModule, uJupiterStringUtilsScript,
   jupiterformcomponenttils, jupiterDesktopApp;
 
 type
@@ -48,6 +48,13 @@ type
     procedure Internal_ListForeignTables;
 
     function Internal_OnRequestData : TJupiterVariableList; override;
+
+    function Internal_EnableWorkMenu : Boolean; override;
+
+    function Internal_GetRouteName : String;
+    function Internal_GetMacroName : String;
+
+    procedure Internal_AddToWorkMenu; override;
   published
     property QueryOrigin : TSQLQuery read FQueryOrigin write FQueryOrigin;
 
@@ -394,6 +401,57 @@ begin
   for vrVez := 0 to Self.FQueryOrigin.FieldCount - 1 do
     if not Result.Exists(Self.FQueryOrigin.Fields[vrVez].FieldName) then
       Result.AddVariable(Self.FQueryOrigin.Fields[vrVez].FieldName, Self.FQueryOrigin.Fields[vrVez].AsString, EmptyStr);
+end;
+
+function TFCustomDatabaseForm.Internal_EnableWorkMenu: Boolean;
+var
+  vrWizard : TJupiterDatabaseWizard;
+begin
+  Result := Self.FID > NULL_KEY;
+
+  if not Result then
+    Exit;
+
+  vrWizard := vrJupiterApp.NewWizard;
+  try
+    if vrWizard.Exists('ROUTES', ' ROUTE = "' + Self.Internal_GetRouteName + '" ') then
+    begin
+      Result := False;
+      Exit;
+    end;
+
+    Result := True;
+  finally
+    FreeAndNil(vrWizard);
+  end;
+end;
+
+function TFCustomDatabaseForm.Internal_GetRouteName: String;
+begin
+  Result := vrJupiterApp.Params.VariableById('Menus.Work.Route.Records').Value + AnsiLowerCase(Self.FTableName) + '/' + IntToStr(Self.FID);
+end;
+
+function TFCustomDatabaseForm.Internal_GetMacroName: String;
+begin
+  Result := JupiterStringUtilsScript_Replace(Copy(Self.Internal_GetRouteName, 2), '/', '.');
+end;
+
+procedure TFCustomDatabaseForm.Internal_AddToWorkMenu;
+var
+  vrModule : TJupiterModule;
+  vrWizard : TJupiterDatabaseWizard;
+begin
+  inherited Internal_AddToWorkMenu;
+
+  vrWizard := vrJupiterApp.NewWizard;
+  vrModule := TJupiterModule.Create;
+  try
+    if vrModule.CreateMacroIfDontExists(Self.Internal_GetMacroName, 'Clique do item de menu ' + Self.FTableName + ' ' + IntToStr(Self.FID), CreateStringListToMacro(' OpenFormFromTableId(''' + Self.FTableName + ''', ' + IntToStr(Self.FID) + '); ')) then
+      vrModule.CreateRouteIfDontExists('Tarefa', Self.Internal_GetRouteName, vrWizard.GetLastID('MACROS'), ICON_NEW, 1000);
+  finally
+    FreeAndNil(vrModule);
+    FreeAndNil(vrWizard);
+  end;
 end;
 
 procedure TFCustomDatabaseForm.FromReference(prReference: TJupiterDatabaseReference);

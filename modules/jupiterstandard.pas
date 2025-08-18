@@ -65,6 +65,13 @@ begin
     if not vrWizard.TableExists('SHORTCUTS') then
       vrWizard.ExecuteScript(CreateStringList('CREATE TABLE SHORTCUTS ( ID INTEGER PRIMARY KEY, DESCRIPTION VARCHAR(100), SHORTCUT VARCHAR(100), DESTINY INT, FOREIGN KEY (DESTINY) REFERENCES MACROS (ID))'));
 
+    if ((vrWizard.TableExists('SHORTCUTS')) and (not vrWizard.FieldExists('SHORTCUTS', 'ZINDEX'))) then
+    begin
+      vrWizard.ExecuteScript(CreateStringList(' ALTER TABLE SHORTCUTS ADD ZINDEX SMALLINT; '));
+
+      vrWizard.ExecuteScript(CreateStringList(' UPDATE SHORTCUTS SET ZINDEX = ID * 1000 WHERE ZINDEX IS NULL '));
+    end;
+
     if not vrWizard.TableExists('ACTIONS') then
       vrWizard.ExecuteScript(CreateStringList('CREATE TABLE ACTIONS ( ID INTEGER PRIMARY KEY, NAME VARCHAR (100), TITLE VARCHAR (100), TABLENAME VARCHAR(100), ICON SMALLINT, ZINDEX SMALLINT, MACRO INTEGER, MACRO_ENABLE INTEGER, MACRO_VISIBLE INTEGER, FOREIGN KEY (MACRO) REFERENCES MACROS (ID), FOREIGN KEY (MACRO_ENABLE) REFERENCES MACROS (ID), FOREIGN KEY (MACRO_VISIBLE) REFERENCES MACROS (ID))'));
 
@@ -90,6 +97,13 @@ begin
       Self.Internal_CreateRouteIfDontExists(EmptyStr, '/menu/contextMenu/', vrWizard.GetLastID('MACROS'), ICON_MENU, 200, 'Ctrl+Enter');
 
       Self.Internal_CreateShortcutIfDontExists('Abrir o menu de contexto', 'Ctrl+Enter', vrWizard.GetLastID('MACROS'));
+    end;
+
+    if Self.Internal_CreateMacroIfDontExists('menu.workMenu.click', 'Clique do botão de menu de trabalho', CreateStringListToMacro(' OpenFormWithParams(''/forms/explorer/menus'', ''/workdir/''); ')) then
+    begin
+      Self.Internal_CreateRouteIfDontExists(EmptyStr, '/menu/workMenu/', vrWizard.GetLastID('MACROS'), ICON_FAVORITE, 200, 'Ctrl+Enter');
+
+      Self.Internal_CreateShortcutIfDontExists('Abrir o menu de trabalho', 'Ctrl+W', vrWizard.GetLastID('MACROS'));
     end;
 
     vrStr.Clear;

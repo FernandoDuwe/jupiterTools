@@ -26,6 +26,7 @@ type
     Image1: TImage;
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
+    miWorkMenu: TMenuItem;
     miThreads: TMenuItem;
     Separator3: TMenuItem;
     miLookColumn: TMenuItem;
@@ -55,6 +56,7 @@ type
     procedure miLookColumnClick(Sender: TObject);
     procedure miParamsClick(Sender: TObject);
     procedure miUpdateClick(Sender: TObject);
+    procedure miWorkMenuClick(Sender: TObject);
     procedure pnSearchBarClick(Sender: TObject);
     procedure tmrAutoUpdaterTimer(Sender: TObject);
     procedure Internal_OnAfterActionExecute(Sender : TObject);
@@ -100,6 +102,8 @@ type
     procedure Internal_CreateShortcutList;
 
     function Internal_IsMainPage : Boolean; virtual;
+    function Internal_EnableWorkMenu : Boolean; virtual;
+    procedure Internal_AddToWorkMenu; virtual;
   public
     procedure Pause; virtual;
     procedure Resume; virtual;
@@ -244,6 +248,11 @@ begin
   tmrAutoUpdater.Enabled := True;
 end;
 
+procedure TFJupiterForm.miWorkMenuClick(Sender: TObject);
+begin
+  Self.Internal_AddToWorkMenu;
+end;
+
 procedure TFJupiterForm.pnSearchBarClick(Sender: TObject);
 begin
 
@@ -337,6 +346,7 @@ procedure TFJupiterForm.Internal_UpdateComponents;
 begin
   miParams.Enabled := Self.Params.Count > 0;
   miThreads.Enabled := Self.ThreadController.Count > 0;
+  miWorkMenu.Enabled := Self.Internal_EnableWorkMenu;
 
   pnBottom.Caption := '                              ' + Self.FHint;
   pnBottom.Visible := Trim(Self.FHint) <> EmptyStr;
@@ -466,6 +476,16 @@ end;
 function TFJupiterForm.Internal_IsMainPage: Boolean;
 begin
   Result := False;
+end;
+
+function TFJupiterForm.Internal_EnableWorkMenu: Boolean;
+begin
+  Result := False;
+end;
+
+procedure TFJupiterForm.Internal_AddToWorkMenu;
+begin
+  //
 end;
 
 procedure TFJupiterForm.Pause;

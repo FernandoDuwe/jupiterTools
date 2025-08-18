@@ -36,6 +36,9 @@ type
     property ModuleTitle : String               read Internal_GetModuleTitle;
     property Params      : TJupiterVariableList read FParams write FParams;
   public
+    function CreateRouteIfDontExists(prTitle, prRoute : String; prDestiny, prIcon, prZIndex : Integer; prShortCut : String = '') : Boolean;
+    function CreateMacroIfDontExists(prID, prTitle : String; prMacro : TStrings) : Boolean;
+
     function DefineParamName(prName : String) : String;
     procedure ExecuteCommand(prParamList : TStrings); virtual;
     function ModuleDatabaseID : Integer;
@@ -467,6 +470,16 @@ begin
   finally
     FreeAndNil(vrWizard);
   end;
+end;
+
+function TJupiterModule.CreateRouteIfDontExists(prTitle, prRoute: String; prDestiny, prIcon, prZIndex: Integer; prShortCut: String): Boolean;
+begin
+  Result := Self.Internal_CreateRouteIfDontExists(prTitle, prRoute, prDestiny, prIcon, prZIndex, prShortCut);
+end;
+
+function TJupiterModule.CreateMacroIfDontExists(prID, prTitle: String; prMacro: TStrings): Boolean;
+begin
+  Result := Self.Internal_CreateMacroIfDontExists(prID, prTitle, prMacro);
 end;
 
 function TJupiterModule.DefineParamName(prName: String): String;
