@@ -1,10 +1,11 @@
 object FJupiterForm: TFJupiterForm
   Left = 539
-  Height = 457
+  Height = 571
   Top = 308
-  Width = 879
-  ClientHeight = 457
-  ClientWidth = 879
+  Width = 1099
+  ClientHeight = 571
+  ClientWidth = 1099
+  DesignTimePPI = 120
   OnActivate = FormActivate
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -12,16 +13,16 @@ object FJupiterForm: TFJupiterForm
   OnShow = FormShow
   PopupMenu = pmOptions
   Position = poScreenCenter
-  LCLVersion = '3.4.0.0'
+  LCLVersion = '3.8.0.0'
   object pnSearchBar: TPanel
     Left = 0
-    Height = 45
+    Height = 56
     Top = 0
-    Width = 879
+    Width = 1099
     Align = alTop
     BevelOuter = bvNone
-    ClientHeight = 45
-    ClientWidth = 879
+    ClientHeight = 56
+    ClientWidth = 1099
     TabOrder = 0
     OnClick = pnSearchBarClick
     object edSearch: TEdit
@@ -37,9 +38,9 @@ object FJupiterForm: TFJupiterForm
   end
   object fpOptions: TFlowPanel
     Left = 0
-    Height = 1
-    Top = 375
-    Width = 879
+    Height = 0
+    Top = 470
+    Width = 1099
     Align = alBottom
     AutoSize = True
     BevelOuter = bvNone
@@ -50,21 +51,21 @@ object FJupiterForm: TFJupiterForm
   end
   object pnBottom: TPanel
     Left = 0
-    Height = 81
-    Top = 376
-    Width = 879
+    Height = 101
+    Top = 470
+    Width = 1099
     Align = alBottom
     Alignment = taLeftJustify
     BevelOuter = bvNone
     Caption = '                                     Teste'
-    ClientHeight = 81
-    ClientWidth = 879
+    ClientHeight = 101
+    ClientWidth = 1099
     TabOrder = 2
     object Image1: TImage
-      Left = 8
-      Height = 64
-      Top = 8
-      Width = 64
+      Left = 10
+      Height = 80
+      Top = 10
+      Width = 80
       OnClick = Image1Click
       Picture.Data = {
         1754506F727461626C654E6574776F726B477261706869633B15000089504E47
@@ -244,8 +245,8 @@ object FJupiterForm: TFJupiterForm
     end
   end
   object acOptions: TActionList
-    Left = 336
-    Top = 72
+    Left = 420
+    Top = 90
     object acIncreaseLefPanel: TAction
       Caption = 'acIncreaseLefPanel'
       OnExecute = acIncreaseLefPanelExecute
@@ -265,12 +266,12 @@ object FJupiterForm: TFJupiterForm
   object tmrAutoUpdater: TTimer
     Enabled = False
     OnTimer = tmrAutoUpdaterTimer
-    Left = 448
-    Top = 72
+    Left = 560
+    Top = 90
   end
   object pmOptions: TPopupMenu
-    Left = 240
-    Top = 72
+    Left = 300
+    Top = 90
     object miUpdate: TMenuItem
       Caption = 'Atualizar'
       OnClick = miUpdateClick

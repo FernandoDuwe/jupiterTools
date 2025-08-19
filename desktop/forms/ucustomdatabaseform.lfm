@@ -4,24 +4,31 @@ inherited FCustomDatabaseForm: TFCustomDatabaseForm
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   inherited pnSearchBar: TPanel
-    Top = 1
+    Width = 1099
+    ClientWidth = 1099
   end
   inherited fpOptions: TFlowPanel
+    Height = 0
     Top = 0
+    Width = 1099
     Align = alTop
   end
   inherited pnBottom: TPanel
+    Top = 470
+    Width = 1099
+    ClientWidth = 1099
     TabOrder = 3
   end
   object sbBody: TScrollBox[3]
     Left = 0
-    Height = 330
-    Top = 46
-    Width = 879
+    Height = 414
+    Top = 56
+    Width = 1099
     HorzScrollBar.Page = 1
     VertScrollBar.Page = 1
     Align = alClient
     TabOrder = 2
+    OnClick = sbBodyClick
   end
   inherited acOptions: TActionList[4]
   end

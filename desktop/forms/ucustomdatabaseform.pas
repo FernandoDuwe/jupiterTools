@@ -28,6 +28,7 @@ type
 
     procedure Internal_OnMarkPinClick(Sender: TObject);
     procedure Internal_OnUnMarkPinClick(Sender: TObject);
+    procedure sbBodyClick(Sender: TObject);
   private
     FObjectList : TJupiterObjectList;
 
@@ -168,6 +169,11 @@ begin
   finally
     Self.UpdateForm;
   end;
+end;
+
+procedure TFCustomDatabaseForm.sbBodyClick(Sender: TObject);
+begin
+
 end;
 
 procedure TFCustomDatabaseForm.Internal_PrepareForm;
@@ -447,7 +453,7 @@ begin
   vrModule := TJupiterModule.Create;
   try
     if vrModule.CreateMacroIfDontExists(Self.Internal_GetMacroName, 'Clique do item de menu ' + Self.FTableName + ' ' + IntToStr(Self.FID), CreateStringListToMacro(' OpenFormFromTableId(''' + Self.FTableName + ''', ' + IntToStr(Self.FID) + '); ')) then
-      vrModule.CreateRouteIfDontExists('Tarefa', Self.Internal_GetRouteName, vrWizard.GetLastID('MACROS'), ICON_NEW, 1000);
+      vrModule.CreateRouteIfDontExists(Self.Caption, Self.Internal_GetRouteName, vrWizard.GetLastID('MACROS'), ICON_NEW, 1000);
   finally
     FreeAndNil(vrModule);
     FreeAndNil(vrWizard);

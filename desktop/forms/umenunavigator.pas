@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, ExtCtrls,
   uJupiterForm, jupiterformutils, jupitertreeviewmenugenerator, JupiterApp,
-  JupiterConsts, jupiterDesktopApp;
+  JupiterConsts, jupiterDesktopApp, jupiterDatabaseWizard;
 
 type
 
@@ -19,6 +19,7 @@ type
     tvTreeMenu: TTreeView;
     procedure FormDestroy(Sender: TObject);
   private
+    FCurrentData : TJupiterDatabaseReference;
     FForm : TForm;
     FClickItem : Boolean;
     FClicKComponent : TNotifyEvent;
@@ -95,6 +96,8 @@ begin
 end;
 
 procedure TFMenuNavigator.Internal_TreeClicked(Sender: TObject);
+var
+  vrWizard : TJupiterDatabaseWizard;
 begin
   if not Assigned(TTreeView(Sender).Selected) then
     Exit;
@@ -102,10 +105,25 @@ begin
   if not Assigned(TTreeView(Sender).Selected.Data) then
     Exit;
 
-  Self.FClickItem := True;
+  // Se é a mesma rota que a atual
+  if Assigned(Self.FCurrentData) then
+    if Self.FCurrentData.ID = TJupiterDatabaseReference(TTreeView(Sender).Selected.Data).ID then
+      Exit;
 
-  if Assigned(Self.FClicKComponent) then
-    Self.FClicKComponent(Sender);
+  vrWizard := vrJupiterApp.NewWizard;
+  try
+    if vrWizard.Exists('ROUTES', ' ID = ' + IntToStr(TJupiterDatabaseReference(TTreeView(Sender).Selected.Data).ID) + ' AND DESTINY IS NULL ') then
+      Exit;
+
+    Self.FCurrentData := TJupiterDatabaseReference(TTreeView(Sender).Selected.Data);
+
+    Self.FClickItem := True;
+
+    if Assigned(Self.FClicKComponent) then
+      Self.FClicKComponent(Sender);
+  finally
+    FreeAndNil(vrWizard);
+  end;
 end;
 
 procedure TFMenuNavigator.AddForm(prForm: TForm);

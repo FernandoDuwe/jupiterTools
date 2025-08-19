@@ -157,7 +157,7 @@ begin
     if vrWizard.Count('SHORTCUTS', ' 1 = 1 ') = 0 then
       Exit;
 
-    vrQry.SQL.Add(' SELECT * FROM SHORTCUTS ');
+    vrQry.SQL.Add(' SELECT * FROM SHORTCUTS ORDER BY ZINDEX, ID ');
     vrQry.Open;
     vrQry.First;
 

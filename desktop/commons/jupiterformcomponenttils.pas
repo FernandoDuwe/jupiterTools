@@ -340,6 +340,7 @@ begin
   vrEdit.AutoSize   := False;
   vrEdit.Width      := prOwner.Width - prPosition.Left - FORM_MARGIN_RIGHT;
   vrEdit.Anchors    := [akTop, akLeft, akRight];
+  vrEdit.Style      := csDropDownList;
 
   vrQry.Open;
 
