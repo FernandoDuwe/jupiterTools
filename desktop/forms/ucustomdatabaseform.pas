@@ -9,7 +9,7 @@ uses
   DBDateTimePicker, SQLDB, DB, uJupiterForm, jupiterformutils,
   jupiterStringUtils, jupiterDatabaseWizard, JupiterApp, JupiterVariable,
   JupiterObject, JupiterConsts, JupiterModule, uJupiterStringUtilsScript,
-  jupiterformcomponenttils, jupiterDesktopApp;
+  uJupiterRunnableScript, jupiterformcomponenttils, jupiterDesktopApp;
 
 type
 
@@ -24,6 +24,7 @@ type
     procedure InternalDataSourceStateChange(Sender: TObject);
     procedure Internal_ClickMenuClick(Sender: TObject);
     procedure Internal_OnCopyClick(Sender: TObject);
+    procedure Internal_OnExecuteClick(Sender: TObject);
     procedure Internal_OnViewClick(Sender: TObject);
 
     procedure Internal_OnMarkPinClick(Sender: TObject);
@@ -137,6 +138,19 @@ begin
   end;
 end;
 
+procedure TFCustomDatabaseForm.Internal_OnExecuteClick(Sender: TObject);
+var
+  vrField : Integer;
+begin
+  if (Sender is TSpeedButton) then
+  begin
+    vrField := TSpeedButton(Sender).Tag;
+
+    if not Self.QueryOrigin.Fields[vrField].IsNull then
+      JupiterRunnableScript_RunCommandOnJupiter(Self.QueryOrigin.Fields[vrField].AsString);
+  end;
+end;
+
 procedure TFCustomDatabaseForm.Internal_OnViewClick(Sender: TObject);
 var
   vrField : Integer;
@@ -235,6 +249,7 @@ begin
                                                       sbBody,
                                                       vrWizard.GetForeignKeyData(Self.TableName, Self.QueryOrigin.Fields[vrVez].FieldName));
 
+
         vrAction := JupiterComponentsAddAction(vrReference, ICON_VIEW, sbBody);
 
         TSpeedButton(vrAction.Component).Tag := vrVez;
@@ -269,11 +284,24 @@ begin
             begin
               vrReference := JupiterComponentsNewDBEdit(Self.QueryOrigin.Fields[vrVez], InternalDataSource, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody);
 
-              vrAction := JupiterComponentsAddAction(vrReference, ICON_COPY, sbBody);
-              TSpeedButton(vrAction.Component).Tag := vrVez;
-              TSpeedButton(vrAction.Component).OnClick := @Internal_OnCopyClick;
-              TSpeedButton(vrAction.Component).Hint := 'Clique aqui para copiar o conteúdo do campo';
-              TSpeedButton(vrAction.Component).ShowHint := True;
+              if vrWizard.Exists('DATABASE_DICTIONARY', ' TABLENAME = "' + Self.FTableName + '" AND FIELDNAME = "' + Self.QueryOrigin.Fields[vrVez].FieldName + '" AND ACTION_COPY = TRUE ') then
+              begin
+                vrAction := JupiterComponentsAddAction(vrReference, ICON_COPY, sbBody);
+                TSpeedButton(vrAction.Component).Tag := vrVez;
+                TSpeedButton(vrAction.Component).OnClick := @Internal_OnCopyClick;
+                TSpeedButton(vrAction.Component).Hint := 'Clique aqui para copiar o conteúdo do campo';
+                TSpeedButton(vrAction.Component).ShowHint := True;
+              end;
+
+              if vrWizard.Exists('DATABASE_DICTIONARY', ' TABLENAME = "' + Self.FTableName + '" AND FIELDNAME = "' + Self.QueryOrigin.Fields[vrVez].FieldName + '" AND ACTION_EXECUTE = TRUE ') then
+              begin
+                vrAction := JupiterComponentsAddAction(vrReference, ICON_PLAY, sbBody);
+
+                TSpeedButton(vrAction.Component).Tag := vrVez;
+                TSpeedButton(vrAction.Component).OnClick := @Internal_OnExecuteClick;
+                TSpeedButton(vrAction.Component).Hint := 'Clique aqui para executar o conteúdo do campo atual';
+                TSpeedButton(vrAction.Component).ShowHint := True;
+              end;
             end;
 
       // Pulando linha
