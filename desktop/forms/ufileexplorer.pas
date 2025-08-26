@@ -7,7 +7,8 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ShellCtrls, ExtCtrls,
   ActnList, uJupiterForm, JupiterConsts, jupiterformutils, JupiterEnviroment,
-  jupiterStringUtils, uJupiterRunnableScript, uJupiterAction,
+  jupiterStringUtils, JupiterModule, jupiterDatabaseWizard, JupiterApp,
+  uJupiterRunnableScript, uJupiterStringUtilsScript, uJupiterAction,
   uJupiterDesktopAppScript;
 
 type
@@ -34,6 +35,12 @@ type
     procedure Internal_OnAsSmallIcons(Sender: TObject);
     procedure Internal_OnSearchInFiles(Sender: TObject);
     procedure Internal_OnSearchContentInFiles(Sender: TObject);
+
+    function Internal_EnableWorkMenu : Boolean; override;
+    procedure Internal_AddToWorkMenu; override;
+
+    function Internal_GetRouteName : String;
+    function Internal_GetMacroName : String;
   public
 
   end;
@@ -149,6 +156,39 @@ end;
 procedure TFFileExplorer.Internal_OnSearchContentInFiles(Sender: TObject);
 begin
   JupiterAppDesktopOpenFileReaderFinderForm(slvExporer.Root);
+end;
+
+function TFFileExplorer.Internal_EnableWorkMenu: Boolean;
+begin
+  Result := True;
+end;
+
+procedure TFFileExplorer.Internal_AddToWorkMenu;
+var
+  vrModule : TJupiterModule;
+  vrWizard : TJupiterDatabaseWizard;
+begin
+  inherited Internal_AddToWorkMenu;
+
+  vrWizard := vrJupiterApp.NewWizard;
+  vrModule := TJupiterModule.Create;
+  try
+    if vrModule.CreateMacroIfDontExists(Self.Internal_GetMacroName, 'Clique do item de menu ' + ExtractFileName(Self.Params.VariableById('path').Value), CreateStringListToMacro(' OpenFileExplorerForm(''' + Self.Params.VariableById('path').Value + '''); ')) then
+      vrModule.CreateRouteIfDontExists(Self.Caption, Self.Internal_GetRouteName, vrWizard.GetLastID('MACROS'), ICON_OPEN, 1000);
+  finally
+    FreeAndNil(vrModule);
+    FreeAndNil(vrWizard);
+  end;
+end;
+
+function TFFileExplorer.Internal_GetRouteName: String;
+begin
+  Result := vrJupiterApp.Params.VariableById('Menus.Work.Route').Value + ExtractFileName(Self.Params.VariableById('path').Value) + '/' + FormatDateTime('ddmmyyyy_hhnnss', Now);
+end;
+
+function TFFileExplorer.Internal_GetMacroName: String;
+begin
+  Result := JupiterStringUtilsScript_Replace(Copy(Self.Internal_GetRouteName, 2), '/', '.');
 end;
 
 end.

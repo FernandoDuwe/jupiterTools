@@ -2,6 +2,20 @@ inherited FTextEditor: TFTextEditor
   Left = 610
   Top = 316
   OnClose = FormClose
+  inherited pnSearchBar: TPanel
+    Width = 879
+    ClientWidth = 879
+  end
+  inherited fpOptions: TFlowPanel
+    Height = 1
+    Top = 375
+    Width = 879
+  end
+  inherited pnBottom: TPanel
+    Top = 376
+    Width = 879
+    ClientWidth = 879
+  end
   inline seEditor: TSynEdit[3]
     Left = 0
     Height = 330

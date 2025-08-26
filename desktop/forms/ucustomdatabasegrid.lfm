@@ -1,20 +1,26 @@
 inherited FCustomDatabaseGrid: TFCustomDatabaseGrid
-  Left = 585
-  Top = 331
-  Caption = ''
+  Left = 873
+  Top = 413
   OnCreate = FormCreate
   inherited pnSearchBar: TPanel
     Top = 1
+    Width = 879
+    ClientWidth = 879
     inherited edSearch: TEdit
       OnChange = edSearchChange
       OnKeyPress = edSearchKeyPress
     end
   end
   inherited fpOptions: TFlowPanel
+    Height = 1
     Top = 0
+    Width = 879
     Align = alTop
   end
   inherited pnBottom: TPanel
+    Top = 376
+    Width = 879
+    ClientWidth = 879
     TabOrder = 3
   end
   object dbMainGrid: TDBGrid[3]
@@ -72,11 +78,7 @@ inherited FCustomDatabaseGrid: TFCustomDatabaseGrid
       Caption = 'Exibir resumo dos dados'
       OnClick = miShowMiniFormClick
     end
-    inherited Separator1: TMenuItem[6]
-    end
-    inherited miParams: TMenuItem[7]
-    end
-    inherited miThreads: TMenuItem[8]
+    inherited miLookColumn: TMenuItem[9]
     end
   end
   object InternalDataSource: TDataSource[9]

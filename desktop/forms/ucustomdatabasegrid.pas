@@ -7,8 +7,9 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, DBGrids, ExtCtrls,
   Menus, uJupiterForm, jupiterDatabaseWizard, JupiterApp, jupiterStringUtils,
-  jupiterformutils, JupiterConsts, JupiterVariable, uJupiterDatabaseScript,
-  uJupiterAction, jupiterformcomponenttils, DB, SQLDB;
+  jupiterformutils, JupiterConsts, JupiterVariable, JupiterModule,
+  uJupiterDatabaseScript, uJupiterStringUtilsScript, uJupiterAction,
+  jupiterformcomponenttils, DB, SQLDB;
 
 type
 
@@ -59,6 +60,12 @@ type
 
     function Internal_OnRequestData :  TJupiterVariableList; override;
     function Internal_OnPopupRequestData :  TJupiterVariableList;
+
+    function Internal_EnableWorkMenu : Boolean; override;
+    procedure Internal_AddToWorkMenu; override;
+
+    function Internal_GetRouteName : String;
+    function Internal_GetMacroName : String;
   public
     procedure FromReference(prReference : TJupiterDatabaseReference);
   end;
@@ -607,6 +614,39 @@ begin
     for vrVez := 0 to Self.InternalQuery.FieldCount - 1 do
       if not Result.Exists(Self.InternalQuery.Fields[vrVez].FieldName) then
         Result.AddVariable(Self.InternalQuery.Fields[vrVez].FieldName, Self.InternalQuery.Fields[vrVez].AsString, EmptyStr);
+end;
+
+function TFCustomDatabaseGrid.Internal_EnableWorkMenu: Boolean;
+begin
+  Result := True;
+end;
+
+procedure TFCustomDatabaseGrid.Internal_AddToWorkMenu;
+var
+  vrModule : TJupiterModule;
+  vrWizard : TJupiterDatabaseWizard;
+begin
+  inherited Internal_AddToWorkMenu;
+
+  vrWizard := vrJupiterApp.NewWizard;
+  vrModule := TJupiterModule.Create;
+  try
+    if vrModule.CreateMacroIfDontExists(Self.Internal_GetMacroName, 'Clique do item de menu ' + Self.FReference.TableName, CreateStringListToMacro(' OpenGridFromTableWithWhere(''' + Self.FReference.TableName + ''', ''' + Self.Params.VariableById('where').Value + ''', ''' + Self.Params.VariableById('orderBy').Value + '''); ')) then
+      vrModule.CreateRouteIfDontExists(Self.Caption, Self.Internal_GetRouteName, vrWizard.GetLastID('MACROS'), ICON_GRID, 1000);
+  finally
+    FreeAndNil(vrModule);
+    FreeAndNil(vrWizard);
+  end;
+end;
+
+function TFCustomDatabaseGrid.Internal_GetRouteName: String;
+begin
+  Result := vrJupiterApp.Params.VariableById('Menus.Work.Route').Value + AnsiLowerCase(Self.FReference.TableName) + '/' + FormatDateTime('ddmmyyyy_hhnnss', Now);
+end;
+
+function TFCustomDatabaseGrid.Internal_GetMacroName: String;
+begin
+  Result := JupiterStringUtilsScript_Replace(Copy(Self.Internal_GetRouteName, 2), '/', '.');
 end;
 
 procedure TFCustomDatabaseGrid.FromReference(prReference: TJupiterDatabaseReference);

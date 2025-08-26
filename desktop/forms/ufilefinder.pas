@@ -8,7 +8,8 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, uJupiterForm,
   jupiterStringUtils, JupiterDirectoryDataProvider, JupiterFileDataProvider,
   JupiterConsts, JupiterApp, uJupiterStringUtilsScript, uJupiterRunnableScript,
-  uMain, uJupiterAction, uJupiterDesktopAppScript, LCLType, jupiterthread;
+  uMain, uJupiterAction, uJupiterDesktopAppScript, LCLType, jupiterthread,
+  JupiterModule, jupiterDatabaseWizard;
 
 type
 
@@ -43,6 +44,12 @@ type
     procedure Internal_PrepareForm; override;
     procedure Internal_ReadDirectory(prPath : String; prOwner : TTreeNode);
     procedure Internal_ReadWithThread(prPath : String);
+
+    function Internal_EnableWorkMenu : Boolean; override;
+    procedure Internal_AddToWorkMenu; override;
+
+    function Internal_GetRouteName : String;
+    function Internal_GetMacroName : String;
   public
     procedure ReadDirectory(prPath : String; prOwner : TTreeNode);
   end;
@@ -359,6 +366,39 @@ end;
 procedure TFFileFinder.Internal_ReadWithThread(prPath: String);
 begin
 
+end;
+
+function TFFileFinder.Internal_EnableWorkMenu: Boolean;
+begin
+  Result := True;
+end;
+
+procedure TFFileFinder.Internal_AddToWorkMenu;
+var
+  vrModule : TJupiterModule;
+  vrWizard : TJupiterDatabaseWizard;
+begin
+  inherited Internal_AddToWorkMenu;
+
+  vrWizard := vrJupiterApp.NewWizard;
+  vrModule := TJupiterModule.Create;
+  try
+    if vrModule.CreateMacroIfDontExists(Self.Internal_GetMacroName, 'Clique do item de menu ' + ExtractFileName(Self.Params.VariableById('path').Value), CreateStringListToMacro(' OpenFileFinderForm(''' + Self.Params.VariableById('path').Value + '''); ')) then
+      vrModule.CreateRouteIfDontExists(Self.Caption, Self.Internal_GetRouteName, vrWizard.GetLastID('MACROS'), ICON_SEARCH, 1000);
+  finally
+    FreeAndNil(vrModule);
+    FreeAndNil(vrWizard);
+  end;
+end;
+
+function TFFileFinder.Internal_GetRouteName: String;
+begin
+  Result := vrJupiterApp.Params.VariableById('Menus.Work.Route').Value + '/search_' + FormatDateTime('ddmmyyyy_hhnnss', Now);
+end;
+
+function TFFileFinder.Internal_GetMacroName: String;
+begin
+  Result := JupiterStringUtilsScript_Replace(Copy(Self.Internal_GetRouteName, 2), '/', '.');
 end;
 
 procedure TFFileFinder.ReadDirectory(prPath: String; prOwner: TTreeNode);

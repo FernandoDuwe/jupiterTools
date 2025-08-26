@@ -4,9 +4,21 @@ inherited FFileFinder: TFFileFinder
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   inherited pnSearchBar: TPanel
+    Width = 879
+    ClientWidth = 879
     inherited edSearch: TEdit
       OnKeyPress = edSearchKeyPress
     end
+  end
+  inherited fpOptions: TFlowPanel
+    Height = 1
+    Top = 375
+    Width = 879
+  end
+  inherited pnBottom: TPanel
+    Top = 376
+    Width = 879
+    ClientWidth = 879
   end
   object tvFileTree: TTreeView[3]
     Left = 0

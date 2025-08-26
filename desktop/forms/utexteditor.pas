@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, SynEdit, uJupiterForm,
-  JupiterConsts, JupiterEnviroment, uJupiterAction, LCLType;
+  JupiterConsts, JupiterEnviroment, JupiterModule, jupiterDatabaseWizard,
+  JupiterApp, uJupiterStringUtilsScript, uJupiterAction, LCLType;
 
 type
 
@@ -26,6 +27,12 @@ type
     procedure Internal_OnAumentarFonte(Sender: TObject);
     procedure Internal_OnDiminuirFonte(Sender: TObject);
     procedure Internal_SetHighligther;
+
+    function Internal_EnableWorkMenu : Boolean; override;
+    procedure Internal_AddToWorkMenu; override;
+
+    function Internal_GetRouteName : String;
+    function Internal_GetMacroName : String;
   public
 
   end;
@@ -136,6 +143,39 @@ begin
 
   if (vrExtension = '.BAT') then
     seEditor.Highlighter := TSynBatSyn.Create(seEditor);
+end;
+
+function TFTextEditor.Internal_EnableWorkMenu: Boolean;
+begin
+  Result := True;
+end;
+
+procedure TFTextEditor.Internal_AddToWorkMenu;
+var
+  vrModule : TJupiterModule;
+  vrWizard : TJupiterDatabaseWizard;
+begin
+  inherited Internal_AddToWorkMenu;
+
+  vrWizard := vrJupiterApp.NewWizard;
+  vrModule := TJupiterModule.Create;
+  try
+    if vrModule.CreateMacroIfDontExists(Self.Internal_GetMacroName, 'Clique do item de menu ' + ExtractFileName(Self.Params.VariableById('path').Value), CreateStringListToMacro(' OpenTextEditorForm(''' + Self.Params.VariableById('path').Value + '''); ')) then
+      vrModule.CreateRouteIfDontExists(Self.Caption, Self.Internal_GetRouteName, vrWizard.GetLastID('MACROS'), ICON_DOCFILE, 1000);
+  finally
+    FreeAndNil(vrModule);
+    FreeAndNil(vrWizard);
+  end;
+end;
+
+function TFTextEditor.Internal_GetRouteName: String;
+begin
+  Result := vrJupiterApp.Params.VariableById('Menus.Work.Route').Value + '/file_' + FormatDateTime('ddmmyyyy_hhnnss', Now);
+end;
+
+function TFTextEditor.Internal_GetMacroName: String;
+begin
+  Result := JupiterStringUtilsScript_Replace(Copy(Self.Internal_GetRouteName, 2), '/', '.');
 end;
 
 end.
