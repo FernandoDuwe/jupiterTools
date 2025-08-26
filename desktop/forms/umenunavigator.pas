@@ -56,6 +56,29 @@ begin
 
   if miLookColumn.Checked then
     tvTreeMenu.Width := PercentOfScreen(Self.Width, Self.PercentDivisor);
+
+  pnBody.Caption := EmptyStr;
+
+  if not Self.Showing then
+    Exit;
+
+  if not Assigned(tvTreeMenu.Selected) then
+    Exit;
+
+  // Caso o formulário tenhas sido fechado
+  if not Assigned(Self.FForm) then
+  begin
+    pnBody.Caption := 'Selecione um item para exibir a rota correspondente';
+
+    Exit;
+  end;
+
+  if not Self.FForm.Showing then
+  begin
+    pnBody.Caption := 'Selecione um item para exibir a rota correspondente';
+
+    Exit;
+  end;
 end;
 
 procedure TFMenuNavigator.Internal_PrepareForm;

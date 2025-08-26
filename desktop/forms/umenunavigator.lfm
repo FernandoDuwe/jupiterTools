@@ -4,23 +4,23 @@ inherited FMenuNavigator: TFMenuNavigator
   Caption = 'Navegador de Menu'
   OnDestroy = FormDestroy
   inherited pnSearchBar: TPanel
-    Width = 1099
-    ClientWidth = 1099
+    Width = 879
+    ClientWidth = 879
   end
   inherited fpOptions: TFlowPanel
-    Height = 0
-    Top = 470
-    Width = 1099
+    Height = 1
+    Top = 375
+    Width = 879
   end
   inherited pnBottom: TPanel
-    Top = 470
-    Width = 1099
-    ClientWidth = 1099
+    Top = 376
+    Width = 879
+    ClientWidth = 879
   end
   object tvTreeMenu: TTreeView[3]
     Left = 0
-    Height = 414
-    Top = 56
+    Height = 330
+    Top = 45
     Width = 343
     Align = alLeft
     BackgroundColor = clDefault
@@ -31,15 +31,15 @@ inherited FMenuNavigator: TFMenuNavigator
   end
   object Splitter1: TSplitter[4]
     Left = 343
-    Height = 414
-    Top = 56
+    Height = 330
+    Top = 45
     Width = 5
   end
   object pnBody: TPanel[5]
     Left = 348
-    Height = 414
-    Top = 56
-    Width = 751
+    Height = 330
+    Top = 45
+    Width = 531
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 5
