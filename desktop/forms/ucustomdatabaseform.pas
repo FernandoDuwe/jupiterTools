@@ -215,8 +215,11 @@ var
   vrWizard : TJupiterDatabaseWizard;
   vrAction : TJupiterComponentReference;
   vrField : TField;
+  vrIsFirst : Boolean;
 begin
   vrCurrentLine := FORM_MARGIN_TOP;
+
+  vrIsFirst := True;
 
   if not Assigned(Self.QueryOrigin) then
     Exit;
@@ -249,6 +252,10 @@ begin
                                                       sbBody,
                                                       vrWizard.GetForeignKeyData(Self.TableName, Self.QueryOrigin.Fields[vrVez].FieldName));
 
+        if ((vrIsFirst) and (TDBEdit(vrReference.Component).CanFocus)) then
+          TDBEdit(vrReference.Component).SetFocus;
+
+        vrIsFirst := False;
 
         vrAction := JupiterComponentsAddAction(vrReference, ICON_VIEW, sbBody);
 
@@ -279,10 +286,24 @@ begin
           end
           else
             if Self.QueryOrigin.Fields[vrVez] is TBooleanField then
-              vrReference := JupiterComponentsNewDBCheckBox(Self.QueryOrigin.Fields[vrVez], InternalDataSource, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody)
+            begin
+              vrReference := JupiterComponentsNewDBCheckBox(Self.QueryOrigin.Fields[vrVez], InternalDataSource, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody);
+
+              if ((vrIsFirst) and (TDBCheckBox(vrReference.Component).CanFocus)) then
+                TDBCheckBox(vrReference.Component).SetFocus;
+
+              vrIsFirst := False;
+
+              TDBCheckBox(vrReference.Component).Caption := JupiterDatabaseScript_GetDescription(Self.FTableName, Self.QueryOrigin.Fields[vrVez].FieldName);
+            end
             else
             begin
               vrReference := JupiterComponentsNewDBEdit(Self.QueryOrigin.Fields[vrVez], InternalDataSource, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody);
+
+              if ((vrIsFirst) and (TDBEdit(vrReference.Component).CanFocus)) then
+                TDBEdit(vrReference.Component).SetFocus;
+
+              vrIsFirst := False;
 
               if vrWizard.Exists('DATABASE_DICTIONARY', ' TABLENAME = "' + Self.FTableName + '" AND FIELDNAME = "' + Self.QueryOrigin.Fields[vrVez].FieldName + '" AND ACTION_COPY = TRUE ') then
               begin
@@ -305,8 +326,11 @@ begin
             end;
 
       // Pulando linha
-          vrCurrentLine := vrReference.Bottom + FORM_MARGIN_TOP + FORM_MARGIN_BOTTOM;
+      vrCurrentLine := vrReference.Bottom + FORM_MARGIN_TOP + FORM_MARGIN_BOTTOM;
     end;
+
+    if vrCurrentLine > sbBody.Height then
+      vrReference := JupiterComponentsNewLabel(EmptyStr, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody);
   finally
     FreeAndNil(vrWizard);
   end;
