@@ -15,6 +15,7 @@ type
   { TFCustomCodeForm }
 
   TFCustomCodeForm = class(TFJupiterForm)
+    fpTile: TFlowPanel;
     sbBody: TScrollBox;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -23,6 +24,8 @@ type
     FCurrentLine : Integer;
     FCurrentMargin : Integer;
     FReferences : TJupiterObjectList;
+    FCustomColor : TColor;
+    FListItemCounter : Integer;
 
     procedure Internal_OnCheckBoxChange(Sender: TObject);
     procedure Internal_OnLinkClick(Sender: TObject);
@@ -35,6 +38,8 @@ type
     procedure Internal_PrepareForm; override;
 
     procedure Internal_UpdateComponents; override;
+
+    function Internal_GetNextColor : TColor;
   published
     property CurrentLine : Integer read FCurrentLine;
 
@@ -60,6 +65,8 @@ type
     procedure AddLinkBoldAsScript(prCaption : String; prMacro : TStrings);
     procedure AddActionWithScript(prCaption, prHint : String; prIcon : Integer; prMacro : TStrings);
     procedure AddLine(prTop, prLeft, prHeight, prWidth: Integer);
+    procedure AddTile(prTitle : String; prCounter : Integer);
+    procedure AddListItem(prTitle, prSubtitle : String);
     procedure JumpLine;
     procedure SetCurrentMargin(prMargin : Integer);
     procedure SetCurrentLine(prLine : Integer);
@@ -80,7 +87,10 @@ uses Buttons, JupiterEdit, Clipbrd;
 
 procedure TFCustomCodeForm.FormCreate(Sender: TObject);
 begin
+  Self.FCustomColor := clMenuHighlight;
+
   Self.FCurrentLine := 0;
+  Self.FListItemCounter := 0;
   Self.FCustomInterval := vrJupiterApp.Params.VariableById(FORM_UPDATE_TIME).AsInteger;
 
   Self.FReferences := TJupiterObjectList.Create;
@@ -207,6 +217,39 @@ begin
         TLabel(TJupiterComponentReference(Self.FReferences.GetAtIndex(vrVez)).Component).Caption := vrJupiterApp.RunMacroAsResult(TJupiterComponentReference(Self.FReferences.GetAtIndex(vrVez)).MacroID, vrParams);
       end;
     end;
+  end;
+end;
+
+function TFCustomCodeForm.Internal_GetNextColor: TColor;
+begin
+  try
+    if Self.FCustomColor = clMenuHighlight then
+    begin
+      Self.FCustomColor := clSkyBlue;
+      Exit;
+    end;
+
+    if Self.FCustomColor = clSkyBlue then
+    begin
+      Self.FCustomColor := clCream;
+      Exit;
+    end;
+
+    if Self.FCustomColor = clCream then
+    begin
+      Self.FCustomColor := clMoneyGreen;
+      Exit;
+    end;
+
+    if Self.FCustomColor = clMoneyGreen then
+    begin
+      Self.FCustomColor := clSilver;
+      Exit;
+    end;
+
+    Self.FCustomColor := clMenuHighlight;
+  finally
+    Result := Self.FCustomColor;
   end;
 end;
 
@@ -567,6 +610,29 @@ begin
   vrReference := JupiterComponentsAddLine(TJupiterPosition.Create(prTop, prLeft), prHeight, prWidth, sbBody);
 
   Self.FCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM;
+end;
+
+procedure TFCustomCodeForm.AddTile(prTitle: String; prCounter: Integer);
+var
+  vrReference : TJupiterComponentReference;
+begin
+  vrReference := JupiterComponentsNewTile(prTitle, prCounter, 50, PercentOfScreen(fpTile.Width, 24), TJupiterPosition.Create(0, 0), fpTile);
+
+  TPanel(vrReference.Component).Color := Self.Internal_GetNextColor;
+end;
+
+procedure TFCustomCodeForm.AddListItem(prTitle, prSubtitle: String);
+var
+  vrReference : TJupiterComponentReference;
+begin
+  try
+    vrReference := JupiterComponentsNewListItem(prTitle, prSubtitle, sbBody);
+
+    if (Self.FListItemCounter mod 2) = 0 then
+      TPanel(vrReference.Component).Color := $00FFEAEA;
+  finally
+    Self.FListItemCounter := Self.FListItemCounter + 1;
+  end;
 end;
 
 procedure TFCustomCodeForm.JumpLine;

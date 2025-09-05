@@ -42,6 +42,10 @@ uses
 
   function JupiterComponentsAddLine(prPosition : TJupiterPosition; prHeight, prWidth: Integer; prOwner : TWinControl) : TJupiterComponentReference;
 
+  function JupiterComponentsNewTile(prTitle : String; prCounter : Integer; prHeight, prWidth: Integer; prPosition : TJupiterPosition; prOwner : TWinControl) : TJupiterComponentReference;
+
+  function JupiterComponentsNewListItem(prTitle, prSubtitle : String; prOwner : TWinControl) : TJupiterComponentReference;
+
 implementation
 
 uses Buttons, DBDateTimePicker, SQLDB, DateTimePicker, Graphics, LCLProc, JupiterEdit, jupiterStringUtils;
@@ -443,6 +447,71 @@ begin
                                               vrShape.Left + vrShape.Width,
                                               vrShape.Top + vrShape.Height,
                                               vrShape);
+end;
+
+function JupiterComponentsNewTile(prTitle: String; prCounter: Integer; prHeight, prWidth: Integer; prPosition: TJupiterPosition; prOwner: TWinControl): TJupiterComponentReference;
+var
+  vrPanel : TPanel;
+begin
+  vrPanel             := TPanel.Create(prOwner);
+  vrPanel.Parent      := prOwner;
+  vrPanel.AutoSize    := False;
+  vrPanel.Top         := prPosition.Top;
+  vrPanel.Left        := prPosition.Left;
+  vrPanel.Height      := prHeight;
+  vrPanel.Width       := prWidth;
+  vrPanel.BevelOuter  := bvNone;
+  vrPanel.Font.Size   := GetFontSize;
+  vrPanel.ParentBackground := False;
+  vrPanel.ParentColor := False;
+
+  vrPanel.Anchors := [akTop, akLeft, akRight];
+
+  JupiterComponentsNewLabel(prTitle, TJupiterPosition.Create(FORM_MARGIN_TOP, FORM_MARGIN_LEFT), vrPanel);
+
+  if prCounter >= 0 then
+    JupiterComponentsNewLabel(IntToStr(prCounter),
+                              TJupiterPosition.Create((prHeight - FORM_MARGIN_TOP) - GetTextHeight(IntToStr(prCounter), vrPanel.Font),
+                                                      (prWidth - FORM_MARGIN_RIGHT) - GetTextWidth(IntToStr(prCounter), vrPanel.Font)),
+                              vrPanel);
+
+  Result := TJupiterComponentReference.Create(vrPanel.Top,
+                                              vrPanel.Left,
+                                              vrPanel.Left + vrPanel.Width,
+                                              vrPanel.Top + vrPanel.Height,
+                                              vrPanel);
+end;
+
+function JupiterComponentsNewListItem(prTitle, prSubtitle: String; prOwner: TWinControl): TJupiterComponentReference;
+var
+  vrPanel : TPanel;
+  vrLabel : TJupiterComponentReference;
+begin
+  vrPanel             := TPanel.Create(prOwner);
+  vrPanel.Parent      := prOwner;
+  vrPanel.Align       := alTop;
+  vrPanel.BevelOuter  := bvNone;
+  vrPanel.Font.Size   := GetFontSize;
+  vrPanel.ParentBackground := False;
+  vrPanel.ParentColor := False;
+
+  vrPanel.Anchors := [akTop, akLeft, akRight];
+
+  vrLabel := JupiterComponentsNewLabel(prTitle, TJupiterPosition.Create(FORM_MARGIN_TOP, FORM_MARGIN_LEFT), vrPanel);
+
+  TLabel(vrLabel.Component).Font.Style := [fsBold];
+
+  vrPanel.Height := vrLabel.Bottom + FORM_MARGIN_BOTTOM;
+
+  vrLabel := JupiterComponentsNewLabel(prSubtitle, TJupiterPosition.Create(vrPanel.Height, FORM_MARGIN_LEFT), vrPanel);
+
+  vrPanel.Height := vrLabel.Bottom + FORM_MARGIN_BOTTOM;
+
+  Result := TJupiterComponentReference.Create(vrPanel.Top,
+                                              vrPanel.Left,
+                                              vrPanel.Left + vrPanel.Width,
+                                              vrPanel.Top + vrPanel.Height,
+                                              vrPanel);
 end;
 
 end.

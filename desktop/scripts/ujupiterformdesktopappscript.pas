@@ -42,6 +42,8 @@ type
   procedure JupiterFormDesktopAppScriptAddAction(prFormID, prCaption, prHint : String; prIcon : Integer; prMacroID : String);
   procedure JupiterFormDesktopAppScriptAddActionWithScript(prFormID, prCaption, prHint : String; prIcon : Integer; prMacro : TStrings);
   procedure JupiterFormDesktopAppScriptAddLine(prFormID : String; prTop, prLeft, prHeight, prWidth : Integer);
+  procedure JupiterFormDesktopAppScriptAddTile(prFormID, prTitle : String; prCounter : Integer);
+  procedure JupiterFormDesktopAppScriptAddListItem(prFormID, prTitle, prSubtitle : String);
   procedure JupiterFormDesktopAppScriptJumpLine(prFormID : String);
   procedure JupiterFormDesktopAppScriptSetCurrentMargin(prFormID : String; prMargin : Integer);
   procedure JupiterFormDesktopAppScriptSetCurrentLine(prFormID : String; prLine : Integer);
@@ -382,6 +384,36 @@ begin
   TFCustomCodeForm(vrForm).AddLine(prTop, prLeft, prHeight, prWidth);
 end;
 
+procedure JupiterFormDesktopAppScriptAddTile(prFormID, prTitle: String; prCounter: Integer);
+var
+  vrForm : TForm;
+begin
+  vrForm := TJupiterDesktopApp(vrJupiterApp).GetFormById(prFormID);
+
+  if not Assigned(vrForm) then
+    Exit;
+
+  if not (vrForm is TFCustomCodeForm) then
+    Exit;
+
+  TFCustomCodeForm(vrForm).AddTile(prTitle, prCounter);
+end;
+
+procedure JupiterFormDesktopAppScriptAddListItem(prFormID, prTitle, prSubtitle: String);
+var
+  vrForm : TForm;
+begin
+  vrForm := TJupiterDesktopApp(vrJupiterApp).GetFormById(prFormID);
+
+  if not Assigned(vrForm) then
+    Exit;
+
+  if not (vrForm is TFCustomCodeForm) then
+    Exit;
+
+  TFCustomCodeForm(vrForm).AddListItem(prTitle, prSubtitle);
+end;
+
 procedure JupiterFormDesktopAppScriptJumpLine(prFormID: String);
 var
   vrForm : TForm;
@@ -548,6 +580,9 @@ begin
   prSender.AddFunction(@JupiterFormDesktopAppScriptAddAction, 'procedure Form_AddAction(prFormID, prCaption, prHint: String; prIcon: Integer; prMacroID: String);');
   prSender.AddFunction(@JupiterFormDesktopAppScriptAddLine, 'procedure Form_AddLine(prFormID : String; prTop, prLeft, prHeight, prWidth : Integer);');
   prSender.AddFunction(@JupiterFormDesktopAppScriptAddActionWithScript, 'procedure Form_AddActionWithScript(prFormID, prCaption, prHint: String; prIcon: Integer; prMacro: TStrings);');
+
+  prSender.AddFunction(@JupiterFormDesktopAppScriptAddTile, 'procedure Form_AddTile(prFormID, prTitle : String; prCounter : Integer);');
+  prSender.AddFunction(@JupiterFormDesktopAppScriptAddListItem, 'procedure Form_AddListItem(prFormID, prTitle, prSubtitle : String);');
 end;
 
 function TJupiterFormDesktopAppScript.AnalyseCode: TJupiterScriptAnalyserList;
@@ -588,6 +623,9 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function Form_GetCurrentLine(prFormID: String): Integer;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function Form_GetHeigth(prFormID: String): Integer;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function Form_GetWidth(prFormID: String): Integer;'));
+
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddTile(prFormID, prTitle : String; prCounter : Integer);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddListItem(prFormID, prTitle, prSubtitle : String);'));
 end;
 
 end.

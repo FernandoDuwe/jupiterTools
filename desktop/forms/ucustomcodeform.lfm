@@ -1,23 +1,35 @@
 inherited FCustomCodeForm: TFCustomCodeForm
   Left = 876
   Top = 586
-  Caption = ''
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   object sbBody: TScrollBox[3]
     Left = 0
-    Height = 330
-    Top = 45
+    Height = 329
+    Top = 46
     Width = 879
     HorzScrollBar.Page = 1
     VertScrollBar.Page = 1
     Align = alClient
     TabOrder = 3
   end
-  inherited acOptions: TActionList[4]
+  object fpTile: TFlowPanel[4]
+    Left = 0
+    Height = 1
+    Top = 45
+    Width = 879
+    Align = alTop
+    AutoSize = True
+    BevelOuter = bvNone
+    ControlList = <>
+    FlowLayout = tlTop
+    FlowStyle = fsLeftRightTopBottom
+    TabOrder = 4
   end
-  inherited tmrAutoUpdater: TTimer[5]
+  inherited acOptions: TActionList[5]
   end
-  inherited pmOptions: TPopupMenu[6]
+  inherited tmrAutoUpdater: TTimer[6]
+  end
+  inherited pmOptions: TPopupMenu[7]
   end
 end

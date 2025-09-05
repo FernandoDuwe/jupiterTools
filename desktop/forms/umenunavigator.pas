@@ -54,6 +54,9 @@ procedure TFMenuNavigator.Internal_UpdateComponents;
 begin
   inherited Internal_UpdateComponents;
 
+  Self.Repaint;
+  Self.Refresh;
+
   if miLookColumn.Checked then
     tvTreeMenu.Width := PercentOfScreen(Self.Width, Self.PercentDivisor);
 
