@@ -5,7 +5,7 @@ unit JupiterConsts;
 interface
 
 uses
-  Classes, SysUtils;
+  Classes, Graphics, SysUtils;
 
 const
    ROOT_PATH : String = '/';
@@ -172,6 +172,9 @@ const
    // Params
    PARAM_PARAMS : String = 'Params';
    PARAM_FORM_CALLER : String = 'FormCaller';
+
+   // Graficos
+   ALTERNATIVE_COLOR = $00FFF4F4; // $00EFEFEF; // $00FFEAEA;
 
    function GetCurrentOS : String;
    function GetDirectorySeparator : String;

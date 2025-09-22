@@ -23,6 +23,8 @@ type
   function JupiterStringUtilsScript_GenerateGUID : String;
   function JupiterStringUtilsScript_GetCSVColumn(prLine : String; prIndex : Integer) : String;
   function JupiterStringUtilsScript_Replace(prStr, prOldString, prNewString : String) : String;
+  function JupiterStringUtilsScript_CountCharInString(prChar, prFullString : String) : Integer;
+  function JupiterStringUtilsScript_GetNextWord(prWord, prText : String) : String;
 
 implementation
 
@@ -39,6 +41,44 @@ end;
 function JupiterStringUtilsScript_Replace(prStr, prOldString, prNewString: String): String;
 begin
   Result := StringReplace(prStr, prOldString, prNewString, [rfIgnoreCase, rfReplaceAll]);
+end;
+
+function JupiterStringUtilsScript_CountCharInString(prChar, prFullString: String): Integer;
+var
+  vrVez : Integer;
+begin
+  Result := 0;
+
+  for vrVez := 1 to Length(prFullString) do
+    if prFullString[vrVez] = prChar then
+      Result := Result + 1;
+end;
+
+function JupiterStringUtilsScript_GetNextWord(prWord, prText: String): String;
+var
+  vrStr   : TStrings;
+  vrIndex : Integer;
+begin
+  Result := EmptyStr;
+
+  vrStr := TStringList.Create;
+  try
+    vrStr.Clear;
+    vrStr.Delimiter     := '|';
+    vrStr.DelimitedText := StringReplace(prText, ' ', '|', [rfReplaceAll, rfIgnoreCase]);
+
+    vrIndex := vrStr.IndexOf(prWord);
+
+    if vrIndex = NULL_KEY then
+      Exit;
+
+    if vrIndex > (vrStr.Count - 1) then
+      Exit;
+
+    Result := vrStr[vrIndex + 1];
+  finally
+    FreeAndNil(vrStr);
+  end;
 end;
 
 { TJupiterStringUtilsScript }

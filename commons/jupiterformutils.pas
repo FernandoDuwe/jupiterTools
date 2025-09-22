@@ -8,7 +8,7 @@ uses
   Classes, ComCtrls, JupiterObject, JupiterConsts, Controls,
   SysUtils, Forms, Graphics, EditBtn, CheckLst, StdCtrls,
   ShellCtrls, SynEdit, DBCtrls, DBDateTimePicker, ActnList,
-  Menus;
+  Menus, ValEdit;
 
   procedure CopyNodes(prSourceNode, prTargetNode: TTreeNode);
 
@@ -390,7 +390,18 @@ begin
       TDBGrid(prComponent.Components[vrVez]).Flat      := True;
 
       {$IFDEF WINDOWS}
-      TDBGrid(prComponent.Components[vrVez]).AlternateColor := $00FFEAEA;
+      TDBGrid(prComponent.Components[vrVez]).AlternateColor := ALTERNATIVE_COLOR;
+      {$ENDIF}
+    end;
+
+    if prComponent.Components[vrVez] is TValueListEditor then
+    begin
+      TValueListEditor(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+      TValueListEditor(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_FONT_NAME).Value;
+      TValueListEditor(prComponent.Components[vrVez]).Flat      := True;
+
+      {$IFDEF WINDOWS}
+      TValueListEditor(prComponent.Components[vrVez]).AlternateColor := ALTERNATIVE_COLOR;
       {$ENDIF}
     end;
   end;

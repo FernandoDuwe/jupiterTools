@@ -1,8 +1,18 @@
 inherited FExternalSQLEditor: TFExternalSQLEditor
   Left = 437
   Top = 206
-  inherited SynCompletion1: TSynCompletion
-    Position = -1
+  Caption = 'Editor SQL (Externo)'
+  OnDestroy = FormDestroy
+  inherited pnBody: TPanel
+    inherited pcBottom: TPageControl
+      inherited tsColumns: TTabSheet
+        inherited mmColumns: TMemo
+          Lines.Strings = (
+            'mmColumns'
+          )
+        end
+      end
+    end
   end
   object sqlLiteInternalTransaction: TSQLTransaction[14]
     Active = False

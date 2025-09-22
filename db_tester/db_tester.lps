@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="12"/>
+    <BuildModes Active="Default"/>
+    <Units>
+      <Unit>
+        <Filename Value="db_tester.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="20"/>
+      </Unit>
+      <Unit>
+        <Filename Value="Forms\umain.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FMain"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uMain"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="41"/>
+        <CursorPos Y="58"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit>
+    </Units>
+    <JumpHistory HistoryIndex="12">
+      <Position>
+        <Filename Value="Forms\umain.pas"/>
+      </Position>
+      <Position>
+        <Filename Value="Forms\umain.pas"/>
+        <Caret Line="25" Column="31"/>
+      </Position>
+      <Position>
+        <Filename Value="Forms\umain.pas"/>
+        <Caret Line="47" Column="7" TopLine="13"/>
+      </Position>
+      <Position>
+        <Filename Value="Forms\umain.pas"/>
+        <Caret Line="46" Column="32" TopLine="28"/>
+      </Position>
+      <Position>
+        <Filename Value="Forms\umain.pas"/>
+        <Caret Line="61" Column="41" TopLine="28"/>
+      </Position>
+      <Position>
+        <Filename Value="Forms\umain.pas"/>
+        <Caret Line="62" Column="56" TopLine="45"/>
+      </Position>
+      <Position>
+        <Filename Value="Forms\umain.pas"/>
+        <Caret Line="63" Column="56" TopLine="46"/>
+      </Position>
+      <Position>
+        <Filename Value="Forms\umain.pas"/>
+        <Caret Line="62" Column="56" TopLine="45"/>
+      </Position>
+      <Position>
+        <Filename Value="Forms\umain.pas"/>
+        <Caret Line="60" Column="72" TopLine="47"/>
+      </Position>
+      <Position>
+        <Filename Value="Forms\umain.pas"/>
+        <Caret Line="52" TopLine="50"/>
+      </Position>
+      <Position>
+        <Filename Value="Forms\umain.pas"/>
+        <Caret Line="9" Column="80"/>
+      </Position>
+      <Position>
+        <Filename Value="Forms\umain.pas"/>
+        <Caret Line="19" Column="80"/>
+      </Position>
+      <Position>
+        <Filename Value="Forms\umain.pas"/>
+        <Caret Line="9" Column="22"/>
+      </Position>
+    </JumpHistory>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes ActiveMode=""/>
+    </RunParams>
+  </ProjectSession>
+</CONFIG>

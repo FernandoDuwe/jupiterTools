@@ -1,0 +1,84 @@
+object FMain: TFMain
+  Left = 880
+  Height = 526
+  Top = 227
+  Width = 500
+  Caption = 'Teste de Conexão de base de dados'
+  ClientHeight = 526
+  ClientWidth = 500
+  Menu = mmOptions
+  LCLVersion = '4.2.0.0'
+  OnShow = FormShow
+  object sbStatus: TStatusBar
+    Left = 0
+    Height = 23
+    Top = 503
+    Width = 500
+    Panels = <>
+  end
+  object gbOutput: TGroupBox
+    Left = 0
+    Height = 287
+    Top = 216
+    Width = 500
+    Align = alBottom
+    Caption = 'Log'
+    ClientHeight = 267
+    ClientWidth = 496
+    TabOrder = 1
+    object mmLog: TMemo
+      Left = 0
+      Height = 267
+      Top = 0
+      Width = 496
+      Align = alClient
+      ReadOnly = True
+      ScrollBars = ssBoth
+      TabOrder = 0
+    end
+  end
+  object vlValues: TValueListEditor
+    Left = 0
+    Height = 216
+    Top = 0
+    Width = 500
+    Align = alClient
+    DefaultColWidth = 140
+    RowCount = 6
+    TabOrder = 2
+    Strings.Strings = (
+      'Tipo de conexão=ODBC'
+      'Servidor=localhost'
+      'Base de Dados=JUPITER'
+      'Usuário=sysdba'
+      'Senha=masterkey'
+    )
+    TitleCaptions.Strings = (
+      'Chave'
+      'Valor'
+    )
+    ColWidths = (
+      140
+      356
+    )
+  end
+  object mmOptions: TMainMenu
+    Left = 253
+    Top = 70
+    object miConnect: TMenuItem
+      Caption = 'Conectar'
+      OnClick = miConnectClick
+    end
+    object miDisconnect: TMenuItem
+      Caption = 'Desconectar'
+      OnClick = miDisconnectClick
+    end
+  end
+  object SQLConnector1: TSQLConnector
+    Connected = False
+    LoginPrompt = False
+    KeepConnection = False
+    Left = 253
+    Top = 144
+  end
+end

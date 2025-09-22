@@ -6,11 +6,12 @@ inherited FMain: TFMain
   ClientHeight = 648
   ClientWidth = 1228
   Menu = mmMainMenu
+  Position = poDesigned
   OnClose = FormClose
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnResize = FormResize
   OnShow = FormShow
-  Position = poDesigned
   inherited pnSearchBar: TPanel
     Width = 1228
     ClientWidth = 1228
@@ -19,19 +20,20 @@ inherited FMain: TFMain
     end
   end
   inherited fpOptions: TFlowPanel
-    Top = 547
+    Height = 0
+    Top = 544
     Width = 1228
     TabOrder = 3
   end
   inherited pnBottom: TPanel
-    Top = 548
+    Top = 544
     Width = 1228
     ClientWidth = 1228
   end
   object sbStatus: TStatusBar[3]
     Left = 0
-    Height = 19
-    Top = 629
+    Height = 23
+    Top = 625
     Width = 1228
     Panels = <    
       item
@@ -46,47 +48,47 @@ inherited FMain: TFMain
   end
   object jtMainTab: TJupiterFormTab[4]
     Left = 0
-    Height = 502
+    Height = 499
     Top = 45
     Width = 1228
     Align = alClient
     HotTrack = True
     Images = ilTabs
     MultiLine = True
+    Options = [nboMultiLine]
     PopupMenu = pmTabOptions
     TabOrder = 1
     Visible = False
     OnChange = jtMainTabChange
     OnResize = jtMainTabResize
-    Options = [nboMultiLine]
     AlwaysHaveForm = False
   end
   inherited acOptions: TActionList[5]
     Images = ilIconFamily
     object acNewTab: TAction[0]
       Caption = 'acNewTab'
-      OnExecute = acNewTabExecute
       ShortCut = 16462
+      OnExecute = acNewTabExecute
     end
     object acNextTab: TAction[1]
       Caption = 'Próxima aba'
-      OnExecute = acNextTabExecute
       ShortCut = 16393
+      OnExecute = acNextTabExecute
     end
     object acPreviousTab: TAction[2]
       Caption = 'acPreviousTab'
-      OnExecute = acPreviousTabExecute
       ShortCut = 24585
+      OnExecute = acPreviousTabExecute
     end
     object acCloseTab: TAction[3]
       Caption = 'acCloseTab'
-      OnExecute = acCloseTabExecute
       ShortCut = 16499
+      OnExecute = acCloseTabExecute
     end
     object acCloseAllButThis: TAction[4]
       Caption = 'acCloseAllButThis'
-      OnExecute = acCloseAllButThisExecute
       ShortCut = 24691
+      OnExecute = acCloseAllButThisExecute
     end
     inherited acIncreaseLefPanel: TAction[5]
     end
@@ -94,8 +96,8 @@ inherited FMain: TFMain
     end
     object acUpdateAndResize: TAction[7]
       Caption = 'acUpdateAndResize'
-      OnExecute = acUpdateAndResizeExecute
       ShortCut = 8308
+      OnExecute = acUpdateAndResizeExecute
     end
     inherited acExitIfModal: TAction[8]
     end

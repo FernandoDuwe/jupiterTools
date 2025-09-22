@@ -30,7 +30,7 @@ uses
   uTextEditor, uJupiterDateUtilsScript, uChartViewer,
   uJupiterCheckListUtilsScript, uWaitForm, uCodeRunner, uFileFinder,
   uFileReaderFinder, jupiterScriptList, uconsole, uExternalSQLEditor,
-  uMultiLevelTextEditor, uMenuNavigator;
+  uMultiLevelTextEditor, uMenuNavigator, jupiterDatabaseAutoComplete;
 
 {$R *.res}
 

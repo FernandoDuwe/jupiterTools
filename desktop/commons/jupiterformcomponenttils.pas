@@ -386,7 +386,6 @@ begin
   vrEdit.Left         := prPosition.Left;
   vrEdit.DataSource   := prDataSource;
   vrEdit.DataField    := prField.FieldName;
-  vrEdit.AutoSize     := False;
   vrEdit.Anchors      := [akTop, akLeft];
   vrEdit.ValueChecked := '1';
   vrEdit.ValueChecked := '0';
@@ -492,8 +491,6 @@ begin
   vrPanel.Align       := alTop;
   vrPanel.BevelOuter  := bvNone;
   vrPanel.Font.Size   := GetFontSize;
-  vrPanel.ParentBackground := False;
-  vrPanel.ParentColor := False;
 
   vrPanel.Anchors := [akTop, akLeft, akRight];
 

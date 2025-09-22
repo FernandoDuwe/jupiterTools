@@ -1,7 +1,7 @@
 inherited FSQLEditor: TFSQLEditor
-  Left = 85
+  Left = 475
   Height = 800
-  Top = 146
+  Top = 129
   Width = 1200
   Caption = 'Editor SQL'
   ClientHeight = 800
@@ -32,6 +32,7 @@ inherited FSQLEditor: TFSQLEditor
     ClientHeight = 674
     ClientWidth = 170
     TabOrder = 3
+    Visible = False
     object tvLibrary: TTreeView
       Left = 0
       Height = 674
@@ -42,6 +43,7 @@ inherited FSQLEditor: TFSQLEditor
       SortType = stText
       TabOrder = 0
       Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
+      OnDblClick = tvLibraryDblClick
     end
   end
   object Splitter1: TSplitter[4]
@@ -63,7 +65,7 @@ inherited FSQLEditor: TFSQLEditor
     TabOrder = 5
     inline SynEdit1: TSynEdit
       Left = 0
-      Height = 469
+      Height = 472
       Top = 0
       Width = 1025
       Align = alClient
@@ -525,10 +527,13 @@ inherited FSQLEditor: TFSQLEditor
       MouseLinkColor.Foreground = clBlue
       LineHighlightColor.Background = clNone
       LineHighlightColor.Foreground = clNone
+      OnChange = SynEdit1Change
       inline SynLeftGutterPartList1: TSynGutterPartList
         object SynGutterMarks1: TSynGutterMarks
           Width = 24
           MouseActions = <>
+          MaxExtraMarksColums = 0
+          Options = [sgmoDeDuplicateMarksOnOverflow]
         end
         object SynGutterLineNumber1: TSynGutterLineNumber
           Width = 13
@@ -561,59 +566,140 @@ inherited FSQLEditor: TFSQLEditor
         end
       end
     end
-    object pcBottom: TPageControl
-      Left = 0
-      Height = 200
-      Top = 474
-      Width = 1025
-      ActivePage = tsBottom
-      Align = alBottom
-      TabIndex = 0
-      TabOrder = 1
-      object tsBottom: TTabSheet
-        Caption = 'Registros'
-        ClientHeight = 172
-        ClientWidth = 1017
-        object dbGridQueryResult: TDBGrid
-          Left = 0
-          Height = 172
-          Top = 0
-          Width = 1017
-          Align = alClient
-          Color = clWindow
-          Columns = <>
-          DataSource = dsQuery
-          TabOrder = 0
-        end
-      end
-      object tsColumns: TTabSheet
-        Caption = 'Colunas'
-        ClientHeight = 172
-        ClientWidth = 1017
-        object mmColumns: TMemo
-          Left = 0
-          Height = 172
-          Top = 0
-          Width = 1017
-          Align = alClient
-          Lines.Strings = (
-            'mmColumns'
-          )
-          ReadOnly = True
-          ScrollBars = ssBoth
-          TabOrder = 0
-        end
-      end
-    end
     object Splitter2: TSplitter
       Cursor = crVSplit
       Left = 0
       Height = 5
-      Top = 469
+      Top = 472
       Width = 1025
       Align = alBottom
-      OnMoved = spDivisorMoved
       ResizeAnchor = akBottom
+      OnMoved = spDivisorMoved
+    end
+    object pnGrid: TPanel
+      Left = 0
+      Height = 197
+      Top = 477
+      Width = 1025
+      Align = alBottom
+      ClientHeight = 197
+      ClientWidth = 1025
+      TabOrder = 2
+      object pnNav: TPanel
+        Left = 960
+        Height = 195
+        Top = 1
+        Width = 64
+        Align = alRight
+        BevelOuter = bvNone
+        ClientHeight = 195
+        ClientWidth = 64
+        TabOrder = 0
+        object dbNav: TDBNavigator
+          Left = 0
+          Height = 195
+          Top = 0
+          Width = 64
+          Align = alClient
+          BevelOuter = bvNone
+          ChildSizing.EnlargeHorizontal = crsScaleChilds
+          ChildSizing.EnlargeVertical = crsScaleChilds
+          ChildSizing.ShrinkHorizontal = crsScaleChilds
+          ChildSizing.ShrinkVertical = crsScaleChilds
+          ChildSizing.Layout = cclTopToBottomThenLeftToRight
+          ChildSizing.ControlsPerLine = 100
+          ClientHeight = 195
+          ClientWidth = 64
+          DataSource = dsQuery
+          Direction = nbdVertical
+          Options = []
+          TabOrder = 0
+        end
+      end
+      object pcBottom: TPageControl
+        Left = 1
+        Height = 195
+        Top = 1
+        Width = 959
+        ActivePage = tsBottom
+        Align = alClient
+        TabIndex = 0
+        TabOrder = 1
+        object tsBottom: TTabSheet
+          Caption = 'Registros'
+          ClientHeight = 167
+          ClientWidth = 951
+          object dbGridQueryResult: TDBGrid
+            Left = 0
+            Height = 167
+            Top = 0
+            Width = 951
+            Align = alClient
+            Color = clWindow
+            Columns = <>
+            DataSource = dsQuery
+            TabOrder = 0
+            OnCellClick = dbGridQueryResultCellClick
+          end
+        end
+        object tsCampos: TTabSheet
+          Caption = 'Campos'
+          ClientHeight = 167
+          ClientWidth = 951
+          object vlFields: TValueListEditor
+            Left = 0
+            Height = 167
+            Top = 0
+            Width = 951
+            Align = alClient
+            RowCount = 2
+            TabOrder = 0
+            TitleCaptions.Strings = (
+              'Campo'
+              'Valor'
+            )
+            ColWidths = (
+              64
+              866
+            )
+          end
+        end
+        object tsColumns: TTabSheet
+          Caption = 'Mensagens'
+          ClientHeight = 167
+          ClientWidth = 951
+          object mmColumns: TMemo
+            Left = 0
+            Height = 167
+            Top = 0
+            Width = 951
+            Align = alClient
+            Lines.Strings = (
+              'mmColumns'
+            )
+            ReadOnly = True
+            ScrollBars = ssBoth
+            TabOrder = 0
+          end
+        end
+        object tsTexto: TTabSheet
+          Caption = 'Texto'
+          ClientHeight = 167
+          ClientWidth = 951
+          TabVisible = False
+          object mmField: TDBMemo
+            Left = 0
+            Height = 167
+            Top = 0
+            Width = 951
+            Align = alClient
+            DataSource = dsQuery
+            ReadOnly = True
+            ScrollBars = ssBoth
+            TabOrder = 0
+          end
+        end
+      end
     end
   end
   inherited acOptions: TActionList[6]
@@ -631,6 +717,7 @@ inherited FSQLEditor: TFSQLEditor
   end
   object dsQuery: TDataSource[10]
     DataSet = InternalQuery
+    OnDataChange = dsQueryDataChange
     Left = 336
     Top = 152
   end
@@ -642,6 +729,7 @@ inherited FSQLEditor: TFSQLEditor
     Top = 152
   end
   object SynCompletion1: TSynCompletion[12]
+    OnBeforeExecute = SynCompletion1BeforeExecute
     Position = 0
     LinesInWindow = 6
     SelectedColor = clHighlight
@@ -649,7 +737,8 @@ inherited FSQLEditor: TFSQLEditor
     Width = 262
     AutoUseSingleIdent = True
     ShortCut = 16416
-    EndOfTokenChr = '()[].'
+    EndOfTokenChr = '()[] '
+    OnCodeCompletion = SynCompletion1CodeCompletion
     ExecCommandID = ecSynCompletionExecute
     Editor = SynEdit1
     ToggleReplaceWhole = False

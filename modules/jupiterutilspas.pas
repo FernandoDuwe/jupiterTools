@@ -95,6 +95,10 @@ begin
 
     if Self.Internal_CreateVariablIfDontExists('Menus.Work.Route.Records', 'Menu padrão para rotas de trabalho para registros', '/workdir/records/') then
       Self.Internal_CreateRouteIfDontExists('Cadastros', '/workdir/records/', NULL_KEY, ICON_RECORDS, 1000);
+
+    Self.Internal_CreateVariablIfDontExists('Pomodoro.Status', 'Pomodoro: Status', EmptyStr);
+    Self.Internal_CreateVariablIfDontExists('Pomodoro.Time.Session', 'Pomodoro: Tempo de sessão', '25');
+    Self.Internal_CreateVariablIfDontExists('Pomodoro.Time.Decompression', 'Pomodoro: Tempo de descompressão', '5');
   finally
     FreeAndNil(vrStr);
     FreeAndNil(vrWizard);

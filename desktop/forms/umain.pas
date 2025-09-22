@@ -37,6 +37,7 @@ type
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure FormResize(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure jtMainTabChange(Sender: TObject);
     procedure jtMainTabCloseTab(Sender: TObject);
@@ -54,6 +55,7 @@ type
     procedure Internal_UpdateCalcs; override;
     procedure Internal_CreatePopMenuTab;
     function Internal_IsMainPage : Boolean; override;
+    procedure Internal_Resize; override;
 
     procedure Internal_CreateComboBox;
     procedure Internal_CloseCurrentTab(Sender: TObject);
@@ -137,6 +139,11 @@ begin
   while jtMainTab.PageCount > 0 do
     jtMainTab.CloseTab(0);
 
+  inherited;
+end;
+
+procedure TFMain.FormResize(Sender: TObject);
+begin
   inherited;
 end;
 
@@ -376,6 +383,17 @@ end;
 function TFMain.Internal_IsMainPage: Boolean;
 begin
   Result := True;
+end;
+
+procedure TFMain.Internal_Resize;
+begin
+  inherited Internal_Resize;
+
+  if jtMainTab.Visible then
+  begin
+    jtMainTab.Align := alCustom;
+    jtMainTab.Align := alClient;
+  end;
 end;
 
 procedure TFMain.Internal_CreateComboBox;

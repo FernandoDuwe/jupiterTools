@@ -66,7 +66,10 @@ type
     procedure AddActionWithScript(prCaption, prHint : String; prIcon : Integer; prMacro : TStrings);
     procedure AddLine(prTop, prLeft, prHeight, prWidth: Integer);
     procedure AddTile(prTitle : String; prCounter : Integer);
+    procedure AddErrorTile(prTitle : String; prCounter : Integer);
     procedure AddListItem(prTitle, prSubtitle : String);
+    procedure AddErrorListItem(prTitle, prSubtitle : String);
+    procedure AddSuccessListItem(prTitle, prSubtitle : String);
     procedure JumpLine;
     procedure SetCurrentMargin(prMargin : Integer);
     procedure SetCurrentLine(prLine : Integer);
@@ -616,9 +619,31 @@ procedure TFCustomCodeForm.AddTile(prTitle: String; prCounter: Integer);
 var
   vrReference : TJupiterComponentReference;
 begin
-  vrReference := JupiterComponentsNewTile(prTitle, prCounter, 50, PercentOfScreen(fpTile.Width, 24), TJupiterPosition.Create(0, 0), fpTile);
+  vrReference := JupiterComponentsNewTile(prTitle, prCounter, 100, PercentOfScreen(fpTile.Width, 22), TJupiterPosition.Create(0, 0), fpTile);
+
+  TPanel(vrReference.Component).BevelOuter := bvRaised;
+
+  TPanel(vrReference.Component).BorderSpacing.Around := 2;
 
   TPanel(vrReference.Component).Color := Self.Internal_GetNextColor;
+
+  fpTile.BorderSpacing.Bottom := FORM_MARGIN_BOTTOM;
+end;
+
+procedure TFCustomCodeForm.AddErrorTile(prTitle: String; prCounter: Integer);
+var
+  vrReference : TJupiterComponentReference;
+begin
+  vrReference := JupiterComponentsNewTile(prTitle, prCounter, 100, PercentOfScreen(fpTile.Width, 22), TJupiterPosition.Create(0, 0), fpTile);
+
+  TPanel(vrReference.Component).BevelOuter := bvRaised;
+
+  TPanel(vrReference.Component).BorderSpacing.Around := 2;
+
+  TPanel(vrReference.Component).Color := Self.Internal_GetNextColor;
+  TPanel(vrReference.Component).Font.Color := clRed;
+
+  fpTile.BorderSpacing.Bottom := FORM_MARGIN_BOTTOM;
 end;
 
 procedure TFCustomCodeForm.AddListItem(prTitle, prSubtitle: String);
@@ -628,8 +653,54 @@ begin
   try
     vrReference := JupiterComponentsNewListItem(prTitle, prSubtitle, sbBody);
 
+//    TPanel(vrReference.Component).BevelOuter := bvRaised;
+
     if (Self.FListItemCounter mod 2) = 0 then
-      TPanel(vrReference.Component).Color := $00FFEAEA;
+    begin
+      TPanel(vrReference.Component).ParentBackground := False;
+      TPanel(vrReference.Component).ParentColor := False;
+      TPanel(vrReference.Component).Color := ALTERNATIVE_COLOR;
+    end;
+  finally
+    Self.FListItemCounter := Self.FListItemCounter + 1;
+  end;
+end;
+
+procedure TFCustomCodeForm.AddErrorListItem(prTitle, prSubtitle: String);
+var
+  vrReference : TJupiterComponentReference;
+begin
+  try
+    vrReference := JupiterComponentsNewListItem(prTitle, prSubtitle, sbBody);
+
+    if (Self.FListItemCounter mod 2) = 0 then
+    begin
+      TPanel(vrReference.Component).ParentBackground := False;
+      TPanel(vrReference.Component).ParentColor := False;
+      TPanel(vrReference.Component).Color := ALTERNATIVE_COLOR;
+    end;
+
+    TPanel(vrReference.Component).Font.Color := clRed;
+  finally
+    Self.FListItemCounter := Self.FListItemCounter + 1;
+  end;
+end;
+
+procedure TFCustomCodeForm.AddSuccessListItem(prTitle, prSubtitle: String);
+var
+  vrReference : TJupiterComponentReference;
+begin
+  try
+    vrReference := JupiterComponentsNewListItem(prTitle, prSubtitle, sbBody);
+
+    if (Self.FListItemCounter mod 2) = 0 then
+    begin
+      TPanel(vrReference.Component).ParentBackground := False;
+      TPanel(vrReference.Component).ParentColor := False;
+      TPanel(vrReference.Component).Color := ALTERNATIVE_COLOR;
+    end;
+
+    TPanel(vrReference.Component).Font.Color := clOlive;
   finally
     Self.FListItemCounter := Self.FListItemCounter + 1;
   end;
