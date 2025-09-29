@@ -30,7 +30,12 @@ type
   procedure JupiterAppDesktopCursorToWait;
   procedure JupiterAppDesktopProcessMessages;
   procedure JupiterAppDesktopCursorToIdle;
+  procedure JupiterAppDesktopRemoveCurrentMessage;
   procedure JupiterAppDesktopSetAppMessage(prMessage : String);
+  procedure JupiterAppDesktopAddPanelMessage(prMessage : String);
+  procedure JupiterAppDesktopAddInfoPanelMessage(prMessage : String);
+  procedure JupiterAppDesktopAddSuccessPanelMessage(prMessage : String);
+  procedure JupiterAppDesktopAddErrorPanelMessage(prMessage : String);
   procedure JupiterAppDesktopOpenFormQuery(prQuery : TSQLQuery);
   procedure JupiterAppDesktopOpenFormFromTableId(prTableName : String; prID : Integer);
   procedure JupiterAppDesktopOpenGridFromTable(prTableName : String);
@@ -54,7 +59,8 @@ type
 
 implementation
 
-uses Controls, uJupiterForm, uMain, jupiterDesktopApp, jupiterDatabaseWizard, LCLType;
+uses Controls, uJupiterForm, uMain, jupiterDesktopApp, jupiterDatabaseWizard, LCLType, jupiterformcomponenttils, jupiterformutils,
+     ExtCtrls, Graphics;
 
 function JupiterAppDesktopOpenForm(prForm: String) : String;
 begin
@@ -125,12 +131,73 @@ begin
   Application.MainForm.Cursor := crDefault;
 end;
 
+procedure JupiterAppDesktopRemoveCurrentMessage;
+begin
+  if Application.MainForm is TFMain then
+    if Assigned(TFMain(Application.MainForm).CurrentMessage) then
+      FreeAndNil(TFMain(Application.MainForm).CurrentMessage);
+end;
+
 procedure JupiterAppDesktopSetAppMessage(prMessage: String);
 begin
   if Application.MainForm is TFMain then
   begin
     TFMain(Application.MainForm).sbStatus.Panels[1].Text := prMessage;
     Application.ProcessMessages;
+  end;
+end;
+
+procedure JupiterAppDesktopAddPanelMessage(prMessage: String);
+var
+  vrComponent : TJupiterComponentReference;
+begin
+  if Application.MainForm is TFMain then
+  begin
+    vrComponent := JupiterComponentsNewMessagePanel(prMessage, Application.MainForm);
+
+    TFMain(Application.MainForm).CurrentMessage := TPanel(vrComponent.Component);
+  end;
+end;
+
+procedure JupiterAppDesktopAddInfoPanelMessage(prMessage: String);
+var
+  vrComponent : TJupiterComponentReference;
+begin
+  if Application.MainForm is TFMain then
+  begin
+    vrComponent := JupiterComponentsNewMessagePanel(prMessage, Application.MainForm);
+
+    TPanel(vrComponent.Component).Color := clSkyBlue;
+
+    TFMain(Application.MainForm).CurrentMessage := TPanel(vrComponent.Component);
+  end;
+end;
+
+procedure JupiterAppDesktopAddSuccessPanelMessage(prMessage: String);
+var
+  vrComponent : TJupiterComponentReference;
+begin
+  if Application.MainForm is TFMain then
+  begin
+    vrComponent := JupiterComponentsNewMessagePanel(prMessage, Application.MainForm);
+
+    TPanel(vrComponent.Component).Color := clMoneyGreen;
+
+    TFMain(Application.MainForm).CurrentMessage := TPanel(vrComponent.Component);
+  end;
+end;
+
+procedure JupiterAppDesktopAddErrorPanelMessage(prMessage: String);
+var
+  vrComponent : TJupiterComponentReference;
+begin
+  if Application.MainForm is TFMain then
+  begin
+    vrComponent := JupiterComponentsNewMessagePanel(prMessage, Application.MainForm);
+
+    TPanel(vrComponent.Component).Color := $006A6AFF;
+
+    TFMain(Application.MainForm).CurrentMessage := TPanel(vrComponent.Component);
   end;
 end;
 
@@ -380,6 +447,13 @@ begin
   prSender.AddFunction(@JupiterAppDesktopDecFont, 'procedure DecFont();');
   prSender.AddFunction(@JupiterAppDesktopShowMessage, 'procedure ShowMessage(prMessage: String);');
 
+  prSender.AddFunction(@JupiterAppDesktopAddPanelMessage, 'procedure AddPanelMessage(prMessage: String);');
+  prSender.AddFunction(@JupiterAppDesktopAddInfoPanelMessage, 'procedure AddInfoPanelMessage(prMessage: String);');
+  prSender.AddFunction(@JupiterAppDesktopAddSuccessPanelMessage, 'procedure AddSuccessPanelMessage(prMessage: String);');
+  prSender.AddFunction(@JupiterAppDesktopAddErrorPanelMessage, 'procedure AddErrorPanelMessage(prMessage: String);');
+
+  prSender.AddFunction(@JupiterAppDesktopRemoveCurrentMessage, 'procedure RemoveCurrentMessage();');
+
   prSender.AddFunction(@JupiterAppDesktopAddReference, 'procedure AddGlobalReference(prTableName : String; prId : Integer);');
 
   prSender.AddFunction(@JupiterAppDesktopInLineMode, 'function InLineMode : Boolean;');
@@ -420,6 +494,13 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure IncFont();'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure DecFont();'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure ShowMessage(prMessage: String);'));
+
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure AddPanelMessage(prMessage: String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure AddInfoPanelMessage(prMessage: String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure AddSuccessPanelMessage(prMessage: String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure AddErrorPanelMessage(prMessage: String);'));
+
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure RemoveCurrentMessage;'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure AddGlobalReference(prTableName : String; prId : Integer);'));
 

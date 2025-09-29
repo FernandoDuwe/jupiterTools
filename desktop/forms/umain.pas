@@ -66,6 +66,8 @@ type
     Procedure Internal_OnGlobalException(Sender : TObject; E : Exception);
     function CurrentForm : TForm;
   public
+    CurrentMessage : TPanel;
+
     procedure NewTab(Form : TForm);
   end;
 
