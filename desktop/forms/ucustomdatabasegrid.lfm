@@ -3,30 +3,23 @@ inherited FCustomDatabaseGrid: TFCustomDatabaseGrid
   Top = 413
   OnCreate = FormCreate
   inherited pnSearchBar: TPanel
-    Top = 1
-    Width = 879
-    ClientWidth = 879
     inherited edSearch: TEdit
       OnChange = edSearchChange
       OnKeyPress = edSearchKeyPress
     end
   end
   inherited fpOptions: TFlowPanel
-    Height = 1
+    Height = 0
     Top = 0
-    Width = 879
     Align = alTop
   end
   inherited pnBottom: TPanel
-    Top = 376
-    Width = 879
-    ClientWidth = 879
     TabOrder = 3
   end
   object dbMainGrid: TDBGrid[3]
     Left = 175
-    Height = 330
-    Top = 46
+    Height = 331
+    Top = 45
     Width = 704
     Align = alClient
     Color = clWindow
@@ -34,38 +27,60 @@ inherited FCustomDatabaseGrid: TFCustomDatabaseGrid
     DataSource = InternalDataSource
     PopupMenu = pmActions
     ReadOnly = True
+    ShowHint = True
     TabOrder = 2
     OnColEnter = dbMainGridColEnter
     OnDblClick = dbMainGridDblClick
     OnEnter = dbMainGridEnter
     OnExit = dbMainGridExit
+    OnGetCellHint = dbMainGridGetCellHint
+    OnTitleClick = dbMainGridTitleClick
   end
   object pnMiniForm: TPanel[4]
     Left = 0
-    Height = 330
-    Top = 46
+    Height = 331
+    Top = 45
     Width = 170
     Align = alLeft
     BevelOuter = bvNone
-    ClientHeight = 330
+    ClientHeight = 331
     ClientWidth = 170
     TabOrder = 4
     Visible = False
     object sbMiniForm: TScrollBox
       Left = 0
-      Height = 330
+      Height = 331
       Top = 0
       Width = 170
-      HorzScrollBar.Page = 1
-      VertScrollBar.Page = 1
+      HorzScrollBar.Page = 75
+      VertScrollBar.Page = 50
       Align = alClient
+      ClientHeight = 327
+      ClientWidth = 166
       TabOrder = 0
+      object ValueListEditor1: TValueListEditor
+        Left = 0
+        Height = 327
+        Top = 0
+        Width = 166
+        Align = alClient
+        RowCount = 2
+        TabOrder = 0
+        TitleCaptions.Strings = (
+          'Campo'
+          'Valor'
+        )
+        ColWidths = (
+          64
+          98
+        )
+      end
     end
   end
   object Splitter1: TSplitter[5]
     Left = 170
-    Height = 330
-    Top = 46
+    Height = 331
+    Top = 45
     Width = 5
     OnMoved = Splitter1Moved
   end
@@ -78,7 +93,17 @@ inherited FCustomDatabaseGrid: TFCustomDatabaseGrid
       Caption = 'Exibir resumo dos dados'
       OnClick = miShowMiniFormClick
     end
-    inherited miLookColumn: TMenuItem[9]
+    object miExibirColunaID: TMenuItem[6]
+      Caption = 'Exibir a coluna ID'
+      OnClick = miExibirColunaIDClick
+    end
+    inherited Separator1: TMenuItem[7]
+    end
+    inherited miParams: TMenuItem[8]
+    end
+    inherited miThreads: TMenuItem[9]
+    end
+    inherited miLookColumn: TMenuItem[10]
     end
   end
   object InternalDataSource: TDataSource[9]

@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, JupiterObject, JupiterConsts, jupiterScript;
 
 type
-  TJupiterThreadOnExecute = procedure(prThreadId : Integer; prParams : String) of object;
+  TJupiterThreadOnExecute = procedure(prId, prThreadId : Integer; prParams : String) of object;
   TJupiterThreadOnUpdateMonitor = procedure of object;
 
   { TJupiterThread }
@@ -43,7 +43,7 @@ type
     property JupiterThreadList : TJupiterObject        read FJupiterThreadList write FJupiterThreadList;
     property Status            : TJupiterThreadsStatus read FStatus;
   public
-    constructor Create(CreateSuspended : Boolean);
+    constructor Create(CreateSuspended : Boolean); virtual;
     constructor Create(CreateSuspended : Boolean; prScript : TJupiterScript);
   end;
 
@@ -99,14 +99,14 @@ begin
     Self.Internal_Execute;
 
     if Assigned(Self.OnExecute) then
-      Self.OnExecute(Self.ThreadID, Self.Params);
+      Self.OnExecute(Self.ID, Self.ThreadID, Self.Params);
   finally
     Self.FStatus := jtsFinished;
 
     Self.FEndedAt := Now;
 
     if Assigned(Self.OnExecuted) then
-      Self.OnExecuted(Self.ThreadID, Self.Params);
+      Self.OnExecuted(Self.ID, Self.ThreadID, Self.Params);
 
     Self.Suspend;
   end;

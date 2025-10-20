@@ -241,7 +241,7 @@ begin
                                                  TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody);
 
         // Pulando linha
-        vrCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM;
+        vrCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM_LABEL;
       end;
 
       if vrWizard.IsForeignKeyField(Self.TableName, Self.QueryOrigin.Fields[vrVez].FieldName) then
@@ -256,6 +256,8 @@ begin
           TDBEdit(vrReference.Component).SetFocus;
 
         vrIsFirst := False;
+
+        vrReference.Top := vrReference.Top - 2;
 
         vrAction := JupiterComponentsAddAction(vrReference, ICON_VIEW, sbBody);
 
@@ -304,6 +306,8 @@ begin
                 TDBEdit(vrReference.Component).SetFocus;
 
               vrIsFirst := False;
+
+              vrReference.Top := vrReference.Top - 1;
 
               if vrWizard.Exists('DATABASE_DICTIONARY', ' TABLENAME = "' + Self.FTableName + '" AND FIELDNAME = "' + Self.QueryOrigin.Fields[vrVez].FieldName + '" AND ACTION_COPY = TRUE ') then
               begin
@@ -359,6 +363,8 @@ begin
     end;
   finally
     FreeAndNil(vrDatabase);
+
+    TJupiterDesktopApp(vrJupiterApp).UpdateChildrenForms;
   end;
 
   Self.DoSecureClose;

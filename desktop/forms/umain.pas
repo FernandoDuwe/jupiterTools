@@ -69,6 +69,7 @@ type
     CurrentMessage : TPanel;
 
     procedure NewTab(Form : TForm);
+    procedure UpdateChildren;
   end;
 
 var
@@ -267,12 +268,12 @@ begin
 
   TJupiterDesktopApp(vrJupiterApp).ImageList := ilIconFamily;
   TJupiterDesktopApp(vrJupiterApp).GetExternalImages;
-
+                               {
   tmrAutoUpdater.Interval := FORM_UPDATE_TIME_MILISECONDS;
 
   if vrJupiterApp.Params. VariableById('Interface.PerformanceMode').AsBool then
     tmrAutoUpdater.Interval := FORM_UPDATE_TIME_MILISECONDS_LOW;
-
+                                }
   Self.Internal_CreateShortcutList;
 
   vrMainMenu := TJupiterMainMenuGenerator.Create(vrJupiterApp.InternalDatabase);
@@ -388,13 +389,31 @@ begin
 end;
 
 procedure TFMain.Internal_Resize;
+var
+  vrVez : Integer;
 begin
   inherited Internal_Resize;
 
   if jtMainTab.Visible then
+    jtMainTab.Invalidate;
+end;
+
+procedure TFMain.UpdateChildren;
+var
+  vrVez : Integer;
+begin
+  for vrVez := 0 to jtMainTab.PageCount - 1 do
   begin
-    jtMainTab.Align := alCustom;
-    jtMainTab.Align := alClient;
+    if not Assigned(jtMainTab.Pages[vrVez]) then
+      Continue;
+
+    if not (jtMainTab.Pages[vrVez] is TJupiterFormTabSheet) then
+      Continue;
+
+    if not Assigned(TJupiterFormTabSheet(jtMainTab.Pages[vrVez]).Form) then
+      Continue;
+
+    TFJupiterForm(TJupiterFormTabSheet(jtMainTab.Pages[vrVez]).Form).UpdateForm();
   end;
 end;
 

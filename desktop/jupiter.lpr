@@ -10,6 +10,7 @@ uses
   athreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
+  opensslsockets, openssl,
   Forms, pascalscript, pascalscriptfcl, datetimectrls, tachartlazaruspkg,
   uJupiterForm, uMain, uDmMain, JupiterConsts, JupiterObject, JupiterEnviroment,
   JupiterModule, JupiterVariable, JupiterCSVDataProvider, JupiterApp,
@@ -30,7 +31,8 @@ uses
   uTextEditor, uJupiterDateUtilsScript, uChartViewer,
   uJupiterCheckListUtilsScript, uWaitForm, uCodeRunner, uFileFinder,
   uFileReaderFinder, jupiterScriptList, uconsole, uExternalSQLEditor,
-  uMultiLevelTextEditor, uMenuNavigator, jupiterDatabaseAutoComplete;
+  uMultiLevelTextEditor, uMenuNavigator, jupiterDatabaseAutoComplete, 
+  uJupiterHTTPScript;
 
 {$R *.res}
 

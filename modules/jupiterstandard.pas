@@ -62,6 +62,9 @@ begin
     if not vrWizard.FieldExists('ROUTES', 'PARAMS') then
         vrWizard.ExecuteScript(CreateStringList(' ALTER TABLE ROUTES ADD PARAMS VARCHAR(100) '));
 
+    if not vrWizard.TableExists('SEARCH_FIELD') then
+      vrWizard.ExecuteScript(CreateStringList('CREATE TABLE SEARCH_FIELD ( ID INTEGER PRIMARY KEY, TABLENAME VARCHAR(100), FIELDNAME VARCHAR(100))'));
+
     if not vrWizard.TableExists('SHORTCUTS') then
       vrWizard.ExecuteScript(CreateStringList('CREATE TABLE SHORTCUTS ( ID INTEGER PRIMARY KEY, DESCRIPTION VARCHAR(100), SHORTCUT VARCHAR(100), DESTINY INT, FOREIGN KEY (DESTINY) REFERENCES MACROS (ID))'));
 
@@ -233,6 +236,8 @@ begin
     Self.Internal_CreateVariablIfDontExists(TRIGGER_ONUPDATE, 'Nome da macro a ser executada a cada atualização de tela na página principal', '');
 
     Self.Internal_CreateVariablIfDontExists(PATH_WORKDIR, 'Diretório de tabalho padrão', ExtractFileDir('/'));
+
+    Self.Internal_CreateVariablIfDontExists('TableGrid.Search.BlobFields', 'Efetuar pesquisa em campos BLOB', 'N');
   finally
     FreeAndNil(vrWizard);
     FreeAndNil(vrStr);

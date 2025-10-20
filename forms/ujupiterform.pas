@@ -372,6 +372,10 @@ begin
 
     pnSearchBar.Height := edSearch.Top + edSearch.Height + FORM_MARGIN_BOTTOM;
   end;
+
+  if not Self.IsWindowForm then
+    if Assigned(Self.OwnerTab) then
+      Self.OwnerTab.Caption := Self.Caption + '        ';
 end;
 
 procedure TFJupiterForm.Internal_UpdateDatasets;

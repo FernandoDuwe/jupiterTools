@@ -45,6 +45,7 @@ type
   procedure JupiterFormDesktopAppScriptAddTile(prFormID, prTitle : String; prCounter : Integer);
   procedure JupiterFormDesktopAppScriptAddErrorTile(prFormID, prTitle : String; prCounter : Integer);
   procedure JupiterFormDesktopAppScriptAddListItem(prFormID, prTitle, prSubtitle : String);
+  procedure JupiterFormDesktopAppScriptAddListActionItem(prFormID, prTitle, prSubtitle, prMacroId, prParams : String);
   procedure JupiterFormDesktopAppScriptAddErrorListItem(prFormID, prTitle, prSubtitle : String);
   procedure JupiterFormDesktopAppScriptAddSuccessListItem(prFormID, prTitle, prSubtitle : String);
   procedure JupiterFormDesktopAppScriptJumpLine(prFormID : String);
@@ -432,6 +433,21 @@ begin
   TFCustomCodeForm(vrForm).AddListItem(prTitle, prSubtitle);
 end;
 
+procedure JupiterFormDesktopAppScriptAddListActionItem(prFormID, prTitle, prSubtitle, prMacroId, prParams: String);
+var
+  vrForm : TForm;
+begin
+  vrForm := TJupiterDesktopApp(vrJupiterApp).GetFormById(prFormID);
+
+  if not Assigned(vrForm) then
+    Exit;
+
+  if not (vrForm is TFCustomCodeForm) then
+    Exit;
+
+  TFCustomCodeForm(vrForm).AddListActionItem(prTitle, prSubtitle, prMacroId, prParams);
+end;
+
 procedure JupiterFormDesktopAppScriptAddErrorListItem(prFormID, prTitle, prSubtitle: String);
 var
   vrForm : TForm;
@@ -632,6 +648,7 @@ begin
   prSender.AddFunction(@JupiterFormDesktopAppScriptAddTile, 'procedure Form_AddTile(prFormID, prTitle : String; prCounter : Integer);');
   prSender.AddFunction(@JupiterFormDesktopAppScriptAddErrorTile, 'procedure Form_AddErrorTile(prFormID, prTitle : String; prCounter : Integer);');
   prSender.AddFunction(@JupiterFormDesktopAppScriptAddListItem, 'procedure Form_AddListItem(prFormID, prTitle, prSubtitle : String);');
+  prSender.AddFunction(@JupiterFormDesktopAppScriptAddListActionItem, 'procedure Form_AddListActionItem(prFormID, prTitle, prSubtitle, prMacroId, prParams : String);');
   prSender.AddFunction(@JupiterFormDesktopAppScriptAddErrorListItem, 'procedure Form_AddErrorListItem(prFormID, prTitle, prSubtitle : String);');
   prSender.AddFunction(@JupiterFormDesktopAppScriptAddSuccessListItem, 'procedure Form_AddSuccessListItem(prFormID, prTitle, prSubtitle : String);');
 end;
@@ -678,6 +695,7 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddTile(prFormID, prTitle : String; prCounter : Integer);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddErrorTile(prFormID, prTitle : String; prCounter : Integer);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddListItem(prFormID, prTitle, prSubtitle : String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddListActionItem(prFormID, prTitle, prSubtitle, prMacroId, prParams : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddErrorListItem(prFormID, prTitle, prSubtitle : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddSuccessListItem(prFormID, prTitle, prSubtitle : String);'));
 end;

@@ -9,7 +9,8 @@ uses
   JupiterVariable, jupiterDatabaseWizard, jupiterScript, jupiterStringUtils,
   JupiterConsts, uJupiterEnviromentScript, uJupiterStringUtilsScript,
   uJupiterRunnableScript, uJupiterDataProviderScript, uJupiterDateUtilsScript,
-  uJupiterCheckListUtilsScript, SQLite3Conn, JupiterDataProvider, jupiterthread;
+  uJupiterCheckListUtilsScript, uJupiterHTTPScript, SQLite3Conn,
+  JupiterDataProvider, jupiterthread;
 
 type
 
@@ -115,6 +116,7 @@ begin
   prScript.LibraryList.Add(TuJupiterDatabaseScript.Create);
   prScript.LibraryList.Add(TJupiterDataProviderScript.Create);
   prScript.LibraryList.Add(TJupiterCheckListUtilsScript.Create);
+  prScript.LibraryList.Add(TJupiterHTTPScript.Create);
 end;
 
 procedure TJupiterApp.Internal_OnExecute(prScript, prMessages, prRunMessages: TStrings; prExecuted: Boolean);

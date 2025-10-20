@@ -15,7 +15,10 @@ type
   { TFNewTask }
 
   TFNewTask = class(TFJupiterForm)
+    fpTabs: TFlowPanel;
     imLogo: TImage;
+    pnHomeBody: TPanel;
+    pnTop: TPanel;
     sbShortcut: TScrollBox;
     Splitter1: TSplitter;
     tvTreeMenu: TTreeView;
@@ -25,9 +28,12 @@ type
       MousePos: TPoint; var Handled: Boolean);
     procedure Splitter1Moved(Sender: TObject);
   private
+    FCustomColor : TColor;
     FReferences : TJupiterObjectList;
     FCurrentLine : Integer;
     FActionList : TJupiterActionGroup;
+
+    function Internal_GetNextColor : TColor;
 
     procedure Internal_LinkClick(Sender: TObject);
 
@@ -76,12 +82,46 @@ begin
   miLookColumn.Checked := False;
 end;
 
+function TFNewTask.Internal_GetNextColor: TColor;
+begin
+  try
+    if Self.FCustomColor = $00FFC175 then
+    begin
+      Self.FCustomColor := clSkyBlue;
+      Exit;
+    end;
+
+    if Self.FCustomColor = clSkyBlue then
+    begin
+      Self.FCustomColor := clCream;
+      Exit;
+    end;
+
+    if Self.FCustomColor = clCream then
+    begin
+      Self.FCustomColor := clMoneyGreen;
+      Exit;
+    end;
+
+    if Self.FCustomColor = clMoneyGreen then
+    begin
+      Self.FCustomColor := clSilver;
+      Exit;
+    end;
+
+    Self.FCustomColor := $00FFC175;
+  finally
+    Result := Self.FCustomColor;
+  end;
+end;
+
 procedure TFNewTask.Internal_LinkClick(Sender: TObject);
 begin
-  if not (Sender is TLabel) then
-    Exit;
+  if (Sender is TLabel) then
+    Self.FActionList.GetActionAtIndex(TLabel(Sender).Tag).Execute;
 
-  Self.FActionList.GetActionAtIndex(TLabel(Sender).Tag).Execute;
+  if (Sender is TPanel) then
+    Self.FActionList.GetActionAtIndex(TPanel(Sender).Tag).Execute;
 end;
 
 procedure TFNewTask.Internal_UpdateComponents;
@@ -118,11 +158,9 @@ var
   vrVez : Integer;
   vrAction : TJupiterAction;
   vrReference : TJupiterComponentReference;
+  vrAlternative : Boolean;
 begin
-  if GetCurrentOS = 'Windows' then
-    Self.FCurrentLine := (imLogo.Height + imLogo.Top) + FORM_MARGIN_BOTTOM_TONEXT + FORM_MARGIN_BOTTOM_TONEXT
-  else
-    Self.FCurrentLine := (imLogo.Height + imLogo.Top) + FORM_MARGIN_BOTTOM_TONEXT;
+  Self.FCurrentLine := FORM_MARGIN_TOP;
 
   Self.FActionList := TJupiterDesktopApp(vrJupiterApp).GenerateContextMenu;
 
@@ -130,17 +168,28 @@ begin
   begin
     vrAction := Self.FActionList.GetAtIndex(vrVez) as TJupiterAction;
 
-    vrReference := JupiterComponentsNewLink(vrAction.Caption, TJupiterPosition.Create(Self.FCurrentLine, FORM_MARGIN_LEFT + FORM_MARGIN_LEFT), sbShortcut);
+    vrReference := JupiterComponentsNewCard(vrAction.Caption, vrAction.Hint, 80, PercentOfScreen(fpTabs.Width, vrJupiterApp.Params.VariableById('Interface.Cards.Size').AsInteger), TJupiterPosition.Create(0, 0), fpTabs);
+    vrAlternative := (vrVez mod vrJupiterApp.Params.VariableById('Interface.Cards.Zebring').AsInteger) = 0;
 
-    TLabel(vrReference.Component).Tag := vrVez;
-    TLabel(vrReference.Component).OnClick := @Internal_LinkClick;
+    TPanel(vrReference.Component).BorderSpacing.Around := 2;
 
-    Self.FCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM;
+    if vrAlternative then
+      TPanel(vrReference.Component).Color := ALTERNATIVE_COLOR;
 
-    vrReference := JupiterComponentsNewLabel(vrAction.Hint, TJupiterPosition.Create(Self.FCurrentLine, FORM_MARGIN_LEFT + FORM_MARGIN_LEFT), sbShortcut);
+    TPanel(vrReference.Component).ParentBackground := not vrAlternative;
+    TPanel(vrReference.Component).ParentColor := not vrAlternative;
 
-    Self.FCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM_TONEXT + 10;
+//      TPanel(vrReference.Component).Color := Self.Internal_GetNextColor;
+
+    TPanel(vrReference.Component).Tag     := vrVez;
+    TPanel(vrReference.Component).Cursor  := crHandPoint;
+    TPanel(vrReference.Component).OnClick := @Internal_LinkClick;
   end;
+
+  fpTabs.BorderSpacing.Top    := FORM_MARGIN_TOP * 2;
+  fpTabs.BorderSpacing.Left   := FORM_MARGIN_LEFT * 2;
+  fpTabs.BorderSpacing.Right  := FORM_MARGIN_RIGHT * 2;
+  fpTabs.BorderSpacing.Bottom := FORM_MARGIN_BOTTOM * 2;
 end;
 
 procedure TFNewTask.Internal_DrawForm;
@@ -150,11 +199,11 @@ var
 begin
   vrCurrentLine := imLogo.Top;
 
-  vrReference := jupiterformcomponenttils.JupiterComponentsNewLabel('Jupiter', TJupiterPosition.Create(vrCurrentLine, imLogo.Width + imLogo.Left + FORM_MARGIN_LEFT), sbShortcut);
+  vrReference := jupiterformcomponenttils.JupiterComponentsNewLabel('Jupiter', TJupiterPosition.Create(vrCurrentLine, imLogo.Width + imLogo.Left + FORM_MARGIN_LEFT + FORM_MARGIN_LEFT), pnTop);
 
   vrCurrentLine := vrReference.Bottom + FORM_MARGIN_TOP;
 
-  vrReference := jupiterformcomponenttils.JupiterComponentsNewLabel('Versão: ' + vrJupiterApp.GetVersion, TJupiterPosition.Create(vrCurrentLine, imLogo.Width + imLogo.Left + FORM_MARGIN_LEFT), sbShortcut);
+  vrReference := jupiterformcomponenttils.JupiterComponentsNewLabel('Versão: ' + vrJupiterApp.GetVersion, TJupiterPosition.Create(vrCurrentLine, imLogo.Width + imLogo.Left + FORM_MARGIN_LEFT + FORM_MARGIN_LEFT), pnTop);
 end;
 
 end.

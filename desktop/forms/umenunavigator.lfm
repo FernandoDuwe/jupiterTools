@@ -3,9 +3,13 @@ inherited FMenuNavigator: TFMenuNavigator
   Top = 351
   Caption = 'Navegador de Menu'
   OnDestroy = FormDestroy
+  inherited fpOptions: TFlowPanel
+    Height = 0
+    Top = 376
+  end
   object tvTreeMenu: TTreeView[3]
     Left = 0
-    Height = 330
+    Height = 331
     Top = 45
     Width = 343
     Align = alLeft
@@ -17,13 +21,13 @@ inherited FMenuNavigator: TFMenuNavigator
   end
   object Splitter1: TSplitter[4]
     Left = 343
-    Height = 330
+    Height = 331
     Top = 45
     Width = 5
   end
   object pnBody: TPanel[5]
     Left = 348
-    Height = 330
+    Height = 331
     Top = 45
     Width = 531
     Align = alClient

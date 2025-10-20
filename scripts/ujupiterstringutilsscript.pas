@@ -61,6 +61,9 @@ var
 begin
   Result := EmptyStr;
 
+  if prWord = prText then
+    Exit;
+
   vrStr := TStringList.Create;
   try
     vrStr.Clear;

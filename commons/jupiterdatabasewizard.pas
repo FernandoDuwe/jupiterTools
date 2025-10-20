@@ -390,6 +390,15 @@ begin
       if vrQry.Fields[vrVez] is TFloatField then
         Continue;
 
+      if vrQry.Fields[vrVez] is TDateField then
+        Continue;
+
+      if vrQry.Fields[vrVez] is TTimeField then
+        Continue;
+
+      if vrQry.Fields[vrVez] is TDateTimeField then
+        Continue;
+
       if Result <> EmptyStr then
         Result := Result + ' || ';
 

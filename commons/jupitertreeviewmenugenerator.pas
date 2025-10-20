@@ -25,7 +25,7 @@ type
     FSingleClick      : Boolean;
 
     procedure Internal_RenderRoute(prOwner : TTreeNode; prPrefix : String);
-    procedure Internal_CheckRender(prOwner : TTreeNode; prPrefix : String; prRouteData : TJupiterRouteData);
+    procedure Internal_CheckRender(prOwner : TTreeNode; prPrefix : String; prRouteData : TJupiterRouteData; prColapsed : Boolean);
     function Internal_GetLevel(prRoute : String) : Integer;
 
     procedure Internal_OnClick(Sender: TObject);
@@ -75,7 +75,7 @@ begin
         if not vrQry.FieldByName('ICON').IsNull then
           vrData.Icon  := vrQry.FieldByName('ICON').AsInteger;
 
-        Self.Internal_CheckRender(prOwner, prPrefix, vrData);
+        Self.Internal_CheckRender(prOwner, prPrefix, vrData, True);
       finally
         FreeAndNil(vrData);
       end;
@@ -100,7 +100,7 @@ begin
         vrData.Destiny  := VariableById('Destiny').AsInteger;
         vrData.ZIndex   := VariableById('ZIndex').AsInteger;
 
-        Self.Internal_CheckRender(prOwner, prPrefix, vrData);
+        Self.Internal_CheckRender(prOwner, prPrefix, vrData, False);
       end;
     end;
   finally
@@ -109,7 +109,9 @@ begin
   end;
 end;
 
-procedure TJupiterTreeViewMenuGenerator.Internal_CheckRender(prOwner: TTreeNode; prPrefix: String; prRouteData: TJupiterRouteData);
+procedure TJupiterTreeViewMenuGenerator.Internal_CheckRender(
+  prOwner: TTreeNode; prPrefix: String; prRouteData: TJupiterRouteData;
+  prColapsed: Boolean);
 var
   vrNodeItem : TTreeNode;
 begin
@@ -206,7 +208,10 @@ begin
       vrJupiterApp.RunMacro(vrRouteData.Destiny, vrVariableList);
     end;
   finally
-  //  FreeAndNil(vrVariableList);
+     try
+       FreeAndNil(vrVariableList);
+     except
+     end;
   end;
 end;
 
@@ -227,7 +232,7 @@ begin
       Self.TreeView.OnDblClick := @Internal_OnClick;
 
   finally
-    Self.TreeView.FullExpand;
+     Self.TreeView.FullExpand;
   end;
 end;
 

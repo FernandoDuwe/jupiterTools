@@ -730,7 +730,7 @@ inherited FSQLEditor: TFSQLEditor
   end
   object SynCompletion1: TSynCompletion[12]
     OnBeforeExecute = SynCompletion1BeforeExecute
-    Position = 0
+    Position = -1
     LinesInWindow = 6
     SelectedColor = clHighlight
     CaseSensitive = False

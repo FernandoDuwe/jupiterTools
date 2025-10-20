@@ -5,14 +5,14 @@ object FJupiterForm: TFJupiterForm
   Width = 879
   ClientHeight = 457
   ClientWidth = 879
+  PopupMenu = pmOptions
+  Position = poScreenCenter
+  LCLVersion = '4.2.0.0'
   OnActivate = FormActivate
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnResize = FormResize
   OnShow = FormShow
-  PopupMenu = pmOptions
-  Position = poScreenCenter
-  LCLVersion = '3.4.0.0'
   object pnSearchBar: TPanel
     Left = 0
     Height = 45
@@ -65,7 +65,6 @@ object FJupiterForm: TFJupiterForm
       Height = 64
       Top = 8
       Width = 64
-      OnClick = Image1Click
       Picture.Data = {
         1754506F727461626C654E6574776F726B477261706869633B15000089504E47
         0D0A1A0A0000000D49484452000001000000010008030000006BAC5854000003
@@ -241,6 +240,7 @@ object FJupiterForm: TFJupiterForm
       }
       Stretch = True
       Transparent = True
+      OnClick = Image1Click
     end
   end
   object acOptions: TActionList
@@ -248,18 +248,18 @@ object FJupiterForm: TFJupiterForm
     Top = 72
     object acIncreaseLefPanel: TAction
       Caption = 'acIncreaseLefPanel'
-      OnExecute = acIncreaseLefPanelExecute
       ShortCut = 39
+      OnExecute = acIncreaseLefPanelExecute
     end
     object acIncreaseCenterPanel: TAction
       Caption = 'acIncreaseCenterPanel'
-      OnExecute = acIncreaseCenterPanelExecute
       ShortCut = 37
+      OnExecute = acIncreaseCenterPanelExecute
     end
     object acExitIfModal: TAction
       Caption = 'acExitIfModal'
-      OnExecute = acExitIfModalExecute
       ShortCut = 27
+      OnExecute = acExitIfModalExecute
     end
   end
   object tmrAutoUpdater: TTimer

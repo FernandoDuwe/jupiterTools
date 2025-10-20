@@ -42,9 +42,13 @@ uses
 
   function JupiterComponentsAddLine(prPosition : TJupiterPosition; prHeight, prWidth: Integer; prOwner : TWinControl) : TJupiterComponentReference;
 
+  function JupiterComponentsNewCard(prTitle: String; prSubTitle: String; prHeight, prWidth: Integer; prPosition: TJupiterPosition; prOwner: TWinControl): TJupiterComponentReference;
+
   function JupiterComponentsNewTile(prTitle : String; prCounter : Integer; prHeight, prWidth: Integer; prPosition : TJupiterPosition; prOwner : TWinControl) : TJupiterComponentReference;
 
   function JupiterComponentsNewListItem(prTitle, prSubtitle : String; prOwner : TWinControl) : TJupiterComponentReference;
+
+  function JupiterComponentsNewListActionItem(prTitle, prSubtitle, prMacroId, prParams : String; prOwner : TWinControl) : TJupiterComponentReference;
 
   function JupiterComponentsNewMessagePanel(prTitle : String; prOwner : TWinControl) : TJupiterComponentReference;
 
@@ -89,10 +93,17 @@ begin
   vrLabel.Parent    := prOwner;
   vrLabel.AutoSize  := True;
   vrLabel.Caption   := prText;
-  vrLabel.Font.Size := GetFontSize;
   vrLabel.Top       := prPosition.Top;
   vrLabel.Left      := prPosition.Left;
   vrLabel.Transparent := True;
+
+  if vrJupiterApp.Params.Exists('Interface.Font.Name') then
+  begin
+    vrLabel.ParentFont := False;
+    vrLabel.Font.Name := vrJupiterApp.Params.VariableById('Interface.Font.Name').Value;
+  end;
+
+  vrLabel.Font.Size := GetFontSize;
 
   Result := TJupiterComponentReference.Create(prPosition.Top,
                                               prPosition.Left,
@@ -413,7 +424,7 @@ begin
   vrSpeedButton.Height := prField.Bottom - prField.Top;
   vrSpeedButton.Width := vrSpeedButton.Height;
   vrSpeedButton.Left := prField.RightCalc - vrSpeedButton.Width;
-  vrSpeedButton.Flat := True;
+  vrSpeedButton.Flat := False;
   vrSpeedButton.Images := TJupiterDesktopApp(vrJupiterApp).ImageList;
   vrSpeedButton.ImageIndex := prIcon;
   vrSpeedButton.Anchors    := [akTop, akRight];
@@ -450,6 +461,40 @@ begin
                                               vrShape);
 end;
 
+function JupiterComponentsNewCard(prTitle: String; prSubTitle: String; prHeight, prWidth: Integer; prPosition: TJupiterPosition; prOwner: TWinControl): TJupiterComponentReference;
+var
+  vrPanel : TPanel;
+  vrReference : TJupiterComponentReference;
+begin
+  vrPanel             := TPanel.Create(prOwner);
+  vrPanel.Parent      := prOwner;
+  vrPanel.AutoSize    := False;
+  vrPanel.Top         := prPosition.Top;
+  vrPanel.Left        := prPosition.Left;
+  vrPanel.Height      := prHeight;
+  vrPanel.Width       := prWidth;
+  vrPanel.BevelOuter  := bvNone;
+  vrPanel.Font.Size   := GetFontSize;
+  vrPanel.ParentBackground := False;
+  vrPanel.ParentColor := False;
+
+  vrPanel.Anchors := [akTop, akLeft, akRight];
+
+  vrReference := JupiterComponentsNewLabel(prTitle, TJupiterPosition.Create(FORM_MARGIN_TOP, FORM_MARGIN_LEFT), vrPanel);
+
+  TLabel(vrReference.Component).Font.Style := [fsBold];
+
+  JupiterComponentsNewLabel(prSubTitle,
+                            TJupiterPosition.Create(vrReference.Bottom + FORM_MARGIN_TOP, FORM_MARGIN_LEFT),
+                            vrPanel);
+
+  Result := TJupiterComponentReference.Create(vrPanel.Top,
+                                              vrPanel.Left,
+                                              vrPanel.Left + vrPanel.Width,
+                                              vrPanel.Top + vrPanel.Height,
+                                              vrPanel);
+end;
+
 function JupiterComponentsNewTile(prTitle: String; prCounter: Integer; prHeight, prWidth: Integer; prPosition: TJupiterPosition; prOwner: TWinControl): TJupiterComponentReference;
 var
   vrPanel : TPanel;
@@ -484,6 +529,36 @@ begin
 end;
 
 function JupiterComponentsNewListItem(prTitle, prSubtitle: String; prOwner: TWinControl): TJupiterComponentReference;
+var
+  vrPanel : TPanel;
+  vrLabel : TJupiterComponentReference;
+begin
+  vrPanel             := TPanel.Create(prOwner);
+  vrPanel.Parent      := prOwner;
+  vrPanel.Align       := alTop;
+  vrPanel.BevelOuter  := bvNone;
+  vrPanel.Font.Size   := GetFontSize;
+
+  vrPanel.Anchors := [akTop, akLeft, akRight];
+
+  vrLabel := JupiterComponentsNewLabel(prTitle, TJupiterPosition.Create(FORM_MARGIN_TOP, FORM_MARGIN_LEFT), vrPanel);
+
+  TLabel(vrLabel.Component).Font.Style := [fsBold];
+
+  vrPanel.Height := vrLabel.Bottom + FORM_MARGIN_BOTTOM;
+
+  vrLabel := JupiterComponentsNewLabel(prSubtitle, TJupiterPosition.Create(vrPanel.Height, FORM_MARGIN_LEFT), vrPanel);
+
+  vrPanel.Height := vrLabel.Bottom + FORM_MARGIN_BOTTOM;
+
+  Result := TJupiterComponentReference.Create(vrPanel.Top,
+                                              vrPanel.Left,
+                                              vrPanel.Left + vrPanel.Width,
+                                              vrPanel.Top + vrPanel.Height,
+                                              vrPanel);
+end;
+
+function JupiterComponentsNewListActionItem(prTitle, prSubtitle, prMacroId, prParams: String; prOwner: TWinControl): TJupiterComponentReference;
 var
   vrPanel : TPanel;
   vrLabel : TJupiterComponentReference;

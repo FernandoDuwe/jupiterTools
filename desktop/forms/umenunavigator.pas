@@ -60,6 +60,10 @@ begin
   if miLookColumn.Checked then
     tvTreeMenu.Width := PercentOfScreen(Self.Width, Self.PercentDivisor);
 
+  if Assigned(Self.FForm) then
+    if Self.FForm is TFJupiterForm then
+      TFJupiterForm(Self.FForm).UpdateForm();
+
   pnBody.Caption := EmptyStr;
 
   if not Self.Showing then

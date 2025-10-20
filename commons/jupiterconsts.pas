@@ -85,7 +85,9 @@ const
 
    STRING_NEWLINE : String = #13#10;
 
-   FORMAT_DATETIME : String = 'dd/mm/yyyy hh:nn:ss';
+   FORMAT_DATETIME : String = 'dd/mm/yyyy hh:nn';
+   FORMAT_DATE     : String = 'dd/mm/yyyy';
+   FORMAT_TIME     : String = 'hh:nn';
 
    EMPTY_SPACE_SEPARATOR    : String = '/JUPITERTOOLS\|/JUPITERTOOLS\';
    COLUMN_SPACE_SEPARATOR   : String = '      ';
@@ -127,6 +129,7 @@ const
    FORM_MARGIN_LEFT          : Integer = 10;
    FORM_MARGIN_RIGHT         : Integer = 20;
    FORM_MARGIN_BOTTOM        : Integer = 10;
+   FORM_MARGIN_BOTTOM_LABEL  : Integer = 3;
 
    {$IFDEF WINDOWS}
      FORM_MARGIN_BOTTOM_TONEXT : Integer = 20; // Bottom to the next field

@@ -37,9 +37,9 @@ type
     procedure Internal_UpdateComponents; override;
     procedure Internal_UpdateDatasets; override;
 
-    procedure Internal_ProcessThread(prThreadId : Integer; prParams : String);
+    procedure Internal_ProcessThread(prId, prThreadId : Integer; prParams : String);
 
-    procedure Internal_ProcessedThead(prThreadId : Integer; prParams : String);
+    procedure Internal_ProcessedThead(prId, prThreadId : Integer; prParams : String);
 
     procedure Internal_PrepareForm; override;
     procedure Internal_ReadDirectory(prPath : String; prOwner : TTreeNode);
@@ -249,7 +249,7 @@ begin
   end;
 end;
 
-procedure TFFileFinder.Internal_ProcessThread(prThreadId: Integer; prParams: String);
+procedure TFFileFinder.Internal_ProcessThread(prId, prThreadId: Integer; prParams: String);
 begin
   {
   try
@@ -264,7 +264,7 @@ begin
   }
 end;
 
-procedure TFFileFinder.Internal_ProcessedThead(prThreadId: Integer; prParams: String);
+procedure TFFileFinder.Internal_ProcessedThead(prId, prThreadId: Integer; prParams: String);
 begin
   Self.UpdateForm(False, True, False);
 end;

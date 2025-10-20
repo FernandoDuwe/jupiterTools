@@ -39,6 +39,7 @@ type
     function OpenForm(prRoute, prParams : String) : String;
     function OpenForm(prRoute : String; prParams : TJupiterVariableList) : String;
     procedure OpenForm(prForm : TForm);
+    procedure UpdateChildrenForms;
 
     function GetFormById(prFormID : String) : TForm;
     procedure DeleteFormById(prFormID : String);
@@ -144,6 +145,12 @@ procedure TJupiterDesktopApp.OpenForm(prForm: TForm);
 begin
   if Application.MainForm is TFMain then
     TFMain(Application.MainForm).NewTab(prForm);
+end;
+
+procedure TJupiterDesktopApp.UpdateChildrenForms;
+begin
+  if Application.MainForm is TFMain then
+    TFMain(Application.MainForm).UpdateChildren;
 end;
 
 function TJupiterDesktopApp.GetFormById(prFormID: String): TForm;

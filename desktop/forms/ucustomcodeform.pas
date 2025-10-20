@@ -26,6 +26,7 @@ type
     FReferences : TJupiterObjectList;
     FCustomColor : TColor;
     FListItemCounter : Integer;
+    FHighContrast : Boolean;
 
     procedure Internal_OnCheckBoxChange(Sender: TObject);
     procedure Internal_OnLinkClick(Sender: TObject);
@@ -68,6 +69,7 @@ type
     procedure AddTile(prTitle : String; prCounter : Integer);
     procedure AddErrorTile(prTitle : String; prCounter : Integer);
     procedure AddListItem(prTitle, prSubtitle : String);
+    procedure AddListActionItem(prTitle, prSubtitle, prMacroId, prParams : String);
     procedure AddErrorListItem(prTitle, prSubtitle : String);
     procedure AddSuccessListItem(prTitle, prSubtitle : String);
     procedure JumpLine;
@@ -90,7 +92,8 @@ uses Buttons, JupiterEdit, Clipbrd;
 
 procedure TFCustomCodeForm.FormCreate(Sender: TObject);
 begin
-  Self.FCustomColor := clMenuHighlight;
+  Self.FCustomColor  := clMenuHighlight;
+  Self.FHighContrast := False;
 
   Self.FCurrentLine := 0;
   Self.FListItemCounter := 0;
@@ -221,12 +224,14 @@ begin
       end;
     end;
   end;
+
+  DrawForm(Self, Self.FHighContrast);
 end;
 
 function TFCustomCodeForm.Internal_GetNextColor: TColor;
 begin
   try
-    if Self.FCustomColor = clMenuHighlight then
+    if Self.FCustomColor = $00FFC175 then
     begin
       Self.FCustomColor := clSkyBlue;
       Exit;
@@ -250,7 +255,7 @@ begin
       Exit;
     end;
 
-    Self.FCustomColor := clMenuHighlight;
+    Self.FCustomColor := $00FFC175;
   finally
     Result := Self.FCustomColor;
   end;
@@ -666,6 +671,26 @@ begin
   end;
 end;
 
+procedure TFCustomCodeForm.AddListActionItem(prTitle, prSubtitle, prMacroId, prParams: String);
+var
+  vrReference : TJupiterComponentReference;
+begin
+  try
+    vrReference := JupiterComponentsNewListActionItem(prTitle, prSubtitle, prMacroId, prParams, sbBody);
+
+//    TPanel(vrReference.Component).BevelOuter := bvRaised;
+
+    if (Self.FListItemCounter mod 2) = 0 then
+    begin
+      TPanel(vrReference.Component).ParentBackground := False;
+      TPanel(vrReference.Component).ParentColor := False;
+      TPanel(vrReference.Component).Color := ALTERNATIVE_COLOR;
+    end;
+  finally
+    Self.FListItemCounter := Self.FListItemCounter + 1;
+  end;
+end;
+
 procedure TFCustomCodeForm.AddErrorListItem(prTitle, prSubtitle: String);
 var
   vrReference : TJupiterComponentReference;
@@ -728,7 +753,9 @@ end;
 
 procedure TFCustomCodeForm.SetFormToHighFocus;
 begin
-  DrawForm(Self, True);
+  Self.FHighContrast := True;
+
+  UpdateForm();
 end;
 
 end.

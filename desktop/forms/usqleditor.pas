@@ -10,7 +10,7 @@ uses
   SynCompletion, uJupiterForm, jupiterformutils, JupiterConsts,
   JupiterEnviroment, jupiterDatabaseWizard, JupiterApp, JupiterVariable,
   uJupiterRunnableScript, uJupiterAppScript, uJupiterAction, uMain, SQLDB, DB,
-  jupiterDatabaseAutoComplete, Types, LCLType;
+  jupiterDatabaseAutoComplete, jupiterthread, Types, LCLType;
 
 type
 
@@ -79,9 +79,26 @@ type
     function Internal_RenderFields : Boolean; virtual;
 
     function Internal_GetLastEditedFile : String; virtual;
+
+    procedure Internal_OnExecuted(prId, prThreadId : Integer; prParams : String);
   public
 
   end;
+
+  { TJupiterGetTableThread }
+
+
+  TJupiterGetTableThread = class (TJupiterThread)
+  public
+    TableList : TStrings;
+    Connection : TSQLConnection;
+  protected
+    procedure Internal_Execute; override;
+
+    constructor Create(CreateSuspended : Boolean); override;
+    destructor Destroy; override;
+  end;
+
 
 var
   FSQLEditor: TFSQLEditor;
@@ -295,15 +312,18 @@ end;
 procedure TFSQLEditor.Internal_PrepareForm;
 var
   vrEnviroment : TJupiterEnviroment;
+  vrThread : TJupiterGetTableThread;
 begin
   inherited Internal_PrepareForm;
 
   Self.FTableList.Clear;
 
-  Self.FWizard.Connection.GetTableNames(Self.FTableList);
+  vrThread := TJupiterGetTableThread.Create(True);
+  vrThread.FreeOnTerminate := True;
+  vrThread.Connection := Self.Internal_GetConnection;
+  vrThread.OnExecuted := @Internal_OnExecuted;
 
-  Self.FDatabaseAuto.TableList.Clear;
-  Self.FDatabaseAuto.TableList.AddStrings(Self.FTableList);
+  Self.ThreadController.AddThread(vrThread);
 
   pnGrid.Height := PercentOfScreen(Self.Height, 50);
 
@@ -499,6 +519,39 @@ end;
 function TFSQLEditor.Internal_GetLastEditedFile: String;
 begin
   Result := '/temp/sql.sql';
+end;
+
+procedure TFSQLEditor.Internal_OnExecuted(prId, prThreadId: Integer; prParams: String);
+begin
+  Self.FTableList.AddStrings(TJupiterGetTableThread(Self.ThreadController.ThreadByD(prId)).TableList);
+
+  Self.FDatabaseAuto.TableList.Clear;
+  Self.FDatabaseAuto.TableList.AddStrings(Self.FTableList);
+end;
+
+{ TJupiterGetTableThread }
+
+procedure TJupiterGetTableThread.Internal_Execute;
+begin
+  inherited Internal_Execute;
+
+  Self.Connection.GetTableNames(Self.TableList);
+end;
+
+constructor TJupiterGetTableThread.Create(CreateSuspended: Boolean);
+begin
+  inherited Create(CreateSuspended);
+
+  Self.TableList := TStringList.Create;
+  Self.TableList.Clear;
+end;
+
+destructor TJupiterGetTableThread.Destroy;
+begin
+  Self.TableList.Clear;
+  FreeAndNil(Self.TableList);
+
+  inherited Destroy;
 end;
 
 end.

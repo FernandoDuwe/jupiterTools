@@ -83,6 +83,10 @@ begin
     Self.Internal_CreateVariablIfDontExists('Interface.Finder.AlwaysSearchEmptyQuery', 'Sempre exibir pesquisa, mesmo sem nenhuma pesquisa informada', BOOL_TRUE_STR);
 
     Self.Internal_CreateVariablIfDontExists('Interface.PerformanceMode', 'Modo performance', BOOL_FALSE_STR);
+
+    Self.Internal_CreateVariablIfDontExists('Interface.Cards.Size', 'Tamanho dos cards (em %)', '25');
+
+    Self.Internal_CreateVariablIfDontExists('Interface.Cards.Zebring', 'Contador de zebragem para cards', '2');
   finally
     FreeAndNil(vrWizard);
   end;

@@ -9,7 +9,7 @@ uses
   Menus, uJupiterForm, jupiterDatabaseWizard, JupiterApp, jupiterStringUtils,
   jupiterformutils, JupiterConsts, JupiterVariable, JupiterModule,
   uJupiterDatabaseScript, uJupiterStringUtilsScript, uJupiterAction,
-  jupiterformcomponenttils, DB, SQLDB;
+  jupiterformcomponenttils, DB, SQLDB, Grids, ValEdit;
 
 type
 
@@ -19,21 +19,29 @@ type
     InternalDataSource: TDataSource;
     dbMainGrid: TDBGrid;
     InternalQuery: TSQLQuery;
+    miExibirColunaID: TMenuItem;
     miShowMiniForm: TMenuItem;
     pnMiniForm: TPanel;
     pmActions: TPopupMenu;
     sbMiniForm: TScrollBox;
     Splitter1: TSplitter;
     tmrExecution: TTimer;
+    ValueListEditor1: TValueListEditor;
     procedure dbMainGridColEnter(Sender: TObject);
     procedure dbMainGridDblClick(Sender: TObject);
+    procedure dbMainGridDrawColumnTitle(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
     procedure dbMainGridEnter(Sender: TObject);
     procedure dbMainGridExit(Sender: TObject);
+    procedure dbMainGridGetCellHint(Sender: TObject; Column: TColumn;
+      var AText: String);
+    procedure dbMainGridTitleClick(Column: TColumn);
     procedure edSearchChange(Sender: TObject);
     procedure edSearchKeyPress(Sender: TObject; var Key: char);
     procedure FormCreate(Sender: TObject);
     procedure InternalDataSourceDataChange(Sender: TObject; Field: TField);
     procedure InternalQueryCalcFields(DataSet: TDataSet);
+    procedure miExibirColunaIDClick(Sender: TObject);
     procedure miShowMiniFormClick(Sender: TObject);
     procedure Splitter1Moved(Sender: TObject);
     procedure tmrExecutionTimer(Sender: TObject);
@@ -54,6 +62,7 @@ type
     procedure Internal_OnIncLimit(Sender: TObject);
     procedure Internal_OnShowAll(Sender: TObject);
     procedure Internal_RenderMiniForm;
+    procedure Internal_RenderMiniFormAsValueList;
     procedure Internal_ClickRecord(Sender: TObject);
     procedure Internal_ClickOwnerRecord(Sender: TObject);
     procedure Internal_OnLinkClick(Sender : TObject);
@@ -64,8 +73,12 @@ type
     function Internal_EnableWorkMenu : Boolean; override;
     procedure Internal_AddToWorkMenu; override;
 
+    function Internal_GetFieldSize(prField : TField) : Integer;
+
     function Internal_GetRouteName : String;
     function Internal_GetMacroName : String;
+
+    procedure Internal_SetColumnName(prColumn : TColumn);
   public
     procedure FromReference(prReference : TJupiterDatabaseReference);
   end;
@@ -102,9 +115,31 @@ begin
 end;
 
 procedure TFCustomDatabaseGrid.InternalDataSourceDataChange(Sender: TObject; Field: TField);
+var
+  vrVez : Integer;
+  vrStr : String;
 begin
+  vrStr := EmptyStr;
+
   if pnMiniForm.Visible then
-    Self.Internal_RenderMiniForm;
+    Self.Internal_RenderMiniFormAsValueList;
+
+  for vrVez := 0 to InternalQuery.Fields.Count - 1 do
+  begin
+    if InternalQuery.Fields[vrVez] is TBlobField then
+      Continue;
+
+    if vrVez > 0 then
+      vrStr := vrStr + #13#10;
+
+    vrStr := vrStr + InternalQuery.Fields[vrVez].FieldName + ': ';
+
+    if not InternalQuery.Fields[vrVez].IsNull then
+      vrStr := vrStr + InternalQuery.Fields[vrVez].AsString;
+  end;
+
+  dbMainGrid.ShowHint := Trim(vrStr) <> EmptyStr;
+  dbMainGrid.Hint := vrStr;
 end;
 
 procedure TFCustomDatabaseGrid.InternalQueryCalcFields(DataSet: TDataSet);
@@ -129,10 +164,19 @@ begin
   end;
 end;
 
+procedure TFCustomDatabaseGrid.miExibirColunaIDClick(Sender: TObject);
+begin
+  miExibirColunaID.Checked := not miExibirColunaID.Checked;
+
+  Self.UpdateForm();
+end;
+
 procedure TFCustomDatabaseGrid.miShowMiniFormClick(Sender: TObject);
 begin
   try
     miShowMiniForm.Checked := not miShowMiniForm.Checked;
+
+    ValueListEditor1.DefaultColWidth := PercentOfScreen(ValueListEditor1.Width, 50);
 
     if miShowMiniForm.Checked then
       vrJupiterApp.Params.VariableById('Interface.Grid.ShowMiniForm').Value := BOOL_TRUE_STR
@@ -163,6 +207,10 @@ begin
   JupiterAppDesktopOpenFormFromTableId(Self.FReference.TableName, InternalQuery.FieldByName('ID').AsInteger);
 end;
 
+procedure TFCustomDatabaseGrid.dbMainGridDrawColumnTitle(Sender: TObject; const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+end;
+
 procedure TFCustomDatabaseGrid.dbMainGridEnter(Sender: TObject);
 begin
   Self.UpdateForm(False);
@@ -171,6 +219,27 @@ end;
 procedure TFCustomDatabaseGrid.dbMainGridExit(Sender: TObject);
 begin
   Self.UpdateForm(False);
+end;
+
+procedure TFCustomDatabaseGrid.dbMainGridGetCellHint(Sender: TObject; Column: TColumn; var AText: String);
+begin
+  if InternalQuery.EOF then
+    Exit;
+
+  if not Column.Field.IsNull then
+    AText := Column.Field.AsString;
+end;
+
+procedure TFCustomDatabaseGrid.dbMainGridTitleClick(Column: TColumn);
+begin
+  try
+    if Self.Params.VariableById('orderBy').Value = Column.FieldName then
+      Self.Params.VariableById('orderBy').Value := Column.FieldName + ' DESC'
+    else
+      Self.Params.VariableById('orderBy').Value := Column.FieldName;
+  finally
+    Self.UpdateForm();
+  end;
 end;
 
 procedure TFCustomDatabaseGrid.edSearchChange(Sender: TObject);
@@ -197,6 +266,8 @@ procedure TFCustomDatabaseGrid.Internal_UpdateComponents;
 var
   vrVez : Integer;
   vrCountVisble : Integer;
+  vrWidth : Integer;
+  vrRemainingWidth : Integer;
 begin
   inherited Internal_UpdateComponents;
 
@@ -204,7 +275,10 @@ begin
 
   for vrVez := 0 to dbMainGrid.Columns.Count - 1 do
   begin
-    dbMainGrid.Columns[vrVez].Visible := dbMainGrid.Columns[vrVez].FieldName <> 'ID';
+    dbMainGrid.Columns[vrVez].Visible := True;
+
+    if not miExibirColunaID.Checked then
+      dbMainGrid.Columns[vrVez].Visible := dbMainGrid.Columns[vrVez].FieldName <> 'ID';
 
     if dbMainGrid.Columns[vrVez].Visible then
       if dbMainGrid.Columns[vrVez].Field is TBlobField then
@@ -212,18 +286,50 @@ begin
 
     if dbMainGrid.Columns[vrVez].Visible then
       vrCountVisble := vrCountVisble + 1;
+
+    if dbMainGrid.Columns[vrVez].Field is TDateField then
+      dbMainGrid.Columns[vrVez].DisplayFormat := FORMAT_DATE;
+
+    if dbMainGrid.Columns[vrVez].Field is TTimeField then
+      dbMainGrid.Columns[vrVez].DisplayFormat := FORMAT_TIME;
   end;
+
+  vrRemainingWidth := dbMainGrid.Width - (dbMainGrid.Columns.Count * 5);
 
   for vrVez := 0 to dbMainGrid.Columns.Count - 1 do
   begin
     if dbMainGrid.Columns[vrVez].Visible then
       dbMainGrid.Columns[vrVez].Title.Caption := JupiterDatabaseScript_GetDescription(Self.FReference.TableName, dbMainGrid.Columns[vrVez].FieldName);
 
-    if vrCountVisble > 5 then
-      dbMainGrid.Columns[vrVez].Width := PercentOfScreen(dbMainGrid.Width, 20)
-    else
-      dbMainGrid.Columns[vrVez].Width := PercentOfScreen(dbMainGrid.Width, Round(100 / vrCountVisble));
+    vrWidth := Internal_GetFieldSize(dbMainGrid.Columns[vrVez].Field);
+
+    if not Assigned(dbMainGrid.Columns[vrVez].Field.OnGetText) then
+    begin
+      if GetTextWidth(dbMainGrid.Columns[vrVez].Title.Caption, dbMainGrid.Font) > vrWidth then
+         dbMainGrid.Columns[vrVez].Width := GetTextWidth(dbMainGrid.Columns[vrVez].Title.Caption + '   ', dbMainGrid.Font)
+      else
+         dbMainGrid.Columns[vrVez].Width := vrWidth;
+    end;
+
+    vrRemainingWidth := vrRemainingWidth - dbMainGrid.Columns[vrVez].Width;
+
+    Self.Internal_SetColumnName(dbMainGrid.Columns[vrVez]);
   end;
+
+  for vrVez := 0 to dbMainGrid.Columns.Count - 1 do
+  begin
+    if vrRemainingWidth <= 0 then
+      Continue;
+
+    if dbMainGrid.Columns[vrVez].Field is TStringField then
+    begin
+      dbMainGrid.Columns[vrVez].Width := dbMainGrid.Columns[vrVez].Width + vrRemainingWidth;
+      vrRemainingWidth := 0;
+    end;
+  end;
+
+  if vrRemainingWidth > 0 then
+    dbMainGrid.Columns[0].Width := dbMainGrid.Columns[0].Width + vrRemainingWidth;
 
   if Self.ActionGroup.Count > 1 then
   begin
@@ -323,8 +429,20 @@ begin
     vrStringList := CreateStringList('');
 
     for vrVez := 0 to InternalQuery.Fields.Count - 1 do
-      if InternalQuery.Fields[vrVez] is TStringField then
+    begin
+      if (InternalQuery.Fields[vrVez] is TStringField) then
+      begin
         vrStringList.Add(InternalQuery.Fields[vrVez].FieldName);
+        Continue;
+      end;
+
+     if vrJupiterApp.Params.VariableById('TableGrid.Search.BlobFields').AsBool then
+       if (InternalQuery.Fields[vrVez] is TBlobField) then
+       begin
+         vrStringList.Add(InternalQuery.Fields[vrVez].FieldName);
+         Continue;
+       end;
+    end;
 
     // Não existem campos possíveis para fazer a pesquisa
     if vrStringList.Count = 0 then
@@ -370,7 +488,7 @@ begin
     pnMiniForm.Width := PercentOfScreen(Self.Width, Self.PercentDivisor);
 
   if pnMiniForm.Visible then
-    Self.Internal_RenderMiniForm;
+    Self.Internal_RenderMiniFormAsValueList;
 end;
 
 procedure TFCustomDatabaseGrid.Internal_RenderActions;
@@ -381,14 +499,21 @@ end;
 procedure TFCustomDatabaseGrid.Internal_SetCalculatedFields;
 var
   vrVez : Integer;
+  vrVez2 : Integer;
   vrWizard : TJupiterDatabaseWizard;
 begin
   vrWizard := vrJupiterApp.NewWizard;
   try
     for vrVez := 0 to InternalQuery.Fields.Count - 1 do
       if vrWizard.IsForeignKeyField(Self.FReference.TableName, InternalQuery.Fields[vrVez].FieldName) then
+      begin
         InternalQuery.Fields[vrVez].OnGetText := @Internal_OnGetText;
 
+        for vrVez2 := 0 to dbMainGrid.Columns.Count - 1 do
+          if dbMainGrid.Columns[vrVez2].FieldName = InternalQuery.Fields[vrVez].FieldName then
+            if dbMainGrid.Columns[vrVez2].Width < PercentOfScreen(dbMainGrid.Width, 40) then
+              dbMainGrid.Columns[vrVez2].Width := PercentOfScreen(dbMainGrid.Width, 40);
+      end;
   finally
     FreeAndNil(vrWizard);
   end;
@@ -570,6 +695,26 @@ begin
   end;
 end;
 
+procedure TFCustomDatabaseGrid.Internal_RenderMiniFormAsValueList;
+var
+  vrVez : Integer;
+begin
+  ValueListEditor1.Strings.Clear;
+
+  ValueListEditor1.DefaultColWidth := PercentOfScreen(ValueListEditor1.Width, 50);
+
+  for vrVez := 0 to dbMainGrid.Columns.Count - 1 do
+  begin
+    if not dbMainGrid.Columns[vrVez].Visible then
+      Continue;
+
+    if dbMainGrid.Columns[vrVez].Field.IsNull then
+      ValueListEditor1.Strings.Add(dbMainGrid.Columns[vrVez].Title.Caption + '=NULO')
+    else
+      ValueListEditor1.Strings.Add(dbMainGrid.Columns[vrVez].Title.Caption + '=' + dbMainGrid.Columns[vrVez].Field.AsString);
+  end;
+end;
+
 procedure TFCustomDatabaseGrid.Internal_ClickRecord(Sender: TObject);
 begin
   JupiterAppDesktopOpenFormFromTableId(Self.FReference.TableName, Self.InternalQuery.FieldByName('ID').AsInteger);
@@ -639,6 +784,41 @@ begin
   end;
 end;
 
+function TFCustomDatabaseGrid.Internal_GetFieldSize(prField: TField): Integer;
+begin
+  Result := PercentOfScreen(dbMainGrid.Width, 25);
+
+  if prField is TIntegerField then
+  begin
+    Result := GetTextWidth('10000   ', dbMainGrid.Font);
+    Exit;
+  end;
+
+  if prField is TFloatField then
+  begin
+    Result := GetTextWidth('10000,00   ', dbMainGrid.Font);
+    Exit;
+  end;
+
+  if prField is TDateField then
+  begin
+    Result := GetTextWidth('00/00/0000   ', dbMainGrid.Font);
+    Exit;
+  end;
+
+  if prField is TTimeField then
+  begin
+    Result := GetTextWidth('00:00:00   ', dbMainGrid.Font);
+    Exit;
+  end;
+
+  if prField is TDateTimeField then
+  begin
+    Result := GetTextWidth('00/00/00 00:00:00   ', dbMainGrid.Font);
+    Exit;
+  end;
+end;
+
 function TFCustomDatabaseGrid.Internal_GetRouteName: String;
 begin
   Result := vrJupiterApp.Params.VariableById('Menus.Work.Route').Value + AnsiLowerCase(Self.FReference.TableName) + '/' + FormatDateTime('ddmmyyyy_hhnnss', Now);
@@ -647,6 +827,34 @@ end;
 function TFCustomDatabaseGrid.Internal_GetMacroName: String;
 begin
   Result := JupiterStringUtilsScript_Replace(Copy(Self.Internal_GetRouteName, 2), '/', '.');
+end;
+
+procedure TFCustomDatabaseGrid.Internal_SetColumnName(prColumn: TColumn);
+const
+  ARROW_UP = '   ↑';
+  ARROW_DOWN = '   ↓';
+var
+  vrStr : String;
+  vrOrder : String;
+begin
+  vrStr   := prColumn.FieldName;
+  vrOrder := EmptyStr;
+
+  if Self.Params.Exists('orderBy') then
+    vrOrder := Self.Params.VariableById('orderBy').Value;
+
+  if vrOrder = EmptyStr then
+    Exit;
+
+  if Pos(vrStr, vrOrder) = 0 then
+    Exit;
+
+  vrStr := Copy(vrOrder, Pos(prColumn.FieldName, Self.Params.VariableById('orderBy').Value));
+
+  if ((JupiterStringUtilsScript_GetNextWord(prColumn.FieldName, vrStr) = 'DESC') or (JupiterStringUtilsScript_GetNextWord(prColumn.FieldName, vrStr) = 'DESC,')) then
+    prColumn.Title.Caption := prColumn.Title.Caption + ARROW_DOWN
+  else
+    prColumn.Title.Caption := prColumn.Title.Caption + ARROW_UP;
 end;
 
 procedure TFCustomDatabaseGrid.FromReference(prReference: TJupiterDatabaseReference);
