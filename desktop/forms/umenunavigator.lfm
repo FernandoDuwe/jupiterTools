@@ -1,38 +1,86 @@
 inherited FMenuNavigator: TFMenuNavigator
-  Left = 810
-  Top = 351
+  Left = 608
+  Height = 566
+  Top = 239
+  Width = 1160
   Caption = 'Navegador de Menu'
+  ClientHeight = 566
+  ClientWidth = 1160
   OnDestroy = FormDestroy
+  inherited pnSearchBar: TPanel
+    Width = 1160
+    ClientWidth = 1160
+  end
   inherited fpOptions: TFlowPanel
     Height = 0
-    Top = 376
+    Top = 485
+    Width = 1160
   end
-  object tvTreeMenu: TTreeView[3]
-    Left = 0
-    Height = 331
-    Top = 45
-    Width = 343
-    Align = alLeft
-    BackgroundColor = clDefault
-    Color = clDefault
-    ReadOnly = True
-    TabOrder = 3
-    Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
+  inherited pnBottom: TPanel
+    Top = 485
+    Width = 1160
+    ClientWidth = 1160
   end
-  object Splitter1: TSplitter[4]
-    Left = 343
-    Height = 331
+  object Splitter1: TSplitter[3]
+    Left = 274
+    Height = 440
     Top = 45
     Width = 5
   end
-  object pnBody: TPanel[5]
-    Left = 348
-    Height = 331
+  object pnBody: TPanel[4]
+    Left = 279
+    Height = 440
     Top = 45
-    Width = 531
+    Width = 881
     Align = alClient
     BevelOuter = bvNone
+    TabOrder = 4
+  end
+  object pnLeft: TPanel[5]
+    Left = 0
+    Height = 440
+    Top = 45
+    Width = 274
+    Align = alLeft
+    BevelOuter = bvNone
+    ClientHeight = 440
+    ClientWidth = 274
     TabOrder = 5
+    object tvTreeMenu: TTreeView
+      Left = 0
+      Height = 414
+      Top = 0
+      Width = 274
+      Align = alClient
+      BackgroundColor = clDefault
+      Color = clDefault
+      ReadOnly = True
+      TabOrder = 0
+      Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
+    end
+    object tbOptions: TToolBar
+      Left = 0
+      Height = 26
+      Top = 414
+      Width = 274
+      Align = alBottom
+      Caption = 'tbOptions'
+      EdgeInner = esNone
+      EdgeOuter = esNone
+      Flat = False
+      TabOrder = 1
+      Transparent = True
+      object tbAddMenu: TToolButton
+        Left = 1
+        Top = 0
+        Caption = 'tbAddMenu'
+      end
+      object tbRemoveButton: TToolButton
+        Left = 24
+        Top = 0
+        Caption = 'tbRemoveButton'
+      end
+    end
   end
   inherited acOptions: TActionList[6]
   end

@@ -14,8 +14,12 @@ type
   { TFMenuNavigator }
 
   TFMenuNavigator = class(TFJupiterForm)
+    pnLeft: TPanel;
     pnBody: TPanel;
     Splitter1: TSplitter;
+    tbOptions: TToolBar;
+    tbAddMenu: TToolButton;
+    tbRemoveButton: TToolButton;
     tvTreeMenu: TTreeView;
     procedure FormDestroy(Sender: TObject);
   private
@@ -38,6 +42,8 @@ var
 
 implementation
 
+uses uMain;
+
 {$R *.lfm}
 
 { TFMenuNavigator }
@@ -58,7 +64,7 @@ begin
   Self.Refresh;
 
   if miLookColumn.Checked then
-    tvTreeMenu.Width := PercentOfScreen(Self.Width, Self.PercentDivisor);
+    pnLeft.Width := PercentOfScreen(Self.Width, Self.PercentDivisor);
 
   if Assigned(Self.FForm) then
     if Self.FForm is TFJupiterForm then
@@ -97,6 +103,11 @@ begin
   Self.FClickItem := False;
 
   tvTreeMenu.Images := TJupiterDesktopApp(vrJupiterApp).ImageList;
+
+  tbOptions.Images := FMain.ilIconFamily;
+
+  tbAddMenu.ImageIndex := ICON_ADD;
+  tbRemoveButton.ImageIndex := ICON_DELETE;
 
   vrTreeView := TJupiterTreeViewMenuGenerator.Create(vrJupiterApp.InternalDatabase);
   try

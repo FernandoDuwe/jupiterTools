@@ -9,7 +9,13 @@ object DMMain: TDMMain
   object sqlLiteInternalDatabaseConnection: TSQLite3Connection
     Connected = False
     LoginPrompt = False
+    AfterConnect = sqlLiteInternalDatabaseConnectionAfterConnect
     KeepConnection = False
+    Params.Strings = (
+      'synchronous=normal'
+      'cache_size=-8000'
+      'temp_store=memory'
+    )
     Transaction = sqlLiteInternalTransaction
     AlwaysUseBigint = False
     Left = 152

@@ -1,0 +1,23 @@
+inherited FCustomDataProviderGrid: TFCustomDataProviderGrid
+  OnCreate = FormCreate
+  inherited fpOptions: TFlowPanel
+    Height = 0
+    Top = 376
+  end
+  object lvColumns: TListView[3]
+    Left = 0
+    Height = 331
+    Top = 45
+    Width = 879
+    Align = alClient
+    Columns = <>
+    TabOrder = 3
+    ViewStyle = vsReport
+  end
+  inherited acOptions: TActionList[4]
+  end
+  inherited tmrAutoUpdater: TTimer[5]
+  end
+  inherited pmOptions: TPopupMenu[6]
+  end
+end

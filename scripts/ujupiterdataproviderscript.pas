@@ -30,6 +30,7 @@ type
   function JupiterDataProviderScript_DataProviderGetField(prProviderID, prFieldName : String; prLine : Integer) : String;
   function JupiterDataProviderScript_DataProviderSetField(prProviderID, prFieldName, prValue : String; prLine : Integer) : String;
   function JupiterDataProviderScript_DataProviderFieldExists(prProviderID, prFieldName : String; prLine : Integer) : Boolean;
+  function JupiterDataProviderScript_DataProviderValueExists(prProviderID, prFieldName, prValue : String) : Boolean;
   procedure JupiterDataProviderScript_DataProviderDestroy(prProviderID : String);
 
 implementation
@@ -95,6 +96,11 @@ begin
   Result := vrJupiterApp.GetDataProviderById(prProviderID).GetRowByIndex(prLine).Fields.Exists(prFieldName);
 end;
 
+function JupiterDataProviderScript_DataProviderValueExists(prProviderID, prFieldName, prValue: String): Boolean;
+begin
+  Result := vrJupiterApp.GetDataProviderById(prProviderID).Exists(prFieldName, prValue);
+end;
+
 procedure JupiterDataProviderScript_DataProviderDestroy(prProviderID : String);
 begin
   vrJupiterApp.GetDataProviderById(prProviderID).Free;
@@ -120,6 +126,7 @@ begin
   prSender.AddFunction(@JupiterDataProviderScript_DataProviderGetField, 'function DataProviderGetField(prProviderID, prFieldName : String; prLine : Integer) : String;');
   prSender.AddFunction(@JupiterDataProviderScript_DataProviderSetField, 'function DataProviderSetField(prProviderID, prFieldName, prValue: String; prLine: Integer): String;');
   prSender.AddFunction(@JupiterDataProviderScript_DataProviderFieldExists, 'function DataProviderFieldExists(prProviderID, prFieldName: String; prLine: Integer): Boolean;');
+  prSender.AddFunction(@JupiterDataProviderScript_DataProviderValueExists, 'function DataProviderValueExists(prProviderID, prFieldName, prValue: String): Boolean;');
 
   prSender.AddFunction(@JupiterDataProviderScript_DataProviderDestroy, 'procedure DataProviderDestroy(prProviderID : String);');
 end;
@@ -137,6 +144,7 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function DataProviderGetField(prProviderID, prFieldName : String; prLine : Integer) : String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function DataProviderSetField(prProviderID, prFieldName, prValue: String; prLine: Integer): String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function DataProviderFieldExists(prProviderID, prFieldName: String; prLine: Integer): Boolean;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function DataProviderValueExists(prProviderID, prFieldName, prValue: String): Boolean;'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure DataProviderDestroy(prProviderID : String);'));
 end;

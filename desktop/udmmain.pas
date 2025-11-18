@@ -16,6 +16,7 @@ type
     sqlLiteInternalTransaction: TSQLTransaction;
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
+    procedure sqlLiteInternalDatabaseConnectionAfterConnect(Sender: TObject);
   private
 
   public
@@ -39,13 +40,18 @@ begin
 
   vrEnviroment := TJupiterEnviroment.Create;
   try
+    if not vrEnviroment.Exists('/datasets/db_params.txt') then
+      vrEnviroment.CreateFile('/datasets/db_params.txt', sqlLiteInternalDatabaseConnection.Params.Text)
+    else
+      sqlLiteInternalDatabaseConnection.Params.LoadFromFile(vrEnviroment.FullPath('/datasets/db_params.txt'));
+
     sqlLiteInternalDatabaseConnection.Connected    := False;
     sqlLiteInternalDatabaseConnection.DatabaseName := vrEnviroment.FullPath(vrJupiterApp.Params.VariableById('database.local').Value);
 
     if not vrEnviroment.Exists(sqlLiteInternalDatabaseConnection.DatabaseName) then
       sqlLiteInternalDatabaseConnection.CreateDB;
 
-    sqlLiteInternalDatabaseConnection.Connected := True;
+    sqlLiteInternalDatabaseConnection.Open;
   finally
     if sqlLiteInternalDatabaseConnection.Connected then
       vrJupiterApp.Prepare;
@@ -55,6 +61,12 @@ end;
 procedure TDMMain.DataModuleDestroy(Sender: TObject);
 begin
   sqlLiteInternalDatabaseConnection.Connected := False;
+end;
+
+procedure TDMMain.sqlLiteInternalDatabaseConnectionAfterConnect(Sender: TObject
+  );
+begin
+
 end;
 
 end.

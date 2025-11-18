@@ -13,7 +13,7 @@ uses
 
   function JupiterStringUtilsStringToStringList(prScript : String) : TStrings;
 
-  function JupiterStringUtilsGetCSVColumn(prLine : String; prIndex : Integer) : String;
+  function JupiterStringUtilsGetCSVColumn(prLine : String; prIndex : Integer; prSeparator : String = ';') : String;
 
   function JupiterStringUtilsGetCountColumns(prLine : String; prCharacterSeparator : Char) : Integer;
 
@@ -93,7 +93,7 @@ begin
   Result.Add(vrStrAux);
 end;
 
-function JupiterStringUtilsGetCSVColumn(prLine: String; prIndex: Integer): String;
+function JupiterStringUtilsGetCSVColumn(prLine: String; prIndex: Integer; prSeparator : String = ';'): String;
 var
   vrStr : TStrings;
 begin
@@ -104,7 +104,7 @@ begin
 
   vrStr := TStringList.Create;
   try
-    vrStr.Delimiter     := ';';
+    vrStr.Delimiter     := prSeparator[1];
     vrStr.DelimitedText := StringReplace(prLine, ' ', EMPTY_SPACE_SEPARATOR, [rfIgnoreCase, rfReplaceAll]);
 
     if (vrStr.Count - 1) < prIndex then

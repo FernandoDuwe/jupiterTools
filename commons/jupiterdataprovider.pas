@@ -41,6 +41,8 @@ type
 
     constructor Create; override;
     destructor Destroy; override;
+
+    function Exists(prField, prValue : String) : Boolean;
   end;
 
   function FactoryDataProvider(prDataProviderType : String; prParam : String; prSubFolders : Boolean) : TJupiterDataProvider;
@@ -200,6 +202,34 @@ begin
       vrJupiterApp.DeleteDataProviderById(Self.ProviderID);
 
   inherited Destroy;
+end;
+
+function TJupiterDataProvider.Exists(prField, prValue: String): Boolean;
+var
+  vrVez   : Integer;
+  vrField : TJupiterVariable;
+begin
+  Result := False;
+
+  if Self.Count = 0 then
+    Exit;
+
+  if not Self.GetRowByIndex(0).Fields.Exists(prField) then
+    Exit;
+
+  for vrVez := 0 to Self.Count - 1 do
+  begin
+    vrField := Self.GetRowByIndex(vrVez).Fields.VariableById(prField);
+
+    if vrField.IsEmpty then
+      Continue;
+
+    if vrField.Value = prValue then
+    begin
+      Result := True;
+      Exit;
+    end;
+  end;
 end;
 
 { TJupiterDataProviderRow }

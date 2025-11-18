@@ -419,6 +419,7 @@ begin
 
   vrPSScript := TPSScript.Create(Application.MainForm);
   try
+    vrPSScript.UseDebugInfo := False;
     vrPSScript.OnCompile    := @Self.Internal_ScriptCompile;
     vrPSScript.OnExecute    := @Self.Internal_ScriptExecute;
     vrPSScript.OnCompImport := @Self.Internal_ClassesPlugin1CompImport;

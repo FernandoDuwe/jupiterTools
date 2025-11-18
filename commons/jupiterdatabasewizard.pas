@@ -250,6 +250,7 @@ begin
   Result                := TSQLQuery.Create(nil);
   Result.SQLConnection  := Self.Connection;
   Result.SQLTransaction := Self.Transaction;
+  Result.UniDirectional := False;
   Result.Close;
   Result.SQL.Clear;
 end;
@@ -420,7 +421,11 @@ var
 begin
   vrQry := Self.NewQuery;
   try
-    vrQry.SQL.Add(Format(' SELECT COUNT(ID) AS COUNTER FROM %0:s WHERE %1:s', [prTableName, prWhere]));
+    vrQry.SQL.Add(Format(' SELECT COUNT(ID) AS COUNTER FROM %0:s ', [prTableName]));
+
+    if Trim(prWhere) <> EmptyStr then
+      vrQry.SQL.Add(Format(' WHERE %0:s ', [prWhere]));
+
     vrQry.Open;
 
     Result := vrQry.Fields[0].AsInteger;

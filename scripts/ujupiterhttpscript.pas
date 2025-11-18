@@ -32,13 +32,17 @@ var
 begin
   vrResponse := TStringStream.Create(EmptyStr);
   try
-    TFPHTTPClient.SimpleGet(prURL, vrResponse);
+    try
+      TFPHTTPClient.SimpleGet(prURL, vrResponse);
 
-    prResponseCode := 200;
+      prResponseCode := 200;
 
-    prResponseBody := vrResponse.DataString;
+      prResponseBody := vrResponse.DataString;
 
-    Result := True;
+      Result := True;
+    except
+      prResponseCode := 500;
+    end;
   finally
     vrResponse.Free;
   end;

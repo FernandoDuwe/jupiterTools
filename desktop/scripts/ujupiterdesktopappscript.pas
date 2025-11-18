@@ -7,7 +7,7 @@ interface
 uses
   Classes, jupiterScript, JupiterConsts, JupiterApp, JupiterVariable,
   uCustomDatabaseForm, ucustomdatabasegrid, uCodeRunner, uExternalSQLEditor,
-  SysUtils, PascalScript, uPSComponent, Forms, SQLDB;
+  uCustomDataProviderGrid, SysUtils, PascalScript, uPSComponent, Forms, SQLDB;
 
 type
 
@@ -41,6 +41,7 @@ type
   procedure JupiterAppDesktopOpenGridFromTable(prTableName : String);
   procedure JupiterAppDesktopOpenGridFromTableWithWhere(prTableName : String; prWhere : String; prOrderBy : String);
   procedure JupiterAppDesktopOpenFileExplorerForm(prPath : String);
+  procedure JupiterAppDesktopOpenDataProviderExplorerForm(prReference : String);
   procedure JupiterAppDesktopOpenCheckListExplorerForm(prPath : String);
   procedure JupiterAppDesktopOpenTextEditorForm(prPath : String);
   procedure JupiterAppDesktopOpenMultiLevelTextEditorForm(prPath : String);
@@ -266,6 +267,17 @@ begin
   end;
 end;
 
+procedure JupiterAppDesktopOpenDataProviderExplorerForm(prReference: String);
+var
+  vrForm : TForm;
+begin
+  vrForm := TJupiterDesktopApp(vrJupiterApp).NewFormByRoute(CUSTOMGRIDPROVIDER_PATH);
+
+  TFCustomDataProviderGrid(vrForm).FromReference(prReference);
+
+  TJupiterDesktopApp(vrJupiterApp).OpenForm(vrForm as TFCustomDataProviderGrid);
+end;
+
 procedure JupiterAppDesktopOpenCheckListExplorerForm(prPath: String);
 var
   vrVariables : TJupiterVariableList;
@@ -429,6 +441,8 @@ begin
   prSender.AddFunction(@JupiterAppDesktopOpenMultiLevelTextEditorForm, 'procedure OpenMultiLevelTextEditorForm(prPath : String);');
   prSender.AddFunction(@JupiterAppDesktopCloseForm, 'procedure CloseForm(prFormID : String);');
   prSender.AddFunction(@JupiterAppDesktopSetAppMessage, 'procedure SetAppMessage(prMessage : String);');
+  prSender.AddFunction(@JupiterAppDesktopOpenDataProviderExplorerForm, 'procedure OpenDataProviderExplorerForm(prReference : String);');
+
   prSender.AddFunction(@JupiterAppDesktopOpenSQLExternalEditor, 'procedure OpenFormSQLExternalEditor(prConnectionType, prDatabase, prHostName, prUserName, prPassword : String);');
 
   prSender.AddFunction(@JupiterAppDesktopAddRoute, 'procedure AddRoute(prTitle, prRoute, prShortcut, prParams: String; prDestiny, prIcon, prZIndex: Integer);');
@@ -477,6 +491,7 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenMultiLevelTextEditorForm(prPath: String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CloseForm(prFormID: String) : String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure SetAppMessage(prMessage: String) : String;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenDataProviderExplorerForm(prReference : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenFormSQLExternalEditor(prConnectionType, prDatabase, prHostName, prUserName, prPassword : String);'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CursorToWait();'));

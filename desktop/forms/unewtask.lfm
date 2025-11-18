@@ -1,7 +1,7 @@
 inherited FNewTask: TFNewTask
-  Left = 361
+  Left = 248
   Height = 698
-  Top = 175
+  Top = 188
   Width = 1450
   Align = alCustom
   Caption = 'Iniciar uma nova tarefa'
@@ -49,8 +49,8 @@ inherited FNewTask: TFNewTask
     Height = 572
     Top = 45
     Width = 1102
-    HorzScrollBar.Page = 56
-    VertScrollBar.Page = 85
+    HorzScrollBar.Page = 150
+    VertScrollBar.Page = 187
     Align = alClient
     ClientHeight = 568
     ClientWidth = 1098
@@ -390,8 +390,8 @@ inherited FNewTask: TFNewTask
       TabOrder = 1
       object fpTabs: TFlowPanel
         Left = 0
-        Height = 483
-        Top = 0
+        Height = 381
+        Top = 102
         Width = 1098
         Align = alClient
         AutoSize = True
@@ -400,6 +400,50 @@ inherited FNewTask: TFNewTask
         FlowLayout = tlTop
         FlowStyle = fsLeftRightTopBottom
         TabOrder = 0
+      end
+      object pnPesquisar: TPanel
+        Left = 0
+        Height = 52
+        Top = 0
+        Width = 1098
+        Align = alTop
+        BevelOuter = bvNone
+        ClientHeight = 52
+        ClientWidth = 1098
+        TabOrder = 1
+        object edSearchTables: TEdit
+          Left = 32
+          Height = 34
+          Top = 5
+          Width = 1044
+          Align = alCustom
+          Anchors = [akTop, akLeft, akRight]
+          AutoSize = False
+          TabOrder = 0
+          TextHint = 'Pesquisar nas tabelas do sistema'
+        end
+      end
+      object pnSearchResult: TPanel
+        Left = 0
+        Height = 50
+        Top = 52
+        Width = 1098
+        Align = alTop
+        BevelOuter = bvNone
+        ClientHeight = 50
+        ClientWidth = 1098
+        TabOrder = 2
+        Visible = False
+        object sbSearchResult: TScrollBox
+          Left = 0
+          Height = 50
+          Top = 0
+          Width = 1098
+          HorzScrollBar.Page = 1
+          VertScrollBar.Page = 1
+          Align = alClient
+          TabOrder = 0
+        end
       end
     end
   end

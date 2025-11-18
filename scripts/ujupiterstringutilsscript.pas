@@ -22,6 +22,7 @@ type
 
   function JupiterStringUtilsScript_GenerateGUID : String;
   function JupiterStringUtilsScript_GetCSVColumn(prLine : String; prIndex : Integer) : String;
+  function JupiterStringUtilsScript_GetCSVColumnSeparator(prLine : String; prIndex : Integer; prSeparator : String) : String;
   function JupiterStringUtilsScript_Replace(prStr, prOldString, prNewString : String) : String;
   function JupiterStringUtilsScript_CountCharInString(prChar, prFullString : String) : Integer;
   function JupiterStringUtilsScript_GetNextWord(prWord, prText : String) : String;
@@ -36,6 +37,11 @@ end;
 function JupiterStringUtilsScript_GetCSVColumn(prLine: String; prIndex: Integer): String;
 begin
   Result := JupiterStringUtilsGetCSVColumn(prLine, prIndex);
+end;
+
+function JupiterStringUtilsScript_GetCSVColumnSeparator(prLine: String; prIndex: Integer; prSeparator : String): String;
+begin
+  Result := JupiterStringUtilsGetCSVColumn(JupiterStringUtilsScript_Replace(prLine, prSeparator, ';'), prIndex);
 end;
 
 function JupiterStringUtilsScript_Replace(prStr, prOldString, prNewString: String): String;
@@ -97,6 +103,7 @@ begin
 
   prSender.AddFunction(@JupiterStringUtilsScript_GenerateGUID, 'function GenerateGUID : String;');
   prSender.AddFunction(@JupiterStringUtilsScript_GetCSVColumn, 'function GetCSVColumn(prLine: String; prIndex: Integer): String;');
+  prSender.AddFunction(@JupiterStringUtilsScript_GetCSVColumnSeparator, 'function GetCSVColumnSeparator(prLine: String; prIndex: Integer; prSeparator : String): String;');
   prSender.AddFunction(@JupiterStringUtilsScript_Replace, 'function Replace(prStr, prOldString, prNewString: String): String;');
 end;
 
@@ -106,6 +113,7 @@ begin
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function GenerateGUID : String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function GetCSVColumn(prLine: String; prIndex: Integer): String;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function GetCSVColumnSeparator(prLine: String; prIndex: Integer; prSeparator : String): String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function Replace(prStr, prOldString, prNewString: String): String;'));
 end;
 

@@ -20,6 +20,7 @@ const
    USERPREFERENCE_PATH : String = '/forms/userPreference';
    CUSTOMDATABASE_PATH : String = '/forms/custom/database';
    CUSTOMGRIDDATABASE_PATH : String = '/forms/custom/databaseGrid';
+   CUSTOMGRIDPROVIDER_PATH : String = '/forms/custom/dataProviderGrid';
    CUSTOMCODEFORM_PATH : String = '/forms/custom/codable';
    SCRIPTFORM_PATH : String = '/forms/script';
    SYSTEM_PATH : String = '/forms/system';
@@ -85,9 +86,11 @@ const
 
    STRING_NEWLINE : String = #13#10;
 
-   FORMAT_DATETIME : String = 'dd/mm/yyyy hh:nn';
-   FORMAT_DATE     : String = 'dd/mm/yyyy';
-   FORMAT_TIME     : String = 'hh:nn';
+   FORMAT_DATETIME     : String = 'dd/mm/yyyy hh:nn';
+   FORMAT_DATE         : String = 'dd/mm/yyyy';
+   FORMAT_TIME         : String = 'hh:nn';
+   FORMAT_INTEGER_MASK : String = '#,##0';
+   FORMAT_NUMBER_MASK  : String = '#,##0.00';
 
    EMPTY_SPACE_SEPARATOR    : String = '/JUPITERTOOLS\|/JUPITERTOOLS\';
    COLUMN_SPACE_SEPARATOR   : String = '      ';

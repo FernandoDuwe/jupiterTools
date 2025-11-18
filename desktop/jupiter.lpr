@@ -10,7 +10,7 @@ uses
   athreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  opensslsockets, openssl,
+  fphttpclient, opensslsockets, openssl,
   Forms, pascalscript, pascalscriptfcl, datetimectrls, tachartlazaruspkg,
   uJupiterForm, uMain, uDmMain, JupiterConsts, JupiterObject, JupiterEnviroment,
   JupiterModule, JupiterVariable, JupiterCSVDataProvider, JupiterApp,
@@ -32,7 +32,7 @@ uses
   uJupiterCheckListUtilsScript, uWaitForm, uCodeRunner, uFileFinder,
   uFileReaderFinder, jupiterScriptList, uconsole, uExternalSQLEditor,
   uMultiLevelTextEditor, uMenuNavigator, jupiterDatabaseAutoComplete, 
-  uJupiterHTTPScript;
+  uJupiterHTTPScript, uCustomDataProviderGrid;
 
 {$R *.res}
 
@@ -56,6 +56,8 @@ begin
 
   TJupiterDesktopApp(vrJupiterApp).GenerateDynamicData;
 
+
+
   Application.CreateForm(TFMain, FMain);
 
   with TJupiterDesktopApp(vrJupiterApp) do
@@ -65,6 +67,7 @@ begin
     FormRoutes.Add(TJupiterFormRoute.Create(GENERATOR_PATH, TFGenerator));
     FormRoutes.Add(TJupiterFormRoute.Create(CUSTOMDATABASE_PATH, TFCustomDatabaseForm));
     FormRoutes.Add(TJupiterFormRoute.Create(CUSTOMGRIDDATABASE_PATH, TFCustomDatabaseGrid));
+    FormRoutes.Add(TJupiterFormRoute.Create(CUSTOMGRIDPROVIDER_PATH, TFCustomDataProviderGrid));
     FormRoutes.Add(TJupiterFormRoute.Create(USERPREFERENCE_PATH, TFUserPreferences));
     FormRoutes.Add(TJupiterFormRoute.Create(SCRIPTFORM_PATH, TFScriptEditorForm));
     FormRoutes.Add(TJupiterFormRoute.Create(SYSTEM_PATH, TFSystemMonitor));

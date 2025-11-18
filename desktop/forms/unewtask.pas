@@ -15,11 +15,15 @@ type
   { TFNewTask }
 
   TFNewTask = class(TFJupiterForm)
+    edSearchTables: TEdit;
     fpTabs: TFlowPanel;
     imLogo: TImage;
+    pnSearchResult: TPanel;
+    pnPesquisar: TPanel;
     pnHomeBody: TPanel;
     pnTop: TPanel;
     sbShortcut: TScrollBox;
+    sbSearchResult: TScrollBox;
     Splitter1: TSplitter;
     tvTreeMenu: TTreeView;
     procedure FormCreate(Sender: TObject);
@@ -169,7 +173,11 @@ begin
     vrAction := Self.FActionList.GetAtIndex(vrVez) as TJupiterAction;
 
     vrReference := JupiterComponentsNewCard(vrAction.Caption, vrAction.Hint, 80, PercentOfScreen(fpTabs.Width, vrJupiterApp.Params.VariableById('Interface.Cards.Size').AsInteger), TJupiterPosition.Create(0, 0), fpTabs);
-    vrAlternative := (vrVez mod vrJupiterApp.Params.VariableById('Interface.Cards.Zebring').AsInteger) = 0;
+
+    vrAlternative := False;
+
+    if vrJupiterApp.Params.VariableById('Interface.Cards.Zebring').AsInteger <> 0 then
+      vrAlternative := (vrVez mod vrJupiterApp.Params.VariableById('Interface.Cards.Zebring').AsInteger) = 0;
 
     TPanel(vrReference.Component).BorderSpacing.Around := 2;
 
@@ -185,6 +193,9 @@ begin
     TPanel(vrReference.Component).Cursor  := crHandPoint;
     TPanel(vrReference.Component).OnClick := @Internal_LinkClick;
   end;
+
+  edSearchTables.Left := FORM_MARGIN_LEFT * 2;
+  edSearchTables.Width := pnPesquisar.Width - ((FORM_MARGIN_LEFT * 2) + (FORM_MARGIN_RIGHT * 2));
 
   fpTabs.BorderSpacing.Top    := FORM_MARGIN_TOP * 2;
   fpTabs.BorderSpacing.Left   := FORM_MARGIN_LEFT * 2;

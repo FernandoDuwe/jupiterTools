@@ -388,6 +388,8 @@ begin
 
   Self.ActionGroup.TableName := Self.FReference.TableName;
 
+  Self.InternalQuery.PacketRecords := vrJupiterApp.Params.VariableById(FORM_GRID_LIMIT).AsInteger;
+
   if not Self.Params.Exists('where') then
     Self.Params.AddVariable('where', EmptyStr, 'Where');
 
@@ -405,6 +407,7 @@ var
   vrVez : Integer;
   vrFields : String;
   vrLimit : String;
+  vrCount : Integer;
 begin
   inherited Internal_UpdateDatasets;
 
@@ -461,19 +464,26 @@ begin
         InternalQuery.SQL.AddStrings(vrWizard.NewQueryFromReference(Self.FReference, Self.Params.VariableById('where').Value, Self.Params.VariableById('orderBy').Value, vrFields, vrLimit).SQL)
     end;
 
+    InternalQuery.Prepare;
     InternalQuery.Open;
 
     Self.Internal_SetCalculatedFields;
 
-    InternalQuery.Last;
-    InternalQuery.First;
-
     if vrId <> NULL_KEY then
-      InternalQuery.Locate('ID', vrId,[]);
+      InternalQuery.Locate('ID', vrId, []);
   finally
-    FreeAndNil(vrWizard);
+    if ((Self.Params.Exists('where')) and (not Self.Params.VariableById('where').IsEmpty)) then
+      vrCount := vrWizard.Count(Self.FReference.TableName, Self.Params.VariableById('where').Value)
+    else
+      vrCount := vrWizard.Count(Self.FReference.TableName, EmptyStr);
 
-    Self.Hint := 'Tabela: ' + Self.FReference.TableName + '   Total de registros em tela: ' + IntToStr(InternalQuery.RecordCount);
+    if Self.FUseLimit then
+      if Self.FLimit < vrCount then
+        vrCount := Self.FLimit;
+
+    Self.Hint := 'Tabela: ' + Self.FReference.TableName + '   Total de registros em tela: ' + FormatFloat(FORMAT_INTEGER_MASK, vrCount);
+
+    FreeAndNil(vrWizard);
 
     if ((Self.Params.Exists('where')) and (not Self.Params.VariableById('where').IsEmpty)) then
       Self.Hint := Self.Hint + '. Existem filtros aplicados nesta consulta';

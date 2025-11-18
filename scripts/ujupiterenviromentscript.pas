@@ -40,6 +40,8 @@ type
   procedure JupiterEnviromentScript_SaveToFile(prFileName, prData : String);
   procedure JupiterEnviromentScript_CopyTextToClipboard(prText : String);
 
+  function JupiterEnviromentScript_SelectFile(prExtension : String) : String;
+
   function JupiterEnviromentScript_GetApplicationPath : String;
 
 implementation
@@ -195,6 +197,18 @@ begin
   Clipboard.AsText := prText;
 end;
 
+function JupiterEnviromentScript_SelectFile(prExtension: String): String;
+var
+  vrEnviroment : TJupiterEnviroment;
+begin
+  vrEnviroment := TJupiterEnviroment.Create;
+  try
+    Result := vrEnviroment.OpenFile(prExtension);
+  finally
+    FreeAndNil(vrEnviroment);
+  end;
+end;
+
 function JupiterEnviromentScript_GetApplicationPath: String;
 var
   vrEnviroment : TJupiterEnviroment;
@@ -239,6 +253,8 @@ begin
 
   prSender.AddFunction(@JupiterEnviromentScript_CopyTextToClipboard, 'procedure CopyTextToClipboard(prText: String);');
 
+  prSender.AddFunction(@JupiterEnviromentScript_SelectFile, 'function SelectFile(prExtension : String) : String;');
+
   prSender.AddFunction(@JupiterEnviromentScript_SameExtension, 'function SameExtension(prFileName, prExtension : String) : Boolean;');
 end;
 
@@ -256,6 +272,8 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function CreateExternalFile(prPath, prContent: String): String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function LoadFromFile(prFileName : String): String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function SameExtension(prFileName, prExtension : String) : Boolean;'));
+
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function SelectFile(prExtension : String) : Boolean;'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function ExtractFileName(prFileName : String) : Boolean;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function ExtractFileDir(prFileName : String) : Boolean;'));

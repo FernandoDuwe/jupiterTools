@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls,
   uJupiterForm, jupiterformutils, JupiterApp, jupiterScript,
   JupiterDataProvider, JupiterConsts, jupiterScriptList, uJupiterAction,
-  jupiterDesktopApp;
+  jupiterDesktopApp, uJupiterDesktopAppScript, uJupiterFormDesktopAppScript;
 
 type
 
@@ -39,6 +39,7 @@ type
 
     procedure Internal_OnDeleteAsset(Sender: TObject);
     procedure Internal_OnCleanAsset(Sender: TObject);
+    procedure Internal_OnViewDataProvider(Sender: TObject);
   public
 
   end;
@@ -57,6 +58,8 @@ begin
   inherited Internal_PrepareForm;
 
 //  Self.ActionGroup.AddAction(TJupiterAction.Create('Encerrar', 'Clique aqui para finalizar o recurso atual', ICON_DELETE, @Internal_OnDeleteAsset));
+
+  Self.ActionGroup.AddAction(TJupiterAction.Create('Visualizar', 'Clique aqui para visualizar o data provider', ICON_VIEW, @Internal_OnViewDataProvider));
 
   Self.ActionGroup.AddAction(TJupiterAction.Create('Limpar', 'Clique aqui para limpar os logs de sistema', ICON_NEW, @Internal_OnCleanAsset));
 end;
@@ -205,6 +208,14 @@ begin
   finally
     Self.UpdateForm();
   end;
+end;
+
+procedure TFSystemMonitor.Internal_OnViewDataProvider(Sender: TObject);
+begin
+  if not Assigned(lvDataProviders.Selected) then
+    Exit;
+
+  JupiterAppDesktopOpenDataProviderExplorerForm(lvDataProviders.Selected.Caption);
 end;
 
 end.

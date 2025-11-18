@@ -20,7 +20,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="3"/>
       <RevisionNr Value="3"/>
-      <BuildNr Value="141"/>
+      <BuildNr Value="204"/>
       <Language Value="0416"/>
       <CharSet Value="04E2"/>
       <StringTable CompanyName="Jupiter" FileDescription="Jupiter interface" ProductName="Jupiter"/>
@@ -499,6 +499,14 @@
         <Filename Value="../scripts/ujupiterhttpscript.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uJupiterHTTPScript"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms/ucustomdataprovidergrid.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FCustomDataProviderGrid"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uCustomDataProviderGrid"/>
       </Unit>
     </Units>
   </ProjectOptions>
