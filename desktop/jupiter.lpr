@@ -32,7 +32,8 @@ uses
   uJupiterCheckListUtilsScript, uWaitForm, uCodeRunner, uFileFinder,
   uFileReaderFinder, jupiterScriptList, uconsole, uExternalSQLEditor,
   uMultiLevelTextEditor, uMenuNavigator, jupiterDatabaseAutoComplete, 
-  uJupiterHTTPScript, uCustomDataProviderGrid;
+  uJupiterHTTPScript, uCustomDataProviderGrid, udatabasefinder, 
+jupiterformdbcomponenttils;
 
 {$R *.res}
 
@@ -82,6 +83,7 @@ begin
     FormRoutes.Add(TJupiterFormRoute.Create(CHARTVIEWER_PATH, TFChartViewer));
     FormRoutes.Add(TJupiterFormRoute.Create(CODERUNNER_PATH, TFCodeRunner));
     FormRoutes.Add(TJupiterFormRoute.Create(FILEFINDER_PATH, TFFileFinder));
+    FormRoutes.Add(TJupiterFormRoute.Create(DATABASEFINDER_PATH, TFDatabaseFinder));
     FormRoutes.Add(TJupiterFormRoute.Create(FILEREADERFINDER_PATH, TFFileReaderFinder));
     FormRoutes.Add(TJupiterFormRoute.Create(CONSOLE_PATH, TFConsole));
     FormRoutes.Add(TJupiterFormRoute.Create(MENUEXPLORER_PATH, TFMenuNavigator));

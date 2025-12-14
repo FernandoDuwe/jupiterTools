@@ -20,7 +20,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="3"/>
       <RevisionNr Value="3"/>
-      <BuildNr Value="204"/>
+      <BuildNr Value="315"/>
       <Language Value="0416"/>
       <CharSet Value="04E2"/>
       <StringTable CompanyName="Jupiter" FileDescription="Jupiter interface" ProductName="Jupiter"/>
@@ -507,6 +507,17 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uCustomDataProviderGrid"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms/udatabasefinder.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FDatabaseFinder"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons/jupiterformdbcomponenttils.pas"/>
+        <IsPartOfProject Value="True"/>
       </Unit>
     </Units>
   </ProjectOptions>

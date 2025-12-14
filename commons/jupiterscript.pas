@@ -39,7 +39,11 @@ type
     property Text       : String read FText;
     property DocText    : String read FDocText;
   public
+    function CanIncludeSource(prSourceCode : TStrings) : Boolean;
+
     constructor Create(prID, prContext : Integer; prType : TJupiterScriptAnalyserType; prDocText : String; prText : String = '');
+
+    function GetIdentifier : String;
   end;
 
   { TJupiterScriptAnalyserList }
@@ -64,11 +68,14 @@ type
   public
     procedure DoCompile(prSender: TPSScript); virtual;
     function AnalyseCode: TJupiterScriptAnalyserList; virtual;
+
+    function CanIncludeSource(prSourceCode : TStrings) : Boolean;
   end;
 
   TJupiterScript = class(TJupiterObject)
   private
     FScriptID     : String;
+    FScriptName   : String;
     FScript       : TStrings;
     FMessages     : TStrings;
     FRunMessages  : TStrings;
@@ -108,9 +115,12 @@ type
     property OnAddMessage : TJupiterScriptOnAddMessage read FOnAddMessage write FOnAddMessage;
     property OnExecute : TJupiterScriptOnExecute read FOnExecute write FOnExecute;
 
-    property ScriptID : String read FScriptID;
+    property ScriptID   : String read FScriptID;
+    property ScriptName : String read FScriptName write FScriptName;
   public
     Flags : TJupiterScriptFlags;
+
+    procedure Optimize(prSourceCode : TStrings);
 
     function GetDateTimeMark : String;
 
@@ -167,7 +177,42 @@ begin
   Result := TJupiterScriptAnalyserList.Create;
 end;
 
+function TJupiterScriptLibrary.CanIncludeSource(prSourceCode: TStrings): Boolean;
+var
+  vrList : TJupiterScriptAnalyserList;
+  vrVez  : Integer;
+begin
+  Result := False;
+
+  vrList := Self.AnalyseCode;
+
+  for vrVez := 0 to vrList.Count - 1 do
+    if vrList.ItemByIndex(vrVez).CanIncludeSource(prSourceCode) then
+    begin
+      Result := True;
+      Exit;
+    end;
+end;
+
 { TJupiterScriptAnalyserItem }
+
+function TJupiterScriptAnalyserItem.CanIncludeSource(prSourceCode: TStrings): Boolean;
+var
+  vrID : String;
+begin
+  Result := True;
+
+  vrID := Self.GetIdentifier;
+
+  if vrID = EmptyStr then
+    Exit;
+
+  if Pos(AnsiUpperCase(vrID), AnsiUpperCase(prSourceCode.Text)) = 0 then
+  begin
+    Result := False;
+    Exit;
+  end;
+end;
 
 constructor TJupiterScriptAnalyserItem.Create(prID, prContext: Integer;
   prType: TJupiterScriptAnalyserType; prDocText : String; prText : String = '');
@@ -207,6 +252,16 @@ begin
   end
   else
     Self.FText := prText;
+end;
+
+function TJupiterScriptAnalyserItem.GetIdentifier: String;
+begin
+  Result := Self.DocText;
+  Result := StringReplace(Result, 'function ', EmptyStr, [rfIgnoreCase, rfReplaceAll]);
+  Result := StringReplace(Result, 'procedure ', EmptyStr, [rfIgnoreCase, rfReplaceAll]);
+  Result := StringReplace(Result, ' ', EmptyStr, [rfIgnoreCase, rfReplaceAll]);
+
+  Result := Copy(AnsiUpperCase(Result), 1, Pos('(', Result) - 1);
 end;
 
 { TJupiterScript }
@@ -368,6 +423,15 @@ begin
   WriteLn(prMessage);
 end;
 
+procedure TJupiterScript.Optimize(prSourceCode: TStrings);
+var
+  vrVez : Integer;
+begin
+  for vrVez := Self.LibraryList.Count - 1 downto 0 do
+    if not TJupiterScriptLibrary(Self.LibraryList.GetAtIndex(vrVez)).CanIncludeSource(prSourceCode) then
+      Self.LibraryList.DeleteAtIndex(vrVez);
+end;
+
 function TJupiterScript.GetDateTimeMark: String;
 begin
   Result := FormatDateTime('dd/mm/yyyy hh:nn:ss', Now);
@@ -428,6 +492,8 @@ begin
     vrPSScript.Script.Clear;
     vrPSScript.Script.AddStrings(Self.Internal_GetFullScript);
 
+    Self.Optimize(vrPSScript.Script);
+
     if Self.Flags.GenerateFullFile then
     begin
       vrEnviroment := TJupiterEnviroment.Create;
@@ -441,6 +507,8 @@ begin
     end;
 
     try
+      Self.Messages.Add('ScriptName: ' + Self.ScriptName);
+
       if vrPSScript.Compile then
       begin
         Self.FCompiled := True;
@@ -494,6 +562,8 @@ end;
 
 constructor TJupiterScript.Create;
 begin
+  Self.ScriptName := EmptyStr;
+
   try
     Self.FScriptID := JupiterStringUtilsGenerateGUID;
 

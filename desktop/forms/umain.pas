@@ -8,7 +8,8 @@ uses
   ActnList, ExtCtrls, Buttons, uJupiterForm, JupiterFormTab, StdCtrls,
   jupiterMainMenuGenerator, JupiterApp, JupiterConsts, JupiterVariable,
   JupiterVariableDataProvider, jupiterformutils, jupitertreeviewmenugenerator,
-  uPSComponent, jupiterDesktopApp, uContextMenu, uMenuNavigator;
+  uPSComponent, jupiterDesktopApp, uContextMenu, uMenuNavigator,
+  udatabasefinder;
 
 type
 
@@ -510,12 +511,21 @@ begin
   Form.WindowState := wsMaximized;
 
   if Assigned(Self.CurrentForm) then
+  begin
     if ((Self.CurrentForm is TFMenuNavigator) and (TFMenuNavigator(Self.CurrentForm).ClickItem)) then
     begin
       TFMenuNavigator(Self.CurrentForm).AddForm(Form);
 
       Exit;
     end;
+
+    if ((Self.CurrentForm is TFDatabaseFinder) and (TFDatabaseFinder(Self.CurrentForm).ClickItem)) then
+    begin
+      TFDatabaseFinder(Self.CurrentForm).AddForm(Form);
+
+      Exit;
+    end;
+  end;
 
   jtMainTab.Visible := True;
   jtMainTab.AddForm(Form);

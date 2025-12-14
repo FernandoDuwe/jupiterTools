@@ -19,6 +19,7 @@ type
     property Query : String read FQuery write FQuery;
   public
     procedure ProvideData; override;
+    procedure ProvideFromQuery(prQry : TSQLQuery); virtual;
   end;
 
 implementation
@@ -28,7 +29,6 @@ implementation
 procedure TJupiterSQLDataProvider.ProvideData;
 var
   vrQry : TSQLQuery;
-  vrVez : Integer;
 begin
   inherited ProvideData;
 
@@ -36,24 +36,32 @@ begin
   try
     vrQry.SQL.Add(Self.Query);
     vrQry.Open;
-    vrQry.First;
 
-    while not vrQry.EOF do
-    begin
-      Self.AddRow;
-
-      for vrVez := 0 to vrQry.Fields.Count - 1 do
-      begin
-        if vrQry.Fields[vrVez].IsNull then
-          Self.GetLastRow.Fields.AddVariable(vrQry.Fields[vrVez].FieldName, EmptyStr)
-        else
-          Self.GetLastRow.Fields.AddVariable(vrQry.Fields[vrVez].FieldName, vrQry.Fields[vrVez].AsString);
-      end;
-
-      vrQry.Next;
-    end;
+    Self.ProvideFromQuery(vrQry);
   finally
     FreeAndNil(vrQry);
+  end;
+end;
+
+procedure TJupiterSQLDataProvider.ProvideFromQuery(prQry : TSQLQuery);
+var
+  vrVez : Integer;
+begin
+  prQry.First;
+
+  while not prQry.EOF do
+  begin
+    Self.AddRow;
+
+    for vrVez := 0 to prQry.Fields.Count - 1 do
+    begin
+      if prQry.Fields[vrVez].IsNull then
+        Self.GetLastRow.Fields.AddVariable(prQry.Fields[vrVez].FieldName, EmptyStr)
+      else
+        Self.GetLastRow.Fields.AddVariable(prQry.Fields[vrVez].FieldName, prQry.Fields[vrVez].AsString);
+    end;
+
+    prQry.Next;
   end;
 end;
 

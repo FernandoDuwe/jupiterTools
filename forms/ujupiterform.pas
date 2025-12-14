@@ -21,6 +21,7 @@ type
     acIncreaseLefPanel: TAction;
     acIncreaseCenterPanel: TAction;
     acExitIfModal: TAction;
+    Button1: TButton;
     edSearch: TEdit;
     fpOptions: TFlowPanel;
     Image1: TImage;
@@ -43,6 +44,7 @@ type
     procedure acExitIfModalExecute(Sender: TObject);
     procedure acIncreaseCenterPanelExecute(Sender: TObject);
     procedure acIncreaseLefPanelExecute(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -131,6 +133,8 @@ procedure TFJupiterForm.Internal_OnAfterActionExecute(Sender : TObject);
 begin
   tmrAutoUpdater.Enabled := False;
 
+  Self.ActionGroup.ResetActions;
+
   Self.UpdateForm();
 
   tmrAutoUpdater.Enabled := True;
@@ -190,7 +194,8 @@ end;
 procedure TFJupiterForm.FormShow(Sender: TObject);
 begin
   try
-    Self.PrepareForm;
+    if not Self.Prepared then
+      Self.PrepareForm;
   finally
     Self.UpdateForm();
   end;
@@ -273,18 +278,35 @@ begin
   try
     Self.FShowSearchBar := prNewValue;
   finally
-    Self.UpdateForm(False, True, False);
+    pnSearchBar.Visible := Self.ShowSearchBar;
+
+    if pnSearchBar.Visible then
+    begin
+      pnSearchBar.Top := fpOptions.Top + fpOptions.Height + 1;
+
+      edSearch.Top    := FORM_MARGIN_TOP;
+      edSearch.Left   := FORM_MARGIN_LEFT;
+      edSearch.Width  := pnSearchBar.Width - (FORM_MARGIN_LEFT + FORM_MARGIN_RIGHT);
+      edSearch.Height := GetTextHeight('PESQUISAR', edSearch.Font) + FORM_MARGIN_TOP;
+
+      pnSearchBar.Height := edSearch.Top + edSearch.Height + FORM_MARGIN_BOTTOM;
+    end;
   end;
 end;
 
 procedure TFJupiterForm.FormActivate(Sender: TObject);
 begin
-  Self.UpdateForm();
+  //Self.UpdateForm();
 end;
 
 procedure TFJupiterForm.acIncreaseLefPanelExecute(Sender: TObject);
 begin
   miAjustRatioLeftClick(Sender);
+end;
+
+procedure TFJupiterForm.Button1Click(Sender: TObject);
+begin
+  // Self.ActionGroup.UpdateActions;
 end;
 
 procedure TFJupiterForm.acIncreaseCenterPanelExecute(Sender: TObject);
@@ -348,16 +370,10 @@ begin
   miThreads.Enabled := Self.ThreadController.Count > 0;
   miWorkMenu.Enabled := Self.Internal_EnableWorkMenu;
 
-  pnBottom.Caption := '                              ' + Self.FHint;
-  pnBottom.Visible := Trim(Self.FHint) <> EmptyStr;
-
   Self.ActionGroup.UpdateActions;
 
-  miAjustRatioLeft.Caption  := 'Aumentar faixa à esquerda (' + IntToStr(Self.PercentDivisor) + '%)';
-  miAjustRatioRight.Caption := 'Aumentar faixa central (' + IntToStr(100 - Self.PercentDivisor) + '%)';
-
-  miAjustRatioRight.Enabled := Self.PercentDivisor >= 20;
-  miAjustRatioLeft.Enabled := Self.PercentDivisor <= 80;
+  pnBottom.Caption := '                              ' + Self.FHint;
+  pnBottom.Visible := Trim(Self.FHint) <> EmptyStr;
 
   pnSearchBar.Visible := Self.ShowSearchBar;
 
@@ -372,6 +388,12 @@ begin
 
     pnSearchBar.Height := edSearch.Top + edSearch.Height + FORM_MARGIN_BOTTOM;
   end;
+
+  miAjustRatioLeft.Caption  := 'Aumentar faixa à esquerda (' + IntToStr(Self.PercentDivisor) + '%)';
+  miAjustRatioRight.Caption := 'Aumentar faixa central (' + IntToStr(100 - Self.PercentDivisor) + '%)';
+
+  miAjustRatioRight.Enabled := Self.PercentDivisor >= 20;
+  miAjustRatioLeft.Enabled := Self.PercentDivisor <= 80;
 
   if not Self.IsWindowForm then
     if Assigned(Self.OwnerTab) then
@@ -518,6 +540,7 @@ begin
 
   Application.ProcessMessages;
 
+  Self.Prepared := True;
   try
     Self.Internal_PrepareForm;
 

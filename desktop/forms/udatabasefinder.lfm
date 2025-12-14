@@ -1,0 +1,56 @@
+inherited FDatabaseFinder: TFDatabaseFinder
+  Caption = 'Pesquisar na base de dados'
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  inherited pnSearchBar: TPanel
+    ParentBackground = False
+    inherited edSearch: TEdit
+      OnChange = edSearchChange
+      OnKeyPress = edSearchKeyPress
+    end
+  end
+  inherited fpOptions: TFlowPanel
+    Height = 0
+    Top = 376
+  end
+  inherited pnBottom: TPanel
+    ParentBackground = False
+  end
+  object Splitter1: TSplitter[3]
+    Left = 375
+    Height = 331
+    Top = 45
+    Width = 5
+  end
+  object sbBody: TScrollBox[4]
+    Left = 0
+    Height = 331
+    Top = 45
+    Width = 375
+    HorzScrollBar.Page = 1
+    VertScrollBar.Page = 1
+    Align = alLeft
+    Color = clWhite
+    ParentBackground = False
+    ParentColor = False
+    TabOrder = 4
+  end
+  object pnForm: TPanel[5]
+    Left = 380
+    Height = 331
+    Top = 45
+    Width = 499
+    Align = alClient
+    BevelOuter = bvNone
+    BorderStyle = bsSingle
+    ParentBackground = False
+    ParentColor = False
+    TabOrder = 5
+  end
+  inherited acOptions: TActionList[6]
+  end
+  inherited tmrAutoUpdater: TTimer[7]
+  end
+  inherited pmOptions: TPopupMenu[8]
+  end
+end

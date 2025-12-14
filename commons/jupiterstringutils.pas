@@ -48,11 +48,14 @@ implementation
 
 function JupiterStringUtilsNormalizeToPresent(prText: String): String;
 begin
-  if prText = EmptyStr then
+  if Trim(prText) = EmptyStr then
     Result := prText;
 
   prText    := AnsiLowerCase(prText);
-  prText[1] := AnsiUpperCase(prText)[1];
+
+  if Length(prText) > 0 then
+    prText[1] := AnsiUpperCase(prText)[1];
+
   prText    := StringReplace(prText, '_', ' ', [rfIgnoreCase, rfReplaceAll]);
 
   Result := prText;

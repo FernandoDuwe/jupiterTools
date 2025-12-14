@@ -6,8 +6,9 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, ActnList,
-  StdCtrls, ExtCtrls, uJupiterForm, jupiterformutils, JupiterApp, JupiterConsts,
-  jupitertreeviewmenugenerator, uJupiterAction, jupiterDesktopApp;
+  StdCtrls, ExtCtrls, EditBtn, Calendar, uJupiterForm, jupiterformutils,
+  JupiterApp, JupiterConsts, jupitertreeviewmenugenerator, uJupiterAction,
+  jupiterDesktopApp, uJupiterDesktopAppScript;
 
 type
 
@@ -29,6 +30,11 @@ type
     procedure Splitter1Moved(Sender: TObject);
     procedure tvTreeMenuEnter(Sender: TObject);
   private
+    FSearchOnMenu : Boolean;
+
+    procedure Internal_OnSearchOnMenuClick(Sender: TObject);
+    procedure Internal_OnSearchOnDatabaseClick(Sender: TObject);
+
     procedure Internal_PrepareForm; override;
 
     procedure Internal_UpdateComponents; override;
@@ -53,6 +59,15 @@ procedure TFContextMenu.acSearchExecute(Sender: TObject);
 var
   vrTreeView : TJupiterTreeViewMenuGenerator;
 begin
+  if not Self.FSearchOnMenu then
+  begin
+    try
+      JupiterAppDesktopOpenDatbaseFinder(edSearch.Text);
+    finally
+      Self.DoSecureClose;
+    end;
+  end;
+
   if edSearch.Focused then
   begin
     Self.UpdateForm();
@@ -117,11 +132,27 @@ begin
   Self.UpdateForm(False);
 end;
 
+procedure TFContextMenu.Internal_OnSearchOnMenuClick(Sender: TObject);
+begin
+  Self.FSearchOnMenu := True;
+
+  Self.UpdateForm();
+end;
+
+procedure TFContextMenu.Internal_OnSearchOnDatabaseClick(Sender: TObject);
+begin
+  Self.FSearchOnMenu := False;
+
+  Self.UpdateForm();
+end;
+
 procedure TFContextMenu.Internal_PrepareForm;
 var
   vrTreeView : TJupiterTreeViewMenuGenerator;
 begin
   inherited Internal_PrepareForm;
+
+  Self.FSearchOnMenu := True;
 
   tvTreeMenu.OnEnter := @tvTreeMenuEnter;
 
@@ -135,8 +166,9 @@ begin
 
   Self.ShowSearchBar := True;
 
-//  Width := PercentOfScreen(Screen.Width, 50);
-//  Height := PercentOfScreen(Screen.Height, 50);
+  Self.ActionGroup.AddAction(TJupiterAction.Create('Menu', 'Pesquisar no menu de contexto', ICON_SEARCH, @Internal_OnSearchOnMenuClick));
+
+  Self.ActionGroup.AddAction(TJupiterAction.Create('Registros', 'Pesquisar nos registros do sistema', ICON_SEARCH, @Internal_OnSearchOnDatabaseClick));
 
   edSearch.SetFocus;
 
@@ -156,6 +188,25 @@ end;
 procedure TFContextMenu.Internal_UpdateComponents;
 begin
   inherited Internal_UpdateComponents;
+
+  if Self.ActionGroup.Count > 0 then
+  begin
+    if Self.FSearchOnMenu then
+    begin
+      Self.ActionGroup.GetActionAtIndex(0).Disable;
+      Self.ActionGroup.GetActionAtIndex(1).Enable;
+
+      edSearch.TextHint := 'Pesquisar no menu de contexto';
+    end;
+
+    if not Self.FSearchOnMenu then
+    begin
+      Self.ActionGroup.GetActionAtIndex(1).Disable;
+      Self.ActionGroup.GetActionAtIndex(0).Enable;
+
+      edSearch.TextHint := 'Pesquisar em todo o sistema';
+    end;
+  end;
 
   gbMain.Width := PercentOfScreen(Self.Width, 50);
 

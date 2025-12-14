@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, ExtCtrls,
   uJupiterForm, jupiterformutils, jupitertreeviewmenugenerator, JupiterApp,
   JupiterConsts, JupiterObject, jupiterDesktopApp, jupiterformcomponenttils,
-  uJupiterAction, StdCtrls, Types;
+  uJupiterAction, uJupiterDesktopAppScript, StdCtrls, Types;
 
 type
 
@@ -26,6 +26,7 @@ type
     sbSearchResult: TScrollBox;
     Splitter1: TSplitter;
     tvTreeMenu: TTreeView;
+    procedure edSearchTablesKeyPress(Sender: TObject; var Key: char);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure Splitter1MouseWheelUp(Sender: TObject; Shift: TShiftState;
@@ -66,6 +67,16 @@ begin
   inherited;
 
   Self.FReferences := TJupiterObjectList.Create;
+end;
+
+procedure TFNewTask.edSearchTablesKeyPress(Sender: TObject; var Key: char);
+begin
+  if Key = #13 then
+  begin
+    JupiterAppDesktopOpenDatbaseFinder(edSearchTables.Text);
+
+    Key := #0;
+  end;
 end;
 
 procedure TFNewTask.FormDestroy(Sender: TObject);

@@ -9,8 +9,9 @@ uses
   ComCtrls, StdCtrls, DBCtrls, ValEdit, SynEdit, SynHighlighterSQL,
   SynCompletion, uJupiterForm, jupiterformutils, JupiterConsts,
   JupiterEnviroment, jupiterDatabaseWizard, JupiterApp, JupiterVariable,
-  uJupiterRunnableScript, uJupiterAppScript, uJupiterAction, uMain, SQLDB, DB,
-  jupiterDatabaseAutoComplete, jupiterthread, Types, LCLType;
+  uJupiterRunnableScript, uJupiterAppScript, uJupiterAction, uMain,
+  uJupiterDesktopAppScript, SQLDB, DB, jupiterDatabaseAutoComplete,
+  jupiterthread, JupiterCSVDataProvider, jupitersqldataprovider, Types, LCLType;
 
 type
 
@@ -67,6 +68,7 @@ type
     procedure Internal_OnRunScript(Sender: TObject);
     procedure Internal_OnCSVExport(Sender: TObject);
     procedure Internal_OnSandwich(Sender: TObject);
+    procedure Internal_OnDataProvider(Sender: TObject);
 
     function Internal_GetText : String;
 
@@ -235,9 +237,15 @@ begin
   pnGrid.Visible := Self.FShowResults;
 
   if Self.FShowResults then
-    Self.ActionGroup.GetActionAtIndex(1).Enable
+  begin
+    Self.ActionGroup.GetActionAtIndex(1).Enable;
+    Self.ActionGroup.GetActionAtIndex(4).Enable;
+  end
   else
+  begin
     Self.ActionGroup.GetActionAtIndex(1).Disable;
+    Self.ActionGroup.GetActionAtIndex(4).Disable;
+  end;
 
   vlFields.DefaultColWidth := PercentOfScreen(vlFields.Width, 50);
 
@@ -335,6 +343,7 @@ begin
   Self.ActionGroup.AddAction(TJupiterAction.Create('Para .csv', 'Clique aqui para exportar os dados atuais para .CSV', ICON_DOWN, @Internal_OnCSVExport));
   Self.ActionGroup.AddAction(TJupiterAction.Create('Script', 'Clique aqui para executar um script', ICON_PLAY, @Internal_OnRunScript));
   Self.ActionGroup.AddAction(TJupiterAction.Create('Estrutura', 'Clique aqui para visualizar ou esconder a estrutura de banco de dados', ICON_RECORDS, @Internal_OnSandwich));
+  Self.ActionGroup.AddAction(TJupiterAction.Create('DataProvider', 'Clique aqui para gerar um DataProvider a partir dos dados atuais', ICON_TECHFILE, @Internal_OnDataProvider));
 
   vrEnviroment := TJupiterEnviroment.Create;
   try
@@ -441,6 +450,18 @@ end;
 procedure TFSQLEditor.Internal_OnSandwich(Sender: TObject);
 begin
   pnLeft.Visible := not pnLeft.Visible;
+end;
+
+procedure TFSQLEditor.Internal_OnDataProvider(Sender: TObject);
+var
+  vrDataProvider : TJupiterSQLDataProvider;
+begin
+  vrDataProvider := TJupiterSQLDataProvider.Create;
+  try
+    vrDataProvider.ProvideFromQuery(InternalQuery);
+  finally
+    JupiterAppDesktopShowMessage('DataProvider: ' + vrDataProvider.ProviderID);
+  end;
 end;
 
 function TFSQLEditor.Internal_GetText: String;

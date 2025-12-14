@@ -9,7 +9,6 @@ inherited FCustomDatabaseGrid: TFCustomDatabaseGrid
     end
   end
   inherited fpOptions: TFlowPanel
-    Height = 0
     Top = 0
     Align = alTop
   end

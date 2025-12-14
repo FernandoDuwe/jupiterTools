@@ -421,6 +421,7 @@ inherited FNewTask: TFNewTask
           AutoSize = False
           TabOrder = 0
           TextHint = 'Pesquisar nas tabelas do sistema'
+          OnKeyPress = edSearchTablesKeyPress
         end
       end
       object pnSearchResult: TPanel

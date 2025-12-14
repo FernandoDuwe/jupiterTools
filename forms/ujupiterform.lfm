@@ -37,8 +37,8 @@ object FJupiterForm: TFJupiterForm
   end
   object fpOptions: TFlowPanel
     Left = 0
-    Height = 1
-    Top = 375
+    Height = 0
+    Top = 376
     Width = 879
     Align = alBottom
     AutoSize = True
@@ -241,6 +241,16 @@ object FJupiterForm: TFJupiterForm
       Stretch = True
       Transparent = True
       OnClick = Image1Click
+    end
+    object Button1: TButton
+      Left = 448
+      Height = 25
+      Top = 32
+      Width = 75
+      Caption = 'Debug'
+      TabOrder = 0
+      Visible = False
+      OnClick = Button1Click
     end
   end
   object acOptions: TActionList

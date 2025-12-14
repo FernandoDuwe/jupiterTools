@@ -87,6 +87,8 @@ begin
     Self.Internal_CreateVariablIfDontExists('Interface.Cards.Size', 'Tamanho dos cards (em %)', '25');
 
     Self.Internal_CreateVariablIfDontExists('Interface.Cards.Zebring', 'Contador de zebragem para cards', '2');
+
+    Self.Internal_CreateVariablIfDontExists('Interface.Form.AsList', 'Orientação do formulário listará todos os componentes, como lista', 'Y');
   finally
     FreeAndNil(vrWizard);
   end;

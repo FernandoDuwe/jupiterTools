@@ -56,6 +56,7 @@ type
     function IsEmpty : Boolean;
     function AsBool : Boolean;
     function AsDateTIme : TDateTime;
+    function ToString : String;
 
     procedure AsList(var prList : TStrings); virtual;
   end;
@@ -105,6 +106,7 @@ type
 
     procedure CopyValues(prList : TJupiterVariableList);
     procedure SaveToFile; virtual;
+    function ToString : String;
 
     constructor Create; virtual;
     destructor Destroy; override;
@@ -200,6 +202,11 @@ begin
   vrFS.LongTimeFormat := 'hh:nn:ss';
 
   Result := StrToDateTime(Self.Value, vrFS);
+end;
+
+function TJupiterVariable.ToString: String;
+begin
+  Result := Self.ID + '=' + Self.Value + ';';
 end;
 
 procedure TJupiterVariable.AsList(var prList: TStrings);
@@ -597,6 +604,16 @@ begin
 
     FreeAndNil(vrEnviroment);
   end;
+end;
+
+function TJupiterVariableList.ToString: String;
+var
+  vrVez : Integer;
+begin
+  Result := EmptyStr;
+
+  for vrVez := 0 to Self.Count - 1 do
+    Result := Result + Self.VariableByIndex(vrVez).ToString;
 end;
 
 constructor TJupiterVariableList.Create;

@@ -209,7 +209,9 @@ begin
     end;
   finally
      try
-       FreeAndNil(vrVariableList);
+       if Assigned(vrVariableList) then
+         if vrVariableList <> nil then
+           FreeAndNil(vrVariableList);
      except
      end;
   end;

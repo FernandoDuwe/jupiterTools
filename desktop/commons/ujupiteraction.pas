@@ -59,6 +59,7 @@ type
     procedure Execute;
 
     procedure UpdateAction;
+    procedure UpdatePopupAction;
 
     procedure Disable;
     procedure Enable;
@@ -75,6 +76,9 @@ type
 
   TJupiterActionGroup = class(TJupiterObjectList)
   private
+    FCurrentData : String;
+    FCurrentPoupData : String;
+
     FFlowPanel : TFlowPanel;
     FImageList : TImageList;
     FTableName : String;
@@ -98,6 +102,7 @@ type
     property OnAfterExecute     : TNotifyEvent                read FOnAfterExecute     write FOnAfterExecute;
   public
     procedure UpdateActions;
+    procedure ResetActions;
 
     procedure AddAction(prAction : TJupiterAction);
 
@@ -327,38 +332,41 @@ begin
     Self.Enable
   else
     Self.Disable;
+end;
 
-  if Assigned(Self.FPopup) then
+procedure TJupiterAction.UpdatePopupAction;
+var
+  vrEnabled : Boolean;
+  vrVisibile : Boolean;
+begin
+  vrEnabled := True;
+
+  if not Assigned(Self.Reference) then
+    Exit;
+
+  if Assigned(Self.OnPopupRequestData) then
+    vrVisibile := vrJupiterApp.RunAcitonVisible(Self.Reference.ID, Self.OnPopupRequestData())
+  else
+    vrVisibile := vrJupiterApp.RunAcitonVisible(Self.Reference.ID, TJupiterVariableList.Create);
+
+  if vrVisibile then
+    Self.SetVisibilityPopup
+  else
   begin
-    vrEnabled := True;
+    Self.SetInvisibilityPopup;
 
-    if not Assigned(Self.Reference) then
-      Exit;
-
-    if Assigned(Self.OnPopupRequestData) then
-      vrVisibile := vrJupiterApp.RunAcitonVisible(Self.Reference.ID, Self.OnPopupRequestData())
-    else
-      vrVisibile := vrJupiterApp.RunAcitonVisible(Self.Reference.ID, TJupiterVariableList.Create);
-
-    if vrVisibile then
-      Self.SetVisibilityPopup
-    else
-    begin
-      Self.SetInvisibilityPopup;
-
-      Exit;
-    end;
-
-    if Assigned(Self.OnPopupRequestData) then
-      vrEnabled := vrJupiterApp.RunAcitonEnabled(Self.Reference.ID, Self.OnPopupRequestData())
-    else
-      vrEnabled := vrJupiterApp.RunAcitonEnabled(Self.Reference.ID, TJupiterVariableList.Create);
-
-    if vrEnabled then
-      Self.EnablePopup
-    else
-      Self.DisablePopup;
+    Exit;
   end;
+
+  if Assigned(Self.OnPopupRequestData) then
+    vrEnabled := vrJupiterApp.RunAcitonEnabled(Self.Reference.ID, Self.OnPopupRequestData())
+  else
+    vrEnabled := vrJupiterApp.RunAcitonEnabled(Self.Reference.ID, TJupiterVariableList.Create);
+
+  if vrEnabled then
+    Self.EnablePopup
+  else
+    Self.DisablePopup;
 end;
 
 procedure TJupiterAction.Disable;
@@ -453,11 +461,51 @@ end;
 
 procedure TJupiterActionGroup.UpdateActions;
 var
-  vrVez : Integer;
+  vrVez  : Integer;
+  vrList : TJupiterVariableList;
+  vrNewData : String;
+  vrNewPopupData : String;
 begin
-  for vrVez := 0 to Self.Count -1 do
-    with TJupiterAction(Self.GetAtIndex(vrVez)) do
-      UpdateAction;
+  vrNewData := EmptyStr;
+  vrNewPopupData := EmptyStr;
+
+  if Assigned(Self.FOnRequestData) then
+  begin
+    vrList := Self.FOnRequestData();
+
+    if Assigned(vrList) then
+      vrNewData := vrList.ToString;
+  end;
+
+  if Assigned(Self.FOnPopupRequestData) then
+  begin
+    vrList := Self.FOnPopupRequestData();
+
+    if Assigned(vrList) then
+      vrNewPopupData := vrList.ToString;
+  end;
+
+  try
+    for vrVez := 0 to Self.Count -1 do
+      with TJupiterAction(Self.GetAtIndex(vrVez)) do
+      begin
+        if Self.FCurrentData <> vrNewData then
+          UpdateAction;
+
+        if Assigned(PopupMenu) then
+          if Self.FCurrentPoupData <> vrNewPopupData then
+            UpdatePopupAction;
+      end;
+  finally
+    Self.FCurrentData     := vrNewData;
+    Self.FCurrentPoupData := vrNewPopupData;
+  end;
+end;
+
+procedure TJupiterActionGroup.ResetActions;
+begin
+  Self.FCurrentData     := 'EMPTY';
+  Self.FCurrentPoupData := 'EMPTY';
 end;
 
 procedure TJupiterActionGroup.AddAction(prAction: TJupiterAction);
@@ -503,6 +551,8 @@ procedure TJupiterActionGroup.Render;
 var
   vrVez : Integer;
 begin
+  Self.ResetActions;
+
   for vrVez := 0 to Self.Count - 1 do
     TJupiterAction(Self.GetAtIndex(vrVez)).Render(Self.FlowPanel, Self.ImageList, Self.PopupMenu);
 end;

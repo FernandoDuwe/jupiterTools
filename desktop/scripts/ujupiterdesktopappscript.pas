@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, jupiterScript, JupiterConsts, JupiterApp, JupiterVariable,
-  uCustomDatabaseForm, ucustomdatabasegrid, uCodeRunner, uExternalSQLEditor,
+  uCustomDatabaseForm, ucustomdatabasegrid, uCodeRunner,
   uCustomDataProviderGrid, SysUtils, PascalScript, uPSComponent, Forms, SQLDB;
 
 type
@@ -23,6 +23,7 @@ type
 
   function JupiterAppDesktopOpenForm(prForm : String) : String;
   procedure JupiterAppDesktopOpenCodeRunner(prMacroId : String);
+  procedure JupiterAppDesktopOpenDatbaseFinder(prSearch : String);
   procedure JupiterAppDesktopOpenFileFinderForm(prPath : String);
   procedure JupiterAppDesktopOpenFileReaderFinderForm(prPath : String);
   procedure JupiterAppDesktopOpenFormWithParams(prForm, prParams : String);
@@ -61,7 +62,7 @@ type
 implementation
 
 uses Controls, uJupiterForm, uMain, jupiterDesktopApp, jupiterDatabaseWizard, LCLType, jupiterformcomponenttils, jupiterformutils,
-     ExtCtrls, Graphics;
+     ExtCtrls, Graphics, uExternalSQLEditor;
 
 function JupiterAppDesktopOpenForm(prForm: String) : String;
 begin
@@ -77,6 +78,20 @@ begin
   TJupiterDesktopApp(vrJupiterApp).OpenForm(vrForm as TFCodeRunner);
 
   TFCodeRunner(vrForm).FromScriptID(prMacroId);
+end;
+
+procedure JupiterAppDesktopOpenDatbaseFinder(prSearch: String);
+var
+  vrVariables : TJupiterVariableList;
+begin
+  vrVariables := TJupiterVariableList.Create;
+  try
+    vrVariables.AddVariable('params', prSearch, 'params');
+
+    TJupiterDesktopApp(vrJupiterApp).OpenForm(DATABASEFINDER_PATH, vrVariables);
+  finally
+    FreeAndNil(vrVariables);
+  end;
 end;
 
 procedure JupiterAppDesktopOpenFileFinderForm(prPath: String);
@@ -428,6 +443,7 @@ begin
   inherited DoCompile(prSender);
 
   prSender.AddFunction(@JupiterAppDesktopOpenForm, 'function OpenForm(Form: String) : String;');
+  prSender.AddFunction(@JupiterAppDesktopOpenDatbaseFinder, 'function OpenDatabaseFinder(Search : String) : String;');
   prSender.AddFunction(@JupiterAppDesktopOpenCodeRunner, 'procedure OpenCodeRunner(prMacroId: String);');
   prSender.AddFunction(@JupiterAppDesktopOpenFormWithParams, 'procedure OpenFormWithParams(Form, Params : String);');
   prSender.AddFunction(@JupiterAppDesktopOpenGridFromTable, 'procedure OpenGridFromTable(prTableName : String);');
@@ -478,6 +494,7 @@ begin
   Result := inherited AnalyseCode;
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function OpenForm(Form: String) : String;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function OpenDatabaseFinder(Search : String) : String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenCodeRunner(prMacroId: String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenFormWithParams(Form, Params : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenGridFromTable(prTableName : String);'));

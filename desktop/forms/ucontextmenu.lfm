@@ -1,7 +1,7 @@
 inherited FContextMenu: TFContextMenu
-  Left = 360
+  Left = 454
   Height = 789
-  Top = 254
+  Top = 216
   Width = 1204
   Caption = 'Menu de Contexto'
   ClientHeight = 789
@@ -16,7 +16,8 @@ inherited FContextMenu: TFContextMenu
     end
   end
   inherited fpOptions: TFlowPanel
-    Top = 707
+    Height = 0
+    Top = 708
     Width = 1204
     TabOrder = 3
   end
@@ -28,49 +29,49 @@ inherited FContextMenu: TFContextMenu
   end
   object gbMain: TGroupBox[3]
     Left = 0
-    Height = 662
+    Height = 663
     Top = 45
     Width = 89
     Align = alLeft
     Caption = 'Menu principal'
-    ClientHeight = 644
-    ClientWidth = 87
+    ClientHeight = 643
+    ClientWidth = 85
     TabOrder = 1
     object tvTreeMenu: TTreeView
       Left = 0
-      Height = 644
+      Height = 643
       Top = 0
-      Width = 87
+      Width = 85
       Align = alClient
       BackgroundColor = clDefault
       Color = clDefault
       ReadOnly = True
       TabOrder = 0
-      OnEnter = tvTreeMenuEnter
       Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
+      OnEnter = tvTreeMenuEnter
     end
   end
   object gbContext: TGroupBox[4]
     Left = 94
-    Height = 662
+    Height = 663
     Top = 45
     Width = 1110
     Align = alClient
     Caption = 'Menu de contexto'
-    ClientHeight = 644
-    ClientWidth = 1108
+    ClientHeight = 643
+    ClientWidth = 1106
     TabOrder = 2
     object lvRoute: TListView
       Left = 0
-      Height = 644
+      Height = 643
       Top = 0
-      Width = 1108
+      Width = 1106
       Align = alClient
       Columns = <      
         item
           AutoSize = True
           Caption = 'Rota'
-          Width = 1093
+          Width = 10
         end>
       MultiSelect = True
       ParentFont = False
@@ -82,7 +83,7 @@ inherited FContextMenu: TFContextMenu
   end
   object Splitter1: TSplitter[5]
     Left = 89
-    Height = 662
+    Height = 663
     Top = 45
     Width = 5
     OnMoved = Splitter1Moved
@@ -90,13 +91,13 @@ inherited FContextMenu: TFContextMenu
   inherited acOptions: TActionList[6]
     object acExit: TAction[0]
       Caption = 'acExit'
-      OnExecute = acExitExecute
       ShortCut = 27
+      OnExecute = acExitExecute
     end
     object acSearch: TAction[1]
       Caption = 'acSearch'
-      OnExecute = acSearchExecute
       ShortCut = 13
+      OnExecute = acSearchExecute
     end
     inherited acIncreaseLefPanel: TAction[2]
     end

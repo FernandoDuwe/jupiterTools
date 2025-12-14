@@ -305,13 +305,14 @@ begin
   vrScript := Self.NewScript;
   vrQry    := Self.NewWizard.NewQuery;
   try
-    vrQry.SQL.Add(' SELECT ID, MACRO FROM MACROS WHERE ID = :PRID ');
+    vrQry.SQL.Add(' SELECT ID, MACROID, MACRO FROM MACROS WHERE ID = :PRID ');
     vrQry.ParamByName('PRID').AsInteger := prId;
     vrQry.Open;
 
     if vrQry.EOF then
       raise Exception.Create('A macro com ID ' + IntToStr(prId) + ' não foi encontrada.');
 
+    vrScript.ScriptName := vrQry.FieldByName('MACROID').AsString;
     vrScript.Script.AddStrings(JupiterStringUtilsStringToStringList(vrQry.FieldByName('MACRO').AsString));
     vrScript.Params.CopyValues(prParams);
 
@@ -332,13 +333,14 @@ begin
   vrScript := Self.NewScript;
   vrQry    := Self.NewWizard.NewQuery;
   try
-    vrQry.SQL.Add(' SELECT ID, MACRO FROM MACROS WHERE MACROID = :PRID ');
+    vrQry.SQL.Add(' SELECT ID, MACROID, MACRO FROM MACROS WHERE MACROID = :PRID ');
     vrQry.ParamByName('PRID').AsString := prMacroId;
     vrQry.Open;
 
     if vrQry.EOF then
       raise Exception.Create('A macro ' + prMacroId + ' não foi encontrada.');
 
+    vrScript.ScriptName := vrQry.FieldByName('MACROID').AsString;
     vrScript.Script.AddStrings(JupiterStringUtilsStringToStringList(vrQry.FieldByName('MACRO').AsString));
     vrScript.Params.CopyValues(prParams);
 
@@ -363,13 +365,14 @@ begin
     if not Self.Params.VariableById(DEBUG_MODE).AsBool then
       vrScript.OnExecute := nil;
 
-    vrQry.SQL.Add(' SELECT ID, MACRO FROM MACROS WHERE MACROID = :PRID ');
+    vrQry.SQL.Add(' SELECT ID, MACROID, MACRO FROM MACROS WHERE MACROID = :PRID ');
     vrQry.ParamByName('PRID').AsString := prMacroId;
     vrQry.Open;
 
     if vrQry.EOF then
       raise Exception.Create('A macro ' + prMacroId + ' não foi encontrada.');
 
+    vrScript.ScriptName := vrQry.FieldByName('MACROID').AsString;
     vrScript.Script.AddStrings(JupiterStringUtilsStringToStringList(vrQry.FieldByName('MACRO').AsString));
     vrScript.Params.CopyValues(prParams);
 
@@ -388,6 +391,7 @@ var
 begin
   vrScript := Self.NewScript;
   try
+    vrScript.ScriptName := prMacroFile;
     vrScript.LoadFromFile(prMacroFile);
     vrScript.Params.CopyValues(prParams);
 
@@ -403,6 +407,7 @@ var
   vrScript : TJupiterScript;
 begin
   vrScript := Self.NewScript;
+  vrScript.ScriptName := prMacroFile;
   vrScript.LoadFromFile(prMacroFile);
   vrScript.Params.CopyValues(prParams);
 
@@ -417,13 +422,14 @@ begin
   vrScript := Self.NewScript;
   vrQry    := Self.NewWizard.NewQuery;
   try
-    vrQry.SQL.Add(' SELECT ID, MACRO FROM MACROS WHERE MACROID = :PRID ');
+    vrQry.SQL.Add(' SELECT ID, MACROID, MACRO FROM MACROS WHERE MACROID = :PRID ');
     vrQry.ParamByName('PRID').AsString := prMacroId;
     vrQry.Open;
 
     if vrQry.EOF then
       raise Exception.Create('A macro ' + prMacroId + ' não foi encontrada.');
 
+    vrScript.ScriptName := vrQry.FieldByName('MACROID').AsString;
     vrScript.Script.AddStrings(JupiterStringUtilsStringToStringList(vrQry.FieldByName('MACRO').AsString));
     vrScript.Params.CopyValues(prParams);
 
@@ -439,6 +445,7 @@ var
 begin
   vrScript := Self.NewScript;
   try
+    vrScript.ScriptName := 'Script de linha';
     vrScript.Script.AddStrings(prMacro);
     vrScript.Params.CopyValues(prParams);
 
@@ -457,7 +464,7 @@ begin
   vrScript := Self.NewScript;
   vrQry    := Self.NewWizard.NewQuery;
   try
-    vrQry.SQL.Add(' SELECT A1.ID, M1.MACRO ');
+    vrQry.SQL.Add(' SELECT A1.ID, M1.MACROID, M1.MACRO ');
     vrQry.SQL.Add(' FROM ACTIONS A1 ');
     vrQry.SQL.Add('   INNER JOIN MACROS M1 ON (A1.MACRO = M1.ID) ');
     vrQry.SQL.Add(' WHERE A1.ID = :PRID ');
@@ -470,6 +477,7 @@ begin
     if vrQry.Fields[1].IsNull then
       Exit;
 
+    vrScript.ScriptName := vrQry.FieldByName('MACROID').AsString;
     vrScript.Script.AddStrings(JupiterStringUtilsStringToStringList(vrQry.FieldByName('MACRO').AsString));
     vrScript.Params.CopyValues(prParams);
 
@@ -496,7 +504,7 @@ begin
     if not Self.Params.VariableById(DEBUG_MODE).AsBool then
       vrScript.OnExecute := nil;
 
-    vrQry.SQL.Add(' SELECT A1.ID, M1.MACRO ');
+    vrQry.SQL.Add(' SELECT A1.ID, M1.MACROID, M1.MACRO ');
     vrQry.SQL.Add(' FROM ACTIONS A1 ');
     vrQry.SQL.Add('   INNER JOIN MACROS M1 ON (A1.MACRO_ENABLE = M1.ID) ');
     vrQry.SQL.Add(' WHERE A1.ID = :PRID ');
@@ -509,6 +517,7 @@ begin
     if vrQry.Fields[1].IsNull then
       Exit;
 
+    vrScript.ScriptName := vrQry.FieldByName('MACROID').AsString;
     vrScript.Params.AddVariable('ScriptID', vrScript.ScriptID, 'ScriptID');
     vrScript.Params.AddVariable('Result', BOOL_FALSE_STR, 'Result');
 
@@ -543,7 +552,7 @@ begin
     if not Self.Params.VariableById(DEBUG_MODE).AsBool then
       vrScript.OnExecute := nil;
 
-    vrQry.SQL.Add(' SELECT A1.ID, M1.MACRO ');
+    vrQry.SQL.Add(' SELECT A1.ID, M1.MACROID, M1.MACRO ');
     vrQry.SQL.Add(' FROM ACTIONS A1 ');
     vrQry.SQL.Add('   INNER JOIN MACROS M1 ON (A1.MACRO_VISIBLE = M1.ID) ');
     vrQry.SQL.Add(' WHERE A1.ID = :PRID ');
@@ -556,6 +565,7 @@ begin
     if vrQry.Fields[1].IsNull then
       Exit;
 
+    vrScript.ScriptName := vrQry.FieldByName('MACROID').AsString;
     vrScript.Script.AddStrings(JupiterStringUtilsStringToStringList(vrQry.FieldByName('MACRO').AsString));
     vrScript.Params.CopyValues(prParams);
     vrScript.Execute;
@@ -587,7 +597,7 @@ begin
     if not Self.Params.VariableById(DEBUG_MODE).AsBool then
       vrScript.OnExecute := nil;
 
-    vrQry.SQL.Add(' SELECT ID, MACRO FROM MACROS WHERE MACROID = :PRID ');
+    vrQry.SQL.Add(' SELECT ID, MACROID, MACRO FROM MACROS WHERE MACROID = :PRID ');
     vrQry.ParamByName('PRID').AsString := prMacroId;
     vrQry.Open;
 
@@ -597,6 +607,7 @@ begin
     if vrQry.Fields[1].IsNull then
       Exit;
 
+    vrScript.ScriptName := vrQry.FieldByName('MACROID').AsString;
     vrScript.Script.AddStrings(JupiterStringUtilsStringToStringList(vrQry.FieldByName('MACRO').AsString));
     vrScript.Params.CopyValues(prParams);
     vrScript.Execute;

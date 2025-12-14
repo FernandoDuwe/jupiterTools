@@ -33,6 +33,7 @@ const
    CONSOLE_PATH : String = '/forms/console';
    FILEFINDER_PATH : String = '/forms/finder/file';
    FILEREADERFINDER_PATH : String = '/forms/finder/fileReader';
+   DATABASEFINDER_PATH : String = '/forms/finder/database';
 
    ICON_ADD       : SmallInt = 0;
    ICON_NEW       : SmallInt = 1;
@@ -194,6 +195,7 @@ type
   // JupiterThreads
   TJupiterThreadsStatus = (jtsNotStarted, jtsRunning, jtsFinished);
   TJupiterSearchMode = (jsmForm, jsmActions);
+  TJupiterFormOrientation = (jfoAsList, jfoAsSmallReport, jfoAsReport);
 
 implementation
 
