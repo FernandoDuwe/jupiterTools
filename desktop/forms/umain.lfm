@@ -1,7 +1,7 @@
 inherited FMain: TFMain
-  Left = 437
+  Left = 606
   Height = 648
-  Top = 280
+  Top = 287
   Width = 1228
   ClientHeight = 648
   ClientWidth = 1228
@@ -20,7 +20,6 @@ inherited FMain: TFMain
     end
   end
   inherited fpOptions: TFlowPanel
-    Height = 0
     Top = 544
     Width = 1228
     TabOrder = 3

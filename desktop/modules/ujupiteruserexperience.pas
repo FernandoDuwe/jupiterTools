@@ -89,6 +89,12 @@ begin
     Self.Internal_CreateVariablIfDontExists('Interface.Cards.Zebring', 'Contador de zebragem para cards', '2');
 
     Self.Internal_CreateVariablIfDontExists('Interface.Form.AsList', 'Orientação do formulário listará todos os componentes, como lista', 'Y');
+
+    Self.Internal_CreateVariablIfDontExists('Interface.Form.Label.Size', 'Tamanho das labels para formulários com uma orientação lado a lado', IntToStr(FORM_MARGIN_LABEL));
+
+    Self.Internal_CreateVariablIfDontExists('Interface.Form.Separator', 'Adicionar separador entre os campos dos formulários', 'N');
+
+    Self.Internal_CreateVariablIfDontExists('Interface.Form.Label.Bold', 'Legenda de campos em formulários ficarão em negrito', 'N');
   finally
     FreeAndNil(vrWizard);
   end;

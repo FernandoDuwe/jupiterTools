@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ActnList, ExtCtrls,
   ButtonPanel, StdCtrls, Menus, ComCtrls, Buttons, JupiterConsts,
   JupiterFormTabSheet, jupiterformutils, JupiterApp, uJupiterAction,
-  jupiterDesktopApp, jupiterformcomponenttils, JupiterVariable,
+  jupiterDesktopApp, jupiterformcomponenttils, DarkModeUtils, JupiterVariable,
   jupiterStringUtils, jupiterDatabaseWizard, uJupiterAppScript,
   jupiterthread;
 
@@ -538,7 +538,8 @@ begin
   vrWaitPanel.Caption := 'Aguarde...';
   vrWaitPanel.BringToFront;
 
-  Application.ProcessMessages;
+  if vrJupiterApp.Params.VariableById('Developer.Debug').AsBool then
+    vrJupiterApp.AddMessage('Prepare: Iniciando', 'Prepare: Iniciando', Self.ClassName);
 
   Self.Prepared := True;
   try
@@ -552,24 +553,31 @@ begin
       vrModalConfig := FORM_ALWAYS_MODAL_CHILD;
 
     if Self.IsWindowForm then
-      if vrJupiterApp.Params.VariableById(vrModalConfig).AsBool then
-        Self.WindowState := wsMaximized;
+      if Self.BorderStyle <> bsDialog then
+        if vrJupiterApp.Params.VariableById(vrModalConfig).AsBool then
+          Self.WindowState := wsMaximized;
 
     if not vrJupiterApp.Params. VariableById('Interface.PerformanceMode').AsBool then
       DrawForm(Self);
   finally
-    Self.Internal_AddShortcutsToMenu;
+    if not vrJupiterApp.Params. VariableById('Interface.PerformanceMode').AsBool then
+    begin
+      Self.Internal_AddShortcutsToMenu;
 
-    PopupMenuShortcutsToActionShortcut(acOptions, pmOptions);
+      PopupMenuShortcutsToActionShortcut(acOptions, pmOptions);
+    end;
 
     Self.FActionGroup.Render;
 
     Self.Prepared := True;
 
-    Application.ProcessMessages;
+//    Application.ProcessMessages;
     FreeAndNil(vrWaitPanel);
 
     tmrAutoUpdater.Enabled := True;
+
+    if vrJupiterApp.Params.VariableById('Developer.Debug').AsBool then
+      vrJupiterApp.AddMessage('Prepare: Finalizando', 'Prepare: Finalizando', Self.ClassName);
   end;
 end;
 
@@ -577,6 +585,9 @@ procedure TFJupiterForm.UpdateForm(prUpdateDatasets: Boolean; prUpdateComponente
 begin
   if not Self.Prepared then
     Exit;
+
+  if vrJupiterApp.Params.VariableById('Developer.Debug').AsBool then
+    vrJupiterApp.AddMessage('UpdateForm: Iniciando', 'UpdateForm: Iniciando', Self.ClassName);
 
   tmrAutoUpdater.Enabled := False;
   tmrAutoUpdater.Enabled := Self.Prepared;
@@ -592,6 +603,9 @@ begin
 
   if prUpdateCalcs then
     Self.Internal_UpdateCalcs;
+
+  if vrJupiterApp.Params.VariableById('Developer.Debug').AsBool then
+    vrJupiterApp.AddMessage('UpdateForm: Finalizando', 'UpdateForm: Finalizando', Self.ClassName);
 end;
 
 function TFJupiterForm.IsWindowForm: Boolean;

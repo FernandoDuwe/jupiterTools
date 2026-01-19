@@ -424,7 +424,7 @@ begin
   vrSpeedButton.Height := prField.Bottom - prField.Top;
   vrSpeedButton.Width := vrSpeedButton.Height;
   vrSpeedButton.Left := prField.RightCalc - vrSpeedButton.Width;
-  vrSpeedButton.Flat := False;
+  vrSpeedButton.Flat := True;
   vrSpeedButton.Images := TJupiterDesktopApp(vrJupiterApp).ImageList;
   vrSpeedButton.ImageIndex := prIcon;
   vrSpeedButton.Anchors    := [akTop, akRight];

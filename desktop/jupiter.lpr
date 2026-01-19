@@ -33,7 +33,7 @@ uses
   uFileReaderFinder, jupiterScriptList, uconsole, uExternalSQLEditor,
   uMultiLevelTextEditor, uMenuNavigator, jupiterDatabaseAutoComplete, 
   uJupiterHTTPScript, uCustomDataProviderGrid, udatabasefinder, 
-jupiterformdbcomponenttils;
+jupiterformdbcomponenttils, uQuickJump, DarkModeUtils;
 
 {$R *.res}
 
@@ -57,8 +57,6 @@ begin
 
   TJupiterDesktopApp(vrJupiterApp).GenerateDynamicData;
 
-
-
   Application.CreateForm(TFMain, FMain);
 
   with TJupiterDesktopApp(vrJupiterApp) do
@@ -75,6 +73,7 @@ begin
     FormRoutes.Add(TJupiterFormRoute.Create(CUSTOMCODEFORM_PATH, TFCustomCodeForm));
     FormRoutes.Add(TJupiterFormRoute.Create(FILEEXPLORER_PATH, TFFileExplorer));
     FormRoutes.Add(TJupiterFormRoute.Create(CONTEXT_PATH, TFContextMenu));
+    FormRoutes.Add(TJupiterFormRoute.Create(QUICKJUMP_PATH, TFQuickJump));
     FormRoutes.Add(TJupiterFormRoute.Create(SQLEDITOR_PATH, TFSQLEditor));
     FormRoutes.Add(TJupiterFormRoute.Create(SQLEXTEDITOR_PATH, TFExternalSQLEditor));
     FormRoutes.Add(TJupiterFormRoute.Create(CHECKLIST_PATH, TFCheckList));

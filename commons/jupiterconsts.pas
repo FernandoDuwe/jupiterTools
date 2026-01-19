@@ -14,6 +14,7 @@ const
    CHECKLIST_PATH: String = '/forms/checkList';
    CONFIG_PATH : String = '/forms/config';
    CONTEXT_PATH : String = '/forms/context';
+   QUICKJUMP_PATH : String = '/forms/quick_jump';
    GENERATOR_PATH : String = '/forms/generator';
    FILEEXPLORER_PATH : String = '/forms/explorer/files';
    MENUEXPLORER_PATH : String = '/forms/explorer/menus';
@@ -134,6 +135,7 @@ const
    FORM_MARGIN_RIGHT         : Integer = 20;
    FORM_MARGIN_BOTTOM        : Integer = 10;
    FORM_MARGIN_BOTTOM_LABEL  : Integer = 3;
+   FORM_MARGIN_LABEL         : Integer = 200;
 
    {$IFDEF WINDOWS}
      FORM_MARGIN_BOTTOM_TONEXT : Integer = 20; // Bottom to the next field

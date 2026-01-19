@@ -117,6 +117,9 @@ begin
       Self.Internal_CreateShortcutIfDontExists('Abrir o menu de trabalho', 'Ctrl+W', vrWizard.GetLastID('MACROS'));
     end;
 
+    if Self.Internal_CreateMacroIfDontExists('menu.quickJump.click', 'Clique do botão de menu QuickJump', CreateStringListToMacro(' OpenForm(''/forms/quick_jump''); ')) then
+      Self.Internal_CreateShortcutIfDontExists('Abrir o menu QuickJump', 'Ctrl+Q', vrWizard.GetLastID('MACROS'));
+
     vrStr.Clear;
     vrStr.Add('program macro;');
     vrStr.Add('const');

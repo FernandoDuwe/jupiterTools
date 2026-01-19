@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, jupiterScript, JupiterConsts, JupiterApp, JupiterVariable,
-  uCustomDatabaseForm, ucustomdatabasegrid, uCodeRunner,
+  jupiterStringUtils, uCustomDatabaseForm, ucustomdatabasegrid, uCodeRunner,
   uCustomDataProviderGrid, SysUtils, PascalScript, uPSComponent, Forms, SQLDB;
 
 type
@@ -48,6 +48,7 @@ type
   procedure JupiterAppDesktopOpenMultiLevelTextEditorForm(prPath : String);
   procedure JupiterAppDesktopOpenSQLExternalEditor(prConnectionType, prDatabase, prHostName, prUserName, prPassword : String);
   procedure JupiterAppDesktopCloseForm(prFormID : String);
+  procedure JupiterAppDesktopRunQuickJumpScript(prScript : String);
   procedure JupiterAppDesktopUpdateForms;
   procedure JupiterAppDesktopIncFont;
   procedure JupiterAppDesktopDecFont;
@@ -380,6 +381,33 @@ begin
   vrForm.Free;
 end;
 
+procedure JupiterAppDesktopRunQuickJumpScript(prScript: String);
+var
+  vrTable : String;
+  vrID : Integer;
+  vrStr : TStrings;
+begin
+  vrTable := EmptyStr;
+  vrID    := NULL_KEY;
+
+  if Trim(prScript) = EmptyStr then
+    Exit;
+
+  vrStr := jupiterStringUtils.JupiterStringUtilsSeparateWords(TrimLeft(prScript));
+  try
+    if vrStr.Count > 0 then
+      vrTable := vrStr[0];
+
+    if vrStr.Count >= 2 then
+      vrID := StrToIntDef(vrStr[2], NULL_KEY);
+
+    if vrTable <> EmptyStr then
+      JupiterAppDesktopOpenFormFromTableId(vrTable, vrID);
+  finally
+    FreeAndNil(vrStr);
+  end;
+end;
+
 procedure JupiterAppDesktopUpdateForms;
 begin
   if Application.MainForm is TFJupiterForm then
@@ -458,6 +486,7 @@ begin
   prSender.AddFunction(@JupiterAppDesktopCloseForm, 'procedure CloseForm(prFormID : String);');
   prSender.AddFunction(@JupiterAppDesktopSetAppMessage, 'procedure SetAppMessage(prMessage : String);');
   prSender.AddFunction(@JupiterAppDesktopOpenDataProviderExplorerForm, 'procedure OpenDataProviderExplorerForm(prReference : String);');
+  prSender.AddFunction(@JupiterAppDesktopRunQuickJumpScript, 'procedure RunQuickJumpScript(prScript : String);');
 
   prSender.AddFunction(@JupiterAppDesktopOpenSQLExternalEditor, 'procedure OpenFormSQLExternalEditor(prConnectionType, prDatabase, prHostName, prUserName, prPassword : String);');
 
@@ -510,6 +539,8 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure SetAppMessage(prMessage: String) : String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenDataProviderExplorerForm(prReference : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenFormSQLExternalEditor(prConnectionType, prDatabase, prHostName, prUserName, prPassword : String);'));
+
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure RunQuickJumpScript(prScript : String);'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CursorToWait();'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CursorToIdle();'));

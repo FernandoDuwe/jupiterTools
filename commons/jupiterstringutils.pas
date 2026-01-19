@@ -31,6 +31,8 @@ uses
 
   function jupiterStringUtilsStringListToString(prStringList : TStrings; prSeparator : String = ', ') : String;
 
+  function JupiterStringUtilsSeparateWords(prStr : String) : TStrings;
+
 type
 
   { TJupiterStringReference }
@@ -214,6 +216,15 @@ begin
 
     Result := Result + prStringList[vrVez];
   end;
+end;
+
+function JupiterStringUtilsSeparateWords(prStr: String): TStrings;
+begin
+  Result := TStringList.Create;
+  Result.Clear;
+
+  Result.Delimiter     := ';';
+  Result.DelimitedText := StringReplace(prStr, ' ', ';', [rfIgnoreCase, rfReplaceAll]);
 end;
 
 { TJupiterStringReference }

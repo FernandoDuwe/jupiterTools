@@ -6,6 +6,7 @@
       <SessionStorage Value="InProjectDir"/>
       <Title Value="jupiter"/>
       <Scaled Value="True"/>
+      <UseAppBundle Value="False"/>
       <ResourceType Value="res"/>
       <UseXPManifest Value="True"/>
       <XPManifest>
@@ -20,7 +21,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="3"/>
       <RevisionNr Value="3"/>
-      <BuildNr Value="315"/>
+      <BuildNr Value="422"/>
       <Language Value="0416"/>
       <CharSet Value="04E2"/>
       <StringTable CompanyName="Jupiter" FileDescription="Jupiter interface" ProductName="Jupiter"/>
@@ -518,6 +519,19 @@
       <Unit>
         <Filename Value="commons/jupiterformdbcomponenttils.pas"/>
         <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms/uquickjump.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FQuickJump"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uQuickJump"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons/darkmodeutils.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="DarkModeUtils"/>
       </Unit>
     </Units>
   </ProjectOptions>

@@ -9,7 +9,7 @@ uses
   jupiterMainMenuGenerator, JupiterApp, JupiterConsts, JupiterVariable,
   JupiterVariableDataProvider, jupiterformutils, jupitertreeviewmenugenerator,
   uPSComponent, jupiterDesktopApp, uContextMenu, uMenuNavigator,
-  udatabasefinder;
+  udatabasefinder, uQuickJump;
 
 type
 
@@ -498,6 +498,9 @@ begin
     vrModal := True;
 
   if Form is TFContextMenu then
+    vrModal := True;
+
+  if Form is TFQuickJump then
     vrModal := True;
 
   if vrModal then
