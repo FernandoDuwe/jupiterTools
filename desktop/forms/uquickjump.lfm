@@ -471,6 +471,8 @@ inherited FQuickJump: TFQuickJump
         MouseActions = <>
         MaxExtraMarksColums = 0
         Options = [sgmoDeDuplicateMarksOnOverflow]
+        MarkupInfo.Background = clBtnFace
+        MarkupInfo.Foreground = clNone
       end
       object SynGutterLineNumber1: TSynGutterLineNumber
         Width = 17
@@ -487,6 +489,9 @@ inherited FQuickJump: TFQuickJump
         MouseActions = <>
         ModifiedColor = 59900
         SavedColor = clGreen
+        MarkupInfo.Background = clNone
+        MarkupInfo.Foreground = clGreen
+        MarkupInfo.FrameColor = 59900
       end
       object SynGutterSeparator1: TSynGutterSeparator
         Width = 2
@@ -511,8 +516,8 @@ inherited FQuickJump: TFQuickJump
   end
   object SynCompletion1: TSynCompletion[7]
     OnBeforeExecute = SynCompletion1BeforeExecute
-    Position = 0
-    LinesInWindow = 6
+    Position = -1
+    LinesInWindow = 20
     SelectedColor = clHighlight
     CaseSensitive = False
     Width = 262

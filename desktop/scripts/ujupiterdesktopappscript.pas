@@ -388,7 +388,7 @@ var
   vrStr : TStrings;
 begin
   vrTable := EmptyStr;
-  vrID    := NULL_KEY;
+  vrID    := 0;
 
   if Trim(prScript) = EmptyStr then
     Exit;
@@ -398,11 +398,16 @@ begin
     if vrStr.Count > 0 then
       vrTable := vrStr[0];
 
-    if vrStr.Count >= 2 then
+    if vrStr.Count > 2 then
       vrID := StrToIntDef(vrStr[2], NULL_KEY);
 
     if vrTable <> EmptyStr then
-      JupiterAppDesktopOpenFormFromTableId(vrTable, vrID);
+    begin
+      if vrID = 0 then
+        JupiterAppDesktopOpenGridFromTable(vrTable)
+      else
+        JupiterAppDesktopOpenFormFromTableId(vrTable, vrID);
+    end;
   finally
     FreeAndNil(vrStr);
   end;

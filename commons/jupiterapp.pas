@@ -242,7 +242,7 @@ var
 begin
   for vrVez := 0 to Self.ModulesList.Count - 1 do
     with Self.ModulesList.GetModuleByIndex(vrVez) do
-         Prepare;
+      Prepare;
 end;
 
 function TJupiterApp.GetVersion: String;

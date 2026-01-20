@@ -55,11 +55,13 @@ type
     procedure Internal_UpdateComponents; override;
     procedure Internal_UpdateCalcs; override;
     procedure Internal_CreatePopMenuTab;
-    function Internal_IsMainPage : Boolean; override;
+    function  Internal_IsMainPage : Boolean; override;
     procedure Internal_Resize; override;
 
     procedure Internal_CreateComboBox;
     procedure Internal_CloseCurrentTab(Sender: TObject);
+    procedure Internal_MoveLeftTab(Sender: TObject);
+    procedure Internal_MoveRightTab(Sender: TObject);
     procedure Internal_CloseAllButCurrentTab(Sender: TObject);
     procedure Internal_GoToNextTab(Sender: TObject);
     procedure Internal_GoToPreviousTab(Sender: TObject);
@@ -378,6 +380,18 @@ begin
   pmTabOptions.Items.Add(vrMenuItem);
 
   vrMenuItem := TMenuItem.Create(pmTabOptions);
+  vrMenuItem.Caption := 'Mover aba para a esquerda';
+  vrMenuItem.OnClick := @Internal_MoveLeftTab;
+  vrMenuItem.Enabled := jtMainTab.PageIndex <> 0;
+  pmTabOptions.Items.Add(vrMenuItem);
+
+  vrMenuItem := TMenuItem.Create(pmTabOptions);
+  vrMenuItem.Caption := 'Mover aba para a direita';
+  vrMenuItem.OnClick := @Internal_MoveRightTab;
+  vrMenuItem.Enabled := jtMainTab.PageIndex < (jtMainTab.PageCount - 1);
+  pmTabOptions.Items.Add(vrMenuItem);
+
+  vrMenuItem := TMenuItem.Create(pmTabOptions);
   vrMenuItem.Caption := 'Fechar todas as abas, exceto essa';
   vrMenuItem.ShortCut := TextToShortCut('Ctrl+Shift+F4');
   vrMenuItem.OnClick := @Internal_CloseAllButCurrentTab;
@@ -430,6 +444,16 @@ end;
 procedure TFMain.Internal_CloseCurrentTab(Sender: TObject);
 begin
   jtMainTab.CloseTab(jtMainTab.PageIndex);
+end;
+
+procedure TFMain.Internal_MoveLeftTab(Sender: TObject);
+begin
+  jtMainTab.Pages[jtMainTab.PageIndex].PageIndex := jtMainTab.Pages[jtMainTab.PageIndex].PageIndex - 1;
+end;
+
+procedure TFMain.Internal_MoveRightTab(Sender: TObject);
+begin
+  jtMainTab.Pages[jtMainTab.PageIndex].PageIndex := jtMainTab.Pages[jtMainTab.PageIndex].PageIndex + 1;
 end;
 
 procedure TFMain.Internal_CloseAllButCurrentTab(Sender: TObject);
