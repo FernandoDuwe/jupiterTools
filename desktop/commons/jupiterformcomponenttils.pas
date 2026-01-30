@@ -340,11 +340,21 @@ end;
 
 function JupiterComponentsNewDBComboBox(prField: TField; prDataSource: TDataSource; prPosition: TJupiterPosition; prOwner: TWinControl; prForeignKeyData : TJupiterDatabaseForeignKeyReference): TJupiterComponentReference;
 var
-  vrEdit : TDBLookupComboBox;
-  vrQry  : TSQLQuery;
+  vrEdit          : TDBLookupComboBox;
+  vrQry           : TSQLQuery;
+  vrSQLExpression : String;
 begin
-  vrQry := TJupiterDatabaseWizard(prForeignKeyData.Wizard).NewQueryFromReference(TJupiterDatabaseReference.Create(prForeignKeyData.TableDestinyName, NULL_KEY), EmptyStr, ' 2 ',
-                                                                                 'ID, ' + TJupiterDatabaseWizard(prForeignKeyData.Wizard).GetDescriptionFieldFromTable(prForeignKeyData.TableDestinyName));
+  vrSQLExpression := EmptyStr;
+
+  if vrJupiterApp.HasTableTitleSQLExpression(prForeignKeyData.TableDestinyName) then
+    vrSQLExpression := vrJupiterApp.GetTableTitleSQLExpression(prForeignKeyData.TableDestinyName);
+
+  if Trim(vrSQLExpression) = EmptyStr then
+    vrQry := TJupiterDatabaseWizard(prForeignKeyData.Wizard).NewQueryFromReference(TJupiterDatabaseReference.Create(prForeignKeyData.TableDestinyName, NULL_KEY), EmptyStr, ' 2 ',
+                                                                                   'ID, ' + TJupiterDatabaseWizard(prForeignKeyData.Wizard).GetDescriptionFieldFromTable(prForeignKeyData.TableDestinyName))
+  else
+    vrQry := TJupiterDatabaseWizard(prForeignKeyData.Wizard).NewQueryFromReference(TJupiterDatabaseReference.Create(prForeignKeyData.TableDestinyName, NULL_KEY), EmptyStr, ' 2 ',
+                                                                                   'ID, ' + vrSQLExpression);
 
   vrEdit := TDBLookupComboBox.Create(prOwner);
   vrEdit.Parent     := prOwner;

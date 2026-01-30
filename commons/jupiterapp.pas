@@ -91,6 +91,9 @@ type
     function  GetGlobalReference(prTablename : String) : TJupiterDatabaseReference;
     procedure RemoveReference(prTableName : String; prID : Integer);
 
+    // Database TableTitle
+    function HasTableTitleSQLExpression(prTableName : String) : Boolean;
+    function GetTableTitleSQLExpression(prTableName : String) : String;
     function SecureMode : Boolean;
 
     constructor Create(prAppID, prAppName : String); virtual;
@@ -729,6 +732,30 @@ begin
       Self.GlobalReferences.DeleteAtIndex(vrVez);
       Exit;
     end;
+end;
+
+function TJupiterApp.HasTableTitleSQLExpression(prTableName: String): Boolean;
+var
+  vrWizard : TJupiterDatabaseWizard;
+begin
+  vrWizard := Self.NewWizard;
+  try
+    Result := vrWizard.Exists('DATABASE_TABLETITLE', ' TABLENAME = "' + prTableName + '" ');
+  finally
+    FreeAndNil(vrWizard);
+  end;
+end;
+
+function TJupiterApp.GetTableTitleSQLExpression(prTableName: String): String;
+var
+  vrWizard : TJupiterDatabaseWizard;
+begin
+  vrWizard := Self.NewWizard;
+  try
+    Result := vrWizard.Resolve('DATABASE_TABLETITLE', 'SQL_EXPRESSION', ' TABLENAME = "' + prTableName + '" ');
+  finally
+    FreeAndNil(vrWizard);
+  end;
 end;
 
 function TJupiterApp.SecureMode: Boolean;

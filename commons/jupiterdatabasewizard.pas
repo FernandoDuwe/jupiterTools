@@ -522,8 +522,8 @@ begin
     vrQry.Open;
     vrQry.First;
 
-    if not vrQry.Fields[1].IsNull then
-      Result := vrQry.Fields[1].AsString;
+    if not vrQry.Fields[0].IsNull then
+      Result := vrQry.Fields[0].AsString;
   finally
     vrQry.Close;
     FreeAndNil(vrQry);
