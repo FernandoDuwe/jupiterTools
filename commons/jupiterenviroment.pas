@@ -38,6 +38,7 @@ type
     procedure CopyToClipboard(prContent : String);
     function  IsOfExtension(prFileName, prGroupOfExtensions : String) : Boolean;
     function  OpenFile(prDefaultExtensions : String) : String;
+    function  OpenPath : String;
     function  SaveToFile(prDefaultExtensions : String) : String;
   end;
 
@@ -308,6 +309,27 @@ begin
       if not FileExists(Result) then
         Result := EmptyStr;
     end;
+  finally
+    FreeAndNil(vrDialog);
+  end;
+  {$ENDIF}
+end;
+
+function TJupiterEnviroment.OpenPath: String;
+{$IFNDEF JUPITERCLI}
+var
+  vrDialog : TSelectDirectoryDialog;
+{$ENDIF}
+begin
+  Result := EmptyStr;
+
+  {$IFNDEF JUPITERCLI}
+  vrDialog := TSelectDirectoryDialog.Create(Application.MainForm);
+  try
+    vrDialog.InitialDir := Self.BasePath;
+
+    if ((vrDialog.Execute) and (vrDialog.FileName <> EmptyStr)) then
+      Result := vrDialog.FileName;
   finally
     FreeAndNil(vrDialog);
   end;

@@ -805,6 +805,7 @@ inherited FMain: TFMain
     }
   end
   object pmTabOptions: TPopupMenu[11]
+    Images = ilIconFamily
     OnPopup = pmTabOptionsPopup
     Left = 592
     Top = 184

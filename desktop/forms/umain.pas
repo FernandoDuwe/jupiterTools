@@ -65,6 +65,7 @@ type
     procedure Internal_CloseAllButCurrentTab(Sender: TObject);
     procedure Internal_GoToNextTab(Sender: TObject);
     procedure Internal_GoToPreviousTab(Sender: TObject);
+    procedure Internal_OpenAsModal(Sender: TObject);
     procedure Internal_MenuGoToTabClick(Sender : TObject);
     Procedure Internal_OnGlobalException(Sender : TObject; E : Exception);
     function CurrentForm : TForm;
@@ -365,36 +366,49 @@ begin
   vrMenuItem.Caption := 'Próxima aba';
   vrMenuItem.ShortCut := TextToShortCut('Ctrl+Tab');
   vrMenuItem.OnClick := @Internal_GoToNextTab;
+  vrMenuItem.ImageIndex := ICON_RIGHT;
   pmTabOptions.Items.Add(vrMenuItem);
 
   vrMenuItem := TMenuItem.Create(pmTabOptions);
   vrMenuItem.Caption := 'Aba anterior';
   vrMenuItem.ShortCut := TextToShortCut('Ctrl+Shift+Tab');
   vrMenuItem.OnClick := @Internal_GoToPreviousTab;
+  vrMenuItem.ImageIndex := ICON_LEFT;
   pmTabOptions.Items.Add(vrMenuItem);
 
   vrMenuItem := TMenuItem.Create(pmTabOptions);
   vrMenuItem.Caption := 'Fechar aba';
   vrMenuItem.ShortCut := TextToShortCut('Ctrl+F4');
   vrMenuItem.OnClick := @Internal_CloseCurrentTab;
+  vrMenuItem.ImageIndex := ICON_CANCEL;
   pmTabOptions.Items.Add(vrMenuItem);
 
   vrMenuItem := TMenuItem.Create(pmTabOptions);
   vrMenuItem.Caption := 'Mover aba para a esquerda';
   vrMenuItem.OnClick := @Internal_MoveLeftTab;
   vrMenuItem.Enabled := jtMainTab.PageIndex <> 0;
+  vrMenuItem.ImageIndex := ICON_UP;
   pmTabOptions.Items.Add(vrMenuItem);
 
   vrMenuItem := TMenuItem.Create(pmTabOptions);
   vrMenuItem.Caption := 'Mover aba para a direita';
   vrMenuItem.OnClick := @Internal_MoveRightTab;
   vrMenuItem.Enabled := jtMainTab.PageIndex < (jtMainTab.PageCount - 1);
+  vrMenuItem.ImageIndex := ICON_DOWN;
+  pmTabOptions.Items.Add(vrMenuItem);
+
+  vrMenuItem := TMenuItem.Create(pmTabOptions);
+  vrMenuItem.Caption := 'Abrir formulário como modal';
+  vrMenuItem.OnClick := @Internal_OpenAsModal;
+  vrMenuItem.Enabled := jtMainTab.PageCount > 0;
+  vrMenuItem.ImageIndex := ICON_APPLICATION;
   pmTabOptions.Items.Add(vrMenuItem);
 
   vrMenuItem := TMenuItem.Create(pmTabOptions);
   vrMenuItem.Caption := 'Fechar todas as abas, exceto essa';
   vrMenuItem.ShortCut := TextToShortCut('Ctrl+Shift+F4');
   vrMenuItem.OnClick := @Internal_CloseAllButCurrentTab;
+  vrMenuItem.ImageIndex := ICON_CANCEL;
   pmTabOptions.Items.Add(vrMenuItem);
 end;
 
@@ -507,6 +521,22 @@ begin
 
   jtMainTab.PageIndex := jtMainTab.PageIndex + 1;
   jtMainTabChange(Sender);
+end;
+
+procedure TFMain.Internal_OpenAsModal(Sender: TObject);
+begin
+  if not (jtMainTab.Pages[jtMainTab.PageIndex] is TJupiterFormTabSheet) then
+    Exit;
+
+  with TJupiterFormTabSheet(jtMainTab.Pages[jtMainTab.PageIndex]) do
+  begin
+    Form.Parent := nil;
+    Form.BorderStyle := bsSizeable;
+
+    Form := nil;
+  end;
+
+  jtMainTab.CloseTab(jtMainTab.PageIndex);
 end;
 
 procedure TFMain.NewTab(Form: TForm);

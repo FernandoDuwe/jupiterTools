@@ -41,6 +41,7 @@ type
   procedure JupiterEnviromentScript_CopyTextToClipboard(prText : String);
 
   function JupiterEnviromentScript_SelectFile(prExtension : String) : String;
+  function JupiterEnviromentScript_SelectPath() : String;
 
   function JupiterEnviromentScript_GetApplicationPath : String;
 
@@ -209,6 +210,18 @@ begin
   end;
 end;
 
+function JupiterEnviromentScript_SelectPath(): String;
+var
+  vrEnviroment : TJupiterEnviroment;
+begin
+  vrEnviroment := TJupiterEnviroment.Create;
+  try
+    Result := vrEnviroment.OpenPath;
+  finally
+    FreeAndNil(vrEnviroment);
+  end;
+end;
+
 function JupiterEnviromentScript_GetApplicationPath: String;
 var
   vrEnviroment : TJupiterEnviroment;
@@ -255,6 +268,8 @@ begin
 
   prSender.AddFunction(@JupiterEnviromentScript_SelectFile, 'function SelectFile(prExtension : String) : String;');
 
+  prSender.AddFunction(@JupiterEnviromentScript_SelectPath, 'function SelectPath : String;');
+
   prSender.AddFunction(@JupiterEnviromentScript_SameExtension, 'function SameExtension(prFileName, prExtension : String) : Boolean;');
 end;
 
@@ -274,6 +289,7 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function SameExtension(prFileName, prExtension : String) : Boolean;'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function SelectFile(prExtension : String) : Boolean;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function SelectPath : Boolean;'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function ExtractFileName(prFileName : String) : Boolean;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function ExtractFileDir(prFileName : String) : Boolean;'));

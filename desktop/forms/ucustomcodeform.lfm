@@ -3,10 +3,6 @@ inherited FCustomCodeForm: TFCustomCodeForm
   Top = 586
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  inherited fpOptions: TFlowPanel
-    Height = 0
-    Top = 376
-  end
   object sbBody: TScrollBox[3]
     Left = 0
     Height = 331
@@ -15,6 +11,7 @@ inherited FCustomCodeForm: TFCustomCodeForm
     HorzScrollBar.Page = 1
     VertScrollBar.Page = 1
     Align = alClient
+    BorderStyle = bsNone
     TabOrder = 3
   end
   object fpTile: TFlowPanel[4]

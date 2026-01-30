@@ -112,6 +112,7 @@ type
 
     procedure PrepareForm; virtual;
     procedure UpdateForm(prUpdateDatasets : Boolean = True; prUpdateComponentes : Boolean = True; prUpdateCalcs : Boolean = True); virtual;
+    procedure SetAsModal;
 
     function IsWindowForm : Boolean; virtual;
 
@@ -372,7 +373,7 @@ begin
 
   Self.ActionGroup.UpdateActions;
 
-  pnBottom.Caption := '                              ' + Self.FHint;
+  pnBottom.Caption := '                       ' + Self.FHint;
   pnBottom.Visible := Trim(Self.FHint) <> EmptyStr;
 
   pnSearchBar.Visible := Self.ShowSearchBar;
@@ -606,6 +607,11 @@ begin
 
   if vrJupiterApp.Params.VariableById('Developer.Debug').AsBool then
     vrJupiterApp.AddMessage('UpdateForm: Finalizando', 'UpdateForm: Finalizando', Self.ClassName);
+end;
+
+procedure TFJupiterForm.SetAsModal;
+begin
+  //
 end;
 
 function TFJupiterForm.IsWindowForm: Boolean;

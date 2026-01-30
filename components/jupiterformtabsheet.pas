@@ -48,15 +48,18 @@ procedure TJupiterFormTabSheet.Internal_SetForm(prForm: TForm);
 begin
   Self.FForm := prForm;
 
-  Self.FForm.Parent      := Self;
-  Self.FForm.Left        := 0;
-  Self.FForm.Top         := 0;
-  Self.FForm.WindowState := wsMaximized;
-  Self.FForm.BorderStyle := bsNone;
+  if (Self.FForm <> nil) then
+  begin
+    Self.FForm.Parent      := Self;
+    Self.FForm.Left        := 0;
+    Self.FForm.Top         := 0;
+    Self.FForm.WindowState := wsMaximized;
+    Self.FForm.BorderStyle := bsNone;
 
-  Self.Caption := Self.FForm.Caption + '        ';
+    Self.Caption := Self.FForm.Caption + '        ';
 
-  Self.FForm.Show;
+    Self.FForm.Show;
+  end;
 end;
 
 procedure TJupiterFormTabSheet.DoClose;

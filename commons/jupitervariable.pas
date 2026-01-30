@@ -628,7 +628,8 @@ end;
 
 destructor TJupiterVariableList.Destroy;
 begin
-  FreeAndNil(Self.FChildList);
+  if Self.FChildList <> nil then
+    FreeAndNil(Self.FChildList);
 
   inherited Destroy;
 end;
