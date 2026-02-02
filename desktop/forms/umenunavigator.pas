@@ -7,7 +7,8 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, ExtCtrls,
   uJupiterForm, jupiterformutils, jupitertreeviewmenugenerator, JupiterApp,
-  JupiterConsts, jupiterDesktopApp, jupiterDatabaseWizard;
+  JupiterConsts, jupiterDesktopApp, jupiterDatabaseWizard, JupiterRoute,
+  LCLType, StdCtrls;
 
 type
 
@@ -22,6 +23,8 @@ type
     tbRemoveButton: TToolButton;
     tvTreeMenu: TTreeView;
     procedure FormDestroy(Sender: TObject);
+    procedure tbAddMenuClick(Sender: TObject);
+    procedure tbRemoveButtonClick(Sender: TObject);
   private
     FCurrentData : TJupiterDatabaseReference;
     FForm : TForm;
@@ -54,6 +57,37 @@ begin
     FForm.Destroy;
 
   inherited;
+end;
+
+procedure TFMenuNavigator.tbAddMenuClick(Sender: TObject);
+begin
+  //
+end;
+
+procedure TFMenuNavigator.tbRemoveButtonClick(Sender: TObject);
+var
+  vrWizard : TJupiterDatabaseWizard;
+begin
+  if tvTreeMenu.Selected = nil then
+    Exit;
+
+  if not Assigned(tvTreeMenu.Selected) then
+    Exit;
+
+  if not Assigned(tvTreeMenu.Selected.Data) then
+    Exit;
+
+  vrWizard := vrJupiterApp.NewWizard;
+  try
+    if Application.MessageBox('Deseja realmente excluir esta rota?' + #13#10 + #13#10 + 'As macros vinculadas não serão removidas.', PAnsiChar(Self.Caption), MB_ICONQUESTION + MB_YESNO) = ID_YES then
+    begin
+      vrWizard.ExecuteScript(CreateStringList(' DELETE FROM ROUTES WHERE ID = ' + IntToStr(TJupiterDatabaseReference(tvTreeMenu.Selected.Data).ID)), True);
+
+      Self.Internal_PrepareForm;
+    end;
+  finally
+    FreeAndNil(vrWizard);
+  end;
 end;
 
 procedure TFMenuNavigator.Internal_UpdateComponents;
@@ -108,6 +142,8 @@ begin
 
   tbAddMenu.ImageIndex := ICON_ADD;
   tbRemoveButton.ImageIndex := ICON_DELETE;
+
+  tvTreeMenu.Items.Clear;
 
   vrTreeView := TJupiterTreeViewMenuGenerator.Create(vrJupiterApp.InternalDatabase);
   try

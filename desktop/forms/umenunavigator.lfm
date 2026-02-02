@@ -12,7 +12,6 @@ inherited FMenuNavigator: TFMenuNavigator
     ClientWidth = 1160
   end
   inherited fpOptions: TFlowPanel
-    Height = 0
     Top = 485
     Width = 1160
   end
@@ -74,11 +73,13 @@ inherited FMenuNavigator: TFMenuNavigator
         Left = 1
         Top = 0
         Caption = 'tbAddMenu'
+        OnClick = tbAddMenuClick
       end
       object tbRemoveButton: TToolButton
         Left = 24
         Top = 0
         Caption = 'tbRemoveButton'
+        OnClick = tbRemoveButtonClick
       end
     end
   end

@@ -1,59 +1,52 @@
 inherited FFileExplorer: TFFileExplorer
-  Left = 595
-  Top = 498
-  inherited pnSearchBar: TPanel
-    Width = 879
-    ClientWidth = 879
-  end
-  inherited fpOptions: TFlowPanel
-    Height = 1
-    Top = 375
-    Width = 879
-  end
-  inherited pnBottom: TPanel
-    Top = 376
-    Width = 879
-    ClientWidth = 879
-  end
-  object stvFolders: TShellTreeView[3]
-    Left = 0
-    Height = 330
-    Top = 45
-    Width = 296
-    Align = alLeft
-    FileSortType = fstFoldersFirst
-    ReadOnly = True
-    TabOrder = 3
-    Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
-    ObjectTypes = [otFolders]
-    ShellListView = slvExporer
-  end
-  object spDivider: TSplitter[4]
-    Left = 296
-    Height = 330
+  Left = 492
+  Top = 343
+  object spDivider: TSplitter[3]
+    Left = 170
+    Height = 331
     Top = 45
     Width = 5
     OnMoved = spDividerMoved
   end
-  object slvExporer: TShellListView[5]
-    Left = 301
-    Height = 330
+  object slvExporer: TShellListView[4]
+    Left = 175
+    Height = 331
     Top = 45
-    Width = 578
+    Width = 704
     Align = alClient
     Color = clDefault
-    ReadOnly = True
     SortType = stText
-    TabOrder = 5
-    OnDblClick = slvExporerDblClick
-    ObjectTypes = [otNonFolders]
+    TabOrder = 4
     ShellTreeView = stvFolders
+    OnDblClick = slvExporerDblClick
+  end
+  object pnLeft: TPanel[5]
+    Left = 0
+    Height = 331
+    Top = 45
+    Width = 170
+    Align = alLeft
+    BevelOuter = bvNone
+    ClientHeight = 331
+    ClientWidth = 170
+    TabOrder = 5
+    object stvFolders: TShellTreeView
+      Left = 0
+      Height = 331
+      Top = 0
+      Width = 170
+      Align = alClient
+      FileSortType = fstFoldersFirst
+      TabOrder = 0
+      Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
+      ShellListView = slvExporer
+    end
   end
   inherited acOptions: TActionList[6]
     object acCopy: TAction[2]
       Caption = 'acCopy'
-      OnExecute = acCopyExecute
       ShortCut = 16451
+      OnExecute = acCopyExecute
     end
     inherited acExitIfModal: TAction[3]
     end

@@ -6,10 +6,10 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ShellCtrls, ExtCtrls,
-  ActnList, uJupiterForm, JupiterConsts, jupiterformutils, JupiterEnviroment,
-  jupiterStringUtils, JupiterModule, jupiterDatabaseWizard, JupiterApp,
-  uJupiterRunnableScript, uJupiterStringUtilsScript, uJupiterAction,
-  uJupiterDesktopAppScript;
+  ActnList, FileCtrl, EditBtn, Calendar, Arrow, uJupiterForm, JupiterConsts,
+  jupiterformutils, JupiterEnviroment, jupiterStringUtils, JupiterModule,
+  jupiterDatabaseWizard, JupiterApp, uJupiterRunnableScript,
+  uJupiterStringUtilsScript, uJupiterAction, uJupiterDesktopAppScript;
 
 type
 
@@ -17,6 +17,7 @@ type
 
   TFFileExplorer = class(TFJupiterForm)
     acCopy: TAction;
+    pnLeft: TPanel;
     slvExporer: TShellListView;
     spDivider: TSplitter;
     stvFolders: TShellTreeView;
@@ -84,7 +85,7 @@ begin
   inherited Internal_UpdateComponents;
 
   if miLookColumn.Checked then
-    stvFolders.Width := PercentOfScreen(Self.Width, Self.PercentDivisor);
+    pnLeft.Width := PercentOfScreen(Self.Width, Self.PercentDivisor);
 
   Self.Caption := 'Pasta: ' + jupiterStringUtilsGetLastPathName(slvExporer.Root);
 end;
