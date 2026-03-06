@@ -5,9 +5,9 @@ unit uQuickJump;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, SynEdit, SynCompletion,
-  SynHighlighterPas, uJupiterForm, jupiterformutils, JupiterConsts,
-  jupiterDatabaseWizard, SQLDB, JupiterApp, uJupiterAction,
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, DBGrids, SynEdit,
+  SynCompletion, SynHighlighterPas, uJupiterForm, jupiterformutils,
+  JupiterConsts, jupiterDatabaseWizard, SQLDB, JupiterApp, uJupiterAction,
   uJupiterDesktopAppScript, uJupiterDatabaseScript;
 
 type
@@ -18,10 +18,11 @@ type
     seQuickAccess: TSynEdit;
     SynCompletion1: TSynCompletion;
     SynPasSyn1: TSynPasSyn;
-    procedure SynCompletion1BeforeExecute(ASender: TSynBaseCompletion;
-      var ACurrentString: String; var APosition: Integer; var AnX,
-      AnY: Integer; var AnResult: TOnBeforeExeucteFlags);
+    procedure SynCompletion1BeforeExecute(ASender: TSynBaseCompletion; var ACurrentString: String; var APosition: Integer; var AnX, AnY: Integer; var AnResult: TOnBeforeExeucteFlags);
   private
+    FFilter : String;
+
+    procedure Internal_UpdateTags;
     procedure Internal_PrepareForm; override;
     procedure Internal_OnPlay(Sender: TObject);
     procedure Internal_PopularRegistros;
@@ -43,15 +44,20 @@ var
   vrWizard : TJupiterDatabaseWizard;
   vrTableList : TStrings;
   vrVez : Integer;
+  vrLine : String;
 begin
   SynCompletion1.ItemList.Clear;
+
+  Self.Internal_UpdateTags;
 
   vrWizard := vrJupiterApp.NewWizard;
   vrTableList := TStringList.Create;
   try
     vrTableList.Clear;
 
-    if Pos('>', seQuickAccess.Lines.Text) <> 0 then
+    vrLine := seQuickAccess.Lines[seQuickAccess.CaretY - 1];
+
+    if Pos('>', vrLine) <> 0 then
       Self.Internal_PopularRegistros
     else
     begin
@@ -68,9 +74,22 @@ begin
   end;
 end;
 
+procedure TFQuickJump.Internal_UpdateTags;
+var
+  vrVez : Integer;
+begin
+  Self.FFilter := EmptyStr;
+
+  for vrVez := 0 to seQuickAccess.Lines.Count - 1 do
+    if Copy(TrimLeft(seQuickAccess.Lines[vrVez]), 1, 1) = '?' then
+      Self.FFilter := Trim(Copy(TrimLeft(seQuickAccess.Lines[vrVez]), 2));
+end;
+
 procedure TFQuickJump.Internal_PrepareForm;
 begin
   inherited Internal_PrepareForm;
+
+  Self.FFilter := EmptyStr;
 
   SynCompletion1.Width := PercentOfScreen(Self.Width, 50);
 
@@ -85,9 +104,20 @@ begin
 end;
 
 procedure TFQuickJump.Internal_OnPlay(Sender: TObject);
+var
+  vrVez : Integer;
 begin
   try
-    JupiterAppDesktopRunQuickJumpScript(seQuickAccess.Lines.Text);
+    for vrVez := 0 to seQuickAccess.Lines.Count -1 do
+    begin
+      if Trim(seQuickAccess.Lines[vrVez]) = EmptyStr then
+        Continue;
+
+      if Copy(TrimLeft(seQuickAccess.Lines[vrVez]), 1, 1) = '?' then
+        Continue;
+
+      JupiterAppDesktopRunQuickJumpScript(seQuickAccess.Lines[vrVez]);
+    end;
   finally
     if Trim(seQuickAccess.Lines.Text) <> EmptyStr then
       DoSecureClose;
@@ -99,8 +129,9 @@ var
   vrQry : TSQLQuery;
   vrWizard : TJupiterDatabaseWizard;
   vrTable : String;
+  vrLabel : String;
 begin
-  vrTable := seQuickAccess.Lines.Text;
+  vrTable := seQuickAccess.Lines[seQuickAccess.CaretY - 1];
   vrTable := StringReplace(vrTable, '>', EmptyStr, [rfIgnoreCase, rfReplaceAll]);
   vrTable := StringReplace(vrTable, ' ', EmptyStr, [rfIgnoreCase, rfReplaceAll]);
   vrTable := StringReplace(vrTable, #13, EmptyStr, [rfIgnoreCase, rfReplaceAll]);
@@ -114,7 +145,19 @@ begin
 
     while not vrQry.EOF do
     begin
-      SynCompletion1.ItemList.Add(vrQry.FieldByName('ID').AsString + ' // ' + JupiterDatabaseScript_ResolveRecordTable(vrTable, vrQry.FieldByName('ID').AsInteger));
+      if Self.FFilter = EmptyStr then
+      begin
+        SynCompletion1.ItemList.Add(vrQry.FieldByName('ID').AsString + ' // ' + JupiterDatabaseScript_ResolveRecordTable(vrTable, vrQry.FieldByName('ID').AsInteger));
+
+        vrQry.Next;
+
+        Continue;
+      end;
+
+      vrLabel := JupiterDatabaseScript_ResolveRecordTable(vrTable, vrQry.FieldByName('ID').AsInteger);
+
+      if Pos(AnsiUpperCase(Self.FFilter), AnsiUpperCase(vrLabel)) <> 0 then
+        SynCompletion1.ItemList.Add(vrQry.FieldByName('ID').AsString + ' // ' + JupiterDatabaseScript_ResolveRecordTable(vrTable, vrQry.FieldByName('ID').AsInteger));
 
       vrQry.Next;
     end;

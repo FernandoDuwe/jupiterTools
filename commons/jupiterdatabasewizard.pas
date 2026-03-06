@@ -142,8 +142,8 @@ begin
 
     for vrVez := 0 to vrStr.Count - 1 do
     begin
-      if Self.Count('DATABASE_DICTIONARY', ' TABLENAME = "' + prTable + '" AND FIELDNAME = "' + vrStr[vrVez] + '" ') = 0 then
-        Self.ExecuteScript(CreateStringList(' INSERT INTO DATABASE_DICTIONARY (TABLENAME, FIELDNAME, TITLE) VALUES ("' + prTable + '", "' + vrStr[vrVez] + '", "' + JupiterStringUtilsNormalizeToPresent(vrStr[vrVez]) + '") '), False);
+      if Self.Count('DATABASE_DICTIONARY', ' TABLENAME = ''' + prTable + ''' AND FIELDNAME = ''' + vrStr[vrVez] + ''' ') = 0 then
+        Self.ExecuteScript(CreateStringList(' INSERT INTO DATABASE_DICTIONARY (TABLENAME, FIELDNAME, TITLE) VALUES ("' + prTable + '", ''' + vrStr[vrVez] + ''', ''' + JupiterStringUtilsNormalizeToPresent(vrStr[vrVez]) + ''') '), False);
     end;
   finally
     FreeAndNil(vrStr);

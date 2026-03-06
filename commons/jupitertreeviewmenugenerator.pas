@@ -208,12 +208,7 @@ begin
       vrJupiterApp.RunMacro(vrRouteData.Destiny, vrVariableList);
     end;
   finally
-     try
-       if Assigned(vrVariableList) then
-         if vrVariableList <> nil then
-           FreeAndNil(vrVariableList);
-     except
-     end;
+
   end;
 end;
 

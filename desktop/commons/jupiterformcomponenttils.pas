@@ -36,7 +36,7 @@ uses
 
   function JupiterComponentsNewDBComboBox(prField : TField; prDataSource : TDataSource; prPosition : TJupiterPosition; prOwner : TWinControl; prForeignKeyData : TJupiterDatabaseForeignKeyReference) : TJupiterComponentReference;
 
-  function JupiterComponentsNewDBCheckBox(prField : TField; prDataSource : TDataSource; prPosition : TJupiterPosition; prOwner : TWinControl) : TJupiterComponentReference;
+  function JupiterComponentsNewDBCheckBox(prField : TField; prTitle : String; prDataSource : TDataSource; prPosition : TJupiterPosition; prOwner : TWinControl) : TJupiterComponentReference;
 
   function JupiterComponentsAddAction(prField : TJupiterComponentReference; prIcon : Integer; prOwner : TWinControl) : TJupiterComponentReference;
 
@@ -367,7 +367,7 @@ begin
   vrEdit.AutoSize   := False;
   vrEdit.Width      := prOwner.Width - prPosition.Left - FORM_MARGIN_RIGHT;
   vrEdit.Anchors    := [akTop, akLeft, akRight];
-  vrEdit.Style      := csDropDownList;
+//  vrEdit.Style      := csDropDownList;
 
   vrQry.Open;
 
@@ -396,12 +396,12 @@ begin
                                               vrEdit);
 end;
 
-function JupiterComponentsNewDBCheckBox(prField: TField; prDataSource: TDataSource; prPosition: TJupiterPosition; prOwner: TWinControl): TJupiterComponentReference;
+function JupiterComponentsNewDBCheckBox(prField: TField; prTitle : String; prDataSource: TDataSource; prPosition: TJupiterPosition; prOwner: TWinControl): TJupiterComponentReference;
 var
   vrEdit : TDBCheckBox;
 begin
   vrEdit := TDBCheckBox.Create(prOwner);
-  vrEdit.Caption      := JupiterStringUtilsNormalizeToPresent(prField.DisplayName);
+  vrEdit.Caption      := prTitle;
   vrEdit.Parent       := prOwner;
   vrEdit.AutoSize     := True;
   vrEdit.Font.Size    := GetFontSize;

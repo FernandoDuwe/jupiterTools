@@ -39,6 +39,7 @@ type
     procedure edSearchChange(Sender: TObject);
     procedure edSearchKeyPress(Sender: TObject; var Key: char);
     procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure InternalDataSourceDataChange(Sender: TObject; Field: TField);
     procedure InternalQueryCalcFields(DataSet: TDataSet);
     procedure miExibirColunaIDClick(Sender: TObject);
@@ -112,6 +113,15 @@ begin
   finally
     FreeAndNil(vrWizard);
   end;
+end;
+
+procedure TFCustomDatabaseGrid.FormShow(Sender: TObject);
+begin
+  inherited;
+
+  if pnSearchBar.Visible then
+    if edSearch.CanFocus then
+      edSearch.SetFocus;
 end;
 
 procedure TFCustomDatabaseGrid.InternalDataSourceDataChange(Sender: TObject; Field: TField);
@@ -201,7 +211,7 @@ end;
 
 procedure TFCustomDatabaseGrid.dbMainGridDblClick(Sender: TObject);
 begin
-  if InternalQuery.EOF then
+  if InternalQuery.IsEmpty then
     Exit;
 
   JupiterAppDesktopOpenFormFromTableId(Self.FReference.TableName, InternalQuery.FieldByName('ID').AsInteger);
@@ -223,7 +233,7 @@ end;
 
 procedure TFCustomDatabaseGrid.dbMainGridGetCellHint(Sender: TObject; Column: TColumn; var AText: String);
 begin
-  if InternalQuery.EOF then
+  if InternalQuery.IsEmpty then
     Exit;
 
   if not Column.Field.IsNull then
@@ -333,7 +343,7 @@ begin
 
   if Self.ActionGroup.Count > 1 then
   begin
-    if (Self.InternalQuery.EOF)  then
+    if (Self.InternalQuery.IsEmpty)  then
     begin
       Self.ActionGroup.GetActionAtIndex(1).Disable;
       Self.ActionGroup.GetActionAtIndex(1).DisablePopup;
@@ -426,7 +436,7 @@ begin
     vrFields := vrWizard.GetSelectGridFields(Self.FReference.TableName);
 
     if InternalQuery.Active then
-      if ((not InternalQuery.EOF) and (not InternalQuery.FieldByName('ID').IsNull)) then
+      if ((not InternalQuery.IsEmpty) and (not InternalQuery.FieldByName('ID').IsNull)) then
         vrId := InternalQuery.FieldByName('ID').AsInteger;
 
     vrStringList := CreateStringList('');
@@ -600,7 +610,7 @@ begin
 
   RemoveChildren(sbMiniForm);
 
-  if Self.InternalQuery.EOF then
+  if Self.InternalQuery.IsEmpty then
     Exit;
 
   vrCurrentLine := FORM_MARGIN_TOP;
@@ -765,7 +775,7 @@ var
 begin
   Result := inherited Internal_OnRequestData;
 
-  if not Self.InternalQuery.EOF then
+  if not Self.InternalQuery.IsEmpty then
     for vrVez := 0 to Self.InternalQuery.FieldCount - 1 do
       if not Result.Exists(Self.InternalQuery.Fields[vrVez].FieldName) then
         Result.AddVariable(Self.InternalQuery.Fields[vrVez].FieldName, Self.InternalQuery.Fields[vrVez].AsString, EmptyStr);

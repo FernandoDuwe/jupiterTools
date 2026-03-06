@@ -33,6 +33,7 @@ type
   procedure JupiterAppDesktopCursorToIdle;
   procedure JupiterAppDesktopRemoveCurrentMessage;
   procedure JupiterAppDesktopSetAppMessage(prMessage : String);
+  procedure JupiterAppDesktopSetAppTitle(prMessage : String);
   procedure JupiterAppDesktopAddPanelMessage(prMessage : String);
   procedure JupiterAppDesktopAddInfoPanelMessage(prMessage : String);
   procedure JupiterAppDesktopAddSuccessPanelMessage(prMessage : String);
@@ -162,6 +163,15 @@ begin
     TFMain(Application.MainForm).sbStatus.Panels[1].Text := prMessage;
     Application.ProcessMessages;
   end;
+end;
+
+procedure JupiterAppDesktopSetAppTitle(prMessage: String);
+begin
+  if Application.MainForm is TFMain then
+    if prMessage <> EmptyStr then
+      TFMain(Application.MainForm).Caption := prMessage + ' - Jupiter'
+    else
+      TFMain(Application.MainForm).Caption := 'Jupiter';
 end;
 
 procedure JupiterAppDesktopAddPanelMessage(prMessage: String);
@@ -490,6 +500,7 @@ begin
   prSender.AddFunction(@JupiterAppDesktopOpenMultiLevelTextEditorForm, 'procedure OpenMultiLevelTextEditorForm(prPath : String);');
   prSender.AddFunction(@JupiterAppDesktopCloseForm, 'procedure CloseForm(prFormID : String);');
   prSender.AddFunction(@JupiterAppDesktopSetAppMessage, 'procedure SetAppMessage(prMessage : String);');
+  prSender.AddFunction(@JupiterAppDesktopSetAppTitle, 'procedure SetAppTitle(prMessage : String);');
   prSender.AddFunction(@JupiterAppDesktopOpenDataProviderExplorerForm, 'procedure OpenDataProviderExplorerForm(prReference : String);');
   prSender.AddFunction(@JupiterAppDesktopRunQuickJumpScript, 'procedure RunQuickJumpScript(prScript : String);');
 
@@ -542,6 +553,7 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenMultiLevelTextEditorForm(prPath: String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CloseForm(prFormID: String) : String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure SetAppMessage(prMessage: String) : String;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure SetAppTitle(prMessage: String) : String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenDataProviderExplorerForm(prReference : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenFormSQLExternalEditor(prConnectionType, prDatabase, prHostName, prUserName, prPassword : String);'));
 

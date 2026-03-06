@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, JupiterModule, JupiterApp, jupiterDatabaseWizard,
-  JupiterConsts;
+  JupiterConsts, Graphics;
 
 type
 
@@ -95,6 +95,8 @@ begin
     Self.Internal_CreateVariablIfDontExists('Interface.Form.Separator', 'Adicionar separador entre os campos dos formulários', 'N');
 
     Self.Internal_CreateVariablIfDontExists('Interface.Form.Label.Bold', 'Legenda de campos em formulários ficarão em negrito', 'N');
+
+    Self.Internal_CreateVariablIfDontExists('Interface.Form.Color.Alternative', 'Cor alternativa', ColorToString(ALTERNATIVE_COLOR));
   finally
     FreeAndNil(vrWizard);
   end;

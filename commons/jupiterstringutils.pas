@@ -33,6 +33,8 @@ uses
 
   function JupiterStringUtilsSeparateWords(prStr : String) : TStrings;
 
+  function JupiterStringUtilsRemoveDuplicatedWords(prStr : TStrings) : TStrings;
+
 type
 
   { TJupiterStringReference }
@@ -225,6 +227,22 @@ begin
 
   Result.Delimiter     := ';';
   Result.DelimitedText := StringReplace(prStr, ' ', ';', [rfIgnoreCase, rfReplaceAll]);
+end;
+
+function JupiterStringUtilsRemoveDuplicatedWords(prStr: TStrings): TStrings;
+var
+  vrVez : Integer;
+begin
+  Result := TStringList.Create;
+  Result.Clear;
+
+  for vrVez := 0 to prStr.Count - 1 do
+  begin
+    if Result.IndexOf(prStr[vrVez]) <> -1 then
+      Continue;
+
+    Result.Add(prStr[vrVez]);
+  end;
 end;
 
 { TJupiterStringReference }

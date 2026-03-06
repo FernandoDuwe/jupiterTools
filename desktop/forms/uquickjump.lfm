@@ -1,9 +1,20 @@
 inherited FQuickJump: TFQuickJump
+  Left = 549
+  Height = 538
+  Top = 283
   BorderStyle = bsDialog
   Caption = 'QuickJump'
+  ClientHeight = 538
+  inherited fpOptions: TFlowPanel
+    Top = 457
+  end
+  inherited pnBottom: TPanel
+    Top = 457
+  end
   inline seQuickAccess: TSynEdit[3]
     Left = 0
-    Height = 331
+    Height = 412
+    Hint = 'Para Pesquisas, informe:'#13#10'? <Palavra ou Frase>'#13#10#13#10'Para Acessar registros'#13#10'TABELA > ID'
     Top = 45
     Width = 879
     Align = alClient
@@ -13,6 +24,8 @@ inherited FQuickJump: TFQuickJump
     Font.Quality = fqNonAntialiased
     ParentColor = False
     ParentFont = False
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 3
     Gutter.Width = 57
     Gutter.MouseActions = <>
@@ -516,7 +529,7 @@ inherited FQuickJump: TFQuickJump
   end
   object SynCompletion1: TSynCompletion[7]
     OnBeforeExecute = SynCompletion1BeforeExecute
-    Position = -1
+    Position = 0
     LinesInWindow = 20
     SelectedColor = clHighlight
     CaseSensitive = False

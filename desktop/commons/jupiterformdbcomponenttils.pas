@@ -101,7 +101,7 @@ begin
   if not vrJupiterApp.Params.VariableById('Interface.Form.AsList').AsBool then
     prPosition.Left := vrJupiterApp.Params.VariableById('Interface.Form.Label.Size').AsInteger + FORM_MARGIN_RIGHT;
 
-  Result := JupiterComponentsNewDBCheckBox(prField, prDataSource, prPosition, prOwner);
+  Result := JupiterComponentsNewDBCheckBox(prField, JupiterDatabaseScript_GetDescription(prTableName, prField.FieldName), prDataSource, prPosition, prOwner);
 end;
 
 function JupiterFormDBComponent_NewForeignKeyEdit(prTableName: String; prField: TField; prDataSource: TDataSource; prPosition: TJupiterPosition; prOwner: TWinControl): TJupiterComponentReference;

@@ -390,7 +390,12 @@ begin
       TDBGrid(prComponent.Components[vrVez]).Flat      := True;
 
       {$IFDEF WINDOWS}
-      TDBGrid(prComponent.Components[vrVez]).AlternateColor := ALTERNATIVE_COLOR;
+      
+	  if vrJupiterApp.Params.Exists('Interface.Form.Color.Alternative') then
+	    TDBGrid(prComponent.Components[vrVez]).AlternateColor := vrJupiterApp.Params.VariableById('Interface.Form.Color.Alternative').AsColor
+	  else
+	    TDBGrid(prComponent.Components[vrVez]).AlternateColor := ALTERNATIVE_COLOR;
+	  
       {$ENDIF}
     end;
 
@@ -401,7 +406,12 @@ begin
       TValueListEditor(prComponent.Components[vrVez]).Flat      := True;
 
       {$IFDEF WINDOWS}
-      TValueListEditor(prComponent.Components[vrVez]).AlternateColor := ALTERNATIVE_COLOR;
+	  
+	  if vrJupiterApp.Params.Exists('Interface.Form.Color.Alternative') then
+	    TValueListEditor(prComponent.Components[vrVez]).AlternateColor := vrJupiterApp.Params.VariableById('Interface.Form.Color.Alternative').AsColor
+	  else
+	    TValueListEditor(prComponent.Components[vrVez]).AlternateColor := ALTERNATIVE_COLOR;
+      
       {$ENDIF}
     end;
   end;

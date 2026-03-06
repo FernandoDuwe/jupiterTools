@@ -19,6 +19,7 @@ inherited FFileExplorer: TFFileExplorer
     TabOrder = 4
     ShellTreeView = stvFolders
     OnDblClick = slvExporerDblClick
+    OnSelectItem = slvExporerSelectItem
   end
   object pnLeft: TPanel[5]
     Left = 0
@@ -40,6 +41,7 @@ inherited FFileExplorer: TFFileExplorer
       TabOrder = 0
       Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
       ShellListView = slvExporer
+      OnChange = stvFoldersChange
     end
   end
   inherited acOptions: TActionList[6]

@@ -26,6 +26,7 @@ type
     procedure miUpdateClick(Sender: TObject);
     procedure tvFileTreeDblClick(Sender: TObject);
     procedure tvFileTreeKeyPress(Sender: TObject; var Key: char);
+    procedure tvFileTreeSelectionChanged(Sender: TObject);
   private
     FSearch : String;
     FForceUpdate : Boolean;
@@ -153,6 +154,17 @@ begin
 
     Key := #0;
   end;
+end;
+
+procedure TFFileFinder.tvFileTreeSelectionChanged(Sender: TObject);
+begin
+  if not Assigned(tvFileTree.Selected) then
+    Exit;
+
+  if not Assigned(tvFileTree.Selected.Data) then
+    Exit;
+
+  Self.Params.VariableById('currentFile').Value := TJupiterStringReference(tvFileTree.Selected.Data).Reference;
 end;
 
 procedure TFFileFinder.Internal_OnOpenFolder(Sender: TObject);
@@ -285,6 +297,9 @@ begin
   Self.ActionGroup.AddAction(TJupiterAction.Create('Parar', 'Clique aqui para parar a pesquisa', ICON_CANCEL, @Internal_OnStop));
   Self.ActionGroup.AddAction(TJupiterAction.Create('Excluir', 'Clique aqui para abrir a pasta atual externamente', ICON_DELETE, @Internal_OnDelete));
   Self.ActionGroup.AddAction(TJupiterAction.Create('Pesquisar', 'Clique aqui para efetuar a pesquisa', ICON_SEARCH, @Internal_OnOpenFolder));
+
+  if not Self.Params.Exists('currentFile') then
+    Self.Params.AddVariable('currentFile', EmptyStr);
 end;
 
 procedure TFFileFinder.Internal_ReadDirectory(prPath: String; prOwner: TTreeNode);

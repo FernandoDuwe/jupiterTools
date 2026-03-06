@@ -193,7 +193,10 @@ begin
     TPanel(vrReference.Component).BorderSpacing.Around := 2;
 
     if vrAlternative then
-      TPanel(vrReference.Component).Color := ALTERNATIVE_COLOR;
+      if vrJupiterApp.Params.Exists('Interface.Form.Color.Alternative') then
+        TPanel(vrReference.Component).Color := vrJupiterApp.Params.VariableById('Interface.Form.Color.Alternative').AsColor
+	  else
+	    TPanel(vrReference.Component).Color := ALTERNATIVE_COLOR; 
 
     TPanel(vrReference.Component).ParentBackground := not vrAlternative;
     TPanel(vrReference.Component).ParentColor := not vrAlternative;

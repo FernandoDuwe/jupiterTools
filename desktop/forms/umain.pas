@@ -246,8 +246,15 @@ begin
 end;
 
 procedure TFMain.Internal_OnGlobalException(Sender: TObject; E: Exception);
+var
+  vrMessage : String;
 begin
-  ShowMessage('Erro: ' + E.Message + #13#10 + 'Origem: ' + Sender.ClassName);
+  vrMessage := 'Erro: ' + E.Message;
+
+  if Assigned(Sender) then
+    vrMessage := vrMessage + #13#10 + 'Origem: ' + Sender.ClassName;
+
+  Application.MessageBox(PAnsiChar(vrMessage), PAnsiChar(Self.Caption), MB_ICONERROR + MB_OK);
 end;
 
 function TFMain.CurrentForm: TForm;
@@ -265,6 +272,8 @@ var
   vrMainMenu : TJupiterMainMenuGenerator;
 begin
   inherited Internal_PrepareForm;
+
+  Self.Caption := vrJupiterApp.AppName;
 
   Application.OnException := @Self.Internal_OnGlobalException;
 
@@ -294,8 +303,6 @@ var
   vrVez : Integer;
 begin
   inherited Internal_UpdateComponents;
-
-  Self.Caption := vrJupiterApp.AppName;
 
   sbStatus.Font.Size := 9;
   sbStatus.Panels[0].Width := PercentOfScreen(Self.Width, 30);

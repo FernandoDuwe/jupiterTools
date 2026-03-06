@@ -451,6 +451,7 @@ end;
 function TFJupiterForm.Internal_OnRequestData: TJupiterVariableList;
 begin
   Result := TJupiterVariableList.Create;
+  Result.CopyValues(Self.Params);
 
   Result.AddVariable('FORMID', Self.FormID);
 end;
@@ -545,6 +546,9 @@ begin
   Self.Prepared := True;
   try
     Self.Internal_PrepareForm;
+
+    if Self.ActionGroup.TableName = EmptyStr then
+      Self.ActionGroup.TableName := Self.ClassName;
 
     Self.Internal_CreateShortcutList;
 

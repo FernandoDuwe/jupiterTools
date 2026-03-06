@@ -8,8 +8,8 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, ComCtrls,
   StdCtrls, ValEdit, SynEdit, SynHighlighterPas, SynCompletion, uJupiterForm,
   jupiterformutils, jupiterScript, JupiterConsts, JupiterApp, JupiterRoute,
-  JupiterEnviroment, jupiterDatabaseWizard, uJupiterAction, jupiterDesktopApp,
-  uJupiterDesktopAppScript;
+  JupiterEnviroment, jupiterDatabaseWizard, jupiterStringUtils, uJupiterAction,
+  jupiterDesktopApp, uJupiterDesktopAppScript;
 
 type
 
@@ -36,11 +36,16 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure Splitter1Moved(Sender: TObject);
+    procedure SynCompletion1BeforeExecute(ASender: TSynBaseCompletion;
+      var ACurrentString: String; var APosition: Integer; var AnX,
+      AnY: Integer; var AnResult: TOnBeforeExeucteFlags);
   private
     FFilePath : String;
     FMacroID : Integer;
 
     FScript : TJupiterScript;
+
+    FCompletionList : TStrings;
 
     procedure Internal_UpdateComponents; override;
     procedure Internal_PrepareForm; override;
@@ -72,10 +77,16 @@ begin
 
   Self.FFilePath := EmptyStr;
   Self.FMacroID := NULL_KEY;
+
+  Self.FCompletionList := TStringList.Create;
+  Self.FCompletionList.Clear;
 end;
 
 procedure TFScriptEditorForm.FormDestroy(Sender: TObject);
 begin
+  Self.FCompletionList.Clear;
+  FreeAndNil(Self.FCompletionList);
+
   FreeAndNil(Self.FScript);
 
   inherited;
@@ -84,6 +95,61 @@ end;
 procedure TFScriptEditorForm.Splitter1Moved(Sender: TObject);
 begin
   miLookColumn.Checked := False;
+end;
+
+procedure TFScriptEditorForm.SynCompletion1BeforeExecute(ASender: TSynBaseCompletion; var ACurrentString: String; var APosition: Integer; var AnX, AnY: Integer;  var AnResult: TOnBeforeExeucteFlags);
+var
+  vrStr : TStrings;
+  vrList : TStrings;
+  vrVez : Integer;
+begin
+  vrStr := TStringList.Create;
+  vrList := TStringList.Create;
+  try
+    if SynCompletion1.ItemList is TStringList then
+      TStringList(SynCompletion1.ItemList).Sorted := False;
+
+    vrList := JupiterStringUtilsSeparateWords(seScript.Lines.Text);
+
+    for vrVez := (vrList.Count - 1) downto 0 do
+    begin
+      if Trim(vrList[vrVez]) = '' then
+      begin
+        vrList.Delete(vrVez);
+        Continue;
+      end;
+
+      if Trim(vrList[vrVez]) = '//' then
+      begin
+        vrList.Delete(vrVez);
+        Continue;
+      end;
+
+      if Trim(vrList[vrVez]) = ';' then
+      begin
+        vrList.Delete(vrVez);
+        Continue;
+      end;
+
+      if Trim(vrList[vrVez]) = ':' then
+      begin
+        vrList.Delete(vrVez);
+        Continue;
+      end;
+    end;
+
+    vrList := JupiterStringUtilsRemoveDuplicatedWords(vrList);
+
+    SynCompletion1.ItemList.Clear;
+    SynCompletion1.ItemList.AddStrings(Self.FCompletionList);
+    SynCompletion1.ItemList.AddStrings(vrList);
+  finally
+    if SynCompletion1.ItemList is TStringList then
+      TStringList(SynCompletion1.ItemList).Sorted := True;
+
+    FreeAndNil(vrStr);
+    FreeAndNil(vrList);
+  end;
 end;
 
 procedure TFScriptEditorForm.Internal_UpdateComponents;
@@ -196,6 +262,8 @@ begin
     end;
 
   tvLibrary.SortType := stText;
+
+  Self.FCompletionList.AddStrings(SynCompletion1.ItemList);
 
   if SynCompletion1.ItemList is TStringList then
     TStringList(SynCompletion1.ItemList).Sorted := True;

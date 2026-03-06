@@ -5,7 +5,7 @@ unit JupiterVariable;
 interface
 
 uses
-  Classes, JupiterObject, JupiterEnviroment, JupiterConsts, SysUtils;
+  Classes, JupiterObject, JupiterEnviroment, JupiterConsts, SysUtils, Graphics;
 
 type
 
@@ -56,6 +56,7 @@ type
     function IsEmpty : Boolean;
     function AsBool : Boolean;
     function AsDateTIme : TDateTime;
+    function AsColor : TColor;
     function ToString : String;
 
     procedure AsList(var prList : TStrings); virtual;
@@ -202,6 +203,19 @@ begin
   vrFS.LongTimeFormat := 'hh:nn:ss';
 
   Result := StrToDateTime(Self.Value, vrFS);
+end;
+
+function TJupiterVariable.AsColor: TColor;
+var
+  vrTest : String;
+begin
+  vrTest := Self.Value;
+
+  try
+    Result := StringToColor(Self.Value);
+  except
+    Result := ALTERNATIVE_COLOR;
+  end;
 end;
 
 function TJupiterVariable.ToString: String;

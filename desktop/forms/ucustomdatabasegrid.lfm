@@ -2,6 +2,7 @@ inherited FCustomDatabaseGrid: TFCustomDatabaseGrid
   Left = 873
   Top = 413
   OnCreate = FormCreate
+  OnShow = FormShow
   inherited pnSearchBar: TPanel
     inherited edSearch: TEdit
       OnChange = edSearchChange

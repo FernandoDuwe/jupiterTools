@@ -9,7 +9,7 @@ uses
   ActnList, FileCtrl, EditBtn, Calendar, Arrow, uJupiterForm, JupiterConsts,
   jupiterformutils, JupiterEnviroment, jupiterStringUtils, JupiterModule,
   jupiterDatabaseWizard, JupiterApp, uJupiterRunnableScript,
-  uJupiterStringUtilsScript, uJupiterAction, uJupiterDesktopAppScript;
+  uJupiterStringUtilsScript, uJupiterAction, uJupiterDesktopAppScript, ComCtrls;
 
 type
 
@@ -23,7 +23,10 @@ type
     stvFolders: TShellTreeView;
     procedure acCopyExecute(Sender: TObject);
     procedure slvExporerDblClick(Sender: TObject);
+    procedure slvExporerSelectItem(Sender: TObject; Item: TListItem;
+      Selected: Boolean);
     procedure spDividerMoved(Sender: TObject);
+    procedure stvFoldersChange(Sender: TObject; Node: TTreeNode);
   private
     procedure Internal_UpdateComponents; override;
 
@@ -51,7 +54,7 @@ var
 
 implementation
 
-uses Clipbrd, ComCtrls;
+uses Clipbrd;
 
 {$R *.lfm}
 
@@ -63,6 +66,15 @@ begin
     Exit;
 
   JupiterRunnableScript_RunCommandOnJupiter(slvExporer.Root + slvExporer.Selected.Caption);
+end;
+
+procedure TFFileExplorer.slvExporerSelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
+begin
+  if not Assigned(slvExporer.Selected) then
+    Exit;
+
+  if Assigned(Item) then
+    Self.Params.VariableById('currentFile').Value := slvExporer.Root + slvExporer.Selected.Caption
 end;
 
 procedure TFFileExplorer.acCopyExecute(Sender: TObject);
@@ -78,6 +90,11 @@ end;
 procedure TFFileExplorer.spDividerMoved(Sender: TObject);
 begin
   miLookColumn.Checked := False;
+end;
+
+procedure TFFileExplorer.stvFoldersChange(Sender: TObject; Node: TTreeNode);
+begin
+  Self.Params.VariableById('currentPath').Value := stvFolders.Path;
 end;
 
 procedure TFFileExplorer.Internal_UpdateComponents;
@@ -115,6 +132,12 @@ begin
     if not Self.Params.Exists('path') then
       Self.Params.AddVariable('path', vrEnviroment.BasePath, 'Endereço');
 
+    if not Self.Params.Exists('currentFile') then
+      Self.Params.AddVariable('currentFile', EmptyStr);
+    
+    if not Self.Params.Exists('currentPath') then
+      Self.Params.AddVariable('currentPath', EmptyStr);
+
     slvExporer.Root := Self.Params.VariableById('path').Value;
     stvFolders.Root := Self.Params.VariableById('path').Value;
   finally
@@ -126,7 +149,7 @@ end;
 
 procedure TFFileExplorer.Internal_OnOpenFolder(Sender: TObject);
 begin
-  JupiterRunnableScript_RunCommandOnJupiter(Self.Params.VariableById('path').Value);
+  JupiterRunnableScript_RunCommandOnJupiter(slvExporer.Root);
 end;
 
 procedure TFFileExplorer.Internal_OnAsReport(Sender: TObject);

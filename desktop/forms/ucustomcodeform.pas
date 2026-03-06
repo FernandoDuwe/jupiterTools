@@ -664,7 +664,11 @@ begin
     begin
       TPanel(vrReference.Component).ParentBackground := False;
       TPanel(vrReference.Component).ParentColor := False;
-      TPanel(vrReference.Component).Color := ALTERNATIVE_COLOR;
+	  
+	  if vrJupiterApp.Params.Exists('Interface.Form.Color.Alternative') then
+	    TPanel(vrReference.Component).Color := vrJupiterApp.Params.VariableById('Interface.Form.Color.Alternative').AsColor
+	  else
+	    TPanel(vrReference.Component).Color := ALTERNATIVE_COLOR;
     end;
   finally
     Self.FListItemCounter := Self.FListItemCounter + 1;
@@ -684,7 +688,11 @@ begin
     begin
       TPanel(vrReference.Component).ParentBackground := False;
       TPanel(vrReference.Component).ParentColor := False;
-      TPanel(vrReference.Component).Color := ALTERNATIVE_COLOR;
+	  
+	  if vrJupiterApp.Params.Exists('Interface.Form.Color.Alternative') then
+        TPanel(vrReference.Component).Color := vrJupiterApp.Params.VariableById('Interface.Form.Color.Alternative').AsColor
+	  else
+	    TPanel(vrReference.Component).Color := ALTERNATIVE_COLOR; 
     end;
   finally
     Self.FListItemCounter := Self.FListItemCounter + 1;
@@ -702,7 +710,11 @@ begin
     begin
       TPanel(vrReference.Component).ParentBackground := False;
       TPanel(vrReference.Component).ParentColor := False;
-      TPanel(vrReference.Component).Color := ALTERNATIVE_COLOR;
+	  
+	  if vrJupiterApp.Params.Exists('Interface.Form.Color.Alternative') then
+        TPanel(vrReference.Component).Color := vrJupiterApp.Params.VariableById('Interface.Form.Color.Alternative').AsColor
+	  else
+	    TPanel(vrReference.Component).Color := ALTERNATIVE_COLOR;
     end;
 
     TPanel(vrReference.Component).Font.Color := clRed;
@@ -722,7 +734,11 @@ begin
     begin
       TPanel(vrReference.Component).ParentBackground := False;
       TPanel(vrReference.Component).ParentColor := False;
-      TPanel(vrReference.Component).Color := ALTERNATIVE_COLOR;
+	  
+      if vrJupiterApp.Params.Exists('Interface.Form.Color.Alternative') then
+        TPanel(vrReference.Component).Color := vrJupiterApp.Params.VariableById('Interface.Form.Color.Alternative').AsColor
+	  else
+	    TPanel(vrReference.Component).Color := ALTERNATIVE_COLOR; 
     end;
 
     TPanel(vrReference.Component).Font.Color := clOlive;
