@@ -22,9 +22,10 @@ type
     spDivider: TSplitter;
     stvFolders: TShellTreeView;
     procedure acCopyExecute(Sender: TObject);
+    procedure edSearchKeyPress(Sender: TObject; var Key: char);
+    procedure slvExporerAddItem(Sender: TObject; const ABasePath: String; const AFileInfo: TSearchRec; var CanAdd: Boolean);
     procedure slvExporerDblClick(Sender: TObject);
-    procedure slvExporerSelectItem(Sender: TObject; Item: TListItem;
-      Selected: Boolean);
+    procedure slvExporerSelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
     procedure spDividerMoved(Sender: TObject);
     procedure stvFoldersChange(Sender: TObject; Node: TTreeNode);
   private
@@ -87,6 +88,26 @@ begin
       Clipboard.AsText := slvExporer.Selected.Caption;
 end;
 
+procedure TFFileExplorer.edSearchKeyPress(Sender: TObject; var Key: char);
+begin
+  if Key = #13 then
+  begin
+    slvExporer.UpdateView;
+
+    Self.UpdateForm();
+
+    Key := #0;
+  end;
+end;
+
+procedure TFFileExplorer.slvExporerAddItem(Sender: TObject; const ABasePath: String; const AFileInfo: TSearchRec; var CanAdd: Boolean);
+begin
+  CanAdd := Trim(edSearch.Text) = EmptyStr;
+
+  if not CanAdd then
+    CanAdd := Pos(AnsiUpperCase(edSearch.Text), AnsiUpperCase(AFileInfo.Name)) > 0;
+end;
+
 procedure TFFileExplorer.spDividerMoved(Sender: TObject);
 begin
   miLookColumn.Checked := False;
@@ -111,6 +132,8 @@ procedure TFFileExplorer.Internal_PrepareForm;
 var
   vrEnviroment : TJupiterEnviroment;
 begin
+  Self.ShowSearchBar := True;
+
   inherited Internal_PrepareForm;
 
   Self.ActionGroup.AddAction(TJupiterAction.Create('Abrir pasta', 'Clique aqui para abrir a pasta atual externamente', ICON_OPEN, @Internal_OnOpenFolder));
@@ -119,9 +142,9 @@ begin
 
   Self.ActionGroup.AddAction(TJupiterAction.Create('Lista', 'Exibir itens como lista', NULL_KEY, @Internal_OnAsList));
 
-  Self.ActionGroup.AddAction(TJupiterAction.Create('Ícones', 'Exibir itens como ícones', NULL_KEY, @Internal_OnAsIcons));
+//  Self.ActionGroup.AddAction(TJupiterAction.Create('Ícones', 'Exibir itens como ícones', NULL_KEY, @Internal_OnAsIcons));
 
-  Self.ActionGroup.AddAction(TJupiterAction.Create('Ícones pequenos', 'Exibir itens como ícones pequenos', NULL_KEY, @Internal_OnAsSmallIcons));
+//  Self.ActionGroup.AddAction(TJupiterAction.Create('Ícones pequenos', 'Exibir itens como ícones pequenos', NULL_KEY, @Internal_OnAsSmallIcons));
 
   Self.ActionGroup.AddAction(TJupiterAction.Create('Pesquisar arquivos', 'Pesquisar arquivos no diretório atual', ICON_SEARCH, @Internal_OnSearchInFiles));
 

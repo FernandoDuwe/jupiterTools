@@ -1,6 +1,11 @@
 inherited FFileExplorer: TFFileExplorer
   Left = 492
   Top = 343
+  inherited pnSearchBar: TPanel
+    inherited edSearch: TEdit
+      OnKeyPress = edSearchKeyPress
+    end
+  end
   object spDivider: TSplitter[3]
     Left = 170
     Height = 331
@@ -17,9 +22,11 @@ inherited FFileExplorer: TFFileExplorer
     Color = clDefault
     SortType = stText
     TabOrder = 4
+    ViewStyle = vsList
     ShellTreeView = stvFolders
     OnDblClick = slvExporerDblClick
     OnSelectItem = slvExporerSelectItem
+    OnAddItem = slvExporerAddItem
   end
   object pnLeft: TPanel[5]
     Left = 0

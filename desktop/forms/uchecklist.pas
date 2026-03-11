@@ -114,26 +114,26 @@ begin
 end;
 
 procedure TFCheckList.Internal_UpdateCalcs;
+var
+  vrVez   : Integer;
+  vrCheck : Integer;
 begin
   inherited Internal_UpdateCalcs;
+
+  vrCheck := 0;
+
+  for vrVez := 0 to cbList.Items.Count - 1 do
+    if cbList.Checked[vrVez] then
+      vrCheck := vrCheck + 1;
+
+  Self.Hint := Format('Total de itens: %0:d   Itens marcados: %1:d', [cbList.Count, vrCheck]);
+
+  pnBottom.Caption := '                       ' + Self.Hint;
+  pnBottom.Visible := Trim(Self.Hint) <> EmptyStr;
 end;
 
 procedure TFCheckList.Internal_UpdateComponents;
-var
-  vrBool : Boolean;
-  vrVez : Integer;
 begin
-  vrBool := True;
-
-  for vrVez := 0 to cbList.Items.Count - 1 do
-    if not cbList.Checked[vrVez] then
-      vrBool := False;
-
-  if not vrBool then
-    Self.Hint := 'Marque as caixas acima para completar o checklist'
-  else
-    Self.Hint := 'Checklist completo';
-
   inherited Internal_UpdateComponents;
 end;
 

@@ -318,7 +318,7 @@ var
 begin
   vrEdit := TDBMemo.Create(prOwner);
   vrEdit.Parent     := prOwner;
-  vrEdit.AutoSize   := True;
+  vrEdit.AutoSize   := False;
   vrEdit.Font.Size  := GetFontSize;
   vrEdit.Top        := prPosition.Top;
   vrEdit.Left       := prPosition.Left;

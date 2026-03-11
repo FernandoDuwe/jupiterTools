@@ -90,8 +90,13 @@ begin
         vrWizard.ExecuteScript(CreateStringList(' ALTER TABLE DATABASE_DICTIONARY ADD ACTION_EXECUTE BOOLEAN '));
 
     if vrWizard.TableExists('DATABASE_DICTIONARY') then
+    begin
       if not vrWizard.FieldExists('DATABASE_DICTIONARY', 'ACTION_COPY') then
         vrWizard.ExecuteScript(CreateStringList(' ALTER TABLE DATABASE_DICTIONARY ADD ACTION_COPY BOOLEAN '));
+
+      if not vrWizard.FieldExists('DATABASE_DICTIONARY', 'HEIGHT') then
+        vrWizard.ExecuteScript(CreateStringList(' ALTER TABLE DATABASE_DICTIONARY ADD HEIGHT INT '));
+    end;
 
     if not vrWizard.TableExists('DATABASE_TABLETITLE') then
       vrWizard.ExecuteScript(CreateStringList('CREATE TABLE DATABASE_TABLETITLE ( ID INTEGER PRIMARY KEY, TABLENAME VARCHAR(100), EXPRESSION VARCHAR(200))'))

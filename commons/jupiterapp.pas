@@ -124,6 +124,9 @@ end;
 
 procedure TJupiterApp.Internal_OnExecute(prScript, prMessages, prRunMessages: TStrings; prExecuted: Boolean);
 begin
+  if ((not Self.Params.VariableById('Developer.Debug').AsBool) and (prExecuted)) then
+    Exit;
+
   Self.ScriptList.AddRow;
 
   with Self.ScriptList.GetLastRow do

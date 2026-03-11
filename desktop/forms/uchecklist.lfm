@@ -15,8 +15,10 @@ inherited FCheckList: TFCheckList
   inherited acOptions: TActionList[4]
     object acCopyCurrentItem: TAction[2]
       Caption = 'acCopyCurrentItem'
-      OnExecute = acCopyCurrentItemExecute
       ShortCut = 16451
+      OnExecute = acCopyCurrentItemExecute
+    end
+    inherited acExitIfModal: TAction[3]
     end
   end
   inherited tmrAutoUpdater: TTimer[5]

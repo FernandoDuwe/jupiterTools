@@ -58,6 +58,8 @@ type
     function Internal_GetMacroName : String;
 
     procedure Internal_AddToWorkMenu; override;
+
+    procedure Internal_RenderButtons(prReference : TJupiterComponentReference; prTableName, prFieldName : String; prIndex : Integer);
   published
     property QueryOrigin : TSQLQuery read FQueryOrigin write FQueryOrigin;
 
@@ -211,10 +213,10 @@ procedure TFCustomDatabaseForm.Internal_BuildForm;
 var
   vrCurrentLine : Integer;
   vrVez : Integer;
+  vrAction : TJupiterComponentReference;
   vrReference : TJupiterComponentReference;
   vrWizard : TJupiterDatabaseWizard;
   vrField : TField;
-  vrAction : TJupiterComponentReference;
   vrHeight : Integer;
   vrIsFirst : Boolean;
 begin
@@ -264,14 +266,17 @@ begin
         vrReference := JupiterFormDBComponent_NewDateTextMemoEdit(Self.TableName, vrField, InternalDataSource, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody);
         vrCurrentLine := vrReference.Bottom + FORM_MARGIN_TOP + FORM_MARGIN_BOTTOM;
 
-        if vrVez = (Self.QueryOrigin.Fields.Count - 1) then
-        begin
-          vrHeight := sbBody.Height;
-          vrHeight := vrHeight - (vrReference.Bottom);
+        if vrJupiterApp.Params.VariableById('Interface.Form.Memo.LasExpand').AsBool then
+          if vrVez = (Self.QueryOrigin.Fields.Count - 1) then
+          begin
+            vrHeight := sbBody.Height;
+            vrHeight := vrHeight - (vrReference.Bottom);
 
-          if vrHeight > 0 then
-            TDBMemo(vrReference.Component).Height := (TDBMemo(vrReference.Component).Height + vrHeight) - (FORM_MARGIN_BOTTOM_TONEXT * 3);
-        end;
+            if vrHeight > 0 then
+              TDBMemo(vrReference.Component).Height := (TDBMemo(vrReference.Component).Height + vrHeight) - (FORM_MARGIN_BOTTOM_TONEXT * 3);
+          end;
+
+//        Self.Internal_RenderButtons(vrReference, Self.FTableName, vrField.FieldName, vrVez);
 
         Continue;
       end;
@@ -310,24 +315,7 @@ begin
       vrReference := JupiterFormDBComponent_NewTextEdit(Self.TableName, vrField, InternalDataSource, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody);
       vrCurrentLine := vrReference.Bottom + FORM_MARGIN_TOP + FORM_MARGIN_BOTTOM;
 
-      if vrWizard.Exists('DATABASE_DICTIONARY', ' TABLENAME = "' + Self.FTableName + '" AND FIELDNAME = "' + Self.QueryOrigin.Fields[vrVez].FieldName + '" AND ACTION_COPY = TRUE ') then
-      begin
-        vrAction := JupiterComponentsAddAction(vrReference, ICON_COPY, sbBody);
-        TSpeedButton(vrAction.Component).Tag := vrVez;
-        TSpeedButton(vrAction.Component).OnClick := @Internal_OnCopyClick;
-        TSpeedButton(vrAction.Component).Hint := 'Clique aqui para copiar o conteúdo do campo';
-        TSpeedButton(vrAction.Component).ShowHint := True;
-      end;
-
-      if vrWizard.Exists('DATABASE_DICTIONARY', ' TABLENAME = "' + Self.FTableName + '" AND FIELDNAME = "' + Self.QueryOrigin.Fields[vrVez].FieldName + '" AND ACTION_EXECUTE = TRUE ') then
-      begin
-        vrAction := JupiterComponentsAddAction(vrReference, ICON_PLAY, sbBody);
-
-        TSpeedButton(vrAction.Component).Tag := vrVez;
-        TSpeedButton(vrAction.Component).OnClick := @Internal_OnExecuteClick;
-        TSpeedButton(vrAction.Component).Hint := 'Clique aqui para executar o conteúdo do campo atual';
-        TSpeedButton(vrAction.Component).ShowHint := True;
-      end;
+      Self.Internal_RenderButtons(vrReference, Self.FTableName, vrField.FieldName, vrVez);
     end;
 
     if vrCurrentLine > sbBody.Height then
@@ -525,6 +513,36 @@ begin
       vrModule.CreateRouteIfDontExists(Self.Caption, Self.Internal_GetRouteName, vrWizard.GetLastID('MACROS'), ICON_NEW, 1000);
   finally
     FreeAndNil(vrModule);
+    FreeAndNil(vrWizard);
+  end;
+end;
+
+procedure TFCustomDatabaseForm.Internal_RenderButtons(prReference: TJupiterComponentReference; prTableName, prFieldName: String; prIndex : Integer);
+var
+  vrWizard : TJupiterDatabaseWizard;
+  vrAction : TJupiterComponentReference;
+begin
+  vrWizard := vrJupiterApp.NewWizard;
+  try
+    if vrWizard.Exists('DATABASE_DICTIONARY', ' TABLENAME = "' + prTableName + '" AND FIELDNAME = "' + prFieldName + '" AND ACTION_COPY = TRUE ') then
+    begin
+      vrAction := JupiterComponentsAddAction(prReference, ICON_COPY, sbBody);
+      TSpeedButton(vrAction.Component).Tag := prIndex;
+      TSpeedButton(vrAction.Component).OnClick := @Internal_OnCopyClick;
+      TSpeedButton(vrAction.Component).Hint := 'Clique aqui para copiar o conteúdo do campo';
+      TSpeedButton(vrAction.Component).ShowHint := True;
+    end;
+
+    if vrWizard.Exists('DATABASE_DICTIONARY', ' TABLENAME = "' + prTableName + '" AND FIELDNAME = "' + prFieldName + '" AND ACTION_EXECUTE = TRUE ') then
+    begin
+      vrAction := JupiterComponentsAddAction(prReference, ICON_PLAY, sbBody);
+
+      TSpeedButton(vrAction.Component).Tag := prIndex;
+      TSpeedButton(vrAction.Component).OnClick := @Internal_OnExecuteClick;
+      TSpeedButton(vrAction.Component).Hint := 'Clique aqui para executar o conteúdo do campo atual';
+      TSpeedButton(vrAction.Component).ShowHint := True;
+    end;
+  finally
     FreeAndNil(vrWizard);
   end;
 end;
