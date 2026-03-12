@@ -190,6 +190,8 @@ begin
 
     Self.Internal_CreateMacroIfDontExists(TRIGGER_ONLOADDYNAMICDATA, 'Evento: Ao carregar dados dinâmicos', CreateStringListToMacro(''));
 
+    Self.Internal_CreateMacroIfDontExists(TRIGGER_ONCHECKLISTCHANGE, 'Evento: Ao alterar uma linha de uma checklist', CreateStringListToMacro(''));
+
     Self.Internal_CreateMacroIfDontExists(TRIGGER_ONPROMPT, 'Evento: Ao executar comando via prompt', CreateStringList('program macro;' + #13#10 + 'begin' + #13#10 + '  OpenForm(''/forms/newTask'');' + #13#10 + 'end.'));
 
     // Creating basic events

@@ -173,6 +173,7 @@ begin
   mmTriggerDetails.Lines.Add(vrPrefix + TRIGGER_ONPROMPT);
   mmTriggerDetails.Lines.Add(vrPrefix + TRIGGER_ONSHOWPARAMS);
   mmTriggerDetails.Lines.Add(vrPrefix + TRIGGER_ONSTART);
+  mmTriggerDetails.Lines.Add(vrPrefix + TRIGGER_ONCHECKLISTCHANGE);
   mmTriggerDetails.Lines.Add(vrPrefix + TRIGGER_ONUPDATE + ' (Informar o nome da macro a ser executada nas configurações do sistema)');
 
   mmTriggerDetails.Lines.Add(EmptyStr);

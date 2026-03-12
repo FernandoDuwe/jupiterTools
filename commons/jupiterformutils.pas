@@ -8,7 +8,7 @@ uses
   Classes, ComCtrls, JupiterObject, JupiterConsts, Controls,
   SysUtils, Forms, Graphics, EditBtn, CheckLst, StdCtrls,
   ShellCtrls, SynEdit, DBCtrls, DBDateTimePicker, ActnList,
-  Menus, ValEdit;
+  Menus, ValEdit, SynHighlighterAny;
 
   procedure CopyNodes(prSourceNode, prTargetNode: TTreeNode);
 
@@ -29,6 +29,8 @@ uses
   function GetFontSize : Integer;
 
   procedure PopupMenuShortcutsToActionShortcut(prActions : TActionList; prPopupMenu : TPopupMenu);
+
+  function CreateSynHighlighterMarkDown(prComponent : TComponent) : TSynAnySyn;
 
 type
 
@@ -602,6 +604,28 @@ begin
     vrAction.OnExecute := prPopupMenu.Items[vrVez].OnClick;
     vrAction.ShortCut := prPopupMenu.Items[vrVez].ShortCut;
   end;
+end;
+
+function CreateSynHighlighterMarkDown(prComponent : TComponent) : TSynAnySyn;
+begin
+  Result := TSynAnySyn.Create(prComponent);
+  Result.SymbolAttri.Foreground := clPurple;
+  Result.KeyAttri.Foreground := clPurple;
+  Result.StringAttri.Foreground := clMoneyGreen;
+  Result.SymbolAttri.Style := [fsBold];
+  Result.KeyAttri.Style := [fsBold];
+  Result.StringAttri.Style := [fsBold];
+
+  Result.StringDelim := sdSingleQuote;   // código inline
+  // Result.Symbols := '#*_-';    // símbolos markdown
+
+  Result.KeyWords.Add('#');
+  Result.KeyWords.Add('##');
+  Result.KeyWords.Add('###');
+  Result.KeyWords.Add('####');
+  Result.KeyWords.Add('#####');
+  Result.KeyWords.Add('######');
+  Result.KeyWords.Add('*');
 end;
 
 { TJupiterPosition }

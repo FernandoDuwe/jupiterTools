@@ -2,23 +2,9 @@ inherited FTextEditor: TFTextEditor
   Left = 610
   Top = 316
   OnClose = FormClose
-  inherited pnSearchBar: TPanel
-    Width = 879
-    ClientWidth = 879
-  end
-  inherited fpOptions: TFlowPanel
-    Height = 1
-    Top = 375
-    Width = 879
-  end
-  inherited pnBottom: TPanel
-    Top = 376
-    Width = 879
-    ClientWidth = 879
-  end
   inline seEditor: TSynEdit[3]
     Left = 0
-    Height = 330
+    Height = 331
     Top = 45
     Width = 879
     Align = alClient
@@ -29,7 +15,7 @@ inherited FTextEditor: TFTextEditor
     ParentColor = False
     ParentFont = False
     TabOrder = 3
-    Gutter.Width = 57
+    Gutter.Width = 53
     Gutter.MouseActions = <>
     RightGutter.Width = 0
     RightGutter.MouseActions = <>
@@ -484,9 +470,13 @@ inherited FTextEditor: TFTextEditor
       object SynGutterMarks1: TSynGutterMarks
         Width = 24
         MouseActions = <>
+        MaxExtraMarksColums = 0
+        Options = [sgmoDeDuplicateMarksOnOverflow]
+        MarkupInfo.Background = clBtnFace
+        MarkupInfo.Foreground = clNone
       end
       object SynGutterLineNumber1: TSynGutterLineNumber
-        Width = 17
+        Width = 13
         MouseActions = <>
         MarkupInfo.Background = clBtnFace
         MarkupInfo.Foreground = clNone
@@ -500,6 +490,9 @@ inherited FTextEditor: TFTextEditor
         MouseActions = <>
         ModifiedColor = 59900
         SavedColor = clGreen
+        MarkupInfo.Background = clNone
+        MarkupInfo.Foreground = clGreen
+        MarkupInfo.FrameColor = 59900
       end
       object SynGutterSeparator1: TSynGutterSeparator
         Width = 2
@@ -521,5 +514,17 @@ inherited FTextEditor: TFTextEditor
   inherited tmrAutoUpdater: TTimer[5]
   end
   inherited pmOptions: TPopupMenu[6]
+  end
+  object SynAnySyn1: TSynAnySyn[7]
+    Enabled = False
+    Comments = []
+    DetectPreprocessor = False
+    IdentifierChars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz'
+    Markup = False
+    Entity = False
+    DollarVariables = False
+    ActiveDot = False
+    Left = 304
+    Top = 248
   end
 end

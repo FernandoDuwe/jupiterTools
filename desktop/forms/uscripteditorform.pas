@@ -6,10 +6,11 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, ComCtrls,
-  StdCtrls, ValEdit, SynEdit, SynHighlighterPas, SynCompletion, uJupiterForm,
-  jupiterformutils, jupiterScript, JupiterConsts, JupiterApp, JupiterRoute,
-  JupiterEnviroment, jupiterDatabaseWizard, jupiterStringUtils, uJupiterAction,
-  jupiterDesktopApp, uJupiterDesktopAppScript;
+  StdCtrls, ValEdit, SynEdit, SynHighlighterPas, SynCompletion,
+  uJupiterForm, jupiterformutils, jupiterScript,
+  JupiterConsts, JupiterApp, JupiterRoute, JupiterEnviroment,
+  jupiterDatabaseWizard, jupiterStringUtils, uJupiterAction, jupiterDesktopApp,
+  uJupiterDesktopAppScript;
 
 type
 

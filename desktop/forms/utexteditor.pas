@@ -5,9 +5,11 @@ unit uTextEditor;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, SynEdit, uJupiterForm,
-  JupiterConsts, JupiterEnviroment, JupiterModule, jupiterDatabaseWizard,
-  JupiterApp, uJupiterStringUtilsScript, uJupiterAction, LCLType;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, SynEdit,
+  SynHighlighterMulti, SynHighlighterAny, uJupiterForm, JupiterConsts,
+  JupiterEnviroment, JupiterModule, jupiterDatabaseWizard, JupiterApp,
+  jupiterformutils, uJupiterStringUtilsScript, uJupiterAction, LCLType,
+  StdCtrls;
 
 type
 
@@ -15,6 +17,7 @@ type
 
   TFTextEditor = class(TFJupiterForm)
     seEditor: TSynEdit;
+    SynAnySyn1: TSynAnySyn;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure seEditorChange(Sender: TObject);
   private
@@ -94,12 +97,12 @@ begin
   Self.Caption := ExtractFileName(Self.Params.VariableById('path').Value);
   Self.Hint := Self.Params.VariableById('path').Value;
 
+  Self.Internal_SetHighligther;
+
   seEditor.Lines.Clear;
   seEditor.Lines.LoadFromFile(Self.Params.VariableById('path').Value);
 
   Self.FEdited := False;
-
-  Self.Internal_SetHighligther;
 end;
 
 procedure TFTextEditor.Internal_OnSave(Sender: TObject);
@@ -143,6 +146,9 @@ begin
 
   if (vrExtension = '.BAT') then
     seEditor.Highlighter := TSynBatSyn.Create(seEditor);
+
+  if (vrExtension = '.MD') then
+    seEditor.Highlighter := CreateSynHighlighterMarkDown(seEditor);
 end;
 
 function TFTextEditor.Internal_EnableWorkMenu: Boolean;

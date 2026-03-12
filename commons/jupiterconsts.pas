@@ -168,6 +168,7 @@ const
    TRIGGER_ONSHOWPARAMS      : String = 'triggers.onShowParams';
    TRIGGER_ONUPDATE          : String = 'triggers.onUpdate';
    TRIGGER_ONLOADDYNAMICDATA : String = 'triggers.onGetLoadDynamicData';
+   TRIGGER_ONCHECKLISTCHANGE : String = 'triggers.onCheckListChange';
 
    // Database Triggers
    TRIGGER_DATABASE_AFTERPOST : String = 'triggers.{0}.OnAfterPost';

@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, CheckLst, ActnList,
-  uJupiterForm, jupiterStringUtils, JupiterConsts, uJupiterAction, Clipbrd;
+  uJupiterForm, jupiterStringUtils, JupiterConsts, JupiterApp, JupiterVariable,
+  uJupiterStringUtilsScript, uJupiterAction, Clipbrd;
 
 type
 
@@ -44,10 +45,12 @@ procedure TFCheckList.cbListClickCheck(Sender: TObject);
 var
   vrStr : TStrings;
   vrVez : Integer;
+  vrParams : TJupiterVariableList;
 begin
   inherited Internal_UpdateDatasets;
 
-  vrStr := TStringList.Create;
+  vrStr    := TStringList.Create;
+  vrParams := TJupiterVariableList.Create;
   try
     vrStr.Clear;
     vrStr.Add('Item;Checked;');
@@ -56,6 +59,20 @@ begin
       vrStr.Add(cbList.Items[vrVez] + ';' + JupiterStringUtilsBoolToStr(cbList.Checked[vrVez]) + ';');
 
     vrStr.SaveToFile(Self.Params.VariableById('path').Value);
+
+    if cbList.ItemIndex <> NULL_KEY then
+    begin
+      vrParams.AddVariable('path', Self.Params.VariableById('path').Value);
+      vrParams.AddVariable('lineIndex', IntToStr(cbList.ItemIndex));
+      vrParams.AddVariable('line', cbList.Items[cbList.ItemIndex]);
+
+      if cbList.Checked[cbList.ItemIndex] then
+        vrParams.AddVariable('checked', BOOL_TRUE_STR)
+      else
+        vrParams.AddVariable('checked', BOOL_FALSE_STR);
+
+      vrJupiterApp.RunMacro(TRIGGER_ONCHECKLISTCHANGE, vrParams);
+    end;
 
     Self.UpdateForm(False);
   finally
