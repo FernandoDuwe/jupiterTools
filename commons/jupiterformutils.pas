@@ -609,8 +609,8 @@ end;
 function CreateSynHighlighterMarkDown(prComponent : TComponent) : TSynAnySyn;
 begin
   Result := TSynAnySyn.Create(prComponent);
-  Result.SymbolAttri.Foreground := clPurple;
-  Result.KeyAttri.Foreground := clPurple;
+//  Result.SymbolAttri.Foreground := clPurple;
+//  Result.KeyAttri.Foreground := clPurple;
   Result.StringAttri.Foreground := clMoneyGreen;
   Result.SymbolAttri.Style := [fsBold];
   Result.KeyAttri.Style := [fsBold];
