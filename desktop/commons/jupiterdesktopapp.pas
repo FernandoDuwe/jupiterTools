@@ -23,6 +23,7 @@ type
     FShortcutList  : TJupiterObjectList;
     FRouteList     : TJupiterObjectList;
     FPeriodicTasks : TJupiterObjectList;
+    FRecentList    : TJupiterObjectList;
   protected
     procedure Internal_AddScriptLibraries(var prScript : TJupiterScript); override;
 
@@ -82,6 +83,8 @@ end;
 procedure TJupiterDesktopApp.Internal_Prepare;
 begin
   inherited;
+
+//  Self.FRecentList.CarouselCount := 10;
 end;
 
 procedure TJupiterDesktopApp.Internal_ShortcutClick(Sender: TObject);
@@ -467,6 +470,7 @@ begin
   Self.FShortcutList  := TJupiterObjectList.Create;
   Self.FRouteList     := TJupiterObjectList.Create;
   Self.FPeriodicTasks := TJupiterObjectList.Create;
+  Self.FRecentList    := TJupiterObjectList.Create;
 end;
 
 destructor TJupiterDesktopApp.Destroy;

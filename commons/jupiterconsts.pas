@@ -31,6 +31,7 @@ const
    MULTILEVELTEXTEDITOR_PATH : String = '/forms/multiLevelEditor/';
    TEXTSOLVER_PATH : String = '/forms/textSolver';
    CODERUNNER_PATH : String = '/forms/codeRunner';
+   CODERUNNERTERMINAL_PATH : String = '/forms/codeRunner/terminal';
    CONSOLE_PATH : String = '/forms/console';
    FILEFINDER_PATH : String = '/forms/finder/file';
    FILEREADERFINDER_PATH : String = '/forms/finder/fileReader';

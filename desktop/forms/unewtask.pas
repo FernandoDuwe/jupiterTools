@@ -18,17 +18,19 @@ type
     edSearchTables: TEdit;
     fpTabs: TFlowPanel;
     imLogo: TImage;
-    pnSearchResult: TPanel;
+    Label1: TLabel;
+    lbRecents: TListBox;
+    pnRecent: TPanel;
     pnPesquisar: TPanel;
     pnHomeBody: TPanel;
     pnTop: TPanel;
     sbShortcut: TScrollBox;
-    sbSearchResult: TScrollBox;
     Splitter1: TSplitter;
     tvTreeMenu: TTreeView;
     procedure edSearchTablesKeyPress(Sender: TObject; var Key: char);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure pnHomeBodyClick(Sender: TObject);
     procedure Splitter1MouseWheelUp(Sender: TObject; Shift: TShiftState;
       MousePos: TPoint; var Handled: Boolean);
     procedure Splitter1Moved(Sender: TObject);
@@ -84,6 +86,11 @@ begin
   FreeAndNil(Self.FReferences);
 
   inherited;
+end;
+
+procedure TFNewTask.pnHomeBodyClick(Sender: TObject);
+begin
+
 end;
 
 procedure TFNewTask.Splitter1MouseWheelUp(Sender: TObject; Shift: TShiftState;
@@ -142,6 +149,12 @@ end;
 procedure TFNewTask.Internal_UpdateComponents;
 begin
   inherited Internal_UpdateComponents;
+
+  Label1.Left := edSearchTables.Left;
+  lbRecents.Left := edSearchTables.Left;
+  lbRecents.Width := edSearchTables.Width;
+
+  lbRecents.Height := (pnRecent.Height - pnRecent.Top) - FORM_MARGIN_BOTTOM;
 
   if miLookColumn.Checked then
     tvTreeMenu.Width := PercentOfScreen(Self.Width, Self.PercentDivisor);

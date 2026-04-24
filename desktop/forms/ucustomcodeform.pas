@@ -53,6 +53,7 @@ type
     procedure AddLabelBoldResultFromScriptWithParams(prMacroID, prParam : String);
     procedure AddLabelBold(prLabelCaption : String);
     procedure AddEdit(prVariableId, prInitialValue : String);
+    procedure AddMemo(prVariableId, prInitialValue: String; prHeight: Integer);
     procedure AddProgressBar(prValue, prMin, prMax : Integer);
     procedure AddAnimatedProgressBar(prValue, prMin, prMax : Integer);
     procedure AddCombBox(prDataProviderID, prColumn, prVariableID : String);
@@ -73,6 +74,7 @@ type
     procedure AddErrorListItem(prTitle, prSubtitle : String);
     procedure AddSuccessListItem(prTitle, prSubtitle : String);
     procedure JumpLine;
+    procedure ResetForm;
     procedure SetCurrentMargin(prMargin : Integer);
     procedure SetCurrentLine(prLine : Integer);
     procedure SetCustomInterval(prInterval : Integer);
@@ -165,6 +167,14 @@ begin
     vrReference := (Self.References.GetAtIndex(TEdit(Sender).Tag)) as TJupiterComponentReference;
 
     Self.Params.VariableById(vrReference.FieldName).Value := TEdit(Sender).Text;
+  end;
+
+  if (Sender is TMemo) then
+  begin
+    vrReference := (Self.References.GetAtIndex(TMemo(Sender).Tag)) as TJupiterComponentReference;
+
+    if Self.Params.Exists(vrReference.FieldName) then
+      Self.Params.VariableById(vrReference.FieldName).Value := TMemo(Sender).Lines.Text;
   end;
 
   if (Sender is TComboBox) then
@@ -384,6 +394,32 @@ begin
     TSpeedButton(vrAction.Component).OnClick := @Internal_OnCopyClick;
     TSpeedButton(vrAction.Component).Hint := 'Clique aqui para copiar o conteúdo do campo';
     TSpeedButton(vrAction.Component).ShowHint := True;
+  end;
+end;
+
+procedure TFCustomCodeForm.AddMemo(prVariableId, prInitialValue: String; prHeight: Integer);
+var
+  vrReference : TJupiterComponentReference;
+  vrAction : TJupiterComponentReference;
+begin
+  try
+    Self.FCurrentLine := Self.FCurrentLine + FORM_MARGIN_TOP;
+
+    vrReference := JupiterComponentsNewMemo(EmptyStr, prHeight, TJupiterPosition.Create(Self.FCurrentLine, Self.FCurrentMargin), sbBody);
+
+    Self.FCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM;
+
+    vrReference.Tag := 0;
+  finally
+    Self.References.Add(vrReference);
+
+    vrReference.FieldName := prVariableId;
+
+    Self.Params.AddVariable(prVariableId, prInitialValue);
+
+    TMemo(vrReference.Component).Tag := Self.References.Count - 1;
+    TMemo(vrReference.Component).OnChange := @Internal_OnFieldChange;
+    TMemo(vrReference.Component).Lines.Text := prInitialValue;
   end;
 end;
 
@@ -750,6 +786,11 @@ end;
 procedure TFCustomCodeForm.JumpLine;
 begin
   Self.FCurrentLine := Self.FCurrentLine + FORM_MARGIN_TOP;
+end;
+
+procedure TFCustomCodeForm.ResetForm;
+begin
+  //
 end;
 
 procedure TFCustomCodeForm.SetCurrentMargin(prMargin: Integer);

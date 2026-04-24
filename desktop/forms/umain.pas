@@ -74,6 +74,7 @@ type
 
     procedure NewTab(Form : TForm);
     procedure UpdateChildren;
+    procedure Redraw;
   end;
 
 var
@@ -451,6 +452,21 @@ begin
 
     TFJupiterForm(TJupiterFormTabSheet(jtMainTab.Pages[vrVez]).Form).UpdateForm();
   end;
+end;
+
+procedure TFMain.Redraw;
+begin
+  if not jtMainTab.Visible then
+    Exit;
+
+  jtMainTab.Align := alNone;
+  jtMainTab.Align := alClient;
+
+  jtMainTab.Repaint;
+  jtMainTab.Refresh;
+
+  Self.Repaint;
+  Self.Refresh;
 end;
 
 procedure TFMain.Internal_CreateComboBox;

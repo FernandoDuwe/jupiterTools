@@ -21,7 +21,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="3"/>
       <RevisionNr Value="3"/>
-      <BuildNr Value="542"/>
+      <BuildNr Value="590"/>
       <Language Value="0416"/>
       <CharSet Value="04E2"/>
       <StringTable CompanyName="Jupiter" FileDescription="Jupiter interface" ProductName="Jupiter"/>
@@ -532,6 +532,14 @@
         <Filename Value="commons/darkmodeutils.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="DarkModeUtils"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms/ucodeterminalrunner.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FCodeTerminalRunner"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uCodeTerminalRunner"/>
       </Unit>
     </Units>
   </ProjectOptions>

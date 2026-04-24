@@ -439,6 +439,10 @@ begin
       if ((not InternalQuery.IsEmpty) and (not InternalQuery.FieldByName('ID').IsNull)) then
         vrId := InternalQuery.FieldByName('ID').AsInteger;
 
+    if vrId = NULL_KEY then
+      if Assigned(vrJupiterApp.GetGlobalReference(Self.FReference.TableName)) then
+        vrId := vrJupiterApp.GetGlobalReference(Self.FReference.TableName).ID;
+
     vrStringList := CreateStringList('');
 
     for vrVez := 0 to InternalQuery.Fields.Count - 1 do
@@ -480,7 +484,12 @@ begin
     Self.Internal_SetCalculatedFields;
 
     if vrId <> NULL_KEY then
+    begin
+      InternalQuery.Last;
+      InternalQuery.First;
+
       InternalQuery.Locate('ID', vrId, []);
+    end;
   finally
     if ((Self.Params.Exists('where')) and (not Self.Params.VariableById('where').IsEmpty)) then
       vrCount := vrWizard.Count(Self.FReference.TableName, Self.Params.VariableById('where').Value)
@@ -880,8 +889,11 @@ end;
 procedure TFCustomDatabaseGrid.FromReference(prReference: TJupiterDatabaseReference);
 var
   vrWizard : TJupiterDatabaseWizard;
+  vrId : Integer;
 begin
   inherited;
+
+  vrId := NULL_KEY;
 
   if not Self.Params.Exists('where') then
     Self.Params.AddVariable('where', EmptyStr, 'Where');
@@ -893,6 +905,9 @@ begin
 
   Self.Caption := JupiterStringUtilsNormalizeToPresent(prReference.TableName);
 
+  if Assigned(vrJupiterApp.GetGlobalReference(prReference.TableName)) then
+    vrId := vrJupiterApp.GetGlobalReference(prReference.TableName).ID;
+
   vrWizard := vrJupiterApp.NewWizard;
   try
     InternalQuery.Close;
@@ -900,6 +915,14 @@ begin
     InternalQuery.SQL.AddStrings(vrWizard.NewQueryFromReference(prReference, Self.Params.VariableById('where').Value, Self.Params.VariableById('orderBy').Value).SQL);
     InternalQuery.Open;
     InternalQuery.First;
+
+    if vrId <> NULL_KEY then
+    begin
+      InternalQuery.Last;
+      InternalQuery.First;
+
+      InternalQuery.Locate('ID', vrId, []);
+    end;
   finally
     FreeAndNil(vrWizard);
   end;

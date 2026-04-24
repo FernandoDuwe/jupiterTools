@@ -2,10 +2,6 @@ inherited FSystemMonitor: TFSystemMonitor
   Left = 736
   Top = 268
   Caption = 'Monitor de Sistema'
-  inherited fpOptions: TFlowPanel
-    Height = 0
-    Top = 376
-  end
   inherited pnBottom: TPanel
     TabOrder = 3
   end
@@ -194,6 +190,24 @@ inherited FSystemMonitor: TFSystemMonitor
         ReadOnly = True
         TabOrder = 0
         ViewStyle = vsReport
+      end
+    end
+    object tsOthers: TTabSheet
+      Caption = 'Outros'
+      ClientHeight = 303
+      ClientWidth = 871
+      object mmOthers: TMemo
+        Left = 0
+        Height = 303
+        Top = 0
+        Width = 871
+        Align = alClient
+        Lines.Strings = (
+          'mmOthers'
+        )
+        ReadOnly = True
+        ScrollBars = ssBoth
+        TabOrder = 0
       end
     end
   end

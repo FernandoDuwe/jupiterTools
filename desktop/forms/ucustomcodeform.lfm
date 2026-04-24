@@ -1,6 +1,6 @@
 inherited FCustomCodeForm: TFCustomCodeForm
-  Left = 876
-  Top = 586
+  Left = 879
+  Top = 274
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   object sbBody: TScrollBox[3]

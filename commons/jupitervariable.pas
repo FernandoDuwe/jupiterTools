@@ -66,10 +66,10 @@ type
 
   TJupiterVariableList = class(TJupiterObjectList)
   private
-    FChildList   : TJupiterObjectList;
-    FTitle       : String;
-    FFileName    : String;
-    FCopyList    : TJupiterVariableList;
+    FChildList     : TJupiterObjectList;
+    FTitle         : String;
+    FFileName      : String;
+    FCopyList      : TJupiterVariableList;
 
     function  Internal_VariableCount : Integer;
     procedure Internal_SetFileName(prFileName : String);
@@ -81,10 +81,10 @@ type
     procedure Internal_OnOwnerChangeValue(prID, prNewValue : String);
     procedure Internal_GetFileVariables(prCompleteFileName : String); virtual;
   published
-    property ChildList     : TJupiterObjectList   read FChildList write FChildList;
-    property CopyList      : TJupiterVariableList read FCopyList  write Internal_SetCopyList;
-    property FileName      : String               read FFileName  write Internal_SetFileName;
-    property Title         : String               read FTitle     write FTitle;
+    property ChildList     : TJupiterObjectList   read FChildList     write FChildList;
+    property CopyList      : TJupiterVariableList read FCopyList      write Internal_SetCopyList;
+    property FileName      : String               read FFileName      write Internal_SetFileName;
+    property Title         : String               read FTitle         write FTitle;
     property VariableCount : Integer              read Internal_VariableCount;
   public
     procedure FromStringList(prList : TStringList);

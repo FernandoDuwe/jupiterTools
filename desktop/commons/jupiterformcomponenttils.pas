@@ -19,6 +19,8 @@ uses
 
   function JupiterComponentsNewEdit(prInitialValue : String; prPosition : TJupiterPosition; prOwner : TWinControl) : TJupiterComponentReference;
 
+  function JupiterComponentsNewMemo(prInitialValue : String; prHeight : Integer; prPosition : TJupiterPosition; prOwner : TWinControl) : TJupiterComponentReference;
+
   function JupiterComponentsNewComboBox(prDataProvider, prColumn : String; prPosition : TJupiterPosition; prOwner : TWinControl) : TJupiterComponentReference;
 
   function JupiterComponentsNewTrackBar(prValue, prMin, prMax : Integer; prPosition : TJupiterPosition; prOwner : TWinControl; prOnChange : TNotifyEvent) : TJupiterComponentReference;
@@ -157,6 +159,30 @@ begin
                                               prPosition.Top + vrEdit.Height,
                                               vrEdit,
                                               vrEdit);
+end;
+
+function JupiterComponentsNewMemo(prInitialValue: String; prHeight : Integer; prPosition: TJupiterPosition; prOwner: TWinControl): TJupiterComponentReference;
+var
+  vrMemo : TMemo;
+begin
+  vrMemo := TMemo.Create(prOwner);
+  vrMemo.Parent     := prOwner;
+  vrMemo.AutoSize   := False;
+  vrMemo.Font.Size  := GetFontSize;
+  vrMemo.Top        := prPosition.Top;
+  vrMemo.Left       := prPosition.Left;
+  vrMemo.AutoSize   := False;
+  vrMemo.Height     := prHeight;
+  vrMemo.Width      := prOwner.Width - prPosition.Left - FORM_MARGIN_RIGHT;
+  vrMemo.Anchors    := [akTop, akLeft, akRight];
+  vrMemo.Lines.Text := prInitialValue;
+
+  Result := TJupiterComponentReference.Create(prPosition.Top,
+                                              prPosition.Left,
+                                              prPosition.Left + vrMemo.Width,
+                                              prPosition.Top + vrMemo.Height,
+                                              vrMemo,
+                                              vrMemo);
 end;
 
 function JupiterComponentsNewComboBox(prDataProvider, prColumn: String; prPosition: TJupiterPosition; prOwner: TWinControl): TJupiterComponentReference;

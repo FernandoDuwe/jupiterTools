@@ -98,6 +98,7 @@ type
     procedure Internal_Resize; virtual;
     function  Internal_OnRequestData : TJupiterVariableList; virtual;
     procedure Internal_OnCloseIfModal; virtual;
+    procedure Internal_OnAfterExecuteAction; virtual;
 
     procedure Internal_BuildMenuParams;
     procedure Internal_ClickMenuClick(Sender: TObject);
@@ -132,6 +133,8 @@ uses SQLDB;
 
 procedure TFJupiterForm.Internal_OnAfterActionExecute(Sender : TObject);
 begin
+  Self.Internal_OnAfterExecuteAction;
+
   tmrAutoUpdater.Enabled := False;
 
   Self.ActionGroup.ResetActions;
@@ -459,6 +462,11 @@ end;
 procedure TFJupiterForm.Internal_OnCloseIfModal;
 begin
   Self.Close;
+end;
+
+procedure TFJupiterForm.Internal_OnAfterExecuteAction;
+begin
+  //
 end;
 
 procedure TFJupiterForm.Internal_BuildMenuParams;

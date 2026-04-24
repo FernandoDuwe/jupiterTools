@@ -7,8 +7,9 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls,
   uJupiterForm, jupiterformutils, JupiterApp, jupiterScript,
-  JupiterDataProvider, JupiterConsts, jupiterScriptList, uJupiterAction,
-  jupiterDesktopApp, uJupiterDesktopAppScript, uJupiterFormDesktopAppScript;
+  JupiterDataProvider, JupiterConsts, jupiterScriptList, jupiterDatabaseWizard,
+  uJupiterAction, jupiterDesktopApp, uJupiterDesktopAppScript,
+  uJupiterFormDesktopAppScript;
 
 type
 
@@ -22,9 +23,11 @@ type
     lvDataProviders: TListView;
     lvScriptList: TListView;
     lvLineScriptList: TListView;
+    mmOthers: TMemo;
     pcPages: TPageControl;
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
+    tsOthers: TTabSheet;
     tsProcessamento: TTabSheet;
     tsMessages: TTabSheet;
     tsScriptList: TTabSheet;
@@ -103,6 +106,8 @@ var
 begin
   inherited Internal_UpdateDatasets;
 
+  mmOthers.Lines.Clear;
+
   lvScripts.Items.Clear;
   lvDataProviders.Items.Clear;
   lvForms.Items.Clear;
@@ -177,6 +182,12 @@ begin
       vrItem := lvLineScriptList.Items.Add;
       vrItem.Caption := TJupiterScriptInstruction(vrJupiterApp.ScriptLineList.GetAtIndex(vrVez)).Comand;
     end;
+
+    mmOthers.Lines.Add('GlobalReferences');
+
+    for vrVez := 0 to vrJupiterApp.GlobalReferences.Count - 1 do
+      with TJupiterDatabaseReference(vrJupiterApp.GlobalReferences.GetAtIndex(vrVez)) do
+        mmOthers.Lines.Add(' - ' + TableName + ': #' + IntToStr(ID));
   finally
   end;
 end;

@@ -7,7 +7,8 @@ interface
 uses
   Classes, jupiterScript, JupiterConsts, JupiterApp, JupiterVariable,
   jupiterStringUtils, uCustomDatabaseForm, ucustomdatabasegrid, uCodeRunner,
-  uCustomDataProviderGrid, SysUtils, PascalScript, uPSComponent, Forms, SQLDB;
+  uCustomDataProviderGrid, uCodeTerminalRunner, SysUtils, PascalScript,
+  uPSComponent, Forms, SQLDB;
 
 type
 
@@ -47,6 +48,7 @@ type
   procedure JupiterAppDesktopOpenCheckListExplorerForm(prPath : String);
   procedure JupiterAppDesktopOpenTextEditorForm(prPath : String);
   procedure JupiterAppDesktopOpenMultiLevelTextEditorForm(prPath : String);
+  procedure JupiterAppDesktopOpenTerminalRunnerForm(prCommand : String);
   procedure JupiterAppDesktopOpenSQLExternalEditor(prConnectionType, prDatabase, prHostName, prUserName, prPassword : String);
   procedure JupiterAppDesktopCloseForm(prFormID : String);
   procedure JupiterAppDesktopRunQuickJumpScript(prScript : String);
@@ -54,6 +56,7 @@ type
   procedure JupiterAppDesktopIncFont;
   procedure JupiterAppDesktopDecFont;
   procedure JupiterAppDesktopClose;
+  procedure JupiterAppDesktopRepaint;
   function  JupiterAppDesktopInLineMode : Boolean;
 
   procedure JupiterAppDesktopAddReference(prTableName : String; prId : Integer);
@@ -346,6 +349,17 @@ begin
   end;
 end;
 
+procedure JupiterAppDesktopOpenTerminalRunnerForm(prCommand: String);
+var
+  vrForm : TForm;
+begin
+  vrForm := TJupiterDesktopApp(vrJupiterApp).NewFormByRoute(CODERUNNERTERMINAL_PATH);
+
+  TFCodeTerminalRunner(vrForm).ExecuteCommand(prCommand);
+
+  TJupiterDesktopApp(vrJupiterApp).OpenForm(vrForm as TFCodeTerminalRunner);
+end;
+
 procedure JupiterAppDesktopOpenSQLExternalEditor(prConnectionType, prDatabase, prHostName, prUserName, prPassword: String);
 var
   vrForm : TForm;
@@ -454,6 +468,12 @@ begin
   Application.Terminate;
 end;
 
+procedure JupiterAppDesktopRepaint;
+begin
+  if Application.MainForm is TFMain then
+    TFMain(Application.MainForm).Redraw;
+end;
+
 function JupiterAppDesktopInLineMode: Boolean;
 begin
   Result := ParamCount > 1;
@@ -504,6 +524,8 @@ begin
   prSender.AddFunction(@JupiterAppDesktopOpenDataProviderExplorerForm, 'procedure OpenDataProviderExplorerForm(prReference : String);');
   prSender.AddFunction(@JupiterAppDesktopRunQuickJumpScript, 'procedure RunQuickJumpScript(prScript : String);');
 
+  prSender.AddFunction(@JupiterAppDesktopOpenTerminalRunnerForm, 'procedure OpenTerminalRunnerForm(prCommand : String);');
+
   prSender.AddFunction(@JupiterAppDesktopOpenSQLExternalEditor, 'procedure OpenFormSQLExternalEditor(prConnectionType, prDatabase, prHostName, prUserName, prPassword : String);');
 
   prSender.AddFunction(@JupiterAppDesktopAddRoute, 'procedure AddRoute(prTitle, prRoute, prShortcut, prParams: String; prDestiny, prIcon, prZIndex: Integer);');
@@ -513,6 +535,7 @@ begin
 
   prSender.AddFunction(@JupiterAppDesktopCursorToWait, 'procedure CursorToWait;');
   prSender.AddFunction(@JupiterAppDesktopCursorToIdle, 'procedure CursorToIdle;');
+  prSender.AddFunction(@JupiterAppDesktopRepaint, 'procedure Repaint;');
 
   prSender.AddFunction(@JupiterAppDesktopProcessMessages, 'procedure ProcessMessages;');
 
@@ -561,10 +584,13 @@ begin
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CursorToWait();'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CursorToIdle();'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Repaint();'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure ProcessMessages();'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CloseApp();'));
+
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenTerminalRunnerForm(prCommand : String);'));
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure AddRoute(prTitle, prRoute, prShortcut, prParams: String; prDestiny, prIcon, prZIndex: Integer);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure AddShortcut(prDescription, prShortcut: String; prDestiny: Integer);'));

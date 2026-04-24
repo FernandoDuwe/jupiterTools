@@ -25,12 +25,15 @@ type
 
   TJupiterObjectList = class(TJupiterObject)
   protected
-    FList : TList;
+    FCarouselCount : Integer;
+    FList          : TList;
 
     function Internal_GetSize : Integer;
+    procedure Internal_PrepareCarousel;
   published
-    property Count : Integer read Internal_GetSize;
-    property Size  : Integer read Internal_GetSize;
+    property CarouselCount : Integer read FCarouselCount write FCarouselCount;
+    property Count         : Integer read Internal_GetSize;
+    property Size          : Integer read Internal_GetSize;
   public
     function GetAtIndex(prIndex : Integer) : TJupiterObject;
     function GetAtIndexAsObject(prIndex : Integer) : TObject;
@@ -61,6 +64,12 @@ begin
   Result := Self.FList.Count;
 end;
 
+procedure TJupiterObjectList.Internal_PrepareCarousel;
+begin
+  while Self.Count > (Self.CarouselCount - 1) do
+    Self.DeleteAtIndex(0);
+end;
+
 function TJupiterObjectList.GetAtIndex(prIndex: Integer): TJupiterObject;
 begin
   Result := nil;
@@ -79,11 +88,17 @@ end;
 
 procedure TJupiterObjectList.Add(prJupiterObject: TJupiterObject);
 begin
+  if Self.CarouselCount > 0 then
+    Self.Internal_PrepareCarousel;
+
   Self.FList.Add(prJupiterObject);
 end;
 
 procedure TJupiterObjectList.AddSimpleObject(prObject: TObject);
 begin
+  if Self.CarouselCount > 0 then
+    Self.Internal_PrepareCarousel;
+
   Self.FList.Add(prObject);
 end;
 
@@ -131,6 +146,8 @@ end;
 
 constructor TJupiterObjectList.Create;
 begin
+  Self.FCarouselCount := 0;
+
   Self.FList := TList.Create;
   Self.FList.Clear;
 end;

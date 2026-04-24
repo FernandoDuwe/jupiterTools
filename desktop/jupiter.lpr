@@ -33,7 +33,7 @@ uses
   uFileReaderFinder, jupiterScriptList, uconsole, uExternalSQLEditor,
   uMultiLevelTextEditor, uMenuNavigator, jupiterDatabaseAutoComplete, 
   uJupiterHTTPScript, uCustomDataProviderGrid, udatabasefinder, 
-jupiterformdbcomponenttils, uQuickJump, DarkModeUtils;
+jupiterformdbcomponenttils, uQuickJump, DarkModeUtils, uCodeTerminalRunner;
 
 {$R *.res}
 
@@ -81,6 +81,7 @@ begin
     FormRoutes.Add(TJupiterFormRoute.Create(MULTILEVELTEXTEDITOR_PATH, TFMultiLevelTextEditor));
     FormRoutes.Add(TJupiterFormRoute.Create(CHARTVIEWER_PATH, TFChartViewer));
     FormRoutes.Add(TJupiterFormRoute.Create(CODERUNNER_PATH, TFCodeRunner));
+    FormRoutes.Add(TJupiterFormRoute.Create(CODERUNNERTERMINAL_PATH, TFCodeTerminalRunner));
     FormRoutes.Add(TJupiterFormRoute.Create(FILEFINDER_PATH, TFFileFinder));
     FormRoutes.Add(TJupiterFormRoute.Create(DATABASEFINDER_PATH, TFDatabaseFinder));
     FormRoutes.Add(TJupiterFormRoute.Create(FILEREADERFINDER_PATH, TFFileReaderFinder));

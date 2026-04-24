@@ -59,6 +59,8 @@ type
 
     procedure Internal_AddToWorkMenu; override;
 
+    procedure Internal_OnAfterExecuteAction; override;
+
     procedure Internal_RenderButtons(prReference : TJupiterComponentReference; prTableName, prFieldName : String; prIndex : Integer);
   published
     property QueryOrigin : TSQLQuery read FQueryOrigin write FQueryOrigin;
@@ -515,6 +517,17 @@ begin
     FreeAndNil(vrModule);
     FreeAndNil(vrWizard);
   end;
+end;
+
+procedure TFCustomDatabaseForm.Internal_OnAfterExecuteAction;
+begin
+  inherited Internal_OnAfterExecuteAction;
+
+  if InternalDataSource.State in [dsEdit, dsInsert] then
+    Exit;
+
+  Self.QueryOrigin.Close;
+  Self.QueryOrigin.Open;
 end;
 
 procedure TFCustomDatabaseForm.Internal_RenderButtons(prReference: TJupiterComponentReference; prTableName, prFieldName: String; prIndex : Integer);
