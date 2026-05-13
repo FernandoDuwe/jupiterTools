@@ -13,22 +13,7 @@ inherited FFileExplorer: TFFileExplorer
     Width = 5
     OnMoved = spDividerMoved
   end
-  object slvExporer: TShellListView[4]
-    Left = 175
-    Height = 331
-    Top = 45
-    Width = 704
-    Align = alClient
-    Color = clDefault
-    SortType = stText
-    TabOrder = 4
-    ViewStyle = vsList
-    ShellTreeView = stvFolders
-    OnDblClick = slvExporerDblClick
-    OnSelectItem = slvExporerSelectItem
-    OnAddItem = slvExporerAddItem
-  end
-  object pnLeft: TPanel[5]
+  object pnLeft: TPanel[4]
     Left = 0
     Height = 331
     Top = 45
@@ -37,11 +22,11 @@ inherited FFileExplorer: TFFileExplorer
     BevelOuter = bvNone
     ClientHeight = 331
     ClientWidth = 170
-    TabOrder = 5
+    TabOrder = 4
     object stvFolders: TShellTreeView
       Left = 0
-      Height = 331
-      Top = 0
+      Height = 308
+      Top = 23
       Width = 170
       Align = alClient
       FileSortType = fstFoldersFirst
@@ -49,6 +34,68 @@ inherited FFileExplorer: TFFileExplorer
       Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
       ShellListView = slvExporer
       OnChange = stvFoldersChange
+    end
+    object cbView: TComboBox
+      Left = 0
+      Height = 23
+      Top = 0
+      Width = 170
+      Align = alTop
+      ItemHeight = 15
+      ItemIndex = 0
+      Items.Strings = (
+        'Ícone'
+        'Lista'
+        'Relatórios'
+        'Ícones Pequenos'
+      )
+      Style = csDropDownList
+      TabOrder = 1
+      Text = 'Ícone'
+      OnChange = cbViewChange
+    end
+  end
+  object pnBody: TPanel[5]
+    Left = 175
+    Height = 331
+    Top = 45
+    Width = 704
+    Align = alClient
+    BevelOuter = bvNone
+    ClientHeight = 331
+    ClientWidth = 704
+    TabOrder = 5
+    object slvExporer: TShellListView
+      Left = 0
+      Height = 308
+      Top = 23
+      Width = 704
+      Align = alClient
+      Color = clDefault
+      SortType = stBoth
+      TabOrder = 0
+      ObjectTypes = [otFolders, otNonFolders]
+      ShellTreeView = stvFolders
+      OnDblClick = slvExporerDblClick
+      OnSelectItem = slvExporerSelectItem
+      OnAddItem = slvExporerAddItem
+    end
+    object dePath: TDirectoryEdit
+      Left = 0
+      Height = 23
+      Top = 0
+      Width = 704
+      Directory = 'dePath'
+      ShowHidden = False
+      ButtonWidth = 23
+      DirectInput = False
+      NumGlyphs = 1
+      Flat = True
+      Align = alTop
+      MaxLength = 0
+      TabOrder = 1
+      Text = 'dePath'
+      OnChange = dePathChange
     end
   end
   inherited acOptions: TActionList[6]

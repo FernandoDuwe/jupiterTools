@@ -8,8 +8,8 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ActnList, ExtCtrls,
   ButtonPanel, StdCtrls, Menus, ComCtrls, Buttons, JupiterConsts,
   JupiterFormTabSheet, jupiterformutils, JupiterApp, uJupiterAction,
-  jupiterDesktopApp, jupiterformcomponenttils, DarkModeUtils, JupiterVariable,
-  jupiterStringUtils, jupiterDatabaseWizard, uJupiterAppScript,
+  jupiterDesktopApp, jupiterformcomponenttils, DarkModeUtils,
+  JupiterVariable, jupiterStringUtils, jupiterDatabaseWizard, uJupiterAppScript,
   jupiterthread;
 
 type
@@ -46,6 +46,7 @@ type
     procedure acIncreaseLefPanelExecute(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure FormActivate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormResize(Sender: TObject);
@@ -76,6 +77,8 @@ type
     procedure Internal_AddShortcutsToMenu;
     procedure Internal_SetSearchBar(prNewValue : Boolean);
   protected
+    FFormType  : TJupiterFormType;
+    FModalPage : Boolean;
     FPrepared  : Boolean;
     FResizing  : Boolean;
     FHint : String;
@@ -90,6 +93,7 @@ type
     property PercentDivisor   : Integer              read FPercentDivisor   write FPercentDivisor;
     property Prepared         : Boolean              read FPrepared         write FPrepared;
     property ThreadController : TJupiterThreadList   read FThreadController write FThreadController;
+    property FormType         : TJupiterFormType     read FFormType         write FFormType;
 
     procedure Internal_UpdateComponents; virtual;
     procedure Internal_UpdateDatasets; virtual;
@@ -115,6 +119,7 @@ type
     procedure UpdateForm(prUpdateDatasets : Boolean = True; prUpdateComponentes : Boolean = True; prUpdateCalcs : Boolean = True); virtual;
     procedure SetAsModal;
 
+    function IsModal : Boolean;
     function IsWindowForm : Boolean; virtual;
 
     procedure DoSecureClose;
@@ -125,7 +130,7 @@ var
 
 implementation
 
-uses SQLDB;
+uses uMain, SQLDB;
 
 {$R *.lfm}
 
@@ -301,6 +306,16 @@ end;
 procedure TFJupiterForm.FormActivate(Sender: TObject);
 begin
   //Self.UpdateForm();
+  if Self.IsModal then
+    TFMain(Application.MainForm).CurrentModalForm := Self;
+end;
+
+procedure TFJupiterForm.FormClose(Sender: TObject; var CloseAction: TCloseAction
+  );
+begin
+  if Assigned(FMain.CurrentModalForm) then
+    if TFJupiterForm(FMain.CurrentModalForm).FormID = Self.FormID then
+      FMain.CurrentModalForm := nil;
 end;
 
 procedure TFJupiterForm.acIncreaseLefPanelExecute(Sender: TObject);
@@ -320,13 +335,16 @@ end;
 
 procedure TFJupiterForm.acExitIfModalExecute(Sender: TObject);
 begin
-  if not Self.Internal_IsMainPage then
-    if Self.IsWindowForm then
-      Self.Internal_OnCloseIfModal;
+  if Self.FormType = jftChild then
+    Exit;
+
+  if Self.IsModal then
+    Self.Internal_OnCloseIfModal;
 end;
 
 procedure TFJupiterForm.FormCreate(Sender: TObject);
 begin
+  Self.FFormType := jftForm;
   Self.FResizing := False;
   Self.FPrepared := False;
 
@@ -361,6 +379,10 @@ begin
   FreeAndNil(FThreadController);
   FreeAndNil(Self.FParams);
   FreeAndNil(Self.FActionGroup);
+
+  if Assigned(FMain.CurrentModalForm) then
+    if TFJupiterForm(FMain.CurrentModalForm).FormID = Self.FormID then
+      FMain.CurrentModalForm := nil;
 end;
 
 procedure TFJupiterForm.FormResize(Sender: TObject);
@@ -377,7 +399,11 @@ begin
   Self.ActionGroup.UpdateActions;
 
   pnBottom.Caption := '                       ' + Self.FHint;
-  pnBottom.Visible := Trim(Self.FHint) <> EmptyStr;
+
+  if vrJupiterApp.Params.VariableById('Interface.Form.AlwaysHideHint').AsBool then
+    pnBottom.Visible := False
+  else
+    pnBottom.Visible := Trim(Self.FHint) <> EmptyStr;
 
   pnSearchBar.Visible := Self.ShowSearchBar;
 
@@ -457,6 +483,7 @@ begin
   Result.CopyValues(Self.Params);
 
   Result.AddVariable('FORMID', Self.FormID);
+  Result.AddVariable('FORMTYPE', Self.ClassName);
 end;
 
 procedure TFJupiterForm.Internal_OnCloseIfModal;
@@ -542,6 +569,8 @@ var
   vrWaitPanel : TPanel;
   vrModalConfig : String;
 begin
+  Self.FModalPage := False;
+
   vrWaitPanel := TPanel.Create(Self);
   vrWaitPanel.Parent := Self;
   vrWaitPanel.Align := alClient;
@@ -623,7 +652,19 @@ end;
 
 procedure TFJupiterForm.SetAsModal;
 begin
-  //
+  Self.FModalPage := True;
+
+  Self.FormType := jftModal;
+end;
+
+function TFJupiterForm.IsModal: Boolean;
+begin
+  Result := False;
+
+  if Self.Internal_IsMainPage then
+    Exit;
+
+  Result := Self.FormType = jftModal;
 end;
 
 function TFJupiterForm.IsWindowForm: Boolean;
@@ -639,6 +680,10 @@ begin
 
     Exit;
   end;
+
+  if Assigned(FMain.CurrentModalForm) then
+    if TFJupiterForm(FMain.CurrentModalForm).FormID = Self.FormID then
+      FMain.CurrentModalForm := nil;
 
   Self.Close;
 end;

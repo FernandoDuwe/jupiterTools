@@ -9,7 +9,8 @@ uses
   ActnList, FileCtrl, EditBtn, Calendar, Arrow, uJupiterForm, JupiterConsts,
   jupiterformutils, JupiterEnviroment, jupiterStringUtils, JupiterModule,
   jupiterDatabaseWizard, JupiterApp, uJupiterRunnableScript,
-  uJupiterStringUtilsScript, uJupiterAction, uJupiterDesktopAppScript, ComCtrls;
+  uJupiterStringUtilsScript, uJupiterEnviromentScript, uJupiterAction,
+  uJupiterDesktopAppScript, ComCtrls, StdCtrls;
 
 type
 
@@ -17,11 +18,16 @@ type
 
   TFFileExplorer = class(TFJupiterForm)
     acCopy: TAction;
+    cbView: TComboBox;
+    dePath: TDirectoryEdit;
+    pnBody: TPanel;
     pnLeft: TPanel;
     slvExporer: TShellListView;
     spDivider: TSplitter;
     stvFolders: TShellTreeView;
     procedure acCopyExecute(Sender: TObject);
+    procedure cbViewChange(Sender: TObject);
+    procedure dePathChange(Sender: TObject);
     procedure edSearchKeyPress(Sender: TObject; var Key: char);
     procedure slvExporerAddItem(Sender: TObject; const ABasePath: String; const AFileInfo: TSearchRec; var CanAdd: Boolean);
     procedure slvExporerDblClick(Sender: TObject);
@@ -46,6 +52,8 @@ type
 
     function Internal_GetRouteName : String;
     function Internal_GetMacroName : String;
+
+    procedure Internal_SetPath(prPath : String);
   public
 
   end;
@@ -65,6 +73,13 @@ procedure TFFileExplorer.slvExporerDblClick(Sender: TObject);
 begin
   if not Assigned(slvExporer.Selected) then
     Exit;
+
+  if JupiterEnviromentScript_FolderExists(slvExporer.Root + slvExporer.Selected.Caption) then
+  begin
+    Self.Internal_SetPath(slvExporer.Root + slvExporer.Selected.Caption);
+
+    Exit;
+  end;
 
   JupiterRunnableScript_RunCommandOnJupiter(slvExporer.Root + slvExporer.Selected.Caption);
 end;
@@ -86,6 +101,37 @@ begin
   if slvExporer.Focused then
     if Assigned(slvExporer.Selected) then
       Clipboard.AsText := slvExporer.Selected.Caption;
+end;
+
+procedure TFFileExplorer.cbViewChange(Sender: TObject);
+begin
+  if cbView.ItemIndex = -1 then
+    Exit;
+
+  if cbView.ItemIndex = 0 then
+    slvExporer.ViewStyle := vsIcon;
+
+  if cbView.ItemIndex = 1 then
+    slvExporer.ViewStyle := vsList;
+
+  if cbView.ItemIndex = 2 then
+    slvExporer.ViewStyle := vsReport;
+
+  if cbView.ItemIndex = 3 then
+    slvExporer.ViewStyle := vsSmallIcon;
+end;
+
+procedure TFFileExplorer.dePathChange(Sender: TObject);
+var
+  vrEnviroment : TJupiterEnviroment;
+begin
+  vrEnviroment := TJupiterEnviroment.Create;
+  try
+    if vrEnviroment.Exists(dePath.Text) then
+      Self.Internal_SetPath(dePath.Text);
+  finally
+    FreeAndNil(vrEnviroment);
+  end;
 end;
 
 procedure TFFileExplorer.edSearchKeyPress(Sender: TObject; var Key: char);
@@ -126,21 +172,24 @@ begin
     pnLeft.Width := PercentOfScreen(Self.Width, Self.PercentDivisor);
 
   Self.Caption := 'Pasta: ' + jupiterStringUtilsGetLastPathName(slvExporer.Root);
+
+  slvExporer.Update;
+  slvExporer.UpdateView;
 end;
 
 procedure TFFileExplorer.Internal_PrepareForm;
-var
-  vrEnviroment : TJupiterEnviroment;
 begin
   Self.ShowSearchBar := True;
+
+  cbView.ItemIndex := 2;
 
   inherited Internal_PrepareForm;
 
   Self.ActionGroup.AddAction(TJupiterAction.Create('Abrir pasta', 'Clique aqui para abrir a pasta atual externamente', ICON_OPEN, @Internal_OnOpenFolder));
 
-  Self.ActionGroup.AddAction(TJupiterAction.Create('Relatório', 'Exibir itens como relatório', NULL_KEY, @Internal_OnAsReport));
+//  Self.ActionGroup.AddAction(TJupiterAction.Create('Relatório', 'Exibir itens como relatório', NULL_KEY, @Internal_OnAsReport));
 
-  Self.ActionGroup.AddAction(TJupiterAction.Create('Lista', 'Exibir itens como lista', NULL_KEY, @Internal_OnAsList));
+//  Self.ActionGroup.AddAction(TJupiterAction.Create('Lista', 'Exibir itens como lista', NULL_KEY, @Internal_OnAsList));
 
 //  Self.ActionGroup.AddAction(TJupiterAction.Create('Ícones', 'Exibir itens como ícones', NULL_KEY, @Internal_OnAsIcons));
 
@@ -150,24 +199,10 @@ begin
 
 //  Self.ActionGroup.AddAction(TJupiterAction.Create('Pesquisar em arquivos', 'Pesquisar conteúdo nos arquivos do diretório atual', ICON_TASKS, @Internal_OnSearchContentInFiles));
 
-  vrEnviroment := TJupiterEnviroment.Create;
-  try
-    if not Self.Params.Exists('path') then
-      Self.Params.AddVariable('path', vrEnviroment.BasePath, 'Endereço');
-
-    if not Self.Params.Exists('currentFile') then
-      Self.Params.AddVariable('currentFile', EmptyStr);
-    
-    if not Self.Params.Exists('currentPath') then
-      Self.Params.AddVariable('currentPath', EmptyStr);
-
-    slvExporer.Root := Self.Params.VariableById('path').Value;
-    stvFolders.Root := Self.Params.VariableById('path').Value;
-  finally
-    FreeAndNil(vrEnviroment);
-
-    Self.Hint := Self.Params.VariableById('path').Value;
-  end;
+  if Self.Params.Exists('path') then
+    Self.Internal_SetPath(Self.Params.VariableById('path').Value)
+  else
+    Self.Internal_SetPath(EmptyStr);
 end;
 
 procedure TFFileExplorer.Internal_OnOpenFolder(Sender: TObject);
@@ -236,6 +271,39 @@ end;
 function TFFileExplorer.Internal_GetMacroName: String;
 begin
   Result := JupiterStringUtilsScript_Replace(Copy(Self.Internal_GetRouteName, 2), '/', '.');
+end;
+
+procedure TFFileExplorer.Internal_SetPath(prPath: String);
+var
+  vrEnviroment : TJupiterEnviroment;
+begin
+  if Trim(prPath) <> EmptyStr then
+    if prPath[Length(prPath)] <> GetDirectorySeparator then
+      prPath := prPath + GetDirectorySeparator;
+
+  vrEnviroment := TJupiterEnviroment.Create;
+  try
+    if not Self.Params.Exists('path') then
+      Self.Params.AddVariable('path', vrEnviroment.BasePath, 'Endereço')
+    else
+      Self.Params.VariableById('path').Value := prPath;
+
+    if not Self.Params.Exists('currentFile') then
+      Self.Params.AddVariable('currentFile', EmptyStr);
+
+    if not Self.Params.Exists('currentPath') then
+      Self.Params.AddVariable('currentPath', EmptyStr);
+
+    slvExporer.Root := Self.Params.VariableById('path').Value;
+    stvFolders.Root := Self.Params.VariableById('path').Value;
+
+    dePath.RootDir := slvExporer.Root;
+    dePath.Text := dePath.RootDir;
+  finally
+    FreeAndNil(vrEnviroment);
+
+    Self.Hint := Self.Params.VariableById('path').Value;
+  end;
 end;
 
 end.

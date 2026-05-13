@@ -9,6 +9,7 @@ object FJupiterForm: TFJupiterForm
   Position = poScreenCenter
   LCLVersion = '4.4.0.0'
   OnActivate = FormActivate
+  OnClose = FormClose
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnResize = FormResize

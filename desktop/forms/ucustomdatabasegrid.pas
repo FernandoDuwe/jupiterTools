@@ -134,22 +134,26 @@ begin
   if pnMiniForm.Visible then
     Self.Internal_RenderMiniFormAsValueList;
 
-  for vrVez := 0 to InternalQuery.Fields.Count - 1 do
+  dbMainGrid.ShowHint := not InternalQuery.IsEmpty;
+
+  for vrVez := 0 to dbMainGrid.Columns.Count - 1 do
   begin
-    if InternalQuery.Fields[vrVez] is TBlobField then
+    if not dbMainGrid.Columns[vrVez].Visible then
       Continue;
 
-    if vrVez > 0 then
+    if vrStr <> EmptyStr then
       vrStr := vrStr + #13#10;
 
-    vrStr := vrStr + InternalQuery.Fields[vrVez].FieldName + ': ';
-
-    if not InternalQuery.Fields[vrVez].IsNull then
-      vrStr := vrStr + InternalQuery.Fields[vrVez].AsString;
+    if dbMainGrid.Columns[vrVez].Field.IsNull then
+      vrStr := vrStr + JupiterDatabaseScript_GetDescription(Self.FReference.TableName, dbMainGrid.Columns[vrVez].FieldName) + ': NULO'
+    else
+      vrStr := vrStr + JupiterDatabaseScript_GetDescription(Self.FReference.TableName, dbMainGrid.Columns[vrVez].FieldName) + ': ' + dbMainGrid.Columns[vrVez].Field.AsString;
   end;
 
-  dbMainGrid.ShowHint := Trim(vrStr) <> EmptyStr;
   dbMainGrid.Hint := vrStr;
+
+  fpOptions.ShowHint := dbMainGrid.ShowHint;
+  fpOptions.Hint     := dbMainGrid.Hint;
 end;
 
 procedure TFCustomDatabaseGrid.InternalQueryCalcFields(DataSet: TDataSet);
@@ -236,8 +240,7 @@ begin
   if InternalQuery.IsEmpty then
     Exit;
 
-  if not Column.Field.IsNull then
-    AText := Column.Field.AsString;
+  AText := dbMainGrid.Hint;
 end;
 
 procedure TFCustomDatabaseGrid.dbMainGridTitleClick(Column: TColumn);

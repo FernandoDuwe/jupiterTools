@@ -8,16 +8,19 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, SynEdit,
   SynHighlighterMulti, SynHighlighterAny, uJupiterForm, JupiterConsts,
   JupiterEnviroment, JupiterModule, jupiterDatabaseWizard, JupiterApp,
-  jupiterformutils, uJupiterStringUtilsScript, uJupiterAction, LCLType,
-  StdCtrls;
+  jupiterformutils, uJupiterStringUtilsScript, uJupiterAction,
+  jupiterDesktopApp, LCLType, StdCtrls, ExtCtrls, SQLDB;
 
 type
 
   { TFTextEditor }
 
   TFTextEditor = class(TFJupiterForm)
+    cbHighlighter: TComboBox;
+    pnTools: TPanel;
     seEditor: TSynEdit;
     SynAnySyn1: TSynAnySyn;
+    procedure cbHighlighterChange(Sender: TObject);
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure seEditorChange(Sender: TObject);
   private
@@ -71,6 +74,21 @@ begin
       Self.Internal_OnSave(Sender);
 end;
 
+procedure TFTextEditor.cbHighlighterChange(Sender: TObject);
+begin
+  if Assigned(seEditor.Highlighter) then
+    seEditor.Highlighter.Free;
+
+  case cbHighlighter.ItemIndex of
+    1 : seEditor.Highlighter := TSynPasSyn.Create(seEditor);
+    2 : seEditor.Highlighter := TSynCppSyn.Create(seEditor);
+    3 : seEditor.Highlighter := TSynJScriptSyn.Create(seEditor);
+    4 : seEditor.Highlighter := TSynSQLSyn.Create(seEditor);
+    5 : seEditor.Highlighter := TSynBatSyn.Create(seEditor);
+    6 : seEditor.Highlighter := CreateSynHighlighterMarkDown(seEditor);
+  end;
+end;
+
 procedure TFTextEditor.Internal_UpdateComponents;
 begin
   inherited Internal_UpdateComponents;
@@ -94,24 +112,77 @@ begin
 
   Self.ActionGroup.AddAction(TJupiterAction.Create('Diminuir fonte', 'Clique aqui para diminuir a fonte', ICON_CURTASK, @Internal_OnDiminuirFonte));
 
-  Self.Caption := ExtractFileName(Self.Params.VariableById('path').Value);
-  Self.Hint := Self.Params.VariableById('path').Value;
+  if Self.Params.Exists('path') then
+  begin
+    Self.Internal_SetHighligther;
 
-  Self.Internal_SetHighligther;
+    seEditor.Lines.Clear;
 
-  seEditor.Lines.Clear;
-  seEditor.Lines.LoadFromFile(Self.Params.VariableById('path').Value);
+    Self.Caption := ExtractFileName(Self.Params.VariableById('path').Value);
+    Self.Hint := Self.Params.VariableById('path').Value;
+
+    seEditor.Lines.LoadFromFile(Self.Params.VariableById('path').Value);
+
+    pnTools.Visible := False;
+  end
+  else
+  begin
+    seEditor.Lines.Clear;
+    seEditor.Lines.Text := vrJupiterApp.NewWizard.Resolve(Self.Params.VariableById('table').Value,
+                                                          Self.Params.VariableById('field').Value,
+                                                          ' ID = ' + Self.Params.VariableById('id').Value);
+
+    Self.Caption := String.Format('%0:s', [TJupiterDesktopApp(vrJupiterApp).NewWizard.GetTableDescription(Self.Params.VariableById('table').Value, StrToInt(Self.Params.VariableById('id').Value))]);
+    Self.Hint := Self.Caption;
+
+    if Params.Exists('highLighter') then
+      if not Params.VariableById('highLighter').IsEmpty then
+      begin
+        cbHighlighter.ItemIndex := cbHighlighter.Items.IndexOf(Params.VariableById('highLighter').Value);
+        cbHighlighterChange(Self);
+        pnTools.Visible := False;
+      end;
+  end;
 
   Self.FEdited := False;
 end;
 
 procedure TFTextEditor.Internal_OnSave(Sender: TObject);
+var
+  vrQry : TSQLQuery;
+  vrWizard : TJupiterDatabaseWizard;
 begin
   Self.FEdited := False;
 
+  vrWizard := vrJupiterApp.NewWizard;
+  vrQry    := vrWizard.NewQuery;
   try
-    seEditor.Lines.SaveToFile(Self.Params.VariableById('path').Value);
+    if Self.Params.Exists('path') then
+      seEditor.Lines.SaveToFile(Self.Params.VariableById('path').Value)
+    else
+    begin
+      vrQry.SQL.Add(' UPDATE ' + Self.Params.VariableById('table').Value);
+      vrQry.SQL.Add(' SET ' + Self.Params.VariableById('field').Value + ' = :PRTEXT ');
+      vrQry.SQL.Add(' WHERE ID = ' + Self.Params.VariableById('id').Value);
+      vrQry.ParamByName('PRTEXT').AsString := seEditor.Lines.Text;
+
+      if not vrWizard.Transaction.Active then
+        vrWizard.Transaction.StartTransaction;
+
+      try
+        vrQry.ExecSQL;
+
+        vrWizard.Transaction.CommitRetaining;
+      except
+        vrWizard.Transaction.RollbackRetaining;
+
+        raise;
+      end;
+    end;
   finally
+    FreeAndNil(vrWizard);
+    FreeAndNil(vrQry);
+
     Self.UpdateForm();
   end;
 end;
@@ -133,21 +204,29 @@ begin
   vrExtension := AnsiUpperCase(ExtractFileExt(Self.Params.VariableById('path').Value));
 
   if ((vrExtension = '.PAS') or (vrExtension = '.JPAS')) then
+    cbHighlighter.ItemIndex := 1;
+
     seEditor.Highlighter := TSynPasSyn.Create(seEditor);
 
   if (vrExtension = '.CS') then
+    cbHighlighter.ItemIndex := 2;
+
     seEditor.Highlighter := TSynCppSyn.Create(seEditor);
 
   if (vrExtension = '.JS') then
+    cbHighlighter.ItemIndex := 3;
     seEditor.Highlighter := TSynJScriptSyn.Create(seEditor);
 
   if (vrExtension = '.SQL') then
+    cbHighlighter.ItemIndex := 4;
     seEditor.Highlighter := TSynSQLSyn.Create(seEditor);
 
   if (vrExtension = '.BAT') then
+    cbHighlighter.ItemIndex := 5;
     seEditor.Highlighter := TSynBatSyn.Create(seEditor);
 
   if (vrExtension = '.MD') then
+    cbHighlighter.ItemIndex := 6;
     seEditor.Highlighter := CreateSynHighlighterMarkDown(seEditor);
 end;
 
@@ -176,7 +255,10 @@ end;
 
 function TFTextEditor.Internal_GetRouteName: String;
 begin
-  Result := vrJupiterApp.Params.VariableById('Menus.Work.Route').Value + '/file_' + FormatDateTime('ddmmyyyy_hhnnss', Now);
+  if Self.Params.Exists('path') then
+    Result := vrJupiterApp.Params.VariableById('Menus.Work.Route').Value + '/file_' + FormatDateTime('ddmmyyyy_hhnnss', Now);
+
+  Result := Self.Caption;
 end;
 
 function TFTextEditor.Internal_GetMacroName: String;

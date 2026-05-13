@@ -1,6 +1,6 @@
 inherited FCustomDatabaseGrid: TFCustomDatabaseGrid
-  Left = 873
-  Top = 413
+  Left = 723
+  Top = 341
   OnCreate = FormCreate
   OnShow = FormShow
   inherited pnSearchBar: TPanel
@@ -25,6 +25,7 @@ inherited FCustomDatabaseGrid: TFCustomDatabaseGrid
     Color = clWindow
     Columns = <>
     DataSource = InternalDataSource
+    Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgRowHighlight]
     PopupMenu = pmActions
     ReadOnly = True
     ShowHint = True

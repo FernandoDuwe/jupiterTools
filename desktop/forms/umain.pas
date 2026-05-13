@@ -71,6 +71,7 @@ type
     function CurrentForm : TForm;
   public
     CurrentMessage : TPanel;
+    CurrentModalForm : TForm;
 
     procedure NewTab(Form : TForm);
     procedure UpdateChildren;
@@ -261,6 +262,14 @@ end;
 function TFMain.CurrentForm: TForm;
 begin
   Result := nil;
+
+  if Assigned(Self.CurrentModalForm) then
+    if ((not (Self.CurrentModalForm is TFMain)) and (TFJupiterForm(Self.CurrentModalForm).IsModal)) then
+    begin
+      Result := Self.CurrentModalForm;
+
+      Exit;
+    end;
 
   if jtMainTab.PageCount = 0 then
     Exit;
@@ -582,18 +591,21 @@ begin
 
   if vrModal then
   begin
+    if Form is TFJupiterForm then
+      TFJupiterForm(Form).FormType := jftModal;
+
     Form.ShowModal;
 
     Exit;
   end;
 
-  Form.Align       := alClient;
-  Form.WindowState := wsMaximized;
-
   if Assigned(Self.CurrentForm) then
   begin
     if ((Self.CurrentForm is TFMenuNavigator) and (TFMenuNavigator(Self.CurrentForm).ClickItem)) then
     begin
+      Form.Align       := alClient;
+      Form.WindowState := wsMaximized;
+
       TFMenuNavigator(Self.CurrentForm).AddForm(Form);
 
       Exit;
@@ -601,11 +613,29 @@ begin
 
     if ((Self.CurrentForm is TFDatabaseFinder) and (TFDatabaseFinder(Self.CurrentForm).ClickItem)) then
     begin
+      Form.Align       := alClient;
+      Form.WindowState := wsMaximized;
+
       TFDatabaseFinder(Self.CurrentForm).AddForm(Form);
 
       Exit;
     end;
-  end;
+
+    if vrJupiterApp.Params.VariableById('Interface.Form.Modal.Implicit').AsBool then
+      if not (Self.CurrentForm is TFContextMenu) then
+        if ((Self.CurrentForm is TFJupiterForm) and (TFJupiterForm(Self.CurrentForm).IsModal)) then
+        begin
+          if Form is TFJupiterForm then
+            TFJupiterForm(Form).FormType := jftModal;
+
+          Form.ShowModal;
+
+          Exit;
+        end;
+  end
+  else
+    Form.Align       := alClient;
+    Form.WindowState := wsMaximized;
 
   jtMainTab.Visible := True;
   jtMainTab.AddForm(Form);

@@ -5,6 +5,7 @@ inherited FQuickJump: TFQuickJump
   BorderStyle = bsDialog
   Caption = 'QuickJump'
   ClientHeight = 538
+  OnClose = FormClose
   inherited fpOptions: TFlowPanel
     Top = 457
   end
@@ -529,7 +530,7 @@ inherited FQuickJump: TFQuickJump
   end
   object SynCompletion1: TSynCompletion[7]
     OnBeforeExecute = SynCompletion1BeforeExecute
-    Position = 0
+    Position = -1
     LinesInWindow = 20
     SelectedColor = clHighlight
     CaseSensitive = False

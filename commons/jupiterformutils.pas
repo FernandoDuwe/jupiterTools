@@ -390,6 +390,7 @@ begin
       TDBGrid(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
       TDBGrid(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_FONT_NAME).Value;
       TDBGrid(prComponent.Components[vrVez]).Flat      := True;
+      TDBGrid(prComponent.Components[vrVez]).Options   := [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgRowHighlight];
 
       {$IFDEF WINDOWS}
       

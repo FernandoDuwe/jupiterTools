@@ -233,12 +233,24 @@ begin
 
   vrSpeedButton            := TSpeedButton.Create(prFlow);
   vrSpeedButton.Parent     := prFlow;
-  vrSpeedButton.Caption    := Self.Caption;
+
+  if not vrJupiterApp.Params.VariableById('Interface.Form.Action.MiniatureMode').AsBool then
+    vrSpeedButton.Caption    := Self.Caption;
+
   vrSpeedButton.Hint       := Self.Hint;
   vrSpeedButton.ShowHint   := Self.Hint <> EmptyStr;
-  vrSpeedButton.Flat       := True;
-  vrSpeedButton.Height     := GetTextHeight(vrSpeedButton.Caption, vrSpeedButton.Font) + FORM_MARGIN_TOP + FORM_MARGIN_BOTTOM + 10;
-  vrSpeedButton.Width      := GetTextWidth(vrSpeedButton.Caption, vrSpeedButton.Font) + FORM_MARGIN_LEFT + FORM_MARGIN_RIGHT + 30;
+  vrSpeedButton.Flat       := vrJupiterApp.Params.VariableById('Interface.Form.Action.FlatMode').AsBool;
+
+  if Trim(vrSpeedButton.Caption) = EmptyStr then
+    vrSpeedButton.Height := GetTextHeight('TESTE 123', vrSpeedButton.Font) + FORM_MARGIN_TOP + FORM_MARGIN_BOTTOM + 10
+  else
+    vrSpeedButton.Height := GetTextHeight(Self.Caption, vrSpeedButton.Font) + FORM_MARGIN_TOP + FORM_MARGIN_BOTTOM + 10;
+
+  if not vrJupiterApp.Params.VariableById('Interface.Form.Action.MiniatureMode').AsBool then
+    vrSpeedButton.Width := GetTextWidth(vrSpeedButton.Caption, vrSpeedButton.Font) + FORM_MARGIN_LEFT + FORM_MARGIN_RIGHT + 30
+  else
+    vrSpeedButton.Width := FORM_MARGIN_LEFT + FORM_MARGIN_RIGHT + 30;
+
   vrSpeedButton.OnClick    := OnClick;
 
   if Assigned(prImageList) then
@@ -528,7 +540,7 @@ begin
 
   with TJupiterAction(Self.GetLastObject) do
   begin
-    Caption := Caption + ' (' + vrShortcut + ')';
+    Caption := Caption;
 
     Action := TAction.Create(Self.ActionList);
     Action.ActionList := Self.ActionList;
@@ -539,6 +551,8 @@ begin
 
     if Assigned(Reference) then
       Action.Tag := Reference.ID;
+
+    Hint := Hint + ' (' + vrShortcut + ')';
   end;
 end;
 

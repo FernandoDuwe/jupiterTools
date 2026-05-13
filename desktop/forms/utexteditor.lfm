@@ -1,11 +1,11 @@
 inherited FTextEditor: TFTextEditor
-  Left = 610
-  Top = 316
+  Left = 275
+  Top = 251
   OnClose = FormClose
   inline seEditor: TSynEdit[3]
     Left = 0
-    Height = 331
-    Top = 45
+    Height = 286
+    Top = 90
     Width = 879
     Align = alClient
     Font.Height = 13
@@ -509,13 +509,45 @@ inherited FTextEditor: TFTextEditor
       end
     end
   end
-  inherited acOptions: TActionList[4]
+  object pnTools: TPanel[4]
+    Left = 0
+    Height = 45
+    Top = 45
+    Width = 879
+    Align = alTop
+    BevelOuter = bvNone
+    ClientHeight = 45
+    ClientWidth = 879
+    TabOrder = 4
+    object cbHighlighter: TComboBox
+      Left = 10
+      Height = 23
+      Top = 10
+      Width = 238
+      ItemHeight = 15
+      ItemIndex = 0
+      Items.Strings = (
+        'Nenhum highlighter'
+        'Pascal'
+        'C/C++'
+        'Javascript'
+        'SQL'
+        '.Bat'
+        'Markdown'
+      )
+      Style = csDropDownList
+      TabOrder = 0
+      Text = 'Nenhum highlighter'
+      OnChange = cbHighlighterChange
+    end
   end
-  inherited tmrAutoUpdater: TTimer[5]
+  inherited acOptions: TActionList[5]
   end
-  inherited pmOptions: TPopupMenu[6]
+  inherited tmrAutoUpdater: TTimer[6]
   end
-  object SynAnySyn1: TSynAnySyn[7]
+  inherited pmOptions: TPopupMenu[7]
+  end
+  object SynAnySyn1: TSynAnySyn[8]
     Enabled = False
     Comments = []
     DetectPreprocessor = False

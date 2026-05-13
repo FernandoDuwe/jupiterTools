@@ -99,6 +99,14 @@ begin
     Self.Internal_CreateVariablIfDontExists('Interface.Form.Color.Alternative', 'Cor alternativa', ColorToString(ALTERNATIVE_COLOR));
 
     Self.Internal_CreateVariablIfDontExists('Interface.Form.Memo.LasExpand', 'Caso o Memo seja o último componente do formulário, expandir o memo', 'Y');
+
+    Self.Internal_CreateVariablIfDontExists('Interface.Form.AlwaysHideHint', 'Esconder área de dicas do formulário', 'N');
+
+    Self.Internal_CreateVariablIfDontExists('Interface.Form.Action.MiniatureMode', 'Modo miniatura nas ações de formulário', 'N');
+
+    Self.Internal_CreateVariablIfDontExists('Interface.Form.Action.FlatMode', 'Modo flat nas ações de formulário', 'Y');
+
+    Self.Internal_CreateVariablIfDontExists('Interface.Form.Modal.Implicit', 'Navegação modal implicita', 'Y');
   finally
     FreeAndNil(vrWizard);
   end;

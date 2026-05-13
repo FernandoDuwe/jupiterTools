@@ -15,6 +15,7 @@ type
 
   TJupiterScriptFlags = Record
     GenerateFullFile : Boolean;
+    DisableSmartImporter : Boolean;
   end;
 
   TJupiterScriptAnalyserType = (jsaVariable, jsaProcedure, jsaFunction, jsaCompilerFlags);
@@ -368,9 +369,12 @@ begin
       if AnsiUpperCase(TrimRight(TrimLeft(Self.Script[vrVez]))) = AnsiUpperCase(JPAS_FLAG_GENERATEFULLFILE) then
         Self.Flags.GenerateFullFile := True
       else
-      begin
-        Result.Add(Self.Script[vrVez]);
-      end;
+        if AnsiUpperCase(TrimRight(TrimLeft(Self.Script[vrVez]))) = AnsiUpperCase(JPAS_FLAG_DISABLESMARTIMPORTER) then
+          Self.Flags.DisableSmartImporter := True
+        else
+        begin
+          Result.Add(Self.Script[vrVez]);
+        end;
     end;
 
   for vrVez := 0 to Result.Count - 1 do
@@ -427,6 +431,9 @@ procedure TJupiterScript.Optimize(prSourceCode: TStrings);
 var
   vrVez : Integer;
 begin
+  if Self.Flags.DisableSmartImporter then
+    Exit;
+
   for vrVez := Self.LibraryList.Count - 1 downto 0 do
     if not TJupiterScriptLibrary(Self.LibraryList.GetAtIndex(vrVez)).CanIncludeSource(prSourceCode) then
       Self.LibraryList.DeleteAtIndex(vrVez);
@@ -567,7 +574,8 @@ begin
   try
     Self.FScriptID := JupiterStringUtilsGenerateGUID;
 
-    Self.Flags.GenerateFullFile := False;
+    Self.Flags.GenerateFullFile     := False;
+    Self.Flags.DisableSmartImporter := False;
 
     Self.FParamList := TJupiterVariableList.Create;
 

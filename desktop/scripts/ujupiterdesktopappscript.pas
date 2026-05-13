@@ -47,6 +47,8 @@ type
   procedure JupiterAppDesktopOpenDataProviderExplorerForm(prReference : String);
   procedure JupiterAppDesktopOpenCheckListExplorerForm(prPath : String);
   procedure JupiterAppDesktopOpenTextEditorForm(prPath : String);
+  procedure JupiterAppDesktopOpenTextDBEditorForm(prTable, prField : String; prId : Integer);
+  procedure JupiterAppDesktopOpenTextDBEditorHighlighterForm(prTable, prField, prHighlighter : String; prId : Integer);
   procedure JupiterAppDesktopOpenMultiLevelTextEditorForm(prPath : String);
   procedure JupiterAppDesktopOpenTerminalRunnerForm(prCommand : String);
   procedure JupiterAppDesktopOpenSQLExternalEditor(prConnectionType, prDatabase, prHostName, prUserName, prPassword : String);
@@ -335,6 +337,40 @@ begin
   end;
 end;
 
+procedure JupiterAppDesktopOpenTextDBEditorForm(prTable, prField: String; prId: Integer);
+var
+  vrVariables : TJupiterVariableList;
+begin
+  vrVariables := TJupiterVariableList.Create;
+  try
+    vrVariables.AddVariable('table', prTable, 'table');
+    vrVariables.AddVariable('field', prField, 'field');
+    vrVariables.AddVariable('id', IntToStr(prId), 'id');
+    vrVariables.AddVariable('highLighter', EmptyStr, 'highLighter');
+
+    TJupiterDesktopApp(vrJupiterApp).OpenForm(TEXTEDITOR_PATH, vrVariables);
+  finally
+    FreeAndNil(vrVariables);
+  end;
+end;
+
+procedure JupiterAppDesktopOpenTextDBEditorHighlighterForm(prTable, prField, prHighlighter: String; prId: Integer);
+var
+  vrVariables : TJupiterVariableList;
+begin
+  vrVariables := TJupiterVariableList.Create;
+  try
+    vrVariables.AddVariable('table', prTable, 'table');
+    vrVariables.AddVariable('field', prField, 'field');
+    vrVariables.AddVariable('id', IntToStr(prId), 'id');
+    vrVariables.AddVariable('highLighter', prHighlighter, 'highLighter');
+
+    TJupiterDesktopApp(vrJupiterApp).OpenForm(TEXTEDITOR_PATH, vrVariables);
+  finally
+    FreeAndNil(vrVariables);
+  end;
+end;
+
 procedure JupiterAppDesktopOpenMultiLevelTextEditorForm(prPath: String);
 var
   vrVariables : TJupiterVariableList;
@@ -517,6 +553,8 @@ begin
   prSender.AddFunction(@JupiterAppDesktopOpenFileReaderFinderForm, 'procedure OpenFileReaderFinderForm(prPath : String);');
   prSender.AddFunction(@JupiterAppDesktopOpenCheckListExplorerForm, 'procedure OpenCheckListExplorerForm(prPath : String);');
   prSender.AddFunction(@JupiterAppDesktopOpenTextEditorForm, 'procedure OpenTextEditorForm(prPath : String);');
+  prSender.AddFunction(@JupiterAppDesktopOpenTextDBEditorForm, 'procedure OpenTextDBEditorForm(prTable, prField : String; prId : Integer);');
+  prSender.AddFunction(@JupiterAppDesktopOpenTextDBEditorHighlighterForm, 'procedure OpenTextDBEditorHighlighterForm(prTable, prField, prHighlighter : String; prId : Integer);');
   prSender.AddFunction(@JupiterAppDesktopOpenMultiLevelTextEditorForm, 'procedure OpenMultiLevelTextEditorForm(prPath : String);');
   prSender.AddFunction(@JupiterAppDesktopCloseForm, 'procedure CloseForm(prFormID : String);');
   prSender.AddFunction(@JupiterAppDesktopSetAppMessage, 'procedure SetAppMessage(prMessage : String);');
@@ -573,6 +611,8 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenFileReaderFinderForm(prPath: String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenCheckListExplorerForm(prPath: String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenTextEditorForm(prPath: String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenTextDBEditorForm(prTable, prField : String; prId : Integer);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenTextDBEditorHighlighterForm(prTable, prField, prHighlighter : String; prId : Integer);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenMultiLevelTextEditorForm(prPath: String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CloseForm(prFormID: String) : String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure SetAppMessage(prMessage: String) : String;'));

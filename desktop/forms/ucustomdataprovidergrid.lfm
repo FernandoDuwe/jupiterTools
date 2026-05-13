@@ -1,23 +1,58 @@
 inherited FCustomDataProviderGrid: TFCustomDataProviderGrid
   OnCreate = FormCreate
   inherited fpOptions: TFlowPanel
-    Height = 0
-    Top = 376
+    Top = 271
   end
   object lvColumns: TListView[3]
     Left = 0
-    Height = 331
+    Height = 221
     Top = 45
     Width = 879
     Align = alClient
     Columns = <>
+    ReadOnly = True
     TabOrder = 3
     ViewStyle = vsReport
+    OnChange = lvColumnsChange
+    OnClick = lvColumnsClick
   end
-  inherited acOptions: TActionList[4]
+  object gbData: TGroupBox[4]
+    Left = 0
+    Height = 105
+    Top = 271
+    Width = 879
+    Align = alBottom
+    Caption = 'Dados'
+    ClientHeight = 85
+    ClientWidth = 875
+    TabOrder = 4
+    object mmData: TMemo
+      Left = 0
+      Height = 85
+      Top = 0
+      Width = 875
+      Align = alClient
+      Lines.Strings = (
+        'mmData'
+      )
+      ReadOnly = True
+      ScrollBars = ssBoth
+      TabOrder = 0
+    end
   end
-  inherited tmrAutoUpdater: TTimer[5]
+  object Splitter1: TSplitter[5]
+    Cursor = crVSplit
+    Left = 0
+    Height = 5
+    Top = 266
+    Width = 879
+    Align = alBottom
+    ResizeAnchor = akBottom
   end
-  inherited pmOptions: TPopupMenu[6]
+  inherited acOptions: TActionList[6]
+  end
+  inherited tmrAutoUpdater: TTimer[7]
+  end
+  inherited pmOptions: TPopupMenu[8]
   end
 end

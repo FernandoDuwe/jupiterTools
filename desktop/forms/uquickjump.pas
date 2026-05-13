@@ -18,6 +18,7 @@ type
     seQuickAccess: TSynEdit;
     SynCompletion1: TSynCompletion;
     SynPasSyn1: TSynPasSyn;
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure SynCompletion1BeforeExecute(ASender: TSynBaseCompletion; var ACurrentString: String; var APosition: Integer; var AnX, AnY: Integer; var AnResult: TOnBeforeExeucteFlags);
   private
     FFilter : String;
@@ -72,6 +73,13 @@ begin
     FreeAndNil(vrTableList);
     FreeAndNil(vrWizard);
   end;
+end;
+
+procedure TFQuickJump.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  SynCompletion1.Deactivate;
+
+  inherited;
 end;
 
 procedure TFQuickJump.Internal_UpdateTags;

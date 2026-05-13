@@ -5,22 +5,34 @@ unit uCustomDataProviderGrid;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, uJupiterForm,
-  JupiterDataProvider, JupiterApp, JupiterVariable;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls,
+  ExtCtrls, uJupiterForm, JupiterDataProvider, JupiterApp, JupiterVariable,
+  JupiterConsts, jupiterformutils, uJupiterAction;
 
 type
 
   { TFCustomDataProviderGrid }
 
   TFCustomDataProviderGrid = class(TFJupiterForm)
+    gbData: TGroupBox;
     lvColumns: TListView;
+    mmData: TMemo;
+    Splitter1: TSplitter;
     procedure FormCreate(Sender: TObject);
+    procedure lvColumnsChange(Sender: TObject; Item: TListItem;
+      Change: TItemChange);
+    procedure lvColumnsClick(Sender: TObject);
   private
     FLimit : Integer;
 
     FDataProvider : TJupiterDataProvider;
 
+    procedure Internal_OnShowAll(Sender: TObject);
+
+    procedure Internal_PrepareForm; override;
+
     procedure Internal_UpdateDatasets; override;
+    procedure Internal_UpdateComponents; override;
   public
     procedure FromReference(prReference : String);
   end;
@@ -39,6 +51,50 @@ begin
   inherited;
 
   Self.FLimit := vrJupiterApp.Params.VariableById('Interface.Form.GridLimit').AsInteger;
+end;
+
+procedure TFCustomDataProviderGrid.lvColumnsChange(Sender: TObject; Item: TListItem; Change: TItemChange);
+begin
+end;
+
+procedure TFCustomDataProviderGrid.lvColumnsClick(Sender: TObject);
+var
+  vrVez : Integer;
+begin
+  mmData.Lines.Clear;
+
+  if not Assigned(lvColumns.Selected) then
+    Exit;
+
+  mmData.Lines.Add(lvColumns.Column[0].Caption + ':');
+  mmData.Lines.Add(lvColumns.Selected.Caption);
+
+  for vrVez := 0 to lvColumns.Selected.SubItems.Count - 1 do
+  begin
+    mmData.Lines.Add(EmptyStr);
+    mmData.Lines.Add(lvColumns.Column[vrVez + 1].Caption + ':');
+    mmData.Lines.Add(lvColumns.Selected.SubItems[vrVez]);
+  end;
+
+  mmData.CaretPos := Point(0, 0);
+end;
+
+procedure TFCustomDataProviderGrid.Internal_OnShowAll(Sender: TObject);
+begin
+  try
+    Self.FLimit := Self.FDataProvider.Count;
+  finally
+    Self.UpdateForm();
+  end;
+end;
+
+procedure TFCustomDataProviderGrid.Internal_PrepareForm;
+begin
+  inherited Internal_PrepareForm;
+
+  Self.ActionGroup.AddAction(TJupiterAction.Create('Todos os registros', 'Clique aqui exibir todos os registros', ICON_VIEW, @Internal_OnShowAll));
+
+  mmData.Lines.Clear;
 end;
 
 procedure TFCustomDataProviderGrid.Internal_UpdateDatasets;
@@ -84,6 +140,14 @@ begin
 
     lvColumns.EnableAutoSizing;
   end;
+end;
+
+procedure TFCustomDataProviderGrid.Internal_UpdateComponents;
+begin
+  inherited Internal_UpdateComponents;
+
+  if miLookColumn.Checked then
+    gbData.Height := PercentOfScreen(Self.Height, Self.PercentDivisor);
 end;
 
 procedure TFCustomDataProviderGrid.FromReference(prReference: String);

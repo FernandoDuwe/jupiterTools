@@ -212,6 +212,9 @@ begin
 
   FForm := prForm;
 
+  if FForm is TFJupiterForm then
+    TFJupiterForm(FForm).FormType := jftChild;
+
   Self.FForm.Parent      := pnBody;
   Self.FForm.Left        := 0;
   Self.FForm.Top         := 0;

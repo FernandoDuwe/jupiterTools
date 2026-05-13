@@ -159,6 +159,7 @@ const
    // JupiterScripts (JPAS)
    JPAS_INCLUDE : String = '';
    JPAS_FLAG_GENERATEFULLFILE : String = '@FLAG_SAVE_COMPILED_FILE';
+   JPAS_FLAG_DISABLESMARTIMPORTER : String = '@FLAG_DISABLESMARTIMPORTER';
    JPAS_FLAG_USERCOMMAND : String = '@FLAG_USER_COMMAND';
    JPAS_FLAG_SCRIPTID : String = '@FLAG_SCRIPTID';
 
@@ -200,6 +201,7 @@ type
   TJupiterThreadsStatus = (jtsNotStarted, jtsRunning, jtsFinished);
   TJupiterSearchMode = (jsmForm, jsmActions);
   TJupiterFormOrientation = (jfoAsList, jfoAsSmallReport, jfoAsReport);
+  TJupiterFormType = (jftForm, jftModal, jftChild);
 
 implementation
 
