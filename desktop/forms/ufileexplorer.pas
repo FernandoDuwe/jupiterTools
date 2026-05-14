@@ -175,6 +175,8 @@ begin
 
   slvExporer.Update;
   slvExporer.UpdateView;
+  slvExporer.Refresh;
+  slvExporer.Repaint;
 end;
 
 procedure TFFileExplorer.Internal_PrepareForm;
@@ -182,6 +184,12 @@ begin
   Self.ShowSearchBar := True;
 
   cbView.ItemIndex := 2;
+
+  if not Self.Params.Exists('currentFile') then
+    Self.Params.AddVariable('currentFile', EmptyStr);
+
+  if not Self.Params.Exists('currentPath') then
+    Self.Params.AddVariable('currentPath', EmptyStr);
 
   inherited Internal_PrepareForm;
 
@@ -292,7 +300,9 @@ begin
       Self.Params.AddVariable('currentFile', EmptyStr);
 
     if not Self.Params.Exists('currentPath') then
-      Self.Params.AddVariable('currentPath', EmptyStr);
+      Self.Params.AddVariable('currentPath', Self.Params.VariableById('path').Value)
+    else
+      Self.Params.VariableById('currentPath').Value := Self.Params.VariableById('path').Value;
 
     slvExporer.Root := Self.Params.VariableById('path').Value;
     stvFolders.Root := Self.Params.VariableById('path').Value;

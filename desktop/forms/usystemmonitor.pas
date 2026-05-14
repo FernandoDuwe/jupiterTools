@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls,
-  uJupiterForm, jupiterformutils, JupiterApp, jupiterScript,
+  ExtCtrls, uJupiterForm, jupiterformutils, JupiterApp, jupiterScript,
   JupiterDataProvider, JupiterConsts, jupiterScriptList, jupiterDatabaseWizard,
   uJupiterAction, jupiterDesktopApp, uJupiterDesktopAppScript,
   uJupiterFormDesktopAppScript;
@@ -23,8 +23,10 @@ type
     lvDataProviders: TListView;
     lvScriptList: TListView;
     lvLineScriptList: TListView;
+    mmDetails: TMemo;
     mmOthers: TMemo;
     pcPages: TPageControl;
+    Splitter1: TSplitter;
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
     tsOthers: TTabSheet;
@@ -33,6 +35,9 @@ type
     tsScriptList: TTabSheet;
     tsDataProviders: TTabSheet;
     tsScripts: TTabSheet;
+    procedure lvScriptListSelectItem(Sender: TObject; Item: TListItem;
+      Selected: Boolean);
+    procedure lvScriptListShowHint(Sender: TObject; HintInfo: PHintInfo);
   private
     procedure Internal_PrepareForm; override;
 
@@ -56,8 +61,65 @@ implementation
 
 { TFSystemMonitor }
 
+procedure TFSystemMonitor.lvScriptListShowHint(Sender: TObject; HintInfo: PHintInfo);
+var
+  vrHint : String;
+  vrVez  : Integer;
+begin
+  vrHint := EmptyStr;
+
+  try
+    if not Assigned(lvScriptList.Selected) then
+      Exit;
+
+    for vrVez := 0 to lvScriptList.Columns.Count - 1 do
+    begin
+      vrHint := vrHint + lvScriptList.Column[vrVez].Caption + ':' + #13#10;
+
+      if vrVez = 0 then
+        vrHint := vrHint + lvScriptList.Selected.Caption;
+
+      if vrVez > 0 then
+        vrHint := vrHint + lvScriptList.Selected.SubItems[vrVez - 1];
+
+      vrHint := vrHint + #13#10;
+    end;
+  finally
+    lvScriptList.Hint := vrHint;
+  end;
+end;
+
+procedure TFSystemMonitor.lvScriptListSelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
+var
+  vrVez  : Integer;
+  vrInfo : String;
+begin
+  if not Assigned(Item) then
+    Exit;
+
+  vrInfo := EmptyStr;
+  try
+    for vrVez := 0 to lvScriptList.Columns.Count - 1 do
+    begin
+      vrInfo := vrInfo + lvScriptList.Column[vrVez].Caption + ':' + #13#10;
+
+      if vrVez = 0 then
+        vrInfo := vrInfo + Item.Caption;
+
+      if vrVez > 0 then
+        vrInfo := vrInfo + Item.SubItems[vrVez - 1];
+
+      vrInfo := vrInfo + #13#10;
+    end;
+  finally
+    mmDetails.Lines.Text := vrInfo;
+  end;
+end;
+
 procedure TFSystemMonitor.Internal_PrepareForm;
 begin
+  mmDetails.Lines.Clear;
+
   inherited Internal_PrepareForm;
 
 //  Self.ActionGroup.AddAction(TJupiterAction.Create('Encerrar', 'Clique aqui para finalizar o recurso atual', ICON_DELETE, @Internal_OnDeleteAsset));
@@ -95,6 +157,8 @@ begin
   lvForms.Column[1].Width := PercentOfScreen(lvForms.Width, 50);
 
   lvLineScriptList.Column[0].Width := PercentOfScreen(lvForms.Width, 50);
+
+  mmDetails.Height := PercentOfScreen(tsScriptList.Height, Self.PercentDivisor);
 
 //  Self.ActionGroup.GetActionAtIndex(0).Disable;
 end;

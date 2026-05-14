@@ -86,7 +86,7 @@ inherited FSystemMonitor: TFSystemMonitor
       ClientWidth = 871
       object lvScriptList: TListView
         Left = 0
-        Height = 303
+        Height = 208
         Top = 0
         Width = 871
         Align = alClient
@@ -105,9 +105,34 @@ inherited FSystemMonitor: TFSystemMonitor
             Caption = 'Executou'
           end>
         GridLines = True
+        ParentShowHint = False
         ReadOnly = True
         TabOrder = 0
         ViewStyle = vsReport
+        OnSelectItem = lvScriptListSelectItem
+        OnShowHint = lvScriptListShowHint
+      end
+      object mmDetails: TMemo
+        Left = 0
+        Height = 90
+        Top = 213
+        Width = 871
+        Align = alBottom
+        Lines.Strings = (
+          'mmDetails'
+        )
+        ReadOnly = True
+        ScrollBars = ssBoth
+        TabOrder = 1
+      end
+      object Splitter1: TSplitter
+        Cursor = crVSplit
+        Left = 0
+        Height = 5
+        Top = 208
+        Width = 871
+        Align = alBottom
+        ResizeAnchor = akBottom
       end
     end
     object tsMessages: TTabSheet

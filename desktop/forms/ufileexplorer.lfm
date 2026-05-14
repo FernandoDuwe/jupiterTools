@@ -26,7 +26,7 @@ inherited FFileExplorer: TFFileExplorer
     object stvFolders: TShellTreeView
       Left = 0
       Height = 308
-      Top = 23
+      Top = 0
       Width = 170
       Align = alClient
       FileSortType = fstFoldersFirst
@@ -38,9 +38,9 @@ inherited FFileExplorer: TFFileExplorer
     object cbView: TComboBox
       Left = 0
       Height = 23
-      Top = 0
+      Top = 308
       Width = 170
-      Align = alTop
+      Align = alBottom
       ItemHeight = 15
       ItemIndex = 0
       Items.Strings = (
@@ -68,7 +68,7 @@ inherited FFileExplorer: TFFileExplorer
     object slvExporer: TShellListView
       Left = 0
       Height = 308
-      Top = 23
+      Top = 0
       Width = 704
       Align = alClient
       Color = clDefault
@@ -83,7 +83,7 @@ inherited FFileExplorer: TFFileExplorer
     object dePath: TDirectoryEdit
       Left = 0
       Height = 23
-      Top = 0
+      Top = 308
       Width = 704
       Directory = 'dePath'
       ShowHidden = False
@@ -91,7 +91,7 @@ inherited FFileExplorer: TFFileExplorer
       DirectInput = False
       NumGlyphs = 1
       Flat = True
-      Align = alTop
+      Align = alBottom
       MaxLength = 0
       TabOrder = 1
       Text = 'dePath'

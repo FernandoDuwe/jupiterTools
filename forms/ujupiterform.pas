@@ -216,8 +216,17 @@ begin
 end;
 
 procedure TFJupiterForm.MenuItem1Click(Sender: TObject);
+var
+  vrVariables : TJupiterVariableList;
 begin
-  vrJupiterApp.RunMacro(TRIGGER_ONSHOWPARAMS, Self.Params);
+  vrVariables := TJupiterVariableList.Create;
+  try
+    vrVariables.CopyValues(Self.Params);
+
+    vrJupiterApp.RunMacro(TRIGGER_ONSHOWPARAMS, vrVariables);
+  finally
+
+  end;
 end;
 
 procedure TFJupiterForm.MenuItem2Click(Sender: TObject);
