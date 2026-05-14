@@ -7,10 +7,10 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, DBCtrls, StdCtrls,
   DBDateTimePicker, SQLDB, DB, uJupiterForm, jupiterformutils, ExtCtrls,
-  jupiterStringUtils, jupiterDatabaseWizard, JupiterApp, JupiterVariable,
-  JupiterObject, JupiterConsts, JupiterModule, uJupiterStringUtilsScript,
-  uJupiterRunnableScript, jupiterformcomponenttils, jupiterDesktopApp,
-  jupiterformdbcomponenttils;
+  ComCtrls, jupiterStringUtils, jupiterDatabaseWizard, JupiterApp,
+  JupiterVariable, JupiterObject, JupiterConsts, JupiterModule,
+  uJupiterStringUtilsScript, uJupiterRunnableScript, jupiterformcomponenttils,
+  jupiterDesktopApp, jupiterformdbcomponenttils;
 
 type
 
@@ -18,7 +18,9 @@ type
 
   TFCustomDatabaseForm = class(TFJupiterForm)
     InternalDataSource: TDataSource;
+    pcRecord: TPageControl;
     sbBody: TScrollBox;
+    tsMain: TTabSheet;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure InternalDataSourceDataChange(Sender: TObject; Field: TField);
@@ -221,6 +223,7 @@ var
   vrField : TField;
   vrHeight : Integer;
   vrIsFirst : Boolean;
+  vrNewTab : TTabSheet;
 begin
   vrCurrentLine := FORM_MARGIN_TOP;
 
@@ -257,6 +260,18 @@ begin
 
         vrReference := JupiterFormDBComponent_NewDateTimeTextEdit(Self.TableName, vrField, InternalDataSource, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody);
         vrCurrentLine := vrReference.Bottom + FORM_MARGIN_TOP + FORM_MARGIN_BOTTOM;
+
+        Continue;
+      end;
+
+      if ((vrField is TBlobField) and (vrJupiterApp.Params.VariableById('Interface.Form.Memo.RenderInNewTab').AsBool)) then
+      begin
+        vrNewTab := pcRecord.AddTabSheet;
+        vrNewTab.Caption := JupiterDatabaseScript_GetDescription(Self.TableName, vrField.FieldName);
+
+        vrReference := JupiterComponentsNewDBMemo(vrField, InternalDataSource, TJupiterPosition.Create(0, 0), vrNewTab);
+
+        TDBMemo(vrReference.Component).Align := alClient;
 
         Continue;
       end;
@@ -336,6 +351,8 @@ begin
 
       TShape(vrReference.Component).Pen.Color := clSilver;
     end;
+
+    pcRecord.ShowTabs := pcRecord.PageCount > 1;
   finally
     FreeAndNil(vrWizard);
   end;

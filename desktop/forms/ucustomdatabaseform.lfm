@@ -7,20 +7,34 @@ inherited FCustomDatabaseForm: TFCustomDatabaseForm
     Top = 0
     Align = alTop
   end
-  inherited pnBottom: TPanel
-    TabOrder = 3
-  end
-  object sbBody: TScrollBox[3]
+  object pcRecord: TPageControl[3]
     Left = 0
     Height = 331
     Top = 45
     Width = 879
-    HorzScrollBar.Page = 1
-    VertScrollBar.Page = 1
+    ActivePage = tsMain
     Align = alClient
-    BorderStyle = bsNone
-    TabOrder = 2
-    OnClick = sbBodyClick
+    MultiLine = True
+    Options = [nboMultiLine]
+    TabIndex = 0
+    TabOrder = 3
+    object tsMain: TTabSheet
+      Caption = 'Geral'
+      ClientHeight = 303
+      ClientWidth = 871
+      object sbBody: TScrollBox
+        Left = 0
+        Height = 303
+        Top = 0
+        Width = 871
+        HorzScrollBar.Page = 1
+        VertScrollBar.Page = 1
+        Align = alClient
+        BorderStyle = bsNone
+        TabOrder = 0
+        OnClick = sbBodyClick
+      end
+    end
   end
   inherited acOptions: TActionList[4]
   end
