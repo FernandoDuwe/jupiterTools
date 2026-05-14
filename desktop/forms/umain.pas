@@ -152,8 +152,20 @@ begin
 end;
 
 procedure TFMain.FormResize(Sender: TObject);
+var
+  vrVez : Integer;
 begin
   inherited;
+
+  for vrVez := 0 to jtMainTab.PageCount - 1 do
+    if jtMainTab.Pages[vrVez] is TJupiterFormTabSheet then
+      with TJupiterFormTabSheet(jtMainTab.Pages[vrVez]) do
+      begin
+        Form.Align := alCustom;
+        Form.Align := alClient;
+        Form.Refresh;
+        Form.Repaint;
+      end;
 end;
 
 procedure TFMain.FormShow(Sender: TObject);
