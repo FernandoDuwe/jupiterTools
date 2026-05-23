@@ -194,6 +194,8 @@ begin
 
     Self.Internal_CreateMacroIfDontExists(TRIGGER_ONPROMPT, 'Evento: Ao executar comando via prompt', CreateStringList('program macro;' + #13#10 + 'begin' + #13#10 + '  OpenForm(''/forms/newTask'');' + #13#10 + 'end.'));
 
+    Self.Internal_CreateMacroIfDontExists(TRIGGER_ONMEMODBCLICK, 'Evento: Ao dar dois cliques em um memo', CreateStringListToMacro(''));
+
     // Creating basic events
     Self.Internal_CreateMacroIfDontExists(EVENT_RECORD_ONENABLE, 'Evento: Enabled de registros', CreateStringListToMacro(' if ParamExists(SCRIPTID, ''ID'') then' + STRING_NEWLINE + '  SetParam(SCRIPTID, ''Result'', ''Y'')'));
     Self.Internal_CreateMacroIfDontExists(EVENT_RECORD_ONVISIBLE, 'Evento: Visible de registros', CreateStringListToMacro(' if ParamExists(SCRIPTID, ''ID'') then' + STRING_NEWLINE + '  SetParam(SCRIPTID, ''Result'', ''Y'')'));

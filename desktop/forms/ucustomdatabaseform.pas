@@ -29,6 +29,7 @@ type
     procedure Internal_OnCopyClick(Sender: TObject);
     procedure Internal_OnExecuteClick(Sender: TObject);
     procedure Internal_OnViewClick(Sender: TObject);
+    procedure Internal_OnMemoDBClick(Sender : TObject);
 
     procedure Internal_OnMarkPinClick(Sender: TObject);
     procedure Internal_OnUnMarkPinClick(Sender: TObject);
@@ -174,6 +175,20 @@ begin
   end;
 end;
 
+procedure TFCustomDatabaseForm.Internal_OnMemoDBClick(Sender: TObject);
+var
+  vrParams : TJupiterVariableList;
+begin
+  vrParams := Self.Internal_OnRequestData;
+
+  if Sender is TDBMemo then
+    vrParams.AddVariable('CURRENTFIELD', TDBMemo(Sender).Field.FieldName);
+
+  vrParams.AddVariable('TABLENAME', Self.FTableName);
+
+  vrJupiterApp.RunMacro(TRIGGER_ONMEMODBCLICK, vrParams);
+end;
+
 procedure TFCustomDatabaseForm.Internal_OnMarkPinClick(Sender: TObject);
 begin
   try
@@ -271,6 +286,7 @@ begin
 
         vrReference := JupiterComponentsNewDBMemo(vrField, InternalDataSource, TJupiterPosition.Create(0, 0), vrNewTab);
 
+        TDBMemo(vrReference.Component).OnDblClick := @Internal_OnMemoDBClick;
         TDBMemo(vrReference.Component).Align := alClient;
 
         Continue;
@@ -292,6 +308,8 @@ begin
             if vrHeight > 0 then
               TDBMemo(vrReference.Component).Height := (TDBMemo(vrReference.Component).Height + vrHeight) - (FORM_MARGIN_BOTTOM_TONEXT * 3);
           end;
+
+        TDBMemo(vrReference.Component).OnDblClick := @Internal_OnMemoDBClick;
 
 //        Self.Internal_RenderButtons(vrReference, Self.FTableName, vrField.FieldName, vrVez);
 

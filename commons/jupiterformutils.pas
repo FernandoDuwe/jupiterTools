@@ -110,7 +110,8 @@ end;
 
 procedure DrawForm(prComponent: TComponent; prHighContrast: Boolean);
 var
-  vrVez : Integer;
+  vrVez  : Integer;
+  vrVez2 : Integer;
 begin
   if not Assigned(vrJupiterApp) then
     Exit;
@@ -147,6 +148,8 @@ begin
             TLabel(prComponent.Components[vrVez]).Font.Color := clWhite;
         end;
       end;
+
+      Continue;
     end;
 
     if prComponent.Components[vrVez] is TEdit then
@@ -163,6 +166,8 @@ begin
         TEdit(prComponent.Components[vrVez]).Color := $002E2E2E;
         TEdit(prComponent.Components[vrVez]).Font.Color := clWhite;
       end;
+
+      Continue;
     end;
 
     if prComponent.Components[vrVez] is TDBEdit then
@@ -179,6 +184,8 @@ begin
         TDBEdit(prComponent.Components[vrVez]).Color := $002E2E2E;
         TDBEdit(prComponent.Components[vrVez]).Font.Color := clWhite;
       end;
+
+      Continue;
     end;
 
     if prComponent.Components[vrVez] is TDateEdit then
@@ -195,6 +202,8 @@ begin
         TDateEdit(prComponent.Components[vrVez]).Color := $002E2E2E;
         TDateEdit(prComponent.Components[vrVez]).Font.Color := clWhite;
       end;
+
+      Continue;
     end;
 
     if prComponent.Components[vrVez] is TDBDateTimePicker then
@@ -211,6 +220,8 @@ begin
         TDBDateTimePicker(prComponent.Components[vrVez]).Color := $002E2E2E;
         TDBDateTimePicker(prComponent.Components[vrVez]).Font.Color := clWhite;
       end;
+
+      Continue;
     end;
 
     if prComponent.Components[vrVez] is TComboBox then
@@ -227,6 +238,8 @@ begin
         TComboBox(prComponent.Components[vrVez]).Color := $002E2E2E;
         TComboBox(prComponent.Components[vrVez]).Font.Color := clWhite;
       end;
+
+      Continue;
     end;
 
     if prComponent.Components[vrVez] is TDBComboBox then
@@ -243,6 +256,8 @@ begin
         TDBComboBox(prComponent.Components[vrVez]).Color := $002E2E2E;
         TDBComboBox(prComponent.Components[vrVez]).Font.Color := clWhite;
       end;
+
+      Continue;
     end;
 
     if prComponent.Components[vrVez] is TDBLookupComboBox then
@@ -259,6 +274,8 @@ begin
         TDBLookupComboBox(prComponent.Components[vrVez]).Color := $002E2E2E;
         TDBLookupComboBox(prComponent.Components[vrVez]).Font.Color := clWhite;
       end;
+
+      Continue;
     end;
 
     if prComponent.Components[vrVez] is TCheckBox then
@@ -274,6 +291,8 @@ begin
 
         TCheckBox(prComponent.Components[vrVez]).Font.Color := clWhite;
       end;
+
+      Continue;
     end;
 
     if prComponent.Components[vrVez] is TDBCheckBox then
@@ -289,6 +308,8 @@ begin
 
         TDBCheckBox(prComponent.Components[vrVez]).Font.Color := clWhite;
       end;
+
+      Continue;
     end;
 
     if prComponent.Components[vrVez] is TListView then
@@ -296,6 +317,8 @@ begin
       TListView(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
       TListView(prComponent.Components[vrVez]).GridLines := True;
       TListView(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_FONT_NAME).Value;
+
+      Continue;
     end;
 
     if prComponent.Components[vrVez] is TShellListView then
@@ -303,39 +326,55 @@ begin
       TShellListView(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
       TShellListView(prComponent.Components[vrVez]).GridLines := True;
       TShellListView(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_FONT_NAME).Value;
+
+      Continue;
     end;
 
     if prComponent.Components[vrVez] is TCheckListBox then
     begin
       TCheckListBox(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
       TCheckListBox(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_FONT_NAME).Value;
+
+      Continue;
     end;
 
     if prComponent.Components[vrVez] is TTreeView then
     begin
       TTreeView(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
       TTreeView(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_FONT_NAME).Value;
+
+      Continue;
     end;
 
     if prComponent.Components[vrVez] is TListBox then
     begin
       TListBox(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
       TListBox(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_FONT_NAME).Value;
+
+      Continue;
     end;
 
     if prComponent.Components[vrVez] is TMemo then
     begin
       TMemo(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
       TMemo(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_MEMO_FONT_NAME).Value;
+
+      Continue;
     end;
 
     if ((prComponent.Components[vrVez] is TShape) and (prHighContrast)) then
+    begin
       TShape(prComponent.Components[vrVez]).Pen.Color := clWhite;
+
+      Continue;
+    end;
 
     if prComponent.Components[vrVez] is TDBMemo then
     begin
       TDBMemo(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
       TDBMemo(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_MEMO_FONT_NAME).Value;
+
+      Continue;
     end;
 
     if prComponent.Components[vrVez] is TSynEdit then
@@ -343,12 +382,16 @@ begin
       TSynEdit(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
       TSynEdit(prComponent.Components[vrVez]).RightEdge := vrJupiterApp.Params.VariableById(FORM_EDITOR_RIGHTEDGE).AsInteger;
       TSynEdit(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_SYNEDIT_FONT_NAME).Value;
+
+      Continue;
     end;
 
     if prComponent.Components[vrVez] is TStatusBar then
     begin
       TStatusBar(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
       TStatusBar(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_FONT_NAME).Value;
+
+      Continue;
     end;
 
     if prComponent.Components[vrVez] is TScrollBox then
@@ -367,6 +410,8 @@ begin
       end;
 
       DrawForm(prComponent.Components[vrVez], prHighContrast);
+
+      Continue;
     end;
 
     if prComponent.Components[vrVez] is TPanel then
@@ -375,6 +420,16 @@ begin
       TPanel(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_FONT_NAME).Value;
 
       DrawForm(prComponent.Components[vrVez], prHighContrast);
+
+      Continue;
+    end;
+
+    if prComponent.Components[vrVez] is TPageControl then
+    begin
+      for vrVez2 := 0 to TPageControl(prComponent.Components[vrVez]).PageCount - 1 do
+        DrawForm(TPageControl(prComponent.Components[vrVez]).Pages[vrVez2]);
+
+      Continue;
     end;
 
     if prComponent.Components[vrVez] is TGroupBox then
@@ -383,6 +438,8 @@ begin
       TGroupBox(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_FONT_NAME).Value;
 
       DrawForm(prComponent.Components[vrVez], prHighContrast);
+
+      Continue;
     end;
 
     if prComponent.Components[vrVez] is TDBGrid then
@@ -400,6 +457,8 @@ begin
 	    TDBGrid(prComponent.Components[vrVez]).AlternateColor := ALTERNATIVE_COLOR;
 	  
       {$ENDIF}
+
+      Continue;
     end;
 
     if prComponent.Components[vrVez] is TValueListEditor then
@@ -416,6 +475,8 @@ begin
 	    TValueListEditor(prComponent.Components[vrVez]).AlternateColor := ALTERNATIVE_COLOR;
       
       {$ENDIF}
+
+      Continue;
     end;
   end;
 end;
