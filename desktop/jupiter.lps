@@ -32,8 +32,8 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uMain"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="322"/>
-        <CursorPos X="36" Y="330"/>
+        <TopLine Value="355"/>
+        <CursorPos X="35" Y="371"/>
         <UsageCount Value="200"/>
       </Unit>
       <Unit>
@@ -50,8 +50,8 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterConsts"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="92"/>
-        <CursorPos Y="111"/>
+        <TopLine Value="117"/>
+        <CursorPos X="15" Y="123"/>
         <UsageCount Value="200"/>
       </Unit>
       <Unit>
@@ -132,9 +132,12 @@
       <Unit>
         <Filename Value="../commons/jupiterformutils.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <CursorPos X="13" Y="17"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="559"/>
+        <CursorPos X="64" Y="644"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../commons/jupitermainmenugenerator.pas"/>
@@ -258,20 +261,21 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uCustomDatabaseForm"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="177"/>
-        <CursorPos X="111" Y="193"/>
+        <TopLine Value="271"/>
+        <CursorPos X="121" Y="281"/>
         <UsageCount Value="222"/>
         <Bookmarks Count="1">
-          <Item0 X="7" Y="339"/>
+          <Item0 X="7" Y="353"/>
         </Bookmarks>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="commons/jupiterformcomponenttils.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="20"/>
-        <CursorPos X="12" Y="37"/>
+        <TopLine Value="451"/>
+        <CursorPos X="30" Y="461"/>
         <UsageCount Value="220"/>
       </Unit>
       <Unit>
@@ -314,12 +318,10 @@
         <ComponentName Value="FCustomDatabaseGrid"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="350"/>
-        <CursorPos X="47" Y="376"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="351"/>
+        <CursorPos X="26" Y="368"/>
         <UsageCount Value="200"/>
-        <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="forms/uuserpreferences.pas"/>
@@ -728,8 +730,8 @@
         <Filename Value="commons/jupiterformdbcomponenttils.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="49"/>
-        <CursorPos X="61" Y="80"/>
+        <TopLine Value="119"/>
+        <CursorPos X="48" Y="128"/>
         <UsageCount Value="86"/>
       </Unit>
       <Unit>
@@ -963,83 +965,81 @@
     </Units>
     <JumpHistory HistoryIndex="19">
       <Position>
-        <Filename Value="forms/ucustomdatabasegrid.pas"/>
-        <Caret Line="616" Column="38" TopLine="599"/>
+        <Filename Value="forms/ucustomdatabaseform.pas"/>
+        <Caret Line="196" TopLine="177"/>
       </Position>
       <Position>
-        <Filename Value="forms/ucustomdatabasegrid.pas"/>
-        <Caret Line="54" Column="30" TopLine="35"/>
+        <Filename Value="forms/ucustomdatabaseform.pas"/>
+        <Caret Line="45" Column="33" TopLine="27"/>
       </Position>
       <Position>
-        <Filename Value="forms/ucustomdatabasegrid.pas"/>
-        <Caret Line="284" Column="33" TopLine="271"/>
+        <Filename Value="forms/ucustomdatabaseform.pas"/>
+        <Caret Line="246" Column="36" TopLine="230"/>
       </Position>
       <Position>
-        <Filename Value="forms/ucustomdatabasegrid.pas"/>
-        <Caret Line="56" Column="15" TopLine="38"/>
+        <Filename Value="forms/ucustomdatabaseform.pas"/>
+        <Caret Line="336" Column="45" TopLine="312"/>
       </Position>
       <Position>
-        <Filename Value="forms/ucustomdatabasegrid.pas"/>
-        <Caret Line="435" TopLine="414"/>
+        <Filename Value="forms/ucustomdatabaseform.pas"/>
+        <Caret Line="281" Column="74" TopLine="262"/>
       </Position>
       <Position>
-        <Filename Value="forms/ucustomdatabasegrid.pas"/>
-        <Caret Line="54" Column="15" TopLine="40"/>
+        <Filename Value="forms/ucustomdatabaseform.pas"/>
       </Position>
       <Position>
-        <Filename Value="forms/ucustomdatabasegrid.pas"/>
-        <Caret Line="298" Column="39" TopLine="277"/>
+        <Filename Value="forms/ucustomdatabaseform.pas"/>
+        <Caret Line="32" Column="37" TopLine="3"/>
       </Position>
       <Position>
-        <Filename Value="forms/ucustomdatabasegrid.pas"/>
-        <Caret Line="54" Column="35" TopLine="41"/>
+        <Filename Value="forms/ucustomdatabaseform.pas"/>
+        <Caret Line="181" Column="3" TopLine="179"/>
       </Position>
       <Position>
-        <Filename Value="forms/ucustomdatabasegrid.pas"/>
-        <Caret Line="292" Column="25" TopLine="268"/>
+        <Filename Value="forms/ucustomdatabaseform.pas"/>
+        <Caret Line="32" Column="35" TopLine="15"/>
       </Position>
       <Position>
-        <Filename Value="forms/ucustomdatabasegrid.pas"/>
-        <Caret Line="54" Column="15" TopLine="38"/>
+        <Filename Value="forms/ucustomdatabaseform.pas"/>
+        <Caret Line="179" Column="59" TopLine="179"/>
       </Position>
       <Position>
-        <Filename Value="forms/ucustomdatabasegrid.pas"/>
-        <Caret Line="386" TopLine="365"/>
+        <Filename Value="forms/ucustomdatabaseform.pas"/>
+        <Caret Line="46" Column="30" TopLine="34"/>
       </Position>
       <Position>
-        <Filename Value="forms/ucustomdatabasegrid.pas"/>
-        <Caret Line="56" Column="15" TopLine="37"/>
+        <Filename Value="forms/ucustomdatabaseform.pas"/>
+        <Caret Line="283" Column="47" TopLine="270"/>
       </Position>
       <Position>
-        <Filename Value="forms/ucustomdatabasegrid.pas"/>
-        <Caret Line="483" Column="59" TopLine="464"/>
+        <Filename Value="../commons/jupiterformutils.pas"/>
+        <Caret Line="129" Column="33" TopLine="102"/>
       </Position>
       <Position>
-        <Filename Value="forms/ucustomdatabasegrid.pas"/>
-        <Caret Line="473" Column="57" TopLine="464"/>
+        <Filename Value="../commons/jupiterformutils.pas"/>
       </Position>
       <Position>
-        <Filename Value="forms/ucustomdatabasegrid.pas"/>
+        <Filename Value="../commons/jupiterformutils.pas"/>
+        <Caret Line="529" Column="35" TopLine="501"/>
       </Position>
       <Position>
-        <Filename Value="forms/ucustomdatabasegrid.pas"/>
-        <Caret Line="479" Column="66" TopLine="463"/>
+        <Filename Value="../commons/jupiterformutils.pas"/>
       </Position>
       <Position>
-        <Filename Value="forms/ucustomdatabasegrid.pas"/>
-        <Caret Line="483" Column="68" TopLine="463"/>
+        <Filename Value="../commons/jupiterformutils.pas"/>
+        <Caret Line="529" Column="37" TopLine="501"/>
       </Position>
       <Position>
-        <Filename Value="forms/ucustomdatabasegrid.pas"/>
-        <Caret Line="486" Column="59" TopLine="466"/>
+        <Filename Value="../commons/jupiterformutils.pas"/>
+        <Caret Line="547" Column="37" TopLine="519"/>
       </Position>
       <Position>
-        <Filename Value="forms/ucustomdatabasegrid.pas"/>
-        <Caret Line="477" Column="30" TopLine="466"/>
+        <Filename Value="../commons/jupiterformutils.pas"/>
+        <Caret Line="578" Column="37" TopLine="550"/>
       </Position>
       <Position>
-        <Filename Value="forms/ucustomdatabasegrid.pas"/>
-        <Caret Line="54" Column="15" TopLine="39"/>
+        <Filename Value="../commons/jupiterformutils.pas"/>
+        <Caret Line="629" Column="80" TopLine="601"/>
       </Position>
     </JumpHistory>
     <RunParams>

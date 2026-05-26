@@ -131,11 +131,11 @@ const
                                             'TJupiterTasksDataProvider');
 
    // Forms
-   FORM_MARGIN_TOP           : Integer = 10;
-   FORM_MARGIN_LEFT          : Integer = 10;
-   FORM_MARGIN_RIGHT         : Integer = 20;
-   FORM_MARGIN_BOTTOM        : Integer = 10;
-   FORM_MARGIN_BOTTOM_LABEL  : Integer = 3;
+   FORM_MARGIN_TOP           : Integer = 12;
+   FORM_MARGIN_LEFT          : Integer = 12;
+   FORM_MARGIN_RIGHT         : Integer = 22;
+   FORM_MARGIN_BOTTOM        : Integer = 12;
+   FORM_MARGIN_BOTTOM_LABEL  : Integer = 6;
    FORM_MARGIN_LABEL         : Integer = 200;
 
    {$IFDEF WINDOWS}

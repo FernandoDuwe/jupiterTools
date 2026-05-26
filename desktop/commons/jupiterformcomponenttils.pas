@@ -319,7 +319,7 @@ begin
   vrEdit.DataSource := prDataSource;
   vrEdit.DataField  := prField.FieldName;
   vrEdit.AutoSize   := False;
-  vrEdit.Width      := prOwner.Width - prPosition.Left - FORM_MARGIN_RIGHT;
+  vrEdit.Width      := 250; //prOwner.Width - prPosition.Left - FORM_MARGIN_RIGHT;
   vrEdit.Anchors    := [akTop, akLeft, akRight];
 
   if prField is TDateField then
@@ -393,7 +393,7 @@ begin
   vrEdit.AutoSize   := False;
   vrEdit.Width      := prOwner.Width - prPosition.Left - FORM_MARGIN_RIGHT;
   vrEdit.Anchors    := [akTop, akLeft, akRight];
-//  vrEdit.Style      := csDropDownList;
+  vrEdit.Style      := csDropDownList;
 
   vrQry.Open;
 

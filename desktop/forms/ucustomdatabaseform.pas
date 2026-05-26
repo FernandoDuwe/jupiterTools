@@ -29,6 +29,7 @@ type
     procedure Internal_OnCopyClick(Sender: TObject);
     procedure Internal_OnExecuteClick(Sender: TObject);
     procedure Internal_OnViewClick(Sender: TObject);
+    procedure Internal_OnSetDateTimeClick(Sender: TObject);
     procedure Internal_OnMemoDBClick(Sender : TObject);
 
     procedure Internal_OnMarkPinClick(Sender: TObject);
@@ -175,6 +176,11 @@ begin
   end;
 end;
 
+procedure TFCustomDatabaseForm.Internal_OnSetDateTimeClick(Sender: TObject);
+begin
+
+end;
+
 procedure TFCustomDatabaseForm.Internal_OnMemoDBClick(Sender: TObject);
 var
   vrParams : TJupiterVariableList;
@@ -274,6 +280,14 @@ begin
         vrIsFirst := True;
 
         vrReference := JupiterFormDBComponent_NewDateTimeTextEdit(Self.TableName, vrField, InternalDataSource, TJupiterPosition.Create(vrCurrentLine, FORM_MARGIN_LEFT), sbBody);
+
+        vrAction := JupiterComponentsAddAction(vrReference, ICON_STARTTIME, sbBody);
+
+        TSpeedButton(vrAction.Component).Tag := vrVez;
+        TSpeedButton(vrAction.Component).OnClick := @Internal_OnSetDateTimeClick;
+        TSpeedButton(vrAction.Component).Hint := 'Clique aqui para preencher este campo com a data/hora atual';
+        TSpeedButton(vrAction.Component).ShowHint := True;
+
         vrCurrentLine := vrReference.Bottom + FORM_MARGIN_TOP + FORM_MARGIN_BOTTOM;
 
         Continue;
