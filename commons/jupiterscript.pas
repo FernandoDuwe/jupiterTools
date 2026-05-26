@@ -347,75 +347,89 @@ end;
 
 function TJupiterScript.Internal_GetFullScript: TStrings;
 var
-  vrVez  : Integer;
-  vrFile : String;
-  vrAux  : TStrings;
+  vrVez      : Integer;
+  vrFile     : String;
+  vrLine     : String;
+  vrUpperLine: String;
+
+  function ReplacePlaceholders(const ALine: String): String;
+  begin
+    Result := StringReplace(ALine, JPAS_FLAG_USERCOMMAND, Self.UserCommand, [rfIgnoreCase, rfReplaceAll]);
+    Result := StringReplace(Result, JPAS_FLAG_SCRIPTID, Self.ScriptID, [rfIgnoreCase, rfReplaceAll]);
+  end;
+
+  function ExtractIncludeFileName(const ALine: String): String;
+  begin
+    Result := StringReplace(ALine, 'IncludeJPAS(', EmptyStr, [rfIgnoreCase, rfReplaceAll]);
+    Result := StringReplace(Result, '''', EmptyStr, [rfIgnoreCase, rfReplaceAll]);
+    Result := StringReplace(Result, ');', EmptyStr, [rfIgnoreCase, rfReplaceAll]);
+  end;
 begin
   Result := TStringList.Create;
-  Result.Clear;
 
   for vrVez := 0 to Self.Script.Count - 1 do
-    if Copy(AnsiUpperCase(Trim(Self.Script[vrVez])), 1, 12) = 'INCLUDEJPAS(' then
-    begin
-      vrFile := TrimLeft(TrimRight(Self.Script[vrVez]));
-      vrFile := StringReplace(vrFile, 'IncludeJPAS(', EmptyStr, [rfIgnoreCase, rfReplaceAll]);
-      vrFile := StringReplace(vrFile, '''', EmptyStr, [rfIgnoreCase, rfReplaceAll]);
-      vrFile := StringReplace(vrFile, ');', EmptyStr, [rfIgnoreCase, rfReplaceAll]);
+  begin
+    vrLine := Trim(Self.Script[vrVez]);
+    vrUpperLine := AnsiUpperCase(vrLine);
 
+    if Copy(vrUpperLine, 1, 12) = 'INCLUDEJPAS(' then
+    begin
+      vrFile := ExtractIncludeFileName(vrLine);
       Self.Internal_IncludeScript(vrFile, Result);
     end
+    else if vrUpperLine = AnsiUpperCase(JPAS_FLAG_GENERATEFULLFILE) then
+      Self.Flags.GenerateFullFile := True
+    else if vrUpperLine = AnsiUpperCase(JPAS_FLAG_DISABLESMARTIMPORTER) then
+      Self.Flags.DisableSmartImporter := True
     else
-    begin
-      if AnsiUpperCase(TrimRight(TrimLeft(Self.Script[vrVez]))) = AnsiUpperCase(JPAS_FLAG_GENERATEFULLFILE) then
-        Self.Flags.GenerateFullFile := True
-      else
-        if AnsiUpperCase(TrimRight(TrimLeft(Self.Script[vrVez]))) = AnsiUpperCase(JPAS_FLAG_DISABLESMARTIMPORTER) then
-          Self.Flags.DisableSmartImporter := True
-        else
-        begin
-          Result.Add(Self.Script[vrVez]);
-        end;
-    end;
-
-  for vrVez := 0 to Result.Count - 1 do
-    Result[vrVez] := StringReplace(Result[vrVez], JPAS_FLAG_USERCOMMAND, Self.UserCommand, [rfIgnoreCase, rfReplaceAll]);
-
-  Result.Text := StringReplace(Result.Text, JPAS_FLAG_SCRIPTID, Self.ScriptID, [rfIgnoreCase, rfReplaceAll]);
+      Result.Add(ReplacePlaceholders(Self.Script[vrVez]));
+  end;
 end;
 
 procedure TJupiterScript.Internal_IncludeScript(prFileName: String; var prStrings: TStrings);
 var
-  vrVez  : Integer;
-  vrFile : String;
-  vrStr  : TStringList;
+  vrVez      : Integer;
+  vrFile     : String;
+  vrLine     : String;
+  vrUpperLine: String;
+  vrStr      : TStringList;
+
+  function ReplacePlaceholders(const ALine: String): String;
+  begin
+    Result := StringReplace(ALine, JPAS_FLAG_USERCOMMAND, Self.UserCommand, [rfIgnoreCase, rfReplaceAll]);
+    Result := StringReplace(Result, JPAS_FLAG_SCRIPTID, Self.ScriptID, [rfIgnoreCase, rfReplaceAll]);
+  end;
+
+  function ExtractIncludeFileName(const ALine: String): String;
+  begin
+    Result := StringReplace(ALine, 'IncludeJPAS(', EmptyStr, [rfIgnoreCase, rfReplaceAll]);
+    Result := StringReplace(Result, '''', EmptyStr, [rfIgnoreCase, rfReplaceAll]);
+    Result := StringReplace(Result, ');', EmptyStr, [rfIgnoreCase, rfReplaceAll]);
+  end;
 begin
   if not FileExists(prFileName) then
     raise Exception.Create('Não foi possível incluir o arquivo ' + prFileName + '.');
 
   vrStr := TStringList.Create;
   try
-    vrStr.Clear;
     vrStr.LoadFromFile(prFileName);
 
     for vrVez := 0 to vrStr.Count - 1 do
-      if Copy(AnsiUpperCase(Trim(vrStr[vrVez])), 1, 12) = 'INCLUDEJPAS(' then
-      begin
-        vrFile := TrimLeft(TrimRight(vrStr[vrVez]));
-        vrFile := StringReplace(vrFile, 'IncludeJPAS(', EmptyStr, [rfIgnoreCase, rfReplaceAll]);
-        vrFile := StringReplace(vrFile, '''', EmptyStr, [rfIgnoreCase, rfReplaceAll]);
-        vrFile := StringReplace(vrFile, ');', EmptyStr, [rfIgnoreCase, rfReplaceAll]);
+    begin
+      vrLine := Trim(vrStr[vrVez]);
+      vrUpperLine := AnsiUpperCase(vrLine);
 
+      if Copy(vrUpperLine, 1, 12) = 'INCLUDEJPAS(' then
+      begin
+        vrFile := ExtractIncludeFileName(vrLine);
         Self.Internal_IncludeScript(vrFile, prStrings);
       end
+      else if vrUpperLine = AnsiUpperCase(JPAS_FLAG_GENERATEFULLFILE) then
+        Self.Flags.GenerateFullFile := True
       else
-      begin
-        if AnsiUpperCase(TrimRight(TrimLeft(vrStr[vrVez]))) = AnsiUpperCase(JPAS_FLAG_GENERATEFULLFILE) then
-          Self.Flags.GenerateFullFile := True
-        else
-          prStrings.Add(vrStr[vrVez]);
-      end;
+        prStrings.Add(ReplacePlaceholders(vrStr[vrVez]));
+    end;
   finally
-    vrStr.Clear;
     FreeAndNil(vrStr);
   end;
 end;

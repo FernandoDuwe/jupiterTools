@@ -286,101 +286,105 @@ begin
 
   vrCountVisble := 0;
 
-  for vrVez := 0 to dbMainGrid.Columns.Count - 1 do
-  begin
-    dbMainGrid.Columns[vrVez].Visible := True;
-
-    if not miExibirColunaID.Checked then
-      dbMainGrid.Columns[vrVez].Visible := dbMainGrid.Columns[vrVez].FieldName <> 'ID';
-
-    if dbMainGrid.Columns[vrVez].Visible then
-      if dbMainGrid.Columns[vrVez].Field is TBlobField then
-        dbMainGrid.Columns[vrVez].Visible := False;
-
-    if dbMainGrid.Columns[vrVez].Visible then
-      vrCountVisble := vrCountVisble + 1;
-
-    if dbMainGrid.Columns[vrVez].Field is TDateField then
-      dbMainGrid.Columns[vrVez].DisplayFormat := FORMAT_DATE;
-
-    if dbMainGrid.Columns[vrVez].Field is TTimeField then
-      dbMainGrid.Columns[vrVez].DisplayFormat := FORMAT_TIME;
-  end;
-
-  vrRemainingWidth := dbMainGrid.Width - (dbMainGrid.Columns.Count * 5);
-
-  for vrVez := 0 to dbMainGrid.Columns.Count - 1 do
-  begin
-    if dbMainGrid.Columns[vrVez].Visible then
-      dbMainGrid.Columns[vrVez].Title.Caption := JupiterDatabaseScript_GetDescription(Self.FReference.TableName, dbMainGrid.Columns[vrVez].FieldName);
-
-    vrWidth := Internal_GetFieldSize(dbMainGrid.Columns[vrVez].Field);
-
-    if not Assigned(dbMainGrid.Columns[vrVez].Field.OnGetText) then
+  try
+    for vrVez := 0 to dbMainGrid.Columns.Count - 1 do
     begin
-      if GetTextWidth(dbMainGrid.Columns[vrVez].Title.Caption, dbMainGrid.Font) > vrWidth then
-         dbMainGrid.Columns[vrVez].Width := GetTextWidth(dbMainGrid.Columns[vrVez].Title.Caption + '   ', dbMainGrid.Font)
+      dbMainGrid.Columns[vrVez].Visible := True;
+
+      if not miExibirColunaID.Checked then
+        dbMainGrid.Columns[vrVez].Visible := dbMainGrid.Columns[vrVez].FieldName <> 'ID';
+
+      if dbMainGrid.Columns[vrVez].Visible then
+        if dbMainGrid.Columns[vrVez].Field is TBlobField then
+          dbMainGrid.Columns[vrVez].Visible := False;
+
+      if dbMainGrid.Columns[vrVez].Visible then
+        vrCountVisble := vrCountVisble + 1;
+
+      if dbMainGrid.Columns[vrVez].Field is TDateField then
+        dbMainGrid.Columns[vrVez].DisplayFormat := FORMAT_DATE;
+
+      if dbMainGrid.Columns[vrVez].Field is TTimeField then
+        dbMainGrid.Columns[vrVez].DisplayFormat := FORMAT_TIME;
+    end;
+
+    vrRemainingWidth := dbMainGrid.Width - (dbMainGrid.Columns.Count * 5);
+
+    for vrVez := 0 to dbMainGrid.Columns.Count - 1 do
+    begin
+      if dbMainGrid.Columns[vrVez].Visible then
+        dbMainGrid.Columns[vrVez].Title.Caption := JupiterDatabaseScript_GetDescription(Self.FReference.TableName, dbMainGrid.Columns[vrVez].FieldName);
+
+      vrWidth := Internal_GetFieldSize(dbMainGrid.Columns[vrVez].Field);
+
+      if not Assigned(dbMainGrid.Columns[vrVez].Field.OnGetText) then
+      begin
+        if GetTextWidth(dbMainGrid.Columns[vrVez].Title.Caption, dbMainGrid.Font) > vrWidth then
+           dbMainGrid.Columns[vrVez].Width := GetTextWidth(dbMainGrid.Columns[vrVez].Title.Caption + '   ', dbMainGrid.Font)
+        else
+           dbMainGrid.Columns[vrVez].Width := vrWidth;
+      end;
+
+      vrRemainingWidth := vrRemainingWidth - dbMainGrid.Columns[vrVez].Width;
+
+      Self.Internal_SetColumnName(dbMainGrid.Columns[vrVez]);
+    end;
+
+    for vrVez := 0 to dbMainGrid.Columns.Count - 1 do
+    begin
+      if vrRemainingWidth <= 0 then
+        Continue;
+
+      if dbMainGrid.Columns[vrVez].Field is TStringField then
+      begin
+        dbMainGrid.Columns[vrVez].Width := dbMainGrid.Columns[vrVez].Width + vrRemainingWidth;
+        vrRemainingWidth := 0;
+      end;
+    end;
+
+    if vrRemainingWidth > 0 then
+      dbMainGrid.Columns[0].Width := dbMainGrid.Columns[0].Width + vrRemainingWidth;
+
+    if Self.ActionGroup.Count > 1 then
+    begin
+      if (Self.InternalQuery.IsEmpty)  then
+      begin
+        Self.ActionGroup.GetActionAtIndex(1).Disable;
+        Self.ActionGroup.GetActionAtIndex(1).DisablePopup;
+      end
       else
-         dbMainGrid.Columns[vrVez].Width := vrWidth;
+      begin
+        Self.ActionGroup.GetActionAtIndex(1).Enable;
+        Self.ActionGroup.GetActionAtIndex(1).EnablePopup;
+      end;
     end;
 
-    vrRemainingWidth := vrRemainingWidth - dbMainGrid.Columns[vrVez].Width;
+    if Self.ActionGroup.Count > 2 then
+      if ((not Self.FUseLimit)  or (Self.InternalQuery.RecordCount < vrJupiterApp.Params.VariableById(FORM_GRID_LIMIT).AsInteger)) then
+      begin
+        Self.ActionGroup.GetActionAtIndex(2).Disable;
+        Self.ActionGroup.GetActionAtIndex(2).DisablePopup;
+      end
+      else
+      begin
+        Self.ActionGroup.GetActionAtIndex(2).Enable;
+        Self.ActionGroup.GetActionAtIndex(2).EnablePopup;
+      end;
 
-    Self.Internal_SetColumnName(dbMainGrid.Columns[vrVez]);
+    if Self.ActionGroup.Count >= 3 then
+      if (Self.InternalQuery.RecordCount < vrJupiterApp.Params.VariableById(FORM_GRID_LIMIT).AsInteger) then
+      begin
+        Self.ActionGroup.GetActionAtIndex(3).Disable;
+        Self.ActionGroup.GetActionAtIndex(3).DisablePopup;
+      end
+      else
+      begin
+        Self.ActionGroup.GetActionAtIndex(3).Enable;
+        Self.ActionGroup.GetActionAtIndex(3).EnablePopup;
+      end;
+  finally
+
   end;
-
-  for vrVez := 0 to dbMainGrid.Columns.Count - 1 do
-  begin
-    if vrRemainingWidth <= 0 then
-      Continue;
-
-    if dbMainGrid.Columns[vrVez].Field is TStringField then
-    begin
-      dbMainGrid.Columns[vrVez].Width := dbMainGrid.Columns[vrVez].Width + vrRemainingWidth;
-      vrRemainingWidth := 0;
-    end;
-  end;
-
-  if vrRemainingWidth > 0 then
-    dbMainGrid.Columns[0].Width := dbMainGrid.Columns[0].Width + vrRemainingWidth;
-
-  if Self.ActionGroup.Count > 1 then
-  begin
-    if (Self.InternalQuery.IsEmpty)  then
-    begin
-      Self.ActionGroup.GetActionAtIndex(1).Disable;
-      Self.ActionGroup.GetActionAtIndex(1).DisablePopup;
-    end
-    else
-    begin
-      Self.ActionGroup.GetActionAtIndex(1).Enable;
-      Self.ActionGroup.GetActionAtIndex(1).EnablePopup;
-    end;
-  end;
-
-  if Self.ActionGroup.Count > 2 then
-    if ((not Self.FUseLimit)  or (Self.InternalQuery.RecordCount < vrJupiterApp.Params.VariableById(FORM_GRID_LIMIT).AsInteger)) then
-    begin
-      Self.ActionGroup.GetActionAtIndex(2).Disable;
-      Self.ActionGroup.GetActionAtIndex(2).DisablePopup;
-    end
-    else
-    begin
-      Self.ActionGroup.GetActionAtIndex(2).Enable;
-      Self.ActionGroup.GetActionAtIndex(2).EnablePopup;
-    end;
-
-  if Self.ActionGroup.Count >= 3 then
-    if (Self.InternalQuery.RecordCount < vrJupiterApp.Params.VariableById(FORM_GRID_LIMIT).AsInteger) then
-    begin
-      Self.ActionGroup.GetActionAtIndex(3).Disable;
-      Self.ActionGroup.GetActionAtIndex(3).DisablePopup;
-    end
-    else
-    begin
-      Self.ActionGroup.GetActionAtIndex(3).Enable;
-      Self.ActionGroup.GetActionAtIndex(3).EnablePopup;
-    end;
 end;
 
 procedure TFCustomDatabaseGrid.Internal_PrepareForm;
@@ -482,6 +486,7 @@ begin
     end;
 
     InternalQuery.Prepare;
+
     InternalQuery.Open;
 
     Self.Internal_SetCalculatedFields;

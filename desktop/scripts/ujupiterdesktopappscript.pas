@@ -146,7 +146,8 @@ end;
 
 procedure JupiterAppDesktopProcessMessages;
 begin
-  Application.ProcessMessages;
+  if Assigned(vrJupiterApp) and not vrJupiterApp.Params.VariableById('Interface.PerformanceMode').AsBool then
+    Application.ProcessMessages;
 end;
 
 procedure JupiterAppDesktopCursorToIdle;
@@ -166,7 +167,8 @@ begin
   if Application.MainForm is TFMain then
   begin
     TFMain(Application.MainForm).sbStatus.Panels[1].Text := prMessage;
-    Application.ProcessMessages;
+    if Assigned(vrJupiterApp) and not vrJupiterApp.Params.VariableById('Interface.PerformanceMode').AsBool then
+      Application.ProcessMessages;
   end;
 end;
 

@@ -92,7 +92,8 @@ procedure TFCodeRunner.Internal_AddMessage(prMessage: String);
 begin
   Self.lbOutput.Items.Add(prMessage);
 
-  Application.ProcessMessages;
+  if Assigned(vrJupiterApp) and not vrJupiterApp.Params.VariableById('Interface.PerformanceMode').AsBool then
+    Application.ProcessMessages;
 end;
 
 procedure TFCodeRunner.Internal_SetCaption(prCaption: String);

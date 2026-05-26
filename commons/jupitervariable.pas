@@ -440,8 +440,10 @@ var
 begin
   Result := nil;
 
+  prID := AnsiUpperCase(prID);
+
   for vrVez := 0 to Self.VariableCount - 1 do
-    if AnsiUpperCase(Self.VariableByIndex(vrVez).ID) = AnsiUpperCase(prID) then
+    if AnsiUpperCase(Self.VariableByIndex(vrVez).ID) = prID then
     begin
       Result := Self.VariableByIndex(vrVez);
       Exit;

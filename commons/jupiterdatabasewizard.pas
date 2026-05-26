@@ -298,10 +298,20 @@ begin
   if prOrderBy = '' then
     prOrderBy := '2';
 
-  if prWhere  <> '' then
-    prWhere := ' AND ' + prWhere;
+  if prReference.ID = NULL_KEY then
+  begin
+    if prWhere = '' then
+      Result.SQL.Add(String.Format(' SELECT ' + prFields + ' FROM %0:s ORDER BY %2:s %3:s', [prReference.TableName, prReference.ID, prOrderBy, prLimit]))
+    else
+      Result.SQL.Add(String.Format(' SELECT ' + prFields + ' FROM %0:s WHERE %3:s ORDER BY %2:s %4:s', [prReference.TableName, prReference.ID, prOrderBy, prWhere, prLimit]));
+  end
+  else
+  begin
+    if prWhere <> '' then
+      prWhere := ' AND ' + prWhere;
 
-  Result.SQL.Add(String.Format(' SELECT ' + prFields + ' FROM %0:s WHERE ((ID = %1:d) OR (-1 = %1:d)) %3:s ORDER BY %2:s %4:s', [prReference.TableName, prReference.ID, prOrderBy, prWhere, prLimit]));
+    Result.SQL.Add(String.Format(' SELECT ' + prFields + ' FROM %0:s WHERE ID = %1:d %3:s ORDER BY %2:s %4:s', [prReference.TableName, prReference.ID, prOrderBy, prWhere, prLimit]));
+  end;
 end;
 
 function TJupiterDatabaseWizard.NewQueryFromReferenceToComboBox(prReference: TJupiterDatabaseReference; prWhere: String; prOrderBy: String; prFields: String; prLimit: String): TSQLQuery;
