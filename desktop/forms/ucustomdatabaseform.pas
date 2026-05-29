@@ -177,8 +177,18 @@ begin
 end;
 
 procedure TFCustomDatabaseForm.Internal_OnSetDateTimeClick(Sender: TObject);
+var
+  vrField : Integer;
 begin
+  if (Sender is TSpeedButton) then
+  begin
+    vrField := TSpeedButton(Sender).Tag;
 
+    if not (Self.QueryOrigin.State in [dsEdit, dsInsert]) then
+      Self.QueryOrigin.Edit;
+
+    Self.QueryOrigin.Fields[vrField].AsDateTime := Now;
+  end;
 end;
 
 procedure TFCustomDatabaseForm.Internal_OnMemoDBClick(Sender: TObject);
@@ -417,7 +427,8 @@ begin
     TJupiterDesktopApp(vrJupiterApp).UpdateChildrenForms;
   end;
 
-  Self.DoSecureClose;
+  if Self.FormType <> jftChild then
+    Self.DoSecureClose;
 end;
 
 procedure TFCustomDatabaseForm.Internal_OnCancel(Sender: TObject);
