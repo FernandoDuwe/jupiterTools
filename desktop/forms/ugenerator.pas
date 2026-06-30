@@ -179,6 +179,11 @@ begin
   mmTriggerDetails.Lines.Add(EmptyStr);
   mmTriggerDetails.Lines.Add('Triggers de tabela');
   mmTriggerDetails.Lines.Add(vrPrefix + TRIGGER_DATABASE_AFTERPOST + ', onde {0} é o nome da tabela');
+
+  mmTriggerDetails.Lines.Add(EmptyStr);
+  mmTriggerDetails.Lines.Add('Triggers de formulário');
+  mmTriggerDetails.Lines.Add(vrPrefix + TRIGGER_FORM_AFTERPREPARE + '');
+  mmTriggerDetails.Lines.Add(vrPrefix + TRIGGER_FORM_BEFOREPREPARE + '');
 end;
 
 end.

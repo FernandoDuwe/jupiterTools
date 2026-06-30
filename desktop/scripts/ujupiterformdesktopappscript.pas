@@ -57,6 +57,10 @@ type
   function  JupiterFormDesktopAppScriptGetCurrentLine(prFormID : String) : Integer;
   function  JupiterFormDesktopAppScriptGetWidth(prFormID : String) : Integer;
   function  JupiterFormDesktopAppScriptGetHeigth(prFormID : String) : Integer;
+  procedure JupiterFormDesktopAppScriptClearAllForm(prFormID : String);
+
+  function JupiterFormDesktopAppScript_GetFormParam(prFormId, prId : String) : String;
+  procedure JupiterFormDesktopAppScript_SetFormParam(prFormId, prId, prValue : String);
 
 implementation
 
@@ -69,9 +73,6 @@ begin
   vrForm := TJupiterDesktopApp(vrJupiterApp).GetFormById(prFormID);
 
   if not Assigned(vrForm) then
-    Exit;
-
-  if not (vrForm is TFCustomCodeForm) then
     Exit;
 
   vrForm.Caption := prCaption;
@@ -617,6 +618,52 @@ begin
   Result := TFCustomCodeForm(vrForm).sbBody.Height;
 end;
 
+procedure JupiterFormDesktopAppScriptClearAllForm(prFormID: String);
+var
+  vrForm : TForm;
+begin
+  vrForm := TJupiterDesktopApp(vrJupiterApp).GetFormById(prFormID);
+
+  if not Assigned(vrForm) then
+    Exit;
+
+  if not (vrForm is TFCustomCodeForm) then
+    Exit;
+
+  TFCustomCodeForm(vrForm).ResetForm;
+end;
+
+function JupiterFormDesktopAppScript_GetFormParam(prFormId, prId: String): String;
+var
+  vrForm : TForm;
+begin
+  Result := EmptyStr;
+
+  vrForm := TJupiterDesktopApp(vrJupiterApp).GetFormById(prFormId);
+
+  if Assigned(vrForm) then
+    if vrForm is TFJupiterForm then
+      Result := TFJupiterForm(vrForm).Params.VariableById(prId).Value;
+end;
+
+procedure JupiterFormDesktopAppScript_SetFormParam(prFormId, prId, prValue: String);
+var
+  vrForm : TForm;
+begin
+  vrForm := TJupiterDesktopApp(vrJupiterApp).GetFormById(prFormId);
+
+  if Assigned(vrForm) then
+    if vrForm is TFJupiterForm then
+    begin
+      if TFJupiterForm(vrForm).Params.Exists(prId) then
+        TFJupiterForm(vrForm).Params.VariableById(prId).Value := prValue
+      else
+        TFJupiterForm(vrForm).Params.AddVariable(prId, prValue);
+
+      TFJupiterForm(vrForm).UpdateForm();
+    end;
+end;
+
 { TJupiterFormDesktopAppScript }
 
 function TJupiterFormDesktopAppScript.Internal_GetName: String;
@@ -668,6 +715,11 @@ begin
   prSender.AddFunction(@JupiterFormDesktopAppScriptAddListActionItem, 'procedure Form_AddListActionItem(prFormID, prTitle, prSubtitle, prMacroId, prParams : String);');
   prSender.AddFunction(@JupiterFormDesktopAppScriptAddErrorListItem, 'procedure Form_AddErrorListItem(prFormID, prTitle, prSubtitle : String);');
   prSender.AddFunction(@JupiterFormDesktopAppScriptAddSuccessListItem, 'procedure Form_AddSuccessListItem(prFormID, prTitle, prSubtitle : String);');
+
+  prSender.AddFunction(@JupiterFormDesktopAppScriptClearAllForm, 'procedure ClearAllForm(prFormID : String);');
+
+  prSender.AddFunction(@JupiterFormDesktopAppScript_GetFormParam, 'function GetFormParam(prFormId, prId : String) : String;');
+  prSender.AddFunction(@JupiterFormDesktopAppScript_SetFormParam, 'procedure SetFormParam(prFormId, prId, prValue : String);');
 end;
 
 function TJupiterFormDesktopAppScript.AnalyseCode: TJupiterScriptAnalyserList;
@@ -716,6 +768,12 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddListActionItem(prFormID, prTitle, prSubtitle, prMacroId, prParams : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddErrorListItem(prFormID, prTitle, prSubtitle : String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure Form_AddSuccessListItem(prFormID, prTitle, prSubtitle : String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure ClearAllForm(prFormID : String);'));
+
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function Form_GetWidth(prFormID: String): Integer;'));
+
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function GetFormParam(prFormId, prId : String) : String;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure SetFormParam(prFormId, prId, prValue : String);'));
 end;
 
 end.

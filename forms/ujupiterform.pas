@@ -27,6 +27,7 @@ type
     Image1: TImage;
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
+    miShowLateralPanel: TMenuItem;
     miWorkMenu: TMenuItem;
     miThreads: TMenuItem;
     Separator3: TMenuItem;
@@ -322,6 +323,10 @@ end;
 procedure TFJupiterForm.FormClose(Sender: TObject; var CloseAction: TCloseAction
   );
 begin
+  if Assigned(vrJupiterApp) then
+    if Assigned(TJupiterDesktopApp(vrJupiterApp).FormList) then
+      TJupiterDesktopApp(vrJupiterApp).DeleteFormById(Self.FormID);
+
   if Assigned(FMain.CurrentModalForm) then
     if TFJupiterForm(FMain.CurrentModalForm).FormID = Self.FormID then
       FMain.CurrentModalForm := nil;
@@ -374,6 +379,12 @@ begin
 
   Self.FParams := TJupiterVariableList.Create;
 
+  Self.FParams.AddVariable('FormId', Self.FormID);
+  Self.FParams.AddVariable('FormType', Self.ClassName);
+
+  Self.FParams.AddVariable(FORM_CURRENTSCRIPTID, vrJupiterApp.Params.VariableById(FORM_CURRENTSCRIPTID).Value);
+  Self.FParams.AddVariable(FORM_CURRENTSCRIPTNAME, vrJupiterApp.Params.VariableById(FORM_CURRENTSCRIPTNAME).Value);
+
   Self.Height      := PercentOfScreen(Screen.Height, 80);
   Self.Width       := PercentOfScreen(Screen.Width, 80);
 
@@ -381,10 +392,18 @@ begin
   Self.Position    := poScreenCenter;
 
   Self.FThreadController := TJupiterThreadList.Create;
+
+  if Assigned(vrJupiterApp) then
+    if Assigned(TJupiterDesktopApp(vrJupiterApp).FormList) then
+      TJupiterDesktopApp(vrJupiterApp).FormList.AddSimpleObject(Self);
 end;
 
 procedure TFJupiterForm.FormDestroy(Sender: TObject);
 begin
+  if Assigned(vrJupiterApp) then
+    if Assigned(TJupiterDesktopApp(vrJupiterApp).FormList) then
+      TJupiterDesktopApp(vrJupiterApp).DeleteFormById(Self.FormID);
+
   FreeAndNil(FThreadController);
   FreeAndNil(Self.FParams);
   FreeAndNil(Self.FActionGroup);
@@ -490,9 +509,6 @@ function TFJupiterForm.Internal_OnRequestData: TJupiterVariableList;
 begin
   Result := TJupiterVariableList.Create;
   Result.CopyValues(Self.Params);
-
-  Result.AddVariable('FORMID', Self.FormID);
-  Result.AddVariable('FORMTYPE', Self.ClassName);
 end;
 
 procedure TFJupiterForm.Internal_OnCloseIfModal;
@@ -591,6 +607,8 @@ begin
 
   Self.Prepared := True;
   try
+    vrJupiterApp.RunMacro(TRIGGER_FORM_BEFOREPREPARE, Self.Internal_OnRequestData);
+
     Self.Internal_PrepareForm;
 
     if Self.ActionGroup.TableName = EmptyStr then
@@ -610,6 +628,8 @@ begin
 
     if not vrJupiterApp.Params. VariableById('Interface.PerformanceMode').AsBool then
       DrawForm(Self);
+
+    vrJupiterApp.RunMacro(TRIGGER_FORM_AFTERPREPARE, Self.Internal_OnRequestData);
   finally
     if not vrJupiterApp.Params. VariableById('Interface.PerformanceMode').AsBool then
     begin

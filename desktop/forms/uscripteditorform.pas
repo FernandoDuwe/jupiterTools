@@ -75,6 +75,7 @@ begin
   inherited;
 
   Self.FScript := TJupiterDesktopApp(vrJupiterApp).NewScript;
+  Self.FScript.UseDebugInfo := True;
 
   Self.FFilePath := EmptyStr;
   Self.FMacroID := NULL_KEY;

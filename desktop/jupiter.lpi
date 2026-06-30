@@ -11,7 +11,6 @@
       <UseXPManifest Value="True"/>
       <XPManifest>
         <DpiAware Value="True"/>
-        <ExecutionLevel Value="requireAdministrator"/>
         <TextDesc Value="Jupiter"/>
       </XPManifest>
       <Icon Value="0"/>
@@ -21,7 +20,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="3"/>
       <RevisionNr Value="4"/>
-      <BuildNr Value="23"/>
+      <BuildNr Value="118"/>
       <Language Value="0416"/>
       <CharSet Value="04E2"/>
       <StringTable CompanyName="Jupiter" FileDescription="Jupiter interface" ProductName="Jupiter"/>
@@ -541,6 +540,14 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uCodeTerminalRunner"/>
       </Unit>
+      <Unit>
+        <Filename Value="forms/uuniquefileexplorer.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FUniqueFileExplorer"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uUniqueFileExplorer"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -555,14 +562,9 @@
     </SearchPaths>
     <CodeGeneration>
       <SmartLinkUnit Value="True"/>
-      <Optimizations>
-        <OptimizationLevel Value="3"/>
-      </Optimizations>
     </CodeGeneration>
     <Linking>
       <Debugging>
-        <GenerateDebugInfo Value="False"/>
-        <RunWithoutDebug Value="True"/>
         <DebugInfoType Value="dsDwarf3"/>
       </Debugging>
       <LinkSmart Value="True"/>

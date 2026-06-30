@@ -10,7 +10,7 @@ uses
   JupiterConsts, uJupiterEnviromentScript, uJupiterStringUtilsScript,
   uJupiterRunnableScript, uJupiterDataProviderScript, uJupiterDateUtilsScript,
   uJupiterCheckListUtilsScript, uJupiterHTTPScript, SQLite3Conn,
-  JupiterDataProvider, jupiterthread;
+  JupiterDataProvider, jupiterthread, JupiterFileDataProvider;
 
 type
 
@@ -29,6 +29,7 @@ type
     FMessageList      : TJupiterDataProvider;
     FThreadList       : TJupiterThreadList;
     FScriptLineList   : TJupiterScriptList;
+    FScriptCache      : TJupiterVariableList;
 
     procedure Internal_OnExecute(prScript, prMessages, prRunMessages : TStrings; prExecuted : Boolean);
     procedure Internal_SetVariableValue(prID, prNewValue : String);
@@ -42,6 +43,7 @@ type
 
     property ModulesList    : TJupiterModuleList   read FModules        write FModules;
     property Params         : TJupiterVariableList read FParams         write FParams;
+    property ScriptCache    : TJupiterVariableList read FScriptCache    write FScriptCache;
     property Scripts        : TJupiterVariableList read FScripts        write FScripts;
     property ScriptLineList : TJupiterScriptList   read FScriptLineList write FScriptLineList;
     property ThreadList     : TJupiterThreadList   read FThreadList     write FThreadList;
@@ -171,10 +173,14 @@ end;
 procedure TJupiterApp.Internal_Prepare;
 var
   vrEnviroment : TJupiterEnviroment;
+  vrFiles      : TJupiterFileDataProvider;
+  vrVez        : Integer;
 begin
   vrEnviroment := TJupiterEnviroment.Create;
+  vrFiles      := TJupiterFileDataProvider.Create;
   try
     vrEnviroment.CreatePath('/assets/');
+    vrEnviroment.CreatePath('/caches/');
     vrEnviroment.CreatePath('/checklists/');
     vrEnviroment.CreatePath('/datasets/');
     vrEnviroment.CreatePath('/temp/');
@@ -185,9 +191,17 @@ begin
     if not Self.FParams.Exists('database.local') then
       Self.FParams.AddConfig('database.local', '/datasets/' + Self.AppID + '.db', 'Base de dados local');
 
+
+    vrFiles.Path := vrEnviroment.FullPath('/caches/');
+    vrFiles.ProvideData;
+
     Self.FAppReady := True;
+
+    for vrVez := 0 to vrFiles.Count - 1 do
+      Self.ScriptCache.AddVariable(vrFiles.GetRowByIndex(vrVez).Fields.VariableById('FieldName').Value, vrEnviroment.LoadFile(vrFiles.GetRowByIndex(vrVez).Fields.VariableById('File').Value));
   finally
     FreeAndNil(vrEnviroment);
+    FreeAndNil(vrFiles);
   end;
 end;
 
@@ -787,6 +801,7 @@ begin
     Self.FParams          := TJupiterVariableList.Create;
     Self.FModules         := TJupiterModuleList.Create;
     Self.FScripts         := TJupiterVariableList.Create;
+    Self.FScriptCache     := TJupiterVariableList.Create;
     Self.DataProviders    := TJupiterObjectList.Create;
     Self.GlobalReferences := TJupiterObjectList.Create;
 
@@ -806,6 +821,7 @@ destructor TJupiterApp.Destroy;
 begin
   FreeAndNil(Self.FMessageList);
   FreeAndNil(Self.FScriptList);
+  FreeAndNil(Self.FScriptCache);
   FreeAndNil(Self.FParams);
   FreeAndNil(Self.FModules);
   FreeAndNil(Self.FScripts);
@@ -818,4 +834,3 @@ begin
 end;
 
 end.
-

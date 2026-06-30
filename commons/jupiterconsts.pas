@@ -17,6 +17,7 @@ const
    QUICKJUMP_PATH : String = '/forms/quick_jump';
    GENERATOR_PATH : String = '/forms/generator';
    FILEEXPLORER_PATH : String = '/forms/explorer/files';
+   FILEUNIQUEEXPLORER_PATH : String = '/forms/explorer/unique/files';
    MENUEXPLORER_PATH : String = '/forms/explorer/menus';
    USERPREFERENCE_PATH : String = '/forms/userPreference';
    CUSTOMDATABASE_PATH : String = '/forms/custom/database';
@@ -100,20 +101,22 @@ const
    FIELD_ID_GENERADOR       : String = 'Generator.FormId';
    FIELD_TREE_COLAPSE       : String = 'MenuTree_Colapse';
 
-   FORM_ALWAYS_MODAL         : String = 'Interface.Form.AlwaysModal';
-   FORM_ALWAYS_MODAL_CHILD   : String = 'Interface.Form.Child.AlwaysModal';
-   FORM_UPDATE_TIME          : String = 'Interface.Form.UpdateTime';
-   FORM_DESCRIPTION_MAXSIZE  : String = 'Interface.Form.Description.MaxSize';
-   FORM_EDITOR_RIGHTEDGE     : String = 'Interface.Editor.RightEdge';
-   FIELD_FONT_NAME           : String = 'Interface.Font.Name';
-   FIELD_FONT_SIZE           : String = 'Interface.Font.Size';
-   FIELD_EDITABLES_FONT_NAME : String = 'Interface.Editables.Font.Size';
-   FIELD_MEMO_FONT_NAME      : String = 'Interface.Memo.Font.Size';
-   FIELD_SYNEDIT_FONT_NAME   : String = 'Interface.SynEdit.Font.Size';
-   CONTEXTMENU_TABLE_SHOW    : String = 'Interface.ContextMenu.ShowTables';
-   FORM_GRID_LIMIT           : String = 'Interface.Form.GridLimit';
-   DEBUG_MODE                : String = 'Developer.Debug';
-   USE_THREADS_LOG_TASKS     : String = 'Threads.LongTasks';
+   FORM_CURRENTSCRIPTID        : String = 'Forms.Script.Current.Id';
+   FORM_CURRENTSCRIPTNAME      : String = 'Forms.Script.Current.Name';
+   FORM_ALWAYS_MODAL           : String = 'Interface.Form.AlwaysModal';
+   FORM_ALWAYS_MODAL_CHILD     : String = 'Interface.Form.Child.AlwaysModal';
+   FORM_UPDATE_TIME            : String = 'Interface.Form.UpdateTime';
+   FORM_DESCRIPTION_MAXSIZE    : String = 'Interface.Form.Description.MaxSize';
+   FORM_EDITOR_RIGHTEDGE       : String = 'Interface.Editor.RightEdge';
+   FIELD_FONT_NAME             : String = 'Interface.Font.Name';
+   FIELD_FONT_SIZE             : String = 'Interface.Font.Size';
+   FIELD_EDITABLES_FONT_NAME   : String = 'Interface.Editables.Font.Size';
+   FIELD_MEMO_FONT_NAME        : String = 'Interface.Memo.Font.Size';
+   FIELD_SYNEDIT_FONT_NAME     : String = 'Interface.SynEdit.Font.Size';
+   CONTEXTMENU_TABLE_SHOW      : String = 'Interface.ContextMenu.ShowTables';
+   FORM_GRID_LIMIT             : String = 'Interface.Form.GridLimit';
+   DEBUG_MODE                  : String = 'Developer.Debug';
+   USE_THREADS_LOG_TASKS       : String = 'Threads.LongTasks';
 
    PATH_WORKDIR : String = 'Enviroment.Path.WorkDir';
 
@@ -161,6 +164,7 @@ const
    JPAS_FLAG_GENERATEFULLFILE : String = '@FLAG_SAVE_COMPILED_FILE';
    JPAS_FLAG_DISABLESMARTIMPORTER : String = '@FLAG_DISABLESMARTIMPORTER';
    JPAS_FLAG_USERCOMMAND : String = '@FLAG_USER_COMMAND';
+   JPAS_FLAG_USECACHES : String = '@FLAG_USECACHES';
    JPAS_FLAG_SCRIPTID : String = '@FLAG_SCRIPTID';
 
    // Triggers
@@ -175,6 +179,10 @@ const
 
    // Database Triggers
    TRIGGER_DATABASE_AFTERPOST : String = 'triggers.{0}.OnAfterPost';
+
+   // Form Triggers
+   TRIGGER_FORM_AFTERPREPARE  : String = 'triggers.Forms.OnAfterPrepare';
+   TRIGGER_FORM_BEFOREPREPARE : String = 'triggers.Forms.OnBeforePrepare';
 
    // Events
    EVENT_RECORD_ONENABLE : String = 'events.record.onEnable';

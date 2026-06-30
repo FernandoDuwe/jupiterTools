@@ -212,6 +212,9 @@ object FJupiterForm: TFJupiterForm
       ShortCut = 16421
       OnClick = miAjustRatioRightClick
     end
+    object miShowLateralPanel: TMenuItem
+      Caption = 'Exibir barra lateral'
+    end
     object miLookColumn: TMenuItem
       Caption = 'Travar colunas'
       Checked = True

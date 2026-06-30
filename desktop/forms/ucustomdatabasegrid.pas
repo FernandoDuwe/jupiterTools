@@ -485,6 +485,8 @@ begin
         InternalQuery.SQL.AddStrings(vrWizard.NewQueryFromReference(Self.FReference, Self.Params.VariableById('where').Value, Self.Params.VariableById('orderBy').Value, vrFields, vrLimit).SQL)
     end;
 
+    InternalQuery.SQL.Text := Self.Params.ResolveString(InternalQuery.SQL.Text);
+
     InternalQuery.Prepare;
 
     InternalQuery.Open;

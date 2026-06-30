@@ -14,9 +14,9 @@ type
   TJupiterVariableChangeValue = procedure(prID, prNewValue : String) of object;
   TJupiterVariableGetValue = function(prID : String) : String of object;
 
-    TJupiterVariableParamExists = function(prId : String) : Boolean of object;
-    TJupiterVariableGetParam = function(prId : String) : String of object;
-    TJupiterVariableSetParam = procedure(prId, prValue : String) of object;
+  TJupiterVariableParamExists = function(prId : String) : Boolean of object;
+  TJupiterVariableGetParam = function(prId : String) : String of object;
+  TJupiterVariableSetParam = procedure(prId, prValue : String) of object;
 
   TJupiterVariable = class(TJupiterObject)
   private
@@ -485,11 +485,27 @@ var
 begin
   Result := prStr;
 
+  if Pos('{', Result) = 0 then
+    Exit;
+
   for vrVez := 0 to Self.Size - 1 do
+  begin
     Result := StringReplace(Result, '{' + Self.VariableByIndex(vrVez).ID + '}', Self.VariableByIndex(vrVez).Value, [rfIgnoreCase, rfReplaceAll]);
 
+    if Pos('{', Result) = 0 then
+      Exit;
+  end;
+
+  if Pos('{', Result) = 0 then
+    Exit;
+
   for vrVezModule := 0 to Self.ChildList.Size -1 do
+  begin
     Result := TJupiterVariableList(Self.ChildList.GetAtIndex(vrVezModule)).ResolveString(Result);
+
+    if Pos('{', Result) = 0 then
+      Exit;
+  end;
 end;
 
 procedure TJupiterVariableList.ResolveFile(prFile: String);

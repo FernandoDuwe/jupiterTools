@@ -164,12 +164,13 @@ begin
   if not Assigned(tvFileTree.Selected.Data) then
     Exit;
 
+  Self.Params.VariableById('currentPath').Value := ExtractFilePath(TJupiterStringReference(tvFileTree.Selected.Data).Reference);
   Self.Params.VariableById('currentFile').Value := TJupiterStringReference(tvFileTree.Selected.Data).Reference;
 end;
 
 procedure TFFileFinder.Internal_OnOpenFolder(Sender: TObject);
 begin
-  JupiterRunnableScript_RunCommandOnJupiter(Self.Params.VariableById('path').Value);
+  JupiterRunnableScript_RunCommandOnJupiter(Self.Params.VariableById('currentPath').Value);
 end;
 
 procedure TFFileFinder.Internal_OnStop(Sender: TObject);
@@ -300,6 +301,9 @@ begin
 
   if not Self.Params.Exists('currentFile') then
     Self.Params.AddVariable('currentFile', EmptyStr);
+
+  if not Self.Params.Exists('currentPath') then
+    Self.Params.AddVariable('currentPath', Self.Params.VariableById('path').Value);
 end;
 
 procedure TFFileFinder.Internal_ReadDirectory(prPath: String; prOwner: TTreeNode);

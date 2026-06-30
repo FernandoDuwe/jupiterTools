@@ -21,6 +21,8 @@ type
   public
     function CreatePath(prPath : String) : String;
     function CreateFile(prPath, prContent : String) : String;
+    function CreateBinaryFile(prPath, prContent : String) : String;
+    function LoadFile(prPath : String) : String;
     function CreateExternalFile(prPath, prContent : String) : String;
     function FullPath(prPath : String) : String;
     function IconOfFile(prFileName : String) : Integer;
@@ -120,6 +122,44 @@ begin
     vrStr.Clear;
     vrStr.Add(prContent);
     vrStr.SaveToFile(Result);
+  finally
+    vrStr.Clear;
+    FreeAndNil(vrStr);
+  end;
+end;
+
+function TJupiterEnviroment.CreateBinaryFile(prPath, prContent: String): String;
+var
+  vrMS: TStringStream;
+begin
+  Result := Self.FullPath(prPath);
+
+  if not Self.Exists(ExtractFileDir(Result)) then
+    Self.CreatePath(ExtractFileDir(Result));
+
+  if FileExists(Result) then
+    Exit;
+
+  vrMS := TStringStream.Create;
+  try
+    vrMS.WriteString(prContent);
+    vrMS.SaveToFile(Result);
+  finally
+    FreeAndNil(vrMS);
+  end;
+end;
+
+function TJupiterEnviroment.LoadFile(prPath: String): String;
+var
+  vrStr : TStrings;
+begin
+  prPath := Self.FullPath(prPath);
+
+  vrStr := TStringList.Create;
+  try
+    vrStr.LoadFromFile(prPath);
+
+    Result := vrStr.Text;
   finally
     vrStr.Clear;
     FreeAndNil(vrStr);

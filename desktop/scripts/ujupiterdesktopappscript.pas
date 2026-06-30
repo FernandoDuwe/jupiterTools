@@ -23,6 +23,7 @@ type
   end;
 
   function JupiterAppDesktopOpenForm(prForm : String) : String;
+  function JupiterAppDesktopGetFormIdByType(prFormType : String) : String;
   procedure JupiterAppDesktopOpenCodeRunner(prMacroId : String);
   procedure JupiterAppDesktopOpenDatbaseFinder(prSearch : String);
   procedure JupiterAppDesktopOpenFileFinderForm(prPath : String);
@@ -74,6 +75,11 @@ uses Controls, uJupiterForm, uMain, jupiterDesktopApp, jupiterDatabaseWizard, LC
 function JupiterAppDesktopOpenForm(prForm: String) : String;
 begin
   Result := TJupiterDesktopApp(vrJupiterApp).OpenForm(prForm, EmptyStr);
+end;
+
+function JupiterAppDesktopGetFormIdByType(prFormType: String): String;
+begin
+  Result := TJupiterDesktopApp(vrJupiterApp).GetFormIdByType(prFormType);
 end;
 
 procedure JupiterAppDesktopOpenCodeRunner(prMacroId: String);
@@ -544,6 +550,7 @@ begin
   inherited DoCompile(prSender);
 
   prSender.AddFunction(@JupiterAppDesktopOpenForm, 'function OpenForm(Form: String) : String;');
+  prSender.AddFunction(@JupiterAppDesktopGetFormIdByType, 'function GetFormIdByType(prFormType: String) : String;');
   prSender.AddFunction(@JupiterAppDesktopOpenDatbaseFinder, 'function OpenDatabaseFinder(Search : String) : String;');
   prSender.AddFunction(@JupiterAppDesktopOpenCodeRunner, 'procedure OpenCodeRunner(prMacroId: String);');
   prSender.AddFunction(@JupiterAppDesktopOpenFormWithParams, 'procedure OpenFormWithParams(Form, Params : String);');
@@ -602,6 +609,7 @@ begin
   Result := inherited AnalyseCode;
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function OpenForm(Form: String) : String;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function GetFormIdByType(prFormType: String) : String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function OpenDatabaseFinder(Search : String) : String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenCodeRunner(prMacroId: String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenFormWithParams(Form, Params : String);'));

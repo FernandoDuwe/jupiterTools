@@ -98,13 +98,9 @@ inherited FCustomDatabaseGrid: TFCustomDatabaseGrid
       Caption = 'Exibir a coluna ID'
       OnClick = miExibirColunaIDClick
     end
-    inherited Separator1: TMenuItem[7]
-    end
-    inherited miParams: TMenuItem[8]
-    end
-    inherited miThreads: TMenuItem[9]
-    end
     inherited miLookColumn: TMenuItem[10]
+    end
+    inherited miShowLateralPanel: TMenuItem[11]
     end
   end
   object InternalDataSource: TDataSource[9]

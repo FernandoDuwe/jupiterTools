@@ -16,6 +16,7 @@ type
   TJupiterScriptFlags = Record
     GenerateFullFile : Boolean;
     DisableSmartImporter : Boolean;
+    UseCaches : Boolean;
   end;
 
   TJupiterScriptAnalyserType = (jsaVariable, jsaProcedure, jsaFunction, jsaCompilerFlags);
@@ -82,6 +83,7 @@ type
     FRunMessages  : TStrings;
     FCompiled     : Boolean;
     FRunned       : Boolean;
+    FUseDebugInfo : Boolean;
     FUserCommand  : String;
     FLibraryList  : TJupiterObjectList;
     FParamList    : TJupiterVariableList;
@@ -103,8 +105,10 @@ type
 
     procedure Internal_WriteLn(prMessage : String);
   published
-    property Compiled : Boolean read FCompiled;
-    property Runned   : Boolean read FRunned;
+    property Compiled     : Boolean read FCompiled;
+    property Runned       : Boolean read FRunned;
+    property UseDebugInfo : Boolean read FUseDebugInfo write FUseDebugInfo;
+
     property Messages    : TStrings             read FMessages    write FMessages;
     property RunMessages : TStrings             read FRunMessages write FRunMessages;
     property Script      : TStrings             read FScript;
@@ -145,7 +149,7 @@ implementation
 
 uses uPSR_std, uPSC_std, uPSR_stdctrls, uPSC_stdctrls, uPSR_forms, uPSC_forms,
      uPSC_graphics, uPSC_controls, uPSC_classes, uPSR_graphics, uPSR_controls,
-     uPSR_classes, uPSC_comobj, uPSR_comobj, JupiterApp;
+     uPSR_classes, uPSC_comobj, uPSR_comobj, JupiterApp, uJupiterDesktopAppScript;
 
 { TJupiterScriptAnalyserList }
 
@@ -356,6 +360,7 @@ var
   begin
     Result := StringReplace(ALine, JPAS_FLAG_USERCOMMAND, Self.UserCommand, [rfIgnoreCase, rfReplaceAll]);
     Result := StringReplace(Result, JPAS_FLAG_SCRIPTID, Self.ScriptID, [rfIgnoreCase, rfReplaceAll]);
+    Result := StringReplace(Result, JPAS_FLAG_USECACHES, EmptyStr, [rfIgnoreCase, rfReplaceAll]);
   end;
 
   function ExtractIncludeFileName(const ALine: String): String;
@@ -370,6 +375,7 @@ begin
   for vrVez := 0 to Self.Script.Count - 1 do
   begin
     vrLine := Trim(Self.Script[vrVez]);
+
     vrUpperLine := AnsiUpperCase(vrLine);
 
     if Copy(vrUpperLine, 1, 12) = 'INCLUDEJPAS(' then
@@ -377,10 +383,16 @@ begin
       vrFile := ExtractIncludeFileName(vrLine);
       Self.Internal_IncludeScript(vrFile, Result);
     end
-    else if vrUpperLine = AnsiUpperCase(JPAS_FLAG_GENERATEFULLFILE) then
+    else if Pos(AnsiUpperCase(JPAS_FLAG_GENERATEFULLFILE), vrUpperLine) > 0 then
       Self.Flags.GenerateFullFile := True
-    else if vrUpperLine = AnsiUpperCase(JPAS_FLAG_DISABLESMARTIMPORTER) then
+    else if Pos(AnsiUpperCase(JPAS_FLAG_DISABLESMARTIMPORTER), vrUpperLine) > 0 then
       Self.Flags.DisableSmartImporter := True
+    else if Pos(AnsiUpperCase(JPAS_FLAG_USECACHES), vrUpperLine) > 0 then
+    begin
+      Self.Flags.UseCaches := True;
+
+      Result.Add(ReplacePlaceholders(Self.Script[vrVez]));
+    end
     else
       Result.Add(ReplacePlaceholders(Self.Script[vrVez]));
   end;
@@ -425,7 +437,14 @@ begin
         Self.Internal_IncludeScript(vrFile, prStrings);
       end
       else if vrUpperLine = AnsiUpperCase(JPAS_FLAG_GENERATEFULLFILE) then
-        Self.Flags.GenerateFullFile := True
+      begin
+        Self.Flags.GenerateFullFile := True;
+      end
+      else if vrUpperLine = AnsiUpperCase(JPAS_FLAG_USECACHES) then
+      begin
+        Self.Flags.UseCaches := True;
+        prStrings.Add(ReplacePlaceholders(vrStr[vrVez]));
+      end
       else
         prStrings.Add(ReplacePlaceholders(vrStr[vrVez]));
     end;
@@ -451,6 +470,13 @@ begin
   for vrVez := Self.LibraryList.Count - 1 downto 0 do
     if not TJupiterScriptLibrary(Self.LibraryList.GetAtIndex(vrVez)).CanIncludeSource(prSourceCode) then
       Self.LibraryList.DeleteAtIndex(vrVez);
+
+  for vrVez := Self.LibraryList.Count - 1 downto 0 do
+    if Self.LibraryList.GetAtIndex(vrVez) is TJupiterDesktopAppScript then
+    begin
+      vrJupiterApp.Params.VariableById(FORM_CURRENTSCRIPTID).Value := Self.ScriptID;
+      vrJupiterApp.Params.VariableById(FORM_CURRENTSCRIPTNAME).Value := Self.ScriptName;
+    end;
 end;
 
 function TJupiterScript.GetDateTimeMark: String;
@@ -492,6 +518,9 @@ var
   vrPSScript   : TPSScript;
   vrEnviroment : TJupiterEnviroment;
   vrVez        : Integer;
+  vrUseCaches  : Boolean;
+  vrCompiled   : AnsiString;
+  vrCompiledFlag : Boolean;
 begin
   Self.FMessages.Clear;
   Self.FRunMessages.Clear;
@@ -503,8 +532,9 @@ begin
   Self.FRunned   := False;
 
   vrPSScript := TPSScript.Create(Application.MainForm);
+  vrEnviroment := TJupiterEnviroment.Create;
   try
-    vrPSScript.UseDebugInfo := False;
+    vrPSScript.UseDebugInfo := Self.UseDebugInfo;
     vrPSScript.OnCompile    := @Self.Internal_ScriptCompile;
     vrPSScript.OnExecute    := @Self.Internal_ScriptExecute;
     vrPSScript.OnCompImport := @Self.Internal_ClassesPlugin1CompImport;
@@ -517,21 +547,37 @@ begin
 
     if Self.Flags.GenerateFullFile then
     begin
-      vrEnviroment := TJupiterEnviroment.Create;
-      try
-        vrPSScript.Script.SaveToFile(vrEnviroment.FullPath('/temp/compiledFile.jpas'));
+      vrPSScript.Script.SaveToFile(vrEnviroment.FullPath('/temp/compiledFile.jpas'));
 
-        Self.Script.SaveToFile(vrEnviroment.FullPath('/temp/script.jpas'));
-      finally
-        FreeAndNil(vrEnviroment);
-      end;
+      Self.Script.SaveToFile(vrEnviroment.FullPath('/temp/script.jpas'));
     end;
 
     try
       Self.Messages.Add('ScriptName: ' + Self.ScriptName);
 
-      if vrPSScript.Compile then
+      if vrJupiterApp.ScriptCache.Exists(Self.ScriptName + '.jpascache') then
       begin
+        vrCompiled     := vrJupiterApp.ScriptCache.VariableById(Self.ScriptName + '.jpascache').Value;
+        vrCompiledFlag := True;
+
+        vrPSScript.SetCompiled(vrCompiled);
+
+        Self.Messages.Add(Self.GetDateTimeMark + ': Compilação utilizada por caches');
+      end
+      else
+        vrCompiledFlag := vrPSScript.Compile;
+
+      if vrCompiledFlag then
+      begin
+        if ((Self.Flags.UseCaches) and (not vrEnviroment.Exists('/caches/' + Self.ScriptName + '.jpascache'))) then
+        begin
+          vrPSScript.GetCompiled(vrCompiled);
+
+          vrJupiterApp.ScriptCache.AddVariable(Self.ScriptName + '.jpascache', vrCompiled);
+
+          vrEnviroment.CreateFile('/caches/' + Self.ScriptName + '.jpascache', vrCompiled);
+        end;
+
         Self.FCompiled := True;
 
         Self.Messages.Add(Self.GetDateTimeMark + ': Compilação completa');
@@ -567,6 +613,7 @@ begin
       Self.OnExecute(vrPSScript.Script, Self.Messages, Self.RunMessages, Self.FRunned);
 
     FreeAndNil(vrPSScript);
+    FreeAndNil(vrEnviroment);
   end;
 end;
 
@@ -583,13 +630,18 @@ end;
 
 constructor TJupiterScript.Create;
 begin
-  Self.ScriptName := EmptyStr;
+  Self.ScriptName    := EmptyStr;
+  Self.FUseDebugInfo := False;
 
   try
     Self.FScriptID := JupiterStringUtilsGenerateGUID;
 
     Self.Flags.GenerateFullFile     := False;
     Self.Flags.DisableSmartImporter := False;
+    Self.Flags.UseCaches            := False;
+
+    if vrJupiterApp.Params.Exists('core.jpas.useCompiledCache') then
+      Self.Flags.UseCaches := vrJupiterApp.Params.VariableById('core.jpas.useCompiledCache').AsBool;
 
     Self.FParamList := TJupiterVariableList.Create;
 

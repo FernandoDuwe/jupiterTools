@@ -1,0 +1,14 @@
+inherited FUniqueFileExplorer: TFUniqueFileExplorer
+  inherited acOptions: TActionList
+    Left = 328
+    Top = 120
+  end
+  inherited tmrAutoUpdater: TTimer
+    Left = 440
+    Top = 120
+  end
+  inherited pmOptions: TPopupMenu
+    Left = 232
+    Top = 120
+  end
+end

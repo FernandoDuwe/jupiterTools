@@ -639,7 +639,7 @@ inherited FScriptEditorForm: TFScriptEditorForm
   end
   object SynCompletion1: TSynCompletion[10]
     OnBeforeExecute = SynCompletion1BeforeExecute
-    Position = -1
+    Position = 0
     LinesInWindow = 10
     SelectedColor = clHighlight
     CaseSensitive = False

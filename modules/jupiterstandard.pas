@@ -160,6 +160,9 @@ begin
 
     Self.Internal_CreateMacroIfDontExists(TRIGGER_ONEXECUTE, 'Evento: Ao executar comando externo', vrStr);
 
+    Self.Internal_CreateMacroIfDontExists(TRIGGER_FORM_BEFOREPREPARE, 'Evento: Formulários, antes de preparar', CreateStringListToMacro(EmptyStr));
+    Self.Internal_CreateMacroIfDontExists(TRIGGER_FORM_AFTERPREPARE, 'Evento: Formulários, após preparar', CreateStringListToMacro(EmptyStr));
+
     Self.Internal_CreateMacroIfDontExists(TRIGGER_ONSTART, 'Evento: Ao iniciar a aplicação', CreateStringList('program macro;' + #13#10 + 'begin' + #13#10 + '  OpenForm(''/forms/newTask'');' + #13#10 + 'end.'));
 
     vrStr.Clear;
@@ -253,6 +256,11 @@ begin
     Self.Internal_CreateVariablIfDontExists(PATH_WORKDIR, 'Diretório de tabalho padrão', ExtractFileDir('/'));
 
     Self.Internal_CreateVariablIfDontExists('TableGrid.Search.BlobFields', 'Efetuar pesquisa em campos BLOB', 'N');
+
+    Self.Internal_CreateVariablIfDontExists('core.jpas.useCompiledCache', 'Utilizar cache de compilação para scripts JPAS', 'N');
+
+    Self.Internal_CreateVariablIfDontExists(FORM_CURRENTSCRIPTID, 'Forms: ID do script atual', '');
+    Self.Internal_CreateVariablIfDontExists(FORM_CURRENTSCRIPTNAME, 'Forms: Nome do script atual', '');
   finally
     FreeAndNil(vrWizard);
     FreeAndNil(vrStr);

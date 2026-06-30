@@ -155,6 +155,9 @@ procedure TFMain.FormResize(Sender: TObject);
 var
   vrVez : Integer;
 begin
+  if not Self.Prepared then
+    Exit;
+
   inherited;
 
   for vrVez := 0 to jtMainTab.PageCount - 1 do

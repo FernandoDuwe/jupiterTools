@@ -103,10 +103,6 @@ begin
 
   Self.FReferences := TJupiterObjectList.Create;
 
-  if Assigned(vrJupiterApp) then
-    if Assigned(TJupiterDesktopApp(vrJupiterApp).FormList) then
-      TJupiterDesktopApp(vrJupiterApp).FormList.AddSimpleObject(Self);
-
   Self.FCurrentMargin := FORM_MARGIN_LEFT;
 
   inherited;
@@ -115,10 +111,6 @@ end;
 procedure TFCustomCodeForm.FormDestroy(Sender: TObject);
 begin
   FreeAndNil(Self.FReferences);
-
-  if Assigned(vrJupiterApp) then
-    if Assigned(TJupiterDesktopApp(vrJupiterApp).FormList) then
-      TJupiterDesktopApp(vrJupiterApp).DeleteFormById(Self.FormID);
 
   inherited;
 end;
@@ -790,7 +782,9 @@ end;
 
 procedure TFCustomCodeForm.ResetForm;
 begin
-  //
+  Self.FCurrentLine := 0;
+
+  RemoveChildren(sbBody);
 end;
 
 procedure TFCustomCodeForm.SetCurrentMargin(prMargin: Integer);

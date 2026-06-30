@@ -43,6 +43,7 @@ type
     procedure UpdateChildrenForms;
 
     function GetFormById(prFormID : String) : TForm;
+    function GetFormIdByType(prFormType : String) : String;
     procedure DeleteFormById(prFormID : String);
     function GenerateContextMenu(prSearch : String = '') : TJupiterActionGroup;
     procedure GetExternalImages;
@@ -174,6 +175,18 @@ begin
 
 end;
 
+function TJupiterDesktopApp.GetFormIdByType(prFormType: String): String;
+var
+  vrVez : Integer;
+begin
+  Result := EmptyStr;
+
+  for vrVez := 0 to Self.FormList.Count - 1 do
+    with TFJupiterForm(Self.FormList.GetAtIndex(vrVez)) do
+      if ClassName = prFormType then
+        Result := FormID;
+end;
+
 procedure TJupiterDesktopApp.DeleteFormById(prFormID: String);
 var
   vrVez : Integer;
@@ -181,6 +194,10 @@ begin
   if not Assigned(FormList) then Exit;
 
   for vrVez := 0 to Self.FormList.Count - 1 do
+  begin
+    if not (TForm(Self.FormList.GetAtIndex(vrVez)) is TFJupiterForm) then
+      Continue;
+
     with TFJupiterForm(Self.FormList.GetAtIndex(vrVez)) do
       if FormID = prFormID then
       begin
@@ -188,6 +205,7 @@ begin
 
         Exit;
       end;
+  end;
 end;
 
 function TJupiterDesktopApp.GenerateContextMenu(prSearch : String = '') : TJupiterActionGroup;

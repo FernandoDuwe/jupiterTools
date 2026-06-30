@@ -10,17 +10,16 @@ uses
   athreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  fphttpclient, opensslsockets, openssl,
-  Forms, pascalscript, pascalscriptfcl, datetimectrls, tachartlazaruspkg,
-  uJupiterForm, uMain, uDmMain, JupiterConsts, JupiterObject, JupiterEnviroment,
-  JupiterModule, JupiterVariable, JupiterCSVDataProvider, JupiterApp,
-  jupiterDatabaseWizard, jupiterformutils, jupiterStandard,
-  jupiterMainMenuGenerator, jupiterScript, JupiterRoute, uJupiterUserExperience,
-  uConfig, uJupiterGenerator, jupiterDesktopApp, uJupiterAppScript,
-  uJupiterDesktopAppScript, uNewTask, uGenerator, uJupiterAction,
-  uCustomDatabaseForm, jupiterformcomponenttils, jupiterStringUtils,
-  uJupiterDatabaseScript, jupitertreeviewmenugenerator, JupiterXMLDataProvider,
-  JupiterFileDataProvider, JupiterTaskTimesDataProvider,
+  fphttpclient, opensslsockets, openssl, Forms, pascalscript, pascalscriptfcl,
+  datetimectrls, tachartlazaruspkg, uJupiterForm, uMain, uDmMain, JupiterConsts,
+  JupiterObject, JupiterEnviroment, JupiterModule, JupiterVariable,
+  JupiterCSVDataProvider, JupiterApp, jupiterDatabaseWizard, jupiterformutils,
+  jupiterStandard, jupiterMainMenuGenerator, jupiterScript, JupiterRoute,
+  uJupiterUserExperience, uConfig, uJupiterGenerator, jupiterDesktopApp,
+  uJupiterAppScript, uJupiterDesktopAppScript, uNewTask, uGenerator,
+  uJupiterAction, uCustomDatabaseForm, jupiterformcomponenttils,
+  jupiterStringUtils, uJupiterDatabaseScript, jupitertreeviewmenugenerator,
+  JupiterXMLDataProvider, JupiterFileDataProvider, JupiterTaskTimesDataProvider,
   jupiterTimeControlDataProvider, JupiterTasksDataProvider,
   JupiterVariableDataProvider, JupiterDirectoryDataProvider,
   JupiterDataProvider, jupiterutilspas, ucustomdatabasegrid, uUserPreferences,
@@ -31,9 +30,10 @@ uses
   uTextEditor, uJupiterDateUtilsScript, uChartViewer,
   uJupiterCheckListUtilsScript, uWaitForm, uCodeRunner, uFileFinder,
   uFileReaderFinder, jupiterScriptList, uconsole, uExternalSQLEditor,
-  uMultiLevelTextEditor, uMenuNavigator, jupiterDatabaseAutoComplete, 
-  uJupiterHTTPScript, uCustomDataProviderGrid, udatabasefinder, 
-jupiterformdbcomponenttils, uQuickJump, DarkModeUtils, uCodeTerminalRunner;
+  uMultiLevelTextEditor, uMenuNavigator, jupiterDatabaseAutoComplete,
+  uJupiterHTTPScript, uCustomDataProviderGrid, udatabasefinder,
+  jupiterformdbcomponenttils, uQuickJump, DarkModeUtils, uCodeTerminalRunner,
+  uUniqueFileExplorer;
 
 {$R *.res}
 
@@ -72,6 +72,7 @@ begin
     FormRoutes.Add(TJupiterFormRoute.Create(SYSTEM_PATH, TFSystemMonitor));
     FormRoutes.Add(TJupiterFormRoute.Create(CUSTOMCODEFORM_PATH, TFCustomCodeForm));
     FormRoutes.Add(TJupiterFormRoute.Create(FILEEXPLORER_PATH, TFFileExplorer));
+    FormRoutes.Add(TJupiterFormRoute.Create(FILEUNIQUEEXPLORER_PATH, TFUniqueFileExplorer));
     FormRoutes.Add(TJupiterFormRoute.Create(CONTEXT_PATH, TFContextMenu));
     FormRoutes.Add(TJupiterFormRoute.Create(QUICKJUMP_PATH, TFQuickJump));
     FormRoutes.Add(TJupiterFormRoute.Create(SQLEDITOR_PATH, TFSQLEditor));
