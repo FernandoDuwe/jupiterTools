@@ -637,7 +637,7 @@ begin
     end;
 
     if vrJupiterApp.Params.VariableById('Interface.Form.Modal.Implicit').AsBool then
-      if not (Self.CurrentForm is TFContextMenu) then
+      if ((not (Self.CurrentForm is TFContextMenu)) and (not (Self.CurrentForm is TFQuickJump))) then
         if ((Self.CurrentForm is TFJupiterForm) and (TFJupiterForm(Self.CurrentForm).IsModal)) then
         begin
           if Form is TFJupiterForm then

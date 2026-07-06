@@ -149,7 +149,7 @@ implementation
 
 uses uPSR_std, uPSC_std, uPSR_stdctrls, uPSC_stdctrls, uPSR_forms, uPSC_forms,
      uPSC_graphics, uPSC_controls, uPSC_classes, uPSR_graphics, uPSR_controls,
-     uPSR_classes, uPSC_comobj, uPSR_comobj, JupiterApp, uJupiterDesktopAppScript;
+     uPSR_classes, uPSC_comobj, uPSR_comobj, JupiterApp {$IFNDEF JUPITERCLI}, uJupiterDesktopAppScript {$ENDIF};
 
 { TJupiterScriptAnalyserList }
 
@@ -471,12 +471,14 @@ begin
     if not TJupiterScriptLibrary(Self.LibraryList.GetAtIndex(vrVez)).CanIncludeSource(prSourceCode) then
       Self.LibraryList.DeleteAtIndex(vrVez);
 
+  {$IFNDEF JUPITERCLI}
   for vrVez := Self.LibraryList.Count - 1 downto 0 do
     if Self.LibraryList.GetAtIndex(vrVez) is TJupiterDesktopAppScript then
     begin
       vrJupiterApp.Params.VariableById(FORM_CURRENTSCRIPTID).Value := Self.ScriptID;
       vrJupiterApp.Params.VariableById(FORM_CURRENTSCRIPTNAME).Value := Self.ScriptName;
     end;
+  {$ENDIF}
 end;
 
 function TJupiterScript.GetDateTimeMark: String;
@@ -522,6 +524,8 @@ var
   vrCompiled   : AnsiString;
   vrCompiledFlag : Boolean;
 begin
+  Result := False;
+
   Self.FMessages.Clear;
   Self.FRunMessages.Clear;
 
@@ -531,7 +535,14 @@ begin
   Self.FCompiled := False;
   Self.FRunned   := False;
 
+  {$IFNDEF JUPITERCLI}
   vrPSScript := TPSScript.Create(Application.MainForm);
+  {$ENDIF}
+
+  {$IFDEF JUPITERCLI}
+  vrPSScript := TPSScript.Create(nil);
+  {$ENDIF}
+
   vrEnviroment := TJupiterEnviroment.Create;
   try
     vrPSScript.UseDebugInfo := Self.UseDebugInfo;
@@ -587,6 +598,8 @@ begin
 
         if vrPSScript.Execute then
         begin
+          Result := True;
+
           Self.AddMessage(EmptyStr);
           Self.AddMessage(Self.GetDateTimeMark + ': Execução finalizada');
 

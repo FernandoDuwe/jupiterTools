@@ -33,7 +33,7 @@ uses
   uMultiLevelTextEditor, uMenuNavigator, jupiterDatabaseAutoComplete,
   uJupiterHTTPScript, uCustomDataProviderGrid, udatabasefinder,
   jupiterformdbcomponenttils, uQuickJump, DarkModeUtils, uCodeTerminalRunner,
-  uUniqueFileExplorer;
+  uUniqueFileExplorer, jupiterElara;
 
 {$R *.res}
 
@@ -52,6 +52,7 @@ begin
   vrJupiterApp.AddModule(TJupiterGenerator.Create);
   vrJupiterApp.AddModule(TJupiterTools.Create);
   vrJupiterApp.AddModule(TJupiterUtils.Create);
+  vrJupiterApp.AddModule(TJupiterElaraModule.Create);
 
   vrJupiterApp.LoadOtherVariables;
 
@@ -92,4 +93,5 @@ begin
 
   Application.Run;
 end.
+
 

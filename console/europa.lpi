@@ -12,7 +12,13 @@
       <Title Value="Europa"/>
       <UseAppBundle Value="False"/>
       <ResourceType Value="res"/>
+      <UseXPManifest Value="True"/>
+      <Icon Value="0"/>
     </General>
+    <VersionInfo>
+      <UseVersionInfo Value="True"/>
+      <MajorVersionNr Value="3"/>
+    </VersionInfo>
     <BuildModes>
       <Item Name="Default" Default="True"/>
     </BuildModes>
@@ -43,16 +49,41 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="uJupiterEnviromentScript"/>
       </Unit>
+      <Unit>
+        <Filename Value="../modules/jupiterstandard.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterStandard"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../modules/jupiterelara.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterElara"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../modules/jupitertools.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterTools"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../modules/jupiterutilspas.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../desktop/udmmain.pas"/>
+        <IsPartOfProject Value="True"/>
+        <HasResources Value="True"/>
+        <UnitName Value="uDmMain"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
     <Version Value="11"/>
     <Target>
-      <Filename Value="europa"/>
+      <Filename Value="../desktop/out/europa"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="../commons;../scripts"/>
+      <OtherUnitFiles Value="../commons;../scripts;../modules;../desktop"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Linking>

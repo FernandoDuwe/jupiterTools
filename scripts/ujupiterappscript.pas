@@ -114,7 +114,13 @@ end;
 
 procedure JupiterAppScript_WriteLn(prMessage: String);
 begin
+  {$IFNDEF JUPITERCLI}
   vrJupiterApp.AddMessage('Mensagem de script', prMessage, 'WriteLn');
+  {$ENDIF}
+
+  {$IFDEF JUPITERCLI}
+  WriteLn(prMessage);
+  {$ENDIF}
 end;
 
 procedure JupiterAppScript_WriteScriptLn(prScriptId, prMessage: String);

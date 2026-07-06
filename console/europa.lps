@@ -7,18 +7,21 @@
       <Unit>
         <Filename Value="europa.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="52"/>
-        <CursorPos Y="82"/>
-        <UsageCount Value="20"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="43"/>
+        <CursorPos X="30" Y="61"/>
+        <UsageCount Value="21"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../commons/jupiterapp.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterApp"/>
-        <EditorIndex Value="-1"/>
-        <CursorPos X="35" Y="12"/>
-        <UsageCount Value="20"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="346"/>
+        <CursorPos Y="355"/>
+        <UsageCount Value="21"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../scripts/ujupiterenviromentscript.pas"/>
@@ -27,7 +30,45 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="19"/>
         <CursorPos X="47" Y="27"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="21"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../modules/jupiterstandard.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterStandard"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="21"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../modules/jupiterelara.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterElara"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="21"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../modules/jupitertools.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="jupiterTools"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="21"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../modules/jupiterutilspas.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="21"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../desktop/udmmain.pas"/>
+        <IsPartOfProject Value="True"/>
+        <HasResources Value="True"/>
+        <UnitName Value="uDmMain"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="16"/>
+        <CursorPos X="51" Y="49"/>
+        <UsageCount Value="21"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../commons/jupiterenviroment.pas"/>
@@ -40,6 +81,9 @@
         <Filename Value="../commons/jupiterscript.pas"/>
         <UnitName Value="jupiterScript"/>
         <IsVisibleTab Value="True"/>
+        <EditorIndex Value="6"/>
+        <TopLine Value="575"/>
+        <CursorPos X="25" Y="601"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit>
@@ -47,59 +91,178 @@
         <Filename Value="../commons/jupiterdatabasewizard.pas"/>
         <UnitName Value="jupiterDatabaseWizard"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="68"/>
-        <CursorPos X="32" Y="83"/>
+        <TopLine Value="731"/>
+        <CursorPos X="6" Y="768"/>
         <UsageCount Value="10"/>
       </Unit>
+      <Unit>
+        <Filename Value="../commons/jupitervariable.pas"/>
+        <UnitName Value="JupiterVariable"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="21"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../scripts/ujupiterappscript.pas"/>
+        <UnitName Value="uJupiterAppScript"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../scripts/ujupiterdatabasescript.pas"/>
+        <UnitName Value="uJupiterDatabaseScript"/>
+        <EditorIndex Value="5"/>
+        <TopLine Value="53"/>
+        <CursorPos X="43" Y="55"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../commons/jupiterstringutils.pas"/>
+        <UnitName Value="jupiterStringUtils"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="78"/>
+        <CursorPos Y="88"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit>
     </Units>
-    <JumpHistory HistoryIndex="10">
+    <JumpHistory HistoryIndex="28">
       <Position>
-        <Filename Value="../commons/jupiterscript.pas"/>
-        <Caret Line="17" Column="68"/>
+        <Filename Value="../commons/jupiterstringutils.pas"/>
+        <Caret Line="92" TopLine="78"/>
       </Position>
       <Position>
-        <Filename Value="../commons/jupiterscript.pas"/>
-        <Caret Line="9" Column="40"/>
+        <Filename Value="../commons/jupiterstringutils.pas"/>
+        <Caret Line="88" TopLine="78"/>
       </Position>
       <Position>
-        <Filename Value="../commons/jupiterscript.pas"/>
-        <Caret Line="68" Column="46" TopLine="49"/>
+        <Filename Value="../commons/jupiterstringutils.pas"/>
+        <Caret Line="90" TopLine="78"/>
       </Position>
       <Position>
-        <Filename Value="../commons/jupiterscript.pas"/>
-        <Caret Line="9" Column="67"/>
+        <Filename Value="../commons/jupiterstringutils.pas"/>
+        <Caret Line="92" TopLine="78"/>
       </Position>
       <Position>
-        <Filename Value="../commons/jupiterscript.pas"/>
-        <Caret Line="284" Column="50" TopLine="269"/>
+        <Filename Value="../commons/jupiterstringutils.pas"/>
+        <Caret Line="88" TopLine="78"/>
       </Position>
       <Position>
-        <Filename Value="../commons/jupiterscript.pas"/>
-        <Caret Line="9" Column="105"/>
+        <Filename Value="../commons/jupiterstringutils.pas"/>
+        <Caret Line="90" TopLine="78"/>
       </Position>
       <Position>
-        <Filename Value="../commons/jupiterscript.pas"/>
-        <Caret Line="285" Column="24" TopLine="269"/>
+        <Filename Value="../commons/jupiterstringutils.pas"/>
+        <Caret Line="92" TopLine="78"/>
       </Position>
       <Position>
-        <Filename Value="../commons/jupiterscript.pas"/>
-        <Caret Line="420" Column="46" TopLine="404"/>
+        <Filename Value="../commons/jupiterstringutils.pas"/>
+        <Caret Line="88" TopLine="78"/>
       </Position>
       <Position>
-        <Filename Value="../commons/jupiterscript.pas"/>
+        <Filename Value="../commons/jupiterstringutils.pas"/>
+        <Caret Line="90" TopLine="78"/>
       </Position>
       <Position>
-        <Filename Value="../commons/jupiterscript.pas"/>
-        <Caret Line="476" Column="17" TopLine="458"/>
+        <Filename Value="../commons/jupiterstringutils.pas"/>
+        <Caret Line="92" TopLine="78"/>
       </Position>
       <Position>
-        <Filename Value="../commons/jupiterscript.pas"/>
-        <Caret Line="419" Column="34" TopLine="395"/>
+        <Filename Value="../commons/jupiterstringutils.pas"/>
+        <Caret Line="88" TopLine="78"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterstringutils.pas"/>
+        <Caret Line="90" TopLine="78"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterstringutils.pas"/>
+        <Caret Line="92" TopLine="78"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterstringutils.pas"/>
+        <Caret Line="88" TopLine="78"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterstringutils.pas"/>
+        <Caret Line="90" TopLine="78"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterstringutils.pas"/>
+        <Caret Line="92" TopLine="78"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterstringutils.pas"/>
+        <Caret Line="88" TopLine="78"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterstringutils.pas"/>
+        <Caret Line="90" TopLine="78"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterstringutils.pas"/>
+        <Caret Line="92" TopLine="78"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterstringutils.pas"/>
+        <Caret Line="88" TopLine="78"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterstringutils.pas"/>
+        <Caret Line="90" TopLine="78"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterstringutils.pas"/>
+        <Caret Line="92" TopLine="78"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterstringutils.pas"/>
+        <Caret Line="88" TopLine="78"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterstringutils.pas"/>
+        <Caret Line="90" TopLine="78"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterstringutils.pas"/>
+        <Caret Line="92" TopLine="78"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterstringutils.pas"/>
+        <Caret Line="88" TopLine="78"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterstringutils.pas"/>
+        <Caret Line="90" TopLine="78"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterstringutils.pas"/>
+        <Caret Line="92" TopLine="78"/>
+      </Position>
+      <Position>
+        <Filename Value="../commons/jupiterstringutils.pas"/>
+        <Caret Line="88" TopLine="78"/>
       </Position>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>
-      <Modes ActiveMode=""/>
+      <Modes ActiveMode="default">
+        <Mode Name="default">
+          <local>
+            <CommandLineParams Value="TEMPOS.MarcarHoraFinal.OnClick"/>
+          </local>
+        </Mode>
+      </Modes>
     </RunParams>
+    <HistoryLists>
+      <List Name="WorkingDirectory" Type="File" Count="1"/>
+      <List Name="LaunchingApplication" Type="File" Count="1">
+        <Item1 Value="C:\Windows\system32\cmd.exe /C ${TargetCmdLine}"/>
+      </List>
+      <List Name="CommandLineParameters" Count="2">
+        <Item1 Value="TEMPOS.MarcarHoraFinal.OnClick"/>
+      </List>
+    </HistoryLists>
   </ProjectSession>
 </CONFIG>

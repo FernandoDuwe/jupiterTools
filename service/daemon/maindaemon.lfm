@@ -1,0 +1,7 @@
+object MainDaemon1: TMainDaemon1
+  OldCreateOrder = False
+  Height = 296
+  HorizontalOffset = 886
+  VerticalOffset = 211
+  Width = 504
+end

@@ -1,4 +1,4 @@
-unit maindaemon;
+unit mapper;
 
 {$mode objfpc}{$H+}
 
@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, DaemonApp;
 
 type
-  TMainDaemon = class(TDaemon)
+  TDaemonMapper1 = class(TDaemonMapper)
   private
 
   public
@@ -16,20 +16,19 @@ type
   end;
 
 var
-  MainDaemonObj : TMainDaemon;
+  DaemonMapper1: TDaemonMapper1;
 
 implementation
 
-procedure RegisterDaemon;
+procedure RegisterMapper;
 begin
-  RegisterDaemonClass(TMainDaemon)
+  RegisterDaemonMapper(TDaemonMapper1)
 end;
 
 {$R *.lfm}
 
 
 initialization
-  RegisterDaemon;
-
+  RegisterMapper;
 end.
 

@@ -1,0 +1,29 @@
+object DMService: TDMService
+  OnCreate = DataModuleCreate
+  OnDestroy = DataModuleDestroy
+  OldCreateOrder = False
+  Height = 181
+  HorizontalOffset = 644
+  VerticalOffset = 145
+  Width = 275
+  object sqlLiteInternalTransaction: TSQLTransaction
+    Active = False
+    Database = sqlLiteInternalDatabaseConnection
+    Left = 88
+    Top = 92
+  end
+  object sqlLiteInternalDatabaseConnection: TSQLite3Connection
+    Connected = False
+    LoginPrompt = False
+    KeepConnection = False
+    Params.Strings = (
+      'synchronous=normal'
+      'cache_size=-8000'
+      'temp_store=memory'
+    )
+    Transaction = sqlLiteInternalTransaction
+    AlwaysUseBigint = False
+    Left = 88
+    Top = 16
+  end
+end

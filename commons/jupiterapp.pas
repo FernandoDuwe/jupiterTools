@@ -70,6 +70,7 @@ type
     function ExistsMacro(prMacroId : String) : Boolean;
 
     procedure RunMacro(prId : Integer; prParams : TJupiterVariableList);
+    procedure RunMacroCLI(prMacroId : String; prParams : TJupiterVariableList);
     procedure RunMacro(prMacroId : String; prParams : TJupiterVariableList);
     procedure RunMacroNoMessage(prMacroId : String; prParams : TJupiterVariableList);
     procedure RunMacroFromFile(prMacroFile : String; prParams : TJupiterVariableList);
@@ -341,6 +342,42 @@ begin
     FreeAndNil(vrScript);
     FreeAndNil(vrQry);
 
+    FreeAndNil(prParams);
+  end;
+end;
+
+procedure TJupiterApp.RunMacroCLI(prMacroId: String; prParams: TJupiterVariableList);
+var
+  vrScript : TJupiterScript;
+  vrQry    : TSQLQuery;
+  vrVez    : Integer;
+begin
+  vrScript := Self.NewScript;
+  vrQry    := Self.NewWizard.NewQuery;
+  try
+    vrQry.SQL.Add(' SELECT ID, MACROID, MACRO FROM MACROS WHERE MACROID = :PRID ');
+    vrQry.ParamByName('PRID').AsString := prMacroId;
+    vrQry.Open;
+
+    if vrQry.EOF then
+      raise Exception.Create('A macro ' + prMacroId + ' não foi encontrada.');
+
+    vrScript.ScriptName := vrQry.FieldByName('MACROID').AsString;
+    vrScript.Script.AddStrings(JupiterStringUtilsStringToStringList(vrQry.FieldByName('MACRO').AsString));
+    vrScript.Params.CopyValues(prParams);
+
+    if vrScript.Execute then
+      WriteLn('Script executado com sucesso')
+    else
+    begin
+      WriteLn('Erro ao executar script:');
+
+      for vrVez := 0 to vrScript.Messages.Count -1 do
+        WriteLn(' ' + vrScript.Messages[vrVez]);
+    end;
+  finally
+    FreeAndNil(vrScript);
+    FreeAndNil(vrQry);
     FreeAndNil(prParams);
   end;
 end;
