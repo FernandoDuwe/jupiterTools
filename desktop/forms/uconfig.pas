@@ -148,6 +148,8 @@ var
 begin
   inherited Internal_PrepareForm;
 
+  Self.LateralPanel := tvFilter;
+
   Self.Hint := 'Ajuste aqui os parâmetros do Jupiter';
 
   Self.ActionGroup.AddAction(TJupiterAction.Create('Novo', 'Inserir um novo item', ICON_NEW, @Internal_NewClick));

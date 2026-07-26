@@ -11,7 +11,7 @@ inherited FMultiLevelTextEditor: TFMultiLevelTextEditor
     ClientWidth = 1285
   end
   inherited fpOptions: TFlowPanel
-    Top = 645
+    Top = 646
     Width = 1285
   end
   inherited pnBottom: TPanel
@@ -21,7 +21,7 @@ inherited FMultiLevelTextEditor: TFMultiLevelTextEditor
   end
   object pcBody: TPageControl[3]
     Left = 0
-    Height = 600
+    Height = 601
     Top = 45
     Width = 632
     ActivePage = tsDetails
@@ -30,15 +30,14 @@ inherited FMultiLevelTextEditor: TFMultiLevelTextEditor
     TabOrder = 3
     object tsDetails: TTabSheet
       Caption = 'Totais'
-      ClientHeight = 569
-      ClientWidth = 622
+      ClientHeight = 573
+      ClientWidth = 624
       object vlParams: TValueListEditor
         Left = 0
-        Height = 569
+        Height = 573
         Top = 0
-        Width = 622
+        Width = 624
         Align = alClient
-        FixedCols = 0
         RowCount = 4
         TabOrder = 0
         TitleStyle = tsNative
@@ -59,19 +58,19 @@ inherited FMultiLevelTextEditor: TFMultiLevelTextEditor
     end
     object tsExplorer: TTabSheet
       Caption = 'Itens'
-      ClientHeight = 569
-      ClientWidth = 622
+      ClientHeight = 573
+      ClientWidth = 624
       object lvReport: TListView
         Left = 0
-        Height = 569
+        Height = 573
         Top = 0
-        Width = 622
+        Width = 624
         Align = alClient
         Columns = <        
           item
             AutoSize = True
             Caption = 'Item'
-            Width = 607
+            Width = 39
           end>
         ReadOnly = True
         TabOrder = 0
@@ -80,13 +79,13 @@ inherited FMultiLevelTextEditor: TFMultiLevelTextEditor
     end
     object tsText: TTabSheet
       Caption = 'Texto'
-      ClientHeight = 569
-      ClientWidth = 622
+      ClientHeight = 573
+      ClientWidth = 624
       object mmText: TMemo
         Left = 0
-        Height = 569
+        Height = 573
         Top = 0
-        Width = 622
+        Width = 624
         Align = alClient
         Lines.Strings = (
           'mmText'
@@ -99,14 +98,14 @@ inherited FMultiLevelTextEditor: TFMultiLevelTextEditor
   end
   object Splitter1: TSplitter[4]
     Left = 632
-    Height = 600
+    Height = 601
     Top = 45
     Width = 5
     OnMoved = Splitter1Moved
   end
   object tvText: TTreeView[5]
     Left = 637
-    Height = 600
+    Height = 601
     Top = 45
     Width = 648
     Align = alClient
@@ -122,23 +121,23 @@ inherited FMultiLevelTextEditor: TFMultiLevelTextEditor
   inherited acOptions: TActionList[6]
     object acNewLine: TAction[3]
       Caption = 'acNewLine'
-      OnExecute = acNewLineExecute
       ShortCut = 13
+      OnExecute = acNewLineExecute
     end
     object acNewChildLine: TAction[4]
       Caption = 'acNewChildLine'
-      OnExecute = acNewChildLineExecute
       ShortCut = 16397
+      OnExecute = acNewChildLineExecute
     end
     object acDelete: TAction[5]
       Caption = 'acDelete'
-      OnExecute = acDeleteExecute
       ShortCut = 46
+      OnExecute = acDeleteExecute
     end
     object acCtrlC: TAction[6]
       Caption = 'acCtrlC'
-      OnExecute = acCtrlCExecute
       ShortCut = 16451
+      OnExecute = acCtrlCExecute
     end
   end
   inherited tmrAutoUpdater: TTimer[7]

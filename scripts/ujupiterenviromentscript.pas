@@ -118,10 +118,15 @@ begin
 end;
 
 function JupiterEnviromentScript_CreateDir(prPath: String): String;
+var
+  vrEnviroment : TJupiterEnviroment;
 begin
-  CreateDir(prPath);
-
-  Result := prPath;
+  vrEnviroment := TJupiterEnviroment.Create;
+  try
+    Result := vrEnviroment.CreateDirRecursily(prPath);
+  finally
+    FreeAndNil(vrEnviroment);
+  end;
 end;
 
 function JupiterEnviromentScript_CreatePath(prPath: String): String;

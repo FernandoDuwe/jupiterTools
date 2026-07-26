@@ -324,6 +324,8 @@ var
 begin
   inherited Internal_PrepareForm;
 
+  Self.LateralPanel := pnLeft;
+
   Self.FTableList.Clear;
 
   vrThread := TJupiterGetTableThread.Create(True);

@@ -202,6 +202,8 @@ var
 begin
   inherited Internal_PrepareForm;
 
+  Self.LateralPanel := pnLeft;
+
   Self.ActionGroup.AddAction(TJupiterAction.Create('Novo', 'Clique aqui para criar um novo script', ICON_NEW, @Internal_OnNew));
 
   Self.ActionGroup.AddAction(TJupiterAction.Create('Abrir', 'Clique aqui para abrir um script existente', ICON_OPEN, @Internal_OnOpen));

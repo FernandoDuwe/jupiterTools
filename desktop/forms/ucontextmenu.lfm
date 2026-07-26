@@ -16,7 +16,6 @@ inherited FContextMenu: TFContextMenu
     end
   end
   inherited fpOptions: TFlowPanel
-    Height = 0
     Top = 708
     Width = 1204
     TabOrder = 3
@@ -71,7 +70,7 @@ inherited FContextMenu: TFContextMenu
         item
           AutoSize = True
           Caption = 'Rota'
-          Width = 10
+          Width = 39
         end>
       MultiSelect = True
       ParentFont = False

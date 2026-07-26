@@ -422,7 +422,8 @@ end;
 
 procedure TJupiterDesktopApp.GenerateDynamicData;
 begin
-  Self.RunMacro(TRIGGER_ONLOADDYNAMICDATA, TJupiterVariableList.Create);
+  if vrJupiterApp.ExistsMacro(TRIGGER_ONLOADDYNAMICDATA) then
+    Self.RunMacro(TRIGGER_ONLOADDYNAMICDATA, TJupiterVariableList.Create);
 end;
 
 procedure TJupiterDesktopApp.CreatePeriodicTasksList;

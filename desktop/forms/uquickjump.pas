@@ -101,7 +101,7 @@ begin
 
   SynCompletion1.Width := PercentOfScreen(Self.Width, 50);
 
-  Self.Height := 300;
+  Self.Height := 400;
   Self.Width  := PercentOfScreen(Screen.Width, 50);
 
   Self.ActionGroup.AddAction(TJupiterAction.Create('Executar', 'Clique aqui para executar o script', ICON_PLAY, @Internal_OnPlay));

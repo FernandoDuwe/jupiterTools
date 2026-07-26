@@ -385,6 +385,8 @@ procedure TFMultiLevelTextEditor.Internal_PrepareForm;
 begin
   inherited Internal_PrepareForm;
 
+  Self.LateralPanel := pcBody;
+
   tvText.Images       := TJupiterDesktopApp(vrJupiterApp).ImageList;
   lvReport.LargeImages := TJupiterDesktopApp(vrJupiterApp).ImageList;
   lvReport.SmallImages := TJupiterDesktopApp(vrJupiterApp).ImageList;

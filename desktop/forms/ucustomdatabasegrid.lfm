@@ -26,7 +26,6 @@ inherited FCustomDatabaseGrid: TFCustomDatabaseGrid
     Columns = <>
     DataSource = InternalDataSource
     Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColumnMove, dgColLines, dgRowLines, dgTabs, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit, dgRowHighlight]
-    PopupMenu = pmActions
     ReadOnly = True
     ShowHint = True
     TabOrder = 2
@@ -98,9 +97,13 @@ inherited FCustomDatabaseGrid: TFCustomDatabaseGrid
       Caption = 'Exibir a coluna ID'
       OnClick = miExibirColunaIDClick
     end
-    inherited miLookColumn: TMenuItem[10]
+    inherited miLookColumn: TMenuItem[8]
+    end
+    inherited miParams: TMenuItem[10]
     end
     inherited miShowLateralPanel: TMenuItem[11]
+    end
+    inherited miShortcut: TMenuItem[12]
     end
   end
   object InternalDataSource: TDataSource[9]
@@ -116,14 +119,10 @@ inherited FCustomDatabaseGrid: TFCustomDatabaseGrid
     Left = 720
     Top = 72
   end
-  object pmActions: TPopupMenu[11]
-    Left = 240
-    Top = 144
-  end
-  object tmrExecution: TTimer[12]
+  object tmrExecution: TTimer[11]
     Interval = 100
     OnTimer = tmrExecutionTimer
-    Left = 336
+    Left = 240
     Top = 144
   end
 end

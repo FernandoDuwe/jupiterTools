@@ -214,6 +214,8 @@ object FJupiterForm: TFJupiterForm
     end
     object miShowLateralPanel: TMenuItem
       Caption = 'Exibir barra lateral'
+      ShortCut = 16460
+      OnClick = miShowLateralPanelClick
     end
     object miLookColumn: TMenuItem
       Caption = 'Travar colunas'
@@ -241,6 +243,9 @@ object FJupiterForm: TFJupiterForm
         Caption = 'Parar todas'
         OnClick = MenuItem2Click
       end
+    end
+    object miShortcut: TMenuItem
+      Caption = 'Atalhos'
     end
   end
 end

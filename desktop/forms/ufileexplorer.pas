@@ -183,6 +183,8 @@ procedure TFFileExplorer.Internal_PrepareForm;
 begin
   Self.ShowSearchBar := True;
 
+  Self.LateralPanel := pnLeft;
+
   cbView.ItemIndex := 2;
 
   if not Self.Params.Exists('currentFile') then

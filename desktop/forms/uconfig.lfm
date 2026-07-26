@@ -47,8 +47,8 @@ inherited FConfig: TFConfig
     Align = alLeft
     ReadOnly = True
     TabOrder = 2
-    OnSelectionChanged = tvFilterSelectionChanged
     Options = [tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
+    OnSelectionChanged = tvFilterSelectionChanged
   end
   object spSeparator: TSplitter[5]
     Left = 329

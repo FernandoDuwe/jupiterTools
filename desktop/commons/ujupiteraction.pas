@@ -82,6 +82,7 @@ type
     FFlowPanel : TFlowPanel;
     FImageList : TImageList;
     FTableName : String;
+    FWhereAction : String;
     FActionList : TActionList;
     FPopupMenu : TPopupMenu;
 
@@ -91,11 +92,12 @@ type
 
     procedure Internal_SetTableName(prTableName : String);
   published
-    property FlowPanel  : TFlowPanel  read FFlowPanel  write FFlowPanel;
-    property PopupMenu  : TPopupMenu  read FPopupMenu  write FPopupMenu;
-    property ImageList  : TImageList  read FImageList  write FImageList;
-    property TableName  : String      read FTableName  write Internal_SetTableName;
-    property ActionList : TActionList read FActionList write FActionList;
+    property FlowPanel    : TFlowPanel  read FFlowPanel    write FFlowPanel;
+    property PopupMenu    : TPopupMenu  read FPopupMenu    write FPopupMenu;
+    property ImageList    : TImageList  read FImageList    write FImageList;
+    property TableName    : String      read FTableName    write Internal_SetTableName;
+    property WhereAction  : String      read FWhereAction  write FWhereAction;
+    property ActionList   : TActionList read FActionList   write FActionList;
 
     property OnRequestData      : TJupiterActionOnRequestData read FOnRequestData      write FOnRequestData;
     property OnPopupRequestData : TJupiterActionOnRequestData read FOnPopupRequestData write FOnPopupRequestData;
@@ -321,6 +323,10 @@ begin
   if not Assigned(Self.Reference) then
     Exit;
 
+  if Assigned(Self.FButton) then
+    if not Self.FButton.Visible then
+      Exit;
+
   if Assigned(Self.OnRequestData) then
     vrVisibile := vrJupiterApp.RunAcitonVisible(Self.Reference.ID, Self.OnRequestData())
   else
@@ -355,6 +361,10 @@ begin
 
   if not Assigned(Self.Reference) then
     Exit;
+
+  if Assigned(Self.FPopup) then
+    if not Self.FPopup.Visible then
+      Exit;
 
   if Assigned(Self.OnPopupRequestData) then
     vrVisibile := vrJupiterApp.RunAcitonVisible(Self.Reference.ID, Self.OnPopupRequestData())
@@ -450,7 +460,11 @@ begin
   vrWizard := vrJupiterApp.NewWizard;
   vrQuery := vrWizard.NewQuery;
   try
-    vrQuery.SQL.Add(' SELECT A1.ID, A1.NAME, A1.TITLE, A1.ICON FROM ACTIONS A1 WHERE A1.TABLENAME = :PRTABLENAME ORDER BY A1.ZINDEX ');
+    if Trim(Self.FWhereAction) <> EmptyStr then
+      vrQuery.SQL.Add(' SELECT A1.ID, A1.NAME, A1.TITLE, A1.ICON FROM ACTIONS A1 WHERE A1.TABLENAME = :PRTABLENAME AND ' + Self.FWhereAction + ' ORDER BY A1.ZINDEX ')
+    else
+      vrQuery.SQL.Add(' SELECT A1.ID, A1.NAME, A1.TITLE, A1.ICON FROM ACTIONS A1 WHERE A1.TABLENAME = :PRTABLENAME ORDER BY A1.ZINDEX ');
+
     vrQuery.ParamByName('PRTABLENAME').AsString := prTableName;
     vrQuery.Open;
     vrQuery.First;

@@ -78,6 +78,20 @@ begin
     if not vrWizard.TableExists('ACTIONS') then
       vrWizard.ExecuteScript(CreateStringList('CREATE TABLE ACTIONS ( ID INTEGER PRIMARY KEY, NAME VARCHAR (100), TITLE VARCHAR (100), TABLENAME VARCHAR(100), ICON SMALLINT, ZINDEX SMALLINT, MACRO INTEGER, MACRO_ENABLE INTEGER, MACRO_VISIBLE INTEGER, FOREIGN KEY (MACRO) REFERENCES MACROS (ID), FOREIGN KEY (MACRO_ENABLE) REFERENCES MACROS (ID), FOREIGN KEY (MACRO_VISIBLE) REFERENCES MACROS (ID))'));
 
+    if not vrWizard.FieldExists('ACTIONS', 'RENDER_ON_FORMS') then
+    begin
+      vrWizard.ExecuteScript(CreateStringList(' ALTER TABLE ACTIONS ADD RENDER_ON_FORMS BOOLEAN '), True);
+
+      vrWizard.ExecuteScript(CreateStringList(' UPDATE ACTIONS SET RENDER_ON_FORMS = TRUE '), True);
+    end;
+
+    if not vrWizard.FieldExists('ACTIONS', 'RENDER_ON_GRIDS') then
+    begin
+      vrWizard.ExecuteScript(CreateStringList(' ALTER TABLE ACTIONS ADD RENDER_ON_GRIDS BOOLEAN '), True);
+
+      vrWizard.ExecuteScript(CreateStringList(' UPDATE ACTIONS SET RENDER_ON_GRIDS = TRUE '), True);
+    end;
+
     if not vrWizard.TableExists('RECORDPIN') then
       vrWizard.ExecuteScript(CreateStringList('CREATE TABLE RECORDPIN ( ID INTEGER PRIMARY KEY, TABLENAME VARCHAR (100), RECORDKEY INTEGER)'));
 
@@ -160,8 +174,8 @@ begin
 
     Self.Internal_CreateMacroIfDontExists(TRIGGER_ONEXECUTE, 'Evento: Ao executar comando externo', vrStr);
 
-    Self.Internal_CreateMacroIfDontExists(TRIGGER_FORM_BEFOREPREPARE, 'Evento: Formulários, antes de preparar', CreateStringListToMacro(EmptyStr));
-    Self.Internal_CreateMacroIfDontExists(TRIGGER_FORM_AFTERPREPARE, 'Evento: Formulários, após preparar', CreateStringListToMacro(EmptyStr));
+//    Self.Internal_CreateMacroIfDontExists(TRIGGER_FORM_BEFOREPREPARE, 'Evento: Formulários, antes de preparar', CreateStringListToMacro(EmptyStr));
+//    Self.Internal_CreateMacroIfDontExists(TRIGGER_FORM_AFTERPREPARE, 'Evento: Formulários, após preparar', CreateStringListToMacro(EmptyStr));
 
     Self.Internal_CreateMacroIfDontExists(TRIGGER_ONSTART, 'Evento: Ao iniciar a aplicação', CreateStringList('program macro;' + #13#10 + 'begin' + #13#10 + '  OpenForm(''/forms/newTask'');' + #13#10 + 'end.'));
 
@@ -191,7 +205,7 @@ begin
 
     Self.Internal_CreateMacroIfDontExists(TRIGGER_ONSHOWPARAMS, 'Evento: Ao exibir os parâmetros dos formulários', vrStr);
 
-    Self.Internal_CreateMacroIfDontExists(TRIGGER_ONLOADDYNAMICDATA, 'Evento: Ao carregar dados dinâmicos', CreateStringListToMacro(''));
+  //  Self.Internal_CreateMacroIfDontExists(TRIGGER_ONLOADDYNAMICDATA, 'Evento: Ao carregar dados dinâmicos', CreateStringListToMacro(''));
 
     Self.Internal_CreateMacroIfDontExists(TRIGGER_ONCHECKLISTCHANGE, 'Evento: Ao alterar uma linha de uma checklist', CreateStringListToMacro(''));
 

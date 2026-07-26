@@ -13,7 +13,6 @@ inherited FSQLEditor: TFSQLEditor
     ClientWidth = 1200
   end
   inherited fpOptions: TFlowPanel
-    Height = 0
     Top = 719
     Width = 1200
   end
@@ -534,6 +533,8 @@ inherited FSQLEditor: TFSQLEditor
           MouseActions = <>
           MaxExtraMarksColums = 0
           Options = [sgmoDeDuplicateMarksOnOverflow]
+          MarkupInfo.Background = clBtnFace
+          MarkupInfo.Foreground = clNone
         end
         object SynGutterLineNumber1: TSynGutterLineNumber
           Width = 13
@@ -550,6 +551,9 @@ inherited FSQLEditor: TFSQLEditor
           MouseActions = <>
           ModifiedColor = 59900
           SavedColor = clGreen
+          MarkupInfo.Background = clNone
+          MarkupInfo.Foreground = clGreen
+          MarkupInfo.FrameColor = 59900
         end
         object SynGutterSeparator1: TSynGutterSeparator
           Width = 2
@@ -730,7 +734,7 @@ inherited FSQLEditor: TFSQLEditor
   end
   object SynCompletion1: TSynCompletion[12]
     OnBeforeExecute = SynCompletion1BeforeExecute
-    Position = -1
+    Position = 0
     LinesInWindow = 6
     SelectedColor = clHighlight
     CaseSensitive = False

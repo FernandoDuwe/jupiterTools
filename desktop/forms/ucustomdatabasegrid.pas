@@ -22,7 +22,6 @@ type
     miExibirColunaID: TMenuItem;
     miShowMiniForm: TMenuItem;
     pnMiniForm: TPanel;
-    pmActions: TPopupMenu;
     sbMiniForm: TScrollBox;
     Splitter1: TSplitter;
     tmrExecution: TTimer;
@@ -103,8 +102,7 @@ begin
 
   Self.FUseLimit := True;
 
-  Self.ActionGroup.PopupMenu := pmActions;
-  Self.ActionGroup.OnPopupRequestData := @Internal_OnPopupRequestData;
+  Self.ActionGroup.WhereAction := 'RENDER_ON_GRIDS = TRUE';
 
   vrWizard := vrJupiterApp.NewWizard;
   try
@@ -391,6 +389,8 @@ procedure TFCustomDatabaseGrid.Internal_PrepareForm;
 begin
   inherited Internal_PrepareForm;
 
+  Self.LateralPanel := sbMiniForm;
+
   Self.ShowSearchBar := True;
 
   Self.FLimit := vrJupiterApp.Params.VariableById(FORM_GRID_LIMIT).AsInteger;
@@ -650,7 +650,7 @@ begin
     TLabel(vrReference.Component).Font.Style := [fsBold];
 
     vrCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM;
-
+                                     {
     for vrVez := 0 to pmActions.Items.Count - 1 do
     begin
       if pmActions.Items[vrVez].Tag = 0 then
@@ -670,6 +670,7 @@ begin
 
       vrCurrentLine := vrReference.Bottom + FORM_MARGIN_BOTTOM_TONEXT;
     end;
+    }
 
     if vrActionCount = 0 then
     begin
@@ -771,7 +772,7 @@ end;
 procedure TFCustomDatabaseGrid.Internal_OnLinkClick(Sender: TObject);
 var
   vrVez : Integer;
-begin
+begin               {
   for vrVez := 0 to pmActions.Items.Count - 1 do
     if TLabel(Sender).Tag = pmActions.Items[vrVez].Tag then
     begin
@@ -780,7 +781,7 @@ begin
       tmrExecution.Enabled := True;
 
       Exit;
-    end;
+    end;}
 end;
 
 function TFCustomDatabaseGrid.Internal_OnRequestData: TJupiterVariableList;

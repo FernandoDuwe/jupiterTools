@@ -19,6 +19,7 @@ type
   published
     property BasePath : String read Internal_GetBasePath write FBasePath;
   public
+    function CreateDirRecursily(prPath : String) : String;
     function CreatePath(prPath : String) : String;
     function CreateFile(prPath, prContent : String) : String;
     function CreateBinaryFile(prPath, prContent : String) : String;
@@ -71,6 +72,38 @@ begin
      Result := Result + GetDirectorySeparator;
 
   Self.FBasePath := Result;
+end;
+
+function TJupiterEnviroment.CreateDirRecursily(prPath: String): String;
+var
+  vrStr     : TStrings;
+  vrStrPath : String;
+  vrVez     : Integer;
+begin
+  Result := prPath;
+
+  vrStr := TStringList.Create;
+  try
+    vrStr.Clear;
+    vrStr.Delimiter     := DirectorySeparator;
+    vrStr.DelimitedText := Result;
+
+    vrStrPath := EmptyStr;
+
+    for vrVez := 0 to vrStr.Count - 1 do
+    begin
+      vrStrPath := vrStrPath + vrStr[vrVez] + GetDirectorySeparator;
+
+      if not DirectoryExists(vrStrPath) then
+        CreateDir(vrStrPath);
+    end;
+
+    if Copy(Result, Length(Result), 1) <>  GetDirectorySeparator then
+       Result := Result + GetDirectorySeparator;
+  finally
+    vrStr.Clear;
+    FreeAndNil(vrStr);
+  end;
 end;
 
 function TJupiterEnviroment.CreatePath(prPath: String) : String;
@@ -308,7 +341,7 @@ end;
 procedure TJupiterEnviroment.CopyFileTo(prOrigin, prDestiny: String);
 begin
   {$IFNDEF JUPITERCLI}
-  CopyFile(prOrigin, prDestiny);
+  CopyFile(prOrigin, prDestiny, [cffOverwriteFile], True);
   {$ENDIF}
 end;
 

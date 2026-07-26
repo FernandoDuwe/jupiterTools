@@ -536,7 +536,6 @@ begin
 
     vrScript.ScriptName := vrQry.FieldByName('MACROID').AsString;
     vrScript.Script.AddStrings(JupiterStringUtilsStringToStringList(vrQry.FieldByName('MACRO').AsString));
-    vrScript.Script.SaveToFile('C:\Temp\Debug.pas');
     vrScript.Params.CopyValues(prParams);
 
     vrScript.Execute;

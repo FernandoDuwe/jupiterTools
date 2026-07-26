@@ -27,6 +27,7 @@ type
     Image1: TImage;
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
+    miShortcut: TMenuItem;
     miShowLateralPanel: TMenuItem;
     miWorkMenu: TMenuItem;
     miThreads: TMenuItem;
@@ -59,6 +60,7 @@ type
     procedure miAjustRatioRightClick(Sender: TObject);
     procedure miLookColumnClick(Sender: TObject);
     procedure miParamsClick(Sender: TObject);
+    procedure miShowLateralPanelClick(Sender: TObject);
     procedure miUpdateClick(Sender: TObject);
     procedure miWorkMenuClick(Sender: TObject);
     procedure pnSearchBarClick(Sender: TObject);
@@ -69,6 +71,7 @@ type
     FFormID : String;
     FPercentDivisor : Integer;
     FThreadController : TJupiterThreadList;
+    FLateralPanel : TWinControl;
 
     FShowSearchBar : Boolean;
     FActionGroup   : TJupiterActionGroup;
@@ -95,6 +98,7 @@ type
     property Prepared         : Boolean              read FPrepared         write FPrepared;
     property ThreadController : TJupiterThreadList   read FThreadController write FThreadController;
     property FormType         : TJupiterFormType     read FFormType         write FFormType;
+    property LateralPanel     : TWinControl          read FLateralPanel     write FLateralPanel;
 
     procedure Internal_UpdateComponents; virtual;
     procedure Internal_UpdateDatasets; virtual;
@@ -179,10 +183,12 @@ begin
 
     while not vrQry.EOF do
     begin
-      vrComponent := JupiterComponentsAddPopupMenuItem(pmOptions, vrQry.FieldByName('DESCRIPTION').AsString, vrQry.FieldByName('SHORTCUT').AsString, NULL_KEY);
+      vrComponent := JupiterComponentsAddPopupMenuItem(nil, vrQry.FieldByName('DESCRIPTION').AsString, vrQry.FieldByName('SHORTCUT').AsString, NULL_KEY);
 
       TMenuItem(vrComponent.Component).Tag := vrQry.FieldByName('DESTINY').AsInteger;
       TMenuItem(vrComponent.Component).OnClick := @Internal_OnShortCutClick;
+
+      miShortcut.Add(TMenuItem(vrComponent.Component));
 
       vrQry.Next;
     end;
@@ -190,10 +196,12 @@ begin
     for vrVez := 0 to TJupiterDesktopApp(vrJupiterApp).DynamicShortcutList.Count - 1 do
       with TJupiterVariableList(TJupiterDesktopApp(vrJupiterApp).DynamicShortcutList.GetAtIndex(vrVez)) do
       begin
-        vrComponent := JupiterComponentsAddPopupMenuItem(pmOptions, VariableById('Description').Value, VariableById('Shortcut').Value, NULL_KEY);
+        vrComponent := JupiterComponentsAddPopupMenuItem(nil, VariableById('Description').Value, VariableById('Shortcut').Value, NULL_KEY);
 
         TMenuItem(vrComponent.Component).Tag := VariableById('Destiny').AsInteger;
         TMenuItem(vrComponent.Component).OnClick := @Internal_OnShortCutClick;
+
+        miShortcut.Add(TMenuItem(vrComponent.Component));
       end;
   finally
     FreeAndNil(vrWizard);
@@ -261,6 +269,16 @@ end;
 procedure TFJupiterForm.miParamsClick(Sender: TObject);
 begin
 
+end;
+
+procedure TFJupiterForm.miShowLateralPanelClick(Sender: TObject);
+begin
+  if not Assigned(Self.LateralPanel) then
+    Exit;
+
+  Self.LateralPanel.Visible := not Self.LateralPanel.Visible;
+
+  miShowLateralPanel.Checked := Self.LateralPanel.Visible;
 end;
 
 procedure TFJupiterForm.miUpdateClick(Sender: TObject);
@@ -426,6 +444,10 @@ begin
 
   Self.ActionGroup.UpdateActions;
 
+  miAjustRatioLeft.Enabled   := Assigned(Self.LateralPanel);
+  miAjustRatioRight.Enabled  := Assigned(Self.LateralPanel);
+  miShowLateralPanel.Enabled := Assigned(Self.LateralPanel);
+
   pnBottom.Caption := '                       ' + Self.FHint;
 
   if vrJupiterApp.Params.VariableById('Interface.Form.AlwaysHideHint').AsBool then
@@ -466,6 +488,8 @@ end;
 procedure TFJupiterForm.Internal_UpdateCalcs;
 begin
   miParams.Caption := Format('Parâmetros (%0:d)', [Self.Params.Count]);
+
+  miShortcut.Caption := Format('Atalhos (%0:d)', [miShortcut.Count]);
 end;
 
 procedure TFJupiterForm.Internal_PrepareForm;
@@ -607,7 +631,8 @@ begin
 
   Self.Prepared := True;
   try
-    vrJupiterApp.RunMacro(TRIGGER_FORM_BEFOREPREPARE, Self.Internal_OnRequestData);
+    if vrJupiterApp.ExistsMacro(TRIGGER_FORM_BEFOREPREPARE) then
+      vrJupiterApp.RunMacro(TRIGGER_FORM_BEFOREPREPARE, Self.Internal_OnRequestData);
 
     Self.Internal_PrepareForm;
 
@@ -629,7 +654,8 @@ begin
     if not vrJupiterApp.Params. VariableById('Interface.PerformanceMode').AsBool then
       DrawForm(Self);
 
-    vrJupiterApp.RunMacro(TRIGGER_FORM_AFTERPREPARE, Self.Internal_OnRequestData);
+    if vrJupiterApp.ExistsMacro(TRIGGER_FORM_AFTERPREPARE) then
+      vrJupiterApp.RunMacro(TRIGGER_FORM_AFTERPREPARE, Self.Internal_OnRequestData);
   finally
     if not vrJupiterApp.Params. VariableById('Interface.PerformanceMode').AsBool then
     begin
@@ -642,7 +668,6 @@ begin
 
     Self.Prepared := True;
 
-//    Application.ProcessMessages;
     FreeAndNil(vrWaitPanel);
 
     tmrAutoUpdater.Enabled := True;

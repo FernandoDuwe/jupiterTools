@@ -166,6 +166,8 @@ var
 begin
   inherited Internal_PrepareForm;
 
+  Self.LateralPanel := tvTreeMenu;
+
   tvTreeMenu.Images := TJupiterDesktopApp(vrJupiterApp).ImageList;
 
   Self.Internal_ListContextMenu;

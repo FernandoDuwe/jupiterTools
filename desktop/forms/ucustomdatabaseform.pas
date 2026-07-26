@@ -92,6 +92,8 @@ begin
 
   Self.FObjectList := TJupiterObjectList.Create;
 
+  Self.ActionGroup.WhereAction := 'RENDER_ON_FORMS = TRUE';
+
   Self.FTableName := EmptyStr;
   Self.FID        := NULL_KEY;
 end;

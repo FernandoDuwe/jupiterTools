@@ -62,6 +62,8 @@ procedure TFFileReaderFinder.Internal_PrepareForm;
 begin
   inherited Internal_PrepareForm;
 
+  Self.LateralPanel := pnLeft;
+
   Self.ShowSearchBar := True;
 
   Self.Hint := Self.Params.VariableById('path').Value;

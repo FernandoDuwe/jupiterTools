@@ -152,6 +152,8 @@ var
 begin
   inherited Internal_PrepareForm;
 
+  Self.LateralPanel := gbMain;
+
   Self.FSearchOnMenu := True;
 
   tvTreeMenu.OnEnter := @tvTreeMenuEnter;

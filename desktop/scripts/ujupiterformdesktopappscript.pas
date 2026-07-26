@@ -88,6 +88,7 @@ begin
     Exit;
 
   TFJupiterForm(vrForm).Hint := prHint;
+  TFJupiterForm(vrForm).UpdateForm(True, False, False);
 end;
 
 procedure JupiterFormDesktopAppScriptAddLabel(prFormID, prCaption: String);
