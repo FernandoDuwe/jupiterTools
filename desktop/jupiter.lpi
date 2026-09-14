@@ -21,7 +21,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="3"/>
       <RevisionNr Value="4"/>
-      <BuildNr Value="166"/>
+      <BuildNr Value="184"/>
       <Language Value="0416"/>
       <CharSet Value="04E2"/>
       <StringTable CompanyName="Jupiter" FileDescription="Jupiter interface" ProductName="Jupiter"/>
@@ -37,6 +37,12 @@
       <FormatVersion Value="2"/>
     </RunParams>
     <RequiredPackages>
+      <Item>
+        <PackageName Value="WebView4Delphi"/>
+      </Item>
+      <Item>
+        <PackageName Value="TurboPowerIPro"/>
+      </Item>
       <Item>
         <PackageName Value="TAChartLazarusPkg"/>
       </Item>
@@ -553,6 +559,14 @@
         <Filename Value="../modules/jupiterelara.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="jupiterElara"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms/uinternetexplorer.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FInternetExplorer"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uInternetExplorer"/>
       </Unit>
     </Units>
   </ProjectOptions>

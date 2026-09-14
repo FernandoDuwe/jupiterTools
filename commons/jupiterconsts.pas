@@ -19,6 +19,7 @@ const
    FILEEXPLORER_PATH : String = '/forms/explorer/files';
    FILEUNIQUEEXPLORER_PATH : String = '/forms/explorer/unique/files';
    MENUEXPLORER_PATH : String = '/forms/explorer/menus';
+   INTERNETEXPLORER_PATH : String = '/forms/explorer/internet';
    USERPREFERENCE_PATH : String = '/forms/userPreference';
    CUSTOMDATABASE_PATH : String = '/forms/custom/database';
    CUSTOMGRIDDATABASE_PATH : String = '/forms/custom/databaseGrid';

@@ -1,0 +1,49 @@
+inherited FInternetExplorer: TFInternetExplorer
+  OnCreate = FormCreate
+  OnShow = FormShow
+  inherited pnSearchBar: TPanel
+    Width = 1099
+    ClientWidth = 1099
+  end
+  inherited fpOptions: TFlowPanel
+    Top = 470
+    Width = 1099
+  end
+  inherited pnBottom: TPanel
+    Top = 470
+    Width = 1099
+    ClientWidth = 1099
+  end
+  object wvPanel: TWVWindowParent[3]
+    Left = 0
+    Height = 414
+    Top = 56
+    Width = 1099
+    Align = alClient
+    TabOrder = 3
+    Browser = wvBrowser
+  end
+  inherited acOptions: TActionList[4]
+  end
+  inherited tmrAutoUpdater: TTimer[5]
+  end
+  inherited pmOptions: TPopupMenu[6]
+  end
+  object wvBrowser: TWVBrowser[7]
+    BrowserExecPath = 'chrome.exe'
+    TargetCompatibleBrowserVersion = '114.0.1823.32'
+    AllowSingleSignOnUsingOSPrimaryAccount = False
+    OnInitializationError = wvBrowserInitializationError
+    OnAfterCreated = wvBrowserAfterCreated
+    OnDocumentTitleChanged = wvBrowserDocumentTitleChanged
+    Left = 80
+    Top = 96
+  end
+  object Timer1: TTimer[8]
+    Enabled = False
+    Interval = 300
+    OnTimer = Timer1Timer
+    Left = 696
+    Top = 90
+  end
+end

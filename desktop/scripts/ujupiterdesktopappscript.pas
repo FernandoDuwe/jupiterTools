@@ -23,6 +23,7 @@ type
   end;
 
   function JupiterAppDesktopOpenForm(prForm : String) : String;
+  function JupiterAppDesktopOpenWebSite(prHTTPAddress : String) : String;
   function JupiterAppDesktopGetFormIdByType(prFormType : String) : String;
   procedure JupiterAppDesktopOpenCodeRunner(prMacroId : String);
   procedure JupiterAppDesktopOpenDatbaseFinder(prSearch : String);
@@ -75,6 +76,11 @@ uses Controls, uJupiterForm, uMain, jupiterDesktopApp, jupiterDatabaseWizard, LC
 function JupiterAppDesktopOpenForm(prForm: String) : String;
 begin
   Result := TJupiterDesktopApp(vrJupiterApp).OpenForm(prForm, EmptyStr);
+end;
+
+function JupiterAppDesktopOpenWebSite(prHTTPAddress: String): String;
+begin
+  TJupiterDesktopApp(vrJupiterApp).OpenForm(INTERNETEXPLORER_PATH, prHTTPAddress);
 end;
 
 function JupiterAppDesktopGetFormIdByType(prFormType: String): String;
@@ -550,6 +556,7 @@ begin
   inherited DoCompile(prSender);
 
   prSender.AddFunction(@JupiterAppDesktopOpenForm, 'function OpenForm(Form: String) : String;');
+  prSender.AddFunction(@JupiterAppDesktopOpenWebSite, 'function OpenWebSite(prHTTPAddress: String) : String;');
   prSender.AddFunction(@JupiterAppDesktopGetFormIdByType, 'function GetFormIdByType(prFormType: String) : String;');
   prSender.AddFunction(@JupiterAppDesktopOpenDatbaseFinder, 'function OpenDatabaseFinder(Search : String) : String;');
   prSender.AddFunction(@JupiterAppDesktopOpenCodeRunner, 'procedure OpenCodeRunner(prMacroId: String);');
@@ -609,6 +616,7 @@ begin
   Result := inherited AnalyseCode;
 
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function OpenForm(Form: String) : String;'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function OpenWebSite(prHTTPAddress: String) : String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function GetFormIdByType(prFormType: String) : String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaFunction, 'function OpenDatabaseFinder(Search : String) : String;'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenCodeRunner(prMacroId: String);'));

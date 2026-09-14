@@ -109,6 +109,14 @@ begin
     Self.Internal_CreateVariablIfDontExists('Interface.Form.Action.FlatMode', 'Modo flat nas ações de formulário', 'Y');
 
     Self.Internal_CreateVariablIfDontExists('Interface.Form.Modal.Implicit', 'Navegação modal implicita', 'Y');
+
+    Self.Internal_CreateVariablIfDontExists('InternetExplorer.BrowserExec.Path', 'Internet Explorer: Navegador padrão', 'chrome.exe');
+
+    Self.Internal_CreateVariablIfDontExists('InternetExplorer.DefaultURL', 'Internet Explorer: Página padrão', 'about:blank');
+
+    Self.Internal_CreateVariablIfDontExists('InternetExplorer.Language', 'Internet Explorer: Idioma padrão', 'Portugues-BR');
+
+    Self.Internal_CreateVariablIfDontExists('InternetExplorer.UserDataFolder.Path', 'Internet Explorer: Diretório de arquivos de usuário', '');
   finally
     FreeAndNil(vrWizard);
   end;
