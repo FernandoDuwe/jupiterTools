@@ -16,6 +16,7 @@ type
   { TFInternetExplorer }
 
   TFInternetExplorer = class(TFJupiterForm)
+    Panel1: TPanel;
     Timer1: TTimer;
     wvBrowser: TWVBrowser;
     wvPanel: TWVWindowParent;
@@ -157,9 +158,12 @@ procedure TFInternetExplorer.Internal_PrepareForm;
 begin
   inherited Internal_PrepareForm;
 
-  Self.ActionGroup.AddAction(TJupiterAction.Create('Voltar', 'Clique aqui para voltar', ICON_LEFT, @Internal_OnBack));
-  Self.ActionGroup.AddAction(TJupiterAction.Create('Avançar', 'Clique aqui para avançar', ICON_RIGHT, @Internal_OnNext));
-  Self.ActionGroup.AddAction(TJupiterAction.Create('Atualizar', 'Clique aqui para atualizar', ICON_REFRESH, @Internal_OnUpdate));
+  if vrJupiterApp.Params.VariableById('InternetExplorer.ShowMainActionsInForm').AsBool then
+  begin
+    Self.ActionGroup.AddAction(TJupiterAction.Create('Voltar', 'Clique aqui para voltar', ICON_LEFT, @Internal_OnBack));
+    Self.ActionGroup.AddAction(TJupiterAction.Create('Avançar', 'Clique aqui para avançar', ICON_RIGHT, @Internal_OnNext));
+    Self.ActionGroup.AddAction(TJupiterAction.Create('Atualizar', 'Clique aqui para atualizar', ICON_REFRESH, @Internal_OnUpdate));
+  end;
 
   Internal_OnUpdate(Self);
 end;

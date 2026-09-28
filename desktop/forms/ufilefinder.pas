@@ -9,7 +9,7 @@ uses
   jupiterStringUtils, JupiterDirectoryDataProvider, JupiterFileDataProvider,
   JupiterConsts, JupiterApp, uJupiterStringUtilsScript, uJupiterRunnableScript,
   uMain, uJupiterAction, uJupiterDesktopAppScript, LCLType, jupiterthread,
-  JupiterModule, jupiterDatabaseWizard;
+  JupiterModule, jupiterDatabaseWizard, JupiterDataProvider;
 
 type
 
@@ -34,6 +34,7 @@ type
     procedure Internal_OnOpenFolder(Sender: TObject);
     procedure Internal_OnStop(Sender: TObject);
     procedure Internal_OnDelete(Sender: TObject);
+    procedure Internal_OnDataProvider(Sender: TObject);
 
     procedure Internal_UpdateComponents; override;
     procedure Internal_UpdateDatasets; override;
@@ -198,6 +199,29 @@ begin
   end;
 end;
 
+procedure TFFileFinder.Internal_OnDataProvider(Sender: TObject);
+var
+  vrProvider : TJupiterDataProvider;
+  vrVez : Integer;
+begin
+  vrProvider := TJupiterDataProvider.Create;
+  try
+    for vrVez := 0 to tvFileTree.Items.Count - 1 do
+      with TJupiterStringReference(tvFileTree.Items[vrVez].Data) do
+      begin
+        if not FileExists(Reference) then
+          Continue;
+
+        vrProvider.AddRow;
+        vrProvider.GetLastRow.Fields.AddVariable('FieldName', ExtractFileName(Reference));
+        vrProvider.GetLastRow.Fields.AddVariable('File', Reference);
+        vrProvider.GetLastRow.Fields.AddVariable('Extension', ExtractFileExt(Reference));
+      end;
+  finally
+    JupiterAppDesktopShowMessage('DataProvider: ' + vrProvider.ProviderID);
+  end;
+end;
+
 procedure TFFileFinder.Internal_UpdateComponents;
 begin
   inherited Internal_UpdateComponents;
@@ -298,6 +322,7 @@ begin
   Self.ActionGroup.AddAction(TJupiterAction.Create('Parar', 'Clique aqui para parar a pesquisa', ICON_CANCEL, @Internal_OnStop));
   Self.ActionGroup.AddAction(TJupiterAction.Create('Excluir', 'Clique aqui para abrir a pasta atual externamente', ICON_DELETE, @Internal_OnDelete));
   Self.ActionGroup.AddAction(TJupiterAction.Create('Pesquisar', 'Clique aqui para efetuar a pesquisa', ICON_SEARCH, @Internal_OnOpenFolder));
+  Self.ActionGroup.AddAction(TJupiterAction.Create('DataProvider', 'Clique aqui para gerar um DataProvider a partir dos dados atuais', ICON_TECHFILE, @Internal_OnDataProvider));
 
   if not Self.Params.Exists('currentFile') then
     Self.Params.AddVariable('currentFile', EmptyStr);

@@ -123,8 +123,8 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="jupiterStandard"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="43"/>
-        <CursorPos X="79" Y="43"/>
+        <TopLine Value="256"/>
+        <CursorPos Y="285"/>
         <UsageCount Value="200"/>
       </Unit>
       <Unit>
@@ -148,11 +148,10 @@
         <Filename Value="modules/ujupiteruserexperience.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uJupiterUserExperience"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="85"/>
-        <CursorPos X="141" Y="119"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="103"/>
+        <CursorPos X="87" Y="107"/>
         <UsageCount Value="200"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="forms/uconfig.pas"/>
@@ -279,8 +278,8 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="jupiterStringUtils"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="7"/>
-        <CursorPos Y="37"/>
+        <TopLine Value="13"/>
+        <CursorPos X="3" Y="42"/>
         <UsageCount Value="219"/>
       </Unit>
       <Unit>
@@ -365,7 +364,8 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="uJupiterRunnableScript"/>
         <EditorIndex Value="-1"/>
-        <CursorPos X="36" Y="17"/>
+        <TopLine Value="200"/>
+        <CursorPos X="27" Y="208"/>
         <UsageCount Value="200"/>
       </Unit>
       <Unit>
@@ -391,8 +391,7 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterDataProvider"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="20"/>
-        <CursorPos X="19" Y="23"/>
+        <CursorPos X="23" Y="27"/>
         <UsageCount Value="200"/>
       </Unit>
       <Unit>
@@ -523,10 +522,11 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uSQLEditor"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="318"/>
-        <CursorPos X="30" Y="328"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="456"/>
+        <CursorPos Y="465"/>
         <UsageCount Value="206"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="forms/uchecklist.pas"/>
@@ -610,10 +610,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uFileFinder"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="325"/>
-        <CursorPos X="43" Y="343"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="211"/>
+        <CursorPos X="63" Y="221"/>
         <UsageCount Value="213"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="forms/ufilereaderfinder.pas"/>
@@ -623,8 +625,7 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uFileReaderFinder"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="61"/>
-        <CursorPos X="30" Y="65"/>
+        <CursorPos X="26"/>
         <UsageCount Value="212"/>
       </Unit>
       <Unit>
@@ -790,12 +791,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uInternetExplorer"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="75"/>
-        <CursorPos X="112" Y="82"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="159"/>
+        <CursorPos X="90" Y="166"/>
         <UsageCount Value="22"/>
-        <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../../../lazarus/lcl/include/customform.inc"/>
@@ -980,9 +979,9 @@
         <Filename Value="../commons/jupiterfiledataprovider.pas"/>
         <UnitName Value="JupiterFileDataProvider"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="26"/>
-        <CursorPos X="47" Y="53"/>
-        <UsageCount Value="7"/>
+        <TopLine Value="22"/>
+        <CursorPos X="52" Y="54"/>
+        <UsageCount Value="10"/>
       </Unit>
       <Unit>
         <Filename Value="../../../lazarus/components/PascalScript/Source/uPSComponent.pas"/>
@@ -1020,110 +1019,85 @@
         <UsageCount Value="10"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="25">
+    <JumpHistory HistoryIndex="19">
       <Position>
-        <Filename Value="forms/uinternetexplorer.pas"/>
-        <Caret Line="50" Column="107" TopLine="39"/>
+        <Filename Value="forms/ufilefinder.pas"/>
+        <Caret Line="335" Column="48" TopLine="326"/>
       </Position>
       <Position>
-        <Filename Value="forms/uinternetexplorer.pas"/>
-        <Caret Line="21" Column="32" TopLine="9"/>
+        <Filename Value="forms/usqleditor.pas"/>
+        <Caret Line="348" Column="175" TopLine="318"/>
       </Position>
       <Position>
-        <Filename Value="forms/uinternetexplorer.pas"/>
-        <Caret Line="62" Column="25" TopLine="43"/>
+        <Filename Value="forms/usqleditor.pas"/>
       </Position>
       <Position>
-        <Filename Value="forms/uinternetexplorer.pas"/>
-        <Caret Line="46" Column="20" TopLine="27"/>
+        <Filename Value="forms/usqleditor.pas"/>
+        <Caret Line="71" Column="56" TopLine="39"/>
       </Position>
       <Position>
-        <Filename Value="forms/uinternetexplorer.pas"/>
-        <Caret Line="51" Column="93" TopLine="34"/>
+        <Filename Value="forms/usqleditor.pas"/>
+        <Caret Line="461" Column="3" TopLine="456"/>
       </Position>
       <Position>
-        <Filename Value="forms/uinternetexplorer.pas"/>
-        <Caret Line="48" Column="102" TopLine="34"/>
+        <Filename Value="forms/ufilefinder.pas"/>
+        <Caret Line="301" Column="178" TopLine="283"/>
       </Position>
       <Position>
-        <Filename Value="forms/uinternetexplorer.pas"/>
-        <Caret Line="50" Column="102" TopLine="36"/>
+        <Filename Value="forms/ufilefinder.pas"/>
+        <Caret Line="37" Column="56" TopLine="26"/>
       </Position>
       <Position>
-        <Filename Value="forms/uinternetexplorer.pas"/>
-        <Caret Line="20" Column="21" TopLine="12"/>
+        <Filename Value="forms/usqleditor.pas"/>
+        <Caret Line="71" Column="55" TopLine="52"/>
       </Position>
       <Position>
-        <Filename Value="forms/uinternetexplorer.pas"/>
-        <Caret Line="26" Column="62" TopLine="9"/>
+        <Filename Value="forms/ufilefinder.pas"/>
+        <Caret Line="285" Column="61" TopLine="231"/>
       </Position>
       <Position>
-        <Filename Value="forms/uinternetexplorer.pas"/>
-        <Caret Line="93" Column="40" TopLine="74"/>
+        <Filename Value="forms/ufilefinder.pas"/>
+        <Caret Line="27" Column="27"/>
       </Position>
       <Position>
-        <Filename Value="forms/uinternetexplorer.pas"/>
-        <Caret Line="77" Column="59" TopLine="66"/>
+        <Filename Value="forms/ufilefinder.pas"/>
+        <Caret Line="93" Column="29" TopLine="73"/>
       </Position>
       <Position>
-        <Filename Value="forms/uinternetexplorer.pas"/>
-        <Caret Line="79" Column="22" TopLine="68"/>
+        <Filename Value="forms/ufilefinder.pas"/>
+        <Caret Line="444" TopLine="404"/>
       </Position>
       <Position>
-        <Filename Value="forms/uinternetexplorer.pas"/>
-        <Caret Line="88" Column="75" TopLine="74"/>
+        <Filename Value="forms/ufilefinder.pas"/>
+        <Caret Line="349" Column="26" TopLine="337"/>
       </Position>
       <Position>
-        <Filename Value="forms/uinternetexplorer.pas"/>
-        <Caret Line="24" Column="60" TopLine="13"/>
+        <Filename Value="forms/ufilefinder.pas"/>
+        <Caret Line="47" Column="15" TopLine="27"/>
       </Position>
       <Position>
-        <Filename Value="forms/uinternetexplorer.pas"/>
-        <Caret Line="12" Column="60"/>
+        <Filename Value="forms/ufilefinder.pas"/>
+        <Caret Line="333" Column="3" TopLine="323"/>
       </Position>
       <Position>
-        <Filename Value="forms/uinternetexplorer.pas"/>
-        <Caret Line="9" Column="81"/>
+        <Filename Value="forms/ufilefinder.pas"/>
+        <Caret Line="37" Column="31" TopLine="23"/>
       </Position>
       <Position>
-        <Filename Value="forms/uinternetexplorer.pas"/>
-        <Caret Line="74" Column="44" TopLine="62"/>
+        <Filename Value="forms/ufilefinder.pas"/>
+        <Caret Line="212" Column="25" TopLine="201"/>
       </Position>
       <Position>
-        <Filename Value="forms/uinternetexplorer.pas"/>
-        <Caret Line="126" Column="97" TopLine="94"/>
+        <Filename Value="forms/ufilefinder.pas"/>
+        <Caret Line="37" Column="37" TopLine="20"/>
       </Position>
       <Position>
-        <Filename Value="forms/uinternetexplorer.pas"/>
-        <Caret Line="29" Column="29" TopLine="16"/>
+        <Filename Value="forms/ufilefinder.pas"/>
+        <Caret Line="210" Column="40" TopLine="202"/>
       </Position>
       <Position>
-        <Filename Value="forms/uinternetexplorer.pas"/>
-        <Caret Line="37" Column="44" TopLine="16"/>
-      </Position>
-      <Position>
-        <Filename Value="forms/uinternetexplorer.pas"/>
-        <Caret Line="79" Column="33" TopLine="59"/>
-      </Position>
-      <Position>
-        <Filename Value="forms/uinternetexplorer.pas"/>
-        <Caret Line="28" Column="15" TopLine="8"/>
-      </Position>
-      <Position>
-        <Filename Value="forms/uinternetexplorer.pas"/>
-        <Caret Line="59" Column="98" TopLine="47"/>
-      </Position>
-      <Position>
-        <Filename Value="forms/uinternetexplorer.pas"/>
-        <Caret Line="98" Column="50" TopLine="81"/>
-      </Position>
-      <Position>
-        <Filename Value="forms/uinternetexplorer.pas"/>
-        <Caret Line="37" Column="24" TopLine="13"/>
-      </Position>
-      <Position>
-        <Filename Value="forms/uinternetexplorer.pas"/>
-        <Caret Line="56" TopLine="23"/>
+        <Filename Value="forms/ufilefinder.pas"/>
+        <Caret Line="219" Column="11" TopLine="202"/>
       </Position>
     </JumpHistory>
     <RunParams>

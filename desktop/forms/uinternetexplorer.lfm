@@ -14,14 +14,25 @@ inherited FInternetExplorer: TFInternetExplorer
     Width = 1099
     ClientWidth = 1099
   end
-  object wvPanel: TWVWindowParent[3]
+  object Panel1: TPanel[3]
     Left = 0
     Height = 414
     Top = 56
     Width = 1099
     Align = alClient
+    BevelInner = bvLowered
+    ClientHeight = 414
+    ClientWidth = 1099
     TabOrder = 3
-    Browser = wvBrowser
+    object wvPanel: TWVWindowParent
+      Left = 2
+      Height = 410
+      Top = 2
+      Width = 1095
+      Align = alClient
+      TabOrder = 0
+      Browser = wvBrowser
+    end
   end
   inherited acOptions: TActionList[4]
   end
@@ -31,6 +42,7 @@ inherited FInternetExplorer: TFInternetExplorer
   end
   object wvBrowser: TWVBrowser[7]
     BrowserExecPath = 'chrome.exe'
+    UserDataFolder = 'C:\Temp\'
     TargetCompatibleBrowserVersion = '114.0.1823.32'
     AllowSingleSignOnUsingOSPrimaryAccount = False
     OnInitializationError = wvBrowserInitializationError

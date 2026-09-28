@@ -117,6 +117,8 @@ begin
     Self.Internal_CreateVariablIfDontExists('InternetExplorer.Language', 'Internet Explorer: Idioma padrão', 'Portugues-BR');
 
     Self.Internal_CreateVariablIfDontExists('InternetExplorer.UserDataFolder.Path', 'Internet Explorer: Diretório de arquivos de usuário', '');
+
+    Self.Internal_CreateVariablIfDontExists('InternetExplorer.ShowMainActionsInForm', 'Internet Explorer: Exibir ações padrões no formulário', 'Y');
   finally
     FreeAndNil(vrWizard);
   end;
