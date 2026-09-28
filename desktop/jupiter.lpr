@@ -33,7 +33,7 @@ uses
   uMultiLevelTextEditor, uMenuNavigator, jupiterDatabaseAutoComplete,
   uJupiterHTTPScript, uCustomDataProviderGrid, udatabasefinder,
   jupiterformdbcomponenttils, uQuickJump, DarkModeUtils, uCodeTerminalRunner,
-  uUniqueFileExplorer, jupiterElara, uInternetExplorer;
+  uUniqueFileExplorer, jupiterElara, uInternetExplorer, uRichTextEditor;
 
 {$R *.res}
 
@@ -80,6 +80,7 @@ begin
     FormRoutes.Add(TJupiterFormRoute.Create(SQLEXTEDITOR_PATH, TFExternalSQLEditor));
     FormRoutes.Add(TJupiterFormRoute.Create(CHECKLIST_PATH, TFCheckList));
     FormRoutes.Add(TJupiterFormRoute.Create(TEXTEDITOR_PATH, TFTextEditor));
+    FormRoutes.Add(TJupiterFormRoute.Create(RICHTEXTEDITOR_PATH, TFRichTextEditor));
     FormRoutes.Add(TJupiterFormRoute.Create(MULTILEVELTEXTEDITOR_PATH, TFMultiLevelTextEditor));
     FormRoutes.Add(TJupiterFormRoute.Create(CHARTVIEWER_PATH, TFChartViewer));
     FormRoutes.Add(TJupiterFormRoute.Create(CODERUNNER_PATH, TFCodeRunner));

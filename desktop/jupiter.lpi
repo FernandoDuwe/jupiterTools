@@ -21,7 +21,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="3"/>
       <RevisionNr Value="4"/>
-      <BuildNr Value="192"/>
+      <BuildNr Value="196"/>
       <Language Value="0416"/>
       <CharSet Value="04E2"/>
       <StringTable CompanyName="Jupiter" FileDescription="Jupiter interface" ProductName="Jupiter"/>
@@ -37,6 +37,12 @@
       <FormatVersion Value="2"/>
     </RunParams>
     <RequiredPackages>
+      <Item>
+        <PackageName Value="richmemo_design"/>
+      </Item>
+      <Item>
+        <PackageName Value="richmemopackage"/>
+      </Item>
       <Item>
         <PackageName Value="WebView4Delphi"/>
       </Item>
@@ -567,6 +573,14 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uInternetExplorer"/>
+      </Unit>
+      <Unit>
+        <Filename Value="forms/urichtexteditor.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FRichTextEditor"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="uRichTextEditor"/>
       </Unit>
     </Units>
   </ProjectOptions>

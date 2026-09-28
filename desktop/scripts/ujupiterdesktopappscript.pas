@@ -50,6 +50,8 @@ type
   procedure JupiterAppDesktopOpenCheckListExplorerForm(prPath : String);
   procedure JupiterAppDesktopOpenTextEditorForm(prPath : String);
   procedure JupiterAppDesktopOpenTextDBEditorForm(prTable, prField : String; prId : Integer);
+  procedure JupiterAppDesktopOpenRichTextEditorForm(prPath : String);
+  procedure JupiterAppDesktopOpenRichTextDBEditorForm(prTable, prField : String; prId : Integer);
   procedure JupiterAppDesktopOpenTextDBEditorHighlighterForm(prTable, prField, prHighlighter : String; prId : Integer);
   procedure JupiterAppDesktopOpenMultiLevelTextEditorForm(prPath : String);
   procedure JupiterAppDesktopOpenTerminalRunnerForm(prCommand : String);
@@ -368,6 +370,36 @@ begin
   end;
 end;
 
+procedure JupiterAppDesktopOpenRichTextEditorForm(prPath: String);
+var
+  vrVariables : TJupiterVariableList;
+begin
+  vrVariables := TJupiterVariableList.Create;
+  try
+    vrVariables.AddVariable('path', prPath, 'path');
+
+    TJupiterDesktopApp(vrJupiterApp).OpenForm(RICHTEXTEDITOR_PATH, vrVariables);
+  finally
+    FreeAndNil(vrVariables);
+  end;
+end;
+
+procedure JupiterAppDesktopOpenRichTextDBEditorForm(prTable, prField: String; prId: Integer);
+var
+  vrVariables : TJupiterVariableList;
+begin
+  vrVariables := TJupiterVariableList.Create;
+  try
+    vrVariables.AddVariable('table', prTable, 'table');
+    vrVariables.AddVariable('field', prField, 'field');
+    vrVariables.AddVariable('id', IntToStr(prId), 'id');
+
+    TJupiterDesktopApp(vrJupiterApp).OpenForm(RICHTEXTEDITOR_PATH, vrVariables);
+  finally
+    FreeAndNil(vrVariables);
+  end;
+end;
+
 procedure JupiterAppDesktopOpenTextDBEditorHighlighterForm(prTable, prField, prHighlighter: String; prId: Integer);
 var
   vrVariables : TJupiterVariableList;
@@ -570,6 +602,8 @@ begin
   prSender.AddFunction(@JupiterAppDesktopOpenCheckListExplorerForm, 'procedure OpenCheckListExplorerForm(prPath : String);');
   prSender.AddFunction(@JupiterAppDesktopOpenTextEditorForm, 'procedure OpenTextEditorForm(prPath : String);');
   prSender.AddFunction(@JupiterAppDesktopOpenTextDBEditorForm, 'procedure OpenTextDBEditorForm(prTable, prField : String; prId : Integer);');
+  prSender.AddFunction(@JupiterAppDesktopOpenRichTextEditorForm, 'procedure OpenRichTextEditorForm(prPath : String);');
+  prSender.AddFunction(@JupiterAppDesktopOpenRichTextDBEditorForm, 'procedure OpenRichTextDBEditorForm(prTable, prField : String; prId : Integer);');
   prSender.AddFunction(@JupiterAppDesktopOpenTextDBEditorHighlighterForm, 'procedure OpenTextDBEditorHighlighterForm(prTable, prField, prHighlighter : String; prId : Integer);');
   prSender.AddFunction(@JupiterAppDesktopOpenMultiLevelTextEditorForm, 'procedure OpenMultiLevelTextEditorForm(prPath : String);');
   prSender.AddFunction(@JupiterAppDesktopCloseForm, 'procedure CloseForm(prFormID : String);');
@@ -630,6 +664,8 @@ begin
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenCheckListExplorerForm(prPath: String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenTextEditorForm(prPath: String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenTextDBEditorForm(prTable, prField : String; prId : Integer);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenRichTextEditorForm(prPath: String);'));
+  Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenRichTextDBEditorForm(prTable, prField : String; prId : Integer);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenTextDBEditorHighlighterForm(prTable, prField, prHighlighter : String; prId : Integer);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure OpenMultiLevelTextEditorForm(prPath: String);'));
   Result.AddItem(TJupiterScriptAnalyserItem.Create(NULL_KEY, NULL_KEY, jsaProcedure, 'procedure CloseForm(prFormID: String) : String;'));

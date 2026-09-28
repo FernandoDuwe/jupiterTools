@@ -1,0 +1,36 @@
+inherited FRichTextEditor: TFRichTextEditor
+  OnClose = FormClose
+  inherited pnSearchBar: TPanel
+    Width = 1099
+    ClientWidth = 1099
+  end
+  inherited fpOptions: TFlowPanel
+    Top = 470
+    Width = 1099
+  end
+  inherited pnBottom: TPanel
+    Top = 470
+    Width = 1099
+    ClientWidth = 1099
+  end
+  object RichMemo1: TRichMemo[3]
+    Left = 0
+    Height = 414
+    Top = 56
+    Width = 1099
+    Align = alClient
+    HideSelection = False
+    Lines.Strings = (
+      'RichMemo1'
+    )
+    OnChange = RichMemo1Change
+    TabOrder = 3
+    ZoomFactor = 1
+  end
+  inherited acOptions: TActionList[4]
+  end
+  inherited tmrAutoUpdater: TTimer[5]
+  end
+  inherited pmOptions: TPopupMenu[6]
+  end
+end

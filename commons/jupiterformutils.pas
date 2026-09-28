@@ -8,7 +8,7 @@ uses
   Classes, ComCtrls, JupiterObject, JupiterConsts, Controls,
   SysUtils, Forms, Graphics, EditBtn, CheckLst, StdCtrls,
   ShellCtrls, SynEdit, DBCtrls, DBDateTimePicker, ActnList,
-  Menus, ValEdit, SynHighlighterAny;
+  Menus, ValEdit, SynHighlighterAny, RichMemo;
 
   procedure CopyNodes(prSourceNode, prTargetNode: TTreeNode);
 
@@ -358,6 +358,14 @@ begin
     begin
       TMemo(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
       TMemo(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_MEMO_FONT_NAME).Value;
+
+      Continue;
+    end;
+
+    if prComponent.Components[vrVez] is TRichMemo then
+    begin
+      TRichMemo(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
+      TRichMemo(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_FONT_NAME).Value;
 
       Continue;
     end;
