@@ -33,7 +33,8 @@ uses
   uMultiLevelTextEditor, uMenuNavigator, jupiterDatabaseAutoComplete,
   uJupiterHTTPScript, uCustomDataProviderGrid, udatabasefinder,
   jupiterformdbcomponenttils, uQuickJump, DarkModeUtils, uCodeTerminalRunner,
-  uUniqueFileExplorer, jupiterElara, uInternetExplorer, uRichTextEditor;
+  uUniqueFileExplorer, jupiterElara, uInternetExplorer, uRichTextEditor, 
+uRichEditUtils;
 
 {$R *.res}
 

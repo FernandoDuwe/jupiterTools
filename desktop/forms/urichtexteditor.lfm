@@ -24,6 +24,7 @@ inherited FRichTextEditor: TFRichTextEditor
       'RichMemo1'
     )
     OnChange = RichMemo1Change
+    ScrollBars = ssAutoBoth
     TabOrder = 3
     ZoomFactor = 1
   end

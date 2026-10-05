@@ -114,6 +114,7 @@ const
    FIELD_FONT_SIZE             : String = 'Interface.Font.Size';
    FIELD_EDITABLES_FONT_NAME   : String = 'Interface.Editables.Font.Size';
    FIELD_MEMO_FONT_NAME        : String = 'Interface.Memo.Font.Size';
+   FIELD_RICHEDIT_FONT_NAME    : String = 'Interface.RichEdit.Font.Name';
    FIELD_SYNEDIT_FONT_NAME     : String = 'Interface.SynEdit.Font.Size';
    CONTEXTMENU_TABLE_SHOW      : String = 'Interface.ContextMenu.ShowTables';
    FORM_GRID_LIMIT             : String = 'Interface.Form.GridLimit';

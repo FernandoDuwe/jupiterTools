@@ -365,7 +365,7 @@ begin
     if prComponent.Components[vrVez] is TRichMemo then
     begin
       TRichMemo(prComponent.Components[vrVez]).Font.Size := StrToInt(vrJupiterApp.Params.VariableById(FIELD_FONT_SIZE).Value);
-      TRichMemo(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_FONT_NAME).Value;
+      TRichMemo(prComponent.Components[vrVez]).Font.Name := vrJupiterApp.Params.VariableById(FIELD_RICHEDIT_FONT_NAME).Value;
 
       Continue;
     end;

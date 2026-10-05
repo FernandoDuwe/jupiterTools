@@ -84,6 +84,8 @@ begin
 end;
 
 procedure TFRichTextEditor.Internal_PrepareForm;
+var
+  vrFS : TFileStream;
 begin
   inherited Internal_PrepareForm;
 
@@ -108,7 +110,12 @@ begin
     Self.Caption := ExtractFileName(Self.Params.VariableById('path').Value);
     Self.Hint := Self.Params.VariableById('path').Value;
 
-    RichMemo1.Lines.LoadFromFile(Self.Params.VariableById('path').Value);
+    vrFS := TFileStream.Create(Utf8ToAnsi(Self.Params.VariableById('path').Value), fmOpenRead or fmShareDenyNone);
+    try
+      RichMemo1.LoadRichText(vrFS);
+    finally
+      vrFS.Free;
+    end;
   end
   else
   begin
@@ -128,6 +135,7 @@ procedure TFRichTextEditor.Internal_OnSave(Sender: TObject);
 var
   vrQry : TSQLQuery;
   vrWizard : TJupiterDatabaseWizard;
+  vrFS : TFileStream;
 begin
   Self.FEdited := False;
 
@@ -135,7 +143,14 @@ begin
   vrQry    := vrWizard.NewQuery;
   try
     if Self.Params.Exists('path') then
-      RichMemo1.Lines.SaveToFile(Self.Params.VariableById('path').Value)
+    begin
+      vrFS := TFileStream.Create(Utf8ToAnsi(Self.Params.VariableById('path').Value), fmCreate);
+      try
+        RichMemo1.SaveRichText(vrFS);
+      finally
+        vrFS.Free;
+      end;
+    end
     else
     begin
       vrQry.SQL.Add(' UPDATE ' + Self.Params.VariableById('table').Value);

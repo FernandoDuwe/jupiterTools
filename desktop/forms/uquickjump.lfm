@@ -6,18 +6,25 @@ inherited FQuickJump: TFQuickJump
   Caption = 'QuickJump'
   ClientHeight = 538
   OnClose = FormClose
+  inherited pnSearchBar: TPanel
+    Width = 1099
+    ClientWidth = 1099
+  end
   inherited fpOptions: TFlowPanel
-    Top = 457
+    Top = 437
+    Width = 1099
   end
   inherited pnBottom: TPanel
-    Top = 457
+    Top = 437
+    Width = 1099
+    ClientWidth = 1099
   end
   inline seQuickAccess: TSynEdit[3]
     Left = 0
-    Height = 412
+    Height = 381
     Hint = 'Para Pesquisas, informe:'#13#10'? <Palavra ou Frase>'#13#10#13#10'Para Acessar registros'#13#10'TABELA > ID'
-    Top = 45
-    Width = 879
+    Top = 56
+    Width = 1099
     Align = alClient
     Font.Height = -13
     Font.Name = 'Courier New'
@@ -28,7 +35,7 @@ inherited FQuickJump: TFQuickJump
     ParentShowHint = False
     ShowHint = True
     TabOrder = 3
-    Gutter.Width = 57
+    Gutter.Width = 68
     Gutter.MouseActions = <>
     RightGutter.Width = 0
     RightGutter.MouseActions = <>
@@ -481,7 +488,7 @@ inherited FQuickJump: TFQuickJump
     LineHighlightColor.Foreground = clNone
     inline SynLeftGutterPartList1: TSynGutterPartList
       object SynGutterMarks1: TSynGutterMarks
-        Width = 24
+        Width = 30
         MouseActions = <>
         MaxExtraMarksColums = 0
         Options = [sgmoDeDuplicateMarksOnOverflow]
@@ -499,7 +506,7 @@ inherited FQuickJump: TFQuickJump
         LeadingZeros = False
       end
       object SynGutterChanges1: TSynGutterChanges
-        Width = 4
+        Width = 5
         MouseActions = <>
         ModifiedColor = 59900
         SavedColor = clGreen
@@ -508,12 +515,13 @@ inherited FQuickJump: TFQuickJump
         MarkupInfo.FrameColor = 59900
       end
       object SynGutterSeparator1: TSynGutterSeparator
-        Width = 2
+        Width = 3
         MouseActions = <>
         MarkupInfo.Background = clWhite
         MarkupInfo.Foreground = clGray
       end
       object SynGutterCodeFolding1: TSynGutterCodeFolding
+        Width = 13
         MouseActions = <>
         MarkupInfo.Background = clNone
         MarkupInfo.Foreground = clGray
@@ -530,7 +538,7 @@ inherited FQuickJump: TFQuickJump
   end
   object SynCompletion1: TSynCompletion[7]
     OnBeforeExecute = SynCompletion1BeforeExecute
-    Position = -1
+    Position = 0
     LinesInWindow = 20
     SelectedColor = clHighlight
     CaseSensitive = False

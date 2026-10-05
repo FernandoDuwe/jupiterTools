@@ -128,7 +128,15 @@ begin
     end;
   finally
     if Trim(seQuickAccess.Lines.Text) <> EmptyStr then
-      DoSecureClose;
+    begin
+      if Self.IsModal then
+        DoSecureClose
+      else
+      begin
+        seQuickAccess.Lines.Clear;
+        Self.UpdateForm();
+      end;
+    end;
   end;
 end;
 

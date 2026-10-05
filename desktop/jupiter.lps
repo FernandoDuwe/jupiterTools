@@ -20,8 +20,8 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uJupiterForm"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="376"/>
-        <CursorPos X="3" Y="414"/>
+        <TopLine Value="80"/>
+        <CursorPos X="40" Y="99"/>
         <UsageCount Value="200"/>
       </Unit>
       <Unit>
@@ -32,8 +32,8 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uMain"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="621"/>
-        <CursorPos X="51" Y="640"/>
+        <TopLine Value="602"/>
+        <CursorPos Y="625"/>
         <UsageCount Value="200"/>
       </Unit>
       <Unit>
@@ -49,10 +49,11 @@
         <Filename Value="../commons/jupiterconsts.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="JupiterConsts"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="96"/>
-        <CursorPos X="19" Y="113"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="97"/>
+        <CursorPos X="28" Y="117"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../commons/jupitervariable.pas"/>
@@ -90,7 +91,7 @@
         <UnitName Value="uDmMain"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="29"/>
-        <CursorPos X="68" Y="31"/>
+        <CursorPos X="11" Y="31"/>
         <UsageCount Value="200"/>
       </Unit>
       <Unit>
@@ -130,10 +131,11 @@
       <Unit>
         <Filename Value="../commons/jupiterformutils.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="340"/>
-        <CursorPos X="43" Y="359"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="351"/>
+        <CursorPos X="43" Y="351"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="../commons/jupitermainmenugenerator.pas"/>
@@ -148,10 +150,11 @@
         <Filename Value="modules/ujupiteruserexperience.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="uJupiterUserExperience"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="103"/>
-        <CursorPos X="87" Y="107"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="53"/>
+        <CursorPos X="69" Y="57"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="forms/uconfig.pas"/>
@@ -246,8 +249,8 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="uJupiterAction"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="450"/>
-        <CursorPos X="119" Y="464"/>
+        <TopLine Value="233"/>
+        <CursorPos X="55" Y="240"/>
         <UsageCount Value="200"/>
       </Unit>
       <Unit>
@@ -313,10 +316,12 @@
         <ComponentName Value="FCustomDatabaseGrid"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="336"/>
-        <CursorPos Y="346"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="754"/>
+        <CursorPos X="52" Y="754"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="forms/uuserpreferences.pas"/>
@@ -325,10 +330,11 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uUserPreferences"/>
-        <EditorIndex Value="-1"/>
+        <EditorIndex Value="1"/>
         <TopLine Value="50"/>
         <CursorPos X="66" Y="79"/>
         <UsageCount Value="203"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="forms/uscripteditorform.pas"/>
@@ -364,8 +370,8 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="uJupiterRunnableScript"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="200"/>
-        <CursorPos X="27" Y="208"/>
+        <TopLine Value="153"/>
+        <CursorPos X="35" Y="167"/>
         <UsageCount Value="200"/>
       </Unit>
       <Unit>
@@ -675,8 +681,8 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uMenuNavigator"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="115"/>
-        <CursorPos Y="137"/>
+        <TopLine Value="191"/>
+        <CursorPos X="6" Y="193"/>
         <UsageCount Value="209"/>
       </Unit>
       <Unit>
@@ -718,7 +724,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="108"/>
         <CursorPos X="34" Y="112"/>
-        <UsageCount Value="158"/>
+        <UsageCount Value="163"/>
       </Unit>
       <Unit>
         <Filename Value="commons/jupiterformdbcomponenttils.pas"/>
@@ -726,7 +732,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="83"/>
         <CursorPos X="30" Y="108"/>
-        <UsageCount Value="143"/>
+        <UsageCount Value="148"/>
       </Unit>
       <Unit>
         <Filename Value="forms/uquickjump.pas"/>
@@ -736,9 +742,9 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uQuickJump"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="85"/>
-        <CursorPos Y="101"/>
-        <UsageCount Value="134"/>
+        <TopLine Value="125"/>
+        <CursorPos X="65" Y="136"/>
+        <UsageCount Value="139"/>
       </Unit>
       <Unit>
         <Filename Value="commons/darkmodeutils.pas"/>
@@ -747,7 +753,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="59"/>
         <CursorPos X="38" Y="70"/>
-        <UsageCount Value="129"/>
+        <UsageCount Value="134"/>
       </Unit>
       <Unit>
         <Filename Value="forms/ucodeterminalrunner.pas"/>
@@ -759,7 +765,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="90"/>
         <CursorPos X="3" Y="100"/>
-        <UsageCount Value="100"/>
+        <UsageCount Value="105"/>
       </Unit>
       <Unit>
         <Filename Value="forms/uuniquefileexplorer.pas"/>
@@ -770,7 +776,7 @@
         <UnitName Value="uUniqueFileExplorer"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="3" Y="6"/>
-        <UsageCount Value="71"/>
+        <UsageCount Value="76"/>
       </Unit>
       <Unit>
         <Filename Value="../modules/jupiterelara.pas"/>
@@ -779,7 +785,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="14"/>
         <CursorPos X="45" Y="24"/>
-        <UsageCount Value="60"/>
+        <UsageCount Value="65"/>
       </Unit>
       <Unit>
         <Filename Value="forms/uinternetexplorer.pas"/>
@@ -791,7 +797,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="159"/>
         <CursorPos X="90" Y="166"/>
-        <UsageCount Value="23"/>
+        <UsageCount Value="28"/>
       </Unit>
       <Unit>
         <Filename Value="forms/urichtexteditor.pas"/>
@@ -800,12 +806,19 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="uRichTextEditor"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="182"/>
-        <CursorPos X="40" Y="214"/>
-        <UsageCount Value="20"/>
-        <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="186"/>
+        <CursorPos X="82" Y="203"/>
+        <UsageCount Value="25"/>
+      </Unit>
+      <Unit>
+        <Filename Value="commons/uricheditutils.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uRichEditUtils"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="25"/>
+        <CursorPos X="14" Y="25"/>
+        <UsageCount Value="24"/>
       </Unit>
       <Unit>
         <Filename Value="../../../lazarus/lcl/include/customform.inc"/>
@@ -905,9 +918,8 @@
         <Filename Value="../../../lazarus/lcl/graphics.pp"/>
         <UnitName Value="Graphics"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="57"/>
-        <CursorPos X="3" Y="75"/>
-        <UsageCount Value="3"/>
+        <CursorPos X="15" Y="3"/>
+        <UsageCount Value="10"/>
       </Unit>
       <Unit>
         <Filename Value="../components/jupiterformtabsheet.pas"/>
@@ -944,9 +956,9 @@
         <Filename Value="../../../lazarus/lcl/dbgrids.pas"/>
         <UnitName Value="DBGrids"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="4552"/>
-        <CursorPos X="30" Y="4569"/>
-        <UsageCount Value="7"/>
+        <TopLine Value="4553"/>
+        <CursorPos X="29" Y="4554"/>
+        <UsageCount Value="10"/>
       </Unit>
       <Unit>
         <Filename Value="../../../lazarus/fpc/3.2.2/source/packages/fcl-db/src/base/bufdataset.pas"/>
@@ -1040,109 +1052,130 @@
       <Unit>
         <Filename Value="../../../Users/silvi/AppData/Local/lazarus/onlinepackagemanager/packages/richmemo/richmemo.pas"/>
         <UnitName Value="RichMemo"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="4"/>
-        <CursorPos X="3" Y="35"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="230"/>
+        <CursorPos X="37" Y="244"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="../../../lazarus/fpc/3.2.2/source/packages/fcl-process/src/processbody.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="165"/>
+        <CursorPos X="10" Y="185"/>
+        <UsageCount Value="10"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="23">
+    <JumpHistory HistoryIndex="28">
       <Position>
-        <Filename Value="forms/urichtexteditor.pas"/>
-        <Caret Line="52" Column="56" TopLine="30"/>
+        <Filename Value="forms/ucustomdatabasegrid.pas"/>
       </Position>
       <Position>
-        <Filename Value="forms/urichtexteditor.pas"/>
-        <Caret Line="9" Column="10"/>
+        <Filename Value="forms/ucustomdatabasegrid.pas"/>
+        <Caret Line="198" Column="68" TopLine="165"/>
       </Position>
       <Position>
-        <Filename Value="forms/urichtexteditor.pas"/>
-        <Caret Line="86" Column="30" TopLine="66"/>
+        <Filename Value="forms/ucustomdatabasegrid.pas"/>
+        <Caret Line="200" Column="68" TopLine="167"/>
       </Position>
       <Position>
-        <Filename Value="forms/urichtexteditor.pas"/>
-        <Caret Line="99" Column="74" TopLine="74"/>
+        <Filename Value="forms/ucustomdatabasegrid.pas"/>
+        <Caret Line="420" Column="25" TopLine="387"/>
       </Position>
       <Position>
-        <Filename Value="forms/urichtexteditor.pas"/>
-        <Caret Line="138" Column="40" TopLine="109"/>
+        <Filename Value="forms/ucustomdatabasegrid.pas"/>
+        <Caret Line="420" Column="3" TopLine="387"/>
       </Position>
       <Position>
-        <Filename Value="forms/urichtexteditor.pas"/>
-        <Caret Line="120" Column="51" TopLine="97"/>
+        <Filename Value="forms/ucustomdatabasegrid.pas"/>
+        <Caret Line="848" Column="81" TopLine="815"/>
       </Position>
       <Position>
-        <Filename Value="forms/urichtexteditor.pas"/>
-        <Caret Line="9" Column="79"/>
+        <Filename Value="forms/ucustomdatabasegrid.pas"/>
       </Position>
       <Position>
-        <Filename Value="forms/urichtexteditor.pas"/>
-        <Caret Line="126" Column="46" TopLine="98"/>
+        <Filename Value="forms/ucustomdatabasegrid.pas"/>
+        <Caret Line="198" Column="68" TopLine="165"/>
       </Position>
       <Position>
-        <Filename Value="forms/urichtexteditor.pas"/>
-        <Caret Line="27" Column="15" TopLine="6"/>
+        <Filename Value="forms/ucustomdatabasegrid.pas"/>
+        <Caret Line="204" Column="97" TopLine="167"/>
       </Position>
       <Position>
-        <Filename Value="forms/urichtexteditor.pas"/>
-        <Caret Line="184" Column="74" TopLine="160"/>
+        <Filename Value="forms/ucustomdatabasegrid.pas"/>
+        <Caret Line="424" Column="92" TopLine="390"/>
       </Position>
       <Position>
-        <Filename Value="forms/urichtexteditor.pas"/>
-        <Caret Line="170" Column="41" TopLine="153"/>
+        <Filename Value="forms/ucustomdatabasegrid.pas"/>
+        <Caret Line="199" Column="43" TopLine="181"/>
       </Position>
       <Position>
-        <Filename Value="forms/urichtexteditor.pas"/>
-        <Caret Line="192" Column="56" TopLine="164"/>
+        <Filename Value="forms/ucustomdatabasegrid.pas"/>
       </Position>
       <Position>
-        <Filename Value="forms/urichtexteditor.pas"/>
-        <Caret Line="32" Column="42" TopLine="7"/>
+        <Filename Value="forms/ucustomdatabasegrid.pas"/>
+        <Caret Line="445" Column="55" TopLine="424"/>
       </Position>
       <Position>
-        <Filename Value="forms/urichtexteditor.pas"/>
-        <Caret Line="180" Column="29" TopLine="163"/>
+        <Filename Value="forms/ucustomdatabasegrid.pas"/>
+        <Caret Line="510" Column="48" TopLine="495"/>
       </Position>
       <Position>
-        <Filename Value="forms/urichtexteditor.pas"/>
-        <Caret Line="95" Column="95" TopLine="78"/>
+        <Filename Value="forms/ucustomdatabasegrid.pas"/>
+        <Caret Line="66" Column="41" TopLine="44"/>
       </Position>
       <Position>
-        <Filename Value="forms/urichtexteditor.pas"/>
-        <Caret Line="85" Column="96" TopLine="58"/>
+        <Filename Value="modules/ujupiteruserexperience.pas"/>
+        <Caret Line="107" Column="87" TopLine="88"/>
       </Position>
       <Position>
-        <Filename Value="forms/urichtexteditor.pas"/>
-        <Caret Line="32" Column="33" TopLine="5"/>
+        <Filename Value="modules/ujupiteruserexperience.pas"/>
+        <Caret Line="79" TopLine="79"/>
       </Position>
       <Position>
-        <Filename Value="forms/urichtexteditor.pas"/>
-        <Caret Line="214" Column="32" TopLine="185"/>
+        <Filename Value="../commons/jupiterconsts.pas"/>
+        <Caret Line="215" Column="50" TopLine="195"/>
       </Position>
       <Position>
-        <Filename Value="forms/urichtexteditor.pas"/>
-        <Caret Line="203" Column="62" TopLine="178"/>
+        <Filename Value="../commons/jupiterconsts.pas"/>
       </Position>
       <Position>
-        <Filename Value="forms/urichtexteditor.pas"/>
-        <Caret Line="86" Column="42" TopLine="72"/>
+        <Filename Value="modules/ujupiteruserexperience.pas"/>
+        <Caret Line="5" Column="46"/>
       </Position>
       <Position>
-        <Filename Value="forms/urichtexteditor.pas"/>
-        <Caret Line="31" Column="34" TopLine="16"/>
+        <Filename Value="forms/ucustomdatabasegrid.pas"/>
+        <Caret Line="782" Column="34" TopLine="768"/>
       </Position>
       <Position>
-        <Filename Value="forms/urichtexteditor.pas"/>
-        <Caret Line="183" Column="21" TopLine="177"/>
+        <Filename Value="forms/ucustomdatabasegrid.pas"/>
+        <Caret Line="781" Column="34" TopLine="767"/>
       </Position>
       <Position>
-        <Filename Value="forms/urichtexteditor.pas"/>
-        <Caret Line="181" Column="82" TopLine="159"/>
+        <Filename Value="forms/ucustomdatabasegrid.pas"/>
+        <Caret Line="782" Column="34" TopLine="768"/>
       </Position>
       <Position>
-        <Filename Value="forms/urichtexteditor.pas"/>
-        <Caret Line="188" Column="80" TopLine="165"/>
+        <Filename Value="forms/ucustomdatabasegrid.pas"/>
+      </Position>
+      <Position>
+        <Filename Value="forms/ucustomdatabasegrid.pas"/>
+        <Caret Line="26" Column="15"/>
+      </Position>
+      <Position>
+        <Filename Value="forms/ucustomdatabasegrid.pas"/>
+        <Caret Line="400" Column="25" TopLine="375"/>
+      </Position>
+      <Position>
+        <Filename Value="forms/ucustomdatabasegrid.pas"/>
+        <Caret Line="642" Column="49" TopLine="615"/>
+      </Position>
+      <Position>
+        <Filename Value="forms/ucustomdatabasegrid.pas"/>
+        <Caret Line="648" Column="127" TopLine="615"/>
+      </Position>
+      <Position>
+        <Filename Value="forms/ucustomdatabasegrid.pas"/>
+        <Caret Line="748" Column="54" TopLine="719"/>
       </Position>
     </JumpHistory>
     <RunParams>

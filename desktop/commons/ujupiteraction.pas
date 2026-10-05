@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, JupiterObject, jupiterformutils, JupiterConsts, JupiterApp,
   jupiterDatabaseWizard, JupiterVariable, ExtCtrls, Controls, Buttons, ActnList,
-  LCLProc, Menus;
+  LCLProc, Menus, Graphics;
 
 type
 
@@ -237,7 +237,10 @@ begin
   vrSpeedButton.Parent     := prFlow;
 
   if not vrJupiterApp.Params.VariableById('Interface.Form.Action.MiniatureMode').AsBool then
-    vrSpeedButton.Caption    := Self.Caption;
+    vrSpeedButton.Caption    := Self.Caption
+  else
+    if Self.Icon = NULL_KEY then
+      vrSpeedButton.Caption := Copy(Trim(Self.Caption), 1, 1);
 
   vrSpeedButton.Hint       := Self.Hint;
   vrSpeedButton.ShowHint   := Self.Hint <> EmptyStr;
