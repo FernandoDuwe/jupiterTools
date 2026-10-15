@@ -44,6 +44,7 @@ type
     procedure Merge(prOtherList : TJupiterObjectList);
     procedure DeleteAtIndex(prIndex : Integer);
     procedure DeleteListItem(prIndex : Integer);
+    procedure MoveItemToHeader(prIndex : Integer);
 
     function IsEmpty : Boolean;
 
@@ -124,6 +125,11 @@ end;
 procedure TJupiterObjectList.DeleteListItem(prIndex: Integer);
 begin
   Self.FList.Delete(prIndex);
+end;
+
+procedure TJupiterObjectList.MoveItemToHeader(prIndex: Integer);
+begin
+  Self.FList.Move(prIndex, 0);
 end;
 
 function TJupiterObjectList.IsEmpty: Boolean;

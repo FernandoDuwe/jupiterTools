@@ -21,6 +21,7 @@ type
     FAppReady         : Boolean;
     FAppID            : String;
     FAppName          : String;
+    FDebugMode        : Boolean;
     FModules          : TJupiterModuleList;
     FParams           : TJupiterVariableList;
     FScripts          : TJupiterVariableList;
@@ -33,6 +34,7 @@ type
 
     procedure Internal_OnExecute(prScript, prMessages, prRunMessages : TStrings; prExecuted : Boolean);
     procedure Internal_SetVariableValue(prID, prNewValue : String);
+    function  Internal_OnDebugGetVariableId(prID : String) : String;
   protected
     procedure Internal_Prepare; virtual;
     procedure Internal_AddScriptLibraries(var prScript : TJupiterScript); virtual;
@@ -87,6 +89,7 @@ type
 
     function GetDataProviderById(prDataProviderID : String) : TJupiterDataProvider;
     procedure DeleteDataProviderById(prDataProviderID : String);
+    procedure PrepareDebugData;
 
     // Global References
     procedure AddGlobalReference(prReference : TJupiterDatabaseReference);
@@ -171,12 +174,19 @@ begin
   end;
 end;
 
+function TJupiterApp.Internal_OnDebugGetVariableId(prID: String): String;
+begin
+  vrJupiterApp.AddMessage(prID, 'Busca de variável: ' + prID, Self.ClassName);
+end;
+
 procedure TJupiterApp.Internal_Prepare;
 var
   vrEnviroment : TJupiterEnviroment;
   vrFiles      : TJupiterFileDataProvider;
   vrVez        : Integer;
 begin
+  Self.Params.Title := 'Variáveis de sistema';
+
   vrEnviroment := TJupiterEnviroment.Create;
   vrFiles      := TJupiterFileDataProvider.Create;
   try
@@ -191,7 +201,6 @@ begin
 
     if not Self.FParams.Exists('database.local') then
       Self.FParams.AddConfig('database.local', '/datasets/' + Self.AppID + '.db', 'Base de dados local');
-
 
     vrFiles.Path := vrEnviroment.FullPath('/caches/');
     vrFiles.ProvideData;
@@ -229,10 +238,16 @@ end;
 procedure TJupiterApp.LoadOtherVariables;
 var
   vrQry : TSQLQuery;
+  vrCurrentModule : Integer;
+  vrVariables : TJupiterVariableList;
 begin
+  vrCurrentModule := NULL_KEY;
+
+  vrVariables := Self.Params;
+
   vrQry := Self.NewWizard.NewQuery;
   try
-    vrQry.SQL.Add(' SELECT * FROM VARIABLES ');
+    vrQry.SQL.Add(' SELECT ID, NAME, DESCRIPTION, VALUE, COALESCE(MODULE, -1) AS MODULE FROM VARIABLES ORDER BY 5, 1  ');
     vrQry.Open;
 
     while not vrQry.EOF do
@@ -243,11 +258,21 @@ begin
         Continue;
       end;
 
-      Self.Params.AddVariable(vrQry.FieldByName('NAME').AsString,
+      if vrCurrentModule <> vrQry.FieldByName('MODULE').AsInteger then
+      begin
+        vrVariables := TJupiterVariableList.Create();
+        vrVariables.Title := 'Variáveis de módulos customizados: ' + vrQry.FieldByName('MODULE').AsString;
+
+        vrCurrentModule := vrQry.FieldByName('MODULE').AsInteger;
+
+        Self.Params.AddChildList(vrVariables);
+      end;
+
+      vrVariables.AddVariable(vrQry.FieldByName('NAME').AsString,
                               vrQry.FieldByName('VALUE').AsString,
                               vrQry.FieldByName('DESCRIPTION').AsString);
 
-      Self.Params.VariableById(vrQry.FieldByName('NAME').AsString).OnChangeValue := @Internal_SetVariableValue;
+      vrVariables.VariableById(vrQry.FieldByName('NAME').AsString).OnChangeValue := @Internal_SetVariableValue;
 
       vrQry.Next;
     end;
@@ -264,6 +289,9 @@ begin
   for vrVez := 0 to Self.ModulesList.Count - 1 do
     with Self.ModulesList.GetModuleByIndex(vrVez) do
       Prepare;
+
+  if Self.Params.UsesCachedValues then
+    Self.Params.CachedValues.ClearListItens;
 end;
 
 function TJupiterApp.GetVersion: String;
@@ -419,7 +447,7 @@ begin
   vrWizard := Self.NewWizard;
   vrQry    := vrWizard.NewQuery;
   try
-    if not Self.Params.VariableById(DEBUG_MODE).AsBool then
+    if not Self.FDebugMode then
       vrScript.OnExecute := nil;
 
     vrQry.SQL.Add(' SELECT ID, MACROID, MACRO FROM MACROS WHERE MACROID = :PRID ');
@@ -558,7 +586,7 @@ begin
   vrWizard := Self.NewWizard;
   vrQry    := vrWizard.NewQuery;
   try
-    if not Self.Params.VariableById(DEBUG_MODE).AsBool then
+    if not Self.FDebugMode then
       vrScript.OnExecute := nil;
 
     vrQry.SQL.Add(' SELECT A1.ID, M1.MACROID, M1.MACRO ');
@@ -606,7 +634,7 @@ begin
   vrWizard := Self.NewWizard;
   vrQry    := vrWizard.NewQuery;
   try
-    if not Self.Params.VariableById(DEBUG_MODE).AsBool then
+    if not Self.FDebugMode then
       vrScript.OnExecute := nil;
 
     vrQry.SQL.Add(' SELECT A1.ID, M1.MACROID, M1.MACRO ');
@@ -651,7 +679,7 @@ begin
   vrWizard := Self.NewWizard;
   vrQry    := vrWizard.NewQuery;
   try
-    if not Self.Params.VariableById(DEBUG_MODE).AsBool then
+    if not Self.FDebugMode then
       vrScript.OnExecute := nil;
 
     vrQry.SQL.Add(' SELECT ID, MACROID, MACRO FROM MACROS WHERE MACROID = :PRID ');
@@ -743,6 +771,45 @@ begin
       end;
 end;
 
+procedure TJupiterApp.PrepareDebugData;
+var
+  vrEnviroment : TJupiterEnviroment;
+  vrStr : TStrings;
+  vrVez : Integer;
+begin
+  vrEnviroment := TJupiterEnviroment.Create;
+  vrStr := TStringList.Create();
+  try
+    vrStr.Clear;
+
+    Self.FDebugMode := Self.Params.VariableById(DEBUG_MODE).AsBool;
+
+    if Self.FDebugMode then
+      Self.FParams.OnSearchValue := @Internal_OnDebugGetVariableId;
+
+    if vrJupiterApp.Params.UsesCachedValues then
+    begin
+      vrStr.Text := vrEnviroment.LoadFile('datasets/cachedVariables.txt');
+
+      vrJupiterApp.Params.CachedValues.ClearListItens;
+
+      for vrVez := 0 to vrStr.Count - 1 do
+      begin
+        if Trim(vrStr[vrVez]) = EmptyStr then
+          Continue;
+
+        if not vrJupiterApp.Params.Exists(vrStr[vrVez]) then
+          Continue;
+
+        vrJupiterApp.Params.CachedValues.AddVariable(vrStr[vrVez], vrJupiterApp.Params.VariableById(vrStr[vrVez]).Value);
+      end;
+    end;
+  finally
+    FreeAndNil(vrEnviroment);
+    FreeAndNil(vrStr);
+  end;
+end;
+
 procedure TJupiterApp.AddGlobalReference(prReference: TJupiterDatabaseReference);
 begin
   Self.GlobalReferences.Add(prReference);
@@ -827,14 +894,17 @@ begin
 end;
 
 constructor TJupiterApp.Create(prAppID, prAppName: String);
+var
+  vrEnviroment : TJupiterEnviroment;
 begin
+  vrEnviroment := TJupiterEnviroment.Create;
   try
     Self.FAppReady := False;
 
     Self.FAppID   := prAppID;
     Self.FAppName := prAppName;
 
-    Self.FParams          := TJupiterVariableList.Create;
+    Self.FParams          := TJupiterVariableList.Create(vrEnviroment.Exists(vrEnviroment.FullPath('datasets/cachedVariables.txt')));
     Self.FModules         := TJupiterModuleList.Create;
     Self.FScripts         := TJupiterVariableList.Create;
     Self.FScriptCache     := TJupiterVariableList.Create;
@@ -850,6 +920,8 @@ begin
     Self.Internal_Prepare;
   finally
     Self.AddMessage('Iniciando', 'Iniciando sistema', Self.ClassName);
+
+    FreeAndNil(vrEnviroment);
   end;
 end;
 

@@ -36,6 +36,7 @@ const
    CODERUNNER_PATH : String = '/forms/codeRunner';
    CODERUNNERTERMINAL_PATH : String = '/forms/codeRunner/terminal';
    CONSOLE_PATH : String = '/forms/console';
+   PAINTFORM_PATH : String = '/forms/paint';
    FILEFINDER_PATH : String = '/forms/finder/file';
    FILEREADERFINDER_PATH : String = '/forms/finder/fileReader';
    DATABASEFINDER_PATH : String = '/forms/finder/database';
@@ -99,6 +100,7 @@ const
    FORMAT_NUMBER_MASK  : String = '#,##0.00';
 
    EMPTY_SPACE_SEPARATOR    : String = '/JUPITERTOOLS\|/JUPITERTOOLS\';
+   COMMON_SEPARATOR         : String = '|';
    COLUMN_SPACE_SEPARATOR   : String = '      ';
    FIELD_ID_GENERADOR       : String = 'Generator.FormId';
    FIELD_TREE_COLAPSE       : String = 'MenuTree_Colapse';

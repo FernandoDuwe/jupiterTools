@@ -34,7 +34,7 @@ uses
   uJupiterHTTPScript, uCustomDataProviderGrid, udatabasefinder,
   jupiterformdbcomponenttils, uQuickJump, DarkModeUtils, uCodeTerminalRunner,
   uUniqueFileExplorer, jupiterElara, uInternetExplorer, uRichTextEditor, 
-uRichEditUtils;
+uRichEditUtils, uPaintForm, uJupiterGraphicScript;
 
 {$R *.res}
 
@@ -58,6 +58,8 @@ begin
   vrJupiterApp.LoadOtherVariables;
 
   TJupiterDesktopApp(vrJupiterApp).GenerateDynamicData;
+
+  vrJupiterApp.PrepareDebugData;
 
   Application.CreateForm(TFMain, FMain);
 
@@ -92,6 +94,7 @@ begin
     FormRoutes.Add(TJupiterFormRoute.Create(CONSOLE_PATH, TFConsole));
     FormRoutes.Add(TJupiterFormRoute.Create(MENUEXPLORER_PATH, TFMenuNavigator));
     FormRoutes.Add(TJupiterFormRoute.Create(INTERNETEXPLORER_PATH, TFInternetExplorer));
+    FormRoutes.Add(TJupiterFormRoute.Create(PAINTFORM_PATH, TFPaintForm));
   end;
 
   Application.Run;

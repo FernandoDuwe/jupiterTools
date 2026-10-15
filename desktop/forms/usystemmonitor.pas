@@ -8,8 +8,8 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ComCtrls, StdCtrls,
   ExtCtrls, uJupiterForm, jupiterformutils, JupiterApp, jupiterScript,
   JupiterDataProvider, JupiterConsts, jupiterScriptList, jupiterDatabaseWizard,
-  uJupiterAction, jupiterDesktopApp, uJupiterDesktopAppScript,
-  uJupiterFormDesktopAppScript;
+  JupiterVariable, uJupiterAction, jupiterDesktopApp, uJupiterDesktopAppScript,
+  uJupiterFormDesktopAppScript, uMain;
 
 type
 
@@ -29,17 +29,20 @@ type
     Splitter1: TSplitter;
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
+    tvParams: TTreeView;
+    tsParams: TTabSheet;
     tsOthers: TTabSheet;
     tsProcessamento: TTabSheet;
     tsMessages: TTabSheet;
     tsScriptList: TTabSheet;
     tsDataProviders: TTabSheet;
     tsScripts: TTabSheet;
-    procedure lvScriptListSelectItem(Sender: TObject; Item: TListItem;
-      Selected: Boolean);
+    procedure lvScriptListSelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
     procedure lvScriptListShowHint(Sender: TObject; HintInfo: PHintInfo);
   private
     procedure Internal_PrepareForm; override;
+    procedure Internal_RenderParams;
+    procedure Internal_RenderParamsByVariableList(prVariableList : TJupiterVariableList; prOwner : TTreeNode);
 
     procedure Internal_UpdateComponents; override;
     procedure Internal_UpdateDatasets; override;
@@ -48,6 +51,7 @@ type
     procedure Internal_OnDeleteAsset(Sender: TObject);
     procedure Internal_OnCleanAsset(Sender: TObject);
     procedure Internal_OnViewDataProvider(Sender: TObject);
+    procedure Internal_RenderVariableList(prVariableList : TJupiterVariableList; prPrefix : String);
   public
 
   end;
@@ -127,6 +131,44 @@ begin
   Self.ActionGroup.AddAction(TJupiterAction.Create('Visualizar', 'Clique aqui para visualizar o data provider', ICON_VIEW, @Internal_OnViewDataProvider));
 
   Self.ActionGroup.AddAction(TJupiterAction.Create('Limpar', 'Clique aqui para limpar os logs de sistema', ICON_NEW, @Internal_OnCleanAsset));
+end;
+
+procedure TFSystemMonitor.Internal_RenderParams;
+begin
+  Self.Internal_RenderParamsByVariableList(vrJupiterApp.Params, nil);
+end;
+
+procedure TFSystemMonitor.Internal_RenderParamsByVariableList(prVariableList: TJupiterVariableList; prOwner : TTreeNode);
+var
+  vrVez : Integer;
+  vrNode : TTreeNode;
+  vrChild : TTreeNode;
+begin
+  if not Assigned(prOwner) then
+    vrNode := tvParams.Items.Add(prOwner, prVariableList.Title)
+  else
+    vrNode := tvParams.Items.AddChild(prOwner, prVariableList.Title);
+
+  vrNode.ImageIndex := ICON_CONFIG;
+  vrNode.SelectedIndex := ICON_CONFIG;
+
+  if prVariableList.UsesCachedValues then
+    Self.Internal_RenderParamsByVariableList(prVariableList.CachedValues, vrNode);
+
+  for vrVez := 0 to prVariableList.ChildList.Count - 1 do
+    Self.Internal_RenderParamsByVariableList(TJupiterVariableList(prVariableList.ChildList.GetAtIndex(vrVez)), vrNode);
+
+  for vrVez := 0 to prVariableList.Count - 1 do
+  begin
+    vrChild := tvParams.Items.AddChild(vrNode, prVariableList.VariableByIndex(vrVez).ID);
+    vrChild.ImageIndex := ICON_NEW;
+    vrChild.SelectedIndex := ICON_NEW;
+  end;
+
+  vrNode.Text := vrNode.Text + ' (' + IntToStr(prVariableList.Count) + ')';
+
+  if not Assigned(prOwner) then
+    vrNode.Expand(False);
 end;
 
 procedure TFSystemMonitor.Internal_UpdateComponents;
@@ -247,11 +289,36 @@ begin
       vrItem.Caption := TJupiterScriptInstruction(vrJupiterApp.ScriptLineList.GetAtIndex(vrVez)).Comand;
     end;
 
+    if vrJupiterApp.Params.UsesCachedValues then
+    begin
+      mmOthers.Lines.Add('Variáveis em cache: ' + IntToStr(vrJupiterApp.Params.CachedValues.Count));
+      mmOthers.Lines.Add(EmptyStr);
+    end;
+
     mmOthers.Lines.Add('GlobalReferences');
 
     for vrVez := 0 to vrJupiterApp.GlobalReferences.Count - 1 do
       with TJupiterDatabaseReference(vrJupiterApp.GlobalReferences.GetAtIndex(vrVez)) do
         mmOthers.Lines.Add(' - ' + TableName + ': #' + IntToStr(ID));
+                                    {
+    mmOthers.Lines.Add(EmptyStr);
+    mmOthers.Lines.Add('Contexto de Variáveis');
+
+    Internal_RenderVariableList(vrJupiterApp.Params, EmptyStr);
+
+    mmOthers.Lines.Add(EmptyStr);
+
+    for vrVez := 0 to vrJupiterApp.Params.ChildList.Count - 1 do
+    begin
+      Internal_RenderVariableList(TJupiterVariableList(vrJupiterApp.Params.ChildList.GetAtIndex(vrVez)), '   ');
+
+      mmOthers.Lines.Add(EmptyStr);
+    end;}
+
+    tvParams.Images := TJupiterDesktopApp(vrJupiterApp).ImageList;
+    tvParams.Items.Clear;
+
+    Self.Internal_RenderParams;
   finally
   end;
 end;
@@ -291,6 +358,16 @@ begin
     Exit;
 
   JupiterAppDesktopOpenDataProviderExplorerForm(lvDataProviders.Selected.Caption);
+end;
+
+procedure TFSystemMonitor.Internal_RenderVariableList(prVariableList: TJupiterVariableList; prPrefix: String);
+var
+  vrVez : Integer;
+begin
+  mmOthers.Lines.Add(prPrefix + prVariableList.Title + ' (' + IntToStr(prVariableList.Count) + ')');
+
+  for vrVez := 0 to prVariableList.Count - 1 do
+    mmOthers.Lines.Add(prPrefix + ' - ' + prVariableList.VariableByIndex(vrVez).ID);
 end;
 
 end.

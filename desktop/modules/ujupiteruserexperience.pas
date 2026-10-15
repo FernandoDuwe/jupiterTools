@@ -100,6 +100,8 @@ begin
 
     Self.Internal_CreateVariablIfDontExists('Interface.Form.Memo.RenderInNewTab', 'Renderizar componentes de texto em uma nova aba do formulário', 'N');
 
+    Self.Internal_CreateVariablIfDontExists('Interface.Form.Memo.RenderInNewTab.MinCount', 'Renderizar componentes de texto em uma nova aba do formulário, somente se a quantidade de campos em tela for maior que:', '0');
+
     Self.Internal_CreateVariablIfDontExists('Interface.Form.Color.Alternative', 'Cor alternativa', ColorToString(ALTERNATIVE_COLOR));
 
     Self.Internal_CreateVariablIfDontExists('Interface.Form.Memo.LasExpand', 'Caso o Memo seja o último componente do formulário, expandir o memo', 'Y');

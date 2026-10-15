@@ -8,8 +8,8 @@ uses
   Classes, SysUtils, JupiterApp, JupiterObject, jupiterScript, JupiterRoute,
   JupiterVariable, jupiterDatabaseWizard, JupiterConsts, ActnList,
   JupiterFileDataProvider, JupiterEnviroment, jupiterStringUtils,
-  JupiterVariableDataProvider, uJupiterFormDesktopAppScript, uJupiterAction,
-  Forms, Controls;
+  JupiterVariableDataProvider, uJupiterFormDesktopAppScript,
+  uJupiterGraphicScript, uJupiterAction, Forms, Controls;
 
 type
 
@@ -79,6 +79,7 @@ begin
 
   prScript.LibraryList.Add(TJupiterDesktopAppScript.Create);
   prScript.LibraryList.Add(TJupiterFormDesktopAppScript.Create);
+  prScript.LibraryList.Add(TJupiterGraphicScript.Create);
 end;
 
 procedure TJupiterDesktopApp.Internal_Prepare;

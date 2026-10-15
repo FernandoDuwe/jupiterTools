@@ -43,6 +43,7 @@ type
     procedure InternalQueryCalcFields(DataSet: TDataSet);
     procedure miExibirColunaIDClick(Sender: TObject);
     procedure miShowMiniFormClick(Sender: TObject);
+    procedure rmFormChange(Sender: TObject);
     procedure Splitter1Moved(Sender: TObject);
     procedure tmrExecutionTimer(Sender: TObject);
   private
@@ -100,6 +101,8 @@ var
   vrWizard : TJupiterDatabaseWizard;
 begin
   inherited;
+
+  Self.PercentDivisor := 50;
 
   Self.FUseLimit := True;
 
@@ -194,16 +197,18 @@ begin
 
     // ValueListEditor1.DefaultColWidth := PercentOfScreen(ValueListEditor1.Width, 50);
 
-    if Self.FormType <> jftChild then
-    begin
-      if miShowMiniForm.Checked then
-        vrJupiterApp.Params.VariableById('Interface.Grid.ShowMiniForm').Value := BOOL_TRUE_STR
-      else
-        vrJupiterApp.Params.VariableById('Interface.Grid.ShowMiniForm').Value := BOOL_FALSE_STR;
-    end;
+    if miShowMiniForm.Checked then
+      vrJupiterApp.Params.VariableById('Interface.Grid.ShowMiniForm').Value := BOOL_TRUE_STR
+    else
+      vrJupiterApp.Params.VariableById('Interface.Grid.ShowMiniForm').Value := BOOL_FALSE_STR;
   finally
     Self.UpdateForm();
   end;
+end;
+
+procedure TFCustomDatabaseGrid.rmFormChange(Sender: TObject);
+begin
+
 end;
 
 procedure TFCustomDatabaseGrid.Splitter1Moved(Sender: TObject);
@@ -420,8 +425,7 @@ begin
   if not Self.Params.Exists('orderBy') then
     Self.Params.AddVariable('orderBy', EmptyStr, 'Order By');
 
-  if Self.FormType <> jftChild then
-    miShowMiniForm.Checked := vrJupiterApp.Params.VariableById('Interface.Grid.ShowMiniForm').AsBool;
+  miShowMiniForm.Checked := vrJupiterApp.Params.VariableById('Interface.Grid.ShowMiniForm').AsBool;
 end;
 
 procedure TFCustomDatabaseGrid.Internal_UpdateDatasets;
@@ -501,9 +505,6 @@ begin
 
     Self.Internal_SetCalculatedFields;
 
-    InternalQuery.Last;
-    InternalQuery.First;
-
     if vrId <> NULL_KEY then
       InternalQuery.Locate('ID', vrId, []);
   finally
@@ -529,8 +530,10 @@ begin
 
   pnMiniForm.Visible := miShowMiniForm.Checked;
 
+  Splitter1.Top := 0;
+
   if miLookColumn.Checked then
-    pnMiniForm.Width := PercentOfScreen(Self.Width, Self.PercentDivisor);
+    pnMiniForm.Height := PercentOfScreen(Self.Height, Self.PercentDivisor);
 
   if pnMiniForm.Visible then
   begin
@@ -558,9 +561,17 @@ begin
         InternalQuery.Fields[vrVez].OnGetText := @Internal_OnGetText;
 
         for vrVez2 := 0 to dbMainGrid.Columns.Count - 1 do
-          if dbMainGrid.Columns[vrVez2].FieldName = InternalQuery.Fields[vrVez].FieldName then
+        begin
+          if dbMainGrid.Columns[vrVez2].FieldName <> InternalQuery.Fields[vrVez].FieldName then
+            Continue;
+
+          try
             if dbMainGrid.Columns[vrVez2].Width < PercentOfScreen(dbMainGrid.Width, 40) then
               dbMainGrid.Columns[vrVez2].Width := PercentOfScreen(dbMainGrid.Width, 40);
+          except
+
+          end;
+        end;
       end;
   finally
     FreeAndNil(vrWizard);
@@ -769,25 +780,35 @@ end;
 procedure TFCustomDatabaseGrid.Internal_RenderMiniFormAsRichText;
 var
   vrVez : Integer;
+  vrQry : TSQLQuery;
 begin
   rmForm.Lines.Clear;
 
-  DrawForm(sbMiniForm);
+  vrQry := vrJupiterApp.NewWizard.NewQuery;
+  try
+    vrQry.SQL.Add(Format(' SELECT * FROM %0:s WHERE ID = %1:d ', [Self.FReference.TableName, InternalQuery.FieldByName('ID').AsInteger]));
+    vrQry.Open;
 
-  for vrVez := 0 to dbMainGrid.Columns.Count - 1 do
-  begin
-    if not dbMainGrid.Columns[vrVez].Visible then
-      Continue;
+    vrQry.First;
 
-    if Length(Trim(rmForm.Lines.Text)) > 0 then
-      rmForm.Lines.Add(EmptyStr);
+    for vrVez := 0 to vrQry.Fields.Count - 1 do
+    begin
+      if AnsiUpperCase(vrQry.Fields[vrVez].FieldName) = 'ID' then
+        Continue;
 
-    RichMemoUtils_AddBoldLine(dbMainGrid.Columns[vrVez].Title.Caption, rmForm);
+      if Length(Trim(rmForm.Lines.Text)) > 0 then
+        rmForm.Lines.Add(EmptyStr);
 
-    if dbMainGrid.Columns[vrVez].Field.IsNull then
-      RichMemoUtils_AddItalicLine('Nulo', rmForm)
-    else
-      RichMemoUtils_AddLine(dbMainGrid.Columns[vrVez].Field.AsString, rmForm);
+      RichMemoUtils_AddBoldLine(JupiterDatabaseScript_GetDescription(Self.FReference.TableName, vrQry.Fields[vrVez].FieldName), rmForm);
+
+      if vrQry.Fields[vrVez].IsNull then
+        RichMemoUtils_AddItalicLine('Nulo', rmForm)
+      else
+        RichMemoUtils_AddLine(vrQry.Fields[vrVez].AsString, rmForm);
+    end;
+  finally
+    vrQry.Close;
+    vrQry.Free;
   end;
 
   rmForm.SelStart := 0;

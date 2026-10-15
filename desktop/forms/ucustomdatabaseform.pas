@@ -305,7 +305,9 @@ begin
         Continue;
       end;
 
-      if ((vrField is TBlobField) and (vrJupiterApp.Params.VariableById('Interface.Form.Memo.RenderInNewTab').AsBool)) then
+      if (((vrField is TBlobField) and
+           (vrJupiterApp.Params.VariableById('Interface.Form.Memo.RenderInNewTab').AsBool)) and
+          (Self.QueryOrigin.Fields.Count > vrJupiterApp.Params.VariableById('Interface.Form.Memo.RenderInNewTab.MinCount').AsInteger)) then
       begin
         vrNewTab := pcRecord.AddTabSheet;
         vrNewTab.Caption := JupiterDatabaseScript_GetDescription(Self.TableName, vrField.FieldName);

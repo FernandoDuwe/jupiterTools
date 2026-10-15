@@ -30,13 +30,15 @@ end;
 
 function TJupiterGenerator.Internal_GetModuleTitle: String;
 begin
-  Result := 'UserExperience: Pacote de experiência do usuário';
+  Result := 'Generator: Pacote de desenvolvimento';
 end;
 
 procedure TJupiterGenerator.Internal_Prepare;
 var
   vrWizard : TJupiterDatabaseWizard;
 begin
+  inherited Internal_Prepare;
+
   vrWizard := vrJupiterApp.NewWizard;
   try
     if Self.Internal_CreateMacroIfDontExists('menu.tools.generator.click', 'Clique do botão Generator', CreateStringList('program macro;' + #13#10 + 'begin' + #13#10 + '  OpenForm(''/forms/generator'');' + #13#10 + 'end.')) then

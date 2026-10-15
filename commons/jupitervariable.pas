@@ -66,26 +66,35 @@ type
 
   TJupiterVariableList = class(TJupiterObjectList)
   private
-    FChildList     : TJupiterObjectList;
-    FTitle         : String;
-    FFileName      : String;
-    FCopyList      : TJupiterVariableList;
+    FChildList        : TJupiterObjectList;
+    FTitle            : String;
+    FFileName         : String;
+    FCopyList         : TJupiterVariableList;
+    FOnSearchValue    : TJupiterVariableGetValue;
+    FCachedValues     : TJupiterVariableList;
+    FUsesCachedValues : Boolean;
+    FVarList          : String;
 
     function  Internal_VariableCount : Integer;
     procedure Internal_SetFileName(prFileName : String);
     procedure Internal_SetCopyList(prCopyList : TJupiterVariableList);
     procedure Internal_OnCopyListChangeValue(prID, prNewValue : String);
+    procedure Internal_UpdateVarList;
   protected
     FReadingFile : Boolean;
 
     procedure Internal_OnOwnerChangeValue(prID, prNewValue : String);
     procedure Internal_GetFileVariables(prCompleteFileName : String); virtual;
   published
-    property ChildList     : TJupiterObjectList   read FChildList     write FChildList;
-    property CopyList      : TJupiterVariableList read FCopyList      write Internal_SetCopyList;
-    property FileName      : String               read FFileName      write Internal_SetFileName;
-    property Title         : String               read FTitle         write FTitle;
-    property VariableCount : Integer              read Internal_VariableCount;
+    property CachedValues     : TJupiterVariableList read FCachedValues     write FCachedValues;
+    property ChildList        : TJupiterObjectList   read FChildList        write FChildList;
+    property CopyList         : TJupiterVariableList read FCopyList         write Internal_SetCopyList;
+    property FileName         : String               read FFileName         write Internal_SetFileName;
+    property Title            : String               read FTitle            write FTitle;
+    property UsesCachedValues : Boolean              read FUsesCachedValues;
+    property VariableCount    : Integer              read Internal_VariableCount;
+
+    property OnSearchValue : TJupiterVariableGetValue read FOnSearchValue write FOnSearchValue;
   public
     procedure FromStringList(prList : TStringList);
 
@@ -99,6 +108,7 @@ type
     function  VariableById(prID : String) : TJupiterVariable;
     function  VariableIndexById(prID : String) : Integer;
     function  VariableByIndex(prIndex : Integer) : TJupiterVariable;
+    function  VariableInList(prID : String) : Boolean;
     function  ResolveString(prStr : String) : String;
     procedure ResolveFile(prFile : String);
     procedure DeleteVariable(prID : String);
@@ -109,7 +119,7 @@ type
     procedure SaveToFile; virtual;
     function ToString : String;
 
-    constructor Create; virtual;
+    constructor Create(prUsesCaches : Boolean = False); virtual;
     destructor Destroy; override;
   end;
 
@@ -352,6 +362,20 @@ begin
     Self.CopyList.VariableById(prID).Value := prNewValue;
 end;
 
+procedure TJupiterVariableList.Internal_UpdateVarList;
+var
+  vrVez : Integer;
+begin
+  Self.FVarList := COMMON_SEPARATOR;
+
+  try
+    for vrVez := 0 to Self.Count - 1 do
+      Self.FVarList := Self.FVarList + Self.VariableByIndex(vrVez).ID + COMMON_SEPARATOR;
+  finally
+    Self.FVarList := AnsiUpperCase(Self.FVarList);
+  end;
+end;
+
 procedure TJupiterVariableList.Internal_OnOwnerChangeValue(prID, prNewValue: String);
 begin
   Self.SaveToFile;
@@ -391,6 +415,8 @@ begin
       Self.Add(vrObj);
     end;
   finally
+    Self.Internal_UpdateVarList;
+
     if not Self.FReadingFile then
       Self.SaveToFile;
   end;
@@ -400,26 +426,30 @@ procedure TJupiterVariableList.AddVariable(prID: String; prValue: String; prTitl
 var
   vrObj : TJupiterVariable;
 begin
-  if Assigned(Self.VariableById(prID)) then
-  begin
-    with Self.VariableById(prID) do
+  try
+    if Assigned(Self.VariableById(prID)) then
     begin
-      Title := prTitle;
-      Value := prValue;
-      Save  := False;
-      Owner := Self;
-    end;
-  end
-  else
-  begin
-    vrObj := TJupiterVariable.Create;
-    vrObj.ID    := prID;
-    vrObj.Value := prValue;
-    vrObj.Title := prTitle;
-    vrObj.Save  := False;
-    vrObj.Owner := Self;
+      with Self.VariableById(prID) do
+      begin
+        Title := prTitle;
+        Value := prValue;
+        Save  := False;
+        Owner := Self;
+      end;
+    end
+    else
+    begin
+      vrObj := TJupiterVariable.Create;
+      vrObj.ID    := prID;
+      vrObj.Value := prValue;
+      vrObj.Title := prTitle;
+      vrObj.Save  := False;
+      vrObj.Owner := Self;
 
-    Self.Add(vrObj);
+      Self.Add(vrObj);
+    end;
+  finally
+    Self.Internal_UpdateVarList;
   end;
 end;
 
@@ -442,19 +472,42 @@ begin
 
   prID := AnsiUpperCase(prID);
 
-  for vrVez := 0 to Self.VariableCount - 1 do
-    if AnsiUpperCase(Self.VariableByIndex(vrVez).ID) = prID then
-    begin
-      Result := Self.VariableByIndex(vrVez);
-      Exit;
-    end;
-
-  for vrVezModule := 0 to Self.ChildList.Size -1 do
+  if Self.UsesCachedValues then
   begin
-    Result := TJupiterVariableList(Self.ChildList.GetAtIndex(vrVezModule)).VariableById(prID);
+    Result := Self.FCachedValues.VariableById(prID);
 
     if Assigned(Result) then
-       Exit;
+      Exit;
+  end;
+
+  if Assigned(Self.FOnSearchValue) then
+    Self.FOnSearchValue(prID);
+
+  try
+    if Self.VariableInList(prID) then
+      for vrVez := 0 to Self.VariableCount - 1 do
+        if AnsiUpperCase(Self.VariableByIndex(vrVez).ID) = prID then
+        begin
+          Result := Self.VariableByIndex(vrVez);
+
+          if vrVez >= 5 then
+            Self.MoveItemToHeader(vrVez);
+
+          Exit;
+        end;
+
+    for vrVezModule := 0 to Self.ChildList.Size -1 do
+    begin
+      if not TJupiterVariableList(Self.ChildList.GetAtIndex(vrVezModule)).VariableInList(prID) then
+        Continue;
+
+      Result := TJupiterVariableList(Self.ChildList.GetAtIndex(vrVezModule)).VariableById(prID);
+
+      if Assigned(Result) then
+         Exit;
+    end;
+  finally
+
   end;
 end;
 
@@ -476,6 +529,11 @@ end;
 function TJupiterVariableList.VariableByIndex(prIndex: Integer): TJupiterVariable;
 begin
   Result := TJupiterVariable(Self.GetAtIndex(prIndex));
+end;
+
+function TJupiterVariableList.VariableInList(prID: String): Boolean;
+begin
+  Result := Pos(COMMON_SEPARATOR + prID + COMMON_SEPARATOR, Self.FVarList) > 0;
 end;
 
 function TJupiterVariableList.ResolveString(prStr: String): String;
@@ -648,20 +706,31 @@ begin
     Result := Result + Self.VariableByIndex(vrVez).ToString;
 end;
 
-constructor TJupiterVariableList.Create;
+constructor TJupiterVariableList.Create(prUsesCaches: Boolean);
 begin
   inherited Create;
+
+  Self.FUsesCachedValues := prUsesCaches;
 
   Self.FReadingFile := False;
 
   Self.FFileName  := EmptyStr;
   Self.FChildList := TJupiterObjectList.Create;
+
+  if prUsesCaches then
+  begin
+    Self.FCachedValues := TJupiterVariableList.Create;
+    Self.FCachedValues.Title := 'Caches';
+  end;
 end;
 
 destructor TJupiterVariableList.Destroy;
 begin
   if Self.FChildList <> nil then
     FreeAndNil(Self.FChildList);
+
+  if Self.UsesCachedValues then
+    FreeAndNil(Self.FCachedValues);
 
   inherited Destroy;
 end;

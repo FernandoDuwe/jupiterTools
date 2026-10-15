@@ -96,10 +96,16 @@ end;
 
 procedure JupiterAppScript_SetGlobalParam(prId, prValue: String);
 begin
-  if JupiterAppScript_GlobalParamExists(prId) then
-    vrJupiterApp.Params.VariableById(prId).Value := prValue
-  else
-    vrJupiterApp.Params.AddConfig(prId, prValue, prId);
+  try
+    if JupiterAppScript_GlobalParamExists(prId) then
+      vrJupiterApp.Params.VariableById(prId).Value := prValue
+    else
+      vrJupiterApp.Params.AddConfig(prId, prValue, prId);
+  finally
+    if vrJupiterApp.Params.UsesCachedValues then
+      if vrJupiterApp.Params.CachedValues.Exists(prId) then
+        vrJupiterApp.Params.CachedValues.VariableById(prId).Value := prValue;
+  end;
 end;
 
 function JupiterAppScript_ResolveGlobal(prValue: String): String;

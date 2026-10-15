@@ -96,6 +96,8 @@ var
 begin
  // Self.Params.FileName := 'datasets/' + StringReplace(Self.ModuleID, '.', EmptyStr, [rfIgnoreCase, rfReplaceAll]) + '.csv';
 
+  Self.Params.Title := 'Variáveis de ' + Self.ModuleID;
+
   vrWizard := vrJupiterApp.NewWizard;
   try
     if vrWizard.TableExists('MODULES') then

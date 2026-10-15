@@ -39,7 +39,6 @@ inherited FCustomDatabaseGrid: TFCustomDatabaseGrid
     OnDblClick = dbMainGridDblClick
     OnEnter = dbMainGridEnter
     OnExit = dbMainGridExit
-    OnGetCellHint = dbMainGridGetCellHint
     OnTitleClick = dbMainGridTitleClick
   end
   object pnMiniForm: TPanel[4]
@@ -74,6 +73,8 @@ inherited FCustomDatabaseGrid: TFCustomDatabaseGrid
         Lines.Strings = (
           'rmForm'
         )
+        OnChange = rmFormChange
+        ReadOnly = True
         ScrollBars = ssAutoBoth
         TabOrder = 0
         ZoomFactor = 1
